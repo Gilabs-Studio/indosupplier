@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gilabs/gims/api/internal/core/infrastructure/redis"
+	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/redis"
 	"github.com/google/uuid"
 	goredis "github.com/redis/go-redis/v9"
 )

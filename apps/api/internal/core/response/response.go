@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gilabs/gims/api/internal/core/apptime"
+	"github.com/gilabs/indosupplier/api/internal/core/apptime"
 	"github.com/gin-gonic/gin"
 )
 

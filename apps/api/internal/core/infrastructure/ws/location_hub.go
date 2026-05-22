@@ -23,16 +23,16 @@ type SubscriptionFilter struct {
 }
 
 type LocationUpdate struct {
-	EmployeeID         string
-	RouteID            *string
-	CheckpointID       *string
-	Lat                float64
-	Lng                float64
-	Heading            *float64
-	Timestamp          time.Time
-	NavigationStatus   string // "navigating" | "idle" | ""
-	EmployeeName       string // enriched for frontend rendering without extra DB query
-	EmployeeAvatarURL  string // enriched for frontend rendering without extra DB query
+	EmployeeID        string
+	RouteID           *string
+	CheckpointID      *string
+	Lat               float64
+	Lng               float64
+	Heading           *float64
+	Timestamp         time.Time
+	NavigationStatus  string // "navigating" | "idle" | ""
+	EmployeeName      string // enriched for frontend rendering without extra DB query
+	EmployeeAvatarURL string // enriched for frontend rendering without extra DB query
 }
 
 // NavigationUpdate is published when a sales employee explicitly starts or stops navigation.

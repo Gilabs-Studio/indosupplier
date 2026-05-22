@@ -5,7 +5,7 @@ package mocks
 import (
 	context "context"
 
-	models "github.com/gilabs/gims/api/internal/refresh_token/data/models"
+	models "github.com/gilabs/indosupplier/api/internal/refresh_token/data/models"
 	mock "github.com/stretchr/testify/mock"
 )
 

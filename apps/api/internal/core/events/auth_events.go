@@ -4,16 +4,16 @@ import (
 	"context"
 	"time"
 
-	infraEvents "github.com/gilabs/gims/api/internal/core/infrastructure/events"
+	infraEvents "github.com/gilabs/indosupplier/api/internal/core/infrastructure/events"
 )
 
 // UserLoggedInPayload contains the data for a user login event
 type UserLoggedInPayload struct {
-	UserID    string    `json:"user_id"`
-	Email     string    `json:"email"`
-	RoleCode  string    `json:"role_code"`
-	IPAddress string    `json:"ip_address,omitempty"`
-	UserAgent string    `json:"user_agent,omitempty"`
+	UserID     string    `json:"user_id"`
+	Email      string    `json:"email"`
+	RoleCode   string    `json:"role_code"`
+	IPAddress  string    `json:"ip_address,omitempty"`
+	UserAgent  string    `json:"user_agent,omitempty"`
 	LoggedInAt time.Time `json:"logged_in_at"`
 }
 
@@ -55,10 +55,10 @@ func NewUserLoggedOutEvent(ctx context.Context, payload UserLoggedOutPayload) *U
 
 // TokenRefreshedPayload contains the data for a token refresh event
 type TokenRefreshedPayload struct {
-	UserID       string    `json:"user_id"`
-	OldTokenID   string    `json:"old_token_id,omitempty"`
-	NewTokenID   string    `json:"new_token_id,omitempty"`
-	RefreshedAt  time.Time `json:"refreshed_at"`
+	UserID      string    `json:"user_id"`
+	OldTokenID  string    `json:"old_token_id,omitempty"`
+	NewTokenID  string    `json:"new_token_id,omitempty"`
+	RefreshedAt time.Time `json:"refreshed_at"`
 }
 
 // TokenRefreshedEvent represents a token refresh event

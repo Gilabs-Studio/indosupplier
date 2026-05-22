@@ -39,9 +39,9 @@ func (p *NoOpEventPublisher) PublishAsync(ctx context.Context, event Event) {
 // logEvent logs the event details to stdout
 func (p *NoOpEventPublisher) logEvent(event Event) {
 	metadata := event.GetMetadata()
-	
+
 	payload, _ := json.Marshal(event.GetPayload())
-	
+
 	log.Printf("[EVENT] type=%s id=%s actor=%s payload=%s",
 		metadata.EventType,
 		metadata.EventID,

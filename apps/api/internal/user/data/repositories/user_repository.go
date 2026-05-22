@@ -5,19 +5,18 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/gilabs/gims/api/internal/core/infrastructure/database"
-	"github.com/gilabs/gims/api/internal/user/data/models"
-	"github.com/gilabs/gims/api/internal/user/domain/dto"
 	"gorm.io/gorm"
+
+	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/database"
+	"github.com/gilabs/indosupplier/api/internal/user/data/models"
+	"github.com/gilabs/indosupplier/api/internal/user/domain/dto"
 )
 
 type UserRepository interface {
 	FindByID(ctx context.Context, id string) (*models.User, error)
 	FindByEmail(ctx context.Context, email string) (*models.User, error)
 	List(ctx context.Context, req *dto.ListUsersRequest) ([]models.User, int64, error)
-	// FindAvailable returns users not yet linked to any employee (excluding the given employeeID if non-empty).
 	FindAvailable(ctx context.Context, search string, excludeEmployeeID string) ([]models.User, error)
-	// Count returns the total number of users belonging to the current tenant.
 	Count(ctx context.Context) (int64, error)
 	Create(ctx context.Context, u *models.User) error
 	Update(ctx context.Context, u *models.User) error
@@ -38,12 +37,7 @@ func (r *userRepository) getDB(ctx context.Context) *gorm.DB {
 
 func (r *userRepository) FindByID(ctx context.Context, id string) (*models.User, error) {
 	var u models.User
-	err := r.getDB(ctx).
-		Preload("Role").
-		Preload("Role.RolePermissions").
-		Preload("Role.RolePermissions.Permission").
-		Where("id = ?", id).First(&u).Error
-	if err != nil {
+	if err := r.getDB(ctx).Where("id = ?", id).First(&u).Error; err != nil {
 		return nil, err
 	}
 	return &u, nil
@@ -51,12 +45,7 @@ func (r *userRepository) FindByID(ctx context.Context, id string) (*models.User,
 
 func (r *userRepository) FindByEmail(ctx context.Context, email string) (*models.User, error) {
 	var u models.User
-	err := r.getDB(ctx).
-		Preload("Role").
-		Preload("Role.RolePermissions").
-		Preload("Role.RolePermissions.Permission").
-		Where("email = ?", email).First(&u).Error
-	if err != nil {
+	if err := r.getDB(ctx).Where("email = ?", email).First(&u).Error; err != nil {
 		return nil, err
 	}
 	return &u, nil
@@ -66,33 +55,23 @@ func (r *userRepository) List(ctx context.Context, req *dto.ListUsersRequest) ([
 	var users []models.User
 	var total int64
 
-	// Scope to current tenant so users only see members of their own organisation
-	query := r.getDB(ctx).Model(&models.User{}).Preload("Role").Preload("Role.Permissions")
+	query := r.getDB(ctx).Model(&models.User{})
 
-	// Apply filters
 	if req.Search != "" {
-		search := "%" + req.Search + "%" // Prefix search for better performance with GIN index
-		// Search across name, email, and role name
-		query = query.Where(
-			"users.name ILIKE ? OR users.email ILIKE ? OR EXISTS (SELECT 1 FROM roles WHERE roles.id = users.role_id AND roles.name ILIKE ?)",
-			search, search, search,
-		)
+		search := "%" + req.Search + "%"
+		query = query.Where("users.name ILIKE ? OR users.email ILIKE ?", search, search)
 	}
-
 	if req.Status != "" {
 		query = query.Where("users.status = ?", req.Status)
 	}
-
 	if req.RoleID != "" {
 		query = query.Where("users.role_id = ?", req.RoleID)
 	}
 
-	// Count total
 	if err := query.Count(&total).Error; err != nil {
 		return nil, 0, err
 	}
 
-	// Apply pagination
 	page := req.Page
 	if page < 1 {
 		page = 1
@@ -106,29 +85,13 @@ func (r *userRepository) List(ctx context.Context, req *dto.ListUsersRequest) ([
 	}
 
 	offset := (page - 1) * perPage
-
-	// Fetch data - Order by updated_at DESC so recently updated items appear first
-	err := query.Order("users.updated_at DESC").Offset(offset).Limit(perPage).Find(&users).Error
-	if err != nil {
+	if err := query.Order("users.updated_at DESC").Offset(offset).Limit(perPage).Find(&users).Error; err != nil {
 		return nil, 0, err
 	}
 
 	return users, total, nil
 }
 
-func (r *userRepository) Create(ctx context.Context, u *models.User) error {
-	err := r.getDB(ctx).Create(u).Error
-	if err != nil {
-		if isDuplicateEmailError(err) {
-			return errors.New("user already exists")
-		}
-		return err
-	}
-	return nil
-}
-
-// isDuplicateEmailError detects PostgreSQL unique-constraint violations on the users email column.
-// Covers both the legacy constraint name and the index name used by newer migrations.
 func isDuplicateEmailError(err error) bool {
 	msg := err.Error()
 	if !strings.Contains(msg, "duplicate key value violates unique constraint") {
@@ -139,9 +102,18 @@ func isDuplicateEmailError(err error) bool {
 		strings.Contains(msg, "23505")
 }
 
+func (r *userRepository) Create(ctx context.Context, u *models.User) error {
+	if err := r.getDB(ctx).Create(u).Error; err != nil {
+		if isDuplicateEmailError(err) {
+			return errors.New("user already exists")
+		}
+		return err
+	}
+	return nil
+}
+
 func (r *userRepository) Update(ctx context.Context, u *models.User) error {
-	err := r.getDB(ctx).Save(u).Error
-	if err != nil {
+	if err := r.getDB(ctx).Save(u).Error; err != nil {
 		if isDuplicateEmailError(err) {
 			return errors.New("user already exists")
 		}
@@ -160,27 +132,15 @@ func (r *userRepository) Delete(ctx context.Context, id string) error {
 	return r.getDB(ctx).Where("id = ?", id).Delete(&models.User{}).Error
 }
 
-// FindAvailable returns active users not yet linked to any employee.
-// If excludeEmployeeID is non-empty, the user already linked to that employee is still included.
 func (r *userRepository) FindAvailable(ctx context.Context, search string, excludeEmployeeID string) ([]models.User, error) {
 	var users []models.User
 
 	query := r.getDB(ctx).Model(&models.User{}).
-		Preload("Role").
 		Where("users.status = ?", "active")
 
-	// Exclude users that are already linked to an employee (except the one being edited)
-	subQuery := "users.id NOT IN (SELECT user_id FROM employees WHERE user_id IS NOT NULL AND deleted_at IS NULL"
-	if excludeEmployeeID != "" {
-		subQuery += " AND id != ?"
-		query = query.Where(subQuery+")", excludeEmployeeID)
-	} else {
-		query = query.Where(subQuery + ")")
-	}
-
 	if search != "" {
-		prefix := search + "%"
-		query = query.Where("users.name ILIKE ? OR users.email ILIKE ?", prefix, prefix)
+		like := "%" + search + "%"
+		query = query.Where("users.name ILIKE ? OR users.email ILIKE ?", like, like)
 	}
 
 	err := query.Order("users.name ASC").Limit(50).Find(&users).Error

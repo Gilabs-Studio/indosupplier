@@ -10,7 +10,7 @@ import (
 // BankAccount represents a company bank account (cash/bank) used for payments.
 type BankAccount struct {
 	ID               string         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
-	TenantID string `gorm:"column:tenant_id;type:uuid;index" json:"tenant_id,omitempty"`
+	TenantID         string         `gorm:"column:tenant_id;type:uuid;index" json:"tenant_id,omitempty"`
 	CompanyID        string         `gorm:"type:uuid;not null;index:idx_company_code,unique" json:"company_id"`
 	Code             string         `gorm:"type:varchar(50);not null;index:idx_company_code,unique" json:"code"`
 	Name             string         `gorm:"type:varchar(150);not null;index" json:"name"`

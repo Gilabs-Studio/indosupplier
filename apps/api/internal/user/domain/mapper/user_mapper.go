@@ -1,12 +1,10 @@
 package mapper
 
 import (
-	roleMapper "github.com/gilabs/gims/api/internal/role/domain/mapper"
-	"github.com/gilabs/gims/api/internal/user/data/models"
-	"github.com/gilabs/gims/api/internal/user/domain/dto"
+	"github.com/gilabs/indosupplier/api/internal/user/data/models"
+	"github.com/gilabs/indosupplier/api/internal/user/domain/dto"
 )
 
-// ToAvailableUserResponse converts User to the lightweight AvailableUserResponse.
 func ToAvailableUserResponse(u *models.User) dto.AvailableUserResponse {
 	return dto.AvailableUserResponse{
 		ID:    u.ID,
@@ -15,21 +13,21 @@ func ToAvailableUserResponse(u *models.User) dto.AvailableUserResponse {
 	}
 }
 
-// ToUserResponse converts User to UserResponse
 func ToUserResponse(u *models.User) *dto.UserResponse {
 	resp := &dto.UserResponse{
-		ID:                   u.ID,
-		Email:                u.Email,
-		Name:                 u.Name,
-		AvatarURL:            u.AvatarURL,
-		RoleID:               u.RoleID,
-		Status:               u.Status,
-		PasswordResetPending: u.PasswordResetPending,
-		CreatedAt:            u.CreatedAt,
-		UpdatedAt:            u.UpdatedAt,
+		ID:        u.ID,
+		Email:     u.Email,
+		Name:      u.Name,
+		AvatarURL: u.AvatarURL,
+		RoleID:    u.RoleID,
+		Status:    u.Status,
+		CreatedAt: u.CreatedAt,
+		UpdatedAt: u.UpdatedAt,
 	}
-	if u.Role != nil {
-		resp.Role = roleMapper.ToRoleResponse(u.Role)
+
+	if u.RoleID != "" {
+		resp.Role = &dto.RoleResponse{Code: u.RoleID, Name: u.RoleID}
 	}
+
 	return resp
 }

@@ -1,8 +1,8 @@
 package mapper
 
 import (
-	"github.com/gilabs/gims/api/internal/core/data/models"
-	"github.com/gilabs/gims/api/internal/core/domain/dto"
+	"github.com/gilabs/indosupplier/api/internal/core/data/models"
+	"github.com/gilabs/indosupplier/api/internal/core/domain/dto"
 )
 
 // ToSOSourceResponse converts SOSource model to response DTO

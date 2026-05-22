@@ -6,8 +6,8 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/gilabs/gims/api/internal/core/apptime"
-	"github.com/gilabs/gims/api/internal/core/response"
+	"github.com/gilabs/indosupplier/api/internal/core/apptime"
+	"github.com/gilabs/indosupplier/api/internal/core/response"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"

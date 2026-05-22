@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/gilabs/gims/api/internal/core/infrastructure/config"
+	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/config"
 	"github.com/gin-gonic/gin"
 )
 

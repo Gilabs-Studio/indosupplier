@@ -10,10 +10,9 @@ import (
 type txKey struct{}
 
 // Context key constants - duplicated from middleware package to avoid import cycle.
-// These MUST stay in sync with middleware.TenantIDKey and middleware.IsSystemAdminKey.
+// This MUST stay in sync with middleware.TenantIDKey.
 const (
-	tenantIDKey      = "tenant_id"
-	isSystemAdminKey = "is_system_admin"
+	tenantIDKey = "tenant_id"
 )
 
 // WithTx returns a new context with the transaction attached
@@ -28,7 +27,6 @@ func GetTx(ctx context.Context) *gorm.DB {
 }
 
 // GetDB returns a *gorm.DB scoped to the current tenant from context.
-// - System admin requests (is_system_admin=true): unscoped, full access.
 // - Tenant requests (tenant_id set): WHERE tenant_id = ? applied automatically.
 // - Unauthenticated requests: unscoped (login, webhooks, etc.).
 //
@@ -43,13 +41,6 @@ func GetDB(ctx context.Context, fallback *gorm.DB) *gorm.DB {
 		db = tx.WithContext(ctx)
 	} else {
 		db = fallback.WithContext(ctx)
-	}
-
-	// System admin bypass — no tenant scoping.
-	if v := ctx.Value(isSystemAdminKey); v != nil {
-		if b, ok := v.(bool); ok && b {
-			return db
-		}
 	}
 
 	// Apply tenant scope when the request carries a tenant_id.

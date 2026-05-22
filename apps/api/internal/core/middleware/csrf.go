@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/gilabs/gims/api/internal/core/infrastructure/config"
+	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/config"
 	"github.com/gin-gonic/gin"
 )
 
@@ -64,7 +64,7 @@ func abortCSRFFailedToGenerate(c *gin.Context) {
 }
 
 func ensureCSRFCookie(c *gin.Context) (string, bool) {
-	token, err := c.Cookie("gims_csrf_token")
+	token, err := c.Cookie("indosupplier_csrf_token")
 	if err == nil && token != "" {
 		return token, true
 	}
@@ -91,12 +91,6 @@ func isPublicAuthEndpoint(path string) bool {
 		"/api/v1/auth/login",
 		"/api/v1/auth/csrf",
 		"/api/v1/auth/refresh-token",
-		"/api/v1/auth/plans",
-		"/api/v1/auth/plans/compute-price",
-		"/api/v1/auth/register",
-		"/api/v1/auth/register/confirm",
-		"/api/v1/auth/coupons/validate",
-		"/api/v1/auth/check-availability",
 	}
 	for _, p := range publicAuthPaths {
 		if path == p {
@@ -250,5 +244,5 @@ func setCSRFCookie(c *gin.Context, token string) {
 	c.SetSameSite(sameSite)
 
 	// Note: HttpOnly is FALSE so JavaScript can read it and send in header (Double-Submit Cookie pattern)
-	c.SetCookie("gims_csrf_token", token, 3600*24, "/", domain, isSecure, false)
+	c.SetCookie("indosupplier_csrf_token", token, 3600*24, "/", domain, isSecure, false)
 }

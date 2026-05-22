@@ -5,10 +5,10 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/gilabs/gims/api/internal/core/data/models"
-	"github.com/gilabs/gims/api/internal/core/data/repositories"
-	"github.com/gilabs/gims/api/internal/core/domain/dto"
-	"github.com/gilabs/gims/api/internal/core/domain/mapper"
+	"github.com/gilabs/indosupplier/api/internal/core/data/models"
+	"github.com/gilabs/indosupplier/api/internal/core/data/repositories"
+	"github.com/gilabs/indosupplier/api/internal/core/domain/dto"
+	"github.com/gilabs/indosupplier/api/internal/core/domain/mapper"
 	"gorm.io/gorm"
 )
 

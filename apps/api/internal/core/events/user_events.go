@@ -4,16 +4,16 @@ import (
 	"context"
 	"time"
 
-	infraEvents "github.com/gilabs/gims/api/internal/core/infrastructure/events"
+	infraEvents "github.com/gilabs/indosupplier/api/internal/core/infrastructure/events"
 )
 
 // UserCreatedPayload contains the data for a user created event
 type UserCreatedPayload struct {
-	UserID    string `json:"user_id"`
-	Email     string `json:"email"`
-	Name      string `json:"name"`
-	RoleID    string `json:"role_id"`
-	Status    string `json:"status"`
+	UserID    string    `json:"user_id"`
+	Email     string    `json:"email"`
+	Name      string    `json:"name"`
+	RoleID    string    `json:"role_id"`
+	Status    string    `json:"status"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
@@ -34,13 +34,13 @@ func NewUserCreatedEvent(ctx context.Context, payload UserCreatedPayload) *UserC
 
 // UserUpdatedPayload contains the data for a user updated event
 type UserUpdatedPayload struct {
-	UserID       string                 `json:"user_id"`
-	Email        string                 `json:"email,omitempty"`
-	Name         string                 `json:"name,omitempty"`
-	RoleID       string                 `json:"role_id,omitempty"`
-	Status       string                 `json:"status,omitempty"`
+	UserID        string                 `json:"user_id"`
+	Email         string                 `json:"email,omitempty"`
+	Name          string                 `json:"name,omitempty"`
+	RoleID        string                 `json:"role_id,omitempty"`
+	Status        string                 `json:"status,omitempty"`
 	ChangedFields map[string]interface{} `json:"changed_fields,omitempty"`
-	UpdatedAt    time.Time              `json:"updated_at"`
+	UpdatedAt     time.Time              `json:"updated_at"`
 }
 
 // UserUpdatedEvent represents a user update event

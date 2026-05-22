@@ -10,10 +10,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gilabs/gims/api/internal/core/apptime"
-	"github.com/gilabs/gims/api/internal/core/errors"
-	"github.com/gilabs/gims/api/internal/core/infrastructure/config"
-	infraRedis "github.com/gilabs/gims/api/internal/core/infrastructure/redis"
+	"github.com/gilabs/indosupplier/api/internal/core/apptime"
+	"github.com/gilabs/indosupplier/api/internal/core/errors"
+	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/config"
+	infraRedis "github.com/gilabs/indosupplier/api/internal/core/infrastructure/redis"
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
 	"golang.org/x/time/rate"
@@ -32,8 +32,8 @@ return {current, ttl}
 type rateLimiter struct {
 	limiter        *rate.Limiter
 	lastSeen       time.Time
-	firstLimitTime *time.Time 
-	window         int        
+	firstLimitTime *time.Time
+	window         int
 }
 
 // rateLimiters is a map of IP addresses to their rate limiters
@@ -52,7 +52,7 @@ var (
 func getMemoryLimiter(typeKey string) *rateLimiters {
 	memoryMu.Lock()
 	defer memoryMu.Unlock()
-	
+
 	if memoryLimiters[typeKey] == nil {
 		rl := &rateLimiters{
 			limiters: make(map[string]*rateLimiter),
@@ -160,14 +160,14 @@ func RateLimitMiddleware(limitType string) gin.HandlerFunc {
 			// Level 1: IP-based
 			rule = config.AppConfig.RateLimit.Login
 			key = fmt.Sprintf("rate_limit:login:ip:%s", ip)
-			
+
 			// Check Level 3: Global Login
 			globalRule := config.AppConfig.RateLimit.LoginGlobal
 			globalKey := "rate_limit:login:global"
 			if !checkLimit(c, globalKey, globalRule, "login_global") {
 				return
 			}
-			
+
 			// Check Level 2: Email (if present)
 			var loginReq struct {
 				Email string `json:"email"`
@@ -194,7 +194,7 @@ func RateLimitMiddleware(limitType string) gin.HandlerFunc {
 					return
 				}
 			}
-			
+
 		case "refresh":
 			rule = config.AppConfig.RateLimit.Refresh
 			key = fmt.Sprintf("rate_limit:refresh:%s", ip)
@@ -221,14 +221,14 @@ func RateLimitMiddleware(limitType string) gin.HandlerFunc {
 // checkLimit handles the actual check using Redis or Memory
 func checkLimit(c *gin.Context, key string, rule config.RateLimitRule, typeKey string) bool {
 	redisClient := infraRedis.GetClient()
-	
+
 	if redisClient != nil {
 		allowed, remaining, reset, err := checkRedisRateLimit(c.Request.Context(), redisClient, key, rule.Requests, rule.Window)
 		if err == nil {
 			c.Header("X-RateLimit-Limit", fmt.Sprintf("%d", rule.Requests))
 			c.Header("X-RateLimit-Remaining", fmt.Sprintf("%d", remaining))
 			c.Header("X-RateLimit-Reset", fmt.Sprintf("%d", reset))
-			
+
 			if !allowed {
 				errors.ErrorResponse(c, "RATE_LIMIT_EXCEEDED", nil, nil)
 				c.Abort()
@@ -255,7 +255,7 @@ func checkLimit(c *gin.Context, key string, rule config.RateLimitRule, typeKey s
 	memConfig := getMemoryLimiter(typeKey)
 	// We use the "key" from Redis logic as the identifier for memory map too (safe enough)
 	limiter, limiterStruct := memConfig.getLimiter(key, rule.Requests, rule.Window)
-	
+
 	if !limiter.Allow() {
 		// Calculate reset time
 		var resetTime int64
@@ -274,7 +274,7 @@ func checkLimit(c *gin.Context, key string, rule config.RateLimitRule, typeKey s
 		c.Abort()
 		return false
 	}
-	
+
 	// Reset FirstLimitTime if allowed
 	memConfig.mu.Lock()
 	limiterStruct.firstLimitTime = nil
@@ -284,6 +284,6 @@ func checkLimit(c *gin.Context, key string, rule config.RateLimitRule, typeKey s
 	c.Header("X-RateLimit-Limit", fmt.Sprintf("%d", rule.Requests))
 	c.Header("X-RateLimit-Remaining", fmt.Sprintf("%d", rule.Requests-1)) // rough estimate
 	c.Header("X-RateLimit-Reset", fmt.Sprintf("%d", apptime.Now().Add(time.Duration(rule.Window)*time.Second).Unix()))
-	
+
 	return true
 }

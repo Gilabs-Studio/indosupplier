@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gilabs/gims/api/internal/core/apptime"
+	"github.com/gilabs/indosupplier/api/internal/core/apptime"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
@@ -32,9 +32,9 @@ type JWTManager struct {
 	refreshKeys      map[string]string
 	accessKID        string
 	refreshKID       string
-	issuer          string
-	accessTokenTTL  time.Duration
-	refreshTokenTTL time.Duration
+	issuer           string
+	accessTokenTTL   time.Duration
+	refreshTokenTTL  time.Duration
 }
 
 type Options struct {
@@ -97,7 +97,6 @@ func (m *JWTManager) AccessTokenTTL() time.Duration {
 func (m *JWTManager) RefreshTokenTTL() time.Duration {
 	return m.refreshTokenTTL
 }
-
 
 func NewJWTManager(opts Options) *JWTManager {
 	return &JWTManager{

@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	infraRedis "github.com/gilabs/gims/api/internal/core/infrastructure/redis"
+	infraRedis "github.com/gilabs/indosupplier/api/internal/core/infrastructure/redis"
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
 )

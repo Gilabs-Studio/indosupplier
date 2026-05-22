@@ -10,7 +10,7 @@ import (
 // CourierAgency represents a courier/shipping agency
 type CourierAgency struct {
 	ID          string         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
-	TenantID string `gorm:"column:tenant_id;type:uuid;index" json:"tenant_id,omitempty"`
+	TenantID    string         `gorm:"column:tenant_id;type:uuid;index" json:"tenant_id,omitempty"`
 	Code        string         `gorm:"type:varchar(20);not null;uniqueIndex" json:"code"`
 	Name        string         `gorm:"type:varchar(100);not null" json:"name"`
 	Description string         `gorm:"type:text" json:"description"`

@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gilabs/gims/api/internal/core/response"
+	"github.com/gilabs/indosupplier/api/internal/core/response"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,7 +17,6 @@ var contextKeysToPropagate = []string{
 	"user_role",
 	"user_permissions",
 	"user_permissions_scope",
-	"is_system_admin",
 }
 
 // propagateRequestContext copies important values from both the request context

@@ -12,12 +12,12 @@ import (
 // (treated as lifetime). This fixes cases where a lifetime coupon previously
 // wrote a near-term expires_at and caused the tenant to appear overdue.
 func NormalizeLifetimeSubscriptions(db *gorm.DB) error {
-    log.Println("Running migration: NormalizeLifetimeSubscriptions")
+	log.Println("Running migration: NormalizeLifetimeSubscriptions")
 
-    // Only operate when coupon exists with duration_days = 0
-    // Update subscriptions that reference such coupons and currently have expires_at set.
-    // Also clear next_billing_at since lifetime shouldn't have recurring billing.
-    res := db.Exec(`
+	// Only operate when coupon exists with duration_days = 0
+	// Update subscriptions that reference such coupons and currently have expires_at set.
+	// Also clear next_billing_at since lifetime shouldn't have recurring billing.
+	res := db.Exec(`
         UPDATE tenant_subscriptions ts
         SET expires_at = NULL,
             next_billing_at = NULL,
@@ -29,11 +29,11 @@ func NormalizeLifetimeSubscriptions(db *gorm.DB) error {
           AND ts.expires_at IS NOT NULL
     `, time.Now())
 
-    if res.Error != nil {
-        log.Printf("Warning: NormalizeLifetimeSubscriptions failed: %v", res.Error)
-        return res.Error
-    }
+	if res.Error != nil {
+		log.Printf("Warning: NormalizeLifetimeSubscriptions failed: %v", res.Error)
+		return res.Error
+	}
 
-    log.Printf("NormalizeLifetimeSubscriptions: rows affected=%d", res.RowsAffected)
-    return nil
+	log.Printf("NormalizeLifetimeSubscriptions: rows affected=%d", res.RowsAffected)
+	return nil
 }

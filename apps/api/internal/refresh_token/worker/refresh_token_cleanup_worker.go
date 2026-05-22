@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gilabs/gims/api/internal/refresh_token/data/repositories"
+	"github.com/gilabs/indosupplier/api/internal/refresh_token/data/repositories"
 )
 
 // RefreshTokenCleanupWorker handles cleanup of expired refresh tokens

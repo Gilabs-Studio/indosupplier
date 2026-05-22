@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	jwtinfra "github.com/gilabs/gims/api/internal/core/infrastructure/jwt"
+	jwtinfra "github.com/gilabs/indosupplier/api/internal/core/infrastructure/jwt"
 	"github.com/joho/godotenv"
 )
 
@@ -50,11 +50,11 @@ type RedisConfig struct {
 }
 
 type ServerConfig struct {
-	Port                    string
-	Env                     string
-	Timezone                string // IANA timezone name (e.g. "Asia/Jakarta")
+	Port     string
+	Env      string
+	Timezone string // IANA timezone name (e.g. "Asia/Jakarta")
 	// FrontendBaseURL is the public web app origin used to build QR code / feedback URLs.
-	FrontendBaseURL         string
+	FrontendBaseURL string
 	// RootDomain is the root domain for setting cookies (e.g., ".salesview.id" or ".gilabs.id")
 	// Used in production to share cookies across subdomains. Must include leading dot.
 	RootDomain              string

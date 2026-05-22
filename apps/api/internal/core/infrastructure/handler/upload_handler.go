@@ -5,10 +5,10 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/gilabs/gims/api/internal/core/errors"
-	"github.com/gilabs/gims/api/internal/core/infrastructure/config"
-	"github.com/gilabs/gims/api/internal/core/response"
-	"github.com/gilabs/gims/api/internal/core/utils"
+	"github.com/gilabs/indosupplier/api/internal/core/errors"
+	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/config"
+	"github.com/gilabs/indosupplier/api/internal/core/response"
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -74,10 +74,6 @@ func resolveTenantID(c *gin.Context) string {
 				return tenantID
 			}
 		}
-	}
-
-	if c.GetBool("is_system_admin") {
-		return "system"
 	}
 
 	return "unknown"

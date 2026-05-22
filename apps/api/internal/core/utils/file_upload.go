@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/gilabs/gims/api/internal/core/storage"
+	"github.com/gilabs/indosupplier/api/internal/core/storage"
 	"github.com/google/uuid"
 	"github.com/h2non/filetype"
 )

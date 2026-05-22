@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gilabs/gims/api/internal/core/infrastructure/config"
+	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/config"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -25,11 +25,11 @@ func InitRedis(cfg *config.Config) error {
 			Addr:         addr,
 			Password:     cfg.Redis.Password,
 			DB:           cfg.Redis.DB,
-				DialTimeout:  time.Duration(cfg.Redis.DialTimeoutSec) * time.Second,
-				ReadTimeout:  time.Duration(cfg.Redis.ReadTimeoutSec) * time.Second,
-				WriteTimeout: time.Duration(cfg.Redis.WriteTimeoutSec) * time.Second,
-				PoolSize:     cfg.Redis.PoolSize,
-				MinIdleConns: cfg.Redis.MinIdleConns,
+			DialTimeout:  time.Duration(cfg.Redis.DialTimeoutSec) * time.Second,
+			ReadTimeout:  time.Duration(cfg.Redis.ReadTimeoutSec) * time.Second,
+			WriteTimeout: time.Duration(cfg.Redis.WriteTimeoutSec) * time.Second,
+			PoolSize:     cfg.Redis.PoolSize,
+			MinIdleConns: cfg.Redis.MinIdleConns,
 		})
 
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

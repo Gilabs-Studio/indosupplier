@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/gilabs/gims/api/internal/core/errors"
+	"github.com/gilabs/indosupplier/api/internal/core/errors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -102,7 +102,6 @@ func ScopeMiddleware(db *gorm.DB) gin.HandlerFunc {
 				Pluck("warehouse_id", &warehouseIDs).Error; err == nil {
 				sc.WarehouseIDs = warehouseIDs
 			}
-
 
 			log.Printf(
 				"[scope] resolved user_id=%s employee_id=%s division_id=%s area_ids=%d outlet_ids=%d warehouse_ids=%d",

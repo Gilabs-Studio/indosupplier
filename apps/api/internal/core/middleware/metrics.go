@@ -6,8 +6,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/gilabs/gims/api/internal/core/apptime"
-	"github.com/gilabs/gims/api/internal/core/infrastructure/config"
+	"github.com/gilabs/indosupplier/api/internal/core/apptime"
+	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/config"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,12 +22,12 @@ var metrics = &metricsStore{}
 var metricsStartedAt = time.Now()
 
 type MetricsSnapshotData struct {
-	TotalRequests    uint64          `json:"total_requests"`
-	TotalErrors5xx   uint64          `json:"total_errors_5xx"`
-	TotalDurationMs  uint64          `json:"total_duration_ms"`
-	AvgDurationMs    float64         `json:"avg_duration_ms"`
-	RequestsByStatus map[int]uint64  `json:"requests_by_statuscode"`
-	UptimeSeconds    int64           `json:"uptime_seconds"`
+	TotalRequests    uint64         `json:"total_requests"`
+	TotalErrors5xx   uint64         `json:"total_errors_5xx"`
+	TotalDurationMs  uint64         `json:"total_duration_ms"`
+	AvgDurationMs    float64        `json:"avg_duration_ms"`
+	RequestsByStatus map[int]uint64 `json:"requests_by_statuscode"`
+	UptimeSeconds    int64          `json:"uptime_seconds"`
 }
 
 func MetricsSnapshot() MetricsSnapshotData {

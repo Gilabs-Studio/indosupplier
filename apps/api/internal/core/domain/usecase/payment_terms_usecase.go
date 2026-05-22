@@ -5,10 +5,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/gilabs/gims/api/internal/core/data/models"
-	"github.com/gilabs/gims/api/internal/core/data/repositories"
-	"github.com/gilabs/gims/api/internal/core/domain/dto"
-	"github.com/gilabs/gims/api/internal/core/domain/mapper"
+	"github.com/gilabs/indosupplier/api/internal/core/data/models"
+	"github.com/gilabs/indosupplier/api/internal/core/data/repositories"
+	"github.com/gilabs/indosupplier/api/internal/core/domain/dto"
+	"github.com/gilabs/indosupplier/api/internal/core/domain/mapper"
 	"github.com/google/uuid"
 )
 
@@ -38,12 +38,12 @@ func (u *paymentTermsUsecase) Create(ctx context.Context, req dto.CreatePaymentT
 
 	// Generate ID to use in Code
 	id := uuid.New().String()
-	
+
 	// Generate Code: PT-<NameSlug>-<Days>D-<ShortID>
 	// Simple slug: first 3 chars or whole name (sanitized)
 	// For simplicity and uniqueness: PT-<Days>D-<First8CharsOfID> (User asked for Name+Days+ID)
 	// Let's do: PT-<First3CharsOfName>-<Days>D-<First4CharsOfID>
-	
+
 	// Helper to get slug
 	slug := "GEN"
 	if len(req.Name) >= 3 {
@@ -53,12 +53,12 @@ func (u *paymentTermsUsecase) Create(ctx context.Context, req dto.CreatePaymentT
 	}
 	// Uppercase slug
 	// (Assuming we can import strings, if not I'll just use ID for now or rely on user understanding)
-	// Since I can't easily add imports with replace_file_content without seeing the whole file imports, 
+	// Since I can't easily add imports with replace_file_content without seeing the whole file imports,
 	// I'll stick to a simpler format or assume `strings` is available if I added it? No I didn't.
 	// I'll use a simple format: PT-DAYS-ID_SUFFIX using just uuid
-	
+
 	code := fmt.Sprintf("PT-%s-%dD-%s", slug, req.Days, id[:4])
-	
+
 	// Note: I need to add "fmt" to imports. I will handle imports in a separate step or assume I can rewrite imports.
 	// Actually, `replace_file_content` is risky for adding imports if I don't replace the import block.
 	// I'll use multi_replace to add imports.

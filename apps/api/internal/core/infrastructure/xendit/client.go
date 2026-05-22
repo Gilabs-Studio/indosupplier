@@ -138,16 +138,16 @@ func (c *Client) CreateInvoice(ctx context.Context, req CreateInvoiceRequest) (*
 // CreateRecurringPlanRequest holds the fields for creating a Xendit recurring plan.
 // Reference: https://docs.xendit.co/docs/subscriptions-overview
 type CreateRecurringPlanRequest struct {
-	ReferenceID    string                 `json:"reference_id"`    // Unique plan reference (e.g. "gims_{tenantID}_{planSlug}")
-	CustomerID     string                 `json:"customer_id"`     // Xendit customer ID
-	RecurringAction string               `json:"recurring_action"` // "PAYMENT"
-	Currency       string                 `json:"currency"`         // "IDR"
-	Amount         int64                  `json:"amount"`
-	PaymentMethods []RecurringPaymentMethod `json:"payment_methods"`
-	Schedule       RecurringSchedule      `json:"schedule"`
-	SuccessReturnURL string              `json:"success_return_url"`
-	FailureReturnURL string              `json:"failure_return_url"`
-	Metadata       map[string]interface{} `json:"metadata,omitempty"`
+	ReferenceID      string                   `json:"reference_id"`     // Unique plan reference (e.g. "gims_{tenantID}_{planSlug}")
+	CustomerID       string                   `json:"customer_id"`      // Xendit customer ID
+	RecurringAction  string                   `json:"recurring_action"` // "PAYMENT"
+	Currency         string                   `json:"currency"`         // "IDR"
+	Amount           int64                    `json:"amount"`
+	PaymentMethods   []RecurringPaymentMethod `json:"payment_methods"`
+	Schedule         RecurringSchedule        `json:"schedule"`
+	SuccessReturnURL string                   `json:"success_return_url"`
+	FailureReturnURL string                   `json:"failure_return_url"`
+	Metadata         map[string]interface{}   `json:"metadata,omitempty"`
 }
 
 // RecurringPaymentMethod specifies how the recurring charge is collected.
@@ -158,8 +158,8 @@ type RecurringPaymentMethod struct {
 // RecurringSchedule defines the billing frequency.
 type RecurringSchedule struct {
 	ReferenceID   string `json:"reference_id"`
-	Interval      string `json:"interval"`       // "MONTH" or "YEAR"
-	IntervalCount int    `json:"interval_count"` // 1 for monthly, 12 for yearly
+	Interval      string `json:"interval"`              // "MONTH" or "YEAR"
+	IntervalCount int    `json:"interval_count"`        // 1 for monthly, 12 for yearly
 	AnchorDate    string `json:"anchor_date,omitempty"` // ISO-8601 start date
 }
 
@@ -175,7 +175,7 @@ type RecurringPlanResponse struct {
 
 // CreateRecurringSubscriptionRequest activates a recurring plan for a customer.
 type CreateRecurringSubscriptionRequest struct {
-	PlanID   string `json:"plan_id"`
+	PlanID     string `json:"plan_id"`
 	CustomerID string `json:"customer_id"`
 }
 
@@ -189,10 +189,10 @@ type RecurringSubscriptionResponse struct {
 
 // CreateCustomerRequest creates a Xendit customer for recurring billing.
 type CreateCustomerRequest struct {
-	ReferenceID  string `json:"reference_id"`
-	GivenNames   string `json:"given_names"`
-	Email        string `json:"email"`
-	Type         string `json:"type"` // "INDIVIDUAL" or "BUSINESS"
+	ReferenceID string `json:"reference_id"`
+	GivenNames  string `json:"given_names"`
+	Email       string `json:"email"`
+	Type        string `json:"type"` // "INDIVIDUAL" or "BUSINESS"
 }
 
 // CustomerResponse is the Xendit customer object.
@@ -214,13 +214,13 @@ func (c *Client) CreateCustomer(ctx context.Context, req CreateCustomerRequest) 
 // The frontend collects card details via Xendit.js, which returns a token_id.
 // This token_id is sent to our backend and stored here — never the raw card data.
 type CardTokenData struct {
-	ID              string `json:"id"`               // Xendit token ID (xnd_...)
-	Status          string `json:"status"`           // "VALID", "INVALID"
+	ID               string `json:"id"`                 // Xendit token ID (xnd_...)
+	Status           string `json:"status"`             // "VALID", "INVALID"
 	MaskedCardNumber string `json:"masked_card_number"` // e.g. "400000XXXXXX0002"
-	CardBrand       string `json:"card_brand"`       // "VISA", "MASTERCARD", etc.
-	CardHolderName  string `json:"card_holder_name"`
-	ExpiryMonth     int    `json:"expiry_month"`
-	ExpiryYear      int    `json:"expiry_year"`
+	CardBrand        string `json:"card_brand"`         // "VISA", "MASTERCARD", etc.
+	CardHolderName   string `json:"card_holder_name"`
+	ExpiryMonth      int    `json:"expiry_month"`
+	ExpiryYear       int    `json:"expiry_year"`
 }
 
 // GetCardToken retrieves a card token by its ID to verify validity and card details.

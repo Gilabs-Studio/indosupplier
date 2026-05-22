@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/gilabs/gims/api/internal/core/apptime"
+	"github.com/gilabs/indosupplier/api/internal/core/apptime"
 	"github.com/google/uuid"
 )
 
@@ -25,9 +25,9 @@ const (
 	EventTypeRolePermissionsAssigned EventType = "role.permissions_assigned"
 
 	// Auth events
-	EventTypeUserLoggedIn    EventType = "auth.user_logged_in"
-	EventTypeUserLoggedOut   EventType = "auth.user_logged_out"
-	EventTypeTokenRefreshed  EventType = "auth.token_refreshed"
+	EventTypeUserLoggedIn   EventType = "auth.user_logged_in"
+	EventTypeUserLoggedOut  EventType = "auth.user_logged_out"
+	EventTypeTokenRefreshed EventType = "auth.token_refreshed"
 )
 
 // EventMetadata contains common metadata for all events

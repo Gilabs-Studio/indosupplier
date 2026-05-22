@@ -132,4 +132,3 @@ func TestGenerateAccessToken_CrossTenantIsolation(t *testing.T) {
 		t.Errorf("tenant2: want %q, got %q", "tenant-222", claims2.TenantID)
 	}
 }
-

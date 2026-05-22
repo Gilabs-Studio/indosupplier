@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gilabs/gims/api/internal/core/apptime"
-	"github.com/gilabs/gims/api/internal/core/infrastructure/redis"
+	"github.com/gilabs/indosupplier/api/internal/core/apptime"
+	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/redis"
 	"gorm.io/gorm"
 )
 

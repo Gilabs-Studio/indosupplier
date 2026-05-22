@@ -26,7 +26,6 @@ var tenantTables = []string{
 
 	// Core master data
 	"audit_logs",
-	"bank_accounts",
 	"courier_agencies",
 	"currencies",
 	"leave_types",
@@ -155,7 +154,6 @@ var tenantTables = []string{
 	"fiscal_years",
 	"accounting_periods",
 	"financial_closings",
-	"financial_closing_snapshots",
 	"financial_closing_logs",
 	"tax_configurations",
 	"tax_invoices",

@@ -10,7 +10,7 @@ import (
 // UserWarehouse represents the many-to-many assignment between users and warehouses (POS outlets)
 type UserWarehouse struct {
 	ID          string         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
-	TenantID string `gorm:"column:tenant_id;type:uuid;index" json:"tenant_id,omitempty"`
+	TenantID    string         `gorm:"column:tenant_id;type:uuid;index" json:"tenant_id,omitempty"`
 	UserID      string         `gorm:"type:uuid;not null;uniqueIndex:idx_user_warehouse" json:"user_id"`
 	WarehouseID string         `gorm:"type:uuid;not null;uniqueIndex:idx_user_warehouse" json:"warehouse_id"`
 	CreatedAt   time.Time      `json:"created_at"`

@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gilabs/gims/api/internal/core/apptime"
-	"github.com/gilabs/gims/api/internal/core/storage"
+	"github.com/gilabs/indosupplier/api/internal/core/apptime"
+	"github.com/gilabs/indosupplier/api/internal/core/storage"
 	"github.com/google/uuid"
 )
 

@@ -4,15 +4,14 @@ import "time"
 
 // UserResponseDTO represents user response
 type UserResponseDTO struct {
-	ID                   string    `json:"id"`
-	Name                 string    `json:"name"`
-	Email                string    `json:"email"`
-	AvatarURL            string    `json:"avatar_url"`
-	RoleID               string    `json:"role_id"`
-	Role                 RoleDTO   `json:"role"`
-	Status               string    `json:"status"`
-	PasswordResetPending bool      `json:"password_reset_pending"`
-	CreatedAt            time.Time `json:"created_at"`
+	ID        string    `json:"id"`
+	Name      string    `json:"name"`
+	Email     string    `json:"email"`
+	AvatarURL string    `json:"avatar_url"`
+	RoleID    string    `json:"role_id"`
+	Role      RoleDTO   `json:"role"`
+	Status    string    `json:"status"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type RoleDTO struct {

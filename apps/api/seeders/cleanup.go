@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/gilabs/gims/api/internal/core/infrastructure/config"
-	"github.com/gilabs/gims/api/internal/core/infrastructure/database"
+	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/config"
+	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/database"
 )
 
 // CleanupDatabase truncates all tables except system tables

@@ -3,7 +3,7 @@ package tenant
 import (
 	"context"
 
-	"github.com/gilabs/gims/api/internal/core/middleware"
+	"github.com/gilabs/indosupplier/api/internal/core/middleware"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
@@ -12,10 +12,6 @@ import (
 // Deprecated: prefer using database.GetDB which applies tenant scoping automatically.
 // Keep for any legacy call sites that explicitly need a scoped DB without going through GetDB.
 func ScopedDB(db *gorm.DB, ctx context.Context) *gorm.DB {
-	if middleware.IsSystemAdmin(ctx) {
-		return db
-	}
-
 	tenantID := middleware.TenantFromContext(ctx)
 	if tenantID == "" {
 		return db
@@ -40,10 +36,6 @@ func tenantFromStatement(tx *gorm.DB) (string, bool) {
 	}
 
 	ctx := tx.Statement.Context
-	if middleware.IsSystemAdmin(ctx) {
-		return "", false
-	}
-
 	tenantID := middleware.TenantFromContext(ctx)
 	if tenantID == "" {
 		return "", false
