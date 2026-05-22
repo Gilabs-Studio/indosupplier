@@ -1,0 +1,236 @@
+{
+  "title": "purchase/supplier-invoice-down-payments",
+  "description": "A comprehensive guide to the purchase API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/purchase/supplier-invoice-down-payments",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "purchase_order": {
+              "id": 3,
+              "code": "PO-20250920-003"
+            },
+            "code": "SIDP-20250920-0001",
+            "invoice_number": "SUP-DP-20250920-001",
+            "invoice_date": "2025-09-05",
+            "due_date": "2025-09-10",
+            "amount": 107000,
+            "status": "PAID",
+            "notes": "Down payment for purchase order",
+            "created_at": "2025-09-20T21:25:39+07:00",
+            "updated_at": "2025-09-20T21:25:39+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "purchase_order_id", "amount"],
+            "string_columns": ["code", "invoice_number"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "invoice_number",
+              "invoice_date",
+              "due_date",
+              "amount",
+              "status",
+              "created_at",
+              "updated_at",
+              "purchase_order_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/purchase/supplier-invoice-down-payments/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "purchase_order": {
+            "id": 3,
+            "code": "PO-20250920-003"
+          },
+          "code": "SIDP-20250920-0001",
+          "invoice_number": "SUP-DP-20250920-001",
+          "invoice_date": "2025-09-05",
+          "due_date": "2025-09-10",
+          "amount": 107000,
+          "status": "PAID",
+          "notes": "Down payment for purchase order",
+          "created_at": "2025-09-20T21:25:39+07:00",
+          "updated_at": "2025-09-20T21:25:39+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "{{base_url}}/purchase/supplier-invoice-down-payments/add",
+      "response": {
+        "data": {
+          "purchase_orders": [
+            {
+              "id": 2,
+              "supplier": {
+                "id": 1,
+                "name": "PT. Medika"
+              },
+              "code": "PO-20250920-002",
+              "order_date": "2025-09-15",
+              "status": "APPROVED",
+              "total_amount": 0,
+              "items": [
+                {
+                  "id": 3,
+                  "product": {
+                    "id": 1,
+                    "name": "Syringe 5ml",
+                    "code": "MED-001",
+                    "image_url": ""
+                  },
+                  "quantity": 10,
+                  "price": 5000,
+                  "subtotal": 50000
+                },
+                {
+                  "id": 4,
+                  "product": {
+                    "id": 2,
+                    "name": "Gloves (Box)",
+                    "code": "MED-002",
+                    "image_url": ""
+                  },
+                  "quantity": 5,
+                  "price": 12000,
+                  "subtotal": 60000
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/purchase/supplier-invoice-down-payments",
+      "body": {
+        "purchase_order_id": 4,
+        "invoice_date": "2025-09-02",
+        "due_date": "2025-09-16",
+        "amount": 20000,
+        "notes": "bayar dp"
+      },
+      "response": {
+        "error": "can only create supplier invoice down payment for approved purchase orders"
+      },
+      "response2": {
+        "data": {
+          "id": 3,
+          "purchase_order": {
+            "id": 1,
+            "code": "PO-20250920-001"
+          },
+          "code": "SIDP-20250920-0002",
+          "invoice_number": "SUP-DP-20250920-002",
+          "invoice_date": "2025-09-02",
+          "due_date": "2025-09-16",
+          "amount": 20000,
+          "status": "DRAFT",
+          "notes": "bayar dp",
+          "created_at": "2025-09-20T21:39:34+07:00",
+          "updated_at": "2025-09-20T21:39:34+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/purchase/supplier-invoice-down-payments/2",
+      "body": {
+        "purchase_order_id": 1,
+        "invoice_date": "2025-09-02",
+        "due_date": "2025-09-17",
+        "tax_rate": 11,
+        "is_tax_inclusive": false
+      },
+      "response": {
+        "error": "only draft can be updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/purchase/supplier-invoice-down-payments/2",
+      "response": {
+        "message": "deleted"
+      }
+    },
+    {
+      "title": "GET PRINT",
+      "endpoint": "GET {{base_url}}/purchase/supplier-invoice-down-payments/1/print",
+      "response": {
+        "data": {
+          "id": 1,
+          "purchase_order": {
+            "id": 3,
+            "code": "PO-20250920-003"
+          },
+          "code": "SIDP-20250920-0001",
+          "invoice_number": "SUP-DP-20250920-001",
+          "invoice_date": "2025-09-05",
+          "due_date": "2025-09-10",
+          "amount": 107000,
+          "status": "PAID",
+          "notes": "Down payment for purchase order",
+          "created_at": "2025-09-20T21:25:39+07:00",
+          "updated_at": "2025-09-20T21:25:39+07:00"
+        }
+      }
+    },
+    {
+      "title": "CONFIRM DATA INVOICE TO PENDING",
+      "endpoint": "POST {{base_url}}/purchase/supplier-invoice-down-payments/3/pending",
+      "response": {
+        "data": {
+          "id": 3,
+          "purchase_order": {
+            "id": 1,
+            "code": "PO-20250920-001"
+          },
+          "code": "SIDP-20250920-0002",
+          "invoice_number": "SUP-DP-20250920-002",
+          "invoice_date": "2025-09-02",
+          "due_date": "2025-09-16",
+          "amount": 20000,
+          "status": "UNPAID",
+          "notes": "bayar dp",
+          "created_at": "2025-09-20T21:39:34+07:00",
+          "updated_at": "2025-09-20T21:41:34+07:00"
+        },
+        "message": "status updated"
+      }
+    }
+  ]
+}

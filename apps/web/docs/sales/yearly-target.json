@@ -1,0 +1,959 @@
+{
+  "title": "yearly-target",
+  "description": "A comprehensive guide to the yearly-target API response.",
+  "item": [
+    {
+      "name": "📊 Get All Yearly Targets",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/yearly-targets?page=1&limit=10&search=&searchBy=&year=2024",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "yearly-targets"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Page number (default: 1)"
+            },
+            {
+              "key": "limit",
+              "value": "10",
+              "description": "Items per page (default: 10)"
+            },
+            {
+              "key": "search",
+              "value": "",
+              "description": "Search term"
+            },
+            {
+              "key": "searchBy",
+              "value": "",
+              "description": "Search by specific field (area.name, year, area_id)"
+            },
+            {
+              "key": "year",
+              "value": "2024",
+              "description": "Filter by year"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/yearly-targets"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"year\": 2024,\n            \"area\": {\n                \"id\": 1,\n                \"name\": \"Jakarta\"\n            },\n            \"total\": 1500000000.00,\n            \"created_at\": \"2024-01-15T10:30:00Z\",\n            \"updated_at\": \"2024-01-15T10:30:00Z\"\n        }\n    ],\n    \"meta\": {\n        \"pagination\": {\n            \"total\": 1,\n            \"page\": 1,\n            \"limit\": 10\n        }\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "📋 Get Form Data for Creating",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/yearly-targets?page=1&limit=10&search=&searchBy=&sort_by=year&sort_order=desc&start_date=&end_date=&year=2024",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "yearly-targets"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Page number (default: 1)"
+            },
+            {
+              "key": "limit",
+              "value": "10",
+              "description": "Items per page (default: 10)"
+            },
+            {
+              "key": "search",
+              "value": "",
+              "description": "Search term"
+            },
+            {
+              "key": "searchBy",
+              "value": "",
+              "description": "Search field: area.name (string) or id, year, area_id, total (numeric)"
+            },
+            {
+              "key": "sort_by",
+              "value": "year",
+              "description": "Sort field: id, year, area_id, area.name, total, created_at, updated_at"
+            },
+            {
+              "key": "sort_order",
+              "value": "desc",
+              "description": "Sort order: asc, desc (default: desc)"
+            },
+            {
+              "key": "start_date",
+              "value": "",
+              "description": "Start date filter (YYYY-MM-DD)"
+            },
+            {
+              "key": "end_date",
+              "value": "",
+              "description": "End date filter (YYYY-MM-DD)"
+            },
+            {
+              "key": "year",
+              "value": "2024",
+              "description": "Filter by specific year"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/yearly-targets?page=1&limit=10&year=2024&sort_by=year&sort_order=desc"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": {\n        \"areas\": [\n            {\n                \"id\": 1,\n                \"name\": \"Area A\"\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Area B\"\n            },\n            {\n                \"id\": 3,\n                \"name\": \"Area C\"\n            }\n        ]\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "🏢 Get Areas with Targets for Year",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/yearly-targets/areas/2024",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "yearly-targets", "areas", "2024"]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/yearly-targets/areas/2024"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": {\n        \"year\": 2024,\n        \"areas\": [\n            {\n                \"id\": 1,\n                \"name\": \"Jakarta\",\n                \"target\": 1500000000.00,\n                \"value_pct\": 100.0,\n                \"has_target\": true\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Surabaya\",\n                \"target\": 0,\n                \"value_pct\": 0,\n                \"has_target\": false\n            },\n            {\n                \"id\": 3,\n                \"name\": \"Bandung\",\n                \"target\": 800000000.00,\n                \"value_pct\": 100.0,\n                \"has_target\": true\n            }\n        ]\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "📋 Get Yearly Target Details",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/yearly-targets/1",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "yearly-targets", "1"]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/yearly-targets/999"
+          },
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": {\n        \"id\": 1,\n        \"year\": 2024,\n        \"area_id\": 1,\n        \"area\": {\n            \"id\": 1,\n            \"name\": \"Jakarta\"\n        },\n        \"total\": 1500000000.00,\n        \"created_at\": \"2024-01-15T10:30:00Z\",\n        \"updated_at\": \"2024-01-15T10:30:00Z\",\n        \"details\": []\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "➕ Create Yearly Target (Single Area)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"year\": 2024,\n    \"area_id\": 1,\n    \"target\": 1500000000.0\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/sales/yearly-targets",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "yearly-targets"]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "POST",
+            "url": "{{base_url}}/sales/yearly-targets",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"year\": 2024,\n    \"area_id\": 1,\n    \"target\": 1500000000.0\n}"
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"message\": \"Yearly target created successfully\"\n}"
+        },
+        {
+          "name": "Error Response - Already Exists",
+          "originalRequest": {
+            "method": "POST",
+            "url": "{{base_url}}/sales/yearly-targets",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"year\": 2024,\n    \"area_id\": 1,\n    \"target\": 1500000000.0\n}"
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"error\": \"yearly target for year 2024 and area 1 already exists\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "➕ Create Yearly Targets (Bulk - Multiple Areas)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"year\": 2024,\n    \"targets\": {\n        \"1\": 1500000000.0,\n        \"2\": 1200000000.0,\n        \"3\": 1000000000.0\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/sales/yearly-targets/bulk",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "yearly-targets", "bulk"]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "POST",
+            "url": "{{base_url}}/sales/yearly-targets/bulk",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"year\": 2024,\n    \"targets\": {\n        \"1\": 1500000000.0,\n        \"2\": 1200000000.0,\n        \"3\": 1000000000.0\n    }\n}"
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"message\": \"Yearly targets created successfully\"\n}"
+        },
+        {
+          "name": "Error Response - Already Exists",
+          "originalRequest": {
+            "method": "POST",
+            "url": "{{base_url}}/sales/yearly-targets/bulk",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"year\": 2024,\n    \"targets\": {\n        \"1\": 1500000000.0\n    }\n}"
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"error\": \"yearly target for year 2024 and area 1 already exists\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "🏢 Get Areas with Targets for Year",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/yearly-targets/areas/2024",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "yearly-targets", "areas", "2024"]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/yearly-targets/areas/2024"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": {\n        \"year\": 2024,\n        \"areas\": [\n            {\n                \"id\": 1,\n                \"name\": \"Jakarta\",\n                \"target\": 1500000000.0,\n                \"value_pct\": 40.54,\n                \"has_target\": true\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Bandung\",\n                \"target\": 1200000000.0,\n                \"value_pct\": 32.43,\n                \"has_target\": true\n            },\n            {\n                \"id\": 3,\n                \"name\": \"Surabaya\",\n                \"target\": 0,\n                \"value_pct\": 0,\n                \"has_target\": false\n            }\n        ]\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "✏️ Update Yearly Target",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"year\": 2024,\n    \"total\": 1600000000.0\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/sales/yearly-targets/1",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "yearly-targets", "1"]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "PUT",
+            "url": "{{base_url}}/sales/yearly-targets/1",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"year\": 2024,\n    \"total\": 1600000000.00\n}"
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"message\": \"Yearly target updated successfully\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "🗑️ Delete Yearly Target",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/yearly-targets/1",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "yearly-targets", "1"]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "DELETE",
+            "url": "{{base_url}}/sales/yearly-targets/1"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"message\": \"Yearly target deleted successfully\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "🎯 Get Target Detail Breakdown",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/yearly-targets/1/detail",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "yearly-targets", "1", "detail"]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "DELETE",
+            "url": "{{base_url}}/sales/yearly-targets/999"
+          },
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": {\n        \"yearly_target\": {\n            \"id\": 1,\n            \"year\": 2024,\n            \"area_id\": 1,\n            \"area\": {\n                \"id\": 1,\n                \"name\": \"Jakarta\"\n            },\n            \"total\": 1500000000.00,\n            \"created_at\": \"2024-01-15T10:30:00Z\",\n            \"updated_at\": \"2024-01-15T10:30:00Z\"\n        },\n        \"matrix\": {\n            \"SEGMENT\": {\n                \"IBD\": {\n                    \"01\": 50000000.00,\n                    \"02\": 55000000.00,\n                    \"total\": 605000000.00\n                },\n                \"HBD\": {\n                    \"01\": 30000000.00,\n                    \"02\": 35000000.00,\n                    \"total\": 365000000.00\n                }\n            },\n            \"UNITBISNIS\": {\n                \"LAB\": {\n                    \"01\": 20000000.00,\n                    \"02\": 25000000.00,\n                    \"total\": 245000000.00\n                }\n            }\n        },\n        \"summary\": {\n            \"SEGMENT\": 970000000.00,\n            \"UNITBISNIS\": 245000000.00,\n            \"FOCUS\": 0,\n            \"PROJECT\": 0\n        },\n        \"breakdown_total\": 1215000000.00,\n        \"is_manual_total\": false\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "🧮 Auto Calculate Breakdown",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"yearly_target_id\": 1,\n    \"breakdown\": {\n        \"SEGMENT\": {\n            \"IBD\": {\n                \"01\": 50000000.00,\n                \"02\": 55000000.00,\n                \"03\": 52000000.00,\n                \"04\": 48000000.00,\n                \"05\": 51000000.00,\n                \"06\": 49000000.00,\n                \"07\": 53000000.00,\n                \"08\": 47000000.00,\n                \"09\": 50000000.00,\n                \"10\": 52000000.00,\n                \"11\": 48000000.00,\n                \"12\": 50000000.00\n            },\n            \"HBD\": {\n                \"01\": 30000000.00,\n                \"02\": 35000000.00,\n                \"03\": 32000000.00,\n                \"04\": 28000000.00,\n                \"05\": 31000000.00,\n                \"06\": 29000000.00,\n                \"07\": 33000000.00,\n                \"08\": 27000000.00,\n                \"09\": 30000000.00,\n                \"10\": 32000000.00,\n                \"11\": 28000000.00,\n                \"12\": 30000000.00\n            }\n        },\n        \"UNITBISNIS\": {\n            \"LAB\": {\n                \"01\": 20000000.00,\n                \"02\": 25000000.00,\n                \"03\": 22000000.00,\n                \"04\": 18000000.00,\n                \"05\": 21000000.00,\n                \"06\": 19000000.00,\n                \"07\": 23000000.00,\n                \"08\": 17000000.00,\n                \"09\": 20000000.00,\n                \"10\": 22000000.00,\n                \"11\": 18000000.00,\n                \"12\": 20000000.00\n            }\n        }\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/sales/yearly-targets/auto-calculate",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "yearly-targets", "auto-calculate"]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "POST",
+            "url": "{{base_url}}/sales/yearly-targets/auto-calculate"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": {\n        \"yearly_target_id\": 1,\n        \"original_total\": 1500000000.00,\n        \"formatted_original\": \"Rp 1,500,000,000.00\",\n        \"breakdown_total\": 1215000000.00,\n        \"formatted_breakdown\": \"Rp 1,215,000,000.00\",\n        \"difference\": 285000000.00,\n        \"formatted_difference\": \"Rp 285,000,000.00\",\n        \"is_valid\": true,\n        \"percentages\": {\n            \"SEGMENT\": {\n                \"IBD\": 41.77,\n                \"HBD\": 25.31\n            },\n            \"UNITBISNIS\": {\n                \"LAB\": 16.46\n            }\n        },\n        \"summary\": {\n            \"SEGMENT\": 815000000.00,\n            \"UNITBISNIS\": 245000000.00,\n            \"FOCUS\": 0,\n            \"PROJECT\": 0\n        },\n        \"validation_errors\": []\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "✏️ Update Target Detail Breakdown (Selective)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"segment\": {\n        \"IBD\": {\n            \"01\": 100000000.0,\n            \"02\": 100000000.0,\n            \"03\": 100000000.0,\n            \"04\": 100000000.0,\n            \"05\": 100000000.0,\n            \"06\": 100000000.0,\n            \"07\": 100000000.0,\n            \"08\": 100000000.0,\n            \"09\": 100000000.0,\n            \"10\": 100000000.0,\n            \"11\": 100000000.0,\n            \"12\": 100000000.0\n        },\n        \"HBD\": {\n            \"01\": 25000000.0,\n            \"02\": 25000000.0,\n            \"03\": 25000000.0,\n            \"04\": 25000000.0,\n            \"05\": 25000000.0,\n            \"06\": 25000000.0,\n            \"07\": 25000000.0,\n            \"08\": 25000000.0,\n            \"09\": 25000000.0,\n            \"10\": 25000000.0,\n            \"11\": 25000000.0,\n            \"12\": 25000000.0\n        }\n    },\n    \"unitbisnis\": {\n        \"LAB\": {\n            \"01\": 80000000.0,\n            \"02\": 80000000.0,\n            \"03\": 80000000.0,\n            \"04\": 80000000.0,\n            \"05\": 80000000.0,\n            \"06\": 80000000.0,\n            \"07\": 80000000.0,\n            \"08\": 80000000.0,\n            \"09\": 80000000.0,\n            \"10\": 80000000.0,\n            \"11\": 80000000.0,\n            \"12\": 80000000.0\n        },\n        \"HSE\": {\n            \"01\": 50000000.0,\n            \"02\": 50000000.0,\n            \"03\": 50000000.0,\n            \"04\": 50000000.0,\n            \"05\": 50000000.0,\n            \"06\": 50000000.0,\n            \"07\": 50000000.0,\n            \"08\": 50000000.0,\n            \"09\": 50000000.0,\n            \"10\": 50000000.0,\n            \"11\": 50000000.0,\n            \"12\": 50000000.0\n        },\n        \"ENV\": {\n            \"01\": 20000000.0,\n            \"02\": 20000000.0,\n            \"03\": 20000000.0,\n            \"04\": 20000000.0,\n            \"05\": 20000000.0,\n            \"06\": 20000000.0,\n            \"07\": 20000000.0,\n            \"08\": 20000000.0,\n            \"09\": 20000000.0,\n            \"10\": 20000000.0,\n            \"11\": 20000000.0,\n            \"12\": 20000000.0\n        }\n    },\n    \"focus\": {\n        \"FOP\": {\n            \"01\": 100000000.0,\n            \"02\": 100000000.0,\n            \"03\": 100000000.0,\n            \"04\": 100000000.0,\n            \"05\": 100000000.0,\n            \"06\": 100000000.0,\n            \"07\": 100000000.0,\n            \"08\": 100000000.0,\n            \"09\": 100000000.0,\n            \"10\": 100000000.0,\n            \"11\": 100000000.0,\n            \"12\": 100000000.0\n        },\n        \"NFP\": {\n            \"01\": 50000000.0,\n            \"02\": 50000000.0,\n            \"03\": 50000000.0,\n            \"04\": 50000000.0,\n            \"05\": 50000000.0,\n            \"06\": 50000000.0,\n            \"07\": 50000000.0,\n            \"08\": 50000000.0,\n            \"09\": 50000000.0,\n            \"10\": 50000000.0,\n            \"11\": 50000000.0,\n            \"12\": 50000000.0\n        }\n    },\n    \"project\": {\n        \"PRO\": {\n            \"01\": 120000000.0,\n            \"02\": 120000000.0,\n            \"03\": 120000000.0,\n            \"04\": 120000000.0,\n            \"05\": 120000000.0,\n            \"06\": 120000000.0,\n            \"07\": 120000000.0,\n            \"08\": 120000000.0,\n            \"09\": 120000000.0,\n            \"10\": 120000000.0,\n            \"11\": 120000000.0,\n            \"12\": 120000000.0\n        },\n        \"NPR\": {\n            \"01\": 30000000.0,\n            \"02\": 30000000.0,\n            \"03\": 30000000.0,\n            \"04\": 30000000.0,\n            \"05\": 30000000.0,\n            \"06\": 30000000.0,\n            \"07\": 30000000.0,\n            \"08\": 30000000.0,\n            \"09\": 30000000.0,\n            \"10\": 30000000.0,\n            \"11\": 30000000.0,\n            \"12\": 30000000.0\n        }\n    },\n    \"type_customer\": {\n        \"Corporate\": {\n            \"01\": 50000000.0,\n            \"02\": 50000000.0,\n            \"03\": 50000000.0,\n            \"04\": 50000000.0,\n            \"05\": 50000000.0,\n            \"06\": 50000000.0,\n            \"07\": 50000000.0,\n            \"08\": 50000000.0,\n            \"09\": 50000000.0,\n            \"10\": 50000000.0,\n            \"11\": 50000000.0,\n            \"12\": 50000000.0\n        },\n        \"Retail\": {\n            \"01\": 100000000.0,\n            \"02\": 100000000.0,\n            \"03\": 100000000.0,\n            \"04\": 100000000.0,\n            \"05\": 100000000.0,\n            \"06\": 100000000.0,\n            \"07\": 100000000.0,\n            \"08\": 100000000.0,\n            \"09\": 100000000.0,\n            \"10\": 100000000.0,\n            \"11\": 100000000.0,\n            \"12\": 100000000.0\n        }\n    }\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/sales/yearly-targets/1/detail",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "yearly-targets", "1", "detail"]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response - Selective Update",
+          "originalRequest": {
+            "method": "PUT",
+            "url": "{{base_url}}/sales/yearly-targets/1/detail",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"project\": {\n        \"PRO\": {\n            \"01\": 75000000.0\n        }\n    }\n}"
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"message\": \"Target breakdown updated successfully\"\n}"
+        },
+        {
+          "name": "Error Response - Breakdown Total Less Than Target",
+          "originalRequest": {
+            "method": "PUT",
+            "url": "{{base_url}}/sales/yearly-targets/1/detail",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"segment\": {\n        \"IBD\": {\n            \"01\": 100000000.0\n        }\n    }\n}"
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"error\": \"breakdown total (1200000000.00) kurang dari target utama (1500000000.00). Breakdown total harus >= target utama\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "📊 Export Target Detail to Excel",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/yearly-targets/1/export",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "yearly-targets", "1", "export"]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/yearly-targets/1/export"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            },
+            {
+              "key": "Content-Disposition",
+              "value": "attachment; filename=target_detail_2024_Jakarta.xlsx"
+            }
+          ],
+          "_postman_previewlanguage": "raw",
+          "body": "Binary Excel file content"
+        }
+      ]
+    },
+    {
+      "name": "📊 Get All Yearly Targets (Fixed Searchable Columns)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/yearly-targets?page=1&limit=10&search=Jakarta&searchBy=area.name&sort_by=year&sort_order=desc&start_date=2024-01-01&end_date=2024-12-31&year=2024",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "yearly-targets"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Page number (default: 1)"
+            },
+            {
+              "key": "limit",
+              "value": "10",
+              "description": "Items per page (default: 10)"
+            },
+            {
+              "key": "search",
+              "value": "Jakarta",
+              "description": "Search term - can be used with any searchable column"
+            },
+            {
+              "key": "searchBy",
+              "value": "area.name",
+              "description": "Search by specific field: area.name (string) or id, year, area_id, total (numeric)"
+            },
+            {
+              "key": "sort_by",
+              "value": "year",
+              "description": "Sort by field: id, year, area_id, area.name, total, created_at, updated_at"
+            },
+            {
+              "key": "sort_order",
+              "value": "desc",
+              "description": "Sort order: asc, desc (default: asc)"
+            },
+            {
+              "key": "start_date",
+              "value": "2024-01-01",
+              "description": "Filter by creation date start (YYYY-MM-DD)"
+            },
+            {
+              "key": "end_date",
+              "value": "2024-12-31",
+              "description": "Filter by creation date end (YYYY-MM-DD)"
+            },
+            {
+              "key": "year",
+              "value": "2024",
+              "description": "Filter by specific year"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response with Fixed Metadata",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/yearly-targets?page=1&limit=10&search=Jakarta&searchBy=area.name"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"year\": 2024,\n            \"area\": {\n                \"id\": 1,\n                \"name\": \"Jakarta\"\n            },\n            \"total\": 1500000000.00,\n            \"created_at\": \"2024-01-15T10:30:00Z\",\n            \"updated_at\": \"2024-01-15T10:30:00Z\"\n        },\n        {\n            \"id\": 3,\n            \"year\": 2024,\n            \"area\": {\n                \"id\": 1,\n                \"name\": \"Jakarta\"\n            },\n            \"total\": 1200000000.00,\n            \"created_at\": \"2024-02-10T14:20:00Z\",\n            \"updated_at\": \"2024-02-10T14:20:00Z\"\n        }\n    ],\n    \"meta\": {\n        \"pagination\": {\n            \"total\": 2,\n            \"page\": 1,\n            \"limit\": 10\n        },\n        \"search\": {\n            \"search\": \"Jakarta\",\n            \"searchBy\": \"area.name\"\n        },\n        \"sort\": {\n            \"sort_by\": \"year\",\n            \"sort_order\": \"desc\"\n        },\n        \"filters\": {\n            \"start_date\": \"2024-01-01\",\n            \"end_date\": \"2024-12-31\",\n            \"year\": 2024\n        },\n        \"searchable_columns\": {\n            \"string_columns\": [\n                \"area.name\"\n            ],\n            \"numeric_columns\": [\n                \"id\",\n                \"year\",\n                \"area_id\",\n                \"total\"\n            ],\n            \"description\": \"FIXED: ID is now correctly categorized as numeric column\"\n        },\n        \"sortable_columns\": {\n            \"available_fields\": [\n                \"id\",\n                \"year\",\n                \"area_id\",\n                \"area.name\",\n                \"total\",\n                \"created_at\",\n                \"updated_at\"\n            ]\n        }\n    }\n}"
+        },
+        {
+          "name": "Global Search Example (Fixed)",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/yearly-targets?search=1"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"year\": 2024,\n            \"area\": {\n                \"id\": 1,\n                \"name\": \"Jakarta\"\n            },\n            \"total\": 1500000000.00,\n            \"created_at\": \"2024-01-15T10:30:00Z\",\n            \"updated_at\": \"2024-01-15T10:30:00Z\"\n        }\n    ],\n    \"meta\": {\n        \"pagination\": {\n            \"total\": 1,\n            \"page\": 1,\n            \"limit\": 10\n        },\n        \"search\": {\n            \"search\": \"1\",\n            \"searchBy\": \"\",\n            \"note\": \"Global search now works - searches area.name (ILIKE) and id, year, area_id, total (exact match)\"\n        },\n        \"searchable_columns\": {\n            \"string_columns\": [\"area.name\"],\n            \"numeric_columns\": [\"id\", \"year\", \"area_id\", \"total\"]\n        }\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "🔍 Search Examples (Fixed)",
+      "item": [
+        {
+          "name": "Search by ID (Numeric - Fixed)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/sales/yearly-targets?search=1&searchBy=id",
+              "host": ["{{base_url}}"],
+              "path": ["sales", "yearly-targets"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "1",
+                  "description": "Search for ID = 1 (exact match, no longer causes ILIKE error)"
+                },
+                {
+                  "key": "searchBy",
+                  "value": "id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search by Area Name (String)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/sales/yearly-targets?search=Jakarta&searchBy=area.name",
+              "host": ["{{base_url}}"],
+              "path": ["sales", "yearly-targets"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "Jakarta"
+                },
+                {
+                  "key": "searchBy",
+                  "value": "area.name"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search by Year (Numeric)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/sales/yearly-targets?search=2024&searchBy=year",
+              "host": ["{{base_url}}"],
+              "path": ["sales", "yearly-targets"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "2024"
+                },
+                {
+                  "key": "searchBy",
+                  "value": "year"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search by Total Amount (Numeric)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/sales/yearly-targets?search=1500000000&searchBy=total",
+              "host": ["{{base_url}}"],
+              "path": ["sales", "yearly-targets"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "1500000000"
+                },
+                {
+                  "key": "searchBy",
+                  "value": "total"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Global Search (All Columns - Fixed)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/sales/yearly-targets?search=1",
+              "host": ["{{base_url}}"],
+              "path": ["sales", "yearly-targets"],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "1",
+                  "description": "NOW WORKS: Searches area.name (ILIKE '%1%') AND id,year,area_id,total (exact = 1)"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+  ]
+}

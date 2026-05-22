@@ -1,0 +1,246 @@
+{
+  "module": "Valuation Journal",
+  "endpoints": [
+    {
+      "name": "GET DATA",
+      "method": "GET",
+      "endpoint": "/api/v1/finance/valuation-journals",
+      "description": "Get all valuation journal entries with pagination, search, sort, and filter capabilities. Includes GR (Goods Receipt), DO (Delivery Order), and Stock Opname entries.",
+      "query_parameters": {
+        "page": "Page number (default: 1)",
+        "limit": "Items per page (default: 10)",
+        "search": "Search term",
+        "searchBy": "Field to search in (description, reference_type, id, reference_id)",
+        "sort_by": "Field to sort by (id, entry_date, description, reference_type, reference_id, created_at, updated_at)",
+        "sort_order": "Sort order (asc, desc)",
+        "start_date": "Filter by start date (format: YYYY-MM-DD)",
+        "end_date": "Filter by end date (format: YYYY-MM-DD)"
+      },
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "entry_date": "2025-10-14T12:15:43+07:00",
+            "description": "Goods Receipt Valuation",
+            "reference_type": "GR",
+            "reference_id": 1,
+            "total_debit": 500000,
+            "total_credit": 500000,
+            "created_at": "2025-10-14T12:15:43+07:00",
+            "updated_at": "2025-10-14T12:15:43+07:00"
+          },
+          {
+            "id": 2,
+            "entry_date": "2025-10-14T14:30:15+07:00",
+            "description": "Delivery Order Valuation",
+            "reference_type": "DO",
+            "reference_id": 1,
+            "total_debit": 300000,
+            "total_credit": 300000,
+            "created_at": "2025-10-14T14:30:15+07:00",
+            "updated_at": "2025-10-14T14:30:15+07:00"
+          }
+        ],
+        "meta": {
+          "pagination": {
+            "total": 2,
+            "page": 1,
+            "limit": 10
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "filter": {
+            "start_date": "",
+            "end_date": ""
+          },
+          "searchable_columns": {
+            "string_columns": ["description", "reference_type"],
+            "numeric_columns": ["id", "reference_id"]
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "entry_date",
+              "description",
+              "reference_type",
+              "reference_id",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "GET DATA BY ID",
+      "method": "GET",
+      "endpoint": "/api/v1/finance/valuation-journals/:id",
+      "description": "Get a single valuation journal entry by ID with all journal lines, reference document information, and stock movements",
+      "path_parameters": {
+        "id": "Valuation journal entry ID"
+      },
+      "response": {
+        "data": {
+          "id": 1,
+          "entry_date": "2025-10-14T12:15:43+07:00",
+          "description": "Goods Receipt Valuation",
+          "reference_type": "GR",
+          "reference_id": 1,
+          "lines": [
+            {
+              "id": 1,
+              "chart_of_account_id": 15,
+              "account_code": "112",
+              "account_name": "Inventory",
+              "debit": 500000,
+              "credit": 0
+            },
+            {
+              "id": 2,
+              "chart_of_account_id": 20,
+              "account_code": "110",
+              "account_name": "Cash",
+              "debit": 0,
+              "credit": 500000
+            }
+          ],
+          "reference_document": {
+            "id": 1,
+            "code": "GR-2025-001",
+            "date": "2025-10-14T10:00:00+07:00",
+            "status": "APPROVED",
+            "description": "Goods Receipt"
+          },
+          "stock_movements": [
+            {
+              "product_id": 1,
+              "product_name": "Laptop Dell XPS 13",
+              "product_code": "LAPTOP-001",
+              "warehouse_id": 1,
+              "warehouse_name": "Main Warehouse",
+              "movement_type": "IN",
+              "quantity": 5,
+              "unit_cost": 100000,
+              "total_cost": 500000,
+              "inventory_batch_id": 1,
+              "notes": "Received from supplier"
+            }
+          ],
+          "created_at": "2025-10-14T12:15:43+07:00",
+          "updated_at": "2025-10-14T12:15:43+07:00"
+        }
+      }
+    },
+    {
+      "name": "GET STATS",
+      "method": "GET",
+      "endpoint": "/api/v1/finance/valuation-journals/stats",
+      "description": "Get comprehensive statistics for valuation journal entries including total entries, total debit/credit, stock movement statistics, and monthly breakdown",
+      "response": {
+        "data": {
+          "total_entries": 2,
+          "total_debit": 800000,
+          "total_credit": 800000,
+          "total_stock_in": 500000,
+          "total_stock_out": 300000,
+          "monthly_stats": [
+            {
+              "month": "2025-10",
+              "count": 2,
+              "total_debit": 800000,
+              "total_credit": 800000
+            }
+          ]
+        },
+        "message": "Valuation journal statistics retrieved successfully"
+      }
+    },
+    {
+      "name": "EXPORT",
+      "method": "GET",
+      "endpoint": "/api/v1/finance/valuation-journals/export",
+      "description": "Export all valuation journal entries to Excel format with reference type information",
+      "response": {
+        "type": "file",
+        "format": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "filename": "valuation_journals_export_YYYYMMDD_HHMMSS.xlsx",
+        "columns": [
+          "ID",
+          "Entry Date",
+          "Description",
+          "Reference Type",
+          "Reference ID",
+          "Total Debit",
+          "Total Credit",
+          "Created At",
+          "Updated At"
+        ],
+        "description": "Excel file containing all valuation journal entries with calculated total debit and credit amounts, including reference type information"
+      }
+    }
+  ],
+  "models": {
+    "JournalEntry": {
+      "id": "uint (primary key)",
+      "entry_date": "time.Time (not null)",
+      "description": "string (text)",
+      "reference_type": "ReferenceType (varchar 10, not null) - Values: SO, PO, STOCK_OP, ADJUSTMENT, NTP, PAYMENT, ASSET_TXN, ASSET_DEP, GR, DO",
+      "reference_id": "uint (nullable)",
+      "lines": "[]JournalLine (foreign key relationship)",
+      "created_at": "time.Time",
+      "updated_at": "time.Time",
+      "deleted_at": "gorm.DeletedAt"
+    },
+    "JournalLine": {
+      "id": "uint (primary key)",
+      "journal_entry_id": "uint (not null, foreign key)",
+      "chart_of_account_id": "uint (not null, foreign key)",
+      "debit": "float64 (default: 0)",
+      "credit": "float64 (default: 0)",
+      "journal_entry": "JournalEntry (relationship)",
+      "chart_of_account": "ChartOfAccount (relationship)",
+      "created_at": "time.Time",
+      "updated_at": "time.Time",
+      "deleted_at": "gorm.DeletedAt"
+    },
+    "StockMovementInfo": {
+      "product_id": "uint",
+      "product_name": "string",
+      "product_code": "string",
+      "warehouse_id": "uint",
+      "warehouse_name": "string",
+      "movement_type": "string (IN or OUT)",
+      "quantity": "int64",
+      "unit_cost": "float64",
+      "total_cost": "float64",
+      "inventory_batch_id": "uint (nullable)",
+      "notes": "string"
+    },
+    "ReferenceDocumentInfo": {
+      "id": "uint",
+      "code": "string",
+      "date": "string (RFC3339 format)",
+      "status": "string",
+      "description": "string"
+    }
+  },
+  "notes": {
+    "reference_type_filter": "Valuation Journal entries are filtered by reference_type IN ('GR', 'DO', 'STOCK_OP') - Goods Receipt, Delivery Order, and Stock Opname",
+    "date_filtering": "Entry date can be filtered using start_date and end_date query parameters. If both dates are the same, it filters for that specific day.",
+    "searching": "Search supports both string columns (description, reference_type) using ILIKE for case-insensitive matching, and numeric columns (id, reference_id) using exact match",
+    "sorting": "Default sorting is by entry_date descending (newest first)",
+    "journal_lines": "Each journal entry contains multiple lines with debit and credit amounts. The total debit should equal total credit for balanced entries.",
+    "export": "Export endpoint generates an Excel file with all valuation journal entries. The filename includes a timestamp for uniqueness and includes reference type information.",
+    "monthly_stats": "Monthly statistics group entries by month and calculate total count, debit, and credit amounts for each month",
+    "stock_movements": "Stock movement information is included in GetByID response, showing product details, warehouse, quantity, and cost information",
+    "reference_documents": "Reference document information provides details about the source document (GR, DO, or Stock Opname) that generated the journal entry",
+    "stock_statistics": "Stock movement statistics track total stock in (from GR and Stock Opname increases) and total stock out (from DO and Stock Opname decreases)",
+    "accounting_principles": "Valuation journals record inventory movements with debit to inventory accounts and credit to cash/accounts payable (for GR) or debit to cost of goods sold and credit to inventory (for DO)"
+  }
+}

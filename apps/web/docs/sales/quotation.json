@@ -1,0 +1,1517 @@
+{
+  "title": "quotations",
+  "description": "A comprehensive guide to the quotations API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/sales/sales-quotations?page=1&limit=10",
+      "response": {
+        "data": [
+          {
+            "id": 9,
+            "code": "SQ-CF-20251017-001",
+            "quotation_date": "2025-09-27",
+            "status": "CONVERTED",
+            "total_amount": 240000,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 1,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          },
+          {
+            "id": 8,
+            "code": "SQ-20251005-0008",
+            "quotation_date": "2025-10-05",
+            "status": "CONVERTED",
+            "total_amount": 2228912.5,
+            "customer": {
+              "id": 2,
+              "name": "Klinik Sehat"
+            },
+            "payment_terms": {
+              "id": 2,
+              "name": "Net 7"
+            },
+            "employee": {
+              "id": 2,
+              "name": "John Doe"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 2,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          },
+          {
+            "id": 7,
+            "code": "SQ-20251007-0007",
+            "quotation_date": "2025-10-07",
+            "status": "CONVERTED",
+            "total_amount": 2942900,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 2,
+              "name": "John Doe",
+              "username": "johndoe",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=johndoe&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 1,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          },
+          {
+            "id": 6,
+            "code": "SQ-20251011-0006",
+            "quotation_date": "2025-10-11",
+            "status": "REJECTED",
+            "total_amount": 621168,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 3,
+              "name": "Net 14"
+            },
+            "employee": {
+              "id": 3,
+              "name": "Viewer User"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 3,
+              "name": "Viewer User",
+              "username": "viewer",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=viewer&backgroundColor=fef3c7&size=200"
+            },
+            "items_count": 2,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          },
+          {
+            "id": 5,
+            "code": "SQ-20251012-0005",
+            "quotation_date": "2025-10-12",
+            "status": "REJECTED",
+            "total_amount": 3365000,
+            "customer": {
+              "id": 2,
+              "name": "Klinik Sehat"
+            },
+            "payment_terms": {
+              "id": 2,
+              "name": "Net 7"
+            },
+            "employee": {
+              "id": 2,
+              "name": "John Doe"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 3,
+              "name": "Viewer User",
+              "username": "viewer",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=viewer&backgroundColor=fef3c7&size=200"
+            },
+            "items_count": 1,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          },
+          {
+            "id": 4,
+            "code": "SQ-20251014-0004",
+            "quotation_date": "2025-10-14",
+            "status": "APPROVED",
+            "total_amount": 1203950,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 2,
+              "name": "John Doe",
+              "username": "johndoe",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=johndoe&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 1,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          },
+          {
+            "id": 3,
+            "code": "SQ-20251015-0003",
+            "quotation_date": "2025-10-15",
+            "status": "APPROVED",
+            "total_amount": 2099136,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 3,
+              "name": "Net 14"
+            },
+            "employee": {
+              "id": 3,
+              "name": "Viewer User"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 2,
+              "name": "John Doe",
+              "username": "johndoe",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=johndoe&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 2,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          },
+          {
+            "id": 2,
+            "code": "SQ-20251016-0002",
+            "quotation_date": "2025-10-16",
+            "status": "DRAFT",
+            "total_amount": 974100,
+            "customer": {
+              "id": 2,
+              "name": "Klinik Sehat"
+            },
+            "payment_terms": {
+              "id": 2,
+              "name": "Net 7"
+            },
+            "employee": {
+              "id": 2,
+              "name": "John Doe"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 1,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          },
+          {
+            "id": 1,
+            "code": "SQ-20251017-0001",
+            "quotation_date": "2025-10-17",
+            "status": "DRAFT",
+            "total_amount": 867000,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 2,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 9
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": [
+              "id",
+              "customer_id",
+              "payment_terms_id",
+              "employee_id",
+              "created_by",
+              "total_amount"
+            ],
+            "string_columns": ["code", "notes"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "quotation_date",
+              "status",
+              "total_amount",
+              "created_at",
+              "updated_at",
+              "customer_id",
+              "payment_terms_id",
+              "employee_id",
+              "created_by"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA with Search",
+      "endpoint": "GET {{base_url}}/sales/sales-quotations?search=1&searchBy=id&page=1&limit=10",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "code": "SQ-20251017-0001",
+            "quotation_date": "2025-10-17",
+            "status": "DRAFT",
+            "total_amount": 867000,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 2,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "1",
+            "searchBy": "id"
+          },
+          "searchable_columns": {
+            "numeric_columns": [
+              "id",
+              "customer_id",
+              "payment_terms_id",
+              "employee_id",
+              "created_by",
+              "total_amount"
+            ],
+            "string_columns": ["code", "notes"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "quotation_date",
+              "status",
+              "total_amount",
+              "created_at",
+              "updated_at",
+              "customer_id",
+              "payment_terms_id",
+              "employee_id",
+              "created_by"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA with Sorting by column",
+      "endpoint": "GET {{base_url}}/sales/sales-quotations?sort_by=id&sort_order=asc&page=1&limit=10",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "code": "SQ-20251017-0001",
+            "quotation_date": "2025-10-17",
+            "status": "DRAFT",
+            "total_amount": 867000,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 2,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          },
+          {
+            "id": 2,
+            "code": "SQ-20251016-0002",
+            "quotation_date": "2025-10-16",
+            "status": "DRAFT",
+            "total_amount": 974100,
+            "customer": {
+              "id": 2,
+              "name": "Klinik Sehat"
+            },
+            "payment_terms": {
+              "id": 2,
+              "name": "Net 7"
+            },
+            "employee": {
+              "id": 2,
+              "name": "John Doe"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 1,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          },
+          {
+            "id": 3,
+            "code": "SQ-20251015-0003",
+            "quotation_date": "2025-10-15",
+            "status": "APPROVED",
+            "total_amount": 2099136,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 3,
+              "name": "Net 14"
+            },
+            "employee": {
+              "id": 3,
+              "name": "Viewer User"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 2,
+              "name": "John Doe",
+              "username": "johndoe",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=johndoe&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 2,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          },
+          {
+            "id": 4,
+            "code": "SQ-20251014-0004",
+            "quotation_date": "2025-10-14",
+            "status": "APPROVED",
+            "total_amount": 1203950,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 2,
+              "name": "John Doe",
+              "username": "johndoe",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=johndoe&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 1,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          },
+          {
+            "id": 5,
+            "code": "SQ-20251012-0005",
+            "quotation_date": "2025-10-12",
+            "status": "REJECTED",
+            "total_amount": 3365000,
+            "customer": {
+              "id": 2,
+              "name": "Klinik Sehat"
+            },
+            "payment_terms": {
+              "id": 2,
+              "name": "Net 7"
+            },
+            "employee": {
+              "id": 2,
+              "name": "John Doe"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 3,
+              "name": "Viewer User",
+              "username": "viewer",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=viewer&backgroundColor=fef3c7&size=200"
+            },
+            "items_count": 1,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          },
+          {
+            "id": 6,
+            "code": "SQ-20251011-0006",
+            "quotation_date": "2025-10-11",
+            "status": "REJECTED",
+            "total_amount": 621168,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 3,
+              "name": "Net 14"
+            },
+            "employee": {
+              "id": 3,
+              "name": "Viewer User"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 3,
+              "name": "Viewer User",
+              "username": "viewer",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=viewer&backgroundColor=fef3c7&size=200"
+            },
+            "items_count": 2,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          },
+          {
+            "id": 7,
+            "code": "SQ-20251007-0007",
+            "quotation_date": "2025-10-07",
+            "status": "CONVERTED",
+            "total_amount": 2942900,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 2,
+              "name": "John Doe",
+              "username": "johndoe",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=johndoe&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 1,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          },
+          {
+            "id": 8,
+            "code": "SQ-20251005-0008",
+            "quotation_date": "2025-10-05",
+            "status": "CONVERTED",
+            "total_amount": 2228912.5,
+            "customer": {
+              "id": 2,
+              "name": "Klinik Sehat"
+            },
+            "payment_terms": {
+              "id": 2,
+              "name": "Net 7"
+            },
+            "employee": {
+              "id": 2,
+              "name": "John Doe"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 2,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          },
+          {
+            "id": 9,
+            "code": "SQ-CF-20251017-001",
+            "quotation_date": "2025-09-27",
+            "status": "CONVERTED",
+            "total_amount": 240000,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 1,
+            "created_at": "2025-10-17T09:44:16Z",
+            "updated_at": "2025-10-17T09:44:16Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 9
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": [
+              "id",
+              "customer_id",
+              "payment_terms_id",
+              "employee_id",
+              "created_by",
+              "total_amount"
+            ],
+            "string_columns": ["code", "notes"]
+          },
+          "sort": {
+            "sort_by": "id",
+            "sort_order": "asc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "quotation_date",
+              "status",
+              "total_amount",
+              "created_at",
+              "updated_at",
+              "customer_id",
+              "payment_terms_id",
+              "employee_id",
+              "created_by"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA with Date Range Filter",
+      "endpoint": "GET {{base_url}}/sales/sales-quotations?start_date=2025-09-27&end_date=2025-09-27&page=1&limit=10",
+      "response": {
+        "data": [
+          {
+            "id": 10,
+            "code": "QUO-20250925-0002",
+            "quotation_date": "2025-09-17",
+            "status": "APPROVED",
+            "total_amount": 874200,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": ""
+            },
+            "items_count": 2,
+            "created_at": "2025-09-25T05:41:50Z",
+            "updated_at": "2025-09-25T05:41:57Z"
+          },
+          {
+            "id": 9,
+            "code": "QUO-20250925-0001",
+            "quotation_date": "2025-09-17",
+            "status": "APPROVED",
+            "total_amount": 874200,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": ""
+            },
+            "items_count": 2,
+            "created_at": "2025-09-25T05:38:46Z",
+            "updated_at": "2025-09-25T05:41:17Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "2025-09-17",
+            "start_date": "2025-09-17"
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 2
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": [
+              "id",
+              "customer_id",
+              "payment_terms_id",
+              "employee_id",
+              "created_by",
+              "total_amount"
+            ],
+            "string_columns": ["code", "notes"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "quotation_date",
+              "status",
+              "total_amount",
+              "created_at",
+              "updated_at",
+              "customer_id",
+              "payment_terms_id",
+              "employee_id",
+              "created_by"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/sales/sales-quotations/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "code": "SQ-20251017-0001",
+          "quotation_date": "2025-10-17",
+          "status": "DRAFT",
+          "notes": "Draft quotation for office equipment - pending customer review",
+          "subtotal": 720000,
+          "tax_amount": 72000,
+          "tax_rate": 10,
+          "delivery_cost": 50000,
+          "other_cost": 25000,
+          "total_amount": 867000,
+          "customer": {
+            "id": 1,
+            "name": "RSUD Tugurejo"
+          },
+          "payment_terms": {
+            "id": 1,
+            "name": "Cash on Delivery"
+          },
+          "employee": {
+            "id": 1,
+            "name": "Administrator"
+          },
+          "business_unit": {
+            "id": 1,
+            "name": "Sales Department"
+          },
+          "created_by_user": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+          },
+          "items": [
+            {
+              "id": 1,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 5,
+              "price": 1500,
+              "discount": 0,
+              "subtotal": 7500
+            },
+            {
+              "id": 2,
+              "product": {
+                "id": 2,
+                "name": "Gloves (Box)",
+                "code": "MED-002",
+                "cost_price": 50000,
+                "selling_price": 75000,
+                "image_url": ""
+              },
+              "quantity": 10,
+              "price": 75000,
+              "discount": 5,
+              "subtotal": 712500
+            }
+          ],
+          "created_at": "2025-10-17T09:44:16Z",
+          "updated_at": "2025-10-17T09:44:16Z"
+        }
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "description": "Get necessary data for adding a new quotations, such as customers and employees.",
+      "endpoint": "GET {{base_url}}/sales/sales-quotations/add",
+      "response": {
+        "data": {
+          "business_units": [
+            {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            {
+              "id": 2,
+              "name": "Marketing Department"
+            },
+            {
+              "id": 3,
+              "name": "Finance Department"
+            },
+            {
+              "id": 4,
+              "name": "Human Resources"
+            },
+            {
+              "id": 5,
+              "name": "Operations"
+            }
+          ],
+          "customers": [
+            {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            {
+              "id": 2,
+              "name": "Klinik Sehat"
+            }
+          ],
+          "employees": [
+            {
+              "id": 1,
+              "name": "Administrator"
+            },
+            {
+              "id": 2,
+              "name": "John Doe"
+            },
+            {
+              "id": 3,
+              "name": "Viewer User"
+            }
+          ],
+          "payment_terms": [
+            {
+              "days": 0,
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            {
+              "days": 7,
+              "id": 2,
+              "name": "Net 7"
+            },
+            {
+              "days": 14,
+              "id": 3,
+              "name": "Net 14"
+            },
+            {
+              "days": 21,
+              "id": 4,
+              "name": "Net 21"
+            },
+            {
+              "days": 30,
+              "id": 5,
+              "name": "Net 30"
+            },
+            {
+              "days": 45,
+              "id": 6,
+              "name": "Net 45"
+            },
+            {
+              "days": 60,
+              "id": 7,
+              "name": "Net 60"
+            }
+          ],
+          "products": [
+            {
+              "code": "MED-001",
+              "cost_price": 1000,
+              "id": 1,
+              "image_url": "",
+              "name": "Syringe 5ml",
+              "selling_price": 1500
+            },
+            {
+              "code": "MED-002",
+              "cost_price": 50000,
+              "id": 2,
+              "image_url": "",
+              "name": "Gloves (Box)",
+              "selling_price": 75000
+            },
+            {
+              "code": "OFF-001",
+              "cost_price": 30000,
+              "id": 3,
+              "image_url": "",
+              "name": "Printer Paper A4",
+              "selling_price": 45000
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/sales/sales-quotations",
+      "body": {
+        "customer_id": 1,
+        "payment_terms_id": 1,
+        "employee_id": 1,
+        "business_unit_id": 1,
+        "quotation_date": "2025-09-17",
+        "notes": "Draft quotation for office equipment",
+        "tax_rate": 11.0,
+        "delivery_cost": 50000,
+        "other_cost": 25000,
+        "items": [
+          {
+            "product_id": 1,
+            "quantity": 5,
+            "price": 1500,
+            "discount": 0
+          },
+          {
+            "product_id": 2,
+            "quantity": 10,
+            "price": 75000,
+            "discount": 5
+          }
+        ]
+      },
+      "response": {
+        "data": {
+          "id": 10,
+          "code": "QUO-20251017-0001",
+          "quotation_date": "2025-09-17",
+          "status": "DRAFT",
+          "notes": "Draft quotation for office equipment",
+          "subtotal": 720000,
+          "tax_amount": 79200,
+          "tax_rate": 11,
+          "delivery_cost": 50000,
+          "other_cost": 25000,
+          "total_amount": 874200,
+          "customer": {
+            "id": 1,
+            "name": "RSUD Tugurejo"
+          },
+          "payment_terms": {
+            "id": 1,
+            "name": "Cash on Delivery"
+          },
+          "employee": {
+            "id": 1,
+            "name": "Administrator"
+          },
+          "business_unit": {
+            "id": 1,
+            "name": "Sales Department"
+          },
+          "created_by_user": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+          },
+          "items": [
+            {
+              "id": 14,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 5,
+              "price": 1500,
+              "discount": 0,
+              "subtotal": 7500
+            },
+            {
+              "id": 15,
+              "product": {
+                "id": 2,
+                "name": "Gloves (Box)",
+                "code": "MED-002",
+                "cost_price": 50000,
+                "selling_price": 75000,
+                "image_url": ""
+              },
+              "quantity": 10,
+              "price": 75000,
+              "discount": 5,
+              "subtotal": 712500
+            }
+          ],
+          "created_at": "2025-10-17T14:03:36Z",
+          "updated_at": "2025-10-17T14:03:36Z"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/sales/sales-quotations/1",
+      "body": {
+        "customer_id": 2,
+        "payment_terms_id": 2,
+        "employee_id": 2,
+        "business_unit_id": 3,
+        "quotation_date": "2025-09-18",
+        "notes": "Updated quotation notes",
+        "tax_rate": 11.0,
+        "delivery_cost": 60000,
+        "other_cost": 30000,
+        "items": [
+          {
+            "product_id": 3,
+            "quantity": 8,
+            "price": 2000,
+            "discount": 10
+          }
+        ]
+      },
+      "response": {
+        "data": {
+          "id": 1,
+          "code": "SQ-20251017-0001",
+          "quotation_date": "2025-09-18",
+          "status": "DRAFT",
+          "notes": "Updated quotation notes",
+          "subtotal": 14400,
+          "tax_amount": 1584,
+          "tax_rate": 11,
+          "delivery_cost": 60000,
+          "other_cost": 30000,
+          "total_amount": 105984,
+          "customer": {
+            "id": 2,
+            "name": "Klinik Sehat"
+          },
+          "payment_terms": {
+            "id": 2,
+            "name": "Net 7"
+          },
+          "employee": {
+            "id": 2,
+            "name": "John Doe"
+          },
+          "business_unit": {
+            "id": 3,
+            "name": "Finance Department"
+          },
+          "created_by_user": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+          },
+          "items": [
+            {
+              "id": 16,
+              "product": {
+                "id": 3,
+                "name": "Printer Paper A4",
+                "code": "OFF-001",
+                "cost_price": 30000,
+                "selling_price": 45000,
+                "image_url": ""
+              },
+              "quantity": 8,
+              "price": 2000,
+              "discount": 10,
+              "subtotal": 14400
+            }
+          ],
+          "created_at": "2025-10-17T13:45:24Z",
+          "updated_at": "2025-10-17T14:03:59Z"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/sales/sales-quotations/2",
+      "response": {
+        "message": "deleted"
+      }
+    },
+    {
+      "title": "APPROVE QUOTATION",
+      "endpoint": "POST {{base_url}}/sales/sales-quotations/1/approve",
+      "response": {
+        "data": {
+          "id": 1,
+          "code": "SQ-20251017-0001",
+          "quotation_date": "2025-09-18",
+          "status": "APPROVED",
+          "notes": "Updated quotation notes",
+          "subtotal": 14400,
+          "tax_amount": 1584,
+          "tax_rate": 11,
+          "delivery_cost": 60000,
+          "other_cost": 30000,
+          "total_amount": 105984,
+          "customer": {
+            "id": 2,
+            "name": "Klinik Sehat"
+          },
+          "payment_terms": {
+            "id": 2,
+            "name": "Net 7"
+          },
+          "employee": {
+            "id": 2,
+            "name": "John Doe"
+          },
+          "business_unit": {
+            "id": 3,
+            "name": "Finance Department"
+          },
+          "created_by_user": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+          },
+          "items": [
+            {
+              "id": 16,
+              "product": {
+                "id": 3,
+                "name": "Printer Paper A4",
+                "code": "OFF-001",
+                "cost_price": 30000,
+                "selling_price": 45000,
+                "image_url": ""
+              },
+              "quantity": 8,
+              "price": 2000,
+              "discount": 10,
+              "subtotal": 14400
+            }
+          ],
+          "created_at": "2025-10-17T13:45:24Z",
+          "updated_at": "2025-10-17T14:04:32Z"
+        },
+        "message": "approved"
+      }
+    },
+    {
+      "title": "REJECT QUOTATION",
+      "endpoint": "POST {{base_url}}/sales/sales-quotations/2/reject",
+      "response": {
+        "data": {
+          "id": 2,
+          "code": "SQ-20251016-0002",
+          "quotation_date": "2025-10-16",
+          "status": "REJECTED",
+          "notes": "Draft quotation for warehouse supplies - awaiting approval",
+          "subtotal": 810000,
+          "tax_amount": 89100,
+          "tax_rate": 11,
+          "delivery_cost": 75000,
+          "other_cost": 0,
+          "total_amount": 974100,
+          "customer": {
+            "id": 2,
+            "name": "Klinik Sehat"
+          },
+          "payment_terms": {
+            "id": 2,
+            "name": "Net 7"
+          },
+          "employee": {
+            "id": 2,
+            "name": "John Doe"
+          },
+          "business_unit": {
+            "id": 1,
+            "name": "Sales Department"
+          },
+          "created_by_user": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+          },
+          "items": [
+            {
+              "id": 3,
+              "product": {
+                "id": 3,
+                "name": "Printer Paper A4",
+                "code": "OFF-001",
+                "cost_price": 30000,
+                "selling_price": 45000,
+                "image_url": ""
+              },
+              "quantity": 20,
+              "price": 45000,
+              "discount": 10,
+              "subtotal": 810000
+            }
+          ],
+          "created_at": "2025-10-17T13:45:24Z",
+          "updated_at": "2025-10-17T14:05:07Z"
+        },
+        "message": "rejected"
+      }
+    },
+    {
+      "title": "CONVERT QUOTATION TO SALES ORDER",
+      "endpoint": "POST {{base_url}}/sales/sales-quotations/4/convert",
+      "response": {
+        "data": {
+          "id": 4,
+          "code": "SQ-20251014-0004",
+          "quotation_date": "2025-10-14",
+          "status": "CONVERTED",
+          "notes": "Approved quotation for annual office supplies contract",
+          "subtotal": 990000,
+          "tax_amount": 103950,
+          "tax_rate": 10.5,
+          "delivery_cost": 80000,
+          "other_cost": 30000,
+          "total_amount": 1203950,
+          "customer": {
+            "id": 1,
+            "name": "RSUD Tugurejo"
+          },
+          "payment_terms": {
+            "id": 1,
+            "name": "Cash on Delivery"
+          },
+          "employee": {
+            "id": 1,
+            "name": "Administrator"
+          },
+          "business_unit": {
+            "id": 1,
+            "name": "Sales Department"
+          },
+          "created_by_user": {
+            "id": 2,
+            "name": "John Doe",
+            "username": "johndoe",
+            "photo_profile": "",
+            "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=johndoe&backgroundColor=fecaca&size=200"
+          },
+          "items": [
+            {
+              "id": 6,
+              "product": {
+                "id": 3,
+                "name": "Printer Paper A4",
+                "code": "OFF-001",
+                "cost_price": 30000,
+                "selling_price": 45000,
+                "image_url": ""
+              },
+              "quantity": 22,
+              "price": 45000,
+              "discount": 0,
+              "subtotal": 990000
+            }
+          ],
+          "created_at": "2025-10-17T13:45:25Z",
+          "updated_at": "2025-10-17T14:05:23Z"
+        },
+        "message": "converted"
+      }
+    },
+    {
+      "title": "STATUS DEFINITIONS",
+      "status_definitions": {
+        "quotation_status": {
+          "DRAFT": {
+            "description": "Initial status when quotation is created",
+            "allowed_operations": ["update", "delete", "approve", "reject"],
+            "next_possible_status": ["APPROVED", "REJECTED"],
+            "business_rules": [
+              "Can be updated or deleted",
+              "Cannot convert to sales order",
+              "Must be approved or rejected before proceeding to next steps"
+            ]
+          },
+          "APPROVED": {
+            "description": "Quotation has been approved and ready for processing",
+            "allowed_operations": ["view", "convert"],
+            "next_possible_status": ["CONVERTED"],
+            "business_rules": [
+              "Cannot be updated or deleted",
+              "Can convert to sales order"
+            ]
+          },
+          "REJECTED": {
+            "description": "Quotation has been rejected and cannot be processed",
+            "allowed_operations": ["view", "update", "delete"],
+            "next_possible_status": ["DRAFT"],
+            "business_rules": [
+              "Read-only status",
+              "Can be updated",
+              "Cannot convert to sales order"
+            ]
+          },
+          "CONVERTED": {
+            "description": "Quotation has been converted to sales order and cannot be processed",
+            "allowed_operations": ["view"],
+            "next_possible_status": [],
+            "business_rules": [
+              "Read-only status",
+              "Cannot be updated or deleted",
+              "Cannot convert to sales order"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

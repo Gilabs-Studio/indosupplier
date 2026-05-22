@@ -1,0 +1,308 @@
+{
+  "title": "Data Master/Product/products",
+  "description": "A comprehensive guide to the Data Master API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/master-data/products",
+      "response": {
+        "data": [
+          {
+            "id": 3,
+            "name": "Printer Paper A4",
+            "code": "OFF-001",
+            "product_category": {
+              "id": 1,
+              "name": "Medical Supplies"
+            },
+            "unit_of_measure": {
+              "id": 1,
+              "name": "Piece",
+              "abbreviation": "pcs"
+            },
+            "cost_price": 30000,
+            "selling_price": 45000,
+            "image_url": "",
+            "created_at": "2025-09-16T14:03:20+07:00",
+            "updated_at": "2025-09-16T14:03:20+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "A",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": [
+              "id",
+              "product_category_id",
+              "unit_of_measure_id"
+            ],
+            "string_columns": ["name", "code", "image_url"]
+          },
+          "sort": {
+            "sort_by": "name",
+            "sort_order": "asc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "name",
+              "code",
+              "image_url",
+              "created_at",
+              "updated_at",
+              "product_category_id",
+              "unit_of_measure_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA STATS",
+      "endpoint": "{{base_url}}/master-data/products/stats",
+      "response": {
+        "data": {
+          "total": 3
+        },
+        "message": "Product statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/master-data/products/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "name": "Syringe 5ml",
+          "code": "MED-001",
+          "product_category": {
+            "id": 1,
+            "name": "Medical Supplies"
+          },
+          "unit_of_measure": {
+            "id": 1,
+            "name": "Piece",
+            "abbreviation": "pcs"
+          },
+          "cost_price": 1000,
+          "selling_price": 1500,
+          "image_url": "",
+          "created_at": "2025-09-16T14:03:20+07:00",
+          "updated_at": "2025-09-16T14:03:20+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "GET {{base_url}}/master-data/products/add",
+      "response": {
+        "data": {
+          "categories": [
+            {
+              "id": 1,
+              "name": "Medical Supplies"
+            },
+            {
+              "id": 2,
+              "name": "Admin Utama"
+            },
+            {
+              "id": 3,
+              "name": "Office Supplies"
+            },
+            {
+              "id": 4,
+              "name": "Admin Utama"
+            }
+          ],
+          "unit_of_measures": [
+            {
+              "id": 1,
+              "name": "Piece",
+              "abbreviation": "pcs"
+            },
+            {
+              "id": 2,
+              "name": "Admin Utama",
+              "abbreviation": "adm"
+            },
+            {
+              "id": 3,
+              "name": "Kilogram",
+              "abbreviation": "kg"
+            },
+            {
+              "id": 4,
+              "name": "Admin Utama",
+              "abbreviation": "adm"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/master-data/products",
+      "body": [
+        {
+          "key": "name",
+          "value": "Produk B",
+          "description": "",
+          "type": "text",
+          "uuid": "2f89cdbf-e692-44ee-8441-89fb7599ab6d",
+          "enabled": true
+        },
+        {
+          "key": "product_category_id",
+          "value": "2",
+          "description": "",
+          "type": "text",
+          "uuid": "3be056d9-b525-4d1b-8d12-8c825940e540",
+          "enabled": true
+        },
+        {
+          "key": "unit_of_measure_id",
+          "value": "1",
+          "description": "",
+          "type": "text",
+          "uuid": "32c8052c-4561-4580-934f-296537269ae9",
+          "enabled": true
+        },
+        {
+          "key": "cost_price",
+          "value": "20000",
+          "description": "",
+          "type": "text",
+          "uuid": "7f65573d-226b-45e0-b9fa-2fc6e465f1ce",
+          "enabled": true
+        },
+        {
+          "key": "selling_price",
+          "value": "30000",
+          "description": "",
+          "type": "text",
+          "uuid": "5115762a-cda9-4de5-9448-a48efb90e6df",
+          "enabled": true
+        },
+        {
+          "key": "image",
+          "description": "",
+          "type": "file",
+          "uuid": "fcd83940-7f60-4ab9-a3f6-425547fd99f5",
+          "enabled": true,
+          "value": ["postman-cloud:///1f0774b1-a50c-4980-922a-daf18df63abf"]
+        }
+      ],
+      "response": {
+        "data": {
+          "id": 4,
+          "name": "Produk B",
+          "code": "PRD-20250916-0001",
+          "product_category": {
+            "id": 2,
+            "name": "Admin Utama"
+          },
+          "unit_of_measure": {
+            "id": 1,
+            "name": "Piece",
+            "abbreviation": "pcs"
+          },
+          "cost_price": 20000,
+          "selling_price": 30000,
+          "image_url": "uploads/products/212d7011-69ab-4998-ba1b-a113eaa2f1b2.jpg",
+          "created_at": "2025-09-16T14:48:25+07:00",
+          "updated_at": "2025-09-16T14:48:25+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/master-data/products/2",
+      "body": [
+        {
+          "key": "name",
+          "value": "Produk B",
+          "type": "text",
+          "uuid": "2f89cdbf-e692-44ee-8441-89fb7599ab6d",
+          "enabled": true
+        },
+        {
+          "key": "product_category_id",
+          "value": "2",
+          "type": "text",
+          "uuid": "3be056d9-b525-4d1b-8d12-8c825940e540",
+          "enabled": true
+        },
+        {
+          "key": "unit_of_measure_id",
+          "value": "1",
+          "type": "text",
+          "uuid": "32c8052c-4561-4580-934f-296537269ae9",
+          "enabled": true
+        },
+        {
+          "key": "cost_price",
+          "value": "20000",
+          "type": "text",
+          "uuid": "7f65573d-226b-45e0-b9fa-2fc6e465f1ce",
+          "enabled": true
+        },
+        {
+          "key": "selling_price",
+          "value": "30000",
+          "type": "text",
+          "uuid": "5115762a-cda9-4de5-9448-a48efb90e6df",
+          "enabled": true
+        },
+        {
+          "key": "image",
+          "type": "file",
+          "uuid": "fcd83940-7f60-4ab9-a3f6-425547fd99f5",
+          "enabled": true,
+          "value": ["postman-cloud:///1f0774b1-a50c-4980-922a-daf18df63abf"]
+        }
+      ],
+      "response": {
+        "data": {
+          "id": 1,
+          "name": "Produk B",
+          "code": "MED-001",
+          "product_category": {
+            "id": 2,
+            "name": "Admin Utama"
+          },
+          "unit_of_measure": {
+            "id": 1,
+            "name": "Piece",
+            "abbreviation": "pcs"
+          },
+          "cost_price": 20000,
+          "selling_price": 30000,
+          "image_url": "uploads/products/6854732c-cf0e-4a22-a4f8-8256cd8abf07.jpg",
+          "created_at": "2025-09-16T14:03:20+07:00",
+          "updated_at": "2025-09-16T14:49:18+07:00"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/master-data/products/2",
+      "response": {
+        "message": "deleted"
+      }
+    }
+  ]
+}

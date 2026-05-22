@@ -1,0 +1,147 @@
+{
+  "title": "Data Master/User Management/ Menu",
+  "description": "A comprehensive guide to the Data Master API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/master-data/menus",
+      "response": {
+        "data": [
+          {
+            "id": 23,
+            "name": "Area",
+            "code": "AREA",
+            "url_path": "/data-master/system/area",
+            "icon": "map",
+            "order_no": 1,
+            "is_active": true,
+            "parent_id": 6,
+            "created_at": "2025-09-16T13:53:25+07:00",
+            "updated_at": "2025-09-16T13:53:25+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 1,
+            "page": 1,
+            "total": 35
+          },
+          "search": {
+            "search": "A",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "parent_id", "order_no"],
+            "string_columns": ["name", "code", "url_path", "icon"]
+          },
+          "sort": {
+            "sort_by": "name",
+            "sort_order": "asc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "name",
+              "url",
+              "icon",
+              "parent_id",
+              "sort_order",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/master-data/menus/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "name": "Data Master",
+          "code": "DATA_MASTER",
+          "url_path": "/data-master",
+          "icon": "database",
+          "order_no": 1,
+          "is_active": true,
+          "created_at": "2025-09-16T13:53:25+07:00",
+          "updated_at": "2025-09-16T13:53:25+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET DATA STATS",
+      "endpoint": "{{base_url}}/master-data/menus/stats",
+      "response": {
+        "data": {
+          "total": 35
+        },
+        "message": "Menu statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/master-data/menus",
+      "body": {
+        "name": "Dashboard1",
+        "code": "DASHBOARD1",
+        "url_path": "/dashboard1",
+        "icon": "fa-home",
+        "order_no": 4,
+        "is_active": true
+      },
+      "response": {
+        "data": {
+          "id": 36,
+          "name": "Dashboard1",
+          "code": "DASHBOARD1",
+          "url_path": "/dashboard1",
+          "icon": "fa-home",
+          "order_no": 4,
+          "is_active": true,
+          "created_at": "2025-09-11T14:44:21+07:00",
+          "updated_at": "2025-09-11T14:44:21+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/master-data/menus/2",
+      "body": {
+        "name": "Laporan",
+        "code": "REPORTS",
+        "url_path": "/reports",
+        "icon": "fa-chart-bar",
+        "order_no": 3,
+        "is_active": false
+      },
+      "response": {
+        "data": {
+          "id": 2,
+          "name": "Laporan",
+          "code": "REPORTS",
+          "url_path": "/reports",
+          "icon": "fa-chart-bar",
+          "order_no": 3,
+          "is_active": false,
+          "created_at": "0001-01-01T00:00:00Z",
+          "updated_at": "0001-01-01T00:00:00Z"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/master-data/menus/2",
+      "response": {
+        "message": "deleted"
+      }
+    }
+  ]
+}

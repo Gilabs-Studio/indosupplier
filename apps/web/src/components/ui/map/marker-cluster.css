@@ -1,0 +1,85 @@
+/* Custom marker cluster styles to match modern Apple-like UI:
+   - White circular background in dark theme
+   - Primary color background in light theme
+   - White text in light theme, primary text in dark theme
+   - Subtle border and shadow
+*/
+
+.marker-cluster {
+  background-image: none !important;
+  border: 1.5px solid hsl(var(--border)) !important;
+  box-shadow: 0 4px 8px hsl(var(--foreground) / 0.08) !important;
+  border-radius: 999px !important;
+  /* Light theme: primary background */
+  background-color: hsl(var(--primary)) !important;
+  color: white !important;
+}
+
+/* Dark theme: white background with subtle primary border */
+html.dark .marker-cluster {
+  background-color: white !important;
+  border-color: hsl(var(--primary) / 0.3) !important;
+  color: hsl(var(--primary)) !important;
+}
+
+/* The cluster element sometimes has nested div/span for the number. */
+.marker-cluster div,
+.marker-cluster span {
+  background: transparent !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  line-height: 1 !important;
+  /* Light theme: white text */
+  color: white !important;
+}
+
+/* Dark theme: primary color text */
+html.dark .marker-cluster div,
+html.dark .marker-cluster span {
+  color: hsl(var(--primary)) !important;
+}
+
+/* Different cluster sizes: keep shape consistent */
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+  width: 36px !important;
+  height: 36px !important;
+  margin-left: -18px !important; /* center the circle */
+  margin-top: -18px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Ensure the icon image (if any) is hidden so we only see the plain circle and text */
+.marker-cluster .marker-cluster-icon,
+.marker-cluster img {
+  display: none !important;
+}
+
+/* Override default inner div offset from library so text is perfectly centered */
+.marker-cluster div {
+  /* match outer size so inner block is centered */
+  width: 36px !important;
+  height: 36px !important;
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+  text-align: center !important;
+  border-radius: 999px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.marker-cluster span {
+  line-height: 36px !important; /* vertical centering fallback */
+}
+
+/* Slightly different sizing for large clusters */
+.marker-cluster-large {
+  width: 44px !important;
+  height: 44px !important;
+  margin-left: -22px !important;
+  margin-top: -22px !important;
+}

@@ -1,0 +1,251 @@
+{
+  "title": "Data Master/Product/inventory-batch",
+  "description": "A comprehensive guide to the Data Master API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/master-data/inventory-batchs",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "code": "BATCH-MED-001-001",
+            "product": {
+              "id": 1,
+              "name": "Produk B",
+              "image_url": "uploads/products/6854732c-cf0e-4a22-a4f8-8256cd8abf07.jpg",
+              "code": "MED-001"
+            },
+            "warehouse": {
+              "id": 1,
+              "name": "Main Warehouse"
+            },
+            "expired_date": "2026-03-16T00:00:00Z",
+            "quantity": 88,
+            "received_at": null,
+            "notes": "Initial batch",
+            "created_at": "2025-09-16T14:03:20+07:00",
+            "updated_at": "2025-09-16T14:03:20+07:00"
+          },
+          {
+            "id": 2,
+            "code": "BATCH-MED-001-002",
+            "product": {
+              "id": 1,
+              "name": "Produk B",
+              "image_url": "uploads/products/6854732c-cf0e-4a22-a4f8-8256cd8abf07.jpg",
+              "code": "MED-001"
+            },
+            "warehouse": {
+              "id": 1,
+              "name": "Main Warehouse"
+            },
+            "expired_date": "2026-09-16T00:00:00Z",
+            "quantity": 0,
+            "received_at": null,
+            "notes": "Secondary batch",
+            "created_at": "2025-09-16T14:03:20+07:00",
+            "updated_at": "2025-09-16T14:03:20+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 2
+          },
+          "search": {
+            "search": "1",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "product_id", "warehouse_id", "quantity"],
+            "string_columns": ["code", "notes"]
+          },
+          "sort": {
+            "sort_by": "id",
+            "sort_order": "asc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "batch_number",
+              "expired_date",
+              "quantity",
+              "created_at",
+              "updated_at",
+              "product_id",
+              "warehouse_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA STATS",
+      "endpoint": "{{base_url}}/master-data/inventory-batchs/stats",
+      "response": {
+        "data": {
+          "total": 2
+        },
+        "message": "Inventory batch statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/master-data/inventory-batchs/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "code": "BATCH-MED-001-001",
+          "product": {
+            "id": 1,
+            "name": "Produk B",
+            "image_url": "uploads/products/6854732c-cf0e-4a22-a4f8-8256cd8abf07.jpg",
+            "code": "MED-001"
+          },
+          "warehouse": {
+            "id": 1,
+            "name": "Main Warehouse"
+          },
+          "expired_date": "2026-03-16T00:00:00Z",
+          "quantity": 88,
+          "received_at": null,
+          "notes": "Initial batch",
+          "created_at": "2025-09-16T14:03:20+07:00",
+          "updated_at": "2025-09-16T14:03:20+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "{{base_url}}/master-data/inventory-batchs/add",
+      "response": {
+        "data": {
+          "products": [
+            {
+              "id": 1,
+              "name": "Produk B",
+              "image_url": "",
+              "code": "MED-001"
+            },
+            {
+              "id": 2,
+              "name": "Gloves (Box)",
+              "image_url": "",
+              "code": "MED-002"
+            },
+            {
+              "id": 3,
+              "name": "Printer Paper A4",
+              "image_url": "",
+              "code": "OFF-001"
+            },
+            {
+              "id": 4,
+              "name": "Produk B",
+              "image_url": "",
+              "code": "PRD-20250916-0001"
+            }
+          ],
+          "warehouses": [
+            {
+              "id": 1,
+              "name": "Main Warehouse"
+            },
+            {
+              "id": 2,
+              "name": "Backup Warehouse"
+            },
+            {
+              "id": 3,
+              "name": "Gudang Utama"
+            }
+          ]
+        }
+      }
+    },
+
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/master-data/inventory-batchs",
+      "body": {
+        "product_id": 1,
+        "warehouse_id": 1,
+        "expired_date": "2026-01-31T00:00:00Z",
+        "quantity": 500,
+        "received_at": "2025-09-01T10:30:00Z",
+        "notes": "Penerimaan barang import gelombang pertama"
+      },
+      "response": {
+        "data": {
+          "id": 3,
+          "code": "IB-20250916-E63E",
+          "product": {
+            "id": 1,
+            "name": "Syringe 5ml",
+            "image_url": "",
+            "code": "MED-001"
+          },
+          "warehouse": {
+            "id": 1,
+            "name": "Main Warehouse"
+          },
+          "expired_date": "2026-01-31T00:00:00Z",
+          "quantity": 500,
+          "received_at": "2025-09-01T17:30:00+07:00",
+          "notes": "Penerimaan barang import gelombang pertama",
+          "created_at": "2025-09-16T15:14:36+07:00",
+          "updated_at": "2025-09-16T15:14:36+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/master-data/inventory-batchs/2",
+      "body": {
+        "product_id": 1,
+        "warehouse_id": 1,
+        "expired_date": "2026-01-31T00:00:00Z",
+        "quantity": 500,
+        "received_at": "2025-09-01T10:30:00Z",
+        "notes": "Penerimaan barang import gelombang pertama"
+      },
+      "response": {
+        "data": {
+          "id": 2,
+          "code": "BATCH-MED-001-002",
+          "product": {
+            "id": 1,
+            "name": "Syringe 5ml",
+            "image_url": "",
+            "code": "MED-001"
+          },
+          "warehouse": {
+            "id": 1,
+            "name": "Main Warehouse"
+          },
+          "expired_date": "2026-01-31T00:00:00Z",
+          "quantity": 500,
+          "received_at": "2025-09-01T17:30:00+07:00",
+          "notes": "Penerimaan barang import gelombang pertama",
+          "created_at": "2025-09-16T15:06:43+07:00",
+          "updated_at": "2025-09-16T15:15:09+07:00"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/master-data/inventory-batchs/2",
+      "response": {
+        "message": "deleted"
+      }
+    }
+  ]
+}

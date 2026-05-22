@@ -1,0 +1,49 @@
+# Air - Live Reload for Go
+# https://github.com/air-verse/air
+#
+# Usage:
+#   1. Start Docker DB/Redis: docker compose up -d postgres redis
+#   2. Uncomment LOCAL_GO_MODE in .env
+#   3. Run: air
+
+root = "."
+tmp_dir = "bin"
+
+[build]
+  # Windows binary output
+  bin = "bin\\main.exe"
+  # Build command - CGO disabled on Windows (no libwebp); WebP conversion falls back to passthrough
+  cmd = "$env:CGO_ENABLED='0'; go build -o bin/main.exe ./cmd/api/main.go"
+  # Watch these directories
+  include_dir = ["cmd", "internal", "pkg", "seeders"]
+  # Watch these extensions
+  include_ext = ["go", "toml", "yaml", "yml"]
+  # Exclude patterns
+  exclude_dir = ["bin", "tmp", "vendor", "node_modules", "uploads"]
+  exclude_regex = ["_test\\.go$"]
+  # Delay after file change before rebuild (ms)
+  delay = 1000
+  # Stop running old binary before building
+  stop_on_error = true
+  # Send interrupt signal before killing
+  send_interrupt = true
+  # Kill delay after interrupt (ms)
+  kill_delay = 500
+  # Log build output
+  log = "bin/build-errors.log"
+
+[log]
+  # Show timestamp in log
+  time = true
+  # Main only shows main log
+  main_only = false
+
+[color]
+  main = "magenta"
+  watcher = "cyan"
+  build = "yellow"
+  runner = "green"
+
+[misc]
+  # Delete tmp directory on exit
+  clean_on_exit = true

@@ -1,0 +1,1156 @@
+{
+  "title": "finance/adjustment-journals",
+  "description": "A comprehensive guide to the Finance API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/finance/adjustment-journals",
+      "response": {
+        "data": [
+          {
+            "id": 3,
+            "entry_date": "2025-09-24",
+            "description": "Penyesuaian biaya listrik bulan September",
+            "total_debit": 1500000,
+            "total_credit": 1500000,
+            "created_at": "2025-09-25T08:46:53+07:00",
+            "updated_at": "2025-09-25T08:46:53+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id"],
+            "string_columns": ["description"]
+          },
+          "sort": {
+            "sort_by": "id",
+            "sort_order": "asc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "entry_date",
+              "description",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/finance/adjustment-journals/1",
+      "response": {
+        "data": {
+          "id": 3,
+          "entry_date": "2025-09-24",
+          "description": "Penyesuaian biaya listrik bulan September",
+          "lines": [
+            {
+              "id": 5,
+              "chart_of_account_id": 12,
+              "chart_of_account_code": "106",
+              "chart_of_account_name": "Bank Jateng 1.088.00380-9",
+              "debit": 1500000,
+              "credit": 0
+            },
+            {
+              "id": 6,
+              "chart_of_account_id": 22,
+              "chart_of_account_code": "112",
+              "chart_of_account_name": "Merchandise Inventory",
+              "debit": 0,
+              "credit": 1500000
+            }
+          ],
+          "created_at": "2025-09-25T08:46:53+07:00",
+          "updated_at": "2025-09-25T08:46:53+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET DATA STATS",
+      "endpoint": "GET {{base_url}}/finance/adjustment-journals/add",
+      "response": {
+        "data": {
+          "total": 1
+        },
+        "message": "Adjustment journal statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "GET {{base_url}}/finance/adjustment-journals/add",
+      "response": {
+        "data": {
+          "chart_of_accounts": [
+            {
+              "id": 6,
+              "code": "100",
+              "name": "Cash",
+              "type": "CASH_BANK"
+            },
+            {
+              "id": 1,
+              "code": "1000",
+              "name": "Assets",
+              "type": "ASSET"
+            },
+            {
+              "id": 7,
+              "code": "101",
+              "name": "PPIC Cash",
+              "type": "CASH_BANK"
+            },
+            {
+              "id": 8,
+              "code": "102",
+              "name": "Bank Jateng 1.034.03633-7",
+              "type": "CASH_BANK"
+            },
+            {
+              "id": 9,
+              "code": "103",
+              "name": "Bank Mandiri 135.001337.6825",
+              "type": "CASH_BANK"
+            },
+            {
+              "id": 10,
+              "code": "104",
+              "name": "Bank BCA 854.5200.747",
+              "type": "CASH_BANK"
+            },
+            {
+              "id": 11,
+              "code": "105",
+              "name": "Bank Jateng 1.088.00237-3",
+              "type": "CASH_BANK"
+            },
+            {
+              "id": 12,
+              "code": "106",
+              "name": "Bank Jateng 1.088.00380-9",
+              "type": "CASH_BANK"
+            },
+            {
+              "id": 13,
+              "code": "107",
+              "name": "Bank Jateng 1.021.02334-1",
+              "type": "CASH_BANK"
+            },
+            {
+              "id": 18,
+              "code": "108",
+              "name": "Trade Receivables",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 19,
+              "code": "109",
+              "name": "Employee Receivables",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 20,
+              "code": "110",
+              "name": "Other Third-Party Receivables",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 21,
+              "code": "111",
+              "name": "Employee Advances",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 22,
+              "code": "112",
+              "name": "Merchandise Inventory",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 23,
+              "code": "113",
+              "name": "Prepaid Purchases",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 24,
+              "code": "114",
+              "name": "Prepaid Rent",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 25,
+              "code": "115",
+              "name": "Input VAT",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 26,
+              "code": "116",
+              "name": "Income Tax Article 22 Advance",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 27,
+              "code": "117",
+              "name": "Income Tax Article 23 Advance",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 28,
+              "code": "118",
+              "name": "Income Tax Article 25 Advance",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 29,
+              "code": "119",
+              "name": "Overpaid VAT",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 40,
+              "code": "120",
+              "name": "Car",
+              "type": "FIXED_ASSET"
+            },
+            {
+              "id": 41,
+              "code": "121",
+              "name": "Motorcycle",
+              "type": "FIXED_ASSET"
+            },
+            {
+              "id": 42,
+              "code": "122",
+              "name": "Office Equipment",
+              "type": "FIXED_ASSET"
+            },
+            {
+              "id": 43,
+              "code": "123",
+              "name": "Land and Building",
+              "type": "FIXED_ASSET"
+            },
+            {
+              "id": 44,
+              "code": "124",
+              "name": "Land and Building Under Construction",
+              "type": "FIXED_ASSET"
+            },
+            {
+              "id": 45,
+              "code": "125",
+              "name": "Accumulated Depreciation - Car",
+              "type": "FIXED_ASSET"
+            },
+            {
+              "id": 46,
+              "code": "126",
+              "name": "Accumulated Depreciation - Motorcycle",
+              "type": "FIXED_ASSET"
+            },
+            {
+              "id": 47,
+              "code": "127",
+              "name": "Accumulated Depreciation - Office Equipment",
+              "type": "FIXED_ASSET"
+            },
+            {
+              "id": 48,
+              "code": "128",
+              "name": "Accumulated Depreciation - Land and Building",
+              "type": "FIXED_ASSET"
+            },
+            {
+              "id": 30,
+              "code": "129",
+              "name": "Receivables from PT. Autentik Karya Analitika",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 31,
+              "code": "130",
+              "name": "Receivable from CV. Mitra Karya Analitika",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 32,
+              "code": "131",
+              "name": "Stock Investment PT. Estu Lentera Indo Teknologi",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 33,
+              "code": "132",
+              "name": "Unbilled Receivables",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 14,
+              "code": "133",
+              "name": "Marketing Cash",
+              "type": "CASH_BANK"
+            },
+            {
+              "id": 15,
+              "code": "134",
+              "name": "Admin Cash",
+              "type": "CASH_BANK"
+            },
+            {
+              "id": 16,
+              "code": "135",
+              "name": "Bank Jateng Account 1,034,03920-4",
+              "type": "CASH_BANK"
+            },
+            {
+              "id": 34,
+              "code": "136",
+              "name": "Other Current Assets",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 17,
+              "code": "137",
+              "name": "Bank Danamon 008800326723",
+              "type": "CASH_BANK"
+            },
+            {
+              "id": 35,
+              "code": "138",
+              "name": "Tantiem Receivable",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 36,
+              "code": "139",
+              "name": "Production Service Receivable",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 37,
+              "code": "140",
+              "name": "Holiday Allowance Receivable",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 38,
+              "code": "150",
+              "name": "Output VAT Not Yet Invoiced",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 39,
+              "code": "190",
+              "name": "Cross Entry",
+              "type": "CURRENT_ASSET"
+            },
+            {
+              "id": 49,
+              "code": "200",
+              "name": "Trade Payables",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 2,
+              "code": "2000",
+              "name": "Liabilities",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 50,
+              "code": "201",
+              "name": "Bank Payables",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 51,
+              "code": "202",
+              "name": "Leasing Payables",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 52,
+              "code": "203",
+              "name": "BPJS Health Payables",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 53,
+              "code": "204",
+              "name": "BPJS Employment Payables",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 54,
+              "code": "205",
+              "name": "Other Payables",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 55,
+              "code": "206",
+              "name": "Sales Advances",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 56,
+              "code": "207",
+              "name": "Salaries Payable",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 57,
+              "code": "208",
+              "name": "Incentive Payable",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 58,
+              "code": "209",
+              "name": "Payable to CV. Mitra Karya Analitika",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 59,
+              "code": "210",
+              "name": "Output VAT",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 60,
+              "code": "211",
+              "name": "Income Tax Article 21 Payable",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 61,
+              "code": "212",
+              "name": "Income Tax Article 23 Payable",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 62,
+              "code": "213",
+              "name": "Income Tax Article 25 Payable",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 63,
+              "code": "214",
+              "name": "Income Tax Article 29 Payable",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 64,
+              "code": "215",
+              "name": "Underpaid VAT",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 65,
+              "code": "216",
+              "name": "Payables to PT. Autentik Karya Analitika",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 66,
+              "code": "217",
+              "name": "Unbilled Payable",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 67,
+              "code": "218",
+              "name": "Sales Discount Payable",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 68,
+              "code": "219",
+              "name": "Input VAT Not Yet Invoiced",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 69,
+              "code": "225",
+              "name": "Tantiem",
+              "type": "EQUITY"
+            },
+            {
+              "id": 70,
+              "code": "226",
+              "name": "Dividends",
+              "type": "EQUITY"
+            },
+            {
+              "id": 71,
+              "code": "227",
+              "name": "Production Services",
+              "type": "EQUITY"
+            },
+            {
+              "id": 72,
+              "code": "228",
+              "name": "Pension Fund",
+              "type": "EQUITY"
+            },
+            {
+              "id": 73,
+              "code": "300",
+              "name": "Capital",
+              "type": "CAPITAL"
+            },
+            {
+              "id": 3,
+              "code": "3000",
+              "name": "Equity",
+              "type": "EQUITY"
+            },
+            {
+              "id": 74,
+              "code": "310",
+              "name": "Retained Earnings",
+              "type": "RETAINED_EARNINGS"
+            },
+            {
+              "id": 75,
+              "code": "320",
+              "name": "Current Year Profit (Loss)",
+              "type": "CURRENT_PROFIT"
+            },
+            {
+              "id": 76,
+              "code": "400",
+              "name": "Merchandise Sales",
+              "type": "SALES_REVENUE"
+            },
+            {
+              "id": 4,
+              "code": "4000",
+              "name": "Revenue",
+              "type": "REVENUE"
+            },
+            {
+              "id": 77,
+              "code": "401",
+              "name": "Sales Discount",
+              "type": "SALES_REVENUE"
+            },
+            {
+              "id": 78,
+              "code": "402",
+              "name": "Sales Returns",
+              "type": "OTHER_REVENUE"
+            },
+            {
+              "id": 79,
+              "code": "403",
+              "name": "Sales Shipping Revenue",
+              "type": "OTHER_REVENUE"
+            },
+            {
+              "id": 80,
+              "code": "404",
+              "name": "Other Revenue",
+              "type": "OTHER_REVENUE"
+            },
+            {
+              "id": 81,
+              "code": "420",
+              "name": "Non-Operating Revenue",
+              "type": "OTHER_REVENUE"
+            },
+            {
+              "id": 82,
+              "code": "421",
+              "name": "Bank Interest Income",
+              "type": "OTHER_REVENUE"
+            },
+            {
+              "id": 83,
+              "code": "500",
+              "name": "Cost of Goods Sold",
+              "type": "COST_OF_GOODS_SOLD"
+            },
+            {
+              "id": 5,
+              "code": "5000",
+              "name": "Expenses",
+              "type": "EXPENSE"
+            },
+            {
+              "id": 84,
+              "code": "501",
+              "name": "Purchase Discount",
+              "type": "COST_OF_GOODS_SOLD"
+            },
+            {
+              "id": 85,
+              "code": "600",
+              "name": "Salary Expense",
+              "type": "SALARY_WAGES"
+            },
+            {
+              "id": 86,
+              "code": "601",
+              "name": "Meal Allowance Expense",
+              "type": "SALARY_WAGES"
+            },
+            {
+              "id": 87,
+              "code": "602",
+              "name": "Employee Incentive Expense",
+              "type": "SALARY_WAGES"
+            },
+            {
+              "id": 88,
+              "code": "604",
+              "name": "Overtime Expense",
+              "type": "SALARY_WAGES"
+            },
+            {
+              "id": 89,
+              "code": "605",
+              "name": "Holiday Allowance Expense",
+              "type": "SALARY_WAGES"
+            },
+            {
+              "id": 90,
+              "code": "610",
+              "name": "Purchase Shipping Expense",
+              "type": "OPERATIONAL"
+            },
+            {
+              "id": 91,
+              "code": "611",
+              "name": "Sales Expense",
+              "type": "OPERATIONAL"
+            },
+            {
+              "id": 92,
+              "code": "612",
+              "name": "Sales Shipping Expense",
+              "type": "OPERATIONAL"
+            },
+            {
+              "id": 93,
+              "code": "613",
+              "name": "Fuel Expense",
+              "type": "OPERATIONAL"
+            },
+            {
+              "id": 94,
+              "code": "614",
+              "name": "Toll and Parking Transportation Expense",
+              "type": "OPERATIONAL"
+            },
+            {
+              "id": 95,
+              "code": "615",
+              "name": "Domestic Business Travel Expense",
+              "type": "OPERATIONAL"
+            },
+            {
+              "id": 96,
+              "code": "616",
+              "name": "Marketing Expense",
+              "type": "OPERATIONAL"
+            },
+            {
+              "id": 97,
+              "code": "617",
+              "name": "Entertainment Expense",
+              "type": "OPERATIONAL"
+            },
+            {
+              "id": 98,
+              "code": "618",
+              "name": "Merchandise Installation Expense",
+              "type": "OPERATIONAL"
+            },
+            {
+              "id": 99,
+              "code": "619",
+              "name": "Sample Goods Expense",
+              "type": "OPERATIONAL"
+            },
+            {
+              "id": 100,
+              "code": "620",
+              "name": "Damaged Goods Expense",
+              "type": "OPERATIONAL"
+            },
+            {
+              "id": 101,
+              "code": "621",
+              "name": "Marketing Expense",
+              "type": "OPERATIONAL"
+            },
+            {
+              "id": 102,
+              "code": "622",
+              "name": "Training Expense",
+              "type": "OPERATIONAL"
+            },
+            {
+              "id": 103,
+              "code": "640",
+              "name": "Administrative Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 104,
+              "code": "641",
+              "name": "Advertising Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 105,
+              "code": "642",
+              "name": "Telephone & Internet Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 106,
+              "code": "643",
+              "name": "Electricity Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 107,
+              "code": "644",
+              "name": "Water Utility Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 108,
+              "code": "645",
+              "name": "Maintenance and Repair Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 109,
+              "code": "646",
+              "name": "Building Maintenance and Repair Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 110,
+              "code": "647",
+              "name": "Inventory Maintenance and Repair Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 111,
+              "code": "648",
+              "name": "Vehicle Maintenance and Repair Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 112,
+              "code": "649",
+              "name": "Motorcycle Maintenance and Repair Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 113,
+              "code": "650",
+              "name": "Building Rental Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 114,
+              "code": "651",
+              "name": "Warehouse Rental Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 115,
+              "code": "652",
+              "name": "Vehicle Rental Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 116,
+              "code": "653",
+              "name": "BPJS Health Insurance Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 117,
+              "code": "654",
+              "name": "BPJS Employment Insurance Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 118,
+              "code": "655",
+              "name": "Vehicle Depreciation Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 119,
+              "code": "656",
+              "name": "Motorcycle Depreciation Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 120,
+              "code": "657",
+              "name": "Inventory Depreciation Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 121,
+              "code": "658",
+              "name": "Vehicle STNK Tax Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 122,
+              "code": "659",
+              "name": "Motorcycle STNK Tax Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 123,
+              "code": "660",
+              "name": "Photocopy Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 124,
+              "code": "661",
+              "name": "Office Cleaning Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 125,
+              "code": "662",
+              "name": "Office Stationery Expenses (ATK)",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 126,
+              "code": "663",
+              "name": "Stamp Duty Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 127,
+              "code": "664",
+              "name": "Household Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 128,
+              "code": "665",
+              "name": "Health Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 129,
+              "code": "666",
+              "name": "Donation Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 130,
+              "code": "667",
+              "name": "Equipment Rental Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 131,
+              "code": "668",
+              "name": "Miscellaneous Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 132,
+              "code": "669",
+              "name": "Loan Interest Expenses",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 133,
+              "code": "670",
+              "name": "Bank Administration Fee",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 134,
+              "code": "671",
+              "name": "Leasing Penalty Fee",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 135,
+              "code": "672",
+              "name": "Leasing Interest Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 136,
+              "code": "673",
+              "name": "Office Event Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 137,
+              "code": "674",
+              "name": "Gathering Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 138,
+              "code": "675",
+              "name": "Halal Bihalal Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 139,
+              "code": "676",
+              "name": "Sports Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 140,
+              "code": "677",
+              "name": "Bank Tax Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 141,
+              "code": "678",
+              "name": "Income Tax Article 21 Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 142,
+              "code": "679",
+              "name": "Import Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 143,
+              "code": "680",
+              "name": "Loan Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 144,
+              "code": "681",
+              "name": "Document Delivery Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 145,
+              "code": "682",
+              "name": "Tax Penalty Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 146,
+              "code": "683",
+              "name": "Office Equipment Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 147,
+              "code": "684",
+              "name": "Security Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 148,
+              "code": "685",
+              "name": "Software Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 149,
+              "code": "686",
+              "name": "Office Supplies Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 150,
+              "code": "688",
+              "name": "Land and Building Tax Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 151,
+              "code": "689",
+              "name": "Indirect Production Costs",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 152,
+              "code": "690",
+              "name": "PPH 29 Tax Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 153,
+              "code": "691",
+              "name": "PPH 23 Tax Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 154,
+              "code": "692",
+              "name": "PPH 22 Tax Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 155,
+              "code": "693",
+              "name": "Function Test Expense",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 156,
+              "code": "694",
+              "name": "Packaging Costs",
+              "type": "ADMINISTRATIVE"
+            },
+            {
+              "id": 157,
+              "code": "695",
+              "name": "Calibration Expense",
+              "type": "ADMINISTRATIVE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/finance/adjustment-journals",
+      "body": {
+        "entry_date": "2025-09-24",
+        "description": "Penyesuaian biaya listrik bulan September",
+        "lines": [
+          {
+            "chart_of_account_id": 12,
+            "type": "debit // tipe hanya berisis debit dan credit aj",
+            "value": 1500000
+          },
+          {
+            "chart_of_account_id": 22,
+            "type": "credit",
+            "value": 1500000
+          }
+        ]
+      },
+      "response": {
+        "data": {
+          "id": 3,
+          "entry_date": "2025-09-24",
+          "description": "Penyesuaian biaya listrik bulan September",
+          "lines": [
+            {
+              "id": 5,
+              "chart_of_account_id": 12,
+              "chart_of_account_code": "106",
+              "chart_of_account_name": "Bank Jateng 1.088.00380-9",
+              "debit": 1500000,
+              "credit": 0
+            },
+            {
+              "id": 6,
+              "chart_of_account_id": 22,
+              "chart_of_account_code": "112",
+              "chart_of_account_name": "Merchandise Inventory",
+              "debit": 0,
+              "credit": 1500000
+            }
+          ],
+          "created_at": "2025-09-25T08:46:53+07:00",
+          "updated_at": "2025-09-25T08:46:53+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/finance/adjustment-journals/1",
+      "body": {
+        "entry_date": "2025-09-24",
+        "description": "Penyesuaian biaya listrik bulan September",
+        "lines": [
+          {
+            "chart_of_account_id": 12,
+            "type": "debit // tipe hanya berisis debit dan credit aj",
+            "value": 1500000
+          },
+          {
+            "chart_of_account_id": 22,
+            "type": "credit",
+            "value": 1500000
+          }
+        ]
+      },
+      "response": {
+        "data": {
+          "id": 3,
+          "entry_date": "2025-09-24",
+          "description": "Penyesuaian biaya listrik bulan September",
+          "lines": [
+            {
+              "id": 7,
+              "chart_of_account_id": 12,
+              "chart_of_account_code": "106",
+              "chart_of_account_name": "Bank Jateng 1.088.00380-9",
+              "debit": 1500000,
+              "credit": 0
+            },
+            {
+              "id": 8,
+              "chart_of_account_id": 22,
+              "chart_of_account_code": "112",
+              "chart_of_account_name": "Merchandise Inventory",
+              "debit": 0,
+              "credit": 1500000
+            }
+          ],
+          "created_at": "2025-09-25T08:46:53+07:00",
+          "updated_at": "2025-09-25T08:48:54+07:00"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/finance/adjustment-journals/2",
+      "response": {
+        "message": "deleted"
+      }
+    },
+    {
+      "title": "EXPORT DATA",
+      "endpoint": "POST {{base_url}}/finance/adjustment-journals/export",
+      "response": "export"
+    }
+  ]
+}

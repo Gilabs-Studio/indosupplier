@@ -1,0 +1,604 @@
+{
+  "title": "purchase/supplier-invoices",
+  "description": "A comprehensive guide to the purchase API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/purchase/supplier-invoices",
+      "response": {
+        "data": [
+          {
+            "id": 2,
+            "purchase_order": {
+              "id": 3,
+              "code": "PO-20250920-003"
+            },
+            "payment_terms": {
+              "id": 5,
+              "name": "Net 30"
+            },
+            "code": "SI-20250920-0002",
+            "invoice_number": "SUP-INV-20250920-002",
+            "invoice_date": "2025-09-10",
+            "due_date": "2025-09-15",
+            "tax_rate": 10,
+            "tax_amount": 24050,
+            "delivery_cost": 50000,
+            "other_cost": 25000,
+            "sub_total": 165500,
+            "amount": 264550,
+            "status": "UNPAID",
+            "notes": "test notes",
+            "items": [
+              {
+                "id": 3,
+                "supplier_invoice_id": 2,
+                "product_id": 1,
+                "product": {
+                  "id": 1,
+                  "name": "Syringe 5ml",
+                  "code": "MED-001",
+                  "cost_price": 1000,
+                  "selling_price": 1500,
+                  "image_url": ""
+                },
+                "quantity": 10,
+                "price": 5000,
+                "discount": 0,
+                "sub_total": 50000,
+                "created_at": "2025-09-20T21:25:39+07:00",
+                "updated_at": "2025-09-20T21:25:39+07:00"
+              },
+              {
+                "id": 4,
+                "supplier_invoice_id": 2,
+                "product_id": 2,
+                "product": {
+                  "id": 2,
+                  "name": "Gloves (Box)",
+                  "code": "MED-002",
+                  "cost_price": 50000,
+                  "selling_price": 75000,
+                  "image_url": ""
+                },
+                "quantity": 5,
+                "price": 12000,
+                "discount": 5,
+                "sub_total": 57000,
+                "created_at": "2025-09-20T21:25:39+07:00",
+                "updated_at": "2025-09-20T21:25:39+07:00"
+              },
+              {
+                "id": 5,
+                "supplier_invoice_id": 2,
+                "product_id": 3,
+                "product": {
+                  "id": 3,
+                  "name": "Printer Paper A4",
+                  "code": "OFF-001",
+                  "cost_price": 30000,
+                  "selling_price": 45000,
+                  "image_url": ""
+                },
+                "quantity": 20,
+                "price": 3000,
+                "discount": 2.5,
+                "sub_total": 58500,
+                "created_at": "2025-09-20T21:25:39+07:00",
+                "updated_at": "2025-09-20T21:25:39+07:00"
+              }
+            ],
+            "created_at": "2025-09-20T21:25:39+07:00",
+            "updated_at": "2025-09-20T21:25:39+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "purchase_order_id", "amount"],
+            "string_columns": ["code", "invoice_number"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "invoice_number",
+              "invoice_date",
+              "due_date",
+              "amount",
+              "status",
+              "created_at",
+              "updated_at",
+              "purchase_order_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/purchase/supplier-invoices/1",
+      "response": {
+        "data": {
+          "id": 2,
+          "purchase_order": {
+            "id": 3,
+            "code": "PO-20250920-003"
+          },
+          "payment_terms": {
+            "id": 5,
+            "name": "Net 30"
+          },
+          "code": "SI-20250920-0002",
+          "invoice_number": "SUP-INV-20250920-002",
+          "invoice_date": "2025-09-10",
+          "due_date": "2025-09-15",
+          "tax_rate": 10,
+          "tax_amount": 24050,
+          "delivery_cost": 50000,
+          "other_cost": 25000,
+          "sub_total": 165500,
+          "amount": 264550,
+          "status": "UNPAID",
+          "notes": "test notes",
+          "items": [
+            {
+              "id": 3,
+              "supplier_invoice_id": 2,
+              "product_id": 1,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 10,
+              "price": 5000,
+              "discount": 0,
+              "sub_total": 50000,
+              "created_at": "2025-09-20T21:25:39+07:00",
+              "updated_at": "2025-09-20T21:25:39+07:00"
+            },
+            {
+              "id": 4,
+              "supplier_invoice_id": 2,
+              "product_id": 2,
+              "product": {
+                "id": 2,
+                "name": "Gloves (Box)",
+                "code": "MED-002",
+                "cost_price": 50000,
+                "selling_price": 75000,
+                "image_url": ""
+              },
+              "quantity": 5,
+              "price": 12000,
+              "discount": 5,
+              "sub_total": 57000,
+              "created_at": "2025-09-20T21:25:39+07:00",
+              "updated_at": "2025-09-20T21:25:39+07:00"
+            },
+            {
+              "id": 5,
+              "supplier_invoice_id": 2,
+              "product_id": 3,
+              "product": {
+                "id": 3,
+                "name": "Printer Paper A4",
+                "code": "OFF-001",
+                "cost_price": 30000,
+                "selling_price": 45000,
+                "image_url": ""
+              },
+              "quantity": 20,
+              "price": 3000,
+              "discount": 2.5,
+              "sub_total": 58500,
+              "created_at": "2025-09-20T21:25:39+07:00",
+              "updated_at": "2025-09-20T21:25:39+07:00"
+            }
+          ],
+          "created_at": "2025-09-20T21:25:39+07:00",
+          "updated_at": "2025-09-20T21:25:39+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "{{base_url}}/purchase/supplier-invoices/add",
+      "response": {
+        "data": {
+          "payment_terms": [
+            {
+              "id": 2,
+              "name": "Net 7"
+            },
+            {
+              "id": 3,
+              "name": "Net 14"
+            },
+            {
+              "id": 4,
+              "name": "Net 21"
+            },
+            {
+              "id": 5,
+              "name": "Net 30"
+            },
+            {
+              "id": 6,
+              "name": "Net 45"
+            },
+            {
+              "id": 7,
+              "name": "Net 60"
+            },
+            {
+              "id": 8,
+              "name": "Net 2000"
+            },
+            {
+              "id": 1,
+              "name": "Netttt 30 NOGA"
+            },
+            {
+              "id": 9,
+              "name": "TEST"
+            },
+            {
+              "id": 11,
+              "name": "Net 22000"
+            }
+          ],
+          "purchase_orders": [
+            {
+              "id": 2,
+              "supplier": {
+                "id": 1,
+                "name": "PT. Medika"
+              },
+              "code": "PO-20250920-002",
+              "order_date": "2025-09-15",
+              "status": "APPROVED",
+              "total_amount": 110000,
+              "items": [
+                {
+                  "id": 3,
+                  "product": {
+                    "id": 1,
+                    "name": "Syringe 5ml",
+                    "code": "MED-001",
+                    "image_url": ""
+                  },
+                  "quantity": 10,
+                  "price": 5000,
+                  "subtotal": 50000
+                },
+                {
+                  "id": 4,
+                  "product": {
+                    "id": 2,
+                    "name": "Gloves (Box)",
+                    "code": "MED-002",
+                    "image_url": ""
+                  },
+                  "quantity": 5,
+                  "price": 12000,
+                  "subtotal": 60000
+                }
+              ]
+            },
+            {
+              "id": 1,
+              "supplier": {
+                "id": 1,
+                "name": "PT. Medika"
+              },
+              "code": "PO-20250920-001",
+              "order_date": "2025-09-10",
+              "status": "APPROVED",
+              "total_amount": 110000,
+              "items": [
+                {
+                  "id": 1,
+                  "product": {
+                    "id": 1,
+                    "name": "Syringe 5ml",
+                    "code": "MED-001",
+                    "image_url": ""
+                  },
+                  "quantity": 10,
+                  "price": 5000,
+                  "subtotal": 50000
+                },
+                {
+                  "id": 2,
+                  "product": {
+                    "id": 2,
+                    "name": "Gloves (Box)",
+                    "code": "MED-002",
+                    "image_url": ""
+                  },
+                  "quantity": 5,
+                  "price": 12000,
+                  "subtotal": 60000
+                }
+              ],
+              "invoice_dp": {
+                "id": 3,
+                "purchase_order": {
+                  "id": 1,
+                  "code": "PO-20250920-001"
+                },
+                "code": "SIDP-20250920-0002",
+                "invoice_number": "SUP-DP-20250920-002",
+                "invoice_date": "2025-09-02",
+                "due_date": "2025-09-16",
+                "amount": 20000,
+                "status": "UNPAID",
+                "notes": "bayar dp",
+                "created_at": "2025-09-20T21:39:34+07:00",
+                "updated_at": "2025-09-20T21:41:34+07:00"
+              }
+            }
+          ]
+        }
+      }
+    },
+
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/purchase/supplier-invoices",
+      "body": {
+        "purchase_order_id": 2,
+        "payment_terms_id": 1,
+        "invoice_number": "INV-2025-001",
+        "invoice_date": "2025-09-19",
+        "due_date": "2025-10-19",
+        "tax_rate": 11.0,
+        "delivery_cost": 50000,
+        "other_cost": 25000,
+        "notes": "Pembayaran via transfer bank",
+        "comments": "//   items ngambil dari get add, user hanya bisa mengisi price dan discount aj dalam bentuk persentase, user tidak bisa tambah items juga",
+        "items": [
+          {
+            "product_id": 1,
+            "quantity": 10,
+            "price": 150000,
+            "discount": 5
+          },
+          {
+            "product_id": 1,
+            "quantity": 5,
+            "price": 200000,
+            "discount": 0
+          }
+        ]
+      },
+      "response": {
+        "data": {
+          "id": 4,
+          "purchase_order": {
+            "id": 2,
+            "code": "PO-20250920-002"
+          },
+          "payment_terms": {
+            "id": 1,
+            "name": "Netttt 30 NOGA"
+          },
+          "code": "SI-20250920-0003",
+          "invoice_number": "SUP-INV-20250920-003",
+          "invoice_date": "2025-09-19",
+          "due_date": "2025-10-19",
+          "tax_rate": 11,
+          "tax_amount": 275000,
+          "delivery_cost": 50000,
+          "other_cost": 25000,
+          "sub_total": 2425000,
+          "amount": 2775000,
+          "status": "DRAFT",
+          "notes": "Pembayaran via transfer bank",
+          "items": [
+            {
+              "id": 6,
+              "supplier_invoice_id": 4,
+              "product_id": 1,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 10,
+              "price": 150000,
+              "discount": 5,
+              "sub_total": 1425000,
+              "created_at": "2025-09-20T21:44:01+07:00",
+              "updated_at": "2025-09-20T21:44:01+07:00"
+            },
+            {
+              "id": 7,
+              "supplier_invoice_id": 4,
+              "product_id": 1,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 5,
+              "price": 200000,
+              "discount": 0,
+              "sub_total": 1000000,
+              "created_at": "2025-09-20T21:44:01+07:00",
+              "updated_at": "2025-09-20T21:44:01+07:00"
+            }
+          ],
+          "created_at": "2025-09-20T21:44:01+07:00",
+          "updated_at": "2025-09-20T21:44:01+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/purchase/supplier-invoices/2",
+      "body": {
+        "purchase_order_id": 2,
+        "payment_terms_id": 2,
+        "invoice_number": "INV-2025-001",
+        "invoice_date": "2025-09-19",
+        "due_date": "2025-10-19",
+        "tax_rate": 11.0,
+        "delivery_cost": 50000,
+        "other_cost": 25000,
+        "notes": "Pembayaran via transfer bank",
+        "comments": "//   items ngambil dari get add, user hanya bisa mengisi price dan discount aj dalam bentuk persentase, user tidak bisa tambah items juga",
+        "items": [
+          {
+            "product_id": 1,
+            "quantity": 10,
+            "price": 150000,
+            "discount": 100
+          },
+          {
+            "product_id": 1,
+            "quantity": 5,
+            "price": 200000,
+            "discount": 0
+          }
+        ]
+      },
+
+      "response": {
+        "error": "only draft can be updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/purchase/supplier-invoices/2",
+      "response": {
+        "message": "deleted"
+      }
+    },
+    {
+      "title": "GET PRINT",
+      "endpoint": "GET {{base_url}}/purchase/supplier-invoices/1/print",
+      "response": {
+        "data": {
+          "id": 2,
+          "purchase_order": {
+            "id": 3,
+            "code": "PO-20250920-003"
+          },
+          "payment_terms": {
+            "id": 5,
+            "name": "Net 30"
+          },
+          "code": "SI-20250920-0002",
+          "invoice_number": "SUP-INV-20250920-002",
+          "invoice_date": "2025-09-10",
+          "due_date": "2025-09-15",
+          "tax_rate": 10,
+          "tax_amount": 24050,
+          "delivery_cost": 50000,
+          "other_cost": 25000,
+          "sub_total": 165500,
+          "amount": 264550,
+          "status": "UNPAID",
+          "notes": "test notes",
+          "items": [
+            {
+              "id": 3,
+              "supplier_invoice_id": 2,
+              "product_id": 1,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 10,
+              "price": 5000,
+              "discount": 0,
+              "sub_total": 50000,
+              "created_at": "2025-09-20T21:25:39+07:00",
+              "updated_at": "2025-09-20T21:25:39+07:00"
+            },
+            {
+              "id": 4,
+              "supplier_invoice_id": 2,
+              "product_id": 2,
+              "product": {
+                "id": 2,
+                "name": "Gloves (Box)",
+                "code": "MED-002",
+                "cost_price": 50000,
+                "selling_price": 75000,
+                "image_url": ""
+              },
+              "quantity": 5,
+              "price": 12000,
+              "discount": 5,
+              "sub_total": 57000,
+              "created_at": "2025-09-20T21:25:39+07:00",
+              "updated_at": "2025-09-20T21:25:39+07:00"
+            },
+            {
+              "id": 5,
+              "supplier_invoice_id": 2,
+              "product_id": 3,
+              "product": {
+                "id": 3,
+                "name": "Printer Paper A4",
+                "code": "OFF-001",
+                "cost_price": 30000,
+                "selling_price": 45000,
+                "image_url": ""
+              },
+              "quantity": 20,
+              "price": 3000,
+              "discount": 2.5,
+              "sub_total": 58500,
+              "created_at": "2025-09-20T21:25:39+07:00",
+              "updated_at": "2025-09-20T21:25:39+07:00"
+            }
+          ],
+          "created_at": "2025-09-20T21:25:39+07:00",
+          "updated_at": "2025-09-20T21:25:39+07:00"
+        }
+      }
+    },
+    {
+      "title": "CONFIRM DATA INVOICE TO PENDING",
+      "endpoint": "POST {{base_url}}/purchase/supplier-invoices/3/pending",
+      "response": {
+        "error": "only draft can be set to pending"
+      }
+    }
+  ]
+}

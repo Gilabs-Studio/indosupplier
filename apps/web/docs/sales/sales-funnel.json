@@ -1,0 +1,975 @@
+{
+  "title": "sales-funnel",
+  "description": "A comprehensive guide to the sales funnel (sales visits) API endpoints for managing sales visits, tracking progress, generating reports, and exporting data.",
+  "item": [
+    {
+      "name": "📝 Get Form Data for Create (Add)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/sales-visits/add",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "sales-visits", "add"]
+        },
+        "description": "Get dropdown data for creating a new sales visit (products, customers, employees)."
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/sales-visits/add"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": {\n        \"products\": [\n            {\n                \"id\": 1,\n                \"name\": \"Product Name\",\n                \"code\": \"PRD-001\",\n                \"selling_price\": 100000,\n                \"cost_price\": 80000,\n                \"image_url\": \"https://example.com/image.jpg\"\n            }\n        ],\n        \"customers\": [\n            {\n                \"id\": 1,\n                \"name\": \"Customer Name\",\n                \"code\": \"CUST-001\"\n            }\n        ],\n        \"employees\": [\n            {\n                \"id\": 1,\n                \"name\": \"Employee Name\",\n                \"user_id\": 1\n            }\n        ]\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "➕ Create Sales Visit",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"customer_id\": 1,\n    \"visit_date\": \"2024-01-15\",\n    \"description\": \"Kunjungan pertama ke customer\",\n    \"activity\": \"Introduction & Product Presentation\",\n    \"activity_weight\": 10,\n    \"status\": \"P\",\n    \"marketing_id\": 1,\n    \"details\": [\n        {\n            \"product_id\": 1,\n            \"quantity\": 10,\n            \"price\": 100000,\n            \"description\": \"Product demo\",\n            \"activity\": \"Product presentation\",\n            \"activity_weight\": 5,\n            \"progress\": \"0\"\n        },\n        {\n            \"product_id\": 2,\n            \"quantity\": 5,\n            \"price\": 250000,\n            \"description\": \"Secondary product\",\n            \"activity\": \"Product discussion\",\n            \"activity_weight\": 3,\n            \"progress\": \"0\"\n        }\n    ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/sales/sales-visits",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "sales-visits"]
+        },
+        "description": "Create a new sales visit with details.\n\n**Required Fields:**\n- `customer_id`: ID of the customer\n- `visit_date`: Visit date in format YYYY-MM-DD\n- `marketing_id`: User ID of the marketing/sales person\n- `details`: Array of visit details (cannot be empty)\n  - `product_id`: Product ID (required)\n  - `quantity`: Quantity (required, must be > 0)\n  - `price`: Price per unit (required, must be >= 0)\n  - `progress`: Progress stage (required)\n\n**Optional Fields:**\n- `description`: Visit description\n- `activity`: Activity name\n- `activity_weight`: Activity weight (default: 0)\n- `status`: Visit status - `P` (Plan), `F` (Finish), `C` (Cancel). Default: `P`\n- Detail fields: `description`, `activity`, `activity_weight`\n\n**Progress Values:**\n- `0` - Plan\n- `1` - Visit\n- `2` - Opportunity\n- `3` - Trial\n- `4` - Quotation\n- `5` - Negotiation\n- `6` - PO (Purchase Order/Deal)\n- `C` - Cancel\n- `P` - Pending"
+      },
+      "response": [
+        {
+          "name": "Success Response (200 OK)",
+          "originalRequest": {
+            "method": "POST",
+            "url": "{{base_url}}/sales/sales-visits"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": {\n        \"id\": 1,\n        \"code\": \"VIS-20240115-0001\",\n        \"customer\": {\n            \"id\": 1,\n            \"name\": \"Customer Name\",\n            \"code\": \"CUST-001\"\n        },\n        \"visit_date\": \"2024-01-15\",\n        \"description\": \"Kunjungan pertama ke customer\",\n        \"activity\": \"Introduction & Product Presentation\",\n        \"activity_weight\": 10,\n        \"status\": \"P\",\n        \"marketing\": {\n            \"id\": 1,\n            \"name\": \"Marketing Name\",\n            \"username\": \"marketing1\",\n            \"photo_profile\": \"\",\n            \"avatar_url\": \"\"\n        },\n        \"details\": [\n            {\n                \"id\": 1,\n                \"visit_id\": 1,\n                \"product\": {\n                    \"id\": 1,\n                    \"name\": \"Product Name\",\n                    \"code\": \"PRD-001\"\n                },\n                \"quantity\": 10,\n                \"price\": 100000,\n                \"description\": \"Product demo\",\n                \"activity\": \"Product presentation\",\n                \"activity_weight\": 5,\n                \"progress\": \"0\",\n                \"before_progress\": \"0\",\n                \"total_value\": 1000000\n            }\n        ],\n        \"created_at\": \"2024-01-15T10:00:00Z\",\n        \"updated_at\": \"2024-01-15T10:00:00Z\"\n    }\n}"
+        },
+        {
+          "name": "Error Response (400 Bad Request)",
+          "originalRequest": {
+            "method": "POST",
+            "url": "{{base_url}}/sales/sales-visits"
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"error\": \"details cannot be empty\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "📋 List Sales Visits",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/sales-visits?page=1&limit=10&status=P&sort_by=visit_date&sort_order=desc",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "sales-visits"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Page number (default: 1)"
+            },
+            {
+              "key": "limit",
+              "value": "10",
+              "description": "Items per page (default: 10)"
+            },
+            {
+              "key": "status",
+              "value": "P",
+              "description": "Filter by status: `P` (Plan), `F` (Finish), `C` (Cancel)"
+            },
+            {
+              "key": "search",
+              "value": "",
+              "description": "Search term"
+            },
+            {
+              "key": "search_by",
+              "value": "",
+              "description": "Search field: `code`, `description`, `activity`"
+            },
+            {
+              "key": "sort_by",
+              "value": "visit_date",
+              "description": "Sort field: `id`, `code`, `visit_date`, `status`, `created_at`, `updated_at`, `customer_id`, `marketing_id`"
+            },
+            {
+              "key": "sort_order",
+              "value": "desc",
+              "description": "Sort order: `asc`, `desc` (default: `desc`)"
+            },
+            {
+              "key": "start_date",
+              "value": "",
+              "description": "Start date filter (YYYY-MM-DD)"
+            },
+            {
+              "key": "end_date",
+              "value": "",
+              "description": "End date filter (YYYY-MM-DD)"
+            },
+            {
+              "key": "customer_id",
+              "value": "",
+              "description": "Filter by customer ID"
+            },
+            {
+              "key": "marketing_id",
+              "value": "",
+              "description": "Filter by marketing ID"
+            }
+          ]
+        },
+        "description": "Get paginated list of sales visits with filters."
+      },
+      "response": [
+        {
+          "name": "Success Response (200 OK)",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/sales-visits?page=1&limit=10&status=P&sort_by=visit_date&sort_order=desc"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": {\n        \"items\": [\n            {\n                \"id\": 1,\n                \"code\": \"VIS-20240115-0001\",\n                \"customer\": {\n                    \"id\": 1,\n                    \"name\": \"Customer Name\",\n                    \"code\": \"CUST-001\"\n                },\n                \"visit_date\": \"2024-01-15\",\n                \"description\": \"Kunjungan pertama\",\n                \"activity\": \"Introduction\",\n                \"status\": \"P\",\n                \"marketing\": {\n                    \"id\": 1,\n                    \"name\": \"Marketing Name\",\n                    \"username\": \"marketing1\",\n                    \"photo_profile\": \"\",\n                    \"avatar_url\": \"\"\n                },\n                \"details_count\": 2,\n                \"created_at\": \"2024-01-15T10:00:00Z\",\n                \"updated_at\": \"2024-01-15T10:00:00Z\"\n            }\n        ],\n        \"pagination\": {\n            \"page\": 1,\n            \"limit\": 10,\n            \"total\": 100,\n            \"total_pages\": 10\n        },\n        \"meta\": {\n            \"searchable_columns\": {\n                \"string_columns\": [\"code\", \"description\", \"activity\"],\n                \"numeric_columns\": [\"id\", \"customer_id\", \"marketing_id\"]\n            },\n            \"sortable_columns\": {\n                \"available_fields\": [\n                    \"id\",\n                    \"code\",\n                    \"visit_date\",\n                    \"status\",\n                    \"created_at\",\n                    \"updated_at\",\n                    \"customer_id\",\n                    \"marketing_id\"\n                ]\n            }\n        }\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "🔍 Get Sales Visit by ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/sales-visits/1",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "sales-visits", "1"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "1",
+              "description": "Sales visit ID"
+            }
+          ]
+        },
+        "description": "Get detailed information of a specific sales visit."
+      },
+      "response": [
+        {
+          "name": "Success Response (200 OK)",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/sales-visits/1"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": {\n        \"id\": 1,\n        \"code\": \"VIS-20240115-0001\",\n        \"customer\": {\n            \"id\": 1,\n            \"name\": \"Customer Name\",\n            \"code\": \"CUST-001\"\n        },\n        \"visit_date\": \"2024-01-15\",\n        \"description\": \"Kunjungan pertama ke customer\",\n        \"activity\": \"Introduction & Product Presentation\",\n        \"activity_weight\": 10,\n        \"status\": \"P\",\n        \"marketing\": {\n            \"id\": 1,\n            \"name\": \"Marketing Name\",\n            \"username\": \"marketing1\",\n            \"photo_profile\": \"\",\n            \"avatar_url\": \"\"\n        },\n        \"details\": [\n            {\n                \"id\": 1,\n                \"visit_id\": 1,\n                \"product\": {\n                    \"id\": 1,\n                    \"name\": \"Product Name\",\n                    \"code\": \"PRD-001\"\n                },\n                \"quantity\": 10,\n                \"price\": 100000,\n                \"description\": \"Product demo\",\n                \"activity\": \"Product presentation\",\n                \"activity_weight\": 5,\n                \"progress\": \"0\",\n                \"before_progress\": \"0\",\n                \"total_value\": 1000000\n            }\n        ],\n        \"created_at\": \"2024-01-15T10:00:00Z\",\n        \"updated_at\": \"2024-01-15T10:00:00Z\"\n    }\n}"
+        },
+        {
+          "name": "Error Response (404 Not Found)",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/sales-visits/999"
+          },
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"error\": \"record not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "✏️ Update Sales Visit",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"customer_id\": 2,\n    \"visit_date\": \"2024-01-20\",\n    \"description\": \"Updated description\",\n    \"activity\": \"Updated activity\",\n    \"activity_weight\": 15,\n    \"status\": \"F\",\n    \"marketing_id\": 2,\n    \"details\": [\n        {\n            \"product_id\": 1,\n            \"quantity\": 15,\n            \"price\": 95000,\n            \"description\": \"Updated product demo\",\n            \"activity\": \"Updated presentation\",\n            \"activity_weight\": 8,\n            \"progress\": \"1\"\n        }\n    ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/sales/sales-visits/1",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "sales-visits", "1"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "1",
+              "description": "Sales visit ID"
+            }
+          ]
+        },
+        "description": "Update an existing sales visit. All fields are optional. Only provide fields you want to update."
+      },
+      "response": [
+        {
+          "name": "Success Response (200 OK)",
+          "originalRequest": {
+            "method": "PUT",
+            "url": "{{base_url}}/sales/sales-visits/1"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"message\": \"updated\",\n    \"data\": {\n        \"id\": 1,\n        \"code\": \"VIS-20240115-0001\",\n        \"customer\": {\n            \"id\": 2,\n            \"name\": \"Updated Customer\",\n            \"code\": \"CUST-002\"\n        },\n        \"visit_date\": \"2024-01-20\",\n        \"description\": \"Updated description\",\n        \"activity\": \"Updated activity\",\n        \"activity_weight\": 15,\n        \"status\": \"F\",\n        \"marketing\": {\n            \"id\": 2,\n            \"name\": \"Updated Marketing\",\n            \"username\": \"marketing2\",\n            \"photo_profile\": \"\",\n            \"avatar_url\": \"\"\n        },\n        \"details\": [\n            {\n                \"id\": 2,\n                \"visit_id\": 1,\n                \"product\": {\n                    \"id\": 1,\n                    \"name\": \"Product Name\",\n                    \"code\": \"PRD-001\"\n                },\n                \"quantity\": 15,\n                \"price\": 95000,\n                \"description\": \"Updated product demo\",\n                \"activity\": \"Updated presentation\",\n                \"activity_weight\": 8,\n                \"progress\": \"1\",\n                \"before_progress\": \"1\",\n                \"total_value\": 1425000\n            }\n        ],\n        \"created_at\": \"2024-01-15T10:00:00Z\",\n        \"updated_at\": \"2024-01-20T11:00:00Z\"\n    }\n}"
+        },
+        {
+          "name": "Error Response (404 Not Found)",
+          "originalRequest": {
+            "method": "PUT",
+            "url": "{{base_url}}/sales/sales-visits/999"
+          },
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"error\": \"record not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "🗑️ Delete Sales Visit",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/sales-visits/1",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "sales-visits", "1"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "1",
+              "description": "Sales visit ID"
+            }
+          ]
+        },
+        "description": "Delete a sales visit (soft delete). The record is not permanently removed from the database."
+      },
+      "response": [
+        {
+          "name": "Success Response (200 OK)",
+          "originalRequest": {
+            "method": "DELETE",
+            "url": "{{base_url}}/sales/sales-visits/1"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"message\": \"deleted\"\n}"
+        },
+        {
+          "name": "Error Response (404 Not Found)",
+          "originalRequest": {
+            "method": "DELETE",
+            "url": "{{base_url}}/sales/sales-visits/999"
+          },
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"error\": \"record not found\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "📈 Update Progress",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"progress\": \"2\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/sales/sales-visits/details/1/progress",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "sales-visits", "details", "1", "progress"],
+          "variable": [
+            {
+              "key": "id",
+              "value": "1",
+              "description": "Visit detail ID"
+            }
+          ]
+        },
+        "description": "Update the progress of a specific visit detail.\n\n**Progress Values:**\n- `0` - Plan\n- `1` - Visit\n- `2` - Opportunity\n- `3` - Trial\n- `4` - Quotation\n- `5` - Negotiation\n- `6` - PO (Purchase Order/Deal)\n- `C` - Cancel\n- `P` - Pending\n\n**Note:** Progress can only move forward. Moving backward more than 1 level is not allowed. Cancel and Pending can be set from any state."
+      },
+      "response": [
+        {
+          "name": "Success Response (200 OK)",
+          "originalRequest": {
+            "method": "PUT",
+            "url": "{{base_url}}/sales/sales-visits/details/1/progress"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"message\": \"progress updated\"\n}"
+        },
+        {
+          "name": "Error Response (400 Bad Request)",
+          "originalRequest": {
+            "method": "PUT",
+            "url": "{{base_url}}/sales/sales-visits/details/1/progress"
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"error\": \"cannot move progress backward from 2 to 0\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "🎯 Get Sales Funnel",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/sales-visits/funnel?marketing_id=1&area_id=1",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "sales-visits", "funnel"],
+          "query": [
+            {
+              "key": "marketing_id",
+              "value": "1",
+              "description": "Filter by marketing ID"
+            },
+            {
+              "key": "customer_type_id",
+              "value": "",
+              "description": "Filter by customer type ID"
+            },
+            {
+              "key": "product_type_id",
+              "value": "",
+              "description": "Filter by product type ID"
+            },
+            {
+              "key": "area_id",
+              "value": "1",
+              "description": "Filter by area ID"
+            },
+            {
+              "key": "customer_segment_id",
+              "value": "",
+              "description": "Filter by customer segment ID"
+            }
+          ]
+        },
+        "description": "Get aggregated sales funnel data grouped by customer."
+      },
+      "response": [
+        {
+          "name": "Success Response (200 OK)",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/sales-visits/funnel?marketing_id=1&area_id=1"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": [\n        {\n            \"customer_id\": 1,\n            \"customer_code\": \"CUST-001\",\n            \"customer_name\": \"Customer Name\",\n            \"area_name\": \"Area Name\",\n            \"customer_type_id\": 1,\n            \"customer_segment_id\": 1,\n            \"total_value\": 5000000\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "📅 Get Schedule",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/sales-visits/schedule?date=2024-01-15&marketing_id=1",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "sales-visits", "schedule"],
+          "query": [
+            {
+              "key": "date",
+              "value": "2024-01-15",
+              "description": "Date in format YYYY-MM-DD (required)"
+            },
+            {
+              "key": "marketing_id",
+              "value": "1",
+              "description": "Filter by marketing ID"
+            },
+            {
+              "key": "customer_type_id",
+              "value": "",
+              "description": "Filter by customer type ID"
+            },
+            {
+              "key": "customer_segment_id",
+              "value": "",
+              "description": "Filter by customer segment ID"
+            }
+          ]
+        },
+        "description": "Get visits scheduled for a specific date."
+      },
+      "response": [
+        {
+          "name": "Success Response (200 OK)",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/sales-visits/schedule?date=2024-01-15&marketing_id=1"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"code\": \"VIS-20240115-0001\",\n            \"customer\": {\n                \"id\": 1,\n                \"name\": \"Customer Name\",\n                \"code\": \"CUST-001\"\n            },\n            \"visit_date\": \"2024-01-15\",\n            \"description\": \"Kunjungan pertama\",\n            \"activity\": \"Introduction\",\n            \"status\": \"P\",\n            \"marketing\": {\n                \"id\": 1,\n                \"name\": \"Marketing Name\",\n                \"username\": \"marketing1\",\n                \"photo_profile\": \"\",\n                \"avatar_url\": \"\"\n            },\n            \"area_name\": \"Area Name\"\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "📊 Get Progress Report",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/sales-visits/progress-report?date_from=2024-01-01&date_to=2024-01-31",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "sales-visits", "progress-report"],
+          "query": [
+            {
+              "key": "date_from",
+              "value": "2024-01-01",
+              "description": "Start date (YYYY-MM-DD)"
+            },
+            {
+              "key": "date_to",
+              "value": "2024-01-31",
+              "description": "End date (YYYY-MM-DD)"
+            }
+          ]
+        },
+        "description": "Get progress statistics for a date range."
+      },
+      "response": [
+        {
+          "name": "Success Response (200 OK)",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/sales-visits/progress-report?date_from=2024-01-01&date_to=2024-01-31"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": {\n        \"progress_0\": 10,\n        \"progress_1\": 5,\n        \"progress_2\": 3,\n        \"progress_3\": 2,\n        \"progress_4\": 1,\n        \"progress_5\": 1,\n        \"progress_6\": 1,\n        \"progress_C\": 2,\n        \"progress_P\": 1,\n        \"before_progress_0\": 15,\n        \"before_progress_1\": 8,\n        \"before_progress_2\": 5\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "👤 Get Customer Report",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/sales-visits/customer-report?customer_id=1&date_from=2024-01-01&date_to=2024-12-31",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "sales-visits", "customer-report"],
+          "query": [
+            {
+              "key": "customer_id",
+              "value": "1",
+              "description": "Customer ID (required)"
+            },
+            {
+              "key": "date_from",
+              "value": "2024-01-01",
+              "description": "Start date (YYYY-MM-DD)"
+            },
+            {
+              "key": "date_to",
+              "value": "2024-12-31",
+              "description": "End date (YYYY-MM-DD)"
+            }
+          ]
+        },
+        "description": "Get customer visit report by month."
+      },
+      "response": [
+        {
+          "name": "Success Response (200 OK)",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/sales-visits/customer-report?customer_id=1&date_from=2024-01-01&date_to=2024-12-31"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": [\n        {\n            \"customer_name\": \"Customer Name\",\n            \"customer_code\": \"CUST-001\",\n            \"month\": 1,\n            \"year\": 2024,\n            \"plan_count\": 5,\n            \"finish_count\": 3,\n            \"cancel_count\": 1,\n            \"total_value\": 5000000\n        },\n        {\n            \"customer_name\": \"Customer Name\",\n            \"customer_code\": \"CUST-001\",\n            \"month\": 2,\n            \"year\": 2024,\n            \"plan_count\": 3,\n            \"finish_count\": 2,\n            \"cancel_count\": 0,\n            \"total_value\": 3000000\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "📦 Get Product Report",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/sales-visits/product-report?progress=2&date_from=2024-01-01&date_to=2024-01-31",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "sales-visits", "product-report"],
+          "query": [
+            {
+              "key": "progress",
+              "value": "2",
+              "description": "Progress stage (required): `0`, `1`, `2`, `3`, `4`, `5`, `6`, `C`, `P`"
+            },
+            {
+              "key": "date_from",
+              "value": "2024-01-01",
+              "description": "Start date (YYYY-MM-DD)"
+            },
+            {
+              "key": "date_to",
+              "value": "2024-01-31",
+              "description": "End date (YYYY-MM-DD)"
+            },
+            {
+              "key": "customer_id",
+              "value": "",
+              "description": "Filter by customer ID"
+            },
+            {
+              "key": "marketing_id",
+              "value": "",
+              "description": "Filter by marketing ID"
+            },
+            {
+              "key": "product_type_id",
+              "value": "",
+              "description": "Filter by product type ID"
+            },
+            {
+              "key": "product_segment_id",
+              "value": "",
+              "description": "Filter by product segment ID"
+            }
+          ]
+        },
+        "description": "Get product funnel report with filters."
+      },
+      "response": [
+        {
+          "name": "Success Response (200 OK)",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/sales-visits/product-report?progress=2&date_from=2024-01-01&date_to=2024-01-31"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"visit_id\": 1,\n            \"product\": {\n                \"id\": 1,\n                \"name\": \"Product Name\",\n                \"code\": \"PRD-001\"\n            },\n            \"quantity\": 10,\n            \"price\": 100000,\n            \"description\": \"Product demo\",\n            \"activity\": \"Product presentation\",\n            \"activity_weight\": 5,\n            \"progress\": \"2\",\n            \"before_progress\": \"1\",\n            \"total_value\": 1000000\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "🔗 Get Visit Details by Customer",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/sales-visits/customer/1/details?progress=2",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "sales-visits", "customer", "1", "details"],
+          "query": [
+            {
+              "key": "progress",
+              "value": "2",
+              "description": "Filter by progress stage"
+            }
+          ],
+          "variable": [
+            {
+              "key": "customer_id",
+              "value": "1",
+              "description": "Customer ID"
+            }
+          ]
+        },
+        "description": "Get visit details for a specific customer."
+      },
+      "response": [
+        {
+          "name": "Success Response (200 OK)",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/sales-visits/customer/1/details?progress=2"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"visit_id\": 1,\n            \"product\": {\n                \"id\": 1,\n                \"name\": \"Product Name\",\n                \"code\": \"PRD-001\"\n            },\n            \"quantity\": 10,\n            \"price\": 100000,\n            \"description\": \"Product demo\",\n            \"activity\": \"Product presentation\",\n            \"activity_weight\": 5,\n            \"progress\": \"2\",\n            \"before_progress\": \"1\",\n            \"total_value\": 1000000\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "📥 Export Sales Visits",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/sales-visits/export?status=P&start_date=2024-01-01&end_date=2024-01-31",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "sales-visits", "export"],
+          "query": [
+            {
+              "key": "page",
+              "value": "",
+              "description": "Page number (optional)"
+            },
+            {
+              "key": "limit",
+              "value": "",
+              "description": "Items per page (optional)"
+            },
+            {
+              "key": "status",
+              "value": "P",
+              "description": "Filter by status: `P`, `F`, `C`"
+            },
+            {
+              "key": "search",
+              "value": "",
+              "description": "Search term"
+            },
+            {
+              "key": "search_by",
+              "value": "",
+              "description": "Search field: `code`, `description`, `activity`"
+            },
+            {
+              "key": "sort_by",
+              "value": "",
+              "description": "Sort field"
+            },
+            {
+              "key": "sort_order",
+              "value": "",
+              "description": "Sort order: `asc`, `desc`"
+            },
+            {
+              "key": "start_date",
+              "value": "2024-01-01",
+              "description": "Start date filter (YYYY-MM-DD)"
+            },
+            {
+              "key": "end_date",
+              "value": "2024-01-31",
+              "description": "End date filter (YYYY-MM-DD)"
+            },
+            {
+              "key": "customer_id",
+              "value": "",
+              "description": "Filter by customer ID"
+            },
+            {
+              "key": "marketing_id",
+              "value": "",
+              "description": "Filter by marketing ID"
+            }
+          ]
+        },
+        "description": "Export sales visits to Excel.\n\n**Returns:** Excel file (.xlsx) with the following columns:\n- ID\n- Code\n- Visit Date\n- Customer\n- Area\n- Marketing\n- Description\n- Activity\n- Activity Weight\n- Status\n- Details Count\n- Created At\n- Updated At\n\n**Query Parameters:** Same as List endpoint (page, limit, status, search, etc.)"
+      },
+      "response": [
+        {
+          "name": "Success Response (Excel File)",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/sales-visits/export?status=P&start_date=2024-01-01&end_date=2024-01-31"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            },
+            {
+              "key": "Content-Disposition",
+              "value": "attachment; filename=sales-visits-2024-01-15.xlsx"
+            }
+          ],
+          "_postman_previewlanguage": "text",
+          "body": "[Binary Excel File]"
+        },
+        {
+          "name": "Error Response (400 Bad Request - No Data)",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/sales-visits/export?status=P&start_date=2024-01-01&end_date=2024-01-31"
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"error\": \"No data found\",\n    \"details\": \"No sales visits found matching the specified filters\"\n}"
+        }
+      ]
+    }
+  ],
+  "info": {
+    "name": "Sales Funnel API",
+    "description": "API documentation for Sales Funnel (Sales Visits) endpoints. This collection includes endpoints for managing sales visits, tracking progress through the sales funnel, generating various reports, and exporting data.\n\n## Base URL\n```\n/api/v1/sales/sales-visits\n```\n\n## Authentication\nAll endpoints require Bearer Token authentication.\n\n**Header:**\n```\nAuthorization: Bearer <your_token>\n```\n\n## Progress Stages\n\n| Code | Stage       | Description                  |\n| ---- | ----------- | ---------------------------- |\n| `0`  | Plan        | Initial planning stage       |\n| `1`  | Visit       | Visit completed              |\n| `2`  | Opportunity | Opportunity identified       |\n| `3`  | Trial       | Product trial/test           |\n| `4`  | Quotation   | Quotation sent               |\n| `5`  | Negotiation | Price negotiation            |\n| `6`  | PO          | Purchase Order (Deal closed) |\n| `C`  | Cancel      | Cancelled                    |\n| `P`  | Pending     | Pending                      |\n\n## Visit Status\n\n| Code | Status | Description     |\n| ---- | ------ | --------------- |\n| `P`  | Plan   | Planned visit   |\n| `F`  | Finish | Visit completed |\n| `C`  | Cancel | Visit cancelled |\n\n## Status Codes\n\n| Code | Description                             |\n| ---- | --------------------------------------- |\n| 200  | OK - Request successful                 |\n| 201  | Created - Resource created successfully |\n| 400  | Bad Request - Invalid request data      |\n| 401  | Unauthorized - Missing or invalid token |\n| 404  | Not Found - Resource not found          |\n| 500  | Internal Server Error - Server error    |\n\n## Error Responses\n\n### Validation Error (400)\n```json\n{\n  \"error\": \"Key: 'SalesVisitCreateRequest.Details' Error:Field validation for 'Details' failed on the 'required' tag\"\n}\n```\n\n### Not Found Error (404)\n```json\n{\n  \"error\": \"record not found\"\n}\n```\n\n### Unauthorized Error (401)\n```json\n{\n  \"error\": \"missing token\"\n}\n```\n\nor\n\n```json\n{\n  \"error\": \"invalid token\"\n}\n```\n\n### Internal Server Error (500)\n```json\n{\n  \"error\": \"failed to create visit: <error details>\"\n}\n```\n\n## Notes\n\n1. **Auto-generated Code**: Sales visit code is automatically generated in format `VIS-YYYYMMDD-XXXX` (e.g., `VIS-20240115-0001`)\n\n2. **Progress Transition**: Progress can only move forward. Moving backward more than 1 level is not allowed. Cancel and Pending can be set from any state.\n\n3. **Soft Delete**: Deleting a sales visit performs a soft delete (sets `deleted_at` timestamp), so the record is not permanently removed from the database.\n\n4. **Before Progress**: The `before_progress` field is automatically set when progress is updated, allowing you to track progress changes.\n\n5. **Total Value**: The `total_value` in visit details is calculated as `quantity * price`.\n\n6. **Pagination**: Default page size is 10. Maximum page size should be configured in the server.\n\n7. **Date Format**: All dates should be in `YYYY-MM-DD` format.\n\n8. **Authentication**: All endpoints require a valid Bearer token in the Authorization header.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
+

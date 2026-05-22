@@ -1,0 +1,282 @@
+{
+  "title": "Data Master/configuration-system/chart-of-accounts",
+  "description": "A comprehensive guide to the Data Master API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/master-data/chart-of-accounts",
+      "response": {
+        "data": [
+          {
+            "id": 11,
+            "code": "2100",
+            "name": "Accounts Payable",
+            "type": "LIABILITY",
+            "parent_id": 2,
+            "created_at": "2025-09-16T15:39:19+07:00",
+            "updated_at": "2025-09-16T15:39:19+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 1,
+            "page": 1,
+            "total": 11
+          },
+          "search": {
+            "search": "A",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "parent_id"],
+            "string_columns": ["code", "name", "type"]
+          },
+          "sort": {
+            "sort_by": "name",
+            "sort_order": "asc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "name",
+              "account_type",
+              "parent_id",
+              "is_active",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA STATS",
+      "endpoint": "{{base_url}}/master-data/chart-of-accounts/stats",
+      "response": {
+        "data": {
+          "total": 15
+        },
+        "message": "Chart of account statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/master-data/chart-of-accounts/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "code": "1000",
+          "name": "Assets",
+          "type": "ASSET",
+          "parent_id": null,
+          "created_at": "2025-09-16T15:39:19+07:00",
+          "updated_at": "2025-09-16T15:39:19+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "{{base_url}}/master-data/chart-of-accounts/add",
+      "response": {
+        "data": {
+          "chart_of_accounts": [
+            {
+              "id": 1,
+              "code": "1000",
+              "name": "Assets",
+              "type": "ASSET",
+              "parent_id": null,
+              "created_at": "2025-09-16T15:39:19+07:00",
+              "updated_at": "2025-09-16T15:39:19+07:00"
+            },
+            {
+              "id": 2,
+              "code": "2000",
+              "name": "Liabilities",
+              "type": "LIABILITY",
+              "parent_id": null,
+              "created_at": "2025-09-16T15:39:19+07:00",
+              "updated_at": "2025-09-16T15:39:19+07:00"
+            },
+            {
+              "id": 3,
+              "code": "3000",
+              "name": "Equity",
+              "type": "EQUITY",
+              "parent_id": null,
+              "created_at": "2025-09-16T15:39:19+07:00",
+              "updated_at": "2025-09-16T15:39:19+07:00"
+            },
+            {
+              "id": 4,
+              "code": "4000",
+              "name": "Revenue",
+              "type": "REVENUE",
+              "parent_id": null,
+              "created_at": "2025-09-16T15:39:19+07:00",
+              "updated_at": "2025-09-16T15:39:19+07:00"
+            },
+            {
+              "id": 5,
+              "code": "5000",
+              "name": "Expenses",
+              "type": "EXPENSE",
+              "parent_id": null,
+              "created_at": "2025-09-16T15:39:19+07:00",
+              "updated_at": "2025-09-16T15:39:19+07:00"
+            },
+            {
+              "id": 6,
+              "code": "1100",
+              "name": "Cash",
+              "type": "ASSET",
+              "parent_id": 1,
+              "created_at": "2025-09-16T15:39:19+07:00",
+              "updated_at": "2025-09-16T15:39:19+07:00"
+            },
+            {
+              "id": 7,
+              "code": "1200",
+              "name": "Bank",
+              "type": "ASSET",
+              "parent_id": 1,
+              "created_at": "2025-09-16T15:39:19+07:00",
+              "updated_at": "2025-09-16T15:39:19+07:00"
+            },
+            {
+              "id": 8,
+              "code": "1300",
+              "name": "Accounts Receivable",
+              "type": "ASSET",
+              "parent_id": 1,
+              "created_at": "2025-09-16T15:39:19+07:00",
+              "updated_at": "2025-09-16T15:39:19+07:00"
+            },
+            {
+              "id": 9,
+              "code": "1400",
+              "name": "Inventory",
+              "type": "ASSET",
+              "parent_id": 1,
+              "created_at": "2025-09-16T15:39:19+07:00",
+              "updated_at": "2025-09-16T15:39:19+07:00"
+            },
+            {
+              "id": 10,
+              "code": "2005",
+              "name": "GRNI",
+              "type": "LIABILITY",
+              "parent_id": 2,
+              "created_at": "2025-09-16T15:39:19+07:00",
+              "updated_at": "2025-09-16T15:39:19+07:00"
+            },
+            {
+              "id": 11,
+              "code": "2100",
+              "name": "Accounts Payable",
+              "type": "LIABILITY",
+              "parent_id": 2,
+              "created_at": "2025-09-16T15:39:19+07:00",
+              "updated_at": "2025-09-16T15:39:19+07:00"
+            },
+            {
+              "id": 12,
+              "code": "3100",
+              "name": "Retained Earnings",
+              "type": "EQUITY",
+              "parent_id": 3,
+              "created_at": "2025-09-16T15:39:19+07:00",
+              "updated_at": "2025-09-16T15:39:19+07:00"
+            },
+            {
+              "id": 13,
+              "code": "4100",
+              "name": "Sales Revenue",
+              "type": "REVENUE",
+              "parent_id": 4,
+              "created_at": "2025-09-16T15:39:19+07:00",
+              "updated_at": "2025-09-16T15:39:19+07:00"
+            },
+            {
+              "id": 14,
+              "code": "5100",
+              "name": "Cost of Goods Sold",
+              "type": "EXPENSE",
+              "parent_id": 5,
+              "created_at": "2025-09-16T15:39:19+07:00",
+              "updated_at": "2025-09-16T15:39:19+07:00"
+            },
+            {
+              "id": 15,
+              "code": "5200",
+              "name": "Operating Expenses",
+              "type": "EXPENSE",
+              "parent_id": 5,
+              "created_at": "2025-09-16T15:39:19+07:00",
+              "updated_at": "2025-09-16T15:39:19+07:00"
+            }
+          ]
+        }
+      }
+    },
+
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/master-data/chart-of-accounts",
+      "body": {
+        "code": "2001",
+        "name": "Accounts Payable",
+        "type": "LIABILITY",
+        "comment info": "parent_id optional",
+        "parent_id": 1
+      },
+      "response": {
+        "data": {
+          "id": 16,
+          "code": "2001",
+          "name": "Accounts Payable",
+          "type": "LIABILITY",
+          "parent_id": 1,
+          "created_at": "2025-09-16T15:45:17+07:00",
+          "updated_at": "2025-09-16T15:45:17+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/master-data/chart-of-accounts/2",
+      "body": {
+        "code": "2012",
+        "name": "Accounts Payable test",
+        "type": "LIABILITY",
+        "comment info": "parent_id optional",
+        "parent_id": 1
+      },
+      "response": {
+        "data": {
+          "id": 2,
+          "code": "2012",
+          "name": "Accounts Payable test",
+          "type": "LIABILITY",
+          "parent_id": 1,
+          "created_at": "2025-09-16T15:39:19+07:00",
+          "updated_at": "2025-09-16T15:47:05+07:00"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/master-data/chart-of-accounts/2",
+      "response": {
+        "message": "deleted"
+      }
+    }
+  ]
+}

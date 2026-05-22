@@ -1,0 +1,71 @@
+{
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/attendance/check-in",
+      "description": "Employee check-in for attendance",
+      "parameters": {
+        "body": {
+          "note": {
+            "type": "string",
+            "description": "Optional note for check-in",
+            "required": false,
+            "example": "test"
+          },
+          "latitude": {
+            "type": "number",
+            "description": "Latitude coordinate for location verification",
+            "required": true,
+            "format": "float",
+            "example": -6.2
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude coordinate for location verification",
+            "required": true,
+            "format": "float",
+            "example": 106.8166
+          }
+        }
+      },
+      "response": {
+        "data": {
+          "id": 16,
+          "date": "2025-10-06",
+          "check_in_time": "14:07:22",
+          "check_out_time": null,
+          "status": "PRESENT",
+          "note": "test",
+          "action": "check_in"
+        },
+        "message": "Check-in successful"
+      },
+      "error_responses": [
+        {
+          "status": 400,
+          "message": "Already checked in today",
+          "data": {
+            "error": "ALREADY_CHECKED_IN",
+            "details": "You have already checked in today"
+          }
+        },
+        {
+          "status": 400,
+          "message": "Invalid location",
+          "data": {
+            "error": "INVALID_LOCATION",
+            "details": "Check-in location is outside allowed area"
+          }
+        },
+        {
+          "status": 401,
+          "message": "Unauthorized",
+          "data": {
+            "error": "UNAUTHORIZED",
+            "details": "Invalid or expired token"
+          }
+        }
+      ]
+    }
+  ]
+}

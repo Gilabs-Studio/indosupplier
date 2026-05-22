@@ -1,0 +1,378 @@
+{
+  "title": "Data Master/Company Management/ Division",
+  "description": "A comprehensive guide to the Data Master API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "{{base_url}}/master-data/employees",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "is_active": true,
+              "created_at": "",
+              "updated_at": "",
+              "roles": null
+            },
+            "division": {
+              "id": 1,
+              "name": "IT",
+              "created_at": "",
+              "updated_at": ""
+            },
+            "job_position": {
+              "id": 1,
+              "name": "Administrator",
+              "created_at": "",
+              "updated_at": ""
+            },
+            "city": {
+              "id": 1,
+              "name": "Semarang",
+              "province_id": 1,
+              "created_at": "",
+              "updated_at": ""
+            },
+            "address": "Jl. Karyawan 1",
+            "phone": "0812-000-000",
+            "join_date": "2025-09-11T00:00:00Z",
+            "nip": "EMP001",
+            "bpjs_no": "BPJS001",
+            "contract_no": "C001",
+            "npwp": "NPWP001",
+            "status": "Active",
+            "created_at": "2025-09-11T10:57:14+07:00",
+            "updated_at": "2025-09-11T10:57:14+07:00"
+          },
+          {
+            "id": 2,
+            "user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "is_active": true,
+              "created_at": "",
+              "updated_at": "",
+              "roles": null
+            },
+            "division": {
+              "id": 1,
+              "name": "IT",
+              "created_at": "",
+              "updated_at": ""
+            },
+            "job_position": {
+              "id": 1,
+              "name": "Administrator",
+              "created_at": "",
+              "updated_at": ""
+            },
+            "city": {
+              "id": 1,
+              "name": "Semarang",
+              "province_id": 1,
+              "created_at": "",
+              "updated_at": ""
+            },
+            "address": "Jl. Karyawan 2",
+            "phone": "0812-111-111",
+            "join_date": "2025-09-11T00:00:00Z",
+            "nip": "EMP002",
+            "bpjs_no": "BPJS002",
+            "contract_no": "C002",
+            "npwp": "NPWP002",
+            "status": "Inactive",
+            "created_at": "2025-09-11T10:57:14+07:00",
+            "updated_at": "2025-09-11T10:57:14+07:00"
+          }
+        ],
+        "meta": {
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 2
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/master-data/employees/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "user": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "is_active": true,
+            "created_at": "",
+            "updated_at": "",
+            "roles": null
+          },
+          "division": {
+            "id": 1,
+            "name": "IT",
+            "created_at": "",
+            "updated_at": ""
+          },
+          "job_position": {
+            "id": 1,
+            "name": "Administrator",
+            "created_at": "",
+            "updated_at": ""
+          },
+          "city": {
+            "id": 1,
+            "name": "Semarang",
+            "province_id": 1,
+            "created_at": "",
+            "updated_at": ""
+          },
+          "address": "Jl. Karyawan 1",
+          "phone": "0812-000-000",
+          "join_date": "2025-09-11T00:00:00Z",
+          "nip": "EMP001",
+          "bpjs_no": "BPJS001",
+          "contract_no": "C001",
+          "npwp": "NPWP001",
+          "status": "Active",
+          "created_at": "2025-09-11T10:57:14+07:00",
+          "updated_at": "2025-09-11T10:57:14+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "GET {{base_url}}/master-data/employees/add",
+      "response": {
+        "data": {
+          "divisions": [
+            {
+              "id": 1,
+              "name": "IT",
+              "created_at": "",
+              "updated_at": ""
+            },
+            {
+              "id": 2,
+              "name": "HR",
+              "created_at": "",
+              "updated_at": ""
+            },
+            {
+              "id": 3,
+              "name": "Procurement",
+              "created_at": "",
+              "updated_at": ""
+            },
+            {
+              "id": 4,
+              "name": "Finance",
+              "created_at": "",
+              "updated_at": ""
+            }
+          ],
+          "jobPositions": [
+            {
+              "id": 1,
+              "name": "Administrator",
+              "created_at": "",
+              "updated_at": ""
+            },
+            {
+              "id": 2,
+              "name": "Doctor",
+              "created_at": "",
+              "updated_at": ""
+            },
+            {
+              "id": 3,
+              "name": "Nurse",
+              "created_at": "",
+              "updated_at": ""
+            },
+            {
+              "id": 4,
+              "name": "Warehouse Staff",
+              "created_at": "",
+              "updated_at": ""
+            },
+            {
+              "id": 5,
+              "name": "Admin Utama",
+              "created_at": "",
+              "updated_at": ""
+            }
+          ],
+          "provinces": [
+            {
+              "id": 1,
+              "name": "Central Java",
+              "created_at": "",
+              "updated_at": "",
+              "cities": [
+                {
+                  "id": 1,
+                  "name": "Semarang",
+                  "province_id": 1,
+                  "created_at": "",
+                  "updated_at": ""
+                },
+                {
+                  "id": 2,
+                  "name": "Surabaya",
+                  "province_id": 1,
+                  "created_at": "",
+                  "updated_at": ""
+                },
+                {
+                  "id": 3,
+                  "name": "Jakarta Pusat",
+                  "province_id": 1,
+                  "created_at": "",
+                  "updated_at": ""
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "name": "East Java",
+              "created_at": "",
+              "updated_at": "",
+              "cities": null
+            },
+            {
+              "id": 3,
+              "name": "Jakarta",
+              "created_at": "",
+              "updated_at": "",
+              "cities": null
+            }
+          ],
+          "users": [
+            {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "is_active": true,
+              "created_at": "",
+              "updated_at": "",
+              "roles": null
+            },
+            {
+              "id": 2,
+              "name": "John Doe",
+              "username": "johndoe",
+              "photo_profile": "",
+              "is_active": true,
+              "created_at": "",
+              "updated_at": "",
+              "roles": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/master-data/employees",
+      "body": {
+        "user_id": 1,
+        "division_id": 2,
+        "job_position_id": 3,
+        "city_id": 1,
+        "address": "Jl. Merdeka No. 45, Jakarta",
+        "phone": "+6281234567890",
+        "join_date": "2025-08-29",
+        "nip": "EMP00123",
+        "bpjs_no": "BPJS-987654321",
+        "contract_no": "CTR-2025-001",
+        "npwp": "12.345.678.9-012.345",
+        "status": "Active"
+      },
+      "response": {
+        "data": {
+          "id": 3,
+          "user": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "is_active": true,
+            "created_at": "",
+            "updated_at": "",
+            "roles": null
+          },
+          "division": {
+            "id": 2,
+            "name": "HR",
+            "created_at": "",
+            "updated_at": ""
+          },
+          "job_position": {
+            "id": 3,
+            "name": "Nurse",
+            "created_at": "",
+            "updated_at": ""
+          },
+          "city": {
+            "id": 1,
+            "name": "Semarang",
+            "province_id": 1,
+            "created_at": "",
+            "updated_at": ""
+          },
+          "address": "Jl. Merdeka No. 45, Jakarta",
+          "phone": "+6281234567890",
+          "join_date": "2025-08-29T00:00:00Z",
+          "nip": "EMP00123",
+          "bpjs_no": "BPJS-987654321",
+          "contract_no": "CTR-2025-001",
+          "npwp": "12.345.678.9-012.345",
+          "status": "Active",
+          "created_at": "2025-09-11T11:29:38+07:00",
+          "updated_at": "2025-09-11T11:29:38+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/master-data/employees/2",
+      "body": {
+        "user_id": 1,
+        "division_id": 2,
+        "job_position_id": 3,
+        "city_id": 1,
+        "address": "Jl. Merdeka No. 45, Jakarta",
+        "phone": "+6281234567890",
+        "join_date": "2025-08-29",
+        "nip": "EMP00123",
+        "bpjs_no": "BPJS-987654321",
+        "contract_no": "CTR-2025-001",
+        "npwp": "12.345.678.9-012.345",
+        "status": "Active"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/master-data/employees/2",
+      "response": {
+        "message": "deleted"
+      }
+    }
+  ]
+}

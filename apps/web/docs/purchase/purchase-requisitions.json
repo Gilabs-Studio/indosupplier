@@ -1,0 +1,569 @@
+{
+  "title": "purchase/purchase-requisitions",
+  "description": "A comprehensive guide to the Purchase API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/purchase/purchase-requisitions",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "code": "PR2024001",
+            "supplier_id": 1,
+            "payment_terms_id": 2,
+            "business_unit_id": 1,
+            "request_date": "2025-09-15",
+            "status": "DRAFT",
+            "tax_rate": 10,
+            "tax_amount": 25950,
+            "delivery_cost": 50000,
+            "order_cost": 25000,
+            "subtotal": 259500,
+            "total_amount": 360450,
+            "notes": "Urgent purchase for office supplies",
+            "requested_by": 1,
+            "supplier": {
+              "id": 1,
+              "name": "PT. Medika",
+              "code": ""
+            },
+            "payment_terms": {
+              "id": 2,
+              "name": "Net 7",
+              "days": 7
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "user": {
+              "id": 1,
+              "username": "admin",
+              "name": "Administrator"
+            },
+            "created_at": "2025-09-20T21:21:54+07:00",
+            "updated_at": "2025-09-20T21:21:54+07:00"
+          },
+          {
+            "id": 2,
+            "code": "PR2024002",
+            "supplier_id": 2,
+            "payment_terms_id": 3,
+            "business_unit_id": 2,
+            "request_date": "2025-09-17",
+            "status": "APPROVED",
+            "tax_rate": 11,
+            "tax_amount": 9768,
+            "delivery_cost": 75000,
+            "order_cost": 30000,
+            "subtotal": 88800,
+            "total_amount": 203568,
+            "notes": "Equipment purchase for new project",
+            "requested_by": 2,
+            "supplier": {
+              "id": 2,
+              "name": "PT. Farma",
+              "code": ""
+            },
+            "payment_terms": {
+              "id": 3,
+              "name": "Net 14",
+              "days": 14
+            },
+            "business_unit": {
+              "id": 2,
+              "name": "Marketing Department"
+            },
+            "user": {
+              "id": 2,
+              "username": "johndoe",
+              "name": "John Doe"
+            },
+            "created_at": "2025-09-20T21:21:54+07:00",
+            "updated_at": "2025-09-20T21:21:54+07:00"
+          },
+          {
+            "id": 3,
+            "code": "PR2024003",
+            "supplier_id": 1,
+            "payment_terms_id": 4,
+            "business_unit_id": 3,
+            "request_date": "2025-09-19",
+            "status": "REJECTED",
+            "tax_rate": 10,
+            "tax_amount": 1500,
+            "delivery_cost": 0,
+            "order_cost": 0,
+            "subtotal": 15000,
+            "total_amount": 16500,
+            "notes": "Rejected due to budget constraints",
+            "requested_by": 1,
+            "supplier": {
+              "id": 1,
+              "name": "PT. Medika",
+              "code": ""
+            },
+            "payment_terms": {
+              "id": 4,
+              "name": "Net 21",
+              "days": 21
+            },
+            "business_unit": {
+              "id": 3,
+              "name": "Finance Department"
+            },
+            "user": {
+              "id": 1,
+              "username": "admin",
+              "name": "Administrator"
+            },
+            "created_at": "2025-09-20T21:21:54+07:00",
+            "updated_at": "2025-09-20T21:21:54+07:00"
+          },
+          {
+            "id": 4,
+            "code": "PR2024004",
+            "supplier_id": 2,
+            "payment_terms_id": 2,
+            "business_unit_id": 1,
+            "request_date": "2025-09-13",
+            "status": "CONVERTED",
+            "tax_rate": 10,
+            "tax_amount": 56100,
+            "delivery_cost": 30000,
+            "order_cost": 15000,
+            "subtotal": 561000,
+            "total_amount": 662100,
+            "notes": "Converted to purchase order",
+            "requested_by": 1,
+            "supplier": {
+              "id": 2,
+              "name": "PT. Farma",
+              "code": ""
+            },
+            "payment_terms": {
+              "id": 2,
+              "name": "Net 7",
+              "days": 7
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "user": {
+              "id": 1,
+              "username": "admin",
+              "name": "Administrator"
+            },
+            "created_at": "2025-09-20T21:21:54+07:00",
+            "updated_at": "2025-09-20T21:21:54+07:00"
+          }
+        ],
+        "message": "Purchase requisitions retrieved successfully",
+        "meta": {
+          "pagination": {
+            "current_page": 1,
+            "has_next": false,
+            "has_prev": false,
+            "per_page": 10,
+            "total_items": 4,
+            "total_pages": 1
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/purchase/purchase-requisitions/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "code": "PR2024001",
+          "supplier_id": 1,
+          "payment_terms_id": 2,
+          "business_unit_id": 1,
+          "request_date": "2025-09-15",
+          "status": "DRAFT",
+          "tax_rate": 10,
+          "tax_amount": 25950,
+          "delivery_cost": 50000,
+          "order_cost": 25000,
+          "subtotal": 259500,
+          "total_amount": 360450,
+          "notes": "Urgent purchase for office supplies",
+          "requested_by": 1,
+          "supplier": {
+            "id": 1,
+            "name": "PT. Medika",
+            "code": ""
+          },
+          "payment_terms": {
+            "id": 2,
+            "name": "Net 7",
+            "days": 7
+          },
+          "business_unit": {
+            "id": 1,
+            "name": "Sales Department"
+          },
+          "user": {
+            "id": 1,
+            "username": "admin",
+            "name": "Administrator"
+          },
+          "items": [
+            {
+              "id": 1,
+              "purchase_requisition_id": 1,
+              "product_id": 1,
+              "quantity": 10,
+              "discount": 5,
+              "subtotal": 9500,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500
+              },
+              "created_at": "2025-09-20T21:21:54+07:00",
+              "updated_at": "2025-09-20T21:21:54+07:00"
+            },
+            {
+              "id": 2,
+              "purchase_requisition_id": 1,
+              "product_id": 2,
+              "quantity": 5,
+              "discount": 0,
+              "subtotal": 250000,
+              "product": {
+                "id": 2,
+                "name": "Gloves (Box)",
+                "code": "MED-002",
+                "cost_price": 50000,
+                "selling_price": 75000
+              },
+              "created_at": "2025-09-20T21:21:54+07:00",
+              "updated_at": "2025-09-20T21:21:54+07:00"
+            }
+          ],
+          "created_at": "2025-09-20T21:21:54+07:00",
+          "updated_at": "2025-09-20T21:21:54+07:00"
+        },
+        "message": "Purchase requisition retrieved successfully"
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "{{base_url}}/purchase/purchase-requisitions/add",
+      "response": {
+        "data": {
+          "business_units": [
+            {
+              "description": "Handles all sales operations and customer relationships",
+              "id": 1,
+              "name": "Sales Department"
+            },
+            {
+              "description": "Responsible for marketing strategies and brand management",
+              "id": 2,
+              "name": "Marketing Department"
+            },
+            {
+              "description": "Manages financial operations, accounting, and budgeting",
+              "id": 3,
+              "name": "Finance Department"
+            },
+            {
+              "description": "Handles recruitment, employee relations, and HR policies",
+              "id": 4,
+              "name": "Human Resources"
+            },
+            {
+              "description": "Manages day-to-day business operations and logistics",
+              "id": 5,
+              "name": "Operations"
+            }
+          ],
+          "payment_terms": [
+            {
+              "days": 7,
+              "id": 2,
+              "name": "Net 7"
+            },
+            {
+              "days": 14,
+              "id": 3,
+              "name": "Net 14"
+            },
+            {
+              "days": 21,
+              "id": 4,
+              "name": "Net 21"
+            },
+            {
+              "days": 30,
+              "id": 5,
+              "name": "Net 30"
+            },
+            {
+              "days": 45,
+              "id": 6,
+              "name": "Net 45"
+            },
+            {
+              "days": 60,
+              "id": 7,
+              "name": "Net 60"
+            },
+            {
+              "days": 30,
+              "id": 8,
+              "name": "Net 2000"
+            },
+            {
+              "days": 30,
+              "id": 1,
+              "name": "Netttt 30 NOGA"
+            },
+            {
+              "days": 32,
+              "id": 9,
+              "name": "TEST"
+            },
+            {
+              "days": 30,
+              "id": 11,
+              "name": "Net 22000"
+            }
+          ],
+          "products": [
+            {
+              "id": 1,
+              "code": "MED-001",
+              "name": "Syringe 5ml",
+              "image_url": "",
+              "cost_price": 1000,
+              "selling_price": 1500
+            },
+            {
+              "id": 2,
+              "code": "MED-002",
+              "name": "Gloves (Box)",
+              "image_url": "",
+              "cost_price": 50000,
+              "selling_price": 75000
+            },
+            {
+              "id": 3,
+              "code": "OFF-001",
+              "name": "Printer Paper A4",
+              "image_url": "",
+              "cost_price": 30000,
+              "selling_price": 45000
+            }
+          ],
+          "suppliers": [
+            {
+              "email": "sales@medika.co.id",
+              "id": 1,
+              "name": "PT. Medika",
+              "phone": "021-123456"
+            },
+            {
+              "email": "hello@farma.co.id",
+              "id": 2,
+              "name": "PT. Farma",
+              "phone": "021-654321"
+            }
+          ]
+        }
+      }
+    },
+
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/purchase/purchase-requisitions",
+      "body": {
+        "supplier_id": 1,
+        "payment_terms_id": 1,
+        "business_unit_id": 1,
+        "request_date": "2024-01-15",
+        "tax_rate": 10.0,
+        "is_tax_inclusive": false,
+        "delivery_cost": 50000,
+        "order_cost": 25000,
+        "notes": "Urgent purchase for office supplies",
+        "items": [
+          {
+            "product_id": 1,
+            "quantity": 10,
+            "discount": 5.0
+          },
+          {
+            "product_id": 2,
+            "quantity": 5,
+            "discount": 0.0
+          }
+        ]
+      },
+      "response": {
+        "data": {
+          "id": 5,
+          "code": "PR20250001",
+          "supplier_id": 1,
+          "payment_terms_id": 1,
+          "business_unit_id": 1,
+          "request_date": "2024-01-15",
+          "status": "DRAFT",
+          "tax_rate": 10,
+          "tax_amount": 25950,
+          "delivery_cost": 50000,
+          "order_cost": 25000,
+          "subtotal": 259500,
+          "total_amount": 360450,
+          "notes": "Urgent purchase for office supplies",
+          "requested_by": 1,
+          "supplier": {
+            "id": 1,
+            "name": "PT. Medika",
+            "code": ""
+          },
+          "payment_terms": {
+            "id": 1,
+            "name": "Netttt 30 NOGA",
+            "days": 30
+          },
+          "business_unit": {
+            "id": 1,
+            "name": "Sales Department"
+          },
+          "user": {
+            "id": 1,
+            "username": "admin",
+            "name": "Administrator"
+          },
+          "items": [
+            {
+              "id": 8,
+              "purchase_requisition_id": 5,
+              "product_id": 1,
+              "quantity": 10,
+              "discount": 5,
+              "subtotal": 9500,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500
+              },
+              "created_at": "2025-09-20T21:26:22+07:00",
+              "updated_at": "2025-09-20T21:26:22+07:00"
+            },
+            {
+              "id": 9,
+              "purchase_requisition_id": 5,
+              "product_id": 2,
+              "quantity": 5,
+              "discount": 0,
+              "subtotal": 250000,
+              "product": {
+                "id": 2,
+                "name": "Gloves (Box)",
+                "code": "MED-002",
+                "cost_price": 50000,
+                "selling_price": 75000
+              },
+              "created_at": "2025-09-20T21:26:22+07:00",
+              "updated_at": "2025-09-20T21:26:22+07:00"
+            }
+          ],
+          "created_at": "2025-09-20T21:26:22+07:00",
+          "updated_at": "2025-09-20T21:26:22+07:00"
+        },
+        "message": "Purchase requisition created successfully"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/purchase/purchase-requisitions/2",
+      "body": {
+        "supplier_id": 2,
+        "payment_terms_id": 2,
+        "business_unit_id": 2,
+        "request_date": "2024-01-16",
+        "tax_rate": 11.0,
+        "is_tax_inclusive": true,
+        "delivery_cost": 60000,
+        "order_cost": 30000,
+        "notes": "Updated purchase requirements",
+        "items": [
+          {
+            "product_id": 3,
+            "quantity": 15,
+            "discount": 10.0
+          },
+          {
+            "product_id": 2,
+            "quantity": 8,
+            "discount": 0.0
+          }
+        ]
+      },
+      "response": {
+        "error": "Failed to update purchase requisition: can only update draft purchase requisitions"
+      }
+    },
+    {
+      "title": "APPROVE DATA",
+      "endpoint": "POST {{base_url}}/purchase/purchase-requisitions/1/approve",
+      "response": {
+        "message": "Purchase requisition approved successfully"
+      }
+    },
+    {
+      "title": "REJECTED DATA",
+      "endpoint": "POST {{base_url}}/purchase/purchase-requisitions/1/reject",
+      "response": {
+        "error": "Failed to reject purchase requisition: can only reject draft purchase requisitions"
+      }
+    },
+    {
+      "title": "CONVERT DATA TO PURCHASE ORDER",
+      "endpoint": "POST {{base_url}}/purchase/purchase-requisitions/1/convert",
+      "response": {
+        "data": {
+          "purchase_order": {
+            "business_unit_id": 2,
+            "code": "PO-20250920-0004",
+            "created_at": "2025-09-20T21:29:19Z",
+            "created_by": 2,
+            "delivery_cost": 75000,
+            "id": 4,
+            "notes": "Equipment purchase for new project",
+            "order_date": "2025-09-20",
+            "other_cost": 30000,
+            "payment_terms_id": 3,
+            "purchase_requisitions_id": 2,
+            "status": "DRAFT",
+            "sub_total": 88800,
+            "supplier_id": 2,
+            "tax_amount": 9768,
+            "tax_rate": 11,
+            "total_amount": 203568
+          }
+        },
+        "message": "Purchase requisition converted successfully"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/purchase/purchase-requisitions/2",
+      "response": {
+        "error": "Failed to delete purchase requisition: can only delete draft purchase requisitions"
+      }
+    }
+  ]
+}

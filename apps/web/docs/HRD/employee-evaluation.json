@@ -1,0 +1,622 @@
+{
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/hrd/employee-evaluations",
+      "description": "Get list of employee evaluations",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "name": "Q1 2025 Performance Review",
+            "description": "Quarterly performance review for Q1 2025",
+            "employee": {
+              "id": 1,
+              "name": "John Doe",
+              "nip": "EMP001",
+              "division": "IT Department",
+              "position": "Software Engineer"
+            },
+            "evaluator": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": ""
+            },
+            "period_start": "2025-01-01",
+            "period_end": "2025-03-31",
+            "overall_score": 85.5,
+            "comments": "Excellent performance throughout the quarter. Shows strong technical skills and good collaboration.",
+            "status": "Approved",
+            "employee_evaluation_criterias": [
+              {
+                "id": 1,
+                "name": "Work Quality",
+                "weight": 30.0,
+                "score": 90.0
+              },
+              {
+                "id": 2,
+                "name": "Productivity",
+                "weight": 25.0,
+                "score": 85.0
+              },
+              {
+                "id": 3,
+                "name": "Team Collaboration",
+                "weight": 20.0,
+                "score": 80.0
+              },
+              {
+                "id": 4,
+                "name": "Communication",
+                "weight": 15.0,
+                "score": 85.0
+              },
+              {
+                "id": 5,
+                "name": "Initiative",
+                "weight": 10.0,
+                "score": 90.0
+              }
+            ],
+            "created_at": "2025-04-01T10:15:30+07:00",
+            "updated_at": "2025-04-01T14:30:45+07:00"
+          },
+          {
+            "id": 2,
+            "name": "Annual Review 2024",
+            "description": "Annual performance review for year 2024",
+            "employee": {
+              "id": 2,
+              "name": "Jane Smith",
+              "nip": "EMP002",
+              "division": "HR Department",
+              "position": "HR Manager"
+            },
+            "evaluator": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": ""
+            },
+            "period_start": "2024-01-01",
+            "period_end": "2024-12-31",
+            "overall_score": 92.0,
+            "comments": "Outstanding performance. Exceeded all expectations and demonstrated exceptional leadership.",
+            "status": "Approved",
+            "employee_evaluation_criterias": [
+              {
+                "id": 6,
+                "name": "Goal Achievement",
+                "weight": 40.0,
+                "score": 95.0
+              },
+              {
+                "id": 7,
+                "name": "Leadership",
+                "weight": 30.0,
+                "score": 90.0
+              },
+              {
+                "id": 8,
+                "name": "Innovation",
+                "weight": 30.0,
+                "score": 90.0
+              }
+            ],
+            "created_at": "2025-01-15T09:20:15+07:00",
+            "updated_at": "2025-01-15T11:45:20+07:00"
+          },
+          {
+            "id": 3,
+            "name": "Probation Period Evaluation",
+            "description": "Evaluation for employee in probation period",
+            "employee": {
+              "id": 3,
+              "name": "Bob Johnson",
+              "nip": "EMP003",
+              "division": "Finance Department",
+              "position": "Accountant"
+            },
+            "evaluator": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": ""
+            },
+            "period_start": "2025-03-01",
+            "period_end": "2025-05-31",
+            "overall_score": 0.0,
+            "comments": "",
+            "status": "Draft",
+            "employee_evaluation_criterias": [
+              {
+                "id": 9,
+                "name": "Adaptability",
+                "weight": 35.0,
+                "score": 0.0
+              },
+              {
+                "id": 10,
+                "name": "Learning Ability",
+                "weight": 35.0,
+                "score": 0.0
+              },
+              {
+                "id": 11,
+                "name": "Work Attitude",
+                "weight": 30.0,
+                "score": 0.0
+              }
+            ],
+            "created_at": "2025-03-15T08:30:00+07:00",
+            "updated_at": "2025-03-15T08:30:00+07:00"
+          }
+        ],
+        "meta": {
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 15
+          },
+          "search": {
+            "search": "",
+            "search_by": ""
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": "desc"
+          },
+          "filter": {
+            "start_date": "",
+            "end_date": "",
+            "note": "Date filters apply to period_start field"
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "employee_id", "evaluated_by"],
+            "string_columns": ["name", "description", "comments", "status"]
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "name",
+              "employee_id",
+              "evaluated_by",
+              "period_start",
+              "period_end",
+              "overall_score",
+              "status",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hrd/employee-evaluations/stats",
+      "description": "Get employee evaluations statistics",
+      "response": {
+        "data": {
+          "total": 15,
+          "draft": 5,
+          "approved": 10
+        },
+        "message": "Employee evaluation statistics retrieved successfully"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hrd/employee-evaluations/{id}",
+      "description": "Get employee evaluation by ID",
+      "response": {
+        "data": {
+          "id": 1,
+          "name": "Q1 2025 Performance Review",
+          "description": "Quarterly performance review for Q1 2025",
+          "employee": {
+            "id": 1,
+            "name": "John Doe",
+            "nip": "EMP001",
+            "division": "IT Department",
+            "position": "Software Engineer"
+          },
+          "evaluator": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "period_start": "2025-01-01",
+          "period_end": "2025-03-31",
+          "overall_score": 85.5,
+          "comments": "Excellent performance throughout the quarter. Shows strong technical skills and good collaboration.",
+          "status": "Approved",
+          "employee_evaluation_criterias": [
+            {
+              "id": 1,
+              "name": "Work Quality",
+              "weight": 30.0,
+              "score": 90.0
+            },
+            {
+              "id": 2,
+              "name": "Productivity",
+              "weight": 25.0,
+              "score": 85.0
+            },
+            {
+              "id": 3,
+              "name": "Team Collaboration",
+              "weight": 20.0,
+              "score": 80.0
+            },
+            {
+              "id": 4,
+              "name": "Communication",
+              "weight": 15.0,
+              "score": 85.0
+            },
+            {
+              "id": 5,
+              "name": "Initiative",
+              "weight": 10.0,
+              "score": 90.0
+            }
+          ],
+          "created_at": "2025-04-01T10:15:30+07:00",
+          "updated_at": "2025-04-01T14:30:45+07:00"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hrd/employee-evaluations/add",
+      "description": "Get employee evaluation ADD DATA FOR FORM",
+      "response": {
+        "data": {
+          "employees": [
+            {
+              "id": 1,
+              "name": "John Doe",
+              "nip": "EMP001",
+              "division": "IT Department",
+              "position": "Software Engineer"
+            },
+            {
+              "id": 2,
+              "name": "Jane Smith",
+              "nip": "EMP002",
+              "division": "HR Department",
+              "position": "HR Manager"
+            },
+            {
+              "id": 3,
+              "name": "Bob Johnson",
+              "nip": "EMP003",
+              "division": "Finance Department",
+              "position": "Accountant"
+            }
+          ],
+          "evaluation_groups": [
+            {
+              "id": 1,
+              "name": "Performance Evaluation Q1 2025",
+              "description": "Quarterly performance evaluation for Q1 2025",
+              "status": "Active",
+              "evaluation_criterias": [
+                {
+                  "id": 1,
+                  "name": "Work Quality",
+                  "weight": 30.0
+                },
+                {
+                  "id": 2,
+                  "name": "Productivity",
+                  "weight": 25.0
+                },
+                {
+                  "id": 3,
+                  "name": "Team Collaboration",
+                  "weight": 20.0
+                },
+                {
+                  "id": 4,
+                  "name": "Communication",
+                  "weight": 15.0
+                },
+                {
+                  "id": 5,
+                  "name": "Initiative",
+                  "weight": 10.0
+                }
+              ],
+              "created_at": "2025-10-06T14:22:52+07:00",
+              "updated_at": "2025-10-06T14:22:52+07:00"
+            },
+            {
+              "id": 2,
+              "name": "Annual Review 2024",
+              "description": "Annual performance review for year 2024",
+              "status": "Active",
+              "evaluation_criterias": [
+                {
+                  "id": 6,
+                  "name": "Goal Achievement",
+                  "weight": 40.0
+                },
+                {
+                  "id": 7,
+                  "name": "Leadership",
+                  "weight": 30.0
+                },
+                {
+                  "id": 8,
+                  "name": "Innovation",
+                  "weight": 30.0
+                }
+              ],
+              "created_at": "2025-10-05T10:15:30+07:00",
+              "updated_at": "2025-10-05T10:15:30+07:00"
+            }
+          ]
+        },
+        "message": "Employees and evaluation groups retrieved successfully"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hrd/employee-evaluations",
+      "description": "Create new employee evaluation",
+      "body": {
+        "name": "Mid-Year Evaluation 2025",
+        "description": "Mid-year performance evaluation for 2025",
+        "employee_id": 1,
+        "period_start": "2025-01-01T00:00:00Z",
+        "period_end": "2025-06-30T00:00:00Z",
+        "comments": "Good progress in the first half of the year",
+        "employee_evaluation_criterias": [
+          {
+            "name": "Technical Skills",
+            "weight": 35.0,
+            "score": 88.0
+          },
+          {
+            "name": "Problem Solving",
+            "weight": 30.0,
+            "score": 85.0
+          },
+          {
+            "name": "Time Management",
+            "weight": 20.0,
+            "score": 82.0
+          },
+          {
+            "name": "Professionalism",
+            "weight": 15.0,
+            "score": 90.0
+          }
+        ]
+      },
+      "response": {
+        "message": "created",
+        "data": {
+          "id": 16,
+          "name": "Mid-Year Evaluation 2025",
+          "description": "Mid-year performance evaluation for 2025",
+          "employee": {
+            "id": 1,
+            "name": "John Doe",
+            "nip": "EMP001",
+            "division": "IT Department",
+            "position": "Software Engineer"
+          },
+          "evaluator": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "period_start": "2025-01-01",
+          "period_end": "2025-06-30",
+          "overall_score": 86.5,
+          "comments": "Good progress in the first half of the year",
+          "status": "Draft",
+          "employee_evaluation_criterias": [
+            {
+              "id": 12,
+              "name": "Technical Skills",
+              "weight": 35.0,
+              "score": 88.0
+            },
+            {
+              "id": 13,
+              "name": "Problem Solving",
+              "weight": 30.0,
+              "score": 85.0
+            },
+            {
+              "id": 14,
+              "name": "Time Management",
+              "weight": 20.0,
+              "score": 82.0
+            },
+            {
+              "id": 15,
+              "name": "Professionalism",
+              "weight": 15.0,
+              "score": 90.0
+            }
+          ],
+          "created_at": "2025-07-01T14:28:23+07:00",
+          "updated_at": "2025-07-01T14:28:23+07:00"
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/hrd/employee-evaluations/{id}",
+      "description": "Update employee evaluation (only Draft status can be updated)",
+      "body": {
+        "name": "Q1 2025 Performance Review - Updated",
+        "description": "Updated quarterly performance review for Q1 2025",
+        "employee_id": 1,
+        "period_start": "2025-01-01T00:00:00Z",
+        "period_end": "2025-03-31T00:00:00Z",
+        "comments": "Updated: Excellent performance with improved collaboration skills",
+        "employee_evaluation_criterias": [
+          {
+            "name": "Work Quality",
+            "weight": 35.0,
+            "score": 92.0
+          },
+          {
+            "name": "Productivity",
+            "weight": 30.0,
+            "score": 88.0
+          },
+          {
+            "name": "Team Collaboration",
+            "weight": 20.0,
+            "score": 85.0
+          },
+          {
+            "name": "Communication",
+            "weight": 15.0,
+            "score": 87.0
+          }
+        ]
+      },
+      "response": {
+        "message": "updated",
+        "data": {
+          "id": 6,
+          "name": "Q1 2025 Performance Review - Updated",
+          "description": "Updated quarterly performance review for Q1 2025",
+          "employee": {
+            "id": 1,
+            "name": "John Doe",
+            "nip": "EMP001",
+            "division": "IT Department",
+            "position": "Software Engineer"
+          },
+          "evaluator": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "period_start": "2025-01-01",
+          "period_end": "2025-03-31",
+          "overall_score": 89.0,
+          "comments": "Updated: Excellent performance with improved collaboration skills",
+          "status": "Draft",
+          "employee_evaluation_criterias": [
+            {
+              "id": 16,
+              "name": "Work Quality",
+              "weight": 35.0,
+              "score": 92.0
+            },
+            {
+              "id": 17,
+              "name": "Productivity",
+              "weight": 30.0,
+              "score": 88.0
+            },
+            {
+              "id": 18,
+              "name": "Team Collaboration",
+              "weight": 20.0,
+              "score": 85.0
+            },
+            {
+              "id": 19,
+              "name": "Communication",
+              "weight": 15.0,
+              "score": 87.0
+            }
+          ],
+          "created_at": "2025-04-01T10:15:30+07:00",
+          "updated_at": "2025-04-01T15:45:20+07:00"
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/hrd/employee-evaluations/{id}",
+      "description": "Delete employee evaluation (only Draft status can be deleted)",
+      "response": {
+        "message": "deleted"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hrd/employee-evaluations/{id}/approve",
+      "description": "Approve employee evaluation (changes status from Draft to Approved)",
+      "response": {
+        "message": "employee evaluation approved",
+        "data": {
+          "id": 6,
+          "name": "Q1 2025 Performance Review - Updated",
+          "description": "Updated quarterly performance review for Q1 2025",
+          "employee": {
+            "id": 1,
+            "name": "John Doe",
+            "nip": "EMP001",
+            "division": "IT Department",
+            "position": "Software Engineer"
+          },
+          "evaluator": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "period_start": "2025-01-01",
+          "period_end": "2025-03-31",
+          "overall_score": 89.0,
+          "comments": "Updated: Excellent performance with improved collaboration skills",
+          "status": "Approved",
+          "employee_evaluation_criterias": [
+            {
+              "id": 16,
+              "name": "Work Quality",
+              "weight": 35.0,
+              "score": 92.0
+            },
+            {
+              "id": 17,
+              "name": "Productivity",
+              "weight": 30.0,
+              "score": 88.0
+            },
+            {
+              "id": 18,
+              "name": "Team Collaboration",
+              "weight": 20.0,
+              "score": 85.0
+            },
+            {
+              "id": 19,
+              "name": "Communication",
+              "weight": 15.0,
+              "score": 87.0
+            }
+          ],
+          "created_at": "2025-04-01T10:15:30+07:00",
+          "updated_at": "2025-04-01T16:20:15+07:00"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,1720 @@
+package usecase
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"log"
+	"time"
+
+	"github.com/gilabs/gims/api/internal/core/apptime"
+	"github.com/gilabs/gims/api/internal/organization/data/models"
+	"github.com/gilabs/gims/api/internal/organization/data/repositories"
+	"github.com/gilabs/gims/api/internal/organization/domain/dto"
+	"github.com/gilabs/gims/api/internal/organization/domain/mapper"
+	"github.com/google/uuid"
+)
+
+var (
+	ErrEmployeeNotFound          = errors.New("employee not found")
+	ErrEmployeeCodeExists        = errors.New("employee code already exists")
+	ErrReplacementNotFound       = errors.New("replacement employee not found")
+	ErrContractNotFound          = errors.New("contract not found")
+	ErrEducationNotFound         = errors.New("education history not found")
+	ErrInvalidDegreeLevel        = errors.New("invalid degree level")
+	ErrInvalidEducationDates     = errors.New("end date must be after start date")
+	ErrInvalidContractType       = errors.New("invalid contract type")
+	ErrInvalidContractDates      = errors.New("invalid contract dates")
+	ErrPKWTTCannotHaveEndDate    = errors.New("PKWTT contract cannot have end date")
+	ErrPKWTMustHaveEndDate       = errors.New("PKWT/Intern contract must have end date")
+	ErrCannotModifyTerminated    = errors.New("cannot modify terminated contract")
+	ErrCannotTerminateInactive   = errors.New("can only terminate active contracts")
+	ErrActiveContractExists      = errors.New("employee already has an active contract")
+	ErrNoActiveContract          = errors.New("employee has no active contract")
+	ErrOngoingEducationExists    = errors.New("employee already has an ongoing education")
+	ErrInvalidGPA                = errors.New("GPA must be between 1.00 and 4.00")
+	ErrCertificationNotFound     = errors.New("certification not found")
+	ErrInvalidCertificationDates = errors.New("expiry date must be after issue date")
+	ErrAssetNotFound             = errors.New("asset not found")
+	ErrAssetAlreadyReturned      = errors.New("asset already returned")
+	ErrInvalidReturnDate         = errors.New("return date must be after borrow date")
+	ErrDuplicateAssetCode        = errors.New("asset code already exists")
+)
+
+// EmployeeUsecase defines the interface for employee business logic
+type EmployeeUsecase interface {
+	Create(ctx context.Context, req dto.CreateEmployeeRequest, createdBy string) (dto.EmployeeResponse, error)
+	GetByID(ctx context.Context, id string) (dto.EmployeeResponse, error)
+	List(ctx context.Context, params dto.EmployeeListParams) ([]dto.EmployeeListItemResponse, int64, error)
+	Update(ctx context.Context, id string, req dto.UpdateEmployeeRequest) (dto.EmployeeResponse, error)
+	Delete(ctx context.Context, id string) error
+	AssignAreas(ctx context.Context, id string, req dto.AssignEmployeeAreasRequest) (dto.EmployeeResponse, error)
+	// AssignSupervisorAreas sets the areas in which the employee acts as supervisor.
+	AssignSupervisorAreas(ctx context.Context, id string, req dto.AssignEmployeeSupervisorAreasRequest) (dto.EmployeeResponse, error)
+	// BulkUpdateAreas replaces all area assignments for an employee in one operation.
+	BulkUpdateAreas(ctx context.Context, employeeID string, req dto.BulkUpdateEmployeeAreasRequest) (dto.EmployeeResponse, error)
+	// RemoveAreaAssignment removes a single area assignment from an employee.
+	RemoveAreaAssignment(ctx context.Context, employeeID string, areaID string) error
+	// GetFormData returns dropdown options for the employee form.
+	GetFormData(ctx context.Context) (*dto.EmployeeFormDataResponse, error)
+	// Contract management methods
+	GetEmployeeContracts(ctx context.Context, employeeID string) ([]dto.EmployeeContractResponse, error)
+	CreateEmployeeContract(ctx context.Context, employeeID string, req dto.CreateEmployeeContractRequest, createdBy string) (dto.EmployeeContractResponse, error)
+	GetActiveContract(ctx context.Context, employeeID string) (*dto.EmployeeContractResponse, error)
+	UpdateEmployeeContract(ctx context.Context, employeeID string, contractID string, req dto.UpdateEmployeeContractRequest) (dto.EmployeeContractResponse, error)
+	DeleteEmployeeContract(ctx context.Context, employeeID string, contractID string) error
+	TerminateEmployeeContract(ctx context.Context, employeeID string, contractID string, req dto.TerminateEmployeeContractRequest, terminatedBy string) (dto.EmployeeContractResponse, error)
+	RenewEmployeeContract(ctx context.Context, employeeID string, contractID string, req dto.RenewEmployeeContractRequest, renewedBy string) (dto.EmployeeContractResponse, error)
+	CorrectActiveEmployeeContract(ctx context.Context, employeeID string, req dto.CorrectEmployeeContractRequest, correctedBy string) (dto.EmployeeContractResponse, error)
+	// Education history management methods
+	GetEmployeeEducationHistories(ctx context.Context, employeeID string) ([]dto.EmployeeEducationHistoryResponse, error)
+	CreateEmployeeEducationHistory(ctx context.Context, employeeID string, req dto.CreateEmployeeEducationHistoryRequest, createdBy string) (dto.EmployeeEducationHistoryResponse, error)
+	UpdateEmployeeEducationHistory(ctx context.Context, employeeID string, educationID string, req dto.UpdateEmployeeEducationHistoryRequest) (dto.EmployeeEducationHistoryResponse, error)
+	DeleteEmployeeEducationHistory(ctx context.Context, employeeID string, educationID string) error
+	GetLatestEducation(ctx context.Context, employeeID string) (*models.EmployeeEducationHistory, error)
+	// Certification management methods
+	GetEmployeeCertifications(ctx context.Context, employeeID string) ([]dto.EmployeeCertificationResponse, error)
+	CreateEmployeeCertification(ctx context.Context, employeeID string, req dto.CreateEmployeeCertificationRequest, createdBy string) (dto.EmployeeCertificationResponse, error)
+	UpdateEmployeeCertification(ctx context.Context, employeeID string, certID string, req dto.UpdateEmployeeCertificationRequest) (dto.EmployeeCertificationResponse, error)
+	DeleteEmployeeCertification(ctx context.Context, employeeID string, certID string) error
+	GetLatestCertification(ctx context.Context, employeeID string) (*models.EmployeeCertification, error)
+	// Asset management methods
+	GetEmployeeAssets(ctx context.Context, employeeID string) ([]dto.EmployeeAssetResponse, error)
+	CreateEmployeeAsset(ctx context.Context, employeeID string, req dto.CreateEmployeeAssetRequest, createdBy string) (dto.EmployeeAssetResponse, error)
+	UpdateEmployeeAsset(ctx context.Context, employeeID string, assetID string, req dto.UpdateEmployeeAssetRequest) (dto.EmployeeAssetResponse, error)
+	ReturnEmployeeAsset(ctx context.Context, employeeID string, assetID string, req dto.ReturnEmployeeAssetRequest) (dto.EmployeeAssetResponse, error)
+	DeleteEmployeeAsset(ctx context.Context, employeeID string, assetID string) error
+	// Signature management methods
+	GetEmployeeSignature(ctx context.Context, employeeID string) (*dto.EmployeeSignatureResponse, error)
+	UploadEmployeeSignature(ctx context.Context, employeeID string, filePath string, fileName string, fileSize int64, fileHash string, mimeType string, width int, height int, uploadedBy string) (*dto.EmployeeSignatureResponse, error)
+	DeleteEmployeeSignature(ctx context.Context, employeeID string) error
+}
+
+type employeeUsecase struct {
+	employeeRepo         repositories.EmployeeRepository
+	employeeAreaRepo     repositories.EmployeeAreaRepository
+	divisionRepo         repositories.DivisionRepository
+	jobPositionRepo      repositories.JobPositionRepository
+	companyRepo          repositories.CompanyRepository
+	areaRepo             repositories.AreaRepository
+	contractRepo         repositories.EmployeeContractRepository
+	educationHistoryRepo repositories.EmployeeEducationHistoryRepository
+	certificationRepo    repositories.EmployeeCertificationRepository
+	assetRepo            repositories.EmployeeAssetRepository
+	signatureRepo        repositories.EmployeeSignatureRepository
+}
+
+// NewEmployeeUsecase creates a new EmployeeUsecase instance
+func NewEmployeeUsecase(
+	employeeRepo repositories.EmployeeRepository,
+	employeeAreaRepo repositories.EmployeeAreaRepository,
+	divisionRepo repositories.DivisionRepository,
+	jobPositionRepo repositories.JobPositionRepository,
+	companyRepo repositories.CompanyRepository,
+	areaRepo repositories.AreaRepository,
+	contractRepo repositories.EmployeeContractRepository,
+	educationHistoryRepo repositories.EmployeeEducationHistoryRepository,
+	certificationRepo repositories.EmployeeCertificationRepository,
+	assetRepo repositories.EmployeeAssetRepository,
+	signatureRepo repositories.EmployeeSignatureRepository,
+) EmployeeUsecase {
+	return &employeeUsecase{
+		employeeRepo:         employeeRepo,
+		employeeAreaRepo:     employeeAreaRepo,
+		divisionRepo:         divisionRepo,
+		jobPositionRepo:      jobPositionRepo,
+		companyRepo:          companyRepo,
+		areaRepo:             areaRepo,
+		contractRepo:         contractRepo,
+		educationHistoryRepo: educationHistoryRepo,
+		certificationRepo:    certificationRepo,
+		assetRepo:            assetRepo,
+		signatureRepo:        signatureRepo,
+	}
+}
+
+func (u *employeeUsecase) Create(ctx context.Context, req dto.CreateEmployeeRequest, createdBy string) (dto.EmployeeResponse, error) {
+	// Generate EmployeeCode if not provided
+	employeeCode := req.EmployeeCode
+	if employeeCode == "" {
+		lastCode, err := u.employeeRepo.GetLastEmployeeCode(ctx)
+		if err != nil {
+			return dto.EmployeeResponse{}, fmt.Errorf("failed to get last employee code: %w", err)
+		}
+
+		var lastNumber int
+		if lastCode != "" && len(lastCode) > 4 {
+			fmt.Sscanf(lastCode, "EMP-%d", &lastNumber)
+		}
+		employeeCode = fmt.Sprintf("EMP-%03d", lastNumber+1)
+	}
+
+	// Check if employee code already exists
+	existing, _ := u.employeeRepo.FindByCode(ctx, employeeCode)
+	if existing != nil {
+		return dto.EmployeeResponse{}, ErrEmployeeCodeExists
+	}
+
+	// Validate replacement employee if specified
+	if req.ReplacementForID != nil && *req.ReplacementForID != "" {
+		replacement, err := u.employeeRepo.FindByID(ctx, *req.ReplacementForID)
+		if err != nil || replacement == nil {
+			return dto.EmployeeResponse{}, ErrReplacementNotFound
+		}
+	}
+
+	// Default values
+	isActive := true
+	if req.IsActive != nil {
+		isActive = *req.IsActive
+	}
+
+	ptkpStatus := models.PTKPTK0
+	if req.PTKPStatus != "" {
+		ptkpStatus = models.PTKPStatus(req.PTKPStatus)
+	}
+
+	totalLeaveQuota := 12
+	if req.TotalLeaveQuota > 0 {
+		totalLeaveQuota = req.TotalLeaveQuota
+	}
+
+	employee := &models.Employee{
+		EmployeeCode:     employeeCode,
+		Name:             req.Name,
+		Email:            req.Email,
+		Phone:            req.Phone,
+		UserID:           req.UserID,
+		DivisionID:       req.DivisionID,
+		JobPositionID:    req.JobPositionID,
+		CompanyID:        req.CompanyID,
+		DateOfBirth:      req.DateOfBirth,
+		PlaceOfBirth:     req.PlaceOfBirth,
+		Gender:           models.Gender(req.Gender),
+		Religion:         req.Religion,
+		Address:          req.Address,
+		VillageID:        req.VillageID,
+		NIK:              req.NIK,
+		NPWP:             req.NPWP,
+		BPJS:             req.BPJS,
+		TotalLeaveQuota:  totalLeaveQuota,
+		PTKPStatus:       ptkpStatus,
+		ReplacementForID: req.ReplacementForID,
+		CreatedBy:        &createdBy,
+		IsActive:         isActive,
+	}
+
+	if err := u.employeeRepo.Create(ctx, employee); err != nil {
+		return dto.EmployeeResponse{}, err
+	}
+
+	// Create initial contract if provided
+	var currentContract *models.EmployeeContract
+	if req.InitialContract != nil {
+		// Validate contract type
+		contractType := models.ContractType(req.InitialContract.ContractType)
+		if contractType != models.ContractTypePKWTT && contractType != models.ContractTypePKWT && contractType != models.ContractTypeIntern {
+			return dto.EmployeeResponse{}, ErrInvalidContractType
+		}
+
+		// Parse dates
+		startDate, err := time.Parse("2006-01-02", req.InitialContract.StartDate)
+		if err != nil {
+			return dto.EmployeeResponse{}, fmt.Errorf("invalid start_date format: %w", err)
+		}
+
+		var endDate *time.Time
+		if req.InitialContract.EndDate != "" {
+			parsedEndDate, err := time.Parse("2006-01-02", req.InitialContract.EndDate)
+			if err != nil {
+				return dto.EmployeeResponse{}, fmt.Errorf("invalid end_date format: %w", err)
+			}
+			endDate = &parsedEndDate
+		}
+
+		// Validation: PKWTT cannot have end_date, PKWT/Intern must have end_date
+		if contractType == models.ContractTypePKWTT && endDate != nil {
+			return dto.EmployeeResponse{}, ErrPKWTTCannotHaveEndDate
+		}
+		if (contractType == models.ContractTypePKWT || contractType == models.ContractTypeIntern) && endDate == nil {
+			return dto.EmployeeResponse{}, ErrPKWTMustHaveEndDate
+		}
+
+		createdByUUID, err := uuid.Parse(createdBy)
+		if err != nil {
+			return dto.EmployeeResponse{}, fmt.Errorf("invalid created_by UUID: %w", err)
+		}
+
+		employeeUUID, err := uuid.Parse(employee.ID)
+		if err != nil {
+			return dto.EmployeeResponse{}, fmt.Errorf("invalid employee ID: %w", err)
+		}
+
+		contract := &models.EmployeeContract{
+			EmployeeID:     employeeUUID,
+			ContractNumber: req.InitialContract.ContractNumber,
+			ContractType:   contractType,
+			StartDate:      startDate,
+			EndDate:        endDate,
+			DocumentPath:   req.InitialContract.DocumentPath,
+			Status:         models.ContractStatusActive,
+			CreatedBy:      createdByUUID,
+		}
+
+		if err := u.contractRepo.Create(ctx, contract); err != nil {
+			return dto.EmployeeResponse{}, fmt.Errorf("failed to create contract: %w", err)
+		}
+		currentContract = contract
+	}
+
+	// Assign member areas if provided
+	if len(req.AreaIDs) > 0 {
+		if err := u.employeeAreaRepo.AssignAreas(ctx, employee.ID, req.AreaIDs); err != nil {
+			return dto.EmployeeResponse{}, err
+		}
+	}
+
+	// Assign supervisor areas if provided
+	if len(req.SupervisedAreaIDs) > 0 {
+		if err := u.employeeAreaRepo.AssignSupervisorAreas(ctx, employee.ID, req.SupervisedAreaIDs); err != nil {
+			return dto.EmployeeResponse{}, err
+		}
+	}
+
+	// Reload with preloaded data
+	employee, err := u.employeeRepo.FindByID(ctx, employee.ID)
+	if err != nil {
+		return dto.EmployeeResponse{}, err
+	}
+
+	// Fetch latest education and certification
+	latestEdu, _ := u.GetLatestEducation(ctx, employee.ID)
+	latestCert, _ := u.GetLatestCertification(ctx, employee.ID)
+
+	return mapper.ToEmployeeResponse(employee, currentContract, latestEdu, latestCert), nil
+}
+
+func (u *employeeUsecase) GetByID(ctx context.Context, id string) (dto.EmployeeResponse, error) {
+	employee, err := u.employeeRepo.FindByID(ctx, id)
+	if err != nil {
+		return dto.EmployeeResponse{}, ErrEmployeeNotFound
+	}
+
+	// Fetch active contract
+	var currentContract *models.EmployeeContract
+	employeeUUID, err := uuid.Parse(id)
+	if err == nil {
+		contract, _ := u.contractRepo.FindActiveByEmployeeID(ctx, employeeUUID)
+		if contract != nil {
+			currentContract = contract
+		}
+	}
+
+	// Fetch latest education and certification
+	latestEdu, _ := u.GetLatestEducation(ctx, id)
+	latestCert, _ := u.GetLatestCertification(ctx, id)
+
+	return mapper.ToEmployeeResponse(employee, currentContract, latestEdu, latestCert), nil
+}
+
+func (u *employeeUsecase) List(ctx context.Context, params dto.EmployeeListParams) ([]dto.EmployeeListItemResponse, int64, error) {
+	// Set defaults
+	if params.Page <= 0 {
+		params.Page = 1
+	}
+	if params.PerPage <= 0 {
+		params.PerPage = 10
+	}
+
+	repoParams := repositories.EmployeeListParams{
+		Page:          params.Page,
+		PerPage:       params.PerPage,
+		Search:        params.Search,
+		DivisionID:    params.DivisionID,
+		JobPositionID: params.JobPositionID,
+		AreaID:        params.AreaID,
+		CompanyID:     params.CompanyID,
+		IsActive:      params.IsActive,
+		SortBy:        params.SortBy,
+		SortDir:       params.SortDir,
+	}
+
+	employees, total, err := u.employeeRepo.List(ctx, repoParams)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	employeeIDs := make([]uuid.UUID, 0, len(employees))
+	for _, e := range employees {
+		if parsedID, err := uuid.Parse(e.ID); err == nil {
+			employeeIDs = append(employeeIDs, parsedID)
+		}
+	}
+
+	activeContracts, _ := u.contractRepo.FindActiveByEmployeeIDs(ctx, employeeIDs)
+
+	return mapper.ToEmployeeListItemResponseList(employees, activeContracts), total, nil
+}
+
+func (u *employeeUsecase) Update(ctx context.Context, id string, req dto.UpdateEmployeeRequest) (dto.EmployeeResponse, error) {
+	employee, err := u.employeeRepo.FindByID(ctx, id)
+	if err != nil {
+		return dto.EmployeeResponse{}, ErrEmployeeNotFound
+	}
+
+	// Check employee code uniqueness if changed
+	if req.EmployeeCode != nil && *req.EmployeeCode != employee.EmployeeCode {
+		existing, _ := u.employeeRepo.FindByCode(ctx, *req.EmployeeCode)
+		if existing != nil && existing.ID != id {
+			return dto.EmployeeResponse{}, ErrEmployeeCodeExists
+		}
+		employee.EmployeeCode = *req.EmployeeCode
+	}
+
+	// Validate replacement employee if specified
+	if req.ReplacementForID != nil && *req.ReplacementForID != "" {
+		replacement, err := u.employeeRepo.FindByID(ctx, *req.ReplacementForID)
+		if err != nil || replacement == nil {
+			return dto.EmployeeResponse{}, ErrReplacementNotFound
+		}
+		employee.ReplacementForID = req.ReplacementForID
+	} else if req.ReplacementForID != nil {
+		employee.ReplacementForID = nil
+	}
+
+	// Update fields if provided
+	if req.Name != nil {
+		employee.Name = *req.Name
+	}
+	if req.Email != nil {
+		employee.Email = *req.Email
+	}
+	if req.Phone != nil {
+		employee.Phone = *req.Phone
+	}
+	if req.UserID != nil {
+		employee.UserID = req.UserID
+	}
+	if req.DivisionID != nil {
+		employee.DivisionID = req.DivisionID
+	}
+	if req.JobPositionID != nil {
+		employee.JobPositionID = req.JobPositionID
+	}
+	if req.CompanyID != nil {
+		employee.CompanyID = req.CompanyID
+	}
+	if req.DateOfBirth != nil {
+		employee.DateOfBirth = req.DateOfBirth
+	}
+	if req.PlaceOfBirth != nil {
+		employee.PlaceOfBirth = *req.PlaceOfBirth
+	}
+	if req.Gender != nil {
+		employee.Gender = models.Gender(*req.Gender)
+	}
+	if req.Religion != nil {
+		employee.Religion = *req.Religion
+	}
+	if req.Address != nil {
+		employee.Address = *req.Address
+	}
+	if req.VillageID != nil {
+		employee.VillageID = req.VillageID
+	}
+	if req.NIK != nil {
+		employee.NIK = *req.NIK
+	}
+	if req.NPWP != nil {
+		employee.NPWP = *req.NPWP
+	}
+	if req.BPJS != nil {
+		employee.BPJS = *req.BPJS
+	}
+	if req.TotalLeaveQuota != nil {
+		employee.TotalLeaveQuota = *req.TotalLeaveQuota
+	}
+	if req.PTKPStatus != nil {
+		employee.PTKPStatus = models.PTKPStatus(*req.PTKPStatus)
+	}
+	if req.IsActive != nil {
+		employee.IsActive = *req.IsActive
+	}
+
+	if err := u.employeeRepo.Update(ctx, employee); err != nil {
+		return dto.EmployeeResponse{}, err
+	}
+
+	// Update area assignments if provided (full replacement for member areas)
+	if req.AreaIDs != nil {
+		if err := u.employeeAreaRepo.RemoveAllAreas(ctx, id); err != nil {
+			return dto.EmployeeResponse{}, err
+		}
+		if len(req.AreaIDs) > 0 {
+			if err := u.employeeAreaRepo.AssignAreas(ctx, id, req.AreaIDs); err != nil {
+				return dto.EmployeeResponse{}, err
+			}
+		}
+	}
+
+	// Update supervised areas if provided (upsert with is_supervisor=true)
+	if req.SupervisedAreaIDs != nil {
+		if len(req.SupervisedAreaIDs) > 0 {
+			if err := u.employeeAreaRepo.AssignSupervisorAreas(ctx, id, req.SupervisedAreaIDs); err != nil {
+				return dto.EmployeeResponse{}, err
+			}
+		}
+	}
+
+	// Reload with preloaded data
+	employee, err = u.employeeRepo.FindByID(ctx, id)
+	if err != nil {
+		return dto.EmployeeResponse{}, err
+	}
+
+	// Fetch active contract
+	var currentContract *models.EmployeeContract
+	employeeUUID, _ := uuid.Parse(id)
+	contract, _ := u.contractRepo.FindActiveByEmployeeID(ctx, employeeUUID)
+	if contract != nil {
+		currentContract = contract
+	}
+
+	latestEdu, _ := u.GetLatestEducation(ctx, id)
+	latestCert, _ := u.GetLatestCertification(ctx, id)
+	return mapper.ToEmployeeResponse(employee, currentContract, latestEdu, latestCert), nil
+}
+
+func (u *employeeUsecase) Delete(ctx context.Context, id string) error {
+	_, err := u.employeeRepo.FindByID(ctx, id)
+	if err != nil {
+		return ErrEmployeeNotFound
+	}
+
+	// Remove all area assignments first
+	if err := u.employeeAreaRepo.RemoveAllAreas(ctx, id); err != nil {
+		return err
+	}
+
+	return u.employeeRepo.Delete(ctx, id)
+}
+
+func (u *employeeUsecase) AssignAreas(ctx context.Context, id string, req dto.AssignEmployeeAreasRequest) (dto.EmployeeResponse, error) {
+	employee, err := u.employeeRepo.FindByID(ctx, id)
+	if err != nil {
+		return dto.EmployeeResponse{}, ErrEmployeeNotFound
+	}
+
+	// Replace all area assignments (member role only)
+	if err := u.employeeAreaRepo.RemoveAllAreas(ctx, id); err != nil {
+		return dto.EmployeeResponse{}, err
+	}
+
+	if len(req.AreaIDs) > 0 {
+		if err := u.employeeAreaRepo.AssignAreas(ctx, id, req.AreaIDs); err != nil {
+			return dto.EmployeeResponse{}, err
+		}
+	}
+
+	// Reload with preloaded data
+	employee, err = u.employeeRepo.FindByID(ctx, id)
+	if err != nil {
+		return dto.EmployeeResponse{}, err
+	}
+
+	// Fetch active contract
+	var currentContract *models.EmployeeContract
+	employeeUUID, _ := uuid.Parse(id)
+	contract, _ := u.contractRepo.FindActiveByEmployeeID(ctx, employeeUUID)
+	if contract != nil {
+		currentContract = contract
+	}
+
+	return mapper.ToEmployeeResponse(employee, currentContract, nil, nil), nil
+}
+
+func (u *employeeUsecase) AssignSupervisorAreas(ctx context.Context, id string, req dto.AssignEmployeeSupervisorAreasRequest) (dto.EmployeeResponse, error) {
+	employee, err := u.employeeRepo.FindByID(ctx, id)
+	if err != nil {
+		return dto.EmployeeResponse{}, ErrEmployeeNotFound
+	}
+
+	// Upsert areas with is_supervisor = true
+	if err := u.employeeAreaRepo.AssignSupervisorAreas(ctx, id, req.AreaIDs); err != nil {
+		return dto.EmployeeResponse{}, err
+	}
+
+	// Reload with preloaded data
+	employee, err = u.employeeRepo.FindByID(ctx, id)
+	if err != nil {
+		return dto.EmployeeResponse{}, err
+	}
+
+	// Fetch active contract
+	var currentContract *models.EmployeeContract
+	employeeUUID, _ := uuid.Parse(id)
+	contract, _ := u.contractRepo.FindActiveByEmployeeID(ctx, employeeUUID)
+	if contract != nil {
+		currentContract = contract
+	}
+
+	return mapper.ToEmployeeResponse(employee, currentContract, nil, nil), nil
+}
+
+func (u *employeeUsecase) BulkUpdateAreas(ctx context.Context, employeeID string, req dto.BulkUpdateEmployeeAreasRequest) (dto.EmployeeResponse, error) {
+	// Verify employee exists
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return dto.EmployeeResponse{}, ErrEmployeeNotFound
+	}
+
+	// Remove all existing assignments then re-create with the provided roles
+	if err := u.employeeAreaRepo.RemoveAllAreas(ctx, employeeID); err != nil {
+		return dto.EmployeeResponse{}, err
+	}
+
+	for _, a := range req.Assignments {
+		if err := u.employeeAreaRepo.AssignAreaWithRole(ctx, employeeID, a.AreaID, a.IsSupervisor); err != nil {
+			return dto.EmployeeResponse{}, err
+		}
+	}
+
+	// Reload with preloaded data
+	employee, err := u.employeeRepo.FindByID(ctx, employeeID)
+	if err != nil {
+		return dto.EmployeeResponse{}, err
+	}
+
+	// Fetch active contract
+	var currentContract *models.EmployeeContract
+	employeeUUID, _ := uuid.Parse(employeeID)
+	contract, _ := u.contractRepo.FindActiveByEmployeeID(ctx, employeeUUID)
+	if contract != nil {
+		currentContract = contract
+	}
+
+	return mapper.ToEmployeeResponse(employee, currentContract, nil, nil), nil
+}
+
+func (u *employeeUsecase) RemoveAreaAssignment(ctx context.Context, employeeID string, areaID string) error {
+	// Verify employee exists
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return ErrEmployeeNotFound
+	}
+
+	return u.employeeAreaRepo.RemoveFromArea(ctx, employeeID, areaID)
+}
+
+func (u *employeeUsecase) GetFormData(ctx context.Context) (*dto.EmployeeFormDataResponse, error) {
+	// Use a generous PerPage to retrieve all options for each dropdown
+	const maxOptions = 100
+
+	divisions, _, err := u.divisionRepo.List(ctx, &dto.ListDivisionsRequest{Page: 1, PerPage: maxOptions})
+	if err != nil {
+		return nil, err
+	}
+	jobPositions, _, err := u.jobPositionRepo.List(ctx, &dto.ListJobPositionsRequest{Page: 1, PerPage: maxOptions})
+	if err != nil {
+		return nil, err
+	}
+	companies, _, err := u.companyRepo.List(ctx, &dto.ListCompaniesRequest{Page: 1, PerPage: maxOptions})
+	if err != nil {
+		return nil, err
+	}
+	areas, _, err := u.areaRepo.List(ctx, &dto.ListAreasRequest{Page: 1, PerPage: maxOptions})
+	if err != nil {
+		return nil, err
+	}
+
+	divOpts := make([]dto.FormOption, len(divisions))
+	for i, d := range divisions {
+		divOpts[i] = dto.FormOption{ID: d.ID, Name: d.Name}
+	}
+
+	jpOpts := make([]dto.FormOption, len(jobPositions))
+	for i, j := range jobPositions {
+		jpOpts[i] = dto.FormOption{ID: j.ID, Name: j.Name}
+	}
+
+	compOpts := make([]dto.FormOption, len(companies))
+	for i, c := range companies {
+		compOpts[i] = dto.FormOption{ID: c.ID, Name: c.Name}
+	}
+
+	areaOpts := make([]dto.FormOption, len(areas))
+	for i, a := range areas {
+		areaOpts[i] = dto.FormOption{ID: a.ID, Name: a.Name}
+	}
+
+	return &dto.EmployeeFormDataResponse{
+		Divisions:    divOpts,
+		JobPositions: jpOpts,
+		Companies:    compOpts,
+		Areas:        areaOpts,
+	}, nil
+}
+
+// Contract management methods
+
+func (u *employeeUsecase) GetEmployeeContracts(ctx context.Context, employeeID string) ([]dto.EmployeeContractResponse, error) {
+	// Verify employee exists
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return nil, ErrEmployeeNotFound
+	}
+
+	employeeUUID, err := uuid.Parse(employeeID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid employee ID: %w", err)
+	}
+
+	contracts, err := u.contractRepo.FindByEmployeeID(ctx, employeeUUID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch contracts: %w", err)
+	}
+
+	return u.mapContractsToResponse(contracts), nil
+}
+
+func (u *employeeUsecase) CreateEmployeeContract(ctx context.Context, employeeID string, req dto.CreateEmployeeContractRequest, createdBy string) (dto.EmployeeContractResponse, error) {
+	// Verify employee exists
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return dto.EmployeeContractResponse{}, ErrEmployeeNotFound
+	}
+
+	employeeUUID, err := uuid.Parse(employeeID)
+	if err != nil {
+		return dto.EmployeeContractResponse{}, fmt.Errorf("invalid employee ID: %w", err)
+	}
+
+	// Check if employee already has an active contract
+	hasActive, err := u.contractRepo.HasActiveContract(ctx, employeeUUID)
+	if err != nil {
+		return dto.EmployeeContractResponse{}, fmt.Errorf("failed to check active contract: %w", err)
+	}
+	if hasActive {
+		return dto.EmployeeContractResponse{}, ErrActiveContractExists
+	}
+
+	// Validate contract type
+	contractType := models.ContractType(req.ContractType)
+	if contractType != models.ContractTypePKWTT && contractType != models.ContractTypePKWT && contractType != models.ContractTypeIntern {
+		return dto.EmployeeContractResponse{}, ErrInvalidContractType
+	}
+
+	// Parse dates
+	startDate, err := time.Parse("2006-01-02", req.StartDate)
+	if err != nil {
+		return dto.EmployeeContractResponse{}, fmt.Errorf("invalid start_date format: %w", err)
+	}
+
+	var endDate *time.Time
+	if req.EndDate != "" {
+		parsedEndDate, err := time.Parse("2006-01-02", req.EndDate)
+		if err != nil {
+			return dto.EmployeeContractResponse{}, fmt.Errorf("invalid end_date format: %w", err)
+		}
+		endDate = &parsedEndDate
+	}
+
+	// Validation: PKWTT cannot have end_date, PKWT/Intern must have end_date
+	if contractType == models.ContractTypePKWTT && endDate != nil {
+		return dto.EmployeeContractResponse{}, ErrPKWTTCannotHaveEndDate
+	}
+	if (contractType == models.ContractTypePKWT || contractType == models.ContractTypeIntern) && endDate == nil {
+		return dto.EmployeeContractResponse{}, ErrPKWTMustHaveEndDate
+	}
+
+	// Check if contract number already exists
+	existing, _ := u.contractRepo.FindByContractNumber(ctx, req.ContractNumber)
+	if existing != nil {
+		return dto.EmployeeContractResponse{}, errors.New("contract number already exists")
+	}
+
+	createdByUUID, err := uuid.Parse(createdBy)
+	if err != nil {
+		return dto.EmployeeContractResponse{}, fmt.Errorf("invalid created_by UUID: %w", err)
+	}
+
+	contract := &models.EmployeeContract{
+		EmployeeID:     employeeUUID,
+		ContractNumber: req.ContractNumber,
+		ContractType:   contractType,
+		StartDate:      startDate,
+		EndDate:        endDate,
+		DocumentPath:   req.DocumentPath,
+		Status:         models.ContractStatusActive,
+		CreatedBy:      createdByUUID,
+	}
+
+	if err := u.contractRepo.Create(ctx, contract); err != nil {
+		return dto.EmployeeContractResponse{}, fmt.Errorf("failed to create contract: %w", err)
+	}
+
+	return u.mapContractToResponse(contract), nil
+}
+
+func (u *employeeUsecase) GetActiveContract(ctx context.Context, employeeID string) (*dto.EmployeeContractResponse, error) {
+	// Verify employee exists
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return nil, ErrEmployeeNotFound
+	}
+
+	employeeUUID, err := uuid.Parse(employeeID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid employee ID: %w", err)
+	}
+
+	contract, err := u.contractRepo.FindActiveByEmployeeID(ctx, employeeUUID)
+	if err != nil {
+		return nil, ErrNoActiveContract
+	}
+
+	resp := u.mapContractToResponse(contract)
+	return &resp, nil
+}
+
+func (u *employeeUsecase) UpdateEmployeeContract(ctx context.Context, employeeID string, contractID string, req dto.UpdateEmployeeContractRequest) (dto.EmployeeContractResponse, error) {
+	// Verify employee exists
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return dto.EmployeeContractResponse{}, ErrEmployeeNotFound
+	}
+
+	contractUUID, err := uuid.Parse(contractID)
+	if err != nil {
+		return dto.EmployeeContractResponse{}, fmt.Errorf("invalid contract ID: %w", err)
+	}
+
+	contract, err := u.contractRepo.FindByID(ctx, contractUUID)
+	if err != nil {
+		return dto.EmployeeContractResponse{}, ErrContractNotFound
+	}
+
+	// Verify contract belongs to employee
+	employeeUUID, _ := uuid.Parse(employeeID)
+	if contract.EmployeeID != employeeUUID {
+		return dto.EmployeeContractResponse{}, errors.New("contract does not belong to employee")
+	}
+
+	// Cannot modify terminated contracts
+	if contract.Status == models.ContractStatusTerminated {
+		return dto.EmployeeContractResponse{}, ErrCannotModifyTerminated
+	}
+
+	// Update fields if provided
+	if req.ContractNumber != "" {
+		// Check uniqueness if changed
+		if req.ContractNumber != contract.ContractNumber {
+			existing, _ := u.contractRepo.FindByContractNumber(ctx, req.ContractNumber)
+			if existing != nil && existing.ID != contractUUID {
+				return dto.EmployeeContractResponse{}, errors.New("contract number already exists")
+			}
+		}
+		contract.ContractNumber = req.ContractNumber
+	}
+
+	if req.ContractType != "" {
+		contractType := models.ContractType(req.ContractType)
+		if contractType != models.ContractTypePKWTT && contractType != models.ContractTypePKWT && contractType != models.ContractTypeIntern {
+			return dto.EmployeeContractResponse{}, ErrInvalidContractType
+		}
+		contract.ContractType = contractType
+	}
+
+	if req.StartDate != "" {
+		startDate, err := time.Parse("2006-01-02", req.StartDate)
+		if err != nil {
+			return dto.EmployeeContractResponse{}, fmt.Errorf("invalid start_date format: %w", err)
+		}
+		contract.StartDate = startDate
+	}
+
+	if req.EndDate != "" {
+		endDate, err := time.Parse("2006-01-02", req.EndDate)
+		if err != nil {
+			return dto.EmployeeContractResponse{}, fmt.Errorf("invalid end_date format: %w", err)
+		}
+		contract.EndDate = &endDate
+	} else if req.EndDate == "" && contract.EndDate != nil {
+		// Explicitly clear end date
+		contract.EndDate = nil
+	}
+
+	// Re-validate contract type vs end date
+	if contract.ContractType == models.ContractTypePKWTT && contract.EndDate != nil {
+		return dto.EmployeeContractResponse{}, ErrPKWTTCannotHaveEndDate
+	}
+	if (contract.ContractType == models.ContractTypePKWT || contract.ContractType == models.ContractTypeIntern) && contract.EndDate == nil {
+		return dto.EmployeeContractResponse{}, ErrPKWTMustHaveEndDate
+	}
+
+	if req.DocumentPath != "" {
+		contract.DocumentPath = req.DocumentPath
+	}
+
+	if err := u.contractRepo.Update(ctx, contract); err != nil {
+		return dto.EmployeeContractResponse{}, fmt.Errorf("failed to update contract: %w", err)
+	}
+
+	return u.mapContractToResponse(contract), nil
+}
+
+func (u *employeeUsecase) DeleteEmployeeContract(ctx context.Context, employeeID string, contractID string) error {
+	// Verify employee exists
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return ErrEmployeeNotFound
+	}
+
+	contractUUID, err := uuid.Parse(contractID)
+	if err != nil {
+		return fmt.Errorf("invalid contract ID: %w", err)
+	}
+
+	contract, err := u.contractRepo.FindByID(ctx, contractUUID)
+	if err != nil {
+		return ErrContractNotFound
+	}
+
+	// Verify contract belongs to employee
+	employeeUUID, _ := uuid.Parse(employeeID)
+	if contract.EmployeeID != employeeUUID {
+		return errors.New("contract does not belong to employee")
+	}
+
+	return u.contractRepo.Delete(ctx, contractUUID)
+}
+
+func (u *employeeUsecase) TerminateEmployeeContract(ctx context.Context, employeeID string, contractID string, req dto.TerminateEmployeeContractRequest, terminatedBy string) (dto.EmployeeContractResponse, error) {
+	// Verify employee exists
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return dto.EmployeeContractResponse{}, ErrEmployeeNotFound
+	}
+
+	contractUUID, err := uuid.Parse(contractID)
+	if err != nil {
+		return dto.EmployeeContractResponse{}, fmt.Errorf("invalid contract ID: %w", err)
+	}
+
+	contract, err := u.contractRepo.FindByID(ctx, contractUUID)
+	if err != nil {
+		return dto.EmployeeContractResponse{}, ErrContractNotFound
+	}
+
+	// Verify contract belongs to employee
+	employeeUUID, _ := uuid.Parse(employeeID)
+	if contract.EmployeeID != employeeUUID {
+		return dto.EmployeeContractResponse{}, errors.New("contract does not belong to employee")
+	}
+
+	// Can only terminate active contracts
+	if contract.Status != models.ContractStatusActive {
+		return dto.EmployeeContractResponse{}, ErrCannotTerminateInactive
+	}
+
+	now := apptime.Now()
+	contract.Status = models.ContractStatusTerminated
+	contract.TerminatedAt = &now
+	contract.TerminationReason = req.Reason
+	contract.TerminationNotes = req.Notes
+
+	if err := u.contractRepo.Update(ctx, contract); err != nil {
+		return dto.EmployeeContractResponse{}, fmt.Errorf("failed to terminate contract: %w", err)
+	}
+
+	return u.mapContractToResponse(contract), nil
+}
+
+func (u *employeeUsecase) RenewEmployeeContract(ctx context.Context, employeeID string, contractID string, req dto.RenewEmployeeContractRequest, renewedBy string) (dto.EmployeeContractResponse, error) {
+	// Verify employee exists
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return dto.EmployeeContractResponse{}, ErrEmployeeNotFound
+	}
+
+	contractUUID, err := uuid.Parse(contractID)
+	if err != nil {
+		return dto.EmployeeContractResponse{}, fmt.Errorf("invalid contract ID: %w", err)
+	}
+
+	oldContract, err := u.contractRepo.FindByID(ctx, contractUUID)
+	if err != nil {
+		return dto.EmployeeContractResponse{}, ErrContractNotFound
+	}
+
+	// Verify contract belongs to employee
+	employeeUUID, _ := uuid.Parse(employeeID)
+	if oldContract.EmployeeID != employeeUUID {
+		return dto.EmployeeContractResponse{}, errors.New("contract does not belong to employee")
+	}
+
+	// Check if employee already has an active contract
+	hasActive, err := u.contractRepo.HasActiveContract(ctx, employeeUUID)
+	if err != nil {
+		return dto.EmployeeContractResponse{}, fmt.Errorf("failed to check active contract: %w", err)
+	}
+	if hasActive {
+		return dto.EmployeeContractResponse{}, ErrActiveContractExists
+	}
+
+	// Validate contract type
+	contractType := models.ContractType(req.ContractType)
+	if contractType != models.ContractTypePKWTT && contractType != models.ContractTypePKWT && contractType != models.ContractTypeIntern {
+		return dto.EmployeeContractResponse{}, ErrInvalidContractType
+	}
+
+	// Parse dates
+	startDate, err := time.Parse("2006-01-02", req.StartDate)
+	if err != nil {
+		return dto.EmployeeContractResponse{}, fmt.Errorf("invalid start_date format: %w", err)
+	}
+
+	var endDate *time.Time
+	if req.EndDate != "" {
+		parsedEndDate, err := time.Parse("2006-01-02", req.EndDate)
+		if err != nil {
+			return dto.EmployeeContractResponse{}, fmt.Errorf("invalid end_date format: %w", err)
+		}
+		endDate = &parsedEndDate
+	}
+
+	// Validation: PKWTT cannot have end_date, PKWT/Intern must have end_date
+	if contractType == models.ContractTypePKWTT && endDate != nil {
+		return dto.EmployeeContractResponse{}, ErrPKWTTCannotHaveEndDate
+	}
+	if (contractType == models.ContractTypePKWT || contractType == models.ContractTypeIntern) && endDate == nil {
+		return dto.EmployeeContractResponse{}, ErrPKWTMustHaveEndDate
+	}
+
+	// Check if contract number already exists
+	existing, _ := u.contractRepo.FindByContractNumber(ctx, req.ContractNumber)
+	if existing != nil {
+		return dto.EmployeeContractResponse{}, errors.New("contract number already exists")
+	}
+
+	createdByUUID, err := uuid.Parse(renewedBy)
+	if err != nil {
+		return dto.EmployeeContractResponse{}, fmt.Errorf("invalid renewed_by UUID: %w", err)
+	}
+
+	// Create new contract
+	newContract := &models.EmployeeContract{
+		EmployeeID:     employeeUUID,
+		ContractNumber: req.ContractNumber,
+		ContractType:   contractType,
+		StartDate:      startDate,
+		EndDate:        endDate,
+		DocumentPath:   req.DocumentPath,
+		Status:         models.ContractStatusActive,
+		CreatedBy:      createdByUUID,
+	}
+
+	if err := u.contractRepo.Create(ctx, newContract); err != nil {
+		return dto.EmployeeContractResponse{}, fmt.Errorf("failed to create renewed contract: %w", err)
+	}
+
+	// Expire the old contract
+	now := apptime.Now()
+	oldContract.Status = models.ContractStatusExpired
+	oldContract.ExpiredAt = &now
+	if err := u.contractRepo.Update(ctx, oldContract); err != nil {
+		// Log error but don't fail the renewal
+		_ = err
+	}
+
+	return u.mapContractToResponse(newContract), nil
+}
+
+func (u *employeeUsecase) CorrectActiveEmployeeContract(ctx context.Context, employeeID string, req dto.CorrectEmployeeContractRequest, correctedBy string) (dto.EmployeeContractResponse, error) {
+	// Verify employee exists
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return dto.EmployeeContractResponse{}, ErrEmployeeNotFound
+	}
+
+	employeeUUID, err := uuid.Parse(employeeID)
+	if err != nil {
+		return dto.EmployeeContractResponse{}, fmt.Errorf("invalid employee ID: %w", err)
+	}
+
+	// Get active contract
+	activeContract, err := u.contractRepo.FindActiveByEmployeeID(ctx, employeeUUID)
+	if err != nil {
+		return dto.EmployeeContractResponse{}, ErrNoActiveContract
+	}
+
+	// Create corrected contract
+	createdByUUID, err := uuid.Parse(correctedBy)
+	if err != nil {
+		return dto.EmployeeContractResponse{}, fmt.Errorf("invalid corrected_by UUID: %w", err)
+	}
+
+	var endDate *time.Time
+	if req.EndDate != "" {
+		parsedEndDate, err := time.Parse("2006-01-02", req.EndDate)
+		if err != nil {
+			return dto.EmployeeContractResponse{}, fmt.Errorf("invalid end_date format: %w", err)
+		}
+		endDate = &parsedEndDate
+	}
+
+	// Validation: PKWTT cannot have end_date, PKWT/Intern must have end_date
+	if activeContract.ContractType == models.ContractTypePKWTT && endDate != nil {
+		return dto.EmployeeContractResponse{}, ErrPKWTTCannotHaveEndDate
+	}
+	if (activeContract.ContractType == models.ContractTypePKWT || activeContract.ContractType == models.ContractTypeIntern) && endDate == nil {
+		return dto.EmployeeContractResponse{}, ErrPKWTMustHaveEndDate
+	}
+
+	// Generate new contract number based on old one
+	newContractNumber := activeContract.ContractNumber + "-C"
+
+	newContract := &models.EmployeeContract{
+		EmployeeID:              employeeUUID,
+		ContractNumber:          newContractNumber,
+		ContractType:            activeContract.ContractType,
+		StartDate:               activeContract.StartDate,
+		EndDate:                 endDate,
+		DocumentPath:            req.DocumentPath,
+		Status:                  models.ContractStatusActive,
+		CreatedBy:               createdByUUID,
+		CorrectedFromContractID: &activeContract.ID,
+	}
+
+	if err := u.contractRepo.Create(ctx, newContract); err != nil {
+		return dto.EmployeeContractResponse{}, fmt.Errorf("failed to create corrected contract: %w", err)
+	}
+
+	// Expire the old contract
+	now := apptime.Now()
+	activeContract.Status = models.ContractStatusExpired
+	activeContract.ExpiredAt = &now
+	if err := u.contractRepo.Update(ctx, activeContract); err != nil {
+		// Log error but don't fail the correction
+		_ = err
+	}
+
+	return u.mapContractToResponse(newContract), nil
+}
+
+// Helper methods
+
+func (u *employeeUsecase) mapContractToResponse(contract *models.EmployeeContract) dto.EmployeeContractResponse {
+	resp := dto.EmployeeContractResponse{
+		ID:                      contract.ID,
+		EmployeeID:              contract.EmployeeID,
+		ContractNumber:          contract.ContractNumber,
+		ContractType:            string(contract.ContractType),
+		StartDate:               contract.StartDate.Format("2006-01-02"),
+		DocumentPath:            contract.DocumentPath,
+		Status:                  string(contract.Status),
+		IsExpiringSoon:          contract.IsExpiringSoon(30),
+		TerminationReason:       contract.TerminationReason,
+		TerminationNotes:        contract.TerminationNotes,
+		CorrectedFromContractID: contract.CorrectedFromContractID,
+		CreatedAt:               contract.CreatedAt,
+		UpdatedAt:               contract.UpdatedAt,
+	}
+
+	if contract.EndDate != nil {
+		endDate := contract.EndDate.Format("2006-01-02")
+		resp.EndDate = &endDate
+		daysUntil := contract.DaysUntilExpiry()
+		resp.DaysUntilExpiry = &daysUntil
+	}
+
+	if contract.TerminatedAt != nil {
+		resp.TerminatedAt = contract.TerminatedAt
+	}
+
+	if contract.ExpiredAt != nil {
+		resp.ExpiredAt = contract.ExpiredAt
+	}
+
+	return resp
+}
+
+func (u *employeeUsecase) mapContractsToResponse(contracts []*models.EmployeeContract) []dto.EmployeeContractResponse {
+	result := make([]dto.EmployeeContractResponse, len(contracts))
+	for i, contract := range contracts {
+		result[i] = u.mapContractToResponse(contract)
+	}
+	return result
+}
+
+// Education history management methods
+
+func (u *employeeUsecase) GetLatestEducation(ctx context.Context, employeeID string) (*models.EmployeeEducationHistory, error) {
+	employeeUUID, err := uuid.Parse(employeeID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid employee ID: %w", err)
+	}
+
+	// Try ongoing education first (end_date is null)
+	ongoing, err := u.educationHistoryRepo.FindOngoingByEmployeeID(ctx, employeeUUID)
+	if err == nil && ongoing != nil {
+		return ongoing, nil
+	}
+
+	// Fall back to most recent education
+	latest, err := u.educationHistoryRepo.FindLatestByEmployeeID(ctx, employeeUUID)
+	if err != nil {
+		return nil, err
+	}
+	return latest, nil
+}
+
+func (u *employeeUsecase) GetEmployeeEducationHistories(ctx context.Context, employeeID string) ([]dto.EmployeeEducationHistoryResponse, error) {
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return nil, ErrEmployeeNotFound
+	}
+
+	employeeUUID, err := uuid.Parse(employeeID)
+	if err != nil {
+		return nil, fmt.Errorf("invalid employee ID: %w", err)
+	}
+
+	educations, err := u.educationHistoryRepo.FindByEmployeeID(ctx, employeeUUID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch education histories: %w", err)
+	}
+
+	return mapper.ToEducationHistoryResponseList(educations), nil
+}
+
+func (u *employeeUsecase) CreateEmployeeEducationHistory(ctx context.Context, employeeID string, req dto.CreateEmployeeEducationHistoryRequest, createdBy string) (dto.EmployeeEducationHistoryResponse, error) {
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return dto.EmployeeEducationHistoryResponse{}, ErrEmployeeNotFound
+	}
+
+	employeeUUID, err := uuid.Parse(employeeID)
+	if err != nil {
+		return dto.EmployeeEducationHistoryResponse{}, fmt.Errorf("invalid employee ID: %w", err)
+	}
+
+	startDate, err := time.Parse("2006-01-02", req.StartDate)
+	if err != nil {
+		return dto.EmployeeEducationHistoryResponse{}, fmt.Errorf("invalid start_date format: %w", err)
+	}
+
+	var endDate *time.Time
+	if req.EndDate != "" {
+		parsedEndDate, err := time.Parse("2006-01-02", req.EndDate)
+		if err != nil {
+			return dto.EmployeeEducationHistoryResponse{}, fmt.Errorf("invalid end_date format: %w", err)
+		}
+		if !parsedEndDate.After(startDate) {
+			return dto.EmployeeEducationHistoryResponse{}, ErrInvalidEducationDates
+		}
+		endDate = &parsedEndDate
+	}
+
+	if req.GPA != nil && (*req.GPA < 1 || *req.GPA > 4) {
+		return dto.EmployeeEducationHistoryResponse{}, ErrInvalidGPA
+	}
+
+	// If no end_date → ongoing education; enforce only one ongoing per employee
+	if endDate == nil {
+		existing, err := u.educationHistoryRepo.FindOngoingByEmployeeID(ctx, employeeUUID)
+		if err == nil && existing != nil {
+			return dto.EmployeeEducationHistoryResponse{}, ErrOngoingEducationExists
+		}
+	}
+
+	createdByUUID, err := uuid.Parse(createdBy)
+	if err != nil {
+		return dto.EmployeeEducationHistoryResponse{}, fmt.Errorf("invalid created_by UUID: %w", err)
+	}
+
+	education := &models.EmployeeEducationHistory{
+		EmployeeID:   employeeUUID,
+		Institution:  req.Institution,
+		Degree:       models.DegreeLevel(req.Degree),
+		FieldOfStudy: req.FieldOfStudy,
+		StartDate:    startDate,
+		EndDate:      endDate,
+		GPA:          req.GPA,
+		Description:  req.Description,
+		DocumentPath: req.DocumentPath,
+		CreatedBy:    createdByUUID,
+	}
+
+	if err := u.educationHistoryRepo.Create(ctx, education); err != nil {
+		return dto.EmployeeEducationHistoryResponse{}, fmt.Errorf("failed to create education history: %w", err)
+	}
+
+	return mapper.ToEducationHistoryResponse(education), nil
+}
+
+func (u *employeeUsecase) UpdateEmployeeEducationHistory(ctx context.Context, employeeID string, educationID string, req dto.UpdateEmployeeEducationHistoryRequest) (dto.EmployeeEducationHistoryResponse, error) {
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return dto.EmployeeEducationHistoryResponse{}, ErrEmployeeNotFound
+	}
+
+	educationUUID, err := uuid.Parse(educationID)
+	if err != nil {
+		return dto.EmployeeEducationHistoryResponse{}, fmt.Errorf("invalid education ID: %w", err)
+	}
+
+	education, err := u.educationHistoryRepo.FindByID(ctx, educationUUID)
+	if err != nil {
+		return dto.EmployeeEducationHistoryResponse{}, ErrEducationNotFound
+	}
+
+	employeeUUID, _ := uuid.Parse(employeeID)
+	if education.EmployeeID != employeeUUID {
+		return dto.EmployeeEducationHistoryResponse{}, errors.New("education history does not belong to employee")
+	}
+
+	if req.Institution != "" {
+		education.Institution = req.Institution
+	}
+	if req.Degree != "" {
+		education.Degree = models.DegreeLevel(req.Degree)
+	}
+	if req.FieldOfStudy != "" {
+		education.FieldOfStudy = req.FieldOfStudy
+	}
+	if req.StartDate != "" {
+		startDate, err := time.Parse("2006-01-02", req.StartDate)
+		if err != nil {
+			return dto.EmployeeEducationHistoryResponse{}, fmt.Errorf("invalid start_date format: %w", err)
+		}
+		education.StartDate = startDate
+	}
+	if req.EndDate != "" {
+		endDate, err := time.Parse("2006-01-02", req.EndDate)
+		if err != nil {
+			return dto.EmployeeEducationHistoryResponse{}, fmt.Errorf("invalid end_date format: %w", err)
+		}
+		if !endDate.After(education.StartDate) {
+			return dto.EmployeeEducationHistoryResponse{}, ErrInvalidEducationDates
+		}
+		education.EndDate = &endDate
+	}
+	if req.GPA != nil {
+		if *req.GPA < 1 || *req.GPA > 4 {
+			return dto.EmployeeEducationHistoryResponse{}, ErrInvalidGPA
+		}
+		education.GPA = req.GPA
+	}
+	if req.Description != "" {
+		education.Description = req.Description
+	}
+	if req.DocumentPath != "" {
+		education.DocumentPath = req.DocumentPath
+	}
+
+	// If end_date is being cleared (ongoing), enforce only one ongoing per employee
+	if req.EndDate == "" && education.EndDate == nil {
+		employeeUUID, _ := uuid.Parse(employeeID)
+		existing, err := u.educationHistoryRepo.FindOngoingByEmployeeID(ctx, employeeUUID)
+		if err == nil && existing != nil && existing.ID != education.ID {
+			return dto.EmployeeEducationHistoryResponse{}, ErrOngoingEducationExists
+		}
+	}
+
+	if err := u.educationHistoryRepo.Update(ctx, education); err != nil {
+		return dto.EmployeeEducationHistoryResponse{}, fmt.Errorf("failed to update education history: %w", err)
+	}
+
+	return mapper.ToEducationHistoryResponse(education), nil
+}
+
+func (u *employeeUsecase) DeleteEmployeeEducationHistory(ctx context.Context, employeeID string, educationID string) error {
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return ErrEmployeeNotFound
+	}
+
+	educationUUID, err := uuid.Parse(educationID)
+	if err != nil {
+		return fmt.Errorf("invalid education ID: %w", err)
+	}
+
+	education, err := u.educationHistoryRepo.FindByID(ctx, educationUUID)
+	if err != nil {
+		return ErrEducationNotFound
+	}
+
+	employeeUUID, _ := uuid.Parse(employeeID)
+	if education.EmployeeID != employeeUUID {
+		return errors.New("education history does not belong to employee")
+	}
+
+	return u.educationHistoryRepo.Delete(ctx, educationUUID)
+}
+
+// Certification management methods
+
+func (u *employeeUsecase) GetLatestCertification(ctx context.Context, employeeID string) (*models.EmployeeCertification, error) {
+	cert, err := u.certificationRepo.FindLatestByEmployeeID(ctx, employeeID)
+	if err != nil {
+		return nil, err
+	}
+	return cert, nil
+}
+
+func (u *employeeUsecase) GetEmployeeCertifications(ctx context.Context, employeeID string) ([]dto.EmployeeCertificationResponse, error) {
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return nil, ErrEmployeeNotFound
+	}
+
+	certs, err := u.certificationRepo.FindByEmployeeID(ctx, employeeID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch certifications: %w", err)
+	}
+
+	return mapper.ToCertificationResponseList(certs), nil
+}
+
+func (u *employeeUsecase) CreateEmployeeCertification(ctx context.Context, employeeID string, req dto.CreateEmployeeCertificationRequest, createdBy string) (dto.EmployeeCertificationResponse, error) {
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return dto.EmployeeCertificationResponse{}, ErrEmployeeNotFound
+	}
+
+	issueDate, err := time.Parse("2006-01-02", req.IssueDate)
+	if err != nil {
+		return dto.EmployeeCertificationResponse{}, fmt.Errorf("invalid issue_date format: %w", err)
+	}
+
+	var expiryDate *time.Time
+	if req.ExpiryDate != nil && *req.ExpiryDate != "" {
+		parsed, err := time.Parse("2006-01-02", *req.ExpiryDate)
+		if err != nil {
+			return dto.EmployeeCertificationResponse{}, fmt.Errorf("invalid expiry_date format: %w", err)
+		}
+		if !parsed.After(issueDate) {
+			return dto.EmployeeCertificationResponse{}, ErrInvalidCertificationDates
+		}
+		expiryDate = &parsed
+	}
+
+	cert := &models.EmployeeCertification{
+		EmployeeID:        employeeID,
+		CertificateName:   req.CertificateName,
+		IssuedBy:          req.IssuedBy,
+		IssueDate:         issueDate,
+		ExpiryDate:        expiryDate,
+		CertificateFile:   req.CertificateFile,
+		CertificateNumber: req.CertificateNumber,
+		Description:       req.Description,
+		CreatedBy:         createdBy,
+		UpdatedBy:         createdBy,
+	}
+
+	if err := u.certificationRepo.Create(ctx, cert); err != nil {
+		return dto.EmployeeCertificationResponse{}, fmt.Errorf("failed to create certification: %w", err)
+	}
+
+	return mapper.ToCertificationResponse(cert), nil
+}
+
+func (u *employeeUsecase) UpdateEmployeeCertification(ctx context.Context, employeeID string, certID string, req dto.UpdateEmployeeCertificationRequest) (dto.EmployeeCertificationResponse, error) {
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return dto.EmployeeCertificationResponse{}, ErrEmployeeNotFound
+	}
+
+	cert, err := u.certificationRepo.FindByID(ctx, certID)
+	if err != nil {
+		return dto.EmployeeCertificationResponse{}, ErrCertificationNotFound
+	}
+
+	if cert.EmployeeID != employeeID {
+		return dto.EmployeeCertificationResponse{}, errors.New("certification does not belong to employee")
+	}
+
+	if req.CertificateName != "" {
+		cert.CertificateName = req.CertificateName
+	}
+	if req.IssuedBy != "" {
+		cert.IssuedBy = req.IssuedBy
+	}
+	if req.IssueDate != "" {
+		issueDate, err := time.Parse("2006-01-02", req.IssueDate)
+		if err != nil {
+			return dto.EmployeeCertificationResponse{}, fmt.Errorf("invalid issue_date format: %w", err)
+		}
+		cert.IssueDate = issueDate
+	}
+	if req.ExpiryDate != nil {
+		if *req.ExpiryDate == "" {
+			cert.ExpiryDate = nil
+		} else {
+			expiryDate, err := time.Parse("2006-01-02", *req.ExpiryDate)
+			if err != nil {
+				return dto.EmployeeCertificationResponse{}, fmt.Errorf("invalid expiry_date format: %w", err)
+			}
+			if !expiryDate.After(cert.IssueDate) {
+				return dto.EmployeeCertificationResponse{}, ErrInvalidCertificationDates
+			}
+			cert.ExpiryDate = &expiryDate
+		}
+	}
+	if req.CertificateFile != "" {
+		cert.CertificateFile = req.CertificateFile
+	}
+	if req.CertificateNumber != "" {
+		cert.CertificateNumber = req.CertificateNumber
+	}
+	if req.Description != "" {
+		cert.Description = req.Description
+	}
+
+	if err := u.certificationRepo.Update(ctx, cert); err != nil {
+		return dto.EmployeeCertificationResponse{}, fmt.Errorf("failed to update certification: %w", err)
+	}
+
+	return mapper.ToCertificationResponse(cert), nil
+}
+
+func (u *employeeUsecase) DeleteEmployeeCertification(ctx context.Context, employeeID string, certID string) error {
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return ErrEmployeeNotFound
+	}
+
+	cert, err := u.certificationRepo.FindByID(ctx, certID)
+	if err != nil {
+		return ErrCertificationNotFound
+	}
+
+	if cert.EmployeeID != employeeID {
+		return errors.New("certification does not belong to employee")
+	}
+
+	return u.certificationRepo.Delete(ctx, certID)
+}
+
+// --- Asset management methods ---
+
+func (u *employeeUsecase) GetEmployeeAssets(ctx context.Context, employeeID string) ([]dto.EmployeeAssetResponse, error) {
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return nil, ErrEmployeeNotFound
+	}
+
+	assets, err := u.assetRepo.FindByEmployeeID(ctx, employeeID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch assets: %w", err)
+	}
+
+	return mapper.ToAssetResponseList(assets), nil
+}
+
+func (u *employeeUsecase) CreateEmployeeAsset(ctx context.Context, employeeID string, req dto.CreateEmployeeAssetRequest, createdBy string) (dto.EmployeeAssetResponse, error) {
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return dto.EmployeeAssetResponse{}, ErrEmployeeNotFound
+	}
+
+	existing, _ := u.assetRepo.FindByAssetCode(ctx, req.AssetCode)
+	if existing != nil {
+		return dto.EmployeeAssetResponse{}, ErrDuplicateAssetCode
+	}
+
+	borrowDate, err := time.Parse("2006-01-02", req.BorrowDate)
+	if err != nil {
+		return dto.EmployeeAssetResponse{}, fmt.Errorf("invalid borrow_date format: %w", err)
+	}
+
+	asset := &models.EmployeeAsset{
+		EmployeeID:      employeeID,
+		AssetName:       req.AssetName,
+		AssetCode:       req.AssetCode,
+		AssetCategory:   req.AssetCategory,
+		BorrowDate:      borrowDate,
+		BorrowCondition: models.AssetCondition(req.BorrowCondition),
+		AssetImage:      req.AssetImage,
+		Notes:           req.Notes,
+	}
+
+	if err := u.assetRepo.Create(ctx, asset); err != nil {
+		return dto.EmployeeAssetResponse{}, fmt.Errorf("failed to create asset: %w", err)
+	}
+
+	return mapper.ToAssetResponse(asset), nil
+}
+
+func (u *employeeUsecase) UpdateEmployeeAsset(ctx context.Context, employeeID string, assetID string, req dto.UpdateEmployeeAssetRequest) (dto.EmployeeAssetResponse, error) {
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return dto.EmployeeAssetResponse{}, ErrEmployeeNotFound
+	}
+
+	asset, err := u.assetRepo.FindByID(ctx, assetID)
+	if err != nil {
+		return dto.EmployeeAssetResponse{}, ErrAssetNotFound
+	}
+
+	if asset.EmployeeID != employeeID {
+		return dto.EmployeeAssetResponse{}, errors.New("asset does not belong to employee")
+	}
+
+	if asset.IsReturned() {
+		return dto.EmployeeAssetResponse{}, ErrAssetAlreadyReturned
+	}
+
+	if req.AssetName != "" {
+		asset.AssetName = req.AssetName
+	}
+	if req.AssetCode != "" {
+		if req.AssetCode != asset.AssetCode {
+			existing, _ := u.assetRepo.FindByAssetCode(ctx, req.AssetCode)
+			if existing != nil && existing.ID != assetID {
+				return dto.EmployeeAssetResponse{}, ErrDuplicateAssetCode
+			}
+		}
+		asset.AssetCode = req.AssetCode
+	}
+	if req.AssetCategory != "" {
+		asset.AssetCategory = req.AssetCategory
+	}
+	if req.BorrowDate != "" {
+		borrowDate, err := time.Parse("2006-01-02", req.BorrowDate)
+		if err != nil {
+			return dto.EmployeeAssetResponse{}, fmt.Errorf("invalid borrow_date format: %w", err)
+		}
+		asset.BorrowDate = borrowDate
+	}
+	if req.BorrowCondition != "" {
+		asset.BorrowCondition = models.AssetCondition(req.BorrowCondition)
+	}
+	if req.AssetImage != nil {
+		asset.AssetImage = *req.AssetImage
+	}
+	if req.Notes != nil {
+		asset.Notes = req.Notes
+	}
+
+	if err := u.assetRepo.Update(ctx, asset); err != nil {
+		return dto.EmployeeAssetResponse{}, fmt.Errorf("failed to update asset: %w", err)
+	}
+
+	return mapper.ToAssetResponse(asset), nil
+}
+
+func (u *employeeUsecase) ReturnEmployeeAsset(ctx context.Context, employeeID string, assetID string, req dto.ReturnEmployeeAssetRequest) (dto.EmployeeAssetResponse, error) {
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return dto.EmployeeAssetResponse{}, ErrEmployeeNotFound
+	}
+
+	asset, err := u.assetRepo.FindByID(ctx, assetID)
+	if err != nil {
+		return dto.EmployeeAssetResponse{}, ErrAssetNotFound
+	}
+
+	if asset.EmployeeID != employeeID {
+		return dto.EmployeeAssetResponse{}, errors.New("asset does not belong to employee")
+	}
+
+	if asset.IsReturned() {
+		return dto.EmployeeAssetResponse{}, ErrAssetAlreadyReturned
+	}
+
+	returnDate, err := time.Parse("2006-01-02", req.ReturnDate)
+	if err != nil {
+		return dto.EmployeeAssetResponse{}, fmt.Errorf("invalid return_date format: %w", err)
+	}
+
+	if !returnDate.After(asset.BorrowDate) && !returnDate.Equal(asset.BorrowDate) {
+		return dto.EmployeeAssetResponse{}, ErrInvalidReturnDate
+	}
+
+	returnCondition := models.AssetCondition(req.ReturnCondition)
+	asset.ReturnDate = &returnDate
+	asset.ReturnCondition = &returnCondition
+	if req.Notes != nil {
+		asset.Notes = req.Notes
+	}
+
+	if err := u.assetRepo.Update(ctx, asset); err != nil {
+		return dto.EmployeeAssetResponse{}, fmt.Errorf("failed to return asset: %w", err)
+	}
+
+	return mapper.ToAssetResponse(asset), nil
+}
+
+func (u *employeeUsecase) DeleteEmployeeAsset(ctx context.Context, employeeID string, assetID string) error {
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return ErrEmployeeNotFound
+	}
+
+	asset, err := u.assetRepo.FindByID(ctx, assetID)
+	if err != nil {
+		return ErrAssetNotFound
+	}
+
+	if asset.EmployeeID != employeeID {
+		return errors.New("asset does not belong to employee")
+	}
+
+	return u.assetRepo.Delete(ctx, assetID)
+}
+
+// GetEmployeeSignature retrieves the employee's signature
+func (u *employeeUsecase) GetEmployeeSignature(ctx context.Context, employeeID string) (*dto.EmployeeSignatureResponse, error) {
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return nil, ErrEmployeeNotFound
+	}
+
+	signature, err := u.signatureRepo.GetByEmployeeID(ctx, employeeID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get signature: %w", err)
+	}
+
+	if signature == nil {
+		return nil, nil
+	}
+
+	return mapper.ToEmployeeSignatureResponse(signature), nil
+}
+
+// UploadEmployeeSignature uploads or replaces an employee's signature
+func (u *employeeUsecase) UploadEmployeeSignature(ctx context.Context, employeeID string, filePath string, fileName string, fileSize int64, fileHash string, mimeType string, width int, height int, uploadedBy string) (*dto.EmployeeSignatureResponse, error) {
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return nil, ErrEmployeeNotFound
+	}
+
+	// Check if employee already has a signature, if so soft delete it
+	existingSignature, err := u.signatureRepo.GetByEmployeeID(ctx, employeeID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to check existing signature: %w", err)
+	}
+
+	if existingSignature != nil {
+		// Soft delete the existing signature
+		if err := u.signatureRepo.SoftDelete(ctx, existingSignature.ID.String()); err != nil {
+			return nil, fmt.Errorf("failed to delete existing signature: %w", err)
+		}
+	}
+
+	// Create new signature
+	signature := &models.EmployeeSignature{
+		ID:         uuid.New(),
+		EmployeeID: employeeID,
+		FilePath:   filePath,
+		FileName:   fileName,
+		FileSize:   fileSize,
+		FileHash:   fileHash,
+		MimeType:   mimeType,
+		Width:      width,
+		Height:     height,
+		UploadedBy: uploadedBy,
+		UploadedAt: apptime.Now(),
+	}
+
+	if err := u.signatureRepo.Create(ctx, signature); err != nil {
+		return nil, fmt.Errorf("failed to create signature: %w", err)
+	}
+
+	return mapper.ToEmployeeSignatureResponse(signature), nil
+}
+
+// DeleteEmployeeSignature soft deletes the employee's signature
+func (u *employeeUsecase) DeleteEmployeeSignature(ctx context.Context, employeeID string) error {
+	if _, err := u.employeeRepo.FindByID(ctx, employeeID); err != nil {
+		return ErrEmployeeNotFound
+	}
+
+	signature, err := u.signatureRepo.GetByEmployeeID(ctx, employeeID)
+	if err != nil {
+		return fmt.Errorf("failed to get signature: %w", err)
+	}
+
+	if signature == nil {
+		return errors.New("employee does not have a signature")
+	}
+
+	return u.signatureRepo.SoftDelete(ctx, signature.ID.String())
+}

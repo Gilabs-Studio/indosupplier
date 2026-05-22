@@ -1,0 +1,22 @@
+{
+  "name": "k6-skill",
+  "description": "User-level skill for implementing, documenting, and maintaining k6 transaction workflow tests in GIMS ERP, with Gill Me inquiry and clean architecture documentation.",
+  "version": "1.0.0",
+  "main": "SKILL.md",
+  "templates": [
+    "TEMPLATE_WORKFLOW_GILLME.md",
+    "TEMPLATE_MODULE_DOC.md",
+    "TEMPLATE_COVERAGE_MATRIX.md",
+    "TEMPLATE_K6_SCRIPT.js",
+    "TEMPLATE_README_USER.md",
+    "TEMPLATE_GILLME_QUESTIONS.md",
+    "TEMPLATE_K6_SKILL_ACTIONS.md",
+    "TEMPLATE_K6_SKILL_STRUCTURE.md",
+    "TEMPLATE_K6_SKILL_CHANGELOG.md",
+    "TEMPLATE_K6_SKILL_BEST_PRACTICES.md",
+    "TEMPLATE_K6_SKILL_FAQ.md",
+    "TEMPLATE_K6_SKILL_MAINTAINERS.md",
+    "TEMPLATE_K6_SKILL_VERSION.md",
+    "TEMPLATE_K6_SKILL_TODO.md"
+  ]
+}

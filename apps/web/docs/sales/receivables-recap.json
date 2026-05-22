@@ -1,0 +1,438 @@
+{
+  "title": "Receivables Recap",
+  "description": "A comprehensive guide to the Receivables Recap API response.",
+  "endpoints": {
+    "receivables_recap": {
+      "get_all_paginated": {
+        "method": "GET",
+        "path": "/receivables-recap",
+        "description": "Get all receivables recap with pagination",
+        "authentication": "Required",
+        "middleware": ["AuthMiddleware", "AuthorizeAuto"],
+        "query_parameters": {
+          "page": {
+            "type": "int",
+            "required": false,
+            "default": 1,
+            "description": "Halaman"
+          },
+          "limit": {
+            "type": "int",
+            "required": false,
+            "default": 10,
+            "description": "Jumlah data per halaman"
+          },
+          "search": {
+            "type": "string",
+            "required": false,
+            "description": "Kata kunci pencarian"
+          },
+          "searchBy": {
+            "type": "string",
+            "required": false,
+            "description": "Kolom untuk pencarian"
+          },
+          "sort_by": {
+            "type": "string",
+            "required": false,
+            "default": "customer_name",
+            "description": "Kolom untuk sorting"
+          },
+          "sort_order": {
+            "type": "string",
+            "required": false,
+            "default": "asc",
+            "enum": ["asc", "desc"],
+            "description": "Urutan sorting"
+          }
+        },
+        "response": {
+          "success": {
+            "code": 200,
+            "example": {
+              "data": [
+                {
+                  "customer_id": 1,
+                  "customer_name": "PT. ABC",
+                  "total_receivable": 5000000,
+                  "paid_amount": 3000000,
+                  "outstanding_amount": 2000000,
+                  "balance_amount": 2000000,
+                  "last_transaction": "2024-01-15T10:30:00Z",
+                  "aging_days": 15,
+                  "aging_category": "Current"
+                }
+              ],
+              "meta": {
+                "pagination": {
+                  "total": 50,
+                  "page": 1,
+                  "limit": 10
+                },
+                "search": {
+                  "search": "",
+                  "searchBy": ""
+                },
+                "sort": {
+                  "sort_by": "customer_name",
+                  "sort_order": "asc"
+                },
+                "searchable_columns": {
+                  "string_columns": [
+                    "customer_name",
+                    "area_name",
+                    "city_name",
+                    "employee_name"
+                  ],
+                  "numeric_columns": [
+                    "customer_id",
+                    "total_invoice",
+                    "total_payment",
+                    "outstanding_balance"
+                  ]
+                },
+                "sortable_columns": {
+                  "available_fields": [
+                    "customer_id",
+                    "customer_name",
+                    "area_name",
+                    "city_name",
+                    "employee_name",
+                    "total_invoice",
+                    "total_payment",
+                    "outstanding_balance"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "get_all_raw": {
+        "method": "GET",
+        "path": "/receivables-recap/add",
+        "description": "Get all receivables recap without pagination",
+        "authentication": "Required",
+        "middleware": ["AuthMiddleware", "AuthorizeAuto"],
+        "response": {
+          "success": {
+            "code": 200,
+            "example": {
+              "data": [
+                {
+                  "customer_id": 1,
+                  "customer_name": "PT. ABC",
+                  "total_receivable": 5000000,
+                  "paid_amount": 3000000,
+                  "outstanding_amount": 2000000,
+                  "balance_amount": 2000000,
+                  "last_transaction": "2024-01-15T10:30:00Z",
+                  "aging_days": 15,
+                  "aging_category": "Current"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "get_summary": {
+        "method": "GET",
+        "path": "/receivables-recap/summary",
+        "description": "Get receivables summary",
+        "authentication": "Required",
+        "middleware": ["AuthMiddleware", "AuthorizeAuto"],
+        "response": {
+          "success": {
+            "code": 200,
+            "example": {
+              "data": {
+                "total_customers": 25,
+                "total_receivables": 50000000,
+                "total_paid": 30000000,
+                "total_outstanding": 20000000,
+                "current_amount": 15000000,
+                "overdue_amount": 5000000
+              }
+            }
+          }
+        }
+      },
+      "export_excel": {
+        "method": "GET",
+        "path": "/receivables-recap/export",
+        "description": "Export receivables recap to Excel",
+        "authentication": "Required",
+        "middleware": ["AuthMiddleware", "AuthorizeAuto"],
+        "query_parameters": {
+          "search": {
+            "type": "string",
+            "required": false,
+            "description": "Kata kunci pencarian"
+          },
+          "searchBy": {
+            "type": "string",
+            "required": false,
+            "description": "Kolom untuk pencarian"
+          },
+          "sort_by": {
+            "type": "string",
+            "required": false,
+            "description": "Kolom untuk sorting"
+          },
+          "sort_order": {
+            "type": "string",
+            "required": false,
+            "description": "Urutan sorting"
+          }
+        },
+        "response": {
+          "success": {
+            "code": 200,
+            "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "description": "Excel file download"
+          }
+        }
+      }
+    },
+    "detail_receivables_recap": {
+      "get_by_customer_paginated": {
+        "method": "GET",
+        "path": "/detail-receivables-recap/customer/{customer_id}",
+        "description": "Get detail receivables by customer with pagination",
+        "authentication": "Required",
+        "middleware": ["AuthMiddleware", "AuthorizeAuto"],
+        "path_parameters": {
+          "customer_id": {
+            "type": "uint",
+            "required": true,
+            "description": "ID customer"
+          }
+        },
+        "query_parameters": {
+          "page": {
+            "type": "int",
+            "required": false,
+            "default": 1,
+            "description": "Halaman"
+          },
+          "limit": {
+            "type": "int",
+            "required": false,
+            "default": 10,
+            "description": "Jumlah data per halaman"
+          },
+          "search": {
+            "type": "string",
+            "required": false,
+            "description": "Kata kunci pencarian"
+          },
+          "searchBy": {
+            "type": "string",
+            "required": false,
+            "description": "Kolom untuk pencarian"
+          },
+          "sort_by": {
+            "type": "string",
+            "required": false,
+            "default": "transaction_date",
+            "description": "Kolom untuk sorting"
+          },
+          "sort_order": {
+            "type": "string",
+            "required": false,
+            "default": "desc",
+            "enum": ["asc", "desc"],
+            "description": "Urutan sorting"
+          }
+        },
+        "response": {
+          "success": {
+            "code": 200,
+            "example": {
+              "data": [
+                {
+                  "journal_entry_id": 123,
+                  "transaction_date": "2024-01-15T10:30:00Z",
+                  "reference_type": "INVOICE",
+                  "so_number": "SO-2024-001",
+                  "transaction_type": "Invoice",
+                  "description": "Customer Invoice INV-2024-001",
+                  "debit_amount": 5000000,
+                  "credit_amount": 0,
+                  "balance": 5000000
+                },
+                {
+                  "journal_entry_id": 124,
+                  "transaction_date": "2024-01-20T14:15:00Z",
+                  "reference_type": "PAYMENT",
+                  "so_number": "SO-2024-001",
+                  "transaction_type": "Payment Received",
+                  "description": "Payment for Invoice INV-2024-001 - BANK_TRANSFER",
+                  "debit_amount": 0,
+                  "credit_amount": 3000000,
+                  "balance": -3000000
+                }
+              ],
+              "meta": {
+                "pagination": {
+                  "total": 10,
+                  "page": 1,
+                  "limit": 10
+                },
+                "search": {
+                  "search": "",
+                  "searchBy": ""
+                },
+                "sort": {
+                  "sort_by": "transaction_date",
+                  "sort_order": "desc"
+                },
+                "searchable_columns": {
+                  "string_columns": [
+                    "reference_type",
+                    "so_number",
+                    "transaction_type",
+                    "description"
+                  ],
+                  "numeric_columns": [
+                    "journal_entry_id",
+                    "debit_amount",
+                    "credit_amount",
+                    "balance"
+                  ]
+                },
+                "sortable_columns": {
+                  "available_fields": [
+                    "journal_entry_id",
+                    "transaction_date",
+                    "reference_type",
+                    "so_number",
+                    "transaction_type",
+                    "description",
+                    "debit_amount",
+                    "credit_amount",
+                    "balance"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "get_by_customer_raw": {
+        "method": "GET",
+        "path": "/detail-receivables-recap/customer/{customer_id}/add",
+        "description": "Get detail receivables by customer without pagination",
+        "authentication": "Required",
+        "middleware": ["AuthMiddleware", "AuthorizeAuto"],
+        "path_parameters": {
+          "customer_id": {
+            "type": "uint",
+            "required": true,
+            "description": "ID customer"
+          }
+        },
+        "response": {
+          "success": {
+            "code": 200,
+            "example": {
+              "data": [
+                {
+                  "journal_entry_id": 123,
+                  "transaction_date": "2024-01-15T10:30:00Z",
+                  "reference_type": "INVOICE",
+                  "so_number": "SO-2024-001",
+                  "transaction_type": "Invoice",
+                  "description": "Customer Invoice INV-2024-001",
+                  "debit_amount": 5000000,
+                  "credit_amount": 0,
+                  "balance": 5000000
+                }
+              ],
+              "meta": {
+                "filter": {
+                  "customer_id": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      "get_by_id": {
+        "method": "GET",
+        "path": "/detail-receivables-recap/{id}",
+        "description": "Get detail receivables by ID",
+        "authentication": "Required",
+        "middleware": ["AuthMiddleware", "AuthorizeAuto"],
+        "path_parameters": {
+          "id": {
+            "type": "uint",
+            "required": true,
+            "description": "ID detail receivables"
+          }
+        },
+        "response": {
+          "success": {
+            "code": 200,
+            "example": {
+              "data": {
+                "journal_entry_id": 123,
+                "transaction_date": "2024-01-15T10:30:00Z",
+                "reference_type": "INVOICE",
+                "so_number": "SO-2024-001",
+                "transaction_type": "Invoice",
+                "description": "Customer Invoice INV-2024-001",
+                "debit_amount": 5000000,
+                "credit_amount": 0,
+                "balance": 5000000
+              }
+            }
+          }
+        }
+      },
+      "export_excel": {
+        "method": "GET",
+        "path": "/detail-receivables-recap/customer/{customer_id}/export",
+        "description": "Export detail receivables to Excel",
+        "authentication": "Required",
+        "middleware": ["AuthMiddleware", "AuthorizeAuto"],
+        "path_parameters": {
+          "customer_id": {
+            "type": "uint",
+            "required": true,
+            "description": "ID customer"
+          }
+        },
+        "query_parameters": {
+          "search": {
+            "type": "string",
+            "required": false,
+            "description": "Kata kunci pencarian"
+          },
+          "searchBy": {
+            "type": "string",
+            "required": false,
+            "description": "Kolom untuk pencarian"
+          },
+          "sort_by": {
+            "type": "string",
+            "required": false,
+            "description": "Kolom untuk sorting"
+          },
+          "sort_order": {
+            "type": "string",
+            "required": false,
+            "description": "Urutan sorting"
+          }
+        },
+        "response": {
+          "success": {
+            "code": 200,
+            "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "description": "Excel file download"
+          }
+        }
+      }
+    }
+  }
+}

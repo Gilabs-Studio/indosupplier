@@ -1,0 +1,74 @@
+{
+  "network": {
+    "timeout": {
+      "title": "Koneksi Timeout",
+      "description": "Permintaan memakan waktu terlalu lama. Silakan periksa koneksi internet Anda dan coba lagi."
+    },
+    "connectionFailed": {
+      "title": "Koneksi Gagal",
+      "description": "Tidak dapat terhubung ke server. Silakan periksa koneksi internet Anda atau hubungi dukungan jika masalah berlanjut."
+    },
+    "serverUnreachable": {
+      "title": "Server Tidak Dapat Diakses",
+      "description": "Tidak dapat terhubung ke server. Server mungkin sedang down atau koneksi internet Anda tidak stabil. Silakan coba lagi nanti."
+    },
+    "generic": {
+      "title": "Error Jaringan",
+      "description": "Terjadi kesalahan jaringan. Silakan periksa koneksi internet Anda dan coba lagi."
+    }
+  },
+  "backend": {
+    "validationError": {
+      "title": "Error Validasi",
+      "description": "Silakan periksa informasi yang Anda masukkan dan coba lagi."
+    },
+    "fieldError": {
+      "title": "Input Tidak Valid",
+      "description": "Ada kesalahan pada field {field}: {message}"
+    },
+    "unauthorized": {
+      "title": "Sesi Berakhir",
+      "description": "Sesi Anda telah berakhir. Silakan masuk kembali untuk melanjutkan."
+    },
+    "forbidden": {
+      "title": "Akses Ditolak",
+      "description": "Anda tidak memiliki izin untuk melakukan tindakan ini. Silakan hubungi administrator jika Anda yakin ini adalah kesalahan."
+    },
+    "notFound": {
+      "title": "Tidak Ditemukan",
+      "description": "Informasi yang diminta tidak dapat ditemukan. Mungkin telah dihapus atau dipindahkan."
+    },
+    "conflict": {
+      "title": "Data Duplikat",
+      "description": "Informasi ini sudah ada dalam sistem. Silakan gunakan informasi yang berbeda."
+    },
+    "emailExists": {
+      "title": "Email Sudah Terdaftar",
+      "description": "Email \"{email}\" sudah terdaftar. Silakan gunakan alamat email yang berbeda."
+    },
+    "resourceExists": {
+      "title": "Data Duplikat",
+      "description": "{field} \"{value}\" sudah ada. Silakan gunakan nilai yang berbeda."
+    },
+    "serverError": {
+      "title": "Error Server",
+      "description": "Terjadi kesalahan pada server. Tim kami telah diberitahu. Silakan coba lagi nanti atau hubungi dukungan jika masalah berlanjut."
+    },
+    "serviceUnavailable": {
+      "title": "Layanan Tidak Tersedia",
+      "description": "Layanan sementara tidak tersedia. Silakan coba lagi dalam beberapa saat."
+    },
+    "rateLimit": {
+      "title": "Terlalu Banyak Permintaan",
+      "description": "Anda telah membuat terlalu banyak permintaan. Silakan coba lagi dalam {countdown}."
+    },
+    "unexpectedError": {
+      "title": "Error Tidak Terduga",
+      "description": "Terjadi kesalahan yang tidak terduga. Silakan coba lagi atau hubungi dukungan jika masalah berlanjut."
+    },
+    "invalidFormat": {
+      "title": "Format Respons Tidak Valid",
+      "description": "Server mengembalikan format respons yang tidak terduga. Silakan hubungi dukungan."
+    }
+  }
+}

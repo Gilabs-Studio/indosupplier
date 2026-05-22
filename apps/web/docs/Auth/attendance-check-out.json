@@ -1,0 +1,79 @@
+{
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/attendance/check-out",
+      "description": "Employee check-out for attendance",
+      "parameters": {
+        "body": {
+          "note": {
+            "type": "string",
+            "description": "Optional note for check-out",
+            "required": false,
+            "example": "test"
+          },
+          "latitude": {
+            "type": "number",
+            "description": "Latitude coordinate for location verification",
+            "required": true,
+            "format": "float",
+            "example": -6.2
+          },
+          "longitude": {
+            "type": "number",
+            "description": "Longitude coordinate for location verification",
+            "required": true,
+            "format": "float",
+            "example": 106.8166
+          }
+        }
+      },
+      "response": {
+        "data": {
+          "id": 16,
+          "date": "2025-10-06",
+          "check_in_time": "14:07:22",
+          "check_out_time": "14:08:22",
+          "status": "PRESENT",
+          "note": "test | test",
+          "action": "check_out"
+        },
+        "message": "Check-out successful"
+      },
+      "error_responses": [
+        {
+          "status": 400,
+          "message": "No check-in found",
+          "data": {
+            "error": "NO_CHECK_IN",
+            "details": "You must check in before checking out"
+          }
+        },
+        {
+          "status": 400,
+          "message": "Already checked out today",
+          "data": {
+            "error": "ALREADY_CHECKED_OUT",
+            "details": "You have already checked out today"
+          }
+        },
+        {
+          "status": 400,
+          "message": "Invalid location",
+          "data": {
+            "error": "INVALID_LOCATION",
+            "details": "Check-out location is outside allowed area"
+          }
+        },
+        {
+          "status": 401,
+          "message": "Unauthorized",
+          "data": {
+            "error": "UNAUTHORIZED",
+            "details": "Invalid or expired token"
+          }
+        }
+      ]
+    }
+  ]
+}

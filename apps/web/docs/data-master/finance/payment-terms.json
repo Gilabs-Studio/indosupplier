@@ -1,0 +1,132 @@
+{
+  "title": "Data Master/finance/payment-terms",
+  "description": "A comprehensive guide to the Data Master API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "{{base_url}}/master-data/payment-terms",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "name": "Cash on Delivery",
+            "description": "Payment upon delivery",
+            "days": 0,
+            "is_active": true,
+            "created_at": "2025-09-19T08:37:17+07:00",
+            "updated_at": "2025-09-19T08:37:17+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "2026-09-09",
+            "start_date": "2025-09-09"
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "1",
+            "search_by": "id"
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "days"],
+            "string_columns": ["name", "description"]
+          },
+          "sort": {
+            "sort_by": "name",
+            "sort_order": "desc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "name",
+              "days",
+              "is_active",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "GET {{base_url}}/master-data/payment-terms/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "name": "Cash on Delivery",
+          "description": "Payment upon delivery",
+          "days": 0,
+          "is_active": true,
+          "created_at": "2025-09-19T08:37:17+07:00",
+          "updated_at": "2025-09-19T08:37:17+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET DATA STATS",
+      "endpoint": "GET {{base_url}}/master-data/payment-terms/stats",
+      "response": {
+        "data": {
+          "total": 7
+        },
+        "message": "Payment terms statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/master-data/payment-terms",
+      "body": {
+        "name": "Net 2000",
+        "description": "Payment due within 30 days",
+        "days": 30,
+        "is_active": true
+      },
+      "response": {
+        "data": {
+          "id": 8,
+          "name": "Net 2000",
+          "description": "Payment due within 30 days",
+          "days": 30,
+          "is_active": true,
+          "created_at": "2025-09-19T16:37:12+07:00",
+          "updated_at": "2025-09-19T16:37:12+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/master-data/payment-terms/2",
+      "body": {
+        "name": "Netttt 30",
+        "description": "Payment due within 30 days",
+        "days": 30,
+        "is_active": true
+      },
+      "response": {
+        "data": {
+          "id": 1,
+          "name": "Netttt 30",
+          "description": "Payment due within 30 days",
+          "days": 30,
+          "is_active": true,
+          "created_at": "2025-09-19T08:37:17+07:00",
+          "updated_at": "2025-09-19T16:37:45+07:00"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/master-data/payment-terms/2",
+      "response": {
+        "message": "deleted"
+      }
+    }
+  ]
+}

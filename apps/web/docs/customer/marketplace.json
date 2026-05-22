@@ -1,0 +1,834 @@
+{
+  "marketplace_api_documentation": {
+    "api_endpoints": {
+      "get_products": {
+        "method": "GET",
+        "url": "/customer/marketplace/product",
+        "description": "Get paginated list of approved products",
+        "authentication": "Not required",
+        "query_parameters": {
+          "page": {
+            "type": "int",
+            "description": "Page number for pagination",
+            "required": false,
+            "default": 1,
+            "min_value": 1,
+            "example": 1
+          },
+          "limit": {
+            "type": "int",
+            "description": "Number of items per page",
+            "required": false,
+            "default": 10,
+            "min_value": 1,
+            "max_value": 100,
+            "example": 10
+          },
+          "search": {
+            "type": "string",
+            "description": "Search by product name",
+            "required": false,
+            "example": "product name"
+          },
+          "sort": {
+            "type": "string",
+            "description": "Sort by selling price",
+            "required": false,
+            "enum_values": ["highest", "lowest"],
+            "example": "highest"
+          },
+          "category_id": {
+            "type": "uint",
+            "description": "Filter by product category ID",
+            "required": false,
+            "example": 1
+          }
+        },
+        "response": {
+          "status_code": 200,
+          "content_type": "application/json",
+          "body": {
+            "data": [
+              {
+                "id": 1,
+                "name": "Product Name",
+                "code": "PRD-001",
+                "catalog_number": "CAT-001",
+                "image_url": "https://example.com/image.jpg",
+                "selling_price": 150000.00,
+                "stock": 100
+              }
+            ],
+            "meta": {
+              "pagination": {
+                "total": 100,
+                "page": 1,
+                "limit": 10
+              },
+              "search": {
+                "search": ""
+              },
+              "sort": {
+                "sort_by": ""
+              },
+              "filter": {
+                "category_id": ""
+              },
+              "product_categories": [
+                {
+                  "id": 1,
+                  "name": "Category Name"
+                }
+              ]
+            }
+          }
+        },
+        "error_responses": {
+          "500": {
+            "description": "Internal server error",
+            "body": {
+              "error": "Error message"
+            }
+          }
+        }
+      },
+      "get_product_detail": {
+        "method": "GET",
+        "url": "/customer/marketplace/product/:id",
+        "description": "Get detailed product information",
+        "authentication": "Not required",
+        "path_parameters": {
+          "id": {
+            "type": "uint",
+            "description": "Product ID",
+            "required": true,
+            "example": 1
+          }
+        },
+        "response": {
+          "status_code": 200,
+          "content_type": "application/json",
+          "body": {
+            "data": {
+              "id": 1,
+              "name": "Product Name",
+              "code": "PRD-001",
+              "catalog_number": "CAT-001",
+              "image_url": "https://example.com/image.jpg",
+              "selling_price": 150000.00,
+              "description": "Product description",
+              "stock": 100,
+              "reviews": [
+                {
+                  "id": 1,
+                  "customer_id": 1,
+                  "customer_name": "Customer Name",
+                  "rating": 5,
+                  "title": "Review Title",
+                  "content": "Review content",
+                  "status": "APPROVED",
+                  "media": [
+                    {
+                      "id": 1,
+                      "url": "https://example.com/review-image.jpg"
+                    }
+                  ],
+                  "created_at": "2024-01-01T00:00:00Z",
+                  "updated_at": "2024-01-01T00:00:00Z"
+                }
+              ],
+              "review_summary": {
+                "total_reviews": 50,
+                "average_rating": 4.5,
+                "rating_distribution": {
+                  "5": 30,
+                  "4": 15,
+                  "3": 3,
+                  "2": 1,
+                  "1": 1
+                }
+              }
+            }
+          }
+        },
+        "error_responses": {
+          "400": {
+            "description": "Bad request - Invalid product id",
+            "body": {
+              "error": "invalid product id"
+            }
+          },
+          "404": {
+            "description": "Product not found",
+            "body": {
+              "error": "product not found"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "body": {
+              "error": "Error message"
+            }
+          }
+        }
+      },
+      "get_product_reviews": {
+        "method": "GET",
+        "url": "/customer/marketplace/product/:id/reviews",
+        "description": "Get paginated list of reviews for a product",
+        "authentication": "Not required",
+        "path_parameters": {
+          "id": {
+            "type": "uint",
+            "description": "Product ID",
+            "required": true,
+            "example": 1
+          }
+        },
+        "query_parameters": {
+          "page": {
+            "type": "int",
+            "description": "Page number for pagination",
+            "required": false,
+            "default": 1,
+            "min_value": 1,
+            "example": 1
+          },
+          "limit": {
+            "type": "int",
+            "description": "Number of items per page",
+            "required": false,
+            "default": 10,
+            "min_value": 1,
+            "max_value": 100,
+            "example": 10
+          },
+          "sort_by": {
+            "type": "string",
+            "description": "Sort by field",
+            "required": false,
+            "enum_values": ["id", "rating", "created_at", "updated_at"],
+            "example": "created_at"
+          },
+          "sort_order": {
+            "type": "string",
+            "description": "Sort order (asc/desc)",
+            "required": false,
+            "default": "desc",
+            "enum_values": ["asc", "desc"],
+            "example": "desc"
+          }
+        },
+        "response": {
+          "status_code": 200,
+          "content_type": "application/json",
+          "body": {
+            "data": [
+              {
+                "id": 1,
+                "customer_id": 1,
+                "customer_name": "Customer Name",
+                "rating": 5,
+                "title": "Review Title",
+                "content": "Review content",
+                "status": "APPROVED",
+                "media": [
+                  {
+                    "id": 1,
+                    "url": "https://example.com/review-image.jpg"
+                  }
+                ],
+                "created_at": "2024-01-01T00:00:00Z",
+                "updated_at": "2024-01-01T00:00:00Z"
+              }
+            ],
+            "meta": {
+              "pagination": {
+                "total": 50,
+                "page": 1,
+                "limit": 10
+              },
+              "sort": {
+                "sort_by": "created_at",
+                "sort_order": "desc"
+              },
+              "sortable_columns": {
+                "available_fields": ["id", "rating", "created_at", "updated_at"]
+              }
+            }
+          }
+        },
+        "error_responses": {
+          "400": {
+            "description": "Bad request - Invalid product id",
+            "body": {
+              "error": "invalid product id"
+            }
+          },
+          "404": {
+            "description": "Product not found",
+            "body": {
+              "error": "product not found"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "body": {
+              "error": "Error message"
+            }
+          }
+        }
+      },
+      "buy_now": {
+        "method": "POST",
+        "url": "/customer/marketplace/buy-now",
+        "description": "Create a sales quotation from marketplace buy now",
+        "authentication": "Required",
+        "content_type": "application/json",
+        "request_body": {
+          "notes": {
+            "type": "string",
+            "description": "Optional notes for the quotation",
+            "required": false,
+            "example": "Please deliver as soon as possible"
+          },
+          "items": {
+            "type": "array",
+            "description": "List of items to purchase",
+            "required": true,
+            "items": {
+              "product_id": {
+                "type": "uint",
+                "description": "Product ID",
+                "required": true,
+                "example": 1
+              },
+              "quantity": {
+                "type": "int",
+                "description": "Quantity to purchase",
+                "required": true,
+                "min_value": 1,
+                "example": 2
+              },
+              "price": {
+                "type": "float64",
+                "description": "Price per unit",
+                "required": true,
+                "min_value": 0,
+                "example": 150000.00
+              }
+            }
+          }
+        },
+        "response": {
+          "status_code": 201,
+          "content_type": "application/json",
+          "body": {
+            "message": "quotation created",
+            "data": {
+              "id": 1,
+              "code": "SQ-20240101-0001",
+              "quotation_date": "2024-01-01",
+              "status": "DRAFT",
+              "notes": "Please deliver as soon as possible",
+              "subtotal": 300000.00,
+              "tax_amount": 33000.00,
+              "tax_rate": 11.0,
+              "delivery_cost": 0.0,
+              "other_cost": 0.0,
+              "total_amount": 333000.00,
+              "customer": {
+                "id": 1,
+                "name": "Customer Name"
+              },
+              "payment_terms": {
+                "id": 1,
+                "name": "Payment Terms Name"
+              },
+              "employee": {
+                "id": 1,
+                "name": "Employee Name"
+              },
+              "business_unit": {
+                "id": 1,
+                "name": "Business Unit Name"
+              },
+              "created_by_user": {
+                "id": 1,
+                "name": "User Name",
+                "username": "username",
+                "photo_profile": "",
+                "avatar_url": ""
+              },
+              "items": [
+                {
+                  "id": 1,
+                  "product": {
+                    "id": 1,
+                    "name": "Product Name",
+                    "code": "PRD-001",
+                    "cost_price": 100000.00,
+                    "selling_price": 150000.00,
+                    "image_url": "https://example.com/image.jpg"
+                  },
+                  "quantity": 2,
+                  "price": 150000.00,
+                  "discount": 0.0,
+                  "subtotal": 300000.00
+                }
+              ],
+              "created_at": "2024-01-01T00:00:00Z",
+              "updated_at": "2024-01-01T00:00:00Z"
+            }
+          }
+        },
+        "error_responses": {
+          "400": {
+            "description": "Bad request - Invalid input data",
+            "body": {
+              "error": "product not found"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "body": {
+              "error": "unauthorized"
+            }
+          },
+          "404": {
+            "description": "Customer not found",
+            "body": {
+              "error": "customer not found for this user"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "body": {
+              "error": "Error message"
+            }
+          }
+        }
+      },
+      "get_history_quotations": {
+        "method": "GET",
+        "url": "/customer/marketplace/quotations",
+        "description": "Get paginated list of quotations for the authenticated customer",
+        "authentication": "Required",
+        "query_parameters": {
+          "page": {
+            "type": "int",
+            "description": "Page number for pagination",
+            "required": false,
+            "default": 1,
+            "min_value": 1,
+            "example": 1
+          },
+          "limit": {
+            "type": "int",
+            "description": "Number of items per page",
+            "required": false,
+            "default": 10,
+            "min_value": 1,
+            "max_value": 100,
+            "example": 10
+          },
+          "status": {
+            "type": "string",
+            "description": "Filter by status",
+            "required": false,
+            "enum_values": ["DRAFT", "APPROVED", "REJECTED", "CONVERTED"],
+            "example": "APPROVED"
+          },
+          "search": {
+            "type": "string",
+            "description": "Search term",
+            "required": false,
+            "example": "SQ-20240101"
+          },
+          "searchBy": {
+            "type": "string",
+            "description": "Search by specific column",
+            "required": false,
+            "example": "code"
+          },
+          "sort_by": {
+            "type": "string",
+            "description": "Sort by field",
+            "required": false,
+            "example": "quotation_date"
+          },
+          "sort_order": {
+            "type": "string",
+            "description": "Sort order (asc/desc)",
+            "required": false,
+            "example": "desc"
+          },
+          "start_date": {
+            "type": "string",
+            "description": "Filter by start date (YYYY-MM-DD)",
+            "required": false,
+            "example": "2024-01-01"
+          },
+          "end_date": {
+            "type": "string",
+            "description": "Filter by end date (YYYY-MM-DD)",
+            "required": false,
+            "example": "2024-01-31"
+          }
+        },
+        "response": {
+          "status_code": 200,
+          "content_type": "application/json",
+          "body": {
+            "data": [
+              {
+                "id": 1,
+                "code": "SQ-20240101-0001",
+                "quotation_date": "2024-01-01",
+                "status": "DRAFT",
+                "latest_status": "PAID",
+                "total_amount": 333000.00,
+                "customer": {
+                  "id": 1,
+                  "name": "Customer Name"
+                },
+                "payment_terms": {
+                  "id": 1,
+                  "name": "Payment Terms Name"
+                },
+                "employee": {
+                  "id": 1,
+                  "name": "Employee Name"
+                },
+                "business_unit": {
+                  "id": 1,
+                  "name": "Business Unit Name"
+                },
+                "created_by_user": {
+                  "id": 1,
+                  "name": "User Name",
+                  "username": "username",
+                  "photo_profile": "",
+                  "avatar_url": ""
+                },
+                "items_count": 2,
+                "created_at": "2024-01-01T00:00:00Z",
+                "updated_at": "2024-01-01T00:00:00Z",
+                "can_review": true,
+                "reviewable_items": [
+                  {
+                    "product_id": 1,
+                    "product_name": "Product Name",
+                    "can_review": true,
+                    "has_review": false
+                  }
+                ]
+              }
+            ],
+            "meta": {
+              "pagination": {
+                "total": 100,
+                "page": 1,
+                "limit": 10
+              },
+              "search": {
+                "search": "",
+                "searchBy": ""
+              },
+              "sort": {
+                "sort_by": "",
+                "sort_order": ""
+              },
+              "filter": {
+                "status": "",
+                "start_date": "",
+                "end_date": ""
+              },
+              "searchable_columns": {
+                "string_columns": ["code", "notes"],
+                "numeric_columns": ["id", "payment_terms_id", "employee_id", "created_by", "total_amount"]
+              },
+              "sortable_columns": {
+                "available_fields": ["id", "code", "quotation_date", "status", "total_amount", "created_at", "updated_at", "payment_terms_id", "employee_id", "created_by"]
+              }
+            }
+          }
+        },
+        "error_responses": {
+          "401": {
+            "description": "Unauthorized",
+            "body": {
+              "error": "unauthorized"
+            }
+          },
+          "404": {
+            "description": "Customer not found",
+            "body": {
+              "error": "customer not found for this user"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "body": {
+              "error": "Error message"
+            }
+          }
+        }
+      },
+      "get_quotation_by_id": {
+        "method": "GET",
+        "url": "/customer/marketplace/quotations/:id",
+        "description": "Get detailed quotation information for the authenticated customer",
+        "authentication": "Required",
+        "path_parameters": {
+          "id": {
+            "type": "uint",
+            "description": "Quotation ID",
+            "required": true,
+            "example": 1
+          }
+        },
+        "response": {
+          "status_code": 200,
+          "content_type": "application/json",
+          "body": {
+            "data": {
+              "id": 1,
+              "code": "SQ-20240101-0001",
+              "quotation_date": "2024-01-01",
+              "status": "DRAFT",
+              "notes": "Please deliver as soon as possible",
+              "subtotal": 300000.00,
+              "tax_amount": 33000.00,
+              "tax_rate": 11.0,
+              "delivery_cost": 0.0,
+              "other_cost": 0.0,
+              "total_amount": 333000.00,
+              "customer": {
+                "id": 1,
+                "name": "Customer Name"
+              },
+              "payment_terms": {
+                "id": 1,
+                "name": "Payment Terms Name"
+              },
+              "employee": {
+                "id": 1,
+                "name": "Employee Name"
+              },
+              "business_unit": {
+                "id": 1,
+                "name": "Business Unit Name"
+              },
+              "created_by_user": {
+                "id": 1,
+                "name": "User Name",
+                "username": "username",
+                "photo_profile": "",
+                "avatar_url": ""
+              },
+              "items": [
+                {
+                  "id": 1,
+                  "product": {
+                    "id": 1,
+                    "name": "Product Name",
+                    "code": "PRD-001",
+                    "cost_price": 100000.00,
+                    "selling_price": 150000.00,
+                    "image_url": "https://example.com/image.jpg"
+                  },
+                  "quantity": 2,
+                  "price": 150000.00,
+                  "discount": 0.0,
+                  "subtotal": 300000.00
+                }
+              ],
+              "tracking": {
+                "sales_order": {
+                  "id": 1,
+                  "code": "SO-20240101-0001",
+                  "status": "APPROVED",
+                  "date": "2024-01-01"
+                },
+                "invoice_down_payment": {
+                  "id": 1,
+                  "sales_order_id": 1,
+                  "code": "INV-DP-20240101-0001",
+                  "invoice_number": "INV-DP-001",
+                  "invoice_date": "2024-01-01",
+                  "due_date": "2024-01-31",
+                  "amount": 166500.00,
+                  "status": "UNPAID",
+                  "notes": "",
+                  "created_at": "2024-01-01T00:00:00Z",
+                  "updated_at": "2024-01-01T00:00:00Z"
+                },
+                "delivery_orders": [
+                  {
+                    "id": 1,
+                    "code": "DO-20240101-0001",
+                    "status": "DELIVERED",
+                    "date": "2024-01-05"
+                  }
+                ],
+                "customer_invoices": [
+                  {
+                    "id": 1,
+                    "code": "INV-20240101-0001",
+                    "invoice_number": "INV-001",
+                    "status": "UNPAID",
+                    "invoice_date": "2024-01-01",
+                    "due_date": "2024-01-31",
+                    "amount": 333000.00
+                  }
+                ],
+                "payments": [
+                  {
+                    "id": 1,
+                    "payment_date": "2024-01-15",
+                    "amount": 333000.00,
+                    "method": "BANK",
+                    "status": "CONFIRMED"
+                  }
+                ]
+              },
+              "created_at": "2024-01-01T00:00:00Z",
+              "updated_at": "2024-01-01T00:00:00Z"
+            }
+          }
+        },
+        "error_responses": {
+          "400": {
+            "description": "Bad request - Invalid quotation id",
+            "body": {
+              "error": "invalid quotation id"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "body": {
+              "error": "unauthorized"
+            }
+          },
+          "404": {
+            "description": "Quotation not found",
+            "body": {
+              "error": "quotation not found"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "body": {
+              "error": "Error message"
+            }
+          }
+        }
+      },
+      "create_review": {
+        "method": "POST",
+        "url": "/customer/marketplace/review",
+        "description": "Create a new review for a product from a quotation",
+        "authentication": "Required",
+        "content_type": "application/json or multipart/form-data",
+        "request_body": {
+          "product_id": {
+            "type": "uint",
+            "description": "Product ID",
+            "required": true,
+            "example": 1
+          },
+          "quotation_id": {
+            "type": "uint",
+            "description": "Quotation ID",
+            "required": true,
+            "example": 1
+          },
+          "rating": {
+            "type": "int8",
+            "description": "Rating value (1-5)",
+            "required": true,
+            "min_value": 1,
+            "max_value": 5,
+            "example": 5
+          },
+          "title": {
+            "type": "string",
+            "description": "Review title",
+            "required": false,
+            "max_length": 255,
+            "example": "Great Product!"
+          },
+          "content": {
+            "type": "string",
+            "description": "Review content",
+            "required": false,
+            "example": "This product is excellent quality."
+          },
+          "media_urls": {
+            "type": "array",
+            "description": "Array of media URLs (for JSON requests)",
+            "required": false,
+            "items": {
+              "type": "string",
+              "example": "https://example.com/review-image.jpg"
+            }
+          },
+          "media": {
+            "type": "file",
+            "description": "Media files (for multipart/form-data requests)",
+            "required": false,
+            "example": "File upload"
+          }
+        },
+        "response": {
+          "status_code": 201,
+          "content_type": "application/json",
+          "body": {
+            "message": "review created successfully",
+            "data": {
+              "id": 1,
+              "product_id": 1,
+              "quotation_id": 1,
+              "rating": 5,
+              "title": "Great Product!",
+              "status": "APPROVED"
+            }
+          }
+        },
+        "error_responses": {
+          "400": {
+            "description": "Bad request - Invalid input data or business rule violation",
+            "body": {
+              "error": "product_id, quotation_id, and rating are required"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "body": {
+              "error": "unauthorized"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "body": {
+              "error": "customer not found for this user"
+            }
+          },
+          "409": {
+            "description": "Conflict - Review already exists",
+            "body": {
+              "error": "review already exists for this product in this quotation"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "body": {
+              "error": "Error message"
+            }
+          }
+        }
+      }
+    }
+  }
+}

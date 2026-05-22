@@ -1,0 +1,603 @@
+{
+  "dashboard": {
+    "title": "Dasbor",
+    "error": "Gagal memuat data dasbor. Silakan coba lagi.",
+    "scopeRestrictedTitle": "Scope dibatasi",
+    "scopeRestrictedDescription": "Widget ini disembunyikan untuk scope izin saat ini.",
+    "loading": "Memuat...",
+    "noData": "Tidak ada data tersedia",
+    "customize": "Kustomisasi",
+    "doneEditing": "Selesai",
+    "addWidget": "Tambah Widget",
+    "resetLayout": "Reset",
+    "emptyDashboard": "Dasbor Anda kosong. Tambahkan widget untuk memulai.",
+    "download": "Unduh",
+    "compareLastMonth": "Dibanding bulan lalu",
+    "formula": "Formula",
+    "purpose": "Tujuan",
+    "templatePicker": {
+      "title": "Pilih tata letak dasbor Anda",
+      "description": "Pilih template untuk memulai. Anda bisa mengubahnya kapan saja.",
+      "useTemplate": "Gunakan template ini",
+      "templates": {
+        "erp": {
+          "name": "ERP",
+          "description": "Pesanan, pendapatan, inventaris, dan gambaran operasional"
+        },
+        "crm": {
+          "name": "CRM",
+          "description": "Kontak, prospek, kesepakatan, dan pelacakan aktivitas"
+        },
+        "pos": {
+          "name": "POS",
+          "description": "Penjualan outlet, meja langsung, dan produk terlaris"
+        },
+        "hr": {
+          "name": "HR",
+          "description": "Jumlah karyawan, kehadiran, dan manajemen cuti"
+        }
+      }
+    },
+    "onboarding": {
+      "welcome": "Selamat datang di GIMS!",
+      "chooseTypePrompt": "Mari siapkan akun Anda. Bisnis apa yang sedang Anda jalankan?",
+      "setupChecklist": "Daftar Periksa Setup",
+      "checklistPrompt": "Selesaikan langkah-langkah berikut untuk menyiapkan workspace Anda ({done}/{total} selesai)",
+      "dismiss": "Lewati untuk sekarang",
+      "markDone": "Selesaikan setup",
+      "accessSetup": {
+        "title": "Setup akses role & karyawan",
+        "description": "Atur permission role dan cakupan akses karyawan sebelum tim mulai menggunakan workspace.",
+        "rolePermissions": "Konfigurasi permission role",
+        "employeeAccessFnb": "Atur akses karyawan untuk outlet dan alur kasir",
+        "employeeAccessOther": "Atur akses karyawan untuk gudang dan operasional"
+      },
+      "types": {
+        "fnb": {
+          "label": "Makanan & Minuman",
+          "description": "Restoran, kafe, katering, atau operasi F&B lainnya"
+        },
+        "other": {
+          "label": "Bisnis Lainnya",
+          "description": "Retail, distribusi, manufaktur, atau jasa"
+        }
+      },
+      "steps": {
+        "company": {
+          "label": "Siapkan perusahaan Anda",
+          "description": "Tambahkan nama, alamat, dan informasi dasar perusahaan"
+        },
+        "fiscalYear": {
+          "label": "Atur Tahun Fiskal",
+          "description": "Atur setidaknya satu tahun fiskal aktif sebelum Anda dapat mencatat transaksi penjualan atau pembelian."
+        },
+        "outlet": {
+          "label": "Buat outlet pertama Anda",
+          "description": "Tambahkan cabang atau lokasi tempat Anda beroperasi"
+        },
+        "floorLayout": {
+          "label": "Desain tata letak lantai",
+          "description": "Atur meja dan bagian untuk tempat Anda"
+        },
+        "products": {
+          "label": "Tambahkan produk / menu",
+          "description": "Siapkan item yang Anda jual atau sajikan"
+        },
+        "warehouse": {
+          "label": "Buat gudang",
+          "description": "Siapkan lokasi penyimpanan stok utama Anda"
+        },
+        "users": {
+          "label": "Undang anggota tim",
+          "description": "Tambahkan akun staf dan tetapkan peran"
+        }
+      }
+    },
+    "status": {
+      "good": "Sehat",
+      "warning": "Waspada",
+      "danger": "Kritis"
+    },
+    "categories": {
+      "erp": "ERP",
+      "crm": "CRM",
+      "pos": "POS",
+      "hr": "HR",
+      "finance": "Keuangan",
+      "other": "Lainnya"
+    },
+    "revenueChart": {
+      "title": "Grafik Pendapatan",
+      "subtitle": "12 periode terakhir",
+      "revenue": "Pendapatan",
+      "costs": "Biaya"
+    },
+    "stats": {
+      "totalBalance": "Total Saldo",
+      "totalRevenue": "Total Pendapatan",
+      "totalExpense": "Total Pengeluaran",
+      "totalOrders": "Total Pesanan"
+    },
+    "bestSelling": {
+      "title": "Produk Terlaris",
+      "subtitle": "Produk dengan Penjualan Tertinggi",
+      "itemsSold": "terjual"
+    },
+    "trackOrders": {
+      "title": "Lacak Sales Order",
+      "subtitle": "Pantau sales order saat ini beserta dokumen pemenuhannya",
+      "newOrder": "Pesanan Baru",
+      "onProgress": "Diproses",
+      "completed": "Selesai",
+      "return": "Dikembalikan",
+      "filterOrders": "Cari pesanan...",
+      "id": "ID",
+      "customerName": "Nama Pelanggan",
+      "issueDate": "Tanggal",
+      "amount": "Jumlah",
+      "status": "Status",
+      "export": "Ekspor",
+      "fulfillment": {
+        "delivered": "terkirim",
+        "pending": "menunggu",
+        "remaining": "sisa"
+      },
+      "columns": {
+        "code": "Kode",
+        "status": "Status",
+        "fulfillment": "Pemenuhan",
+        "do": "DO",
+        "invoice": "Invoice",
+        "totalAmount": "Total Nilai"
+      }
+    },
+    "trackPurchaseOrders": {
+      "title": "Lacak Purchase Order",
+      "subtitle": "Pantau purchase order beserta dokumen penerimaan dan invoice terkait",
+      "columns": {
+        "code": "Kode",
+        "status": "Status",
+        "fulfillment": "Pemenuhan",
+        "gr": "GR",
+        "invoice": "Invoice",
+        "totalAmount": "Total Nilai"
+      },
+      "fulfillment": {
+        "received": "diterima",
+        "pending": "menunggu",
+        "remaining": "sisa"
+      }
+    },
+    "widgetPicker": {
+      "title": "Tambah Widget",
+      "all": "Semua",
+      "added": "Ditambahkan"
+    },
+    "widgets": {
+      "total_revenue": {
+        "title": "Total Pendapatan",
+        "description": "Total pendapatan dari semua saluran penjualan"
+      },
+      "total_orders": {
+        "title": "Total Pesanan",
+        "description": "Jumlah pesanan penjualan dalam periode"
+      },
+      "total_customers": {
+        "title": "Total Pelanggan",
+        "description": "Jumlah pelanggan aktif"
+      },
+      "total_products": {
+        "title": "Total Produk",
+        "description": "Jumlah produk aktif dalam katalog"
+      },
+      "employee_count": {
+        "title": "Karyawan",
+        "description": "Total karyawan aktif"
+      },
+      "revenue_chart": {
+        "title": "Tren Pendapatan",
+        "description": "Grafik tren pendapatan bulanan"
+      },
+      "costs_chart": {
+        "title": "Tren Biaya",
+        "description": "Grafik tren biaya bulanan"
+      },
+      "revenue_vs_costs": {
+        "title": "Pendapatan vs Biaya",
+        "description": "Perbandingan pendapatan dan biaya"
+      },
+      "balance_overview": {
+        "title": "Saldo",
+        "description": "Ikhtisar saldo akun saat ini"
+      },
+      "costs_by_category": {
+        "title": "Biaya per Kategori",
+        "description": "Rincian biaya berdasarkan kategori"
+      },
+      "invoices_summary": {
+        "title": "Faktur",
+        "description": "Ringkasan status faktur",
+        "total": "Total",
+        "paid": "Lunas",
+        "unpaid": "Belum Lunas",
+        "overdue": "Jatuh Tempo"
+      },
+      "recent_invoices": {
+        "title": "Faktur Terbaru",
+        "description": "Transaksi faktur terbaru"
+      },
+      "sales_performance": {
+        "title": "Kinerja Penjualan",
+        "description": "Tenaga penjualan berkinerja terbaik"
+      },
+      "top_products": {
+        "title": "Produk Teratas",
+        "description": "Produk dengan penjualan tertinggi",
+        "sold": "terjual"
+      },
+      "delivery_status": {
+        "title": "Pengiriman",
+        "description": "Ikhtisar status pengiriman",
+        "totalLabel": "total pengiriman",
+        "pending": "Menunggu",
+        "inTransit": "Dalam Perjalanan",
+        "delivered": "Terkirim"
+      },
+      "geographic_overview": {
+        "title": "Ikhtisar Geografis",
+        "description": "Peta performa regional dengan GeoJSON",
+        "entries": "entri",
+        "low": "Rendah",
+        "high": "Tinggi"
+      },
+      "warehouse_overview": {
+        "title": "Ikhtisar Gudang",
+        "description": "Stok dan utilisasi per gudang",
+        "items": "barang",
+        "stockStatus": "Status Stok",
+        "inStock": "Stok Baik",
+        "lowStock": "Stok Rendah",
+        "outOfStock": "Kehabisan Stok"
+      },
+      "pending_approvals_sales": {
+        "title": "Persetujuan Tertunda - Penjualan",
+        "description": "Dokumen yang menunggu persetujuan di jalur penjualan"
+      },
+      "pending_approvals_purchase": {
+        "title": "Persetujuan Tertunda - Pembelian",
+        "description": "Dokumen yang menunggu persetujuan di jalur pembelian"
+      },
+      "travel_planner_overview": {
+        "title": "Anggaran Travel Planner",
+        "description": "Anggaran, realisasi, dan rencana perjalanan aktif",
+        "open": "Buka Planner",
+        "utilization": "Utilisasi Anggaran",
+        "listTitle": "Rencana Aktif",
+        "empty": "Belum ada rencana perjalanan",
+        "metrics": {
+          "budget": "Anggaran",
+          "spent": "Terpakai",
+          "remaining": "Sisa"
+        }
+      },
+      "kpi_roe": {
+        "title": "ROE",
+        "description": "Return on Equity — Laba Bersih / Ekuitas"
+      },
+      "kpi_net_profit_margin": {
+        "title": "Net Profit Margin",
+        "description": "Laba Bersih / Pendapatan — persentase pendapatan yang menjadi laba bersih"
+      },
+      "kpi_gross_profit_margin": {
+        "title": "Gross Profit Margin",
+        "description": "Laba Kotor / Pendapatan — indikator kekuatan harga jual"
+      },
+      "kpi_inventory_turnover": {
+        "title": "Inventory Turnover",
+        "description": "COGS / Rata-rata Persediaan — berapa kali stok terjual per tahun"
+      },
+      "kpi_dio": {
+        "title": "DIO",
+        "description": "Days Inventory Outstanding — rata-rata hari stok tersimpan sebelum terjual"
+      },
+      "kpi_ar_days": {
+        "title": "AR Days (DSO)",
+        "description": "Days Sales Outstanding — rata-rata hari untuk menagih piutang"
+      },
+      "kpi_ap_days": {
+        "title": "AP Days (DPO)",
+        "description": "Days Payable Outstanding — rata-rata hari untuk membayar ke supplier"
+      },
+      "kpi_ccc": {
+        "title": "CCC",
+        "description": "Cash Conversion Cycle — total hari uang terikat di operasi (DIO + DSO − DPO)"
+      },
+      "kpi_cost_per_delivery": {
+        "title": "Biaya/Pengiriman",
+        "description": "Rata-rata biaya per pengiriman — metrik efisiensi logistik"
+      },
+      "kpi_utilization_rate": {
+        "title": "Tingkat Utilisasi",
+        "description": "Utilisasi armada/kapasitas — pemakaian aktual vs total kapasitas"
+      },
+      "kpi_otd_rate": {
+        "title": "OTD Rate",
+        "description": "On-Time Delivery Rate — persentase pengiriman tepat waktu (target >95%)"
+      },
+      "kpi_roa": {
+        "title": "ROA",
+        "description": "Return on Assets — seberapa efisien aset menghasilkan profit"
+      },
+      "kpi_asset_turnover": {
+        "title": "Asset Turnover",
+        "description": "Pendapatan / Total Aset — rasio efisiensi aset"
+      },
+      "kpi_opex_vs_capex": {
+        "title": "Struktur Biaya",
+        "description": "Rincian OPEX vs CAPEX dengan tracking depresiasi"
+      },
+      "owner_intelligence": {
+        "title": "Owner Intelligence",
+        "description": "Analisis kesehatan bisnis otomatis, deteksi bottleneck, dan insight actionable"
+      },
+      "crm_total_contacts": {
+        "title": "Total Kontak",
+        "description": "Total kontak CRM"
+      },
+      "crm_active_leads": {
+        "title": "Prospek Aktif",
+        "description": "Prospek aktif dalam pipeline",
+        "thisMonth": "baru bulan ini"
+      },
+      "crm_leads_list": {
+        "title": "Lead Terbaru",
+        "description": "Lead terbaru yang terlihat di scope saat ini",
+        "noLeads": "Tidak ada lead dalam scope"
+      },
+      "crm_pipeline_summary": {
+        "title": "Ringkasan Pipeline",
+        "description": "Deal aktif per stage, dibatasi scope saat ini",
+        "noPipelineData": "Tidak ada item pipeline dalam scope"
+      },
+      "crm_activity_summary": {
+        "title": "Ringkasan Aktivitas",
+        "description": "Aktivitas CRM yang dijadwalkan hari ini",
+        "activitiesToday": "aktivitas hari ini"
+      },
+      "pos_outlet_sales": {
+        "title": "Penjualan Outlet",
+        "description": "Pendapatan, pesanan yang tersaji, dan antrean per outlet hari ini",
+        "allOutlets": "Semua Outlet",
+        "loadMore": "Muat Lebih Banyak",
+        "todayRevenue": "Pendapatan Hari Ini",
+        "todayOrders": "Pesanan Hari Ini",
+        "servedOrders": "Pesanan Tersaji",
+        "waitingOrders": "Pesanan Menunggu",
+        "warningOrders": "Peringatan",
+        "outlet": "Outlet",
+        "revenue": "Pendapatan",
+        "orders": "Pesanan",
+        "tables": "Meja"
+      },
+      "pos_live_table_overview": {
+        "title": "Tampilan Meja Langsung",
+        "description": "Okupansi meja real-time dan antrean servis di semua outlet",
+        "allOutlets": "Semua Outlet",
+        "loadMore": "Muat Lebih Banyak",
+        "focusedTitle": "Outlet terfokus",
+        "openLiveTable": "Buka Live Table",
+        "tables": "Meja",
+        "loadingTables": "Memuat meja...",
+        "noTableLabels": "Label meja belum tersedia",
+        "occupancy": "Okupansi Meja",
+        "served": "tersaji",
+        "waiting": "menunggu",
+        "warnings": "peringatan",
+        "waitingShort": "{count} menunggu",
+        "warningShort": "{count} peringatan",
+        "ordersShort": "pesanan"
+      },
+      "pos_cash_control": {
+        "title": "Meja Aktif",
+        "description": "Daftar meja aktif realtime yang sama dengan status POS Live Table",
+        "allOutlets": "Semua Outlet",
+        "loadMore": "Muat Lebih Banyak",
+        "focus": "Fokus",
+        "focusedTitle": "Outlet terfokus",
+        "openLiveTable": "Buka Live Table",
+        "activeTables": "{count} meja aktif",
+        "totalActiveTables": "Total meja aktif: {count}",
+        "noActiveTables": "Tidak ada meja aktif",
+        "activeSessions": "{count} sesi aktif",
+        "servedRate": "{rate}% tersaji",
+        "expectedCash": "Kas Harapan",
+        "actualCash": "Kas Aktual",
+        "cashVariance": "Selisih",
+        "cashSales": "Penjualan Tunai",
+        "cashCover": "Cakupan kas",
+        "served": "Tersaji",
+        "waiting": "Menunggu",
+        "warnings": "Peringatan",
+        "tableCoverage": "{occupied}/{total} meja terpakai",
+        "varianceAlert": "Selisih kas terdeteksi",
+        "warningAlert": "Terdeteksi peringatan operasional",
+        "varianceSummary": "Selisih {variance} perlu diperiksa.",
+        "warningSummary": "{count} item peringatan perlu perhatian."
+      },
+      "hr_attendance_today": {
+        "title": "Kehadiran Hari Ini",
+        "description": "Ringkasan kehadiran karyawan hari ini",
+        "present": "Hadir",
+        "late": "Terlambat",
+        "absent": "Tidak Hadir",
+        "attendanceRate": "Tingkat Kehadiran"
+      },
+      "hr_pending_leaves": {
+        "title": "Cuti Menunggu",
+        "description": "Permintaan cuti menunggu persetujuan",
+        "pendingRequests": "permintaan menunggu"
+      }
+    },
+    "ownerKpi": {
+      "intelligence": {
+        "title": "Owner Intelligence"
+      },
+      "opex_vs_capex": {
+        "title": "Struktur Biaya"
+      },
+      "noData": "Tidak ada data analisis tersedia",
+      "noCostData": "Tidak ada data biaya tersedia",
+      "primaryBottleneck": "Titik Hambat Utama",
+      "insightsRecommendations": "Insight & Rekomendasi",
+      "insights": {
+        "roe_low": {
+          "title": "ROE sangat rendah",
+          "description": "Imbal hasil ekuitas (ROE) sebesar {formatted} — target ideal minimal 15%.",
+          "action": "Tinjau strategi harga dan struktur biaya untuk meningkatkan profit bersih."
+        },
+        "gpm_low": {
+          "title": "Margin kotor terlalu tipis",
+          "description": "Gross Profit Margin sebesar {formatted} — COGS terlalu tinggi dibanding penjualan.",
+          "action": "Negosiasi ulang harga supplier atau sesuaikan harga jual."
+        },
+        "dio_high": {
+          "title": "Stok mengendap terlalu lama",
+          "description": "DIO sebesar {formatted} — perputaran stok barang di gudang lambat.",
+          "action": "Lakukan promosi cuci gudang untuk barang slow-moving. Tinjau titik reorder."
+        },
+        "ccc_danger": {
+          "title": "Siklus Konversi Kas kritis",
+          "description": "CCC sebesar {formatted} — uang tertahan terlalu lama di operasional.",
+          "action": "Percepat penagihan piutang dan optimalkan jatuh tempo pembayaran supplier."
+        },
+        "ar_slow": {
+          "title": "Penagihan piutang lambat",
+          "description": "AR Days (DSO) sebesar {formatted} — pelanggan membayar terlalu lama.",
+          "action": "Perketat syarat pembayaran. Lakukan follow-up intens pada faktur jatuh tempo."
+        },
+        "otd_low": {
+          "title": "Pengiriman tepat waktu rendah",
+          "description": "OTD Rate sebesar {formatted} — target minimal >95%.",
+          "action": "Tinjau perencanaan rute dan kapasitas armada. Cari hambatan di pengiriman."
+        },
+        "asset_poor": {
+          "title": "Efisiensi aset rendah",
+          "description": "ROA sebesar {formatted} — aset belum menghasilkan profit optimal.",
+          "action": "Evaluasi aset yang tidak produktif. Pertimbangkan skema sewa untuk alat baru."
+        },
+        "opex_high": {
+          "title": "Rasio OPEX tinggi",
+          "description": "Biaya operasional mencapai {formatted} dari total biaya.",
+          "action": "Identifikasi dan kurangi biaya operasional yang tidak mendesak."
+        }
+      },
+      "opex": "OPEX",
+      "capex": "CAPEX",
+      "depreciation": "Depresiasi",
+      "opexBreakdown": "Rincian OPEX",
+      "capexBreakdown": "Rincian CAPEX",
+      "healthStatus": {
+        "good": "Bisnis Sehat",
+        "warning": "Perlu Perhatian",
+        "danger": "Kondisi Kritis"
+      },
+      "healthSummaries": {
+        "good": "Bisnis dalam kondisi sehat. Seluruh metrik utama berada dalam rentang aman.",
+        "warning": "Bisnis butuh perhatian. Beberapa KPI menunjukkan gejala waspada yang perlu segera ditangani.",
+        "danger": "Kesehatan bisnis kritis. Berbagai lini KPI menunjukkan masalah signifikan yang butuh aksi cepat."
+      },
+      "bottleneckSummaries": {
+        "inventory": "Manajemen inventori adalah hambatan utama. Stok mengendap terlalu lama dan menyedot arus kas.",
+        "cashflow": "Arus kas adalah hambatan utama. Siklus konversi kas terlalu lambat — butuh aksi penagihan cepat.",
+        "asset": "Efisiensi aset adalah masalah utama. Investasi modal tinggi tapi hasil imbal hasil rendah.",
+        "logistics": "Performa logistik tertinggal. Metrik pengiriman masih di bawah target.",
+        "profitability": "Profitabilitas tertekan. Margin menipis dan imbal hasil di bawah ekspektasi.",
+        "cost": "Struktur biaya butuh optimasi. Pengeluaran operasional terlalu tinggi dibanding pendapatan."
+      },
+      "areas": {
+        "inventory": "Inventori",
+        "cashflow": "Arus Kas",
+        "asset": "Aset",
+        "logistics": "Logistik",
+        "profitability": "Profitabilitas",
+        "cost": "Biaya"
+      },
+      "metrics": {
+        "kpi_ccc": {
+          "formula": "DIO + DSO - DPO",
+          "purpose": "Siklus konversi kas — berapa hari uang terikat di operasi. Semakin kecil semakin baik. KPI paling kritis untuk bisnis."
+        },
+        "kpi_dio": {
+          "formula": "(Persediaan / COGS) x 365",
+          "purpose": "Rata-rata hari stok tersimpan sebelum terjual. Semakin kecil = manajemen persediaan semakin efisien."
+        },
+        "kpi_ar_days": {
+          "formula": "(Piutang / Penjualan) x 365",
+          "purpose": "Rata-rata hari pelanggan membayar (DSO). Semakin kecil = penagihan kas semakin cepat."
+        },
+        "kpi_ap_days": {
+          "formula": "(Hutang / COGS) x 365",
+          "purpose": "Rata-rata hari membayar supplier (DPO). Semakin besar = pengelolaan arus kas lebih baik."
+        },
+        "kpi_roe": {
+          "formula": "Laba Bersih / Ekuitas x 100",
+          "purpose": "Imbal hasil ekuitas — seberapa efektif uang owner menghasilkan profit. Target min 15%."
+        },
+        "kpi_roa": {
+          "formula": "Laba Bersih / Total Aset x 100",
+          "purpose": "Imbal hasil aset — seberapa efisien total aset menghasilkan profit."
+        },
+        "kpi_net_profit_margin": {
+          "formula": "Laba Bersih / Penjualan x 100",
+          "purpose": "Persentase penjualan yang menjadi laba bersih setelah semua biaya. Target min 10%."
+        },
+        "kpi_gross_profit_margin": {
+          "formula": "Laba Kotor / Penjualan x 100",
+          "purpose": "Margin kotor — selisih antara penjualan dan COGS. Indikator kekuatan harga jual."
+        },
+        "kpi_inventory_turnover": {
+          "formula": "COGS / Rata-rata Persediaan",
+          "purpose": "Berapa kali persediaan terjual habis dalam setahun. Semakin tinggi = stok berputar cepat."
+        },
+        "kpi_asset_turnover": {
+          "formula": "Penjualan / Total Aset",
+          "purpose": "Seberapa efisien aset digunakan untuk menghasilkan penjualan."
+        },
+        "kpi_cost_per_delivery": {
+          "formula": "Total Biaya Pengiriman / Jumlah Pengiriman",
+          "purpose": "Biaya rata-rata per pengiriman. Pantau efisiensi operasi logistik."
+        },
+        "kpi_utilization_rate": {
+          "formula": "Penggunaan Aktual / Total Kapasitas x 100",
+          "purpose": "Tingkat utilisasi armada/kapasitas. Target > 80%."
+        },
+        "kpi_otd_rate": {
+          "formula": "Pengiriman Tepat Waktu / Total Pengiriman x 100",
+          "purpose": "Persentase pengiriman tepat waktu. Target > 95%."
+        },
+        "kpi_opex_vs_capex": {
+          "formula": "OPEX vs CAPEX",
+          "purpose": "OPEX = biaya operasional (gaji, sewa, BBM). CAPEX = belanja modal (truck, alat). Pantau depresiasi untuk insight owner."
+        }
+      }
+    },
+    "approvals": {
+      "tabs": {
+        "quotations": "Penawaran",
+        "salesOrders": "Pesanan Jual",
+        "deliveryOrders": "Pengiriman",
+        "customerInvoices": "Faktur",
+        "requisitions": "Permintaan",
+        "purchaseOrders": "PO",
+        "goodsReceipts": "Penerimaan",
+        "supplierInvoices": "Faktur Pemasok"
+      },
+      "actions": {
+        "reviewNow": "Tinjau Sekarang",
+        "openModule": "Buka Modul"
+      },
+      "pendingCount": "Tertunda:",
+      "empty": "Tidak ada persetujuan yang tertunda"
+    }
+  }
+}

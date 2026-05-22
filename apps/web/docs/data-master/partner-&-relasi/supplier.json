@@ -1,0 +1,331 @@
+{
+  "title": "Data Master/Partner & Relasi/ Supplier",
+  "description": "A comprehensive guide to the Data Master API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/master-data/suppliers",
+      "response": {
+        "data": [
+          {
+            "id": 2,
+            "city": {
+              "id": 1,
+              "name": "Semarang",
+              "province_id": 1,
+              "province_name": "Central Java"
+            },
+            "name": "PT. Farma",
+            "phone": "021-654321",
+            "email": "hello@farma.co.id",
+            "address": "Jl. Supplier No.2",
+            "logo_url": "",
+            "created_at": "2025-09-16T14:03:20+07:00",
+            "updated_at": "2025-09-16T14:03:20+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 1,
+            "page": 1,
+            "total": 2
+          },
+          "search": {
+            "search": "A",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "city_id", "user_id"],
+            "string_columns": ["name", "phone", "email", "address", "logo_url"]
+          },
+          "sort": {
+            "sort_by": "id",
+            "sort_order": "desc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "name",
+              "phone",
+              "email",
+              "address",
+              "logo_url",
+              "created_at",
+              "updated_at",
+              "city_id",
+              "user_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/master-data/suppliers/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "city": {
+            "id": 1,
+            "name": "Semarang",
+            "province_id": 1,
+            "province_name": "Central Java"
+          },
+          "name": "PT. Medika",
+          "phone": "021-123456",
+          "email": "sales@medika.co.id",
+          "address": "Jl. Example No.1",
+          "logo_url": "",
+          "created_at": "2025-09-11T16:22:30+07:00",
+          "updated_at": "2025-09-11T16:22:30+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/master-data/suppliers/stats",
+      "response": {
+        "data": {
+          "total": 2
+        },
+        "message": "Supplier statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "GET {{base_url}}/master-data/suppliers/add",
+      "response": {
+        "data": {
+          "provinces": [
+            {
+              "id": 1,
+              "name": "Central Java",
+              "cities": [
+                {
+                  "id": 1,
+                  "name": "Semarang",
+                  "province_id": 1,
+                  "province_name": "Central Java"
+                },
+                {
+                  "id": 2,
+                  "name": "Surabaya",
+                  "province_id": 1,
+                  "province_name": "Central Java"
+                },
+                {
+                  "id": 3,
+                  "name": "Jakarta Pusat",
+                  "province_id": 1,
+                  "province_name": "Central Java"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "name": "East Java",
+              "cities": []
+            },
+            {
+              "id": 3,
+              "name": "Jakarta",
+              "cities": []
+            }
+          ],
+          "users": [
+            {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": ""
+            },
+            {
+              "id": 2,
+              "name": "John Doe",
+              "username": "johndoe",
+              "photo_profile": ""
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/master-data/suppliers",
+      "body": [
+        {
+          "key": "city_id",
+          "value": "1",
+          "description": "",
+          "type": "text",
+          "uuid": "798cebb7-6486-435a-a5f7-5acfe8b1b8b6",
+          "enabled": true
+        },
+        {
+          "key": "user_id",
+          "value": "1",
+          "description": "",
+          "type": "text",
+          "uuid": "1c054409-df21-41d1-ad6c-a00847716586",
+          "enabled": true
+        },
+        {
+          "key": "name",
+          "value": "PT Sumber Makmur",
+          "description": "",
+          "type": "text",
+          "uuid": "a9a8fa71-72e9-4bb5-80b9-74d16ef0f934",
+          "enabled": true
+        },
+        {
+          "key": "phone",
+          "value": "628123456789",
+          "description": "",
+          "type": "text",
+          "uuid": "ea9d3066-45cb-4029-87d3-73f768433493",
+          "enabled": true
+        },
+        {
+          "key": "email",
+          "value": "contact@sumbermakmur.co.id",
+          "description": "",
+          "type": "text",
+          "uuid": "3b192d30-87db-47f4-9dbc-ff264f904b15",
+          "enabled": true
+        },
+        {
+          "key": "address",
+          "value": "Jl. Sudirman No. 45, Jakarta",
+          "description": "",
+          "type": "text",
+          "uuid": "63484ba2-c975-4b89-b252-9af57f09d89d",
+          "enabled": true
+        },
+        {
+          "key": "logo",
+          "description": "",
+          "type": "file",
+          "uuid": "f74764c4-2d33-48c2-9531-81cd758c77f9",
+          "enabled": true,
+          "value": ["postman-cloud:///1f0774b1-a50c-4980-922a-daf18df63abf"]
+        }
+      ],
+      "response": {
+        "data": {
+          "id": 3,
+          "city": {
+            "id": 1,
+            "name": "Semarang",
+            "province_id": 1,
+            "province_name": "Central Java"
+          },
+          "user": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": ""
+          },
+          "name": "PT Sumber Makmur",
+          "phone": "628123456789",
+          "email": "contact@sumbermakmur.co.id",
+          "address": "Jl. Sudirman No. 45, Jakarta",
+          "logo_url": "uploads/suppliers/b42f96a7-e0a0-4ee0-a2cf-bee9c00eb54f.jpg",
+          "created_at": "2025-09-11T16:33:42+07:00",
+          "updated_at": "2025-09-11T16:33:42+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/master-data/suppliers/2",
+      "body": [
+        {
+          "key": "city_id",
+          "value": "1",
+          "type": "text",
+          "uuid": "798cebb7-6486-435a-a5f7-5acfe8b1b8b6",
+          "enabled": true
+        },
+        {
+          "key": "user_id",
+          "value": "1",
+          "type": "text",
+          "uuid": "1c054409-df21-41d1-ad6c-a00847716586",
+          "enabled": true
+        },
+        {
+          "key": "name",
+          "value": "PT Sumber Makmur",
+          "type": "text",
+          "uuid": "a9a8fa71-72e9-4bb5-80b9-74d16ef0f934",
+          "enabled": true
+        },
+        {
+          "key": "phone",
+          "value": "628123456789",
+          "type": "text",
+          "uuid": "ea9d3066-45cb-4029-87d3-73f768433493",
+          "enabled": true
+        },
+        {
+          "key": "email",
+          "value": "contact@sumbermakmur.co.id",
+          "type": "text",
+          "uuid": "3b192d30-87db-47f4-9dbc-ff264f904b15",
+          "enabled": true
+        },
+        {
+          "key": "address",
+          "value": "Jl. Sudirman No. 45, Jakarta",
+          "type": "text",
+          "uuid": "63484ba2-c975-4b89-b252-9af57f09d89d",
+          "enabled": true
+        },
+        {
+          "key": "logo",
+          "type": "file",
+          "uuid": "f74764c4-2d33-48c2-9531-81cd758c77f9",
+          "enabled": true,
+          "value": ["postman-cloud:///1f0774b1-a50c-4980-922a-daf18df63abf"]
+        }
+      ],
+      "response": {
+        "data": {
+          "id": 1,
+          "city": {
+            "id": 1,
+            "name": "Semarang",
+            "province_id": 1,
+            "province_name": "Central Java"
+          },
+          "user": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": ""
+          },
+          "name": "PT Sumber Makmur",
+          "phone": "628123456789",
+          "email": "contact@sumbermakmur.co.id",
+          "address": "Jl. Sudirman No. 45, Jakarta",
+          "logo_url": "uploads/suppliers/500378c7-c5c0-4530-92b0-af5ea9bbf84f.jpg",
+          "created_at": "2025-09-11T16:22:30+07:00",
+          "updated_at": "2025-09-11T16:34:44+07:00"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/master-data/suppliers/2",
+      "response": {
+        "message": "deleted"
+      }
+    }
+  ]
+}

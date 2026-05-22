@@ -1,0 +1,134 @@
+{
+  "title": "stock/stock-valuations",
+  "description": "A comprehensive guide to the Stock API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/stock/stock-valuations",
+      "response": {
+        "data": [
+          {
+            "id": 2,
+            "product": {
+              "id": 1,
+              "name": "Syringe 5ml",
+              "code": "MED-001",
+              "cost_price": 1000,
+              "selling_price": 1500,
+              "image_url": ""
+            },
+            "warehouse": {
+              "id": 1,
+              "name": "Main Warehouse"
+            },
+            "movement_type": "OUT",
+            "quantity": 12,
+            "unit_cost": 0,
+            "total_cost": 0,
+            "reference_type": "SO",
+            "reference_id": null,
+            "notes": "Seed: sample consumption (SO)",
+            "created_at": "2025-09-22T13:51:12+07:00",
+            "updated_at": "2025-09-22T13:51:12+07:00"
+          },
+          {
+            "id": 1,
+            "product": {
+              "id": 1,
+              "name": "Syringe 5ml",
+              "code": "MED-001",
+              "cost_price": 1000,
+              "selling_price": 1500,
+              "image_url": ""
+            },
+            "warehouse": {
+              "id": 1,
+              "name": "Main Warehouse"
+            },
+            "movement_type": "IN",
+            "quantity": 100,
+            "unit_cost": 0,
+            "total_cost": 0,
+            "reference_type": "PO",
+            "reference_id": null,
+            "notes": "Seed: initial receipt (PO)",
+            "created_at": "2025-09-22T13:51:12+07:00",
+            "updated_at": "2025-09-22T13:51:12+07:00"
+          }
+        ],
+        "meta": {
+          "date_range": {
+            "end_date": "2025-09-30",
+            "start_date": "2025-09-01"
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 2
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": [
+              "id",
+              "product_id",
+              "warehouse_id",
+              "quantity",
+              "unit_cost",
+              "total_cost",
+              "reference_id"
+            ],
+            "string_columns": [
+              "product_name",
+              "product_code",
+              "warehouse_name",
+              "movement_type",
+              "reference_type",
+              "notes"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA STATS",
+      "endpoint": "{{base_url}}/stock/stock-valuations/stats",
+      "response": {
+        "data": {
+          "total_movements": 2,
+          "total_in_quantity": 100,
+          "total_out_quantity": 0,
+          "total_in_value": 0,
+          "total_out_value": 0,
+          "net_quantity": 100,
+          "net_value": 0,
+          "average_unit_cost": 0,
+          "date_range": "2025-06-01 to 2025-12-01"
+        }
+      }
+    },
+    {
+      "title": "GET GRAPH DATA TIMELINE",
+      "endpoint": "GET {{base_url}}/stock/stock-valuations/stats/timeline",
+      "response": {
+        "data": {
+          "data": {
+            "data": [
+              {
+                "date": "2025-09-22T00:00:00Z",
+                "hpp_average": 0,
+                "total_quantity": 112,
+                "total_value": 0,
+                "movement_count": 2
+              }
+            ],
+            "group_by": "daily",
+            "date_range": "2025-06-01 to 2025-12-01"
+          }
+        }
+      }
+    }
+  ]
+}

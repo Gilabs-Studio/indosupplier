@@ -1,0 +1,473 @@
+{
+  "title": "Finance/budget",
+  "description": "A comprehensive guide to the Budget API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/finance/budgets",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "division_id": 1,
+            "division": {
+              "id": 1,
+              "name": "Finance"
+            },
+            "name": "Q1 2025 Budget",
+            "period_type": "QUARTERLY",
+            "period_start": "2025-01-01",
+            "period_end": "2025-03-31",
+            "created_by": 1,
+            "user": {
+              "id": 1,
+              "name": "John Doe",
+              "username": "john.doe",
+              "photo_profile": "",
+              "avatar_url": "uploads/users/avatar1.jpg"
+            },
+            "status": "APPROVED",
+            "notes": "Quarterly budget for Q1 2025",
+            "budget_items": [
+              {
+                "id": 1,
+                "budget_id": 1,
+                "chart_of_account_id": 1,
+                "chart_of_account": {
+                  "id": 1,
+                  "code": "ACC-001",
+                  "name": "Office Supplies",
+                  "type": "EXPENSE"
+                },
+                "planned_amount": 5000000,
+                "actual_amount": 3200000,
+                "variance": 1800000,
+                "percentage": 64.0,
+                "month": 1,
+                "year": 2025,
+                "notes": "Monthly office supplies budget",
+                "created_at": "2025-01-15T10:30:00+07:00",
+                "updated_at": "2025-01-15T10:30:00+07:00"
+              },
+              {
+                "id": 2,
+                "budget_id": 1,
+                "chart_of_account_id": 2,
+                "chart_of_account": {
+                  "id": 2,
+                  "code": "ACC-002",
+                  "name": "Marketing Expenses",
+                  "type": "EXPENSE"
+                },
+                "planned_amount": 10000000,
+                "actual_amount": 8500000,
+                "variance": 1500000,
+                "percentage": 85.0,
+                "month": 1,
+                "year": 2025,
+                "notes": "Marketing campaign budget",
+                "created_at": "2025-01-15T10:30:00+07:00",
+                "updated_at": "2025-01-15T10:30:00+07:00"
+              }
+            ],
+            "created_at": "2025-01-15T10:30:00+07:00",
+            "updated_at": "2025-01-15T10:30:00+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 5
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "division_id", "created_by"],
+            "string_columns": ["name", "notes"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "name",
+              "period_type",
+              "period_start",
+              "period_end",
+              "status",
+              "created_at",
+              "updated_at",
+              "division_id",
+              "created_by"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/finance/budgets/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "division_id": 1,
+          "division": {
+            "id": 1,
+            "name": "Finance"
+          },
+          "name": "Q1 2025 Budget",
+          "period_type": "QUARTERLY",
+          "period_start": "2025-01-01",
+          "period_end": "2025-03-31",
+          "created_by": 1,
+          "user": {
+            "id": 1,
+            "name": "John Doe",
+            "username": "john.doe",
+            "photo_profile": "",
+            "avatar_url": "uploads/users/avatar1.jpg"
+          },
+          "status": "APPROVED",
+          "notes": "Quarterly budget for Q1 2025",
+          "budget_items": [
+            {
+              "id": 1,
+              "budget_id": 1,
+              "chart_of_account_id": 1,
+              "chart_of_account": {
+                "id": 1,
+                "code": "ACC-001",
+                "name": "Office Supplies",
+                "type": "EXPENSE"
+              },
+              "planned_amount": 5000000,
+              "actual_amount": 3200000,
+              "variance": 1800000,
+              "percentage": 64.0,
+              "month": 1,
+              "year": 2025,
+              "notes": "Monthly office supplies budget",
+              "created_at": "2025-01-15T10:30:00+07:00",
+              "updated_at": "2025-01-15T10:30:00+07:00"
+            }
+          ],
+          "created_at": "2025-01-15T10:30:00+07:00",
+          "updated_at": "2025-01-15T10:30:00+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET STATS",
+      "endpoint": "GET {{base_url}}/finance/budgets/stats",
+      "response": {
+        "data": {
+          "total": 15,
+          "draft": 5,
+          "approved": 7,
+          "rejected": 2,
+          "closed": 1
+        },
+        "message": "Budget statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "GET {{base_url}}/finance/budgets/add",
+      "response": {
+        "data": {
+          "divisions": [
+            {
+              "id": 1,
+              "name": "Finance"
+            },
+            {
+              "id": 2,
+              "name": "Marketing"
+            },
+            {
+              "id": 3,
+              "name": "Operations"
+            }
+          ],
+          "chart_of_accounts": [
+            {
+              "id": 1,
+              "code": "ACC-001",
+              "name": "Office Supplies",
+              "type": "EXPENSE"
+            },
+            {
+              "id": 2,
+              "code": "ACC-002",
+              "name": "Marketing Expenses",
+              "type": "EXPENSE"
+            },
+            {
+              "id": 3,
+              "code": "ACC-003",
+              "name": "Travel Expenses",
+              "type": "EXPENSE"
+            },
+            {
+              "id": 4,
+              "code": "ACC-004",
+              "name": "Equipment",
+              "type": "ASSET"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/finance/budgets",
+      "body": {
+        "division_id": 1,
+        "name": "Q2 2025 Budget",
+        "period_type": "QUARTERLY",
+        "period_start": "2025-04-01",
+        "period_end": "2025-06-30",
+        "notes": "Quarterly budget for Q2 2025",
+        "budget_items": [
+          {
+            "chart_of_account_id": 1,
+            "planned_amount": 6000000,
+            "month": 4,
+            "year": 2025,
+            "notes": "Office supplies for April"
+          },
+          {
+            "chart_of_account_id": 2,
+            "planned_amount": 12000000,
+            "month": 4,
+            "year": 2025,
+            "notes": "Marketing campaign for April"
+          }
+        ]
+      },
+      "response": {
+        "data": {
+          "id": 2,
+          "division_id": 1,
+          "division": {
+            "id": 1,
+            "name": "Finance"
+          },
+          "name": "Q2 2025 Budget",
+          "period_type": "QUARTERLY",
+          "period_start": "2025-04-01",
+          "period_end": "2025-06-30",
+          "created_by": 1,
+          "user": {
+            "id": 1,
+            "name": "John Doe",
+            "username": "john.doe",
+            "photo_profile": "",
+            "avatar_url": "uploads/users/avatar1.jpg"
+          },
+          "status": "DRAFT",
+          "notes": "Quarterly budget for Q2 2025",
+          "budget_items": [
+            {
+              "id": 3,
+              "budget_id": 2,
+              "chart_of_account_id": 1,
+              "chart_of_account": {
+                "id": 1,
+                "code": "ACC-001",
+                "name": "Office Supplies",
+                "type": "EXPENSE"
+              },
+              "planned_amount": 6000000,
+              "actual_amount": 0,
+              "variance": 6000000,
+              "percentage": 0,
+              "month": 4,
+              "year": 2025,
+              "notes": "Office supplies for April",
+              "created_at": "2025-01-15T11:00:00+07:00",
+              "updated_at": "2025-01-15T11:00:00+07:00"
+            },
+            {
+              "id": 4,
+              "budget_id": 2,
+              "chart_of_account_id": 2,
+              "chart_of_account": {
+                "id": 2,
+                "code": "ACC-002",
+                "name": "Marketing Expenses",
+                "type": "EXPENSE"
+              },
+              "planned_amount": 12000000,
+              "actual_amount": 0,
+              "variance": 12000000,
+              "percentage": 0,
+              "month": 4,
+              "year": 2025,
+              "notes": "Marketing campaign for April",
+              "created_at": "2025-01-15T11:00:00+07:00",
+              "updated_at": "2025-01-15T11:00:00+07:00"
+            }
+          ],
+          "created_at": "2025-01-15T11:00:00+07:00",
+          "updated_at": "2025-01-15T11:00:00+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/finance/budgets/1",
+      "body": {
+        "division_id": 1,
+        "name": "Q1 2025 Budget - Updated",
+        "period_type": "QUARTERLY",
+        "period_start": "2025-01-01",
+        "period_end": "2025-03-31",
+        "notes": "Updated quarterly budget for Q1 2025",
+        "budget_items": [
+          {
+            "id": 1,
+            "chart_of_account_id": 1,
+            "planned_amount": 5500000,
+            "month": 1,
+            "year": 2025,
+            "notes": "Updated office supplies budget",
+            "action": "update"
+          },
+          {
+            "chart_of_account_id": 3,
+            "planned_amount": 8000000,
+            "month": 1,
+            "year": 2025,
+            "notes": "New travel expenses budget",
+            "action": "add"
+          }
+        ]
+      },
+      "response": {
+        "data": {
+          "id": 1,
+          "division_id": 1,
+          "division": {
+            "id": 1,
+            "name": "Finance"
+          },
+          "name": "Q1 2025 Budget - Updated",
+          "period_type": "QUARTERLY",
+          "period_start": "2025-01-01",
+          "period_end": "2025-03-31",
+          "created_by": 1,
+          "user": {
+            "id": 1,
+            "name": "John Doe",
+            "username": "john.doe",
+            "photo_profile": "",
+            "avatar_url": "uploads/users/avatar1.jpg"
+          },
+          "status": "DRAFT",
+          "notes": "Updated quarterly budget for Q1 2025",
+          "budget_items": [
+            {
+              "id": 1,
+              "budget_id": 1,
+              "chart_of_account_id": 1,
+              "chart_of_account": {
+                "id": 1,
+                "code": "ACC-001",
+                "name": "Office Supplies",
+                "type": "EXPENSE"
+              },
+              "planned_amount": 5500000,
+              "actual_amount": 3200000,
+              "variance": 2300000,
+              "percentage": 58.18,
+              "month": 1,
+              "year": 2025,
+              "notes": "Updated office supplies budget",
+              "created_at": "2025-01-15T10:30:00+07:00",
+              "updated_at": "2025-01-15T11:15:00+07:00"
+            },
+            {
+              "id": 5,
+              "budget_id": 1,
+              "chart_of_account_id": 3,
+              "chart_of_account": {
+                "id": 3,
+                "code": "ACC-003",
+                "name": "Travel Expenses",
+                "type": "EXPENSE"
+              },
+              "planned_amount": 8000000,
+              "actual_amount": 0,
+              "variance": 8000000,
+              "percentage": 0,
+              "month": 1,
+              "year": 2025,
+              "notes": "New travel expenses budget",
+              "created_at": "2025-01-15T11:15:00+07:00",
+              "updated_at": "2025-01-15T11:15:00+07:00"
+            }
+          ],
+          "created_at": "2025-01-15T10:30:00+07:00",
+          "updated_at": "2025-01-15T11:15:00+07:00"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/finance/budgets/2",
+      "response": {
+        "message": "deleted"
+      }
+    },
+    {
+      "title": "Approve Budget",
+      "endpoint": "POST {{base_url}}/finance/budgets/1/approve",
+      "body": {
+        "notes": "Budget approved by finance manager"
+      },
+      "response": {
+        "message": "budget approved"
+      }
+    },
+    {
+      "title": "Reject Budget",
+      "endpoint": "POST {{base_url}}/finance/budgets/1/reject",
+      "body": {
+        "notes": "Budget rejected due to insufficient justification"
+      },
+      "response": {
+        "message": "budget rejected"
+      }
+    },
+    {
+      "title": "Close Budget",
+      "endpoint": "POST {{base_url}}/finance/budgets/1/close",
+      "body": {
+        "notes": "Budget closed after period completion"
+      },
+      "response": {
+        "message": "budget closed"
+      }
+    },
+    {
+      "title": "Export Budget",
+      "endpoint": "GET {{base_url}}/finance/budgets/export?start_date=2025-01-01&end_date=2025-12-31&status=APPROVED&division_id=1",
+      "response": {
+        "message": "Budget data exported successfully",
+        "download_url": "/downloads/budget_export_20250115_110000.xlsx"
+      }
+    }
+  ]
+}

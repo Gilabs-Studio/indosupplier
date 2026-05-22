@@ -1,0 +1,511 @@
+{
+  "title": "Finance/Asset List",
+  "description": "A comprehensive guide to the Asset List API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/finance/assets",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "asset_category_id": 1,
+            "asset_category_name": "Computer Equipment",
+            "asset_location_id": 1,
+            "asset_location_name": "Head Office - Jakarta",
+            "city_name": "Semarang",
+            "province_name": "Central Java",
+            "code": "COMP-001",
+            "name": "Dell OptiPlex 7090 Desktop",
+            "acquisition_date": "2023-01-15T00:00:00Z",
+            "acquisition_cost": 15000000,
+            "accumulated_depreciation": 3000000,
+            "current_value": 12000000,
+            "status": "ACTIVE",
+            "description": "High-performance desktop for development team",
+            "depreciations_count": 12,
+            "transactions_count": 4,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 2,
+            "asset_category_id": 1,
+            "asset_category_name": "Computer Equipment",
+            "asset_location_id": 2,
+            "asset_location_name": "Branch Office - Surabaya",
+            "city_name": "Surabaya",
+            "province_name": "Central Java",
+            "code": "COMP-002",
+            "name": "HP EliteBook 850 Laptop",
+            "acquisition_date": "2023-03-20T00:00:00Z",
+            "acquisition_cost": 18000000,
+            "accumulated_depreciation": 3600000,
+            "current_value": 14400000,
+            "status": "ACTIVE",
+            "description": "Business laptop for sales team",
+            "depreciations_count": 12,
+            "transactions_count": 4,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 3,
+            "asset_category_id": 2,
+            "asset_category_name": "Office Furniture",
+            "asset_location_id": 1,
+            "asset_location_name": "Head Office - Jakarta",
+            "city_name": "Semarang",
+            "province_name": "Central Java",
+            "code": "FURN-001",
+            "name": "Executive Office Desk",
+            "acquisition_date": "2022-06-10T00:00:00Z",
+            "acquisition_cost": 5000000,
+            "accumulated_depreciation": 1000000,
+            "current_value": 4000000,
+            "status": "ACTIVE",
+            "description": "Mahogany executive desk for CEO office",
+            "depreciations_count": 12,
+            "transactions_count": 5,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 4,
+            "asset_category_id": 3,
+            "asset_category_name": "Vehicles",
+            "asset_location_id": 1,
+            "asset_location_name": "Head Office - Jakarta",
+            "city_name": "Semarang",
+            "province_name": "Central Java",
+            "code": "VEH-001",
+            "name": "Toyota Avanza 2022",
+            "acquisition_date": "2022-08-05T00:00:00Z",
+            "acquisition_cost": 250000000,
+            "accumulated_depreciation": 62500000,
+            "current_value": 187500000,
+            "status": "ACTIVE",
+            "description": "Company vehicle for business operations",
+            "depreciations_count": 12,
+            "transactions_count": 4,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 5,
+            "asset_category_id": 4,
+            "asset_category_name": "Software Licenses",
+            "asset_location_id": 4,
+            "asset_location_name": "IT Department - Jakarta",
+            "city_name": "Semarang",
+            "province_name": "Central Java",
+            "code": "SOFT-001",
+            "name": "Microsoft Office 365 Business",
+            "acquisition_date": "2023-01-01T00:00:00Z",
+            "acquisition_cost": 12000000,
+            "accumulated_depreciation": 4000000,
+            "current_value": 8000000,
+            "status": "ACTIVE",
+            "description": "Annual subscription for 50 users",
+            "depreciations_count": 12,
+            "transactions_count": 4,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 6,
+            "asset_category_id": 6,
+            "asset_category_name": "Machinery",
+            "asset_location_id": 7,
+            "asset_location_name": "Factory - Medan",
+            "city_name": "Semarang",
+            "province_name": "Central Java",
+            "code": "MACH-001",
+            "name": "Industrial Printer",
+            "acquisition_date": "2021-12-15T00:00:00Z",
+            "acquisition_cost": 50000000,
+            "accumulated_depreciation": 15000000,
+            "current_value": 35000000,
+            "status": "ACTIVE",
+            "description": "High-speed industrial printing machine",
+            "depreciations_count": 12,
+            "transactions_count": 5,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 7,
+            "asset_category_id": 7,
+            "asset_category_name": "Buildings",
+            "asset_location_id": 1,
+            "asset_location_name": "Head Office - Jakarta",
+            "city_name": "Semarang",
+            "province_name": "Central Java",
+            "code": "BUILD-001",
+            "name": "Office Building Floor 12",
+            "acquisition_date": "2020-01-01T00:00:00Z",
+            "acquisition_cost": 2000000000,
+            "accumulated_depreciation": 300000000,
+            "current_value": 1700000000,
+            "status": "ACTIVE",
+            "description": "Office space for finance department",
+            "depreciations_count": 12,
+            "transactions_count": 4,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 8,
+            "asset_category_id": 8,
+            "asset_category_name": "Patents",
+            "asset_location_id": 4,
+            "asset_location_name": "IT Department - Jakarta",
+            "city_name": "Semarang",
+            "province_name": "Central Java",
+            "code": "PAT-001",
+            "name": "Software Algorithm Patent",
+            "acquisition_date": "2022-05-20T00:00:00Z",
+            "acquisition_cost": 100000000,
+            "accumulated_depreciation": 10000000,
+            "current_value": 90000000,
+            "status": "ACTIVE",
+            "description": "Proprietary algorithm for data processing",
+            "depreciations_count": 12,
+            "transactions_count": 4,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 8
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "asset_category_id", "asset_location_id"],
+            "string_columns": ["code", "name", "status", "description"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "name",
+              "acquisition_date",
+              "acquisition_cost",
+              "accumulated_depreciation",
+              "current_value",
+              "status",
+              "created_at",
+              "updated_at",
+              "asset_category_id",
+              "asset_location_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "GET {{base_url}}/finance/assets/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "asset_category_id": 1,
+          "asset_category_name": "Computer Equipment",
+          "asset_location_id": 1,
+          "asset_location_name": "Head Office - Jakarta",
+          "city_name": "Semarang",
+          "province_name": "Central Java",
+          "code": "COMP-001",
+          "name": "Dell OptiPlex 7090 Desktop",
+          "acquisition_date": "2023-01-15T00:00:00Z",
+          "acquisition_cost": 15000000,
+          "accumulated_depreciation": 3000000,
+          "current_value": 12000000,
+          "status": "ACTIVE",
+          "description": "High-performance desktop for development team",
+          "depreciations_count": 12,
+          "transactions_count": 4,
+          "created_at": "2025-10-29T18:25:20+07:00",
+          "updated_at": "2025-10-29T18:25:20+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET STATS",
+      "endpoint": "GET {{base_url}}/finance/assets/stats",
+      "response": {
+        "data": {
+          "by_category": {
+            "top_categories": [
+              {
+                "category_id": 7,
+                "category_name": "Buildings",
+                "count": 1
+              },
+              {
+                "category_id": 8,
+                "category_name": "Patents",
+                "count": 1
+              },
+              {
+                "category_id": 1,
+                "category_name": "Computer Equipment",
+                "count": 2
+              },
+              {
+                "category_id": 2,
+                "category_name": "Office Furniture",
+                "count": 1
+              },
+              {
+                "category_id": 3,
+                "category_name": "Vehicles",
+                "count": 1
+              },
+              {
+                "category_id": 4,
+                "category_name": "Software Licenses",
+                "count": 1
+              },
+              {
+                "category_id": 6,
+                "category_name": "Machinery",
+                "count": 1
+              }
+            ],
+            "total_categories": 7
+          },
+          "by_location": {
+            "top_locations": [
+              {
+                "count": 4,
+                "location_id": 1,
+                "location_name": "Head Office - Jakarta"
+              },
+              {
+                "count": 1,
+                "location_id": 2,
+                "location_name": "Branch Office - Surabaya"
+              },
+              {
+                "count": 2,
+                "location_id": 4,
+                "location_name": "IT Department - Jakarta"
+              },
+              {
+                "count": 1,
+                "location_id": 7,
+                "location_name": "Factory - Medan"
+              }
+            ],
+            "total_locations": 4
+          },
+          "by_status": {
+            "active": 8,
+            "disposed": 0,
+            "inactive": 0,
+            "sold": 0
+          },
+          "financial": {
+            "total_acquisition_cost": 2450000000,
+            "total_current_value": 2050900000,
+            "total_depreciation": 399100000
+          },
+          "total": 8
+        },
+        "message": "Asset statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "GET {{base_url}}/finance/assets/add",
+      "response": {
+        "data": {
+          "asset_categories": [
+            {
+              "id": 1,
+              "name": "Computer Equipment",
+              "type": "FIXED"
+            },
+            {
+              "id": 2,
+              "name": "Office Furniture",
+              "type": "FIXED"
+            },
+            {
+              "id": 3,
+              "name": "Vehicles",
+              "type": "FIXED"
+            },
+            {
+              "id": 4,
+              "name": "Software Licenses",
+              "type": "INTANGIBLE"
+            },
+            {
+              "id": 5,
+              "name": "Office Supplies",
+              "type": "CURRENT"
+            },
+            {
+              "id": 6,
+              "name": "Machinery",
+              "type": "FIXED"
+            },
+            {
+              "id": 7,
+              "name": "Buildings",
+              "type": "FIXED"
+            },
+            {
+              "id": 8,
+              "name": "Patents",
+              "type": "INTANGIBLE"
+            }
+          ],
+          "asset_locations": [
+            {
+              "id": 1,
+              "name": "Head Office - Jakarta",
+              "city": "Semarang"
+            },
+            {
+              "id": 2,
+              "name": "Branch Office - Surabaya",
+              "city": "Surabaya"
+            },
+            {
+              "id": 3,
+              "name": "Warehouse - Bandung",
+              "city": "Jakarta Pusat"
+            },
+            {
+              "id": 4,
+              "name": "IT Department - Jakarta",
+              "city": "Semarang"
+            },
+            {
+              "id": 5,
+              "name": "Finance Department - Jakarta",
+              "city": "Semarang"
+            },
+            {
+              "id": 6,
+              "name": "Sales Office - Surabaya",
+              "city": "Semarang"
+            },
+            {
+              "id": 7,
+              "name": "Factory - Medan",
+              "city": "Semarang"
+            },
+            {
+              "id": 8,
+              "name": "Distribution Center - Makassar",
+              "city": "Semarang"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/finance/assets",
+      "body": {
+        "asset_category_id": 1,
+        "asset_location_id": 3,
+        "name": "Mesin Produksi Tekstil",
+        "acquisition_date": "2022-01-10T00:00:00Z",
+        "acquisition_cost": 500000000,
+        "accumulated_depreciation": 150000000,
+        "current_value": 350000000,
+        "status": "ACTIVE | INACTIVE ",
+        "description": "Digunakan di pabrik utama Bandung untuk produksi kain."
+      },
+      "response": {
+        "data": {
+          "id": 9,
+          "asset_category_id": 1,
+          "asset_category_name": "Computer Equipment",
+          "asset_location_id": 3,
+          "asset_location_name": "Warehouse - Bandung",
+          "city_name": "Jakarta Pusat",
+          "province_name": "Central Java",
+          "code": "AST-20251029-0001",
+          "name": "Mesin Produksi Tekstil",
+          "acquisition_date": "2022-01-10T00:00:00Z",
+          "acquisition_cost": 500000000,
+          "accumulated_depreciation": 150000000,
+          "current_value": 350000000,
+          "status": "ACTIVE",
+          "description": "Digunakan di pabrik utama Bandung untuk produksi kain.",
+          "depreciations_count": 0,
+          "transactions_count": 1,
+          "created_at": "2025-10-29T18:53:02+07:00",
+          "updated_at": "2025-10-29T18:53:02+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/finance/assets/3",
+      "body": {
+        "asset_category_id": 1,
+        "asset_location_id": 3,
+        "name": "Mesin Produksi Tekstil",
+        "acquisition_date": "2022-01-10T00:00:00Z",
+        "acquisition_cost": 500000000,
+        "accumulated_depreciation": 150000000,
+        "current_value": 350000000,
+        "status": "ACTIVE | INACTIVE ",
+        "description": "Digunakan di pabrik utama Bandung untuk produksi kain."
+      },
+      "response": {
+        "data": {
+          "id": 9,
+          "asset_category_id": 1,
+          "asset_category_name": "Computer Equipment",
+          "asset_location_id": 3,
+          "asset_location_name": "Warehouse - Bandung",
+          "city_name": "Jakarta Pusat",
+          "province_name": "Central Java",
+          "code": "AST-20251029-0001",
+          "name": "Mesin Produksi Tekstil",
+          "acquisition_date": "2022-01-10T00:00:00Z",
+          "acquisition_cost": 500000000,
+          "accumulated_depreciation": 150000000,
+          "current_value": 350000000,
+          "status": "ACTIVE",
+          "description": "Digunakan di pabrik utama Bandung untuk produksi kain.",
+          "depreciations_count": 0,
+          "transactions_count": 1,
+          "created_at": "2025-10-29T18:53:02+07:00",
+          "updated_at": "2025-10-29T18:53:02+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/finance/assets/3",
+      "response": {
+        "message": "Asset deleted successfully"
+      }
+    }
+  ]
+}

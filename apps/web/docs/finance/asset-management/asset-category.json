@@ -1,0 +1,250 @@
+{
+  "title": "Finance/Asset Category",
+  "description": "A comprehensive guide to the Asset Category API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/finance/asset-categories",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "name": "Computer Equipment",
+            "type": "FIXED",
+            "depreciation_method": "STRAIGHT_LINE",
+            "depreciation_rate": 0.2,
+            "useful_life": 5,
+            "is_depreciable": true,
+            "assets_count": 2,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 2,
+            "name": "Office Furniture",
+            "type": "FIXED",
+            "depreciation_method": "STRAIGHT_LINE",
+            "depreciation_rate": 0.1,
+            "useful_life": 10,
+            "is_depreciable": true,
+            "assets_count": 1,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 3,
+            "name": "Vehicles",
+            "type": "FIXED",
+            "depreciation_method": "DECLINING",
+            "depreciation_rate": 0.25,
+            "useful_life": 4,
+            "is_depreciable": true,
+            "assets_count": 1,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 4,
+            "name": "Software Licenses",
+            "type": "INTANGIBLE",
+            "depreciation_method": "STRAIGHT_LINE",
+            "depreciation_rate": 0.33,
+            "useful_life": 3,
+            "is_depreciable": true,
+            "assets_count": 1,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 5,
+            "name": "Office Supplies",
+            "type": "CURRENT",
+            "depreciation_method": "NONE",
+            "depreciation_rate": 0,
+            "useful_life": 1,
+            "is_depreciable": false,
+            "assets_count": 0,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 6,
+            "name": "Machinery",
+            "type": "FIXED",
+            "depreciation_method": "STRAIGHT_LINE",
+            "depreciation_rate": 0.15,
+            "useful_life": 7,
+            "is_depreciable": true,
+            "assets_count": 1,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 7,
+            "name": "Buildings",
+            "type": "FIXED",
+            "depreciation_method": "STRAIGHT_LINE",
+            "depreciation_rate": 0.05,
+            "useful_life": 20,
+            "is_depreciable": true,
+            "assets_count": 1,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 8,
+            "name": "Patents",
+            "type": "INTANGIBLE",
+            "depreciation_method": "STRAIGHT_LINE",
+            "depreciation_rate": 0.1,
+            "useful_life": 10,
+            "is_depreciable": true,
+            "assets_count": 1,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 8
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "useful_life"],
+            "string_columns": ["name", "type", "depreciation_method"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "name",
+              "type",
+              "depreciation_method",
+              "depreciation_rate",
+              "useful_life",
+              "is_depreciable",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "GET {{base_url}}/finance/asset-categories/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "name": "Computer Equipment",
+          "type": "FIXED",
+          "depreciation_method": "STRAIGHT_LINE",
+          "depreciation_rate": 0.2,
+          "useful_life": 5,
+          "is_depreciable": true,
+          "assets_count": 2,
+          "created_at": "2025-10-29T18:25:20+07:00",
+          "updated_at": "2025-10-29T18:25:20+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET STATS",
+      "endpoint": "GET {{base_url}}/finance/asset-categories/stats",
+      "response": {
+        "data": {
+          "by_depreciation": {
+            "depreciable": 7,
+            "non_depreciable": 1
+          },
+          "by_method": {
+            "declining": 1,
+            "none": 1,
+            "straight_line": 6
+          },
+          "by_type": {
+            "current": 1,
+            "fixed": 5,
+            "intangible": 2,
+            "other": 0
+          },
+          "total": 8
+        },
+        "message": "Asset category statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/finance/asset-categories",
+      "body": {
+        "name": "Kendaraan Operasional",
+        "type": "FIXED | CURRENT | INTANGIBLE | OTHER",
+        "depreciation_method": "STRAIGHT_LINE | DECLINING | NONE",
+        "depreciation_rate": 10.0,
+        "useful_life": 10,
+        "is_depreciable": true
+      },
+      "response": {
+        "data": {
+          "id": 9,
+          "name": "Kendaraan Operasional",
+          "type": "FIXED",
+          "depreciation_method": "STRAIGHT_LINE",
+          "depreciation_rate": 10,
+          "useful_life": 10,
+          "is_depreciable": true,
+          "assets_count": 0,
+          "created_at": "2025-10-29T18:54:48+07:00",
+          "updated_at": "2025-10-29T18:54:48+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/finance/asset-categories/6",
+      "body": {
+        "name": "Kendaraan Operasional",
+        "type": "FIXED | CURRENT | INTANGIBLE | OTHER",
+        "depreciation_method": "STRAIGHT_LINE | DECLINING | NONE",
+        "depreciation_rate": 10.0,
+        "useful_life": 10,
+        "is_depreciable": true
+      },
+      "response": {
+        "data": {
+          "id": 9,
+          "name": "Kendaraan Operasional",
+          "type": "FIXED",
+          "depreciation_method": "STRAIGHT_LINE",
+          "depreciation_rate": 10,
+          "useful_life": 10,
+          "is_depreciable": true,
+          "assets_count": 0,
+          "created_at": "2025-10-29T18:54:48+07:00",
+          "updated_at": "2025-10-29T18:54:48+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/finance/asset-categories/6",
+      "response": {
+        "message": "Asset category deleted successfully"
+      }
+    }
+  ]
+}

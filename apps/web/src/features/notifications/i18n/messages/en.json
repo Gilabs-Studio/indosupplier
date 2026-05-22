@@ -1,0 +1,22 @@
+{
+  "notifications": {
+    "badgeAriaLabel": "View notifications",
+    "drawerTitle": "Notifications",
+    "drawerDescription": "View and manage your notifications",
+    "filterAll": "All",
+    "filterUnread": "Unread",
+    "filterRead": "Read",
+    "markAllAsRead": "Mark all as read",
+    "markAsRead": "Mark as read",
+    "delete": "Delete",
+    "empty": "No notifications found",
+    "errorLoading": "Failed to load notifications",
+    "retry": "Retry",
+    "showing": "Showing {from} to {to} of {total} notifications",
+    "previous": "Previous",
+    "next": "Next",
+    "copyToken": "Copy token",
+    "tokenCopied": "Token copied"
+  }
+}
+

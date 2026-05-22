@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Receipt - {{.PaymentID}}</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 18mm 14mm 18mm;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 9.5pt;
+      color: #333;
+      line-height: 1.45;
+      background: #fff;
+    }
+
+    .page {
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+
+    .doc-label {
+      font-size: 22pt;
+      font-weight: 400;
+      color: #7a7a7a;
+      font-style: italic;
+      line-height: 1.1;
+    }
+
+    .company-block { text-align: right; }
+
+    .company-block .company-name {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #333;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .header-line {
+      height: 4px;
+      background: #4a5e8a;
+      margin-bottom: 16px;
+    }
+
+    /* ── Meta Grid ── */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 40px;
+      margin-bottom: 20px;
+      font-size: 9pt;
+    }
+
+    .meta-block { margin-bottom: 10px; }
+
+    .meta-block .meta-title {
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #333;
+      margin-bottom: 4px;
+      border-bottom: 1px solid #e0e7f0;
+      padding-bottom: 3px;
+    }
+
+    .meta-row { display: flex; line-height: 1.7; }
+    .meta-row .lbl { color: #666; min-width: 130px; }
+    .meta-row .val { color: #000; font-weight: 500; }
+
+    .company-addr { font-size: 8.5pt; color: #555; line-height: 1.5; }
+
+    /* ── Amount Highlight ── */
+    .amount-highlight {
+      background: #4a5e8a;
+      color: #fff;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-radius: 3px;
+    }
+
+    .amount-highlight .ah-label {
+      font-size: 10pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .amount-highlight .ah-value {
+      font-size: 14pt;
+      font-weight: 700;
+    }
+
+    /* ── Detail Panels ── */
+    .panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .panel {
+      border: 1px solid #dce5f2;
+      border-radius: 3px;
+      padding: 12px 14px;
+    }
+
+    .panel h4 {
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #4a5e8a;
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #dce5f2;
+    }
+
+    .panel .p-row { display: flex; line-height: 1.7; font-size: 8.5pt; }
+    .panel .p-row .lbl { color: #666; min-width: 110px; }
+    .panel .p-row .val { color: #000; font-weight: 500; }
+
+    /* ── Notes ── */
+    .notes-section {
+      margin-bottom: 18px;
+      font-size: 8.5pt;
+      color: #555;
+    }
+
+    .notes-section h4 {
+      font-size: 8.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    /* ── Contact & Footer ── */
+    .contact-footer { margin-top: 8px; font-size: 8pt; color: #555; }
+
+    .thank-you {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 10pt;
+      font-weight: 700;
+      color: #4a5e8a;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .doc-footer {
+      margin-top: 24px;
+      padding-top: 10px;
+      border-top: 1px solid #ccc;
+      text-align: center;
+      font-size: 7.5pt;
+      color: #999;
+    }
+
+    /* ── Print Rules ── */
+    @media print {
+      body { background: #fff; }
+      .page { padding: 0; max-width: none; }
+      .no-print { display: none !important; }
+    }
+
+    @media screen {
+      .print-toolbar {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        background: #4a5e8a;
+        color: #fff;
+        padding: 10px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+      }
+
+      .print-toolbar button {
+        background: #fff;
+        color: #4a5e8a;
+        border: none;
+        padding: 8px 20px;
+        font-weight: 600;
+        font-size: 10pt;
+        cursor: pointer;
+      }
+
+      .print-toolbar button:hover { background: #e8ecf2; }
+      .page { margin-top: 56px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="print-toolbar no-print">
+    <span style="font-weight:600;">Payment Receipt &mdash; {{.InvoiceCode}}</span>
+    <button onclick="window.print()">Print Document</button>
+  </div>
+
+  <div class="page">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="doc-label">Payment Receipt</div>
+      <div class="company-block">
+        <div class="company-name">{{.CompanyName}}</div>
+      </div>
+    </div>
+    <div class="header-line"></div>
+
+    <!-- Company details + Payment meta -->
+    <div class="meta-grid">
+      <div>
+        <div class="meta-block">
+          <div class="company-addr">
+            {{if .CompanyAddress}}{{.CompanyAddress}}<br>{{end}}
+            {{if .CompanyPhone}}Tel: {{.CompanyPhone}}{{end}}
+            {{if .CompanyEmail}}<br>{{.CompanyEmail}}{{end}}
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="meta-block">
+          <div class="meta-row"><span class="lbl">PAYMENT DATE:</span> <span class="val">{{.PaymentDate}}</span></div>
+          <div class="meta-row"><span class="lbl">STATUS:</span> <span class="val">{{.Status}}</span></div>
+          {{if .ReferenceNumber}}<div class="meta-row"><span class="lbl">REFERENCE NO:</span> <span class="val">{{.ReferenceNumber}}</span></div>{{end}}
+        </div>
+      </div>
+    </div>
+
+    <!-- Amount Highlight -->
+    <div class="amount-highlight">
+      <span class="ah-label">Payment Amount</span>
+      <span class="ah-value">{{formatMoney .Amount}}</span>
+    </div>
+
+    <!-- Detail Panels -->
+    <div class="panels">
+
+      <!-- Payment Details -->
+      <div class="panel">
+        <h4>Payment Details</h4>
+        <div class="p-row"><span class="lbl">Method:</span> <span class="val">{{.Method}}</span></div>
+        {{if .BankAccountName}}
+        <div class="p-row"><span class="lbl">Bank:</span> <span class="val">{{.BankAccountName}}</span></div>
+        {{end}}
+        {{if .BankAccountNumber}}
+        <div class="p-row"><span class="lbl">Account No:</span> <span class="val">{{.BankAccountNumber}}</span></div>
+        {{end}}
+        {{if .AccountHolder}}
+        <div class="p-row"><span class="lbl">Account Holder:</span> <span class="val">{{.AccountHolder}}</span></div>
+        {{end}}
+        {{if .Currency}}
+        <div class="p-row"><span class="lbl">Currency:</span> <span class="val">{{.Currency}}</span></div>
+        {{end}}
+      </div>
+
+      <!-- Invoice Reference -->
+      <div class="panel">
+        <h4>Invoice Reference</h4>
+        {{if .InvoiceCode}}
+        <div class="p-row"><span class="lbl">Invoice Code:</span> <span class="val">{{.InvoiceCode}}</span></div>
+        {{end}}
+        {{if .InvoiceNumber}}
+        <div class="p-row"><span class="lbl">Invoice No:</span> <span class="val">{{.InvoiceNumber}}</span></div>
+        {{end}}
+        {{if .InvoiceDate}}
+        <div class="p-row"><span class="lbl">Invoice Date:</span> <span class="val">{{.InvoiceDate}}</span></div>
+        {{end}}
+        {{if .InvoiceDueDate}}
+        <div class="p-row"><span class="lbl">Due Date:</span> <span class="val">{{.InvoiceDueDate}}</span></div>
+        {{end}}
+        {{if gt0 .InvoiceAmount}}
+        <div class="p-row"><span class="lbl">Invoice Amount:</span> <span class="val">{{formatMoney .InvoiceAmount}}</span></div>
+        {{end}}
+      </div>
+
+    </div>
+
+    <!-- Notes -->
+    {{if .Notes}}
+    <div class="notes-section">
+      <h4>Notes</h4>
+      <p>{{.Notes}}</p>
+    </div>
+    {{end}}
+
+    <!-- Contact & Footer -->
+    <div class="contact-footer">
+      If you have any questions about this payment, please contact<br>
+      {{if .CompanyPhone}}{{.CompanyPhone}}{{end}}
+      {{if .CompanyEmail}}, {{.CompanyEmail}}{{end}}
+    </div>
+
+    <div class="thank-you">Thank you for your payment!</div>
+
+    <div class="doc-footer">
+      This document was generated on {{.PrintDate}} &mdash; {{.CompanyName}}
+    </div>
+
+  </div>
+
+  <script>
+    window.onload = function() { window.print(); };
+  </script>
+</body>
+</html>

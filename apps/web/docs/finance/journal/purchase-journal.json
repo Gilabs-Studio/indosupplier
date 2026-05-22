@@ -1,0 +1,184 @@
+{
+  "module": "Purchase Journal",
+  "endpoints": [
+    {
+      "name": "GET DATA",
+      "method": "GET",
+      "endpoint": "/api/v1/finance/purchase-journals",
+      "description": "Get all purchase journal entries with pagination, search, sort, and filter capabilities",
+      "query_parameters": {
+        "page": "Page number (default: 1)",
+        "limit": "Items per page (default: 10)",
+        "search": "Search term",
+        "searchBy": "Field to search in (description, id, reference_id)",
+        "sort_by": "Field to sort by (id, entry_date, description, reference_id, created_at, updated_at)",
+        "sort_order": "Sort order (asc, desc)",
+        "start_date": "Filter by start date (format: YYYY-MM-DD)",
+        "end_date": "Filter by end date (format: YYYY-MM-DD)"
+      },
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "entry_date": "2025-10-14T12:15:43+07:00",
+            "description": "Supplier Payment",
+            "reference_id": 2,
+            "total_debit": 110000,
+            "total_credit": 110000,
+            "created_at": "2025-10-14T12:15:43+07:00",
+            "updated_at": "2025-10-14T12:15:43+07:00"
+          }
+        ],
+        "meta": {
+          "pagination": {
+            "total": 1,
+            "page": 1,
+            "limit": 10
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "filter": {
+            "start_date": "",
+            "end_date": ""
+          },
+          "searchable_columns": {
+            "string_columns": ["description"],
+            "numeric_columns": ["id", "reference_id"]
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "entry_date",
+              "description",
+              "reference_id",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "GET DATA BY ID",
+      "method": "GET",
+      "endpoint": "/api/v1/finance/purchase-journals/:id",
+      "description": "Get a single purchase journal entry by ID with all journal lines",
+      "path_parameters": {
+        "id": "Purchase journal entry ID"
+      },
+      "response": {
+        "data": {
+          "id": 1,
+          "entry_date": "2025-10-14T12:15:43+07:00",
+          "description": "Supplier Payment",
+          "reference_type": "PO",
+          "reference_id": 2,
+          "lines": [
+            {
+              "id": 1,
+              "chart_of_account_id": 49,
+              "account_code": "200",
+              "account_name": "Trade Payables",
+              "debit": 110000,
+              "credit": 0
+            },
+            {
+              "id": 2,
+              "chart_of_account_id": 20,
+              "account_code": "110",
+              "account_name": "Other Third-Party Receivables",
+              "debit": 0,
+              "credit": 110000
+            }
+          ],
+          "created_at": "2025-10-14T12:15:43+07:00",
+          "updated_at": "2025-10-14T12:15:43+07:00"
+        }
+      }
+    },
+    {
+      "name": "GET STATS",
+      "method": "GET",
+      "endpoint": "/api/v1/finance/purchase-journals/stats",
+      "description": "Get statistics for purchase journal entries including total entries, total debit/credit, and monthly statistics",
+      "response": {
+        "data": {
+          "total_entries": 1,
+          "total_debit": 110000,
+          "total_credit": 110000,
+          "monthly_stats": [
+            {
+              "month": "2025-10",
+              "count": 2,
+              "total_debit": 110000,
+              "total_credit": 110000
+            }
+          ]
+        },
+        "message": "Purchase journal statistics retrieved successfully"
+      }
+    },
+    {
+      "name": "EXPORT",
+      "method": "GET",
+      "endpoint": "/api/v1/finance/purchase-journals/export",
+      "description": "Export all purchase journal entries to Excel format",
+      "response": {
+        "type": "file",
+        "format": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "filename": "purchase_journals_export_YYYYMMDD_HHMMSS.xlsx",
+        "columns": [
+          "ID",
+          "Entry Date",
+          "Description",
+          "Reference ID",
+          "Total Debit",
+          "Total Credit",
+          "Created At",
+          "Updated At"
+        ],
+        "description": "Excel file containing all purchase journal entries with calculated total debit and credit amounts"
+      }
+    }
+  ],
+  "models": {
+    "JournalEntry": {
+      "id": "uint (primary key)",
+      "entry_date": "time.Time (not null)",
+      "description": "string (text)",
+      "reference_type": "ReferenceType (varchar 10, not null) - Values: SO, PO, STOCK_OP, ADJUSTMENT, NTP, PAYMENT, ASSET_TXN, ASSET_DEP",
+      "reference_id": "uint (nullable)",
+      "lines": "[]JournalLine (foreign key relationship)",
+      "created_at": "time.Time",
+      "updated_at": "time.Time",
+      "deleted_at": "gorm.DeletedAt"
+    },
+    "JournalLine": {
+      "id": "uint (primary key)",
+      "journal_entry_id": "uint (not null, foreign key)",
+      "chart_of_account_id": "uint (not null, foreign key)",
+      "debit": "float64 (default: 0)",
+      "credit": "float64 (default: 0)",
+      "journal_entry": "JournalEntry (relationship)",
+      "chart_of_account": "ChartOfAccount (relationship)",
+      "created_at": "time.Time",
+      "updated_at": "time.Time",
+      "deleted_at": "gorm.DeletedAt"
+    }
+  },
+  "notes": {
+    "reference_type_filter": "Purchase Journal entries are filtered by reference_type = 'PO' (Purchase Order)",
+    "date_filtering": "Entry date can be filtered using start_date and end_date query parameters. If both dates are the same, it filters for that specific day.",
+    "searching": "Search supports both string columns (description) using ILIKE for case-insensitive matching, and numeric columns (id, reference_id) using exact match",
+    "sorting": "Default sorting is by entry_date descending (newest first)",
+    "journal_lines": "Each journal entry contains multiple lines with debit and credit amounts. The total debit should equal total credit for balanced entries.",
+    "export": "Export endpoint generates an Excel file with all purchase journal entries. The filename includes a timestamp for uniqueness.",
+    "monthly_stats": "Monthly statistics group entries by month and calculate total count, debit, and credit amounts for each month"
+  }
+}

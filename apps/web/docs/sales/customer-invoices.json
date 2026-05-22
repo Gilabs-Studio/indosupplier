@@ -1,0 +1,1272 @@
+{
+  "title": "customer-invoices",
+  "description": "A comprehensive guide to the customer-invoices API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/sales/customer-invoices?page=1&limit=10",
+      "response": {
+        "data": [
+          {
+            "id": 2,
+            "sales_order": {
+              "id": 3,
+              "code": "SO-20250930-003"
+            },
+            "payment_terms": null,
+            "code": "CI-20250930-002",
+            "invoice_number": "INV-NORMAL-001",
+            "invoice_date": "2025-09-20",
+            "due_date": "2025-09-25",
+            "tax_rate": 10,
+            "tax_amount": 166078.5,
+            "delivery_cost": 75000,
+            "other_cost": 30000,
+            "sub_total": 1660785,
+            "amount": 1931863.5,
+            "status": "PAID",
+            "notes": "Final invoice for sales order",
+            "items": [
+              {
+                "id": 5,
+                "product": {
+                  "id": 1,
+                  "name": "Syringe 5ml",
+                  "code": "MED-001",
+                  "cost_price": 1000,
+                  "selling_price": 1500,
+                  "image_url": ""
+                },
+                "quantity": 5,
+                "price": 100000,
+                "discount": 5,
+                "subtotal": 499995
+              },
+              {
+                "id": 6,
+                "product": {
+                  "id": 2,
+                  "name": "Gloves (Box)",
+                  "code": "MED-002",
+                  "cost_price": 50000,
+                  "selling_price": 75000,
+                  "image_url": ""
+                },
+                "quantity": 3,
+                "price": 250000,
+                "discount": 10,
+                "subtotal": 749990
+              },
+              {
+                "id": 7,
+                "product": {
+                  "id": 3,
+                  "name": "Printer Paper A4",
+                  "code": "OFF-001",
+                  "cost_price": 30000,
+                  "selling_price": 45000,
+                  "image_url": ""
+                },
+                "quantity": 10,
+                "price": 50000,
+                "discount": 0,
+                "subtotal": 500000
+              },
+              {
+                "id": 8,
+                "product": {
+                  "id": 1,
+                  "name": "Syringe 5ml",
+                  "code": "MED-001",
+                  "cost_price": 1000,
+                  "selling_price": 1500,
+                  "image_url": ""
+                },
+                "quantity": 4,
+                "price": 95000,
+                "discount": 2.5,
+                "subtotal": 379997.5
+              }
+            ],
+            "created_at": "2025-09-30T06:43:04Z",
+            "updated_at": "2025-09-30T06:43:04Z"
+          },
+          {
+            "id": 1,
+            "sales_order": {
+              "id": 3,
+              "code": "SO-20250930-003"
+            },
+            "payment_terms": null,
+            "code": "CI-20250930-001",
+            "invoice_number": "INV-DP-001",
+            "invoice_date": "2025-09-15",
+            "due_date": "2025-09-20",
+            "tax_rate": 10,
+            "tax_amount": 71176.5,
+            "delivery_cost": 50000,
+            "other_cost": 25000,
+            "sub_total": 711765,
+            "amount": 857941.5,
+            "status": "PAID",
+            "notes": "Down payment invoice for sales order",
+            "items": [
+              {
+                "id": 1,
+                "product": {
+                  "id": 1,
+                  "name": "Syringe 5ml",
+                  "code": "MED-001",
+                  "cost_price": 1000,
+                  "selling_price": 1500,
+                  "image_url": ""
+                },
+                "quantity": 5,
+                "price": 100000,
+                "discount": 5,
+                "subtotal": 499995
+              },
+              {
+                "id": 2,
+                "product": {
+                  "id": 2,
+                  "name": "Gloves (Box)",
+                  "code": "MED-002",
+                  "cost_price": 50000,
+                  "selling_price": 75000,
+                  "image_url": ""
+                },
+                "quantity": 3,
+                "price": 250000,
+                "discount": 10,
+                "subtotal": 749990
+              },
+              {
+                "id": 3,
+                "product": {
+                  "id": 3,
+                  "name": "Printer Paper A4",
+                  "code": "OFF-001",
+                  "cost_price": 30000,
+                  "selling_price": 45000,
+                  "image_url": ""
+                },
+                "quantity": 10,
+                "price": 50000,
+                "discount": 0,
+                "subtotal": 500000
+              },
+              {
+                "id": 4,
+                "product": {
+                  "id": 1,
+                  "name": "Syringe 5ml",
+                  "code": "MED-001",
+                  "cost_price": 1000,
+                  "selling_price": 1500,
+                  "image_url": ""
+                },
+                "quantity": 4,
+                "price": 95000,
+                "discount": 2.5,
+                "subtotal": 379997.5
+              }
+            ],
+            "created_at": "2025-09-30T06:43:04Z",
+            "updated_at": "2025-09-30T06:43:04Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 2
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "sales_order_id", "amount"],
+            "string_columns": ["invoice_number"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "invoice_number",
+              "invoice_date",
+              "due_date",
+              "amount",
+              "status",
+              "created_at",
+              "updated_at",
+              "sales_order_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA with Date Range Filter",
+      "endpoint": "GET {{base_url}}/sales/customer-invoices?page=1&limit=10&start_date=2025-09-20&end_date=2025-09-20",
+      "response": {
+        "data": [
+          {
+            "id": 2,
+            "sales_order": {
+              "id": 3,
+              "code": "SO-20250930-003"
+            },
+            "payment_terms": null,
+            "code": "CI-20250930-002",
+            "invoice_number": "INV-NORMAL-001",
+            "invoice_date": "2025-09-20",
+            "due_date": "2025-09-25",
+            "tax_rate": 10,
+            "tax_amount": 166078.5,
+            "delivery_cost": 75000,
+            "other_cost": 30000,
+            "sub_total": 1660785,
+            "amount": 1931863.5,
+            "status": "PAID",
+            "notes": "Final invoice for sales order",
+            "items": [
+              {
+                "id": 5,
+                "product": {
+                  "id": 1,
+                  "name": "Syringe 5ml",
+                  "code": "MED-001",
+                  "cost_price": 1000,
+                  "selling_price": 1500,
+                  "image_url": ""
+                },
+                "quantity": 5,
+                "price": 100000,
+                "discount": 5,
+                "subtotal": 499995
+              },
+              {
+                "id": 6,
+                "product": {
+                  "id": 2,
+                  "name": "Gloves (Box)",
+                  "code": "MED-002",
+                  "cost_price": 50000,
+                  "selling_price": 75000,
+                  "image_url": ""
+                },
+                "quantity": 3,
+                "price": 250000,
+                "discount": 10,
+                "subtotal": 749990
+              },
+              {
+                "id": 7,
+                "product": {
+                  "id": 3,
+                  "name": "Printer Paper A4",
+                  "code": "OFF-001",
+                  "cost_price": 30000,
+                  "selling_price": 45000,
+                  "image_url": ""
+                },
+                "quantity": 10,
+                "price": 50000,
+                "discount": 0,
+                "subtotal": 500000
+              },
+              {
+                "id": 8,
+                "product": {
+                  "id": 1,
+                  "name": "Syringe 5ml",
+                  "code": "MED-001",
+                  "cost_price": 1000,
+                  "selling_price": 1500,
+                  "image_url": ""
+                },
+                "quantity": 4,
+                "price": 95000,
+                "discount": 2.5,
+                "subtotal": 379997.5
+              }
+            ],
+            "created_at": "2025-09-30T06:43:04Z",
+            "updated_at": "2025-09-30T06:43:04Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "2025-09-20",
+            "start_date": "2025-09-20"
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "sales_order_id", "amount"],
+            "string_columns": ["invoice_number"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "invoice_number",
+              "invoice_date",
+              "due_date",
+              "amount",
+              "status",
+              "created_at",
+              "updated_at",
+              "sales_order_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA with search query",
+      "endpoint": "GET {{base_url}}/sales/customer-invoices?page=1&limit=10&search=1&searchBy=id",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "sales_order": {
+              "id": 3,
+              "code": "SO-20250930-003"
+            },
+            "payment_terms": null,
+            "code": "CI-20250930-001",
+            "invoice_number": "INV-DP-001",
+            "invoice_date": "2025-09-15",
+            "due_date": "2025-09-20",
+            "tax_rate": 10,
+            "tax_amount": 71176.5,
+            "delivery_cost": 50000,
+            "other_cost": 25000,
+            "sub_total": 711765,
+            "amount": 857941.5,
+            "status": "PAID",
+            "notes": "Down payment invoice for sales order",
+            "items": [
+              {
+                "id": 1,
+                "product": {
+                  "id": 1,
+                  "name": "Syringe 5ml",
+                  "code": "MED-001",
+                  "cost_price": 1000,
+                  "selling_price": 1500,
+                  "image_url": ""
+                },
+                "quantity": 5,
+                "price": 100000,
+                "discount": 5,
+                "subtotal": 499995
+              },
+              {
+                "id": 2,
+                "product": {
+                  "id": 2,
+                  "name": "Gloves (Box)",
+                  "code": "MED-002",
+                  "cost_price": 50000,
+                  "selling_price": 75000,
+                  "image_url": ""
+                },
+                "quantity": 3,
+                "price": 250000,
+                "discount": 10,
+                "subtotal": 749990
+              },
+              {
+                "id": 3,
+                "product": {
+                  "id": 3,
+                  "name": "Printer Paper A4",
+                  "code": "OFF-001",
+                  "cost_price": 30000,
+                  "selling_price": 45000,
+                  "image_url": ""
+                },
+                "quantity": 10,
+                "price": 50000,
+                "discount": 0,
+                "subtotal": 500000
+              },
+              {
+                "id": 4,
+                "product": {
+                  "id": 1,
+                  "name": "Syringe 5ml",
+                  "code": "MED-001",
+                  "cost_price": 1000,
+                  "selling_price": 1500,
+                  "image_url": ""
+                },
+                "quantity": 4,
+                "price": 95000,
+                "discount": 2.5,
+                "subtotal": 379997.5
+              }
+            ],
+            "created_at": "2025-09-30T06:43:04Z",
+            "updated_at": "2025-09-30T06:43:04Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "1",
+            "searchBy": "id"
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "sales_order_id", "amount"],
+            "string_columns": ["invoice_number"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "invoice_number",
+              "invoice_date",
+              "due_date",
+              "amount",
+              "status",
+              "created_at",
+              "updated_at",
+              "sales_order_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA with sort",
+      "endpoint": "GET {{base_url}}/sales/customer-invoices?page=1&sort_by=id&sort_order=asc&limit=10",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "sales_order": {
+              "id": 3,
+              "code": "SO-20250930-003"
+            },
+            "payment_terms": null,
+            "code": "CI-20250930-001",
+            "invoice_number": "INV-DP-001",
+            "invoice_date": "2025-09-15",
+            "due_date": "2025-09-20",
+            "tax_rate": 10,
+            "tax_amount": 71176.5,
+            "delivery_cost": 50000,
+            "other_cost": 25000,
+            "sub_total": 711765,
+            "amount": 857941.5,
+            "status": "PAID",
+            "notes": "Down payment invoice for sales order",
+            "items": [
+              {
+                "id": 1,
+                "product": {
+                  "id": 1,
+                  "name": "Syringe 5ml",
+                  "code": "MED-001",
+                  "cost_price": 1000,
+                  "selling_price": 1500,
+                  "image_url": ""
+                },
+                "quantity": 5,
+                "price": 100000,
+                "discount": 5,
+                "subtotal": 499995
+              },
+              {
+                "id": 2,
+                "product": {
+                  "id": 2,
+                  "name": "Gloves (Box)",
+                  "code": "MED-002",
+                  "cost_price": 50000,
+                  "selling_price": 75000,
+                  "image_url": ""
+                },
+                "quantity": 3,
+                "price": 250000,
+                "discount": 10,
+                "subtotal": 749990
+              },
+              {
+                "id": 3,
+                "product": {
+                  "id": 3,
+                  "name": "Printer Paper A4",
+                  "code": "OFF-001",
+                  "cost_price": 30000,
+                  "selling_price": 45000,
+                  "image_url": ""
+                },
+                "quantity": 10,
+                "price": 50000,
+                "discount": 0,
+                "subtotal": 500000
+              },
+              {
+                "id": 4,
+                "product": {
+                  "id": 1,
+                  "name": "Syringe 5ml",
+                  "code": "MED-001",
+                  "cost_price": 1000,
+                  "selling_price": 1500,
+                  "image_url": ""
+                },
+                "quantity": 4,
+                "price": 95000,
+                "discount": 2.5,
+                "subtotal": 379997.5
+              }
+            ],
+            "created_at": "2025-09-30T06:43:04Z",
+            "updated_at": "2025-09-30T06:43:04Z"
+          },
+          {
+            "id": 2,
+            "sales_order": {
+              "id": 3,
+              "code": "SO-20250930-003"
+            },
+            "payment_terms": null,
+            "code": "CI-20250930-002",
+            "invoice_number": "INV-NORMAL-001",
+            "invoice_date": "2025-09-20",
+            "due_date": "2025-09-25",
+            "tax_rate": 10,
+            "tax_amount": 166078.5,
+            "delivery_cost": 75000,
+            "other_cost": 30000,
+            "sub_total": 1660785,
+            "amount": 1931863.5,
+            "status": "PAID",
+            "notes": "Final invoice for sales order",
+            "items": [
+              {
+                "id": 5,
+                "product": {
+                  "id": 1,
+                  "name": "Syringe 5ml",
+                  "code": "MED-001",
+                  "cost_price": 1000,
+                  "selling_price": 1500,
+                  "image_url": ""
+                },
+                "quantity": 5,
+                "price": 100000,
+                "discount": 5,
+                "subtotal": 499995
+              },
+              {
+                "id": 6,
+                "product": {
+                  "id": 2,
+                  "name": "Gloves (Box)",
+                  "code": "MED-002",
+                  "cost_price": 50000,
+                  "selling_price": 75000,
+                  "image_url": ""
+                },
+                "quantity": 3,
+                "price": 250000,
+                "discount": 10,
+                "subtotal": 749990
+              },
+              {
+                "id": 7,
+                "product": {
+                  "id": 3,
+                  "name": "Printer Paper A4",
+                  "code": "OFF-001",
+                  "cost_price": 30000,
+                  "selling_price": 45000,
+                  "image_url": ""
+                },
+                "quantity": 10,
+                "price": 50000,
+                "discount": 0,
+                "subtotal": 500000
+              },
+              {
+                "id": 8,
+                "product": {
+                  "id": 1,
+                  "name": "Syringe 5ml",
+                  "code": "MED-001",
+                  "cost_price": 1000,
+                  "selling_price": 1500,
+                  "image_url": ""
+                },
+                "quantity": 4,
+                "price": 95000,
+                "discount": 2.5,
+                "subtotal": 379997.5
+              }
+            ],
+            "created_at": "2025-09-30T06:43:04Z",
+            "updated_at": "2025-09-30T06:43:04Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 2
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "sales_order_id", "amount"],
+            "string_columns": ["invoice_number"]
+          },
+          "sort": {
+            "sort_by": "id",
+            "sort_order": "asc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "invoice_number",
+              "invoice_date",
+              "due_date",
+              "amount",
+              "status",
+              "created_at",
+              "updated_at",
+              "sales_order_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/sales/customer-invoices/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "sales_order": {
+            "id": 3,
+            "code": "SO-20250930-003"
+          },
+          "payment_terms": null,
+          "code": "CI-20250930-001",
+          "invoice_number": "INV-DP-001",
+          "invoice_date": "2025-09-15",
+          "due_date": "2025-09-20",
+          "tax_rate": 10,
+          "tax_amount": 71176.5,
+          "delivery_cost": 50000,
+          "other_cost": 25000,
+          "sub_total": 711765,
+          "amount": 857941.5,
+          "status": "PAID",
+          "notes": "Down payment invoice for sales order",
+          "items": [
+            {
+              "id": 1,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 5,
+              "price": 100000,
+              "discount": 5,
+              "subtotal": 499995
+            },
+            {
+              "id": 2,
+              "product": {
+                "id": 2,
+                "name": "Gloves (Box)",
+                "code": "MED-002",
+                "cost_price": 50000,
+                "selling_price": 75000,
+                "image_url": ""
+              },
+              "quantity": 3,
+              "price": 250000,
+              "discount": 10,
+              "subtotal": 749990
+            },
+            {
+              "id": 3,
+              "product": {
+                "id": 3,
+                "name": "Printer Paper A4",
+                "code": "OFF-001",
+                "cost_price": 30000,
+                "selling_price": 45000,
+                "image_url": ""
+              },
+              "quantity": 10,
+              "price": 50000,
+              "discount": 0,
+              "subtotal": 500000
+            },
+            {
+              "id": 4,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 4,
+              "price": 95000,
+              "discount": 2.5,
+              "subtotal": 379997.5
+            }
+          ],
+          "created_at": "2025-09-30T06:43:04Z",
+          "updated_at": "2025-09-30T06:43:04Z"
+        }
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "description": "Get necessary data for adding a new customer invoice, such as sales orders.",
+      "endpoint": "GET {{base_url}}/sales/customer-invoices/add",
+      "response": {
+        "data": {
+          "payment_terms": [
+            {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            {
+              "id": 2,
+              "name": "Net 7"
+            },
+            {
+              "id": 3,
+              "name": "Net 14"
+            },
+            {
+              "id": 4,
+              "name": "Net 21"
+            },
+            {
+              "id": 5,
+              "name": "Net 30"
+            },
+            {
+              "id": 6,
+              "name": "Net 45"
+            },
+            {
+              "id": 7,
+              "name": "Net 60"
+            }
+          ],
+          "sales_orders": [
+            {
+              "id": 2,
+              "code": "SO-20250930-002",
+              "customer": {
+                "id": 1,
+                "name": "RSUD Tugurejo"
+              },
+              "order_date": "2025-09-25",
+              "status": "APPROVED",
+              "tax_amount": 126500,
+              "tax_rate": 11,
+              "delivery_cost": 75000,
+              "other_cost": 25000,
+              "subtotal": 1150000,
+              "total_amount": 1376500,
+              "items": [
+                {
+                  "id": 3,
+                  "product": {
+                    "id": 1,
+                    "name": "Syringe 5ml",
+                    "code": "MED-001",
+                    "image_url": ""
+                  },
+                  "quantity": 5,
+                  "price": 100000,
+                  "discount": 5,
+                  "subtotal": 475000
+                },
+                {
+                  "id": 4,
+                  "product": {
+                    "id": 2,
+                    "name": "Gloves (Box)",
+                    "code": "MED-002",
+                    "image_url": ""
+                  },
+                  "quantity": 3,
+                  "price": 250000,
+                  "discount": 10,
+                  "subtotal": 675000
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/sales/customer-invoices",
+      "body": {
+        "sales_order_id": 2,
+        "payment_terms_id": 1,
+        "invoice_number": "INV-2025-001",
+        "invoice_date": "2025-09-19",
+        "due_date": "2025-10-19",
+        "tax_rate": 11.0,
+        "delivery_cost": 50000,
+        "other_cost": 25000,
+        "notes": "Pembayaran via transfer bank",
+        "items": [
+          {
+            "product_id": 1,
+            "quantity": 10,
+            "price": 150000,
+            "discount": 5
+          },
+          {
+            "product_id": 1,
+            "quantity": 5,
+            "price": 200000,
+            "discount": 0
+          }
+        ]
+      },
+      "response": {
+        "data": {
+          "id": 3,
+          "sales_order": {
+            "id": 2,
+            "code": "SO-20250930-002"
+          },
+          "payment_terms": {
+            "id": 1,
+            "name": "Cash on Delivery"
+          },
+          "code": "CI-20250930-0003",
+          "invoice_number": "INV-2025-001",
+          "invoice_date": "2025-09-19",
+          "due_date": "2025-10-19",
+          "tax_rate": 11,
+          "tax_amount": 8250,
+          "delivery_cost": 50000,
+          "other_cost": 25000,
+          "sub_total": 75000,
+          "amount": 83250,
+          "status": "DRAFT",
+          "notes": "Pembayaran via transfer bank",
+          "items": [
+            {
+              "id": 9,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 10,
+              "price": 150000,
+              "discount": 5,
+              "subtotal": 1499995
+            },
+            {
+              "id": 10,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 5,
+              "price": 200000,
+              "discount": 0,
+              "subtotal": 1000000
+            }
+          ],
+          "created_at": "2025-09-30T06:58:16Z",
+          "updated_at": "2025-09-30T06:58:16Z"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/sales/customer-invoices/2",
+      "body": {
+        "sales_order_id": 1,
+        "invoice_date": "2025-09-02",
+        "due_date": "2025-09-16",
+        "tax_rate": 13,
+        "notes": "test update"
+      },
+      "response": {
+        "data": {
+          "id": 3,
+          "sales_order": {
+            "id": 2,
+            "code": "SO-20250930-002"
+          },
+          "payment_terms": {
+            "id": 1,
+            "name": "Cash on Delivery"
+          },
+          "code": "CI-20250930-0003",
+          "invoice_number": "INV-2025-001",
+          "invoice_date": "2025-09-02",
+          "due_date": "2025-09-16",
+          "tax_rate": 13,
+          "tax_amount": 8250,
+          "delivery_cost": 50000,
+          "other_cost": 25000,
+          "sub_total": 75000,
+          "amount": 83250,
+          "status": "DRAFT",
+          "notes": "test update",
+          "items": [
+            {
+              "id": 9,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 10,
+              "price": 150000,
+              "discount": 5,
+              "subtotal": 1499995
+            },
+            {
+              "id": 10,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 5,
+              "price": 200000,
+              "discount": 0,
+              "subtotal": 1000000
+            }
+          ],
+          "created_at": "2025-09-30T06:58:16Z",
+          "updated_at": "2025-09-30T06:59:18Z"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/sales/customer-invoices/2",
+      "response": {
+        "message": "deleted"
+      }
+    },
+    {
+      "title": "GET PRINT DATA",
+      "endpoint": "GET {{base_url}}/sales/customer-invoices/1/print",
+      "response": {
+        "data": {
+          "id": 1,
+          "sales_order": {
+            "id": 3,
+            "code": "SO-20250930-003"
+          },
+          "payment_terms": null,
+          "code": "CI-20250930-001",
+          "invoice_number": "INV-DP-001",
+          "invoice_date": "2025-09-15",
+          "due_date": "2025-09-20",
+          "tax_rate": 10,
+          "tax_amount": 71176.5,
+          "delivery_cost": 50000,
+          "other_cost": 25000,
+          "sub_total": 711765,
+          "amount": 857941.5,
+          "status": "PAID",
+          "notes": "Down payment invoice for sales order",
+          "items": [
+            {
+              "id": 1,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 5,
+              "price": 100000,
+              "discount": 5,
+              "subtotal": 499995
+            },
+            {
+              "id": 2,
+              "product": {
+                "id": 2,
+                "name": "Gloves (Box)",
+                "code": "MED-002",
+                "cost_price": 50000,
+                "selling_price": 75000,
+                "image_url": ""
+              },
+              "quantity": 3,
+              "price": 250000,
+              "discount": 10,
+              "subtotal": 749990
+            },
+            {
+              "id": 3,
+              "product": {
+                "id": 3,
+                "name": "Printer Paper A4",
+                "code": "OFF-001",
+                "cost_price": 30000,
+                "selling_price": 45000,
+                "image_url": ""
+              },
+              "quantity": 10,
+              "price": 50000,
+              "discount": 0,
+              "subtotal": 500000
+            },
+            {
+              "id": 4,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 4,
+              "price": 95000,
+              "discount": 2.5,
+              "subtotal": 379997.5
+            }
+          ],
+          "created_at": "2025-09-30T06:43:04Z",
+          "updated_at": "2025-09-30T06:43:04Z"
+        }
+      }
+    },
+    {
+      "title": "CONFIRM INVOICE STATUS TO PENDING",
+      "endpoint": "POST {{base_url}}/sales/customer-invoices/3/pending",
+      "response": {
+        "data": {
+          "id": 3,
+          "sales_order": {
+            "id": 2,
+            "code": "SO-20250930-002"
+          },
+          "payment_terms": {
+            "id": 1,
+            "name": "Cash on Delivery"
+          },
+          "code": "CI-20250930-0003",
+          "invoice_number": "INV-2025-001",
+          "invoice_date": "2025-09-02",
+          "due_date": "2025-09-16",
+          "tax_rate": 13,
+          "tax_amount": 8250,
+          "delivery_cost": 50000,
+          "other_cost": 25000,
+          "sub_total": 75000,
+          "amount": 83250,
+          "status": "PENDING",
+          "notes": "test update",
+          "items": [
+            {
+              "id": 9,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 10,
+              "price": 150000,
+              "discount": 5,
+              "subtotal": 1499995
+            },
+            {
+              "id": 10,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 5,
+              "price": 200000,
+              "discount": 0,
+              "subtotal": 1000000
+            }
+          ],
+          "created_at": "2025-09-30T06:58:16Z",
+          "updated_at": "2025-09-30T06:59:55Z"
+        },
+        "message": "status updated"
+      }
+    },
+    {
+      "title": "STATUS DEFINITIONS",
+      "status_definitions": {
+        "invoice_status": {
+          "DRAFT": {
+            "description": "Invoice created but not yet finalized",
+            "allowed_operations": ["update", "set_pending", "delete"],
+            "next_possible_status": ["PENDING"],
+            "business_rules": [
+              "Can be updated or deleted",
+              "Not yet ready for payment",
+              "Journal entries not posted yet"
+            ],
+            "color": "gray"
+          },
+          "PENDING": {
+            "description": "Invoice is ready for payment",
+            "allowed_operations": ["view", "create_payment"],
+            "next_possible_status": ["PAID", "PARTIAL", "OVERDUE"],
+            "business_rules": [
+              "Journal entries posted (AR and Revenue)",
+              "Ready for payment processing",
+              "Cannot be updated or deleted"
+            ],
+            "color": "orange"
+          },
+          "PAID": {
+            "description": "Invoice is fully paid",
+            "allowed_operations": ["view"],
+            "next_possible_status": [],
+            "business_rules": [
+              "Read-only status",
+              "All payments completed",
+              "Sales order may be closed"
+            ],
+            "color": "blue"
+          },
+          "PARTIAL": {
+            "description": "Invoice is partially paid",
+            "allowed_operations": ["view", "create_payment"],
+            "next_possible_status": ["PAID"],
+            "business_rules": [
+              "Some payments received",
+              "Can accept additional payments",
+              "Shows remaining balance"
+            ],
+            "color": "green"
+          },
+          "OVERDUE": {
+            "description": "Invoice is past due date",
+            "allowed_operations": ["view", "create_payment"],
+            "next_possible_status": ["PAID", "PARTIAL"],
+            "business_rules": [
+              "Past due date",
+              "Can still accept payments",
+              "May require follow-up"
+            ],
+            "color": "red"
+          }
+        }
+      }
+    },
+    {
+      "title": "BUSINESS RULES",
+      "business_rules": {
+        "invoice_creation": {
+          "sales_order_validation": "Sales order must exist and be in APPROVED status",
+          "duplicate_check": "Only one invoice per sales order is allowed",
+          "date_validation": "Both invoice date and due date must be valid YYYY-MM-DD format",
+          "amount_calculation": "Amount is automatically copied from sales order total",
+          "code_generation": "Code is auto-generated in format CI-YYYYMMDD-XXXX",
+          "invoice_number_generation": "Invoice number is auto-generated in format INV-YYYYMMDD-XXX"
+        },
+        "invoice_update": {
+          "status_restriction": "Only DRAFT status can be updated",
+          "date_validation": "Both dates must be valid YYYY-MM-DD format if provided",
+          "amount_immutable": "Amount cannot be changed after creation"
+        },
+        "invoice_deletion": {
+          "status_restriction": "Only DRAFT status can be deleted",
+          "sales_order_restoration": "Sales order status is restored to APPROVED if it was CLOSED",
+          "journal_reversal": "Journal entries are automatically reversed on deletion"
+        },
+        "invoice_confirmation": {
+          "status_restriction": "Only DRAFT status can be confirmed to PENDING",
+          "journal_posting": "Posts AR and Revenue journal entries",
+          "irreversible": "Once confirmed, cannot be reverted to DRAFT"
+        }
+      }
+    }
+  ]
+}

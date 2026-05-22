@@ -1,0 +1,209 @@
+{
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/hrd/leave-requests",
+      "description": "Get list of leave requests",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "employee": {
+              "id": 1,
+              "name": "John Doe"
+            },
+            "start_date": "2025-10-10",
+            "end_date": "2025-10-12",
+            "type": "LEAVE",
+            "reason": "Mengambil cuti tahunan untuk berlibur bersama keluarga",
+            "status": "PENDING",
+            "approved_by": null,
+            "created_at": "2025-01-01T00:00:00Z",
+            "updated_at": "2025-01-01T00:00:00Z"
+          }
+        ],
+        "meta": {
+          "pagination": {
+            "total": 1,
+            "page": 1,
+            "limit": 10
+          },
+          "search": {
+            "search": null,
+            "search_by": null
+          },
+          "sort": {
+            "sort_by": "created_at",
+            "sort_order": "desc"
+          },
+          "filter": {
+            "start_date": null,
+            "end_date": null,
+            "note": "Date filters apply to start_date field"
+          },
+          "searchable_columns": {
+            "string_columns": ["reason", "type", "status"],
+            "numeric_columns": ["id", "employee_id", "approved_by"]
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "employee_id",
+              "start_date",
+              "end_date",
+              "type",
+              "reason",
+              "status",
+              "approved_by",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hrd/leave-requests/stats",
+      "description": "Get leave request statistics",
+      "response": {
+        "data": {
+          "total": 25
+        },
+        "message": "Leave request statistics retrieved successfully"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hrd/leave-requests/{id}",
+      "description": "Get leave request by ID",
+      "response": {
+        "data": {
+          "id": 1,
+          "employee": {
+            "id": 1,
+            "name": "John Doe"
+          },
+          "start_date": "2025-10-10",
+          "end_date": "2025-10-12",
+          "type": "LEAVE",
+          "reason": "Mengambil cuti tahunan untuk berlibur bersama keluarga",
+          "status": "PENDING",
+          "approved_by": null,
+          "created_at": "2025-01-01T00:00:00Z",
+          "updated_at": "2025-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hrd/leave-requests",
+      "description": "Create new leave request",
+      "body": {
+        "employee_id": 1,
+        "start_date": "2025-10-10T00:00:00Z",
+        "end_date": "2025-10-12T23:59:59Z",
+        "type": "LEAVE",
+        "reason": "Mengambil cuti tahunan untuk berlibur bersama keluarga"
+      },
+      "response": {
+        "data": {
+          "id": 1,
+          "employee": {
+            "id": 1,
+            "name": "John Doe"
+          },
+          "start_date": "2025-10-10",
+          "end_date": "2025-10-12",
+          "type": "LEAVE",
+          "reason": "Mengambil cuti tahunan untuk berlibur bersama keluarga",
+          "status": "PENDING",
+          "approved_by": null,
+          "created_at": "2025-01-01T00:00:00Z",
+          "updated_at": "2025-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/hrd/leave-requests/{id}",
+      "description": "Update leave request",
+      "body": {
+        "employee_id": 1,
+        "start_date": "2025-10-10T00:00:00Z",
+        "end_date": "2025-10-12T23:59:59Z",
+        "type": "SICK",
+        "reason": "Mengambil cuti tahunan untuk berlibur bersama keluarga"
+      },
+      "response": {
+        "data": {
+          "id": 1,
+          "employee": {
+            "id": 1,
+            "name": "John Doe"
+          },
+          "start_date": "2025-10-10",
+          "end_date": "2025-10-12",
+          "type": "SICK",
+          "reason": "Mengambil cuti tahunan untuk berlibur bersama keluarga",
+          "status": "PENDING",
+          "approved_by": null,
+          "created_at": "2025-01-01T00:00:00Z",
+          "updated_at": "2025-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/hrd/leave-requests/{id}",
+      "description": "Delete leave request",
+      "response": {
+        "message": "deleted"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hrd/leave-requests/{id}/approve",
+      "description": "Approve leave request",
+      "response": {
+        "data": {
+          "id": 1,
+          "employee": {
+            "id": 1,
+            "name": "John Doe"
+          },
+          "start_date": "2025-10-10",
+          "end_date": "2025-10-12",
+          "type": "LEAVE",
+          "reason": "Mengambil cuti tahunan untuk berlibur bersama keluarga",
+          "status": "APPROVED",
+          "approved_by": "Manager Name",
+          "created_at": "2025-01-01T00:00:00Z",
+          "updated_at": "2025-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hrd/leave-requests/{id}/reject",
+      "description": "Reject leave request",
+      "response": {
+        "data": {
+          "id": 1,
+          "employee": {
+            "id": 1,
+            "name": "John Doe"
+          },
+          "start_date": "2025-10-10",
+          "end_date": "2025-10-12",
+          "type": "LEAVE",
+          "reason": "Mengambil cuti tahunan untuk berlibur bersama keluarga",
+          "status": "REJECTED",
+          "approved_by": "Manager Name",
+          "created_at": "2025-01-01T00:00:00Z",
+          "updated_at": "2025-01-01T00:00:00Z"
+        }
+      }
+    }
+  ]
+}

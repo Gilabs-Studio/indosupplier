@@ -1,0 +1,18 @@
+{
+  "name": "@repo/api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env DROP_ALL_TABLES=true go run ./cmd/api/main.go",
+    "dev:keep": "cross-env go run ./cmd/api/main.go",
+    "build": "go build -o bin/server ./cmd/api/main.go",
+    "start": "./bin/server",
+    "test": "go test ./...",
+    "lint": "golangci-lint run",
+    "clean": "go clean && rm -rf bin"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
+

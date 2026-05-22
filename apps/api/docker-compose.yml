@@ -1,0 +1,99 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: gims-platform-db
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-gims_erp}
+    ports:
+      - "${DB_PORT:-5435}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - gims-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: gims-platform-redis
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - gims-network
+    command: redis-server --save 60 1 --loglevel warning ${REDIS_PASSWORD:+--requirepass ${REDIS_PASSWORD}}
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gims-platform-api
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      - GIN_MODE=${GIN_MODE:-release}
+      - PORT=8080
+      - ENV=${ENV:-development}
+      - CGO_ENABLED=1
+      - DROP_ALL_TABLES=${DROP_ALL_TABLES:-false}
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - DB_NAME=${DB_NAME:-gims_erp}
+      - DB_SSLMODE=${DB_SSLMODE:-disable}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_ACCESS_TTL=${JWT_ACCESS_TTL:-24}
+      - JWT_REFRESH_TTL=${JWT_REFRESH_TTL:-7}
+      - CEREBRAS_BASE_URL=${CEREBRAS_BASE_URL:-https://api.cerebras.ai}
+      - CEREBRAS_API_KEY=${CEREBRAS_API_KEY}
+      - STORAGE_UPLOAD_DIR=/app/uploads
+      - STORAGE_BASE_URL=${STORAGE_BASE_URL:-/uploads}
+      - STORAGE_MAX_UPLOAD_SIZE=${STORAGE_MAX_UPLOAD_SIZE:-10485760}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - REDIS_DB=${REDIS_DB:-0}
+      - SEED_DEFAULT_PASSWORD=${SEED_DEFAULT_PASSWORD:-admin123}
+      - SEED_ONLY_MASTER_DATA=${SEED_ONLY_MASTER_DATA:-false}
+      - SEED_MINIMAL_DATA=${SEED_MINIMAL_DATA:-true}
+      - SEED_ONCE=${SEED_ONCE:-true}
+      - MIGRATE_ONCE=${MIGRATE_ONCE:-true}
+      - APP_TIMEZONE=${APP_TIMEZONE:-Asia/Jakarta}
+      - XENDIT_CREDENTIAL_ENCRYPTION_KEY=${XENDIT_CREDENTIAL_ENCRYPTION_KEY}
+      - XENDIT_WEBHOOK_TOKEN=${XENDIT_WEBHOOK_TOKEN}
+      - XENDIT_SECRET_KEY=${XENDIT_SECRET_KEY}
+      - R2_ACCOUNT_ID=${R2_ACCOUNT_ID}
+      - R2_ACCESS_KEY_ID=${R2_ACCESS_KEY_ID}
+      - R2_SECRET_ACCESS_KEY=${R2_SECRET_ACCESS_KEY}
+      - R2_BUCKET_NAME=${R2_BUCKET_NAME}
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - gims-network
+
+networks:
+  gims-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  uploads_data:
+  redis_data:

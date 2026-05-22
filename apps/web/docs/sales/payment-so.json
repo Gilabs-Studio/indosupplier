@@ -1,0 +1,553 @@
+{
+  "title": "payment-so",
+  "description": "A comprehensive guide to the payment-so API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/sales/payments?page=1&limit=10",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "invoice": {
+              "id": 1,
+              "code": "CI-20251003-001",
+              "invoice_number": "INV-DP-001",
+              "invoice_date": "2025-09-18",
+              "due_date": "2025-09-23",
+              "tax_rate": 0,
+              "tax_amount": 0,
+              "delivery_cost": 0,
+              "other_cost": 0,
+              "sub_total": 0,
+              "amount": 857941.5,
+              "status": "PAID"
+            },
+            "bank_account": {
+              "id": 0,
+              "name": "",
+              "account_number": "",
+              "account_holder": "",
+              "currency": ""
+            },
+            "payment_date": "2025-09-25",
+            "amount": 857941.5,
+            "method": "BANK",
+            "status": "CONFIRMED",
+            "created_at": "2025-10-03T10:35:20Z",
+            "updated_at": "2025-10-03T10:35:20Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "invoice_id", "amount"],
+            "string_columns": ["payment_method", "reference_number", "notes"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "payment_date",
+              "amount",
+              "payment_method",
+              "reference_number",
+              "status",
+              "created_at",
+              "updated_at",
+              "invoice_id",
+              "notes"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA with Search",
+      "endpoint": "GET {{base_url}}/sales/payments?page=1&search=1&searchBy=id&limit=10",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "invoice": {
+              "id": 1,
+              "code": "CI-20251003-001",
+              "invoice_number": "INV-DP-001",
+              "invoice_date": "2025-09-18",
+              "due_date": "2025-09-23",
+              "tax_rate": 0,
+              "tax_amount": 0,
+              "delivery_cost": 0,
+              "other_cost": 0,
+              "sub_total": 0,
+              "amount": 857941.5,
+              "status": "PAID"
+            },
+            "bank_account": {
+              "id": 0,
+              "name": "",
+              "account_number": "",
+              "account_holder": "",
+              "currency": ""
+            },
+            "payment_date": "2025-09-25",
+            "amount": 857941.5,
+            "method": "BANK",
+            "status": "CONFIRMED",
+            "created_at": "2025-10-03T10:35:20Z",
+            "updated_at": "2025-10-03T10:35:20Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "1",
+            "searchBy": "id"
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "invoice_id", "amount"],
+            "string_columns": ["payment_method", "reference_number", "notes"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "payment_date",
+              "amount",
+              "payment_method",
+              "reference_number",
+              "status",
+              "created_at",
+              "updated_at",
+              "invoice_id",
+              "notes"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA with Sorting by column",
+      "endpoint": "GET {{base_url}}/sales/payments?page=1&limit=10&sort_by=id&sort_order=asc",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "invoice": {
+              "id": 1,
+              "code": "CI-20251003-001",
+              "invoice_number": "INV-DP-001",
+              "invoice_date": "2025-09-18",
+              "due_date": "2025-09-23",
+              "tax_rate": 0,
+              "tax_amount": 0,
+              "delivery_cost": 0,
+              "other_cost": 0,
+              "sub_total": 0,
+              "amount": 857941.5,
+              "status": "PAID"
+            },
+            "bank_account": {
+              "id": 0,
+              "name": "",
+              "account_number": "",
+              "account_holder": "",
+              "currency": ""
+            },
+            "payment_date": "2025-09-25",
+            "amount": 857941.5,
+            "method": "BANK",
+            "status": "CONFIRMED",
+            "created_at": "2025-10-03T10:35:20Z",
+            "updated_at": "2025-10-03T10:35:20Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "invoice_id", "amount"],
+            "string_columns": ["payment_method", "reference_number", "notes"]
+          },
+          "sort": {
+            "sort_by": "id",
+            "sort_order": "asc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "payment_date",
+              "amount",
+              "payment_method",
+              "reference_number",
+              "status",
+              "created_at",
+              "updated_at",
+              "invoice_id",
+              "notes"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA with Date Range Filter",
+      "endpoint": "GET {{base_url}}/sales/payments?page=1&limit=10&start_date=2025-09-25&end_date=2025-09-25",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "invoice": {
+              "id": 1,
+              "code": "CI-20251003-001",
+              "invoice_number": "INV-DP-001",
+              "invoice_date": "2025-09-18",
+              "due_date": "2025-09-23",
+              "tax_rate": 0,
+              "tax_amount": 0,
+              "delivery_cost": 0,
+              "other_cost": 0,
+              "sub_total": 0,
+              "amount": 857941.5,
+              "status": "PAID"
+            },
+            "bank_account": {
+              "id": 0,
+              "name": "",
+              "account_number": "",
+              "account_holder": "",
+              "currency": ""
+            },
+            "payment_date": "2025-09-25",
+            "amount": 857941.5,
+            "method": "BANK",
+            "status": "CONFIRMED",
+            "created_at": "2025-10-03T10:35:20Z",
+            "updated_at": "2025-10-03T10:35:20Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "2025-09-25",
+            "start_date": "2025-09-25"
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "invoice_id", "amount"],
+            "string_columns": ["payment_method", "reference_number", "notes"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "payment_date",
+              "amount",
+              "payment_method",
+              "reference_number",
+              "status",
+              "created_at",
+              "updated_at",
+              "invoice_id",
+              "notes"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/sales/payments/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "invoice": {
+            "id": 1,
+            "code": "CI-20251003-001",
+            "invoice_number": "INV-DP-001",
+            "invoice_date": "2025-09-18",
+            "due_date": "2025-09-23",
+            "tax_rate": 0,
+            "tax_amount": 0,
+            "delivery_cost": 0,
+            "other_cost": 0,
+            "sub_total": 0,
+            "amount": 857941.5,
+            "status": "PAID"
+          },
+          "bank_account": {
+            "id": 0,
+            "name": "",
+            "account_number": "",
+            "account_holder": "",
+            "currency": ""
+          },
+          "payment_date": "2025-09-25",
+          "amount": 857941.5,
+          "method": "BANK",
+          "status": "CONFIRMED",
+          "created_at": "2025-10-03T10:35:20Z",
+          "updated_at": "2025-10-03T10:35:20Z"
+        }
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "description": "Get necessary data for adding a new payment so, such as invoices.",
+      "endpoint": "GET {{base_url}}/sales/payments/add",
+      "response": {
+        "data": {
+          "bank_accounts": [
+            {
+              "id": 1,
+              "name": "Bank Mandiri - Main Account",
+              "account_number": "1234567890",
+              "account_holder": "PT. ERP Company",
+              "currency": "IDR"
+            },
+            {
+              "id": 2,
+              "name": "Bank BCA - Operating Account",
+              "account_number": "0987654321",
+              "account_holder": "PT. ERP Company",
+              "currency": "IDR"
+            },
+            {
+              "id": 3,
+              "name": "Bank BRI - USD Account",
+              "account_number": "1122334455",
+              "account_holder": "PT. ERP Company",
+              "currency": "USD"
+            },
+            {
+              "id": 4,
+              "name": "Bank BNI - Inactive Account",
+              "account_number": "5566778899",
+              "account_holder": "PT. ERP Company",
+              "currency": "IDR"
+            }
+          ],
+          "invoices": [
+            {
+              "id": 4,
+              "sales_order": {
+                "id": 4,
+                "code": "SO-20251003-0004"
+              },
+              "invoice_number": "INV-2025-001",
+              "invoice_date": "2025-09-19",
+              "due_date": "2025-10-19",
+              "amount": 83250,
+              "status": "PENDING"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/sales/payments",
+      "body": {
+        "invoice_id": 2,
+        "bank_account_id": 1,
+        "payment_date": "2025-09-02",
+        "amount": 1250000.0,
+        "method": "BANK"
+      },
+      "response": {
+        "data": {
+          "id": 2,
+          "invoice": {
+            "id": 2,
+            "code": "CI-20251003-002",
+            "invoice_number": "INV-NORMAL-001",
+            "invoice_date": "2025-09-23",
+            "due_date": "2025-09-28",
+            "tax_rate": 0,
+            "tax_amount": 0,
+            "delivery_cost": 0,
+            "other_cost": 0,
+            "sub_total": 0,
+            "amount": 1931863.5,
+            "status": "PAID"
+          },
+          "bank_account": {
+            "id": 1,
+            "name": "Bank Mandiri - Main Account",
+            "account_number": "1234567890",
+            "account_holder": "PT. ERP Company",
+            "currency": "IDR"
+          },
+          "payment_date": "2025-09-02",
+          "amount": 1250000,
+          "method": "BANK",
+          "status": "PENDING",
+          "created_at": "2025-10-03T12:21:24Z",
+          "updated_at": "2025-10-03T12:21:24Z"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/sales/payments/2",
+      "response": {
+        "message": "deleted"
+      }
+    },
+    {
+      "title": "CONFIRM PAYMENT",
+      "endpoint": "POST {{base_url}}/sales/payments/2/confirm",
+      "response": {
+        "data": {
+          "id": 2,
+          "invoice": {
+            "id": 2,
+            "code": "CI-20251003-002",
+            "invoice_number": "INV-NORMAL-001",
+            "invoice_date": "2025-09-23",
+            "due_date": "2025-09-28",
+            "tax_rate": 0,
+            "tax_amount": 0,
+            "delivery_cost": 0,
+            "other_cost": 0,
+            "sub_total": 0,
+            "amount": 1931863.5,
+            "status": "PARTIAL"
+          },
+          "bank_account": {
+            "id": 1,
+            "name": "Bank Mandiri - Main Account",
+            "account_number": "1234567890",
+            "account_holder": "PT. ERP Company",
+            "currency": "IDR"
+          },
+          "payment_date": "2025-09-02",
+          "amount": 1250000,
+          "method": "BANK",
+          "status": "CONFIRMED",
+          "created_at": "2025-10-03T12:21:24Z",
+          "updated_at": "2025-10-03T12:21:45Z"
+        },
+        "message": "confirmed"
+      }
+    },
+    {
+      "title": "STATUS DEFINITIONS",
+      "status_definitions": {
+        "payment_status": {
+          "PENDING": {
+            "description": "Payment created but not yet confirmed",
+            "allowed_operations": ["confirm", "delete"],
+            "next_possible_status": ["CONFIRMED"],
+            "business_rules": [
+              "Can be confirmed or deleted",
+              "Not yet processed in accounting",
+              "Invoice status not yet updated"
+            ],
+            "variant": "pending"
+          },
+          "CONFIRMED": {
+            "description": "Payment is confirmed and processed",
+            "allowed_operations": ["view"],
+            "next_possible_status": [],
+            "business_rules": [
+              "Read-only status",
+              "Journal entries posted",
+              "Invoice status updated",
+              "Sales order may be closed if fully paid"
+            ],
+            "variant": "completed"
+          }
+        },
+        "payment_method": {
+          "CASH": {
+            "description": "Cash payment",
+            "journal_account": "1100 (Cash)",
+            "variant": "cash_bank"
+          },
+          "BANK": {
+            "description": "Bank transfer payment",
+            "journal_account": "1100 (Cash)",
+            "variant": "cash_bank"
+          }
+        }
+      }
+    },
+    {
+      "title": "BUSINESS RULES",
+      "business_rules": {
+        "payment_creation": {
+          "invoice_validation": "Invoice must exist and not be in DRAFT status",
+          "invoice_type": "Automatically set to InvoiceCustomer",
+          "date_validation": "Payment date defaults to current date if not provided",
+          "status_initialization": "Status automatically set to PENDING",
+          "amount_validation": "Amount must be positive"
+        },
+        "payment_confirmation": {
+          "status_restriction": "Only PENDING payments can be confirmed",
+          "invoice_status_update": "Updates invoice status based on total paid amount",
+          "sales_order_closure": "Closes sales order when invoice is fully paid",
+          "journal_posting": "Posts Cash and AR journal entries",
+          "irreversible": "Once confirmed, cannot be reverted to PENDING"
+        },
+        "payment_deletion": {
+          "status_restriction": "Only PENDING payments can be deleted",
+          "no_side_effects": "No impact on invoice or sales order status"
+        },
+        "invoice_status_calculation": {
+          "fully_paid": "Invoice status set to PAID when total payments >= invoice amount",
+          "partially_paid": "Invoice status set to PARTIAL when total payments > 0 but < invoice amount",
+          "unpaid": "Invoice status remains PENDING when no payments"
+        }
+      }
+    }
+  ]
+}

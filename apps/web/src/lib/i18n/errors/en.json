@@ -1,0 +1,74 @@
+{
+  "network": {
+    "timeout": {
+      "title": "Connection Timeout",
+      "description": "The request took too long to complete. Please check your internet connection and try again."
+    },
+    "connectionFailed": {
+      "title": "Connection Failed",
+      "description": "Unable to connect to the server. Please check your internet connection or contact support if the problem persists."
+    },
+    "serverUnreachable": {
+      "title": "Server Unreachable",
+      "description": "Cannot connect to the server. The server may be down or your internet connection is unstable. Please try again later."
+    },
+    "generic": {
+      "title": "Network Error",
+      "description": "A network error occurred. Please check your internet connection and try again."
+    }
+  },
+  "backend": {
+    "validationError": {
+      "title": "Validation Error",
+      "description": "Please check the information you entered and try again."
+    },
+    "fieldError": {
+      "title": "Invalid Input",
+      "description": "There is an error in the {field} field: {message}"
+    },
+    "unauthorized": {
+      "title": "Session Expired",
+      "description": "Your session has expired. Please log in again to continue."
+    },
+    "forbidden": {
+      "title": "Access Denied",
+      "description": "You do not have permission to perform this action. Please contact your administrator if you believe this is an error."
+    },
+    "notFound": {
+      "title": "Not Found",
+      "description": "The requested information could not be found. It may have been deleted or moved."
+    },
+    "conflict": {
+      "title": "Duplicate Entry",
+      "description": "This information already exists in the system. Please use different information."
+    },
+    "emailExists": {
+      "title": "Email Already Registered",
+      "description": "The email \"{email}\" is already registered. Please use a different email address."
+    },
+    "resourceExists": {
+      "title": "Duplicate Entry",
+      "description": "The {field} \"{value}\" already exists. Please use a different value."
+    },
+    "serverError": {
+      "title": "Server Error",
+      "description": "An error occurred on the server. Our team has been notified. Please try again later or contact support if the problem persists."
+    },
+    "serviceUnavailable": {
+      "title": "Service Unavailable",
+      "description": "The service is temporarily unavailable. Please try again in a few moments."
+    },
+    "rateLimit": {
+      "title": "Too Many Requests",
+      "description": "You have made too many requests. Please try again in {countdown}."
+    },
+    "unexpectedError": {
+      "title": "Unexpected Error",
+      "description": "An unexpected error occurred. Please try again or contact support if the problem persists."
+    },
+    "invalidFormat": {
+      "title": "Invalid Response Format",
+      "description": "The server returned an unexpected response format. Please contact support."
+    }
+  }
+}

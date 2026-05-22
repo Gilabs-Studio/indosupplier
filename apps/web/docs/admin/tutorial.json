@@ -1,0 +1,408 @@
+{
+  "title": "admin/tutorials",
+  "description": "A comprehensive guide to the admin API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/admin/tutorials",
+      "response": {
+        "data": [
+          {
+            "id": 3,
+            "title": "Configuration",
+            "status": "DRAFT",
+            "parent_id": 1,
+            "created_by": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "content_blocks": [],
+            "created_at": "2025-11-06T16:17:37+07:00",
+            "updated_at": "2025-11-06T16:17:37+07:00"
+          },
+          {
+            "id": 2,
+            "title": "Installation",
+            "status": "APPROVE",
+            "parent_id": 1,
+            "created_by": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "approved_by": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "content_blocks": [],
+            "created_at": "2025-11-06T16:17:37+07:00",
+            "updated_at": "2025-11-06T16:17:37+07:00"
+          },
+          {
+            "id": 1,
+            "title": "Getting Started",
+            "status": "APPROVE",
+            "parent_id": null,
+            "created_by": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "approved_by": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "content_blocks": [
+              {
+                "id": 1,
+                "type": "header",
+                "text": "Welcome",
+                "media_id": null,
+                "order": 1
+              },
+              {
+                "id": 2,
+                "type": "paragraph",
+                "text": "This tutorial helps you get started.",
+                "media_id": null,
+                "order": 2
+              },
+              {
+                "id": 3,
+                "type": "image",
+                "text": "",
+                "media_id": 1,
+                "order": 3,
+                "media": {
+                  "id": 1,
+                  "url": "/image1.jpg",
+                  "type": "image",
+                  "alt_text": "Example Image 1"
+                }
+              }
+            ],
+            "created_at": "2025-11-06T16:17:37+07:00",
+            "updated_at": "2025-11-06T16:17:37+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 3
+          },
+          "search": {
+            "search": "A",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "created_by", "parent_id"],
+            "string_columns": ["title", "status"]
+          },
+          "sort": {
+            "sort_by": "id",
+            "sort_order": "desc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "title",
+              "status",
+              "created_by",
+              "parent_id",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/admin/tutorials/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "title": "Getting Started",
+          "status": "APPROVE",
+          "parent_id": null,
+          "created_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+          },
+          "approved_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+          },
+          "content_blocks": [
+            {
+              "id": 1,
+              "type": "header",
+              "text": "Welcome",
+              "media_id": null,
+              "order": 1
+            },
+            {
+              "id": 2,
+              "type": "paragraph",
+              "text": "This tutorial helps you get started.",
+              "media_id": null,
+              "order": 2
+            },
+            {
+              "id": 3,
+              "type": "image",
+              "text": "",
+              "media_id": 1,
+              "order": 3,
+              "media": {
+                "id": 1,
+                "url": "/image1.jpg",
+                "type": "image",
+                "alt_text": "Example Image 1"
+              }
+            }
+          ],
+          "created_at": "2025-11-06T16:17:37+07:00",
+          "updated_at": "2025-11-06T16:17:37+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "GET {{base_url}}/admin/tutorials/add",
+      "response": {
+        "data": {
+          "medias": [
+            {
+              "alt_text": "Example Image 1",
+              "id": 1,
+              "type": "image",
+              "url": "/image1.jpg"
+            },
+            {
+              "alt_text": "Example Video 1",
+              "id": 2,
+              "type": "video",
+              "url": "/video1.mp4"
+            },
+            {
+              "alt_text": "Example File 1",
+              "id": 3,
+              "type": "file",
+              "url": "/file1.pdf"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/admin/tutorials",
+      "body": {
+        "title": "How to Plant a Tree",
+        "parent_id": null,
+        "content_blocks": [
+          {
+            "type": "header | header paragraph image video",
+            "text": "Introduction",
+            "media_id": null,
+            "order": 1
+          },
+          {
+            "type": "paragraph | header paragraph image video",
+            "text": "Planting a tree helps the environment and is easy to do.",
+            "media_id": null,
+            "order": 2
+          },
+          {
+            "type": "image | header paragraph image video",
+            "text": "",
+            "media_id": 1,
+            "order": 3
+          },
+          {
+            "type": "video | header paragraph image video",
+            "text": "",
+            "media_id": 1,
+            "order": 4
+          }
+        ]
+      },
+      "response": {
+        "data": {
+          "id": 4,
+          "title": "How to Plant a Tree",
+          "status": "DRAFT",
+          "parent_id": null,
+          "created_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+          },
+          "content_blocks": [
+            {
+              "id": 4,
+              "type": "header",
+              "text": "Introduction",
+              "media_id": null,
+              "order": 1
+            },
+            {
+              "id": 5,
+              "type": "paragraph",
+              "text": "Planting a tree helps the environment and is easy to do.",
+              "media_id": null,
+              "order": 2
+            },
+            {
+              "id": 6,
+              "type": "image",
+              "text": "",
+              "media_id": 1,
+              "order": 3,
+              "media": {
+                "id": 1,
+                "url": "/image1.jpg",
+                "type": "image",
+                "alt_text": "Example Image 1"
+              }
+            },
+            {
+              "id": 7,
+              "type": "video",
+              "text": "",
+              "media_id": 1,
+              "order": 4,
+              "media": {
+                "id": 1,
+                "url": "/image1.jpg",
+                "type": "image",
+                "alt_text": "Example Image 1"
+              }
+            }
+          ],
+          "created_at": "2025-11-06T17:04:21+07:00",
+          "updated_at": "2025-11-06T17:04:21+07:00"
+        }
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/admin/tutorials/1",
+      "body": "same as post data",
+      "response": {
+        "data": {
+          "id": 1,
+          "supplier": {
+            "id": 1,
+            "code": "PT. Medika"
+          },
+          "code": "PO-20250918-001",
+          "order_date": "2025-09-02",
+          "status": "DRAFT",
+          "status_receipts": "NOT_CREATED",
+          "status_invoices": "NOT_CREATED",
+          "total_amount": 1050000,
+          "items": [
+            {
+              "id": 11,
+              "product_id": 1,
+              "quantity": 50,
+              "price": 1000,
+              "subtotal": 50000
+            },
+            {
+              "id": 12,
+              "product_id": 2,
+              "quantity": 20,
+              "price": 50000,
+              "subtotal": 1000000
+            }
+          ],
+          "created_at": "2025-09-18T12:37:52+07:00",
+          "updated_at": "2025-09-18T12:56:40+07:00"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/admin/tutorials/2",
+      "response": {
+        "message": "deleted"
+      }
+    },
+    {
+      "title": "ADD MEDIA",
+      "endpoint": "POST {{base_url}}/admin/tutorials/medias",
+      "body": {
+        "file": "/home/vinsen/Pictures/Screenshots/Screenshot from 2025-11-03 14-25-16.png",
+        "type": "image",
+        "alt_text": "test"
+      },
+      "response": {
+        "data": {
+          "alt_text": "test",
+          "id": 4,
+          "type": "image",
+          "url": "/uploads/tutorial-medias/908ae90b-6eda-444a-b584-d1f1d062c586.jpg"
+        }
+      }
+    },
+    {
+      "title": "APPROVE DATA",
+      "endpoint": "POST {{base_url}}/admin/tutorials/1/approve",
+      "response": {
+        "data": {
+          "id": 3,
+          "title": "Configuration",
+          "status": "APPROVE",
+          "parent_id": 1,
+          "created_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+          },
+          "approved_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+          },
+          "content_blocks": [],
+          "created_at": "2025-11-06T16:17:37+07:00",
+          "updated_at": "2025-11-06T17:08:37+07:00"
+        }
+      }
+    }
+  ]
+}

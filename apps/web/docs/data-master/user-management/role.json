@@ -1,0 +1,2361 @@
+{
+  "title": "Data Master/User Management/ ROLE",
+  "description": "A comprehensive guide to the Data Master API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/master-data/roles",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "name": "Admin",
+            "description": "Full Access",
+            "created_at": "2025-09-16T08:33:08+07:00",
+            "updated_at": "2025-09-16T08:33:08+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 1,
+            "page": 1,
+            "total": 3
+          },
+          "search": {
+            "search": "A",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id"],
+            "string_columns": ["name", "description"]
+          },
+          "sort": {
+            "sort_by": "name",
+            "sort_order": "asc"
+          },
+          "sortable_columns": {
+            "available_fields": ["id", "name", "created_at", "updated_at"]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/master-data/roles/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "name": "Admin",
+          "description": "Full Access",
+          "created_at": "2025-09-11T13:50:20+07:00",
+          "updated_at": "2025-09-11T13:50:20+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET DATA STATS",
+      "endpoint": "GET {{base_url}}/master-data/roles/stats",
+      "response": {
+        "data": {
+          "total": 3
+        },
+        "message": "Role statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/master-data/roles",
+      "body": {
+        "name": "Admin Utama",
+        "description": "Test"
+      },
+      "response": {
+        "data": {
+          "id": 3,
+          "name": "Admin Utama",
+          "description": "Test",
+          "created_at": "2025-09-11T14:27:46+07:00",
+          "updated_at": "2025-09-11T14:27:46+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/master-data/roles/2",
+      "body": {
+        "name": "Admin Utama2",
+        "description": "update"
+      },
+      "response": {
+        "data": {
+          "id": 2,
+          "name": "Admin Utama2",
+          "description": "update",
+          "created_at": "0001-01-01T00:00:00Z",
+          "updated_at": "0001-01-01T00:00:00Z"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/master-data/roles/2",
+      "response": {
+        "message": "deleted"
+      }
+    },
+    {
+      "title": "Get List All Menu with Menu Action",
+      "endpoint": "GET {{base_url}}/master-data/management-access/1",
+      "response": {
+        "data": {
+          "role_id": 1,
+          "role": {
+            "id": 1,
+            "name": "Admin",
+            "description": "Full Access"
+          },
+          "menus": [
+            {
+              "id": 1,
+              "name": "Data Master",
+              "code": "DATA_MASTER",
+              "url_path": "/data-master",
+              "icon": "database",
+              "order_no": 1,
+              "actions": [
+                {
+                  "id": 1,
+                  "name": "View Data Master",
+                  "is_active": true,
+                  "is_allowed": true,
+                  "action_type": {
+                    "id": 1,
+                    "code": "VIEW",
+                    "name": "View"
+                  }
+                }
+              ],
+              "children": [
+                {
+                  "id": 2,
+                  "name": "Company Management",
+                  "code": "COMPANY_MGMT",
+                  "url_path": "/data-master/company",
+                  "icon": "building",
+                  "order_no": 2,
+                  "actions": [
+                    {
+                      "id": 2,
+                      "name": "View Company Management",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 1,
+                        "code": "VIEW",
+                        "name": "View"
+                      }
+                    }
+                  ],
+                  "children": [
+                    {
+                      "id": 10,
+                      "name": "Division",
+                      "code": "DIVISION",
+                      "url_path": "/data-master/company/division",
+                      "icon": "grid",
+                      "order_no": 1,
+                      "actions": [
+                        {
+                          "id": 3,
+                          "name": "View Division",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 1,
+                            "code": "VIEW",
+                            "name": "View"
+                          }
+                        },
+                        {
+                          "id": 4,
+                          "name": "Create Division",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 2,
+                            "code": "CREATE",
+                            "name": "Create"
+                          }
+                        },
+                        {
+                          "id": 5,
+                          "name": "Edit Division",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 3,
+                            "code": "EDIT",
+                            "name": "Edit"
+                          }
+                        },
+                        {
+                          "id": 6,
+                          "name": "Delete Division",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 4,
+                            "code": "DELETE",
+                            "name": "Delete"
+                          }
+                        },
+                        {
+                          "id": 7,
+                          "name": "Detail Division",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 8,
+                            "code": "DETAIL",
+                            "name": "Detail"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": 11,
+                      "name": "Job Position",
+                      "code": "JOB_POSITION",
+                      "url_path": "/data-master/company/job-position",
+                      "icon": "briefcase",
+                      "order_no": 2,
+                      "actions": [
+                        {
+                          "id": 8,
+                          "name": "View Job Position",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 1,
+                            "code": "VIEW",
+                            "name": "View"
+                          }
+                        },
+                        {
+                          "id": 9,
+                          "name": "Create Job Position",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 2,
+                            "code": "CREATE",
+                            "name": "Create"
+                          }
+                        },
+                        {
+                          "id": 10,
+                          "name": "Edit Job Position",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 3,
+                            "code": "EDIT",
+                            "name": "Edit"
+                          }
+                        },
+                        {
+                          "id": 11,
+                          "name": "Delete Job Position",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 4,
+                            "code": "DELETE",
+                            "name": "Delete"
+                          }
+                        },
+                        {
+                          "id": 12,
+                          "name": "Detail Job Position",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 8,
+                            "code": "DETAIL",
+                            "name": "Detail"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": 12,
+                      "name": "Employee",
+                      "code": "EMPLOYEE",
+                      "url_path": "/data-master/company/employee",
+                      "icon": "user",
+                      "order_no": 3,
+                      "actions": [
+                        {
+                          "id": 13,
+                          "name": "View Employee",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 1,
+                            "code": "VIEW",
+                            "name": "View"
+                          }
+                        },
+                        {
+                          "id": 14,
+                          "name": "Create Employee",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 2,
+                            "code": "CREATE",
+                            "name": "Create"
+                          }
+                        },
+                        {
+                          "id": 15,
+                          "name": "Edit Employee",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 3,
+                            "code": "EDIT",
+                            "name": "Edit"
+                          }
+                        },
+                        {
+                          "id": 16,
+                          "name": "Delete Employee",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 4,
+                            "code": "DELETE",
+                            "name": "Delete"
+                          }
+                        },
+                        {
+                          "id": 17,
+                          "name": "Detail Employee",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 8,
+                            "code": "DETAIL",
+                            "name": "Detail"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": 3,
+                  "name": "User Management",
+                  "code": "USER_MGMT",
+                  "url_path": "/data-master/user-management",
+                  "icon": "users",
+                  "order_no": 3,
+                  "actions": [
+                    {
+                      "id": 18,
+                      "name": "View User Management",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 1,
+                        "code": "VIEW",
+                        "name": "View"
+                      }
+                    }
+                  ],
+                  "children": [
+                    {
+                      "id": 13,
+                      "name": "User",
+                      "code": "USER",
+                      "url_path": "/data-master/user-management/user",
+                      "icon": "user",
+                      "order_no": 1,
+                      "actions": [
+                        {
+                          "id": 19,
+                          "name": "View User",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 1,
+                            "code": "VIEW",
+                            "name": "View"
+                          }
+                        },
+                        {
+                          "id": 20,
+                          "name": "Create User",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 2,
+                            "code": "CREATE",
+                            "name": "Create"
+                          }
+                        },
+                        {
+                          "id": 21,
+                          "name": "Edit User",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 3,
+                            "code": "EDIT",
+                            "name": "Edit"
+                          }
+                        },
+                        {
+                          "id": 22,
+                          "name": "Delete User",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 4,
+                            "code": "DELETE",
+                            "name": "Delete"
+                          }
+                        },
+                        {
+                          "id": 23,
+                          "name": "Detail User",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 8,
+                            "code": "DETAIL",
+                            "name": "Detail"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": 14,
+                      "name": "Role",
+                      "code": "ROLE",
+                      "url_path": "/data-master/user-management/role",
+                      "icon": "shield",
+                      "order_no": 2,
+                      "actions": [
+                        {
+                          "id": 24,
+                          "name": "View Role",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 1,
+                            "code": "VIEW",
+                            "name": "View"
+                          }
+                        },
+                        {
+                          "id": 25,
+                          "name": "Create Role",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 2,
+                            "code": "CREATE",
+                            "name": "Create"
+                          }
+                        },
+                        {
+                          "id": 26,
+                          "name": "Edit Role",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 3,
+                            "code": "EDIT",
+                            "name": "Edit"
+                          }
+                        },
+                        {
+                          "id": 27,
+                          "name": "Delete Role",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 4,
+                            "code": "DELETE",
+                            "name": "Delete"
+                          }
+                        },
+                        {
+                          "id": 28,
+                          "name": "Detail Role",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 8,
+                            "code": "DETAIL",
+                            "name": "Detail"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": 15,
+                      "name": "Menu",
+                      "code": "MENU",
+                      "url_path": "/data-master/user-management/menu",
+                      "icon": "menu",
+                      "order_no": 3,
+                      "actions": [
+                        {
+                          "id": 29,
+                          "name": "View Menu",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 1,
+                            "code": "VIEW",
+                            "name": "View"
+                          }
+                        },
+                        {
+                          "id": 30,
+                          "name": "Create Menu",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 2,
+                            "code": "CREATE",
+                            "name": "Create"
+                          }
+                        },
+                        {
+                          "id": 31,
+                          "name": "Edit Menu",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 3,
+                            "code": "EDIT",
+                            "name": "Edit"
+                          }
+                        },
+                        {
+                          "id": 32,
+                          "name": "Delete Menu",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 4,
+                            "code": "DELETE",
+                            "name": "Delete"
+                          }
+                        },
+                        {
+                          "id": 33,
+                          "name": "Detail Menu",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 8,
+                            "code": "DETAIL",
+                            "name": "Detail"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": 4,
+                  "name": "Partner & Relation",
+                  "code": "PARTNER_RELATION",
+                  "url_path": "/data-master/partner",
+                  "icon": "handshake",
+                  "order_no": 4,
+                  "actions": [
+                    {
+                      "id": 34,
+                      "name": "View Partner & Relation",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 1,
+                        "code": "VIEW",
+                        "name": "View"
+                      }
+                    }
+                  ],
+                  "children": [
+                    {
+                      "id": 16,
+                      "name": "Customer",
+                      "code": "CUSTOMER",
+                      "url_path": "/data-master/partner/customer",
+                      "icon": "users",
+                      "order_no": 1,
+                      "actions": [
+                        {
+                          "id": 35,
+                          "name": "View Customer",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 1,
+                            "code": "VIEW",
+                            "name": "View"
+                          }
+                        },
+                        {
+                          "id": 36,
+                          "name": "Create Customer",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 2,
+                            "code": "CREATE",
+                            "name": "Create"
+                          }
+                        },
+                        {
+                          "id": 37,
+                          "name": "Edit Customer",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 3,
+                            "code": "EDIT",
+                            "name": "Edit"
+                          }
+                        },
+                        {
+                          "id": 38,
+                          "name": "Delete Customer",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 4,
+                            "code": "DELETE",
+                            "name": "Delete"
+                          }
+                        },
+                        {
+                          "id": 39,
+                          "name": "Detail Customer",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 8,
+                            "code": "DETAIL",
+                            "name": "Detail"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": 17,
+                      "name": "Supplier",
+                      "code": "SUPPLIER",
+                      "url_path": "/data-master/partner/supplier",
+                      "icon": "truck",
+                      "order_no": 2,
+                      "actions": [
+                        {
+                          "id": 40,
+                          "name": "View Supplier",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 1,
+                            "code": "VIEW",
+                            "name": "View"
+                          }
+                        },
+                        {
+                          "id": 41,
+                          "name": "Create Supplier",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 2,
+                            "code": "CREATE",
+                            "name": "Create"
+                          }
+                        },
+                        {
+                          "id": 42,
+                          "name": "Edit Supplier",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 3,
+                            "code": "EDIT",
+                            "name": "Edit"
+                          }
+                        },
+                        {
+                          "id": 43,
+                          "name": "Delete Supplier",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 4,
+                            "code": "DELETE",
+                            "name": "Delete"
+                          }
+                        },
+                        {
+                          "id": 44,
+                          "name": "Detail Supplier",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 8,
+                            "code": "DETAIL",
+                            "name": "Detail"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": 5,
+                  "name": "Product",
+                  "code": "PRODUCT",
+                  "url_path": "/data-master/product",
+                  "icon": "package",
+                  "order_no": 5,
+                  "actions": [
+                    {
+                      "id": 45,
+                      "name": "View Product",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 1,
+                        "code": "VIEW",
+                        "name": "View"
+                      }
+                    }
+                  ],
+                  "children": [
+                    {
+                      "id": 18,
+                      "name": "Product Category",
+                      "code": "PRODUCT_CATEGORY",
+                      "url_path": "/data-master/product/category",
+                      "icon": "tag",
+                      "order_no": 1,
+                      "actions": [
+                        {
+                          "id": 46,
+                          "name": "View Product Category",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 1,
+                            "code": "VIEW",
+                            "name": "View"
+                          }
+                        },
+                        {
+                          "id": 47,
+                          "name": "Create Product Category",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 2,
+                            "code": "CREATE",
+                            "name": "Create"
+                          }
+                        },
+                        {
+                          "id": 48,
+                          "name": "Edit Product Category",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 3,
+                            "code": "EDIT",
+                            "name": "Edit"
+                          }
+                        },
+                        {
+                          "id": 49,
+                          "name": "Delete Product Category",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 4,
+                            "code": "DELETE",
+                            "name": "Delete"
+                          }
+                        },
+                        {
+                          "id": 50,
+                          "name": "Detail Product Category",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 8,
+                            "code": "DETAIL",
+                            "name": "Detail"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": 19,
+                      "name": "Unit Of Measure",
+                      "code": "UNIT_MEASURE",
+                      "url_path": "/data-master/product/unit-measure",
+                      "icon": "ruler",
+                      "order_no": 2,
+                      "actions": [
+                        {
+                          "id": 51,
+                          "name": "View Unit Of Measure",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 1,
+                            "code": "VIEW",
+                            "name": "View"
+                          }
+                        },
+                        {
+                          "id": 52,
+                          "name": "Create Unit Of Measure",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 2,
+                            "code": "CREATE",
+                            "name": "Create"
+                          }
+                        },
+                        {
+                          "id": 53,
+                          "name": "Edit Unit Of Measure",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 3,
+                            "code": "EDIT",
+                            "name": "Edit"
+                          }
+                        },
+                        {
+                          "id": 54,
+                          "name": "Delete Unit Of Measure",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 4,
+                            "code": "DELETE",
+                            "name": "Delete"
+                          }
+                        },
+                        {
+                          "id": 55,
+                          "name": "Detail Unit Of Measure",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 8,
+                            "code": "DETAIL",
+                            "name": "Detail"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": 20,
+                      "name": "Product",
+                      "code": "PRODUCT_ITEM",
+                      "url_path": "/data-master/product/item",
+                      "icon": "box",
+                      "order_no": 3,
+                      "actions": [
+                        {
+                          "id": 56,
+                          "name": "View Product Item",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 1,
+                            "code": "VIEW",
+                            "name": "View"
+                          }
+                        },
+                        {
+                          "id": 57,
+                          "name": "Create Product Item",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 2,
+                            "code": "CREATE",
+                            "name": "Create"
+                          }
+                        },
+                        {
+                          "id": 58,
+                          "name": "Edit Product Item",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 3,
+                            "code": "EDIT",
+                            "name": "Edit"
+                          }
+                        },
+                        {
+                          "id": 59,
+                          "name": "Delete Product Item",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 4,
+                            "code": "DELETE",
+                            "name": "Delete"
+                          }
+                        },
+                        {
+                          "id": 60,
+                          "name": "Detail Product Item",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 8,
+                            "code": "DETAIL",
+                            "name": "Detail"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": 21,
+                      "name": "Warehouse",
+                      "code": "WAREHOUSE",
+                      "url_path": "/data-master/product/warehouse",
+                      "icon": "warehouse",
+                      "order_no": 4,
+                      "actions": [
+                        {
+                          "id": 61,
+                          "name": "View Warehouse",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 1,
+                            "code": "VIEW",
+                            "name": "View"
+                          }
+                        },
+                        {
+                          "id": 62,
+                          "name": "Create Warehouse",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 2,
+                            "code": "CREATE",
+                            "name": "Create"
+                          }
+                        },
+                        {
+                          "id": 63,
+                          "name": "Edit Warehouse",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 3,
+                            "code": "EDIT",
+                            "name": "Edit"
+                          }
+                        },
+                        {
+                          "id": 64,
+                          "name": "Delete Warehouse",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 4,
+                            "code": "DELETE",
+                            "name": "Delete"
+                          }
+                        },
+                        {
+                          "id": 65,
+                          "name": "Detail Warehouse",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 8,
+                            "code": "DETAIL",
+                            "name": "Detail"
+                          }
+                        },
+                        {
+                          "id": 66,
+                          "name": "Export Warehouse",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 6,
+                            "code": "EXPORT",
+                            "name": "Export"
+                          }
+                        },
+                        {
+                          "id": 67,
+                          "name": "Print Warehouse",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 7,
+                            "code": "PRINT",
+                            "name": "Print"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": 22,
+                      "name": "Inventory Batch",
+                      "code": "INVENTORY_BATCH",
+                      "url_path": "/data-master/product/inventory-batch",
+                      "icon": "layers",
+                      "order_no": 5,
+                      "actions": [
+                        {
+                          "id": 68,
+                          "name": "View Inventory Batch",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 1,
+                            "code": "VIEW",
+                            "name": "View"
+                          }
+                        },
+                        {
+                          "id": 69,
+                          "name": "Create Inventory Batch",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 2,
+                            "code": "CREATE",
+                            "name": "Create"
+                          }
+                        },
+                        {
+                          "id": 70,
+                          "name": "Edit Inventory Batch",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 3,
+                            "code": "EDIT",
+                            "name": "Edit"
+                          }
+                        },
+                        {
+                          "id": 71,
+                          "name": "Delete Inventory Batch",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 4,
+                            "code": "DELETE",
+                            "name": "Delete"
+                          }
+                        },
+                        {
+                          "id": 72,
+                          "name": "Detail Inventory Batch",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 8,
+                            "code": "DETAIL",
+                            "name": "Detail"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "id": 6,
+                  "name": "System Configuration",
+                  "code": "SYSTEM_CONFIG",
+                  "url_path": "/data-master/system",
+                  "icon": "settings",
+                  "order_no": 6,
+                  "actions": [
+                    {
+                      "id": 73,
+                      "name": "View System Configuration",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 1,
+                        "code": "VIEW",
+                        "name": "View"
+                      }
+                    }
+                  ],
+                  "children": [
+                    {
+                      "id": 23,
+                      "name": "Area",
+                      "code": "AREA",
+                      "url_path": "/data-master/system/area",
+                      "icon": "map",
+                      "order_no": 1,
+                      "actions": [
+                        {
+                          "id": 74,
+                          "name": "View Area",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 1,
+                            "code": "VIEW",
+                            "name": "View"
+                          }
+                        },
+                        {
+                          "id": 75,
+                          "name": "Create Area",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 2,
+                            "code": "CREATE",
+                            "name": "Create"
+                          }
+                        },
+                        {
+                          "id": 76,
+                          "name": "Edit Area",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 3,
+                            "code": "EDIT",
+                            "name": "Edit"
+                          }
+                        },
+                        {
+                          "id": 77,
+                          "name": "Delete Area",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 4,
+                            "code": "DELETE",
+                            "name": "Delete"
+                          }
+                        },
+                        {
+                          "id": 78,
+                          "name": "Detail Area",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 8,
+                            "code": "DETAIL",
+                            "name": "Detail"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": 24,
+                      "name": "City",
+                      "code": "CITY",
+                      "url_path": "/data-master/system/city",
+                      "icon": "map-pin",
+                      "order_no": 2,
+                      "actions": [
+                        {
+                          "id": 79,
+                          "name": "View City",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 1,
+                            "code": "VIEW",
+                            "name": "View"
+                          }
+                        },
+                        {
+                          "id": 80,
+                          "name": "Create City",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 2,
+                            "code": "CREATE",
+                            "name": "Create"
+                          }
+                        },
+                        {
+                          "id": 81,
+                          "name": "Edit City",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 3,
+                            "code": "EDIT",
+                            "name": "Edit"
+                          }
+                        },
+                        {
+                          "id": 82,
+                          "name": "Delete City",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 4,
+                            "code": "DELETE",
+                            "name": "Delete"
+                          }
+                        },
+                        {
+                          "id": 83,
+                          "name": "Detail City",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 8,
+                            "code": "DETAIL",
+                            "name": "Detail"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": 25,
+                      "name": "Chart Of Account",
+                      "code": "CHART_ACCOUNT",
+                      "url_path": "/data-master/system/chart-account",
+                      "icon": "pie-chart",
+                      "order_no": 3,
+                      "actions": [
+                        {
+                          "id": 84,
+                          "name": "View Chart Of Account",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 1,
+                            "code": "VIEW",
+                            "name": "View"
+                          }
+                        },
+                        {
+                          "id": 85,
+                          "name": "Create Chart Of Account",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 2,
+                            "code": "CREATE",
+                            "name": "Create"
+                          }
+                        },
+                        {
+                          "id": 86,
+                          "name": "Edit Chart Of Account",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 3,
+                            "code": "EDIT",
+                            "name": "Edit"
+                          }
+                        },
+                        {
+                          "id": 87,
+                          "name": "Delete Chart Of Account",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 4,
+                            "code": "DELETE",
+                            "name": "Delete"
+                          }
+                        },
+                        {
+                          "id": 88,
+                          "name": "Detail Chart Of Account",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 8,
+                            "code": "DETAIL",
+                            "name": "Detail"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "id": 26,
+                      "name": "Provinces",
+                      "code": "PROVINCES",
+                      "url_path": "/data-master/system/provinces",
+                      "icon": "globe",
+                      "order_no": 4,
+                      "actions": [
+                        {
+                          "id": 89,
+                          "name": "View Provinces",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 1,
+                            "code": "VIEW",
+                            "name": "View"
+                          }
+                        },
+                        {
+                          "id": 90,
+                          "name": "Create Provinces",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 2,
+                            "code": "CREATE",
+                            "name": "Create"
+                          }
+                        },
+                        {
+                          "id": 91,
+                          "name": "Edit Provinces",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 3,
+                            "code": "EDIT",
+                            "name": "Edit"
+                          }
+                        },
+                        {
+                          "id": 92,
+                          "name": "Delete Provinces",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 4,
+                            "code": "DELETE",
+                            "name": "Delete"
+                          }
+                        },
+                        {
+                          "id": 93,
+                          "name": "Detail Provinces",
+                          "is_active": true,
+                          "is_allowed": true,
+                          "action_type": {
+                            "id": 8,
+                            "code": "DETAIL",
+                            "name": "Detail"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 7,
+              "name": "Sales",
+              "code": "SALES",
+              "url_path": "/sales",
+              "icon": "trending-up",
+              "order_no": 7,
+              "actions": [
+                {
+                  "id": 94,
+                  "name": "View Sales",
+                  "is_active": true,
+                  "is_allowed": true,
+                  "action_type": {
+                    "id": 1,
+                    "code": "VIEW",
+                    "name": "View"
+                  }
+                }
+              ],
+              "children": [
+                {
+                  "id": 27,
+                  "name": "Sales Order",
+                  "code": "SALES_ORDER",
+                  "url_path": "/sales/order",
+                  "icon": "file-text",
+                  "order_no": 1,
+                  "actions": [
+                    {
+                      "id": 95,
+                      "name": "View Sales Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 1,
+                        "code": "VIEW",
+                        "name": "View"
+                      }
+                    },
+                    {
+                      "id": 96,
+                      "name": "Create Sales Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 2,
+                        "code": "CREATE",
+                        "name": "Create"
+                      }
+                    },
+                    {
+                      "id": 97,
+                      "name": "Edit Sales Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 3,
+                        "code": "EDIT",
+                        "name": "Edit"
+                      }
+                    },
+                    {
+                      "id": 98,
+                      "name": "Delete Sales Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 4,
+                        "code": "DELETE",
+                        "name": "Delete"
+                      }
+                    },
+                    {
+                      "id": 99,
+                      "name": "Approve Sales Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 5,
+                        "code": "APPROVE",
+                        "name": "Approve"
+                      }
+                    },
+                    {
+                      "id": 100,
+                      "name": "Detail Sales Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 8,
+                        "code": "DETAIL",
+                        "name": "Detail"
+                      }
+                    },
+                    {
+                      "id": 101,
+                      "name": "Export Sales Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 6,
+                        "code": "EXPORT",
+                        "name": "Export"
+                      }
+                    },
+                    {
+                      "id": 102,
+                      "name": "Print Sales Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 7,
+                        "code": "PRINT",
+                        "name": "Print"
+                      }
+                    },
+                    {
+                      "id": 103,
+                      "name": "Revise Sales Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 9,
+                        "code": "REVISE",
+                        "name": "Revise"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": 28,
+                  "name": "Delivery Order",
+                  "code": "DELIVERY_ORDER",
+                  "url_path": "/sales/delivery-order",
+                  "icon": "truck",
+                  "order_no": 2,
+                  "actions": [
+                    {
+                      "id": 104,
+                      "name": "View Delivery Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 1,
+                        "code": "VIEW",
+                        "name": "View"
+                      }
+                    },
+                    {
+                      "id": 105,
+                      "name": "Create Delivery Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 2,
+                        "code": "CREATE",
+                        "name": "Create"
+                      }
+                    },
+                    {
+                      "id": 106,
+                      "name": "Edit Delivery Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 3,
+                        "code": "EDIT",
+                        "name": "Edit"
+                      }
+                    },
+                    {
+                      "id": 107,
+                      "name": "Delete Delivery Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 4,
+                        "code": "DELETE",
+                        "name": "Delete"
+                      }
+                    },
+                    {
+                      "id": 108,
+                      "name": "Approve Delivery Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 5,
+                        "code": "APPROVE",
+                        "name": "Approve"
+                      }
+                    },
+                    {
+                      "id": 109,
+                      "name": "Detail Delivery Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 8,
+                        "code": "DETAIL",
+                        "name": "Detail"
+                      }
+                    },
+                    {
+                      "id": 110,
+                      "name": "Export Delivery Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 6,
+                        "code": "EXPORT",
+                        "name": "Export"
+                      }
+                    },
+                    {
+                      "id": 111,
+                      "name": "Print Delivery Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 7,
+                        "code": "PRINT",
+                        "name": "Print"
+                      }
+                    },
+                    {
+                      "id": 112,
+                      "name": "Delivered Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 10,
+                        "code": "DELIVERED",
+                        "name": "Delivered"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": 29,
+                  "name": "Customer Invoices",
+                  "code": "CUSTOMER_INVOICES",
+                  "url_path": "/sales/customer-invoices",
+                  "icon": "file-invoice",
+                  "order_no": 3,
+                  "actions": [
+                    {
+                      "id": 113,
+                      "name": "View Customer Invoices",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 1,
+                        "code": "VIEW",
+                        "name": "View"
+                      }
+                    },
+                    {
+                      "id": 114,
+                      "name": "Create Customer Invoices",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 2,
+                        "code": "CREATE",
+                        "name": "Create"
+                      }
+                    },
+                    {
+                      "id": 115,
+                      "name": "Edit Customer Invoices",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 3,
+                        "code": "EDIT",
+                        "name": "Edit"
+                      }
+                    },
+                    {
+                      "id": 116,
+                      "name": "Delete Customer Invoices",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 4,
+                        "code": "DELETE",
+                        "name": "Delete"
+                      }
+                    },
+                    {
+                      "id": 117,
+                      "name": "Approve Customer Invoices",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 5,
+                        "code": "APPROVE",
+                        "name": "Approve"
+                      }
+                    },
+                    {
+                      "id": 118,
+                      "name": "Detail Customer Invoices",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 8,
+                        "code": "DETAIL",
+                        "name": "Detail"
+                      }
+                    },
+                    {
+                      "id": 119,
+                      "name": "Export Customer Invoices",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 6,
+                        "code": "EXPORT",
+                        "name": "Export"
+                      }
+                    },
+                    {
+                      "id": 120,
+                      "name": "Print Customer Invoices",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 7,
+                        "code": "PRINT",
+                        "name": "Print"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": 30,
+                  "name": "Payment SO",
+                  "code": "PAYMENT_SO",
+                  "url_path": "/sales/payment",
+                  "icon": "credit-card",
+                  "order_no": 4,
+                  "actions": [
+                    {
+                      "id": 121,
+                      "name": "View Payment SO",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 1,
+                        "code": "VIEW",
+                        "name": "View"
+                      }
+                    },
+                    {
+                      "id": 122,
+                      "name": "Create Payment SO",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 2,
+                        "code": "CREATE",
+                        "name": "Create"
+                      }
+                    },
+                    {
+                      "id": 123,
+                      "name": "Edit Payment SO",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 3,
+                        "code": "EDIT",
+                        "name": "Edit"
+                      }
+                    },
+                    {
+                      "id": 124,
+                      "name": "Delete Payment SO",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 4,
+                        "code": "DELETE",
+                        "name": "Delete"
+                      }
+                    },
+                    {
+                      "id": 125,
+                      "name": "Approve Payment SO",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 5,
+                        "code": "APPROVE",
+                        "name": "Approve"
+                      }
+                    },
+                    {
+                      "id": 126,
+                      "name": "Detail Payment SO",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 8,
+                        "code": "DETAIL",
+                        "name": "Detail"
+                      }
+                    },
+                    {
+                      "id": 127,
+                      "name": "Export Payment SO",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 6,
+                        "code": "EXPORT",
+                        "name": "Export"
+                      }
+                    },
+                    {
+                      "id": 128,
+                      "name": "Print Payment SO",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 7,
+                        "code": "PRINT",
+                        "name": "Print"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 8,
+              "name": "Purchase",
+              "code": "PURCHASE",
+              "url_path": "/purchase",
+              "icon": "shopping-cart",
+              "order_no": 8,
+              "actions": [
+                {
+                  "id": 129,
+                  "name": "View Purchase",
+                  "is_active": true,
+                  "is_allowed": true,
+                  "action_type": {
+                    "id": 1,
+                    "code": "VIEW",
+                    "name": "View"
+                  }
+                }
+              ],
+              "children": [
+                {
+                  "id": 31,
+                  "name": "Purchase Order",
+                  "code": "PURCHASE_ORDER",
+                  "url_path": "/purchase/order",
+                  "icon": "file-text",
+                  "order_no": 1,
+                  "actions": [
+                    {
+                      "id": 130,
+                      "name": "View Purchase Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 1,
+                        "code": "VIEW",
+                        "name": "View"
+                      }
+                    },
+                    {
+                      "id": 131,
+                      "name": "Create Purchase Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 2,
+                        "code": "CREATE",
+                        "name": "Create"
+                      }
+                    },
+                    {
+                      "id": 132,
+                      "name": "Edit Purchase Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 3,
+                        "code": "EDIT",
+                        "name": "Edit"
+                      }
+                    },
+                    {
+                      "id": 133,
+                      "name": "Delete Purchase Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 4,
+                        "code": "DELETE",
+                        "name": "Delete"
+                      }
+                    },
+                    {
+                      "id": 134,
+                      "name": "Approve Purchase Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 5,
+                        "code": "APPROVE",
+                        "name": "Approve"
+                      }
+                    },
+                    {
+                      "id": 135,
+                      "name": "Detail Purchase Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 8,
+                        "code": "DETAIL",
+                        "name": "Detail"
+                      }
+                    },
+                    {
+                      "id": 136,
+                      "name": "Export Purchase Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 6,
+                        "code": "EXPORT",
+                        "name": "Export"
+                      }
+                    },
+                    {
+                      "id": 137,
+                      "name": "Print Purchase Order",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 7,
+                        "code": "PRINT",
+                        "name": "Print"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": 32,
+                  "name": "Goods Receipt",
+                  "code": "GOODS_RECEIPT",
+                  "url_path": "/purchase/goods-receipt",
+                  "icon": "package",
+                  "order_no": 2,
+                  "actions": [
+                    {
+                      "id": 138,
+                      "name": "View Goods Receipt",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 1,
+                        "code": "VIEW",
+                        "name": "View"
+                      }
+                    },
+                    {
+                      "id": 139,
+                      "name": "Create Goods Receipt",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 2,
+                        "code": "CREATE",
+                        "name": "Create"
+                      }
+                    },
+                    {
+                      "id": 140,
+                      "name": "Edit Goods Receipt",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 3,
+                        "code": "EDIT",
+                        "name": "Edit"
+                      }
+                    },
+                    {
+                      "id": 141,
+                      "name": "Delete Goods Receipt",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 4,
+                        "code": "DELETE",
+                        "name": "Delete"
+                      }
+                    },
+                    {
+                      "id": 142,
+                      "name": "Approve Goods Receipt",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 5,
+                        "code": "APPROVE",
+                        "name": "Approve"
+                      }
+                    },
+                    {
+                      "id": 143,
+                      "name": "Detail Goods Receipt",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 8,
+                        "code": "DETAIL",
+                        "name": "Detail"
+                      }
+                    },
+                    {
+                      "id": 144,
+                      "name": "Export Goods Receipt",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 6,
+                        "code": "EXPORT",
+                        "name": "Export"
+                      }
+                    },
+                    {
+                      "id": 145,
+                      "name": "Print Goods Receipt",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 7,
+                        "code": "PRINT",
+                        "name": "Print"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": 33,
+                  "name": "Supplier Invoices",
+                  "code": "SUPPLIER_INVOICES",
+                  "url_path": "/purchase/supplier-invoices",
+                  "icon": "file",
+                  "order_no": 3,
+                  "actions": [
+                    {
+                      "id": 146,
+                      "name": "View Supplier Invoices",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 1,
+                        "code": "VIEW",
+                        "name": "View"
+                      }
+                    },
+                    {
+                      "id": 147,
+                      "name": "Create Supplier Invoices",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 2,
+                        "code": "CREATE",
+                        "name": "Create"
+                      }
+                    },
+                    {
+                      "id": 148,
+                      "name": "Edit Supplier Invoices",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 3,
+                        "code": "EDIT",
+                        "name": "Edit"
+                      }
+                    },
+                    {
+                      "id": 149,
+                      "name": "Delete Supplier Invoices",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 4,
+                        "code": "DELETE",
+                        "name": "Delete"
+                      }
+                    },
+                    {
+                      "id": 150,
+                      "name": "Approve Supplier Invoices",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 5,
+                        "code": "APPROVE",
+                        "name": "Approve"
+                      }
+                    },
+                    {
+                      "id": 151,
+                      "name": "Detail Supplier Invoices",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 8,
+                        "code": "DETAIL",
+                        "name": "Detail"
+                      }
+                    },
+                    {
+                      "id": 152,
+                      "name": "Export Supplier Invoices",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 6,
+                        "code": "EXPORT",
+                        "name": "Export"
+                      }
+                    },
+                    {
+                      "id": 153,
+                      "name": "Print Supplier Invoices",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 7,
+                        "code": "PRINT",
+                        "name": "Print"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": 34,
+                  "name": "Payment PO",
+                  "code": "PAYMENT_PO",
+                  "url_path": "/purchase/payment",
+                  "icon": "credit-card",
+                  "order_no": 4,
+                  "actions": [
+                    {
+                      "id": 154,
+                      "name": "View Payment PO",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 1,
+                        "code": "VIEW",
+                        "name": "View"
+                      }
+                    },
+                    {
+                      "id": 155,
+                      "name": "Create Payment PO",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 2,
+                        "code": "CREATE",
+                        "name": "Create"
+                      }
+                    },
+                    {
+                      "id": 156,
+                      "name": "Edit Payment PO",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 3,
+                        "code": "EDIT",
+                        "name": "Edit"
+                      }
+                    },
+                    {
+                      "id": 157,
+                      "name": "Delete Payment PO",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 4,
+                        "code": "DELETE",
+                        "name": "Delete"
+                      }
+                    },
+                    {
+                      "id": 158,
+                      "name": "Detail Payment PO",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 8,
+                        "code": "DETAIL",
+                        "name": "Detail"
+                      }
+                    },
+                    {
+                      "id": 159,
+                      "name": "Export Payment PO",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 6,
+                        "code": "EXPORT",
+                        "name": "Export"
+                      }
+                    },
+                    {
+                      "id": 160,
+                      "name": "Print Payment PO",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 7,
+                        "code": "PRINT",
+                        "name": "Print"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 9,
+              "name": "Finance",
+              "code": "FINANCE",
+              "url_path": "/finance",
+              "icon": "dollar-sign",
+              "order_no": 9,
+              "actions": [
+                {
+                  "id": 161,
+                  "name": "View Finance",
+                  "is_active": true,
+                  "is_allowed": true,
+                  "action_type": {
+                    "id": 1,
+                    "code": "VIEW",
+                    "name": "View"
+                  }
+                }
+              ],
+              "children": [
+                {
+                  "id": 35,
+                  "name": "Journal Entry",
+                  "code": "JOURNAL_ENTRY",
+                  "url_path": "/finance/journal-entry",
+                  "icon": "book",
+                  "order_no": 1,
+                  "actions": [
+                    {
+                      "id": 162,
+                      "name": "View Journal Entry",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 1,
+                        "code": "VIEW",
+                        "name": "View"
+                      }
+                    },
+                    {
+                      "id": 163,
+                      "name": "Create Journal Entry",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 2,
+                        "code": "CREATE",
+                        "name": "Create"
+                      }
+                    },
+                    {
+                      "id": 164,
+                      "name": "Edit Journal Entry",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 3,
+                        "code": "EDIT",
+                        "name": "Edit"
+                      }
+                    },
+                    {
+                      "id": 165,
+                      "name": "Delete Journal Entry",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 4,
+                        "code": "DELETE",
+                        "name": "Delete"
+                      }
+                    },
+                    {
+                      "id": 166,
+                      "name": "Detail Journal Entry",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 8,
+                        "code": "DETAIL",
+                        "name": "Detail"
+                      }
+                    },
+                    {
+                      "id": 167,
+                      "name": "Export Journal Entry",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 6,
+                        "code": "EXPORT",
+                        "name": "Export"
+                      }
+                    },
+                    {
+                      "id": 168,
+                      "name": "Print Journal Entry",
+                      "is_active": true,
+                      "is_allowed": true,
+                      "action_type": {
+                        "id": 7,
+                        "code": "PRINT",
+                        "name": "Print"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "Change Access Role",
+      "endpoint": "POST {{base_url}}/master-data/management-access",
+      "body": {
+        "role_id": 2,
+        "menu_action_ids": [1, 2, 3, 4, 5]
+      },
+      "response": {
+        "data": {
+          "menu_action_ids": [1, 2, 3, 4, 5],
+          "role_id": 2,
+          "role_name": "User"
+        },
+        "message": "Role menu actions created successfully"
+      }
+    }
+  ]
+}

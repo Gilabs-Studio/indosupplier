@@ -1,0 +1,1731 @@
+{
+  "title": "Finance/Asset Management",
+  "description": "A comprehensive guide to the Asset Management API responses covering Asset List, Asset Category, Asset Location, Asset Transaction, and Asset Depreciation modules.",
+  "modules": [
+    {
+      "module_name": "Asset List",
+      "base_path": "/finance/assets",
+      "sections": [
+        {
+          "title": "GET DATA",
+          "endpoint": "GET {{base_url}}/finance/assets",
+          "response": {
+            "data": [
+              {
+                "id": 1,
+                "asset_category_id": 1,
+                "asset_location_id": 1,
+                "code": "AST-001",
+                "name": "Office Building A",
+                "acquisition_date": "2024-01-15",
+                "acquisition_cost": 5000000000,
+                "accumulated_depreciation": 250000000,
+                "current_value": 4750000000,
+                "status": "ACTIVE",
+                "description": "Main office building in Jakarta",
+                "asset_category": {
+                  "id": 1,
+                  "name": "Building",
+                  "type": "FIXED",
+                  "depreciation_method": "STRAIGHT_LINE",
+                  "depreciation_rate": 5.0,
+                  "useful_life": 20,
+                  "is_depreciable": true
+                },
+                "asset_location": {
+                  "id": 1,
+                  "city_id": 3171,
+                  "name": "Jakarta Head Office",
+                  "address": "Jl. Sudirman No. 123, Jakarta Pusat",
+                  "latitude": -6.2088,
+                  "longitude": 106.8456,
+                  "city": {
+                    "id": 3171,
+                    "name": "Jakarta Pusat"
+                  }
+                },
+                "created_at": "2024-01-15T10:30:00+07:00",
+                "updated_at": "2024-01-15T10:30:00+07:00"
+              },
+              {
+                "id": 2,
+                "asset_category_id": 2,
+                "asset_location_id": 1,
+                "code": "AST-002",
+                "name": "Company Vehicle - Toyota Avanza",
+                "acquisition_date": "2024-02-01",
+                "acquisition_cost": 250000000,
+                "accumulated_depreciation": 12500000,
+                "current_value": 237500000,
+                "status": "ACTIVE",
+                "description": "Company car for operational use",
+                "asset_category": {
+                  "id": 2,
+                  "name": "Vehicle",
+                  "type": "FIXED",
+                  "depreciation_method": "DECLINING",
+                  "depreciation_rate": 25.0,
+                  "useful_life": 4,
+                  "is_depreciable": true
+                },
+                "asset_location": {
+                  "id": 1,
+                  "city_id": 3171,
+                  "name": "Jakarta Head Office",
+                  "address": "Jl. Sudirman No. 123, Jakarta Pusat",
+                  "latitude": -6.2088,
+                  "longitude": 106.8456,
+                  "city": {
+                    "id": 3171,
+                    "name": "Jakarta Pusat"
+                  }
+                },
+                "created_at": "2024-02-01T09:00:00+07:00",
+                "updated_at": "2024-02-01T09:00:00+07:00"
+              }
+            ],
+            "meta": {
+              "filter": {
+                "asset_category_id": "",
+                "asset_location_id": "",
+                "status": "",
+                "start_date": "",
+                "end_date": ""
+              },
+              "pagination": {
+                "limit": 10,
+                "page": 1,
+                "total": 2
+              },
+              "search": {
+                "search": "",
+                "searchBy": ""
+              },
+              "searchable_columns": {
+                "numeric_columns": [
+                  "id",
+                  "asset_category_id",
+                  "asset_location_id",
+                  "acquisition_cost",
+                  "accumulated_depreciation",
+                  "current_value"
+                ],
+                "string_columns": ["code", "name", "status", "description"],
+                "date_columns": ["acquisition_date"]
+              },
+              "sort": {
+                "sort_by": "",
+                "sort_order": ""
+              },
+              "sortable_columns": {
+                "available_fields": [
+                  "id",
+                  "code",
+                  "name",
+                  "acquisition_date",
+                  "acquisition_cost",
+                  "current_value",
+                  "status",
+                  "created_at",
+                  "updated_at"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "title": "GET DATA BY ID",
+          "endpoint": "GET {{base_url}}/finance/assets/1",
+          "response": {
+            "data": {
+              "id": 1,
+              "asset_category_id": 1,
+              "asset_location_id": 1,
+              "code": "AST-001",
+              "name": "Office Building A",
+              "acquisition_date": "2024-01-15",
+              "acquisition_cost": 5000000000,
+              "accumulated_depreciation": 250000000,
+              "current_value": 4750000000,
+              "status": "ACTIVE",
+              "description": "Main office building in Jakarta",
+              "asset_category": {
+                "id": 1,
+                "name": "Building",
+                "type": "FIXED",
+                "depreciation_method": "STRAIGHT_LINE",
+                "depreciation_rate": 5.0,
+                "useful_life": 20,
+                "is_depreciable": true
+              },
+              "asset_location": {
+                "id": 1,
+                "city_id": 3171,
+                "name": "Jakarta Head Office",
+                "address": "Jl. Sudirman No. 123, Jakarta Pusat",
+                "latitude": -6.2088,
+                "longitude": 106.8456,
+                "city": {
+                  "id": 3171,
+                  "name": "Jakarta Pusat"
+                }
+              },
+              "asset_depreciations": [
+                {
+                  "id": 1,
+                  "asset_id": 1,
+                  "period": "2024-01-31",
+                  "depreciation_amount": 20833333.33,
+                  "accumulated_depreciation": 20833333.33,
+                  "book_value": 4979166666.67,
+                  "status": "APPROVED"
+                },
+                {
+                  "id": 2,
+                  "asset_id": 1,
+                  "period": "2024-02-29",
+                  "depreciation_amount": 20833333.33,
+                  "accumulated_depreciation": 41666666.66,
+                  "book_value": 4958333333.34,
+                  "status": "APPROVED"
+                }
+              ],
+              "asset_transactions": [
+                {
+                  "id": 1,
+                  "asset_id": 1,
+                  "transaction_type": "ACQUISITION",
+                  "transaction_date": "2024-01-15",
+                  "transaction_amount": 5000000000,
+                  "description": "Initial acquisition of building",
+                  "status": "APPROVED"
+                }
+              ],
+              "created_at": "2024-01-15T10:30:00+07:00",
+              "updated_at": "2024-01-15T10:30:00+07:00"
+            }
+          }
+        },
+        {
+          "title": "GET STATS",
+          "endpoint": "GET {{base_url}}/finance/assets/stats",
+          "response": {
+            "data": {
+              "total": 150,
+              "active": 120,
+              "inactive": 15,
+              "sold": 10,
+              "disposed": 5,
+              "total_acquisition_cost": 25000000000,
+              "total_accumulated_depreciation": 5000000000,
+              "total_current_value": 20000000000,
+              "by_category": [
+                {
+                  "category_id": 1,
+                  "category_name": "Building",
+                  "count": 25,
+                  "total_value": 15000000000
+                },
+                {
+                  "category_id": 2,
+                  "category_name": "Vehicle",
+                  "count": 50,
+                  "total_value": 3000000000
+                }
+              ],
+              "by_location": [
+                {
+                  "location_id": 1,
+                  "location_name": "Jakarta Head Office",
+                  "count": 80,
+                  "total_value": 18000000000
+                },
+                {
+                  "location_id": 2,
+                  "location_name": "Surabaya Branch",
+                  "count": 40,
+                  "total_value": 2000000000
+                }
+              ]
+            },
+            "message": "Asset statistics retrieved successfully"
+          }
+        },
+        {
+          "title": "GET ADD DATA",
+          "endpoint": "GET {{base_url}}/finance/assets/add",
+          "response": {
+            "data": {
+              "asset_categories": [
+                {
+                  "id": 1,
+                  "name": "Building",
+                  "type": "FIXED",
+                  "depreciation_method": "STRAIGHT_LINE",
+                  "depreciation_rate": 5.0,
+                  "useful_life": 20,
+                  "is_depreciable": true
+                },
+                {
+                  "id": 2,
+                  "name": "Vehicle",
+                  "type": "FIXED",
+                  "depreciation_method": "DECLINING",
+                  "depreciation_rate": 25.0,
+                  "useful_life": 4,
+                  "is_depreciable": true
+                },
+                {
+                  "id": 3,
+                  "name": "Computer Equipment",
+                  "type": "FIXED",
+                  "depreciation_method": "STRAIGHT_LINE",
+                  "depreciation_rate": 25.0,
+                  "useful_life": 4,
+                  "is_depreciable": true
+                }
+              ],
+              "asset_locations": [
+                {
+                  "id": 1,
+                  "city_id": 3171,
+                  "name": "Jakarta Head Office",
+                  "address": "Jl. Sudirman No. 123, Jakarta Pusat",
+                  "city": {
+                    "id": 3171,
+                    "name": "Jakarta Pusat"
+                  }
+                },
+                {
+                  "id": 2,
+                  "city_id": 3578,
+                  "name": "Surabaya Branch",
+                  "address": "Jl. Raya Darmo No. 45, Surabaya",
+                  "city": {
+                    "id": 3578,
+                    "name": "Surabaya"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "POST DATA",
+          "endpoint": "POST {{base_url}}/finance/assets",
+          "body": {
+            "asset_category_id": 3,
+            "asset_location_id": 1,
+            "code": "AST-003",
+            "name": "Dell Laptop - Finance Dept",
+            "acquisition_date": "2024-03-01",
+            "acquisition_cost": 15000000,
+            "description": "Laptop for finance department"
+          },
+          "response": {
+            "data": {
+              "id": 3,
+              "asset_category_id": 3,
+              "asset_location_id": 1,
+              "code": "AST-003",
+              "name": "Dell Laptop - Finance Dept",
+              "acquisition_date": "2024-03-01",
+              "acquisition_cost": 15000000,
+              "accumulated_depreciation": 0,
+              "current_value": 15000000,
+              "status": "ACTIVE",
+              "description": "Laptop for finance department",
+              "asset_category": {
+                "id": 3,
+                "name": "Computer Equipment",
+                "type": "FIXED",
+                "depreciation_method": "STRAIGHT_LINE",
+                "depreciation_rate": 25.0,
+                "useful_life": 4,
+                "is_depreciable": true
+              },
+              "asset_location": {
+                "id": 1,
+                "city_id": 3171,
+                "name": "Jakarta Head Office",
+                "address": "Jl. Sudirman No. 123, Jakarta Pusat",
+                "city": {
+                  "id": 3171,
+                  "name": "Jakarta Pusat"
+                }
+              },
+              "created_at": "2024-03-01T10:00:00+07:00",
+              "updated_at": "2024-03-01T10:00:00+07:00"
+            },
+            "message": "Asset created successfully"
+          }
+        },
+        {
+          "title": "EDIT DATA",
+          "endpoint": "PUT {{base_url}}/finance/assets/3",
+          "body": {
+            "asset_category_id": 3,
+            "asset_location_id": 1,
+            "code": "AST-003",
+            "name": "Dell Laptop - Finance Dept (Updated)",
+            "acquisition_date": "2024-03-01",
+            "acquisition_cost": 16000000,
+            "description": "Updated laptop for finance department"
+          },
+          "response": {
+            "data": {
+              "id": 3,
+              "asset_category_id": 3,
+              "asset_location_id": 1,
+              "code": "AST-003",
+              "name": "Dell Laptop - Finance Dept (Updated)",
+              "acquisition_date": "2024-03-01",
+              "acquisition_cost": 16000000,
+              "accumulated_depreciation": 0,
+              "current_value": 16000000,
+              "status": "ACTIVE",
+              "description": "Updated laptop for finance department",
+              "asset_category": {
+                "id": 3,
+                "name": "Computer Equipment",
+                "type": "FIXED",
+                "depreciation_method": "STRAIGHT_LINE",
+                "depreciation_rate": 25.0,
+                "useful_life": 4,
+                "is_depreciable": true
+              },
+              "asset_location": {
+                "id": 1,
+                "city_id": 3171,
+                "name": "Jakarta Head Office",
+                "address": "Jl. Sudirman No. 123, Jakarta Pusat",
+                "city": {
+                  "id": 3171,
+                  "name": "Jakarta Pusat"
+                }
+              },
+              "created_at": "2024-03-01T10:00:00+07:00",
+              "updated_at": "2024-03-01T10:30:00+07:00"
+            },
+            "message": "Asset updated successfully"
+          }
+        },
+        {
+          "title": "DELETE DATA",
+          "endpoint": "DELETE {{base_url}}/finance/assets/3",
+          "response": {
+            "message": "Asset deleted successfully",
+            "data": {
+              "id": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "module_name": "Asset Category",
+      "base_path": "/finance/asset-categories",
+      "sections": [
+        {
+          "title": "GET DATA",
+          "endpoint": "GET {{base_url}}/finance/asset-categories",
+          "response": {
+            "data": [
+              {
+                "id": 1,
+                "name": "Building",
+                "type": "FIXED",
+                "depreciation_method": "STRAIGHT_LINE",
+                "depreciation_rate": 5.0,
+                "useful_life": 20,
+                "is_depreciable": true,
+                "created_at": "2024-01-01T08:00:00+07:00",
+                "updated_at": "2024-01-01T08:00:00+07:00"
+              },
+              {
+                "id": 2,
+                "name": "Vehicle",
+                "type": "FIXED",
+                "depreciation_method": "DECLINING",
+                "depreciation_rate": 25.0,
+                "useful_life": 4,
+                "is_depreciable": true,
+                "created_at": "2024-01-01T08:00:00+07:00",
+                "updated_at": "2024-01-01T08:00:00+07:00"
+              },
+              {
+                "id": 3,
+                "name": "Computer Equipment",
+                "type": "FIXED",
+                "depreciation_method": "STRAIGHT_LINE",
+                "depreciation_rate": 25.0,
+                "useful_life": 4,
+                "is_depreciable": true,
+                "created_at": "2024-01-01T08:00:00+07:00",
+                "updated_at": "2024-01-01T08:00:00+07:00"
+              },
+              {
+                "id": 4,
+                "name": "Office Furniture",
+                "type": "FIXED",
+                "depreciation_method": "STRAIGHT_LINE",
+                "depreciation_rate": 12.5,
+                "useful_life": 8,
+                "is_depreciable": true,
+                "created_at": "2024-01-01T08:00:00+07:00",
+                "updated_at": "2024-01-01T08:00:00+07:00"
+              },
+              {
+                "id": 5,
+                "name": "Land",
+                "type": "FIXED",
+                "depreciation_method": "NONE",
+                "depreciation_rate": 0.0,
+                "useful_life": 0,
+                "is_depreciable": false,
+                "created_at": "2024-01-01T08:00:00+07:00",
+                "updated_at": "2024-01-01T08:00:00+07:00"
+              }
+            ],
+            "meta": {
+              "filter": {
+                "type": "",
+                "depreciation_method": "",
+                "is_depreciable": ""
+              },
+              "pagination": {
+                "limit": 10,
+                "page": 1,
+                "total": 5
+              },
+              "search": {
+                "search": "",
+                "searchBy": ""
+              },
+              "searchable_columns": {
+                "numeric_columns": ["id", "depreciation_rate", "useful_life"],
+                "string_columns": ["name", "type", "depreciation_method"],
+                "boolean_columns": ["is_depreciable"]
+              },
+              "sort": {
+                "sort_by": "",
+                "sort_order": ""
+              },
+              "sortable_columns": {
+                "available_fields": [
+                  "id",
+                  "name",
+                  "type",
+                  "depreciation_method",
+                  "depreciation_rate",
+                  "useful_life",
+                  "is_depreciable",
+                  "created_at",
+                  "updated_at"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "title": "GET DATA BY ID",
+          "endpoint": "GET {{base_url}}/finance/asset-categories/1",
+          "response": {
+            "data": {
+              "id": 1,
+              "name": "Building",
+              "type": "FIXED",
+              "depreciation_method": "STRAIGHT_LINE",
+              "depreciation_rate": 5.0,
+              "useful_life": 20,
+              "is_depreciable": true,
+              "assets": [
+                {
+                  "id": 1,
+                  "code": "AST-001",
+                  "name": "Office Building A",
+                  "acquisition_cost": 5000000000,
+                  "current_value": 4750000000,
+                  "status": "ACTIVE"
+                }
+              ],
+              "created_at": "2024-01-01T08:00:00+07:00",
+              "updated_at": "2024-01-01T08:00:00+07:00"
+            }
+          }
+        },
+        {
+          "title": "GET STATS",
+          "endpoint": "GET {{base_url}}/finance/asset-categories/stats",
+          "response": {
+            "data": {
+              "total": 5,
+              "depreciable": 4,
+              "non_depreciable": 1,
+              "by_type": [
+                {
+                  "type": "FIXED",
+                  "count": 4
+                },
+                {
+                  "type": "CURRENT",
+                  "count": 0
+                },
+                {
+                  "type": "INTANGIBLE",
+                  "count": 0
+                },
+                {
+                  "type": "OTHER",
+                  "count": 1
+                }
+              ],
+              "by_depreciation_method": [
+                {
+                  "method": "STRAIGHT_LINE",
+                  "count": 3
+                },
+                {
+                  "method": "DECLINING",
+                  "count": 1
+                },
+                {
+                  "method": "NONE",
+                  "count": 1
+                }
+              ]
+            },
+            "message": "Asset category statistics retrieved successfully"
+          }
+        },
+        {
+          "title": "POST DATA",
+          "endpoint": "POST {{base_url}}/finance/asset-categories",
+          "body": {
+            "name": "Machinery",
+            "type": "FIXED",
+            "depreciation_method": "STRAIGHT_LINE",
+            "depreciation_rate": 10.0,
+            "useful_life": 10,
+            "is_depreciable": true
+          },
+          "response": {
+            "data": {
+              "id": 6,
+              "name": "Machinery",
+              "type": "FIXED",
+              "depreciation_method": "STRAIGHT_LINE",
+              "depreciation_rate": 10.0,
+              "useful_life": 10,
+              "is_depreciable": true,
+              "created_at": "2024-03-01T11:00:00+07:00",
+              "updated_at": "2024-03-01T11:00:00+07:00"
+            },
+            "message": "Asset category created successfully"
+          }
+        },
+        {
+          "title": "EDIT DATA",
+          "endpoint": "PUT {{base_url}}/finance/asset-categories/6",
+          "body": {
+            "name": "Machinery & Equipment",
+            "type": "FIXED",
+            "depreciation_method": "STRAIGHT_LINE",
+            "depreciation_rate": 12.5,
+            "useful_life": 8,
+            "is_depreciable": true
+          },
+          "response": {
+            "data": {
+              "id": 6,
+              "name": "Machinery & Equipment",
+              "type": "FIXED",
+              "depreciation_method": "STRAIGHT_LINE",
+              "depreciation_rate": 12.5,
+              "useful_life": 8,
+              "is_depreciable": true,
+              "created_at": "2024-03-01T11:00:00+07:00",
+              "updated_at": "2024-03-01T11:30:00+07:00"
+            },
+            "message": "Asset category updated successfully"
+          }
+        },
+        {
+          "title": "DELETE DATA",
+          "endpoint": "DELETE {{base_url}}/finance/asset-categories/6",
+          "response": {
+            "message": "Asset category deleted successfully",
+            "data": {
+              "id": 6
+            }
+          }
+        }
+      ]
+    },
+    {
+      "module_name": "Asset Location",
+      "base_path": "/finance/asset-locations",
+      "sections": [
+        {
+          "title": "GET DATA",
+          "endpoint": "GET {{base_url}}/finance/asset-locations",
+          "response": {
+            "data": [
+              {
+                "id": 1,
+                "city_id": 3171,
+                "name": "Jakarta Head Office",
+                "address": "Jl. Sudirman No. 123, Jakarta Pusat",
+                "latitude": -6.2088,
+                "longitude": 106.8456,
+                "city": {
+                  "id": 3171,
+                  "name": "Jakarta Pusat",
+                  "province_id": 31,
+                  "province": {
+                    "id": 31,
+                    "name": "DKI Jakarta"
+                  }
+                },
+                "created_at": "2024-01-01T08:00:00+07:00",
+                "updated_at": "2024-01-01T08:00:00+07:00"
+              },
+              {
+                "id": 2,
+                "city_id": 3578,
+                "name": "Surabaya Branch",
+                "address": "Jl. Raya Darmo No. 45, Surabaya",
+                "latitude": -7.2575,
+                "longitude": 112.7521,
+                "city": {
+                  "id": 3578,
+                  "name": "Surabaya",
+                  "province_id": 35,
+                  "province": {
+                    "id": 35,
+                    "name": "Jawa Timur"
+                  }
+                },
+                "created_at": "2024-01-01T08:00:00+07:00",
+                "updated_at": "2024-01-01T08:00:00+07:00"
+              },
+              {
+                "id": 3,
+                "city_id": 3273,
+                "name": "Bandung Office",
+                "address": "Jl. Asia Afrika No. 8, Bandung",
+                "latitude": -6.9175,
+                "longitude": 107.6191,
+                "city": {
+                  "id": 3273,
+                  "name": "Bandung",
+                  "province_id": 32,
+                  "province": {
+                    "id": 32,
+                    "name": "Jawa Barat"
+                  }
+                },
+                "created_at": "2024-01-05T09:00:00+07:00",
+                "updated_at": "2024-01-05T09:00:00+07:00"
+              }
+            ],
+            "meta": {
+              "filter": {
+                "city_id": "",
+                "province_id": ""
+              },
+              "pagination": {
+                "limit": 10,
+                "page": 1,
+                "total": 3
+              },
+              "search": {
+                "search": "",
+                "searchBy": ""
+              },
+              "searchable_columns": {
+                "numeric_columns": ["id", "city_id"],
+                "string_columns": ["name", "address"],
+                "float_columns": ["latitude", "longitude"]
+              },
+              "sort": {
+                "sort_by": "",
+                "sort_order": ""
+              },
+              "sortable_columns": {
+                "available_fields": [
+                  "id",
+                  "name",
+                  "city_id",
+                  "created_at",
+                  "updated_at"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "title": "GET DATA BY ID",
+          "endpoint": "GET {{base_url}}/finance/asset-locations/1",
+          "response": {
+            "data": {
+              "id": 1,
+              "city_id": 3171,
+              "name": "Jakarta Head Office",
+              "address": "Jl. Sudirman No. 123, Jakarta Pusat",
+              "latitude": -6.2088,
+              "longitude": 106.8456,
+              "city": {
+                "id": 3171,
+                "name": "Jakarta Pusat",
+                "province_id": 31,
+                "province": {
+                  "id": 31,
+                  "name": "DKI Jakarta"
+                }
+              },
+              "assets": [
+                {
+                  "id": 1,
+                  "code": "AST-001",
+                  "name": "Office Building A",
+                  "acquisition_cost": 5000000000,
+                  "current_value": 4750000000,
+                  "status": "ACTIVE"
+                },
+                {
+                  "id": 2,
+                  "code": "AST-002",
+                  "name": "Company Vehicle - Toyota Avanza",
+                  "acquisition_cost": 250000000,
+                  "current_value": 237500000,
+                  "status": "ACTIVE"
+                }
+              ],
+              "created_at": "2024-01-01T08:00:00+07:00",
+              "updated_at": "2024-01-01T08:00:00+07:00"
+            }
+          }
+        },
+        {
+          "title": "GET STATS",
+          "endpoint": "GET {{base_url}}/finance/asset-locations/stats",
+          "response": {
+            "data": {
+              "total": 3,
+              "by_province": [
+                {
+                  "province_id": 31,
+                  "province_name": "DKI Jakarta",
+                  "count": 1,
+                  "asset_count": 80
+                },
+                {
+                  "province_id": 35,
+                  "province_name": "Jawa Timur",
+                  "count": 1,
+                  "asset_count": 40
+                },
+                {
+                  "province_id": 32,
+                  "province_name": "Jawa Barat",
+                  "count": 1,
+                  "asset_count": 30
+                }
+              ],
+              "total_assets": 150
+            },
+            "message": "Asset location statistics retrieved successfully"
+          }
+        },
+        {
+          "title": "GET ADD DATA",
+          "endpoint": "GET {{base_url}}/finance/asset-locations/add",
+          "response": {
+            "data": {
+              "provinces": [
+                {
+                  "id": 31,
+                  "name": "DKI Jakarta"
+                },
+                {
+                  "id": 32,
+                  "name": "Jawa Barat"
+                },
+                {
+                  "id": 33,
+                  "name": "Jawa Tengah"
+                },
+                {
+                  "id": 35,
+                  "name": "Jawa Timur"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "POST DATA",
+          "endpoint": "POST {{base_url}}/finance/asset-locations",
+          "body": {
+            "city_id": 3374,
+            "name": "Semarang Office",
+            "address": "Jl. Pemuda No. 100, Semarang",
+            "latitude": -6.9667,
+            "longitude": 110.4167
+          },
+          "response": {
+            "data": {
+              "id": 4,
+              "city_id": 3374,
+              "name": "Semarang Office",
+              "address": "Jl. Pemuda No. 100, Semarang",
+              "latitude": -6.9667,
+              "longitude": 110.4167,
+              "city": {
+                "id": 3374,
+                "name": "Semarang",
+                "province_id": 33,
+                "province": {
+                  "id": 33,
+                  "name": "Jawa Tengah"
+                }
+              },
+              "created_at": "2024-03-01T12:00:00+07:00",
+              "updated_at": "2024-03-01T12:00:00+07:00"
+            },
+            "message": "Asset location created successfully"
+          }
+        },
+        {
+          "title": "EDIT DATA",
+          "endpoint": "PUT {{base_url}}/finance/asset-locations/4",
+          "body": {
+            "city_id": 3374,
+            "name": "Semarang Regional Office",
+            "address": "Jl. Pemuda No. 100-102, Semarang",
+            "latitude": -6.9667,
+            "longitude": 110.4167
+          },
+          "response": {
+            "data": {
+              "id": 4,
+              "city_id": 3374,
+              "name": "Semarang Regional Office",
+              "address": "Jl. Pemuda No. 100-102, Semarang",
+              "latitude": -6.9667,
+              "longitude": 110.4167,
+              "city": {
+                "id": 3374,
+                "name": "Semarang",
+                "province_id": 33,
+                "province": {
+                  "id": 33,
+                  "name": "Jawa Tengah"
+                }
+              },
+              "created_at": "2024-03-01T12:00:00+07:00",
+              "updated_at": "2024-03-01T12:30:00+07:00"
+            },
+            "message": "Asset location updated successfully"
+          }
+        },
+        {
+          "title": "DELETE DATA",
+          "endpoint": "DELETE {{base_url}}/finance/asset-locations/4",
+          "response": {
+            "message": "Asset location deleted successfully",
+            "data": {
+              "id": 4
+            }
+          }
+        }
+      ]
+    },
+    {
+      "module_name": "Asset Transaction",
+      "base_path": "/finance/asset-transactions",
+      "sections": [
+        {
+          "title": "GET DATA",
+          "endpoint": "GET {{base_url}}/finance/asset-transactions",
+          "response": {
+            "data": [
+              {
+                "id": 1,
+                "asset_id": 1,
+                "transaction_type": "ACQUISITION",
+                "transaction_date": "2024-01-15",
+                "transaction_amount": 5000000000,
+                "description": "Initial acquisition of building",
+                "status": "APPROVED",
+                "asset": {
+                  "id": 1,
+                  "code": "AST-001",
+                  "name": "Office Building A",
+                  "asset_category": {
+                    "id": 1,
+                    "name": "Building"
+                  },
+                  "asset_location": {
+                    "id": 1,
+                    "name": "Jakarta Head Office"
+                  }
+                },
+                "created_at": "2024-01-15T10:30:00+07:00",
+                "updated_at": "2024-01-15T10:30:00+07:00"
+              },
+              {
+                "id": 2,
+                "asset_id": 2,
+                "transaction_type": "TRANSFER",
+                "transaction_date": "2024-02-10",
+                "transaction_amount": 0,
+                "description": "Transfer vehicle from Jakarta to Surabaya",
+                "status": "DRAFT",
+                "asset": {
+                  "id": 2,
+                  "code": "AST-002",
+                  "name": "Company Vehicle - Toyota Avanza",
+                  "asset_category": {
+                    "id": 2,
+                    "name": "Vehicle"
+                  },
+                  "asset_location": {
+                    "id": 1,
+                    "name": "Jakarta Head Office"
+                  }
+                },
+                "created_at": "2024-02-10T14:00:00+07:00",
+                "updated_at": "2024-02-10T14:00:00+07:00"
+              },
+              {
+                "id": 3,
+                "asset_id": 1,
+                "transaction_type": "REVALUATION",
+                "transaction_date": "2024-03-01",
+                "transaction_amount": 5500000000,
+                "description": "Asset revaluation based on market value",
+                "status": "APPROVED",
+                "asset": {
+                  "id": 1,
+                  "code": "AST-001",
+                  "name": "Office Building A",
+                  "asset_category": {
+                    "id": 1,
+                    "name": "Building"
+                  },
+                  "asset_location": {
+                    "id": 1,
+                    "name": "Jakarta Head Office"
+                  }
+                },
+                "created_at": "2024-03-01T09:00:00+07:00",
+                "updated_at": "2024-03-01T10:00:00+07:00"
+              }
+            ],
+            "meta": {
+              "filter": {
+                "asset_id": "",
+                "transaction_type": "",
+                "status": "",
+                "start_date": "",
+                "end_date": ""
+              },
+              "pagination": {
+                "limit": 10,
+                "page": 1,
+                "total": 3
+              },
+              "search": {
+                "search": "",
+                "searchBy": ""
+              },
+              "searchable_columns": {
+                "numeric_columns": ["id", "asset_id", "transaction_amount"],
+                "string_columns": ["transaction_type", "description", "status"],
+                "date_columns": ["transaction_date"]
+              },
+              "sort": {
+                "sort_by": "",
+                "sort_order": ""
+              },
+              "sortable_columns": {
+                "available_fields": [
+                  "id",
+                  "asset_id",
+                  "transaction_type",
+                  "transaction_date",
+                  "transaction_amount",
+                  "status",
+                  "created_at",
+                  "updated_at"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "title": "GET DATA BY ID",
+          "endpoint": "GET {{base_url}}/finance/asset-transactions/1",
+          "response": {
+            "data": {
+              "id": 1,
+              "asset_id": 1,
+              "transaction_type": "ACQUISITION",
+              "transaction_date": "2024-01-15",
+              "transaction_amount": 5000000000,
+              "description": "Initial acquisition of building",
+              "status": "APPROVED",
+              "asset": {
+                "id": 1,
+                "code": "AST-001",
+                "name": "Office Building A",
+                "acquisition_cost": 5000000000,
+                "current_value": 4750000000,
+                "status": "ACTIVE",
+                "asset_category": {
+                  "id": 1,
+                  "name": "Building",
+                  "type": "FIXED"
+                },
+                "asset_location": {
+                  "id": 1,
+                  "name": "Jakarta Head Office",
+                  "city": {
+                    "id": 3171,
+                    "name": "Jakarta Pusat"
+                  }
+                }
+              },
+              "created_at": "2024-01-15T10:30:00+07:00",
+              "updated_at": "2024-01-15T10:30:00+07:00"
+            }
+          }
+        },
+        {
+          "title": "GET STATS",
+          "endpoint": "GET {{base_url}}/finance/asset-transactions/stats",
+          "response": {
+            "data": {
+              "total": 50,
+              "draft": 10,
+              "approved": 40,
+              "by_type": [
+                {
+                  "type": "ACQUISITION",
+                  "count": 25,
+                  "total_amount": 15000000000
+                },
+                {
+                  "type": "TRANSFER",
+                  "count": 15,
+                  "total_amount": 0
+                },
+                {
+                  "type": "DISPOSAL",
+                  "count": 5,
+                  "total_amount": 500000000
+                },
+                {
+                  "type": "REVALUATION",
+                  "count": 3,
+                  "total_amount": 2000000000
+                },
+                {
+                  "type": "ADJUSTMENT",
+                  "count": 2,
+                  "total_amount": 100000000
+                }
+              ],
+              "total_acquisition_amount": 15000000000,
+              "total_disposal_amount": 500000000,
+              "total_revaluation_amount": 2000000000
+            },
+            "message": "Asset transaction statistics retrieved successfully"
+          }
+        },
+        {
+          "title": "GET ADD DATA",
+          "endpoint": "GET {{base_url}}/finance/asset-transactions/add",
+          "response": {
+            "data": {
+              "assets": [
+                {
+                  "id": 1,
+                  "code": "AST-001",
+                  "name": "Office Building A",
+                  "current_value": 4750000000,
+                  "status": "ACTIVE",
+                  "asset_category": {
+                    "id": 1,
+                    "name": "Building"
+                  },
+                  "asset_location": {
+                    "id": 1,
+                    "name": "Jakarta Head Office"
+                  }
+                },
+                {
+                  "id": 2,
+                  "code": "AST-002",
+                  "name": "Company Vehicle - Toyota Avanza",
+                  "current_value": 237500000,
+                  "status": "ACTIVE",
+                  "asset_category": {
+                    "id": 2,
+                    "name": "Vehicle"
+                  },
+                  "asset_location": {
+                    "id": 1,
+                    "name": "Jakarta Head Office"
+                  }
+                }
+              ],
+              "transaction_types": [
+                "ACQUISITION",
+                "TRANSFER",
+                "DISPOSAL",
+                "REVALUATION",
+                "ADJUSTMENT"
+              ]
+            }
+          }
+        },
+        {
+          "title": "POST DATA",
+          "endpoint": "POST {{base_url}}/finance/asset-transactions",
+          "body": {
+            "asset_id": 2,
+            "transaction_type": "ADJUSTMENT",
+            "transaction_date": "2024-03-15",
+            "transaction_amount": 5000000,
+            "description": "Repair and maintenance adjustment"
+          },
+          "response": {
+            "data": {
+              "id": 4,
+              "asset_id": 2,
+              "transaction_type": "ADJUSTMENT",
+              "transaction_date": "2024-03-15",
+              "transaction_amount": 5000000,
+              "description": "Repair and maintenance adjustment",
+              "status": "DRAFT",
+              "asset": {
+                "id": 2,
+                "code": "AST-002",
+                "name": "Company Vehicle - Toyota Avanza",
+                "asset_category": {
+                  "id": 2,
+                  "name": "Vehicle"
+                },
+                "asset_location": {
+                  "id": 1,
+                  "name": "Jakarta Head Office"
+                }
+              },
+              "created_at": "2024-03-15T11:00:00+07:00",
+              "updated_at": "2024-03-15T11:00:00+07:00"
+            },
+            "message": "Asset transaction created successfully"
+          }
+        },
+        {
+          "title": "EDIT DATA",
+          "endpoint": "PUT {{base_url}}/finance/asset-transactions/4",
+          "body": {
+            "asset_id": 2,
+            "transaction_type": "ADJUSTMENT",
+            "transaction_date": "2024-03-15",
+            "transaction_amount": 6000000,
+            "description": "Repair and maintenance adjustment (updated)"
+          },
+          "response": {
+            "data": {
+              "id": 4,
+              "asset_id": 2,
+              "transaction_type": "ADJUSTMENT",
+              "transaction_date": "2024-03-15",
+              "transaction_amount": 6000000,
+              "description": "Repair and maintenance adjustment (updated)",
+              "status": "DRAFT",
+              "asset": {
+                "id": 2,
+                "code": "AST-002",
+                "name": "Company Vehicle - Toyota Avanza",
+                "asset_category": {
+                  "id": 2,
+                  "name": "Vehicle"
+                },
+                "asset_location": {
+                  "id": 1,
+                  "name": "Jakarta Head Office"
+                }
+              },
+              "created_at": "2024-03-15T11:00:00+07:00",
+              "updated_at": "2024-03-15T11:30:00+07:00"
+            },
+            "message": "Asset transaction updated successfully"
+          }
+        },
+        {
+          "title": "DELETE DATA",
+          "endpoint": "DELETE {{base_url}}/finance/asset-transactions/4",
+          "response": {
+            "message": "Asset transaction deleted successfully",
+            "data": {
+              "id": 4
+            }
+          }
+        },
+        {
+          "title": "Approve Asset Transaction",
+          "endpoint": "POST {{base_url}}/finance/asset-transactions/2/approve",
+          "response": {
+            "data": {
+              "id": 2,
+              "asset_id": 2,
+              "transaction_type": "TRANSFER",
+              "transaction_date": "2024-02-10",
+              "transaction_amount": 0,
+              "description": "Transfer vehicle from Jakarta to Surabaya",
+              "status": "APPROVED",
+              "asset": {
+                "id": 2,
+                "code": "AST-002",
+                "name": "Company Vehicle - Toyota Avanza",
+                "asset_category": {
+                  "id": 2,
+                  "name": "Vehicle"
+                },
+                "asset_location": {
+                  "id": 1,
+                  "name": "Jakarta Head Office"
+                }
+              },
+              "created_at": "2024-02-10T14:00:00+07:00",
+              "updated_at": "2024-03-15T12:00:00+07:00"
+            },
+            "message": "Asset transaction approved successfully"
+          }
+        }
+      ]
+    },
+    {
+      "module_name": "Asset Depreciation",
+      "base_path": "/finance/asset-depreciations",
+      "sections": [
+        {
+          "title": "GET DATA",
+          "endpoint": "GET {{base_url}}/finance/asset-depreciations",
+          "response": {
+            "data": [
+              {
+                "id": 1,
+                "asset_id": 1,
+                "period": "2024-01-31",
+                "depreciation_amount": 20833333.33,
+                "accumulated_depreciation": 20833333.33,
+                "book_value": 4979166666.67,
+                "journal_entry_id": 101,
+                "status": "APPROVED",
+                "asset": {
+                  "id": 1,
+                  "code": "AST-001",
+                  "name": "Office Building A",
+                  "acquisition_cost": 5000000000,
+                  "asset_category": {
+                    "id": 1,
+                    "name": "Building",
+                    "depreciation_method": "STRAIGHT_LINE"
+                  },
+                  "asset_location": {
+                    "id": 1,
+                    "name": "Jakarta Head Office"
+                  }
+                },
+                "created_at": "2024-02-01T08:00:00+07:00",
+                "updated_at": "2024-02-01T09:00:00+07:00"
+              },
+              {
+                "id": 2,
+                "asset_id": 1,
+                "period": "2024-02-29",
+                "depreciation_amount": 20833333.33,
+                "accumulated_depreciation": 41666666.66,
+                "book_value": 4958333333.34,
+                "journal_entry_id": 102,
+                "status": "APPROVED",
+                "asset": {
+                  "id": 1,
+                  "code": "AST-001",
+                  "name": "Office Building A",
+                  "acquisition_cost": 5000000000,
+                  "asset_category": {
+                    "id": 1,
+                    "name": "Building",
+                    "depreciation_method": "STRAIGHT_LINE"
+                  },
+                  "asset_location": {
+                    "id": 1,
+                    "name": "Jakarta Head Office"
+                  }
+                },
+                "created_at": "2024-03-01T08:00:00+07:00",
+                "updated_at": "2024-03-01T09:00:00+07:00"
+              },
+              {
+                "id": 3,
+                "asset_id": 2,
+                "period": "2024-02-29",
+                "depreciation_amount": 5208333.33,
+                "accumulated_depreciation": 5208333.33,
+                "book_value": 244791666.67,
+                "journal_entry_id": null,
+                "status": "PENDING",
+                "asset": {
+                  "id": 2,
+                  "code": "AST-002",
+                  "name": "Company Vehicle - Toyota Avanza",
+                  "acquisition_cost": 250000000,
+                  "asset_category": {
+                    "id": 2,
+                    "name": "Vehicle",
+                    "depreciation_method": "DECLINING"
+                  },
+                  "asset_location": {
+                    "id": 1,
+                    "name": "Jakarta Head Office"
+                  }
+                },
+                "created_at": "2024-03-01T08:00:00+07:00",
+                "updated_at": "2024-03-01T08:00:00+07:00"
+              }
+            ],
+            "meta": {
+              "filter": {
+                "asset_id": "",
+                "status": "",
+                "start_period": "",
+                "end_period": ""
+              },
+              "pagination": {
+                "limit": 10,
+                "page": 1,
+                "total": 3
+              },
+              "search": {
+                "search": "",
+                "searchBy": ""
+              },
+              "searchable_columns": {
+                "numeric_columns": [
+                  "id",
+                  "asset_id",
+                  "depreciation_amount",
+                  "accumulated_depreciation",
+                  "book_value"
+                ],
+                "string_columns": ["status"],
+                "date_columns": ["period"]
+              },
+              "sort": {
+                "sort_by": "",
+                "sort_order": ""
+              },
+              "sortable_columns": {
+                "available_fields": [
+                  "id",
+                  "asset_id",
+                  "period",
+                  "depreciation_amount",
+                  "accumulated_depreciation",
+                  "book_value",
+                  "status",
+                  "created_at",
+                  "updated_at"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "title": "GET DATA BY ID",
+          "endpoint": "GET {{base_url}}/finance/asset-depreciations/1",
+          "response": {
+            "data": {
+              "id": 1,
+              "asset_id": 1,
+              "period": "2024-01-31",
+              "depreciation_amount": 20833333.33,
+              "accumulated_depreciation": 20833333.33,
+              "book_value": 4979166666.67,
+              "journal_entry_id": 101,
+              "status": "APPROVED",
+              "asset": {
+                "id": 1,
+                "code": "AST-001",
+                "name": "Office Building A",
+                "acquisition_cost": 5000000000,
+                "current_value": 4750000000,
+                "status": "ACTIVE",
+                "asset_category": {
+                  "id": 1,
+                  "name": "Building",
+                  "type": "FIXED",
+                  "depreciation_method": "STRAIGHT_LINE",
+                  "depreciation_rate": 5.0,
+                  "useful_life": 20
+                },
+                "asset_location": {
+                  "id": 1,
+                  "name": "Jakarta Head Office",
+                  "city": {
+                    "id": 3171,
+                    "name": "Jakarta Pusat"
+                  }
+                }
+              },
+              "journal_entry": {
+                "id": 101,
+                "entry_number": "JE-2024-0101",
+                "entry_date": "2024-01-31",
+                "description": "Depreciation expense for Office Building A - January 2024",
+                "total_debit": 20833333.33,
+                "total_credit": 20833333.33
+              },
+              "created_at": "2024-02-01T08:00:00+07:00",
+              "updated_at": "2024-02-01T09:00:00+07:00"
+            }
+          }
+        },
+        {
+          "title": "GET STATS",
+          "endpoint": "GET {{base_url}}/finance/asset-depreciations/stats",
+          "response": {
+            "data": {
+              "total": 100,
+              "pending": 25,
+              "approved": 75,
+              "total_depreciation_amount": 500000000,
+              "total_accumulated_depreciation": 5000000000,
+              "by_asset_category": [
+                {
+                  "category_id": 1,
+                  "category_name": "Building",
+                  "count": 30,
+                  "total_depreciation": 300000000
+                },
+                {
+                  "category_id": 2,
+                  "category_name": "Vehicle",
+                  "count": 50,
+                  "total_depreciation": 150000000
+                },
+                {
+                  "category_id": 3,
+                  "category_name": "Computer Equipment",
+                  "count": 20,
+                  "total_depreciation": 50000000
+                }
+              ],
+              "by_period": [
+                {
+                  "period": "2024-01",
+                  "count": 40,
+                  "total_depreciation": 200000000
+                },
+                {
+                  "period": "2024-02",
+                  "count": 40,
+                  "total_depreciation": 200000000
+                },
+                {
+                  "period": "2024-03",
+                  "count": 20,
+                  "total_depreciation": 100000000
+                }
+              ]
+            },
+            "message": "Asset depreciation statistics retrieved successfully"
+          }
+        },
+        {
+          "title": "GET ADD DATA",
+          "endpoint": "GET {{base_url}}/finance/asset-depreciations/add",
+          "response": {
+            "data": {
+              "assets": [
+                {
+                  "id": 1,
+                  "code": "AST-001",
+                  "name": "Office Building A",
+                  "acquisition_cost": 5000000000,
+                  "current_value": 4750000000,
+                  "accumulated_depreciation": 250000000,
+                  "status": "ACTIVE",
+                  "asset_category": {
+                    "id": 1,
+                    "name": "Building",
+                    "depreciation_method": "STRAIGHT_LINE",
+                    "depreciation_rate": 5.0,
+                    "useful_life": 20,
+                    "is_depreciable": true
+                  }
+                },
+                {
+                  "id": 2,
+                  "code": "AST-002",
+                  "name": "Company Vehicle - Toyota Avanza",
+                  "acquisition_cost": 250000000,
+                  "current_value": 237500000,
+                  "accumulated_depreciation": 12500000,
+                  "status": "ACTIVE",
+                  "asset_category": {
+                    "id": 2,
+                    "name": "Vehicle",
+                    "depreciation_method": "DECLINING",
+                    "depreciation_rate": 25.0,
+                    "useful_life": 4,
+                    "is_depreciable": true
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "POST DATA",
+          "endpoint": "POST {{base_url}}/finance/asset-depreciations",
+          "body": {
+            "asset_id": 1,
+            "period": "2024-03-31",
+            "depreciation_amount": 20833333.33,
+            "accumulated_depreciation": 62500000,
+            "book_value": 4937500000
+          },
+          "response": {
+            "data": {
+              "id": 4,
+              "asset_id": 1,
+              "period": "2024-03-31",
+              "depreciation_amount": 20833333.33,
+              "accumulated_depreciation": 62500000,
+              "book_value": 4937500000,
+              "journal_entry_id": null,
+              "status": "PENDING",
+              "asset": {
+                "id": 1,
+                "code": "AST-001",
+                "name": "Office Building A",
+                "asset_category": {
+                  "id": 1,
+                  "name": "Building",
+                  "depreciation_method": "STRAIGHT_LINE"
+                },
+                "asset_location": {
+                  "id": 1,
+                  "name": "Jakarta Head Office"
+                }
+              },
+              "created_at": "2024-04-01T08:00:00+07:00",
+              "updated_at": "2024-04-01T08:00:00+07:00"
+            },
+            "message": "Asset depreciation created successfully"
+          }
+        },
+        {
+          "title": "EDIT DATA",
+          "endpoint": "PUT {{base_url}}/finance/asset-depreciations/4",
+          "body": {
+            "asset_id": 1,
+            "period": "2024-03-31",
+            "depreciation_amount": 21000000,
+            "accumulated_depreciation": 62666666.66,
+            "book_value": 4937333333.34
+          },
+          "response": {
+            "data": {
+              "id": 4,
+              "asset_id": 1,
+              "period": "2024-03-31",
+              "depreciation_amount": 21000000,
+              "accumulated_depreciation": 62666666.66,
+              "book_value": 4937333333.34,
+              "journal_entry_id": null,
+              "status": "PENDING",
+              "asset": {
+                "id": 1,
+                "code": "AST-001",
+                "name": "Office Building A",
+                "asset_category": {
+                  "id": 1,
+                  "name": "Building",
+                  "depreciation_method": "STRAIGHT_LINE"
+                },
+                "asset_location": {
+                  "id": 1,
+                  "name": "Jakarta Head Office"
+                }
+              },
+              "created_at": "2024-04-01T08:00:00+07:00",
+              "updated_at": "2024-04-01T08:30:00+07:00"
+            },
+            "message": "Asset depreciation updated successfully"
+          }
+        },
+        {
+          "title": "DELETE DATA",
+          "endpoint": "DELETE {{base_url}}/finance/asset-depreciations/4",
+          "response": {
+            "message": "Asset depreciation deleted successfully",
+            "data": {
+              "id": 4
+            }
+          }
+        },
+        {
+          "title": "Approve Asset Depreciation",
+          "endpoint": "POST {{base_url}}/finance/asset-depreciations/3/approve",
+          "response": {
+            "data": {
+              "id": 3,
+              "asset_id": 2,
+              "period": "2024-02-29",
+              "depreciation_amount": 5208333.33,
+              "accumulated_depreciation": 5208333.33,
+              "book_value": 244791666.67,
+              "journal_entry_id": 103,
+              "status": "APPROVED",
+              "asset": {
+                "id": 2,
+                "code": "AST-002",
+                "name": "Company Vehicle - Toyota Avanza",
+                "asset_category": {
+                  "id": 2,
+                  "name": "Vehicle",
+                  "depreciation_method": "DECLINING"
+                },
+                "asset_location": {
+                  "id": 1,
+                  "name": "Jakarta Head Office"
+                }
+              },
+              "journal_entry": {
+                "id": 103,
+                "entry_number": "JE-2024-0103",
+                "entry_date": "2024-02-29",
+                "description": "Depreciation expense for Company Vehicle - Toyota Avanza - February 2024",
+                "total_debit": 5208333.33,
+                "total_credit": 5208333.33
+              },
+              "created_at": "2024-03-01T08:00:00+07:00",
+              "updated_at": "2024-04-01T09:00:00+07:00"
+            },
+            "message": "Asset depreciation approved successfully and journal entry created"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,306 @@
+{
+  "title": "Finance/non-trade-payables",
+  "description": "A comprehensive guide to the Non Trade Payables API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/finance/non-trade-payables",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "code": "NTP-20250115-001",
+            "reference_type": "SUPPLIER",
+            "reference_id": 1,
+            "chart_of_account_id": 1,
+            "chart_of_account": {
+              "id": 1,
+              "code": "ACC-001",
+              "name": "Accounts Payable - Supplier",
+              "type": "LIABILITY"
+            },
+            "description": "Payment for office supplies from PT. Medika",
+            "amount": 2500000,
+            "date": "2025-01-15",
+            "due_date": "2025-02-15",
+            "status": "APPROVED",
+            "created_at": "2025-01-15T10:30:00+07:00",
+            "updated_at": "2025-01-15T10:30:00+07:00"
+          },
+          {
+            "id": 2,
+            "code": "NTP-20250115-002",
+            "reference_type": "EMPLOYEE",
+            "reference_id": 1,
+            "chart_of_account_id": 2,
+            "chart_of_account": {
+              "id": 2,
+              "code": "ACC-002",
+              "name": "Employee Advances",
+              "type": "ASSET"
+            },
+            "description": "Advance payment for business trip",
+            "amount": 5000000,
+            "date": "2025-01-15",
+            "due_date": "2025-01-30",
+            "status": "DRAFT",
+            "created_at": "2025-01-15T11:00:00+07:00",
+            "updated_at": "2025-01-15T11:00:00+07:00"
+          }
+        ],
+        "meta": {
+          "pagination": {
+            "total": 2,
+            "page": 1,
+            "limit": 10
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "filter": {
+            "start_date": "",
+            "end_date": ""
+          },
+          "searchable_columns": {
+            "string_columns": ["code", "description", "status"],
+            "numeric_columns": ["id", "reference_id", "chart_of_account_id"]
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "reference_type",
+              "description",
+              "amount",
+              "date",
+              "due_date",
+              "status",
+              "created_at",
+              "updated_at",
+              "reference_id",
+              "chart_of_account_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/finance/non-trade-payables/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "code": "NTP-20250115-001",
+          "reference_type": "SUPPLIER",
+          "reference_id": 1,
+          "chart_of_account_id": 1,
+          "chart_of_account": {
+            "id": 1,
+            "code": "ACC-001",
+            "name": "Accounts Payable - Supplier",
+            "type": "LIABILITY"
+          },
+          "description": "Payment for office supplies from PT. Medika",
+          "amount": 2500000,
+          "date": "2025-01-15",
+          "due_date": "2025-02-15",
+          "status": "APPROVED",
+          "created_at": "2025-01-15T10:30:00+07:00",
+          "updated_at": "2025-01-15T10:30:00+07:00",
+          "payments": [
+            {
+              "id": 1,
+              "reference_id": 1,
+              "reference_type": "NON_TRADE_PAYABLE",
+              "payment_date": "2025-01-20",
+              "amount": 2500000,
+              "method": "BANK",
+              "status": "COMPLETED",
+              "created_at": "2025-01-20T14:30:00+07:00",
+              "updated_at": "2025-01-20T14:30:00+07:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "GET STATS",
+      "endpoint": "GET {{base_url}}/finance/non-trade-payables/stats",
+      "response": {
+        "data": {
+          "total": 15,
+          "draft": 3,
+          "approved": 8,
+          "paid": 3,
+          "cancelled": 1,
+          "total_amount": 50000000,
+          "total_amount_draft": 10000000,
+          "total_amount_approved": 30000000,
+          "total_amount_paid": 8000000,
+          "total_amount_cancelled": 2000000
+        },
+        "message": "Statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "GET {{base_url}}/finance/non-trade-payables/add",
+      "response": {
+        "data": {
+          "chart_of_accounts": [
+            {
+              "id": 1,
+              "code": "ACC-001",
+              "name": "Accounts Payable - Supplier",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 2,
+              "code": "ACC-002",
+              "name": "Employee Advances",
+              "type": "ASSET"
+            },
+            {
+              "id": 3,
+              "code": "ACC-003",
+              "name": "Other Payables",
+              "type": "LIABILITY"
+            }
+          ],
+          "employees": [
+            {
+              "id": 1,
+              "name": "John Doe"
+            },
+            {
+              "id": 2,
+              "name": "Jane Smith"
+            },
+            {
+              "id": 3,
+              "name": "Bob Johnson"
+            }
+          ],
+          "suppliers": [
+            {
+              "id": 1,
+              "name": "PT. Medika"
+            },
+            {
+              "id": 2,
+              "name": "PT. Farma"
+            },
+            {
+              "id": 3,
+              "name": "CV. Office Supplies"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/finance/non-trade-payables",
+      "body": {
+        "reference_type": "SUPPLIER",
+        "reference_id": 1,
+        "chart_of_account_id": 1,
+        "description": "Payment for office supplies from PT. Medika",
+        "amount": 2500000,
+        "date": "2025-01-15",
+        "due_date": "2025-02-15"
+      },
+      "response": {
+        "data": {
+          "id": 3,
+          "code": "NTP-20250115-003",
+          "reference_type": "SUPPLIER",
+          "reference_id": 1,
+          "chart_of_account_id": 1,
+          "chart_of_account": {
+            "id": 1,
+            "code": "ACC-001",
+            "name": "Accounts Payable - Supplier",
+            "type": "LIABILITY"
+          },
+          "description": "Payment for office supplies from PT. Medika",
+          "amount": 2500000,
+          "date": "2025-01-15",
+          "due_date": "2025-02-15",
+          "status": "DRAFT",
+          "created_at": "2025-01-15T12:00:00+07:00",
+          "updated_at": "2025-01-15T12:00:00+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/finance/non-trade-payables/3",
+      "body": {
+        "reference_type": "SUPPLIER",
+        "reference_id": 1,
+        "chart_of_account_id": 1,
+        "description": "Updated payment for office supplies from PT. Medika",
+        "amount": 2750000,
+        "date": "2025-01-15",
+        "due_date": "2025-02-15"
+      },
+      "response": {
+        "data": {
+          "id": 3,
+          "code": "NTP-20250115-003",
+          "reference_type": "SUPPLIER",
+          "reference_id": 1,
+          "chart_of_account_id": 1,
+          "chart_of_account": {
+            "id": 1,
+            "code": "ACC-001",
+            "name": "Accounts Payable - Supplier",
+            "type": "LIABILITY"
+          },
+          "description": "Updated payment for office supplies from PT. Medika",
+          "amount": 2750000,
+          "date": "2025-01-15",
+          "due_date": "2025-02-15",
+          "status": "DRAFT",
+          "created_at": "2025-01-15T12:00:00+07:00",
+          "updated_at": "2025-01-15T12:15:00+07:00"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/finance/non-trade-payables/3",
+      "response": {
+        "message": "deleted"
+      }
+    },
+    {
+      "title": "Approve Non Trade Payable",
+      "endpoint": "POST {{base_url}}/finance/non-trade-payables/3/approve",
+      "response": {
+        "message": "non trade payable approved and journal entry created"
+      }
+    },
+    {
+      "title": "Create Payment",
+      "endpoint": "POST {{base_url}}/finance/non-trade-payables/payment/1",
+      "body": {
+        "payment_date": "2025-01-20",
+        "bank_account_id": 1,
+        "amount": 2500000,
+        "method": "BANK"
+      },
+      "response": {
+        "message": "payment created and journal entry created"
+      }
+    }
+  ]
+}

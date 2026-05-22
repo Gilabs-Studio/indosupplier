@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=302px">
+  <title>Receipt #{{.OrderNumber}}</title>
+  <style>
+    *  { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 11px;
+      line-height: 1.45;
+      width: 302px;
+      margin: 0 auto;
+      background: #fff;
+      color: #000;
+      padding: 6px 8px 16px;
+    }
+    .center  { text-align: center; }
+    .right   { text-align: right; }
+    .bold    { font-weight: bold; }
+    .small   { font-size: 10px; }
+    .dash    { border: none; border-top: 1px dashed #000; margin: 5px 0; }
+    .solid   { border: none; border-top: 1px solid  #000; margin: 5px 0; }
+    .outlet-name { font-size: 15px; font-weight: bold; letter-spacing: 0.5px; }
+    .row     { display: flex; justify-content: space-between; margin: 1px 0; }
+    .row-bold { display: flex; justify-content: space-between; margin: 2px 0; font-weight: bold; }
+    .row-total {
+      display: flex; justify-content: space-between; margin: 3px 0;
+      font-weight: bold; font-size: 14px;
+    }
+    .col-hdr { display: flex; gap: 0; margin: 1px 0; font-weight: bold; }
+    .col-qty  { width: 26px; text-align: right; flex-shrink: 0; }
+    .col-name { flex: 1; padding: 0 5px; overflow: hidden; }
+    .col-price{ width: 80px; text-align: right; flex-shrink: 0; }
+    .item-unit-price { color: #444; font-size: 10px; padding-left: 31px; }
+    /* Feedback QR section */
+    .feedback-section { margin-top: 8px; text-align: center; }
+    .feedback-section .feedback-label { font-size: 10px; margin-bottom: 4px; }
+    .feedback-section img { width: 90px; height: 90px; }
+    @media print {
+      @page { margin: 0; size: 80mm auto; }
+      body  { width: 302px; margin: 0 auto; padding: 4px 6px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="center">
+    <div class="outlet-name">{{.OutletName}}</div>
+    {{if .OutletAddress}}<div class="small">{{.OutletAddress}}</div>{{end}}
+    {{if .OutletPhone}}<div class="small">{{.OutletPhone}}</div>{{end}}
+  </div>
+
+  <hr class="dash">
+
+  <!-- Order meta -->
+  <div class="row"><span>No. Order</span><span class="bold">#{{.OrderNumber}}</span></div>
+  <div class="row"><span>Tanggal</span><span>{{.OrderDate}}</span></div>
+  <div class="row"><span>Jam</span><span>{{.OrderTime}}</span></div>
+  {{if .TableLabel}}<div class="row"><span>Meja</span><span>{{.TableLabel}}</span></div>{{end}}
+  {{if .CustomerName}}<div class="row"><span>Pelanggan</span><span>{{.CustomerName}}</span></div>{{end}}
+
+  <hr class="dash">
+
+  <!-- Item header -->
+  <div class="col-hdr">
+    <span class="col-qty">Qty</span>
+    <span class="col-name">Item</span>
+    <span class="col-price">Subtotal</span>
+  </div>
+  <hr class="dash">
+
+  <!-- Items -->
+  {{range .Items}}
+  <div class="col-hdr" style="font-weight:normal; margin:2px 0;">
+    <span class="col-qty">{{.Qty}}x</span>
+    <span class="col-name">{{.Name}}</span>
+    <span class="col-price">{{.Subtotal}}</span>
+  </div>
+  <div class="item-unit-price">@ {{.UnitPrice}}</div>
+  {{end}}
+
+  <hr class="dash">
+
+  <!-- Totals -->
+  <div class="row"><span>Subtotal</span><span>{{.Subtotal}}</span></div>
+  {{if .DiscountLine}}<div class="row"><span>Diskon</span><span>-&nbsp;{{.DiscountLine}}</span></div>{{end}}
+  {{if .TaxLine}}<div class="row"><span>Pajak</span><span>{{.TaxLine}}</span></div>{{end}}
+  {{if .ServiceLine}}<div class="row"><span>Service</span><span>{{.ServiceLine}}</span></div>{{end}}
+
+  <hr class="solid">
+
+  <div class="row-total"><span>TOTAL</span><span>{{.Total}}</span></div>
+
+  <hr class="dash">
+
+  <!-- Payment -->
+  <div class="row"><span>Pembayaran</span><span class="bold">{{.PaymentMethod}}</span></div>
+  {{if .ShowCashDetails}}
+  <div class="row"><span>Diterima</span><span>{{.TenderAmount}}</span></div>
+  <div class="row bold"><span>Kembalian</span><span>{{.ChangeAmount}}</span></div>
+  {{end}}
+
+  <hr class="dash">
+
+  <!-- Footer -->
+  <div class="center small" style="margin-top: 4px;">
+    {{if .Footer}}
+    <div>{{.Footer}}</div>
+    {{else}}
+    <div>Terima kasih sudah berkunjung!</div>
+    <div style="margin-top:2px;">Thank you for your visit!</div>
+    {{end}}
+  </div>
+
+  {{if .FeedbackQRBase64}}
+  <hr class="dash">
+  <!-- Feedback QR Code — embedded base64 PNG, no external dependency -->
+  <div class="feedback-section">
+    <div class="feedback-label bold">Nilai Pelayanan Kami</div>
+    <div class="feedback-label">Scan QR untuk memberikan feedback</div>
+    <img src="{{.FeedbackQRBase64}}" alt="Feedback QR Code">
+  </div>
+  {{end}}
+
+  {{if .ShowLoyaltySection}}
+  <hr class="dash">
+  <div class="center" style="margin-top:4px;">
+    <span style="background:{{.LoyaltyBadgeColor}};color:#fff;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:bold;">{{.LoyaltyTier}}</span>
+  </div>
+  <div class="row" style="margin-top:3px;"><span>No. Member</span><span class="bold">{{.LoyaltyMemberCode}}</span></div>
+  {{if gt .LoyaltyPointsEarned 0}}<div class="row"><span>Poin Didapat</span><span class="bold">+{{.LoyaltyPointsEarned}} poin</span></div>{{end}}
+  <div class="row"><span>Saldo Poin</span><span class="bold">{{.LoyaltyTotalBalance}} poin</span></div>
+  {{end}}
+
+  {{if .PrintReceiptAuto}}
+  <script>window.addEventListener('load', function() { window.print(); });</script>
+  {{end}}
+</body>
+</html>

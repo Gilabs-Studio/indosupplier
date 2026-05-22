@@ -1,0 +1,119 @@
+{
+  "title": "Data Master/Product/business-units",
+  "description": "A comprehensive guide to the Data Master API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/master-data/business-unitss",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "name": "Sales Department",
+            "description": "Handles all sales operations and customer relationships",
+            "created_at": "2025-09-19T22:56:41+07:00",
+            "updated_at": "2025-09-19T22:56:41+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "2026-09-09",
+            "start_date": "2025-09-09"
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "1",
+            "searchBy": "id"
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id"],
+            "string_columns": ["name", "description"]
+          },
+          "sort": {
+            "sort_by": "name",
+            "sort_order": "desc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "name",
+              "description",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA STATS",
+      "endpoint": "{{base_url}}/master-data/business-unitss/stats",
+      "response": {
+        "data": {
+          "total": 5
+        },
+        "message": "Business unit statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/master-data/business-unitss/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "name": "Sales Department",
+          "description": "Handles all sales operations and customer relationships",
+          "created_at": "2025-09-19T22:56:41+07:00",
+          "updated_at": "2025-09-19T22:56:41+07:00"
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/master-data/business-unitss",
+      "body": {
+        "name": "Bank BCA",
+        "description": "test"
+      },
+      "response": {
+        "data": {
+          "id": 6,
+          "name": "Bank BCA",
+          "description": "test",
+          "created_at": "2025-09-19T22:57:20+07:00",
+          "updated_at": "2025-09-19T22:57:20+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/master-data/business-unitss/2",
+      "body": {
+        "name": "Bank BCA",
+        "description": "test"
+      },
+      "response": {
+        "data": {
+          "id": 1,
+          "name": "Bank BCA",
+          "description": "test",
+          "created_at": "2025-09-19T22:56:41+07:00",
+          "updated_at": "2025-09-19T22:57:47+07:00"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/master-data/business-unitss/2",
+      "response": {
+        "message": "deleted"
+      }
+    }
+  ]
+}

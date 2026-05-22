@@ -1,0 +1,317 @@
+{
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/hrd/evaluation-groups",
+      "description": "Get list of evaluation groups",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "name": "Performance Evaluation Q1 2025",
+            "description": "Quarterly performance evaluation for Q1 2025",
+            "status": "Active",
+            "evaluation_criterias": [
+              {
+                "id": 1,
+                "name": "Work Quality",
+                "weight": 30.0
+              },
+              {
+                "id": 2,
+                "name": "Productivity",
+                "weight": 25.0
+              },
+              {
+                "id": 3,
+                "name": "Team Collaboration",
+                "weight": 20.0
+              },
+              {
+                "id": 4,
+                "name": "Communication",
+                "weight": 15.0
+              },
+              {
+                "id": 5,
+                "name": "Initiative",
+                "weight": 10.0
+              }
+            ],
+            "created_at": "2025-10-06T14:22:52+07:00",
+            "updated_at": "2025-10-06T14:22:52+07:00"
+          },
+          {
+            "id": 2,
+            "name": "Annual Review 2024",
+            "description": "Annual performance review for year 2024",
+            "status": "Active",
+            "evaluation_criterias": [
+              {
+                "id": 6,
+                "name": "Goal Achievement",
+                "weight": 40.0
+              },
+              {
+                "id": 7,
+                "name": "Leadership",
+                "weight": 30.0
+              },
+              {
+                "id": 8,
+                "name": "Innovation",
+                "weight": 30.0
+              }
+            ],
+            "created_at": "2025-10-05T10:15:30+07:00",
+            "updated_at": "2025-10-05T10:15:30+07:00"
+          },
+          {
+            "id": 3,
+            "name": "Probation Period Evaluation",
+            "description": "Evaluation for employees in probation period",
+            "status": "Inactive",
+            "evaluation_criterias": [
+              {
+                "id": 9,
+                "name": "Adaptability",
+                "weight": 35.0
+              },
+              {
+                "id": 10,
+                "name": "Learning Ability",
+                "weight": 35.0
+              },
+              {
+                "id": 11,
+                "name": "Work Attitude",
+                "weight": 30.0
+              }
+            ],
+            "created_at": "2025-10-04T09:20:15+07:00",
+            "updated_at": "2025-10-04T09:20:15+07:00"
+          }
+        ],
+        "meta": {
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 15
+          },
+          "search": {
+            "search": "",
+            "search_by": ""
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": "desc"
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id"],
+            "string_columns": ["name", "description", "status"]
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "name",
+              "description",
+              "status",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hrd/evaluation-groups/stats",
+      "description": "Get evaluation groups statistics",
+      "response": {
+        "data": {
+          "total": 15,
+          "active": 10,
+          "inactive": 5,
+          "total_criterias": 45
+        },
+        "message": "Evaluation group statistics retrieved successfully"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hrd/evaluation-groups/{id}",
+      "description": "Get evaluation group by ID",
+      "response": {
+        "data": {
+          "id": 1,
+          "name": "Performance Evaluation Q1 2025",
+          "description": "Quarterly performance evaluation for Q1 2025",
+          "status": "Active",
+          "evaluation_criterias": [
+            {
+              "id": 1,
+              "name": "Work Quality",
+              "weight": 30.0
+            },
+            {
+              "id": 2,
+              "name": "Productivity",
+              "weight": 25.0
+            },
+            {
+              "id": 3,
+              "name": "Team Collaboration",
+              "weight": 20.0
+            },
+            {
+              "id": 4,
+              "name": "Communication",
+              "weight": 15.0
+            },
+            {
+              "id": 5,
+              "name": "Initiative",
+              "weight": 10.0
+            }
+          ],
+          "created_at": "2025-10-06T14:22:52+07:00",
+          "updated_at": "2025-10-06T14:22:52+07:00"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hrd/evaluation-groups",
+      "description": "Create new evaluation group",
+      "body": {
+        "name": "Mid-Year Evaluation 2025",
+        "description": "Mid-year performance evaluation for 2025",
+        "status": "Active",
+        "evaluation_criterias": [
+          {
+            "name": "Technical Skills",
+            "weight": 35.0
+          },
+          {
+            "name": "Problem Solving",
+            "weight": 30.0
+          },
+          {
+            "name": "Time Management",
+            "weight": 20.0
+          },
+          {
+            "name": "Professionalism",
+            "weight": 15.0
+          }
+        ]
+      },
+      "response": {
+        "message": "created",
+        "data": {
+          "id": 16,
+          "name": "Mid-Year Evaluation 2025",
+          "description": "Mid-year performance evaluation for 2025",
+          "status": "Active",
+          "evaluation_criterias": [
+            {
+              "id": 12,
+              "name": "Technical Skills",
+              "weight": 35.0
+            },
+            {
+              "id": 13,
+              "name": "Problem Solving",
+              "weight": 30.0
+            },
+            {
+              "id": 14,
+              "name": "Time Management",
+              "weight": 20.0
+            },
+            {
+              "id": 15,
+              "name": "Professionalism",
+              "weight": 15.0
+            }
+          ],
+          "created_at": "2025-10-06T14:28:23+07:00",
+          "updated_at": "2025-10-06T14:28:23+07:00"
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/hrd/evaluation-groups/{id}",
+      "description": "Update evaluation group",
+      "body": {
+        "name": "Performance Evaluation Q1 2025 - Updated",
+        "description": "Updated quarterly performance evaluation for Q1 2025",
+        "status": "Active",
+        "evaluation_criterias": [
+          {
+            "id": 1,
+            "name": "Work Quality",
+            "weight": 35.0
+          },
+          {
+            "id": 2,
+            "name": "Productivity",
+            "weight": 30.0
+          },
+          {
+            "id": 3,
+            "name": "Team Collaboration",
+            "weight": 20.0
+          },
+          {
+            "id": 4,
+            "name": "Communication",
+            "weight": 15.0
+          }
+        ]
+      },
+      "response": {
+        "message": "updated",
+        "data": {
+          "id": 1,
+          "name": "Performance Evaluation Q1 2025 - Updated",
+          "description": "Updated quarterly performance evaluation for Q1 2025",
+          "status": "Active",
+          "evaluation_criterias": [
+            {
+              "id": 1,
+              "name": "Work Quality",
+              "weight": 35.0
+            },
+            {
+              "id": 2,
+              "name": "Productivity",
+              "weight": 30.0
+            },
+            {
+              "id": 3,
+              "name": "Team Collaboration",
+              "weight": 20.0
+            },
+            {
+              "id": 4,
+              "name": "Communication",
+              "weight": 15.0
+            }
+          ],
+          "created_at": "2025-10-06T14:22:52+07:00",
+          "updated_at": "2025-10-06T14:28:41+07:00"
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/hrd/evaluation-groups/{id}",
+      "description": "Delete evaluation group",
+      "response": {
+        "message": "deleted"
+      }
+    }
+  ]
+}

@@ -1,0 +1,580 @@
+{
+  "title": "monthly-target",
+  "description": "A comprehensive guide to the monthly-target API endpoints for managing monthly sales targets per area, customer, and product. Features include auto-calculation of total (quantity × price_list), auto-fill of customer and product names from master data, duplicate prevention, and status management.",
+  "item": [
+    {
+      "name": "📋 Get Master Data for Form",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/monthly-targets/add?area=all",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "monthly-targets", "add"],
+          "query": [
+            {
+              "key": "area",
+              "value": "all",
+              "description": "Filter master data by area (optional, default: all)"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/monthly-targets/add?area=all"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": {\n        \"areas\": [\"Jakarta\", \"Bandung\", \"SCA\"],\n        \"customers\": [\n            { \"id\": 1, \"name\": \"PT ABC Corp\" },\n            { \"id\": 2, \"name\": \"PT XYZ Ltd\" }\n        ],\n        \"products\": [\n            { \"code\": \"PRD001\", \"name\": \"Product A\" },\n            { \"code\": \"PRD002\", \"name\": \"Product B\" }\n        ],\n        \"months\": [\n            \"January\", \"February\", \"March\", \"April\", \"May\", \"June\",\n            \"July\", \"August\", \"September\", \"October\", \"November\", \"December\"\n        ],\n        \"years\": [2024, 2025, 2026],\n        \"statuses\": [\"ACTIVE\", \"INACTIVE\"]\n    },\n    \"meta\": {\n        \"filters\": { \"area\": \"all\" },\n        \"timestamp\": \"2024-01-15T10:30:00Z\"\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "📊 List Monthly Targets",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/monthly-targets?page=1&limit=10&area=all&month=all&year=all",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "monthly-targets"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1",
+              "description": "Page number (optional, default: 1, min: 1)"
+            },
+            {
+              "key": "limit",
+              "value": "10",
+              "description": "Items per page (optional, default: 10, range: 1-100)"
+            },
+            {
+              "key": "search",
+              "value": "",
+              "description": "Search query (optional, auto-trimmed)"
+            },
+            {
+              "key": "searchBy",
+              "value": "",
+              "description": "Specific field to search in (optional)"
+            },
+            {
+              "key": "area",
+              "value": "all",
+              "description": "Filter by area (optional, default: all)"
+            },
+            {
+              "key": "month",
+              "value": "all",
+              "description": "Filter by month (optional, default: all)"
+            },
+            {
+              "key": "year",
+              "value": "all",
+              "description": "Filter by year (optional, default: all)"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/monthly-targets?page=1&limit=10&area=all&month=all&year=all"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"area\": \"Jakarta\",\n            \"month\": \"January\",\n            \"year\": 2024,\n            \"customer_id\": 2,\n            \"customer\": \"PT ABC Corp\",\n            \"product_code\": \"PRD001\",\n            \"product_name\": \"Product A\",\n            \"quantity\": 100,\n            \"price_list\": 50000,\n            \"total\": 5000000,\n            \"status\": \"ACTIVE\",\n            \"created_at\": \"2024-01-15T10:30:00Z\",\n            \"updated_at\": \"2024-01-15T10:30:00Z\"\n        }\n    ],\n    \"meta\": {\n        \"pagination\": {\n            \"total\": 150,\n            \"count\": 10,\n            \"page\": 1,\n            \"limit\": 10,\n            \"total_pages\": 15,\n            \"has_next\": true,\n            \"has_prev\": false\n        },\n        \"search\": {\n            \"query\": \"\",\n            \"search_by\": \"\",\n            \"applied\": false,\n            \"searchable_fields\": {\n                \"string_fields\": [\n                    \"area\",\n                    \"month\",\n                    \"customer\",\n                    \"product_code\",\n                    \"product_name\",\n                    \"status\"\n                ],\n                \"numeric_fields\": [\n                    \"year\",\n                    \"customer_id\",\n                    \"quantity\",\n                    \"price_list\",\n                    \"total\"\n                ]\n            }\n        },\n        \"filters\": {\n            \"area\": \"all\",\n            \"month\": \"all\",\n            \"year\": \"all\",\n            \"active\": false\n        },\n        \"timestamp\": \"2024-01-15T10:30:00Z\"\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "🔍 Get Monthly Target by ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/monthly-targets/1",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "monthly-targets", "1"]
+        }
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/monthly-targets/1"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": {\n        \"id\": 1,\n        \"area\": \"Jakarta\",\n        \"month\": \"January\",\n        \"year\": 2024,\n        \"customer_id\": 2,\n        \"customer\": \"PT ABC Corp\",\n        \"product_code\": \"PRD001\",\n        \"product_name\": \"Product A\",\n        \"quantity\": 100,\n        \"price_list\": 50000,\n        \"total\": 5000000,\n        \"status\": \"ACTIVE\",\n        \"created_at\": \"2024-01-15T10:30:00Z\",\n        \"updated_at\": \"2024-01-15T10:30:00Z\"\n    },\n    \"meta\": {\n        \"id\": 1,\n        \"timestamp\": \"2024-01-15T10:30:00Z\"\n    }\n}"
+        },
+        {
+          "name": "Error Response - Not Found",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/monthly-targets/999"
+          },
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"error\": \"Monthly target not found\",\n    \"details\": \"No monthly target found with ID: 999\"\n}"
+        },
+        {
+          "name": "Error Response - Invalid ID",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/monthly-targets/invalid"
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"error\": \"Invalid ID format\",\n    \"details\": \"ID must be a positive integer\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "➕ Create Monthly Target",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"area\": \"Jakarta\",\n    \"month\": \"January\",\n    \"year\": 2024,\n    \"customer_id\": 2,\n    \"product_code\": \"PRD001\",\n    \"quantity\": 100,\n    \"price_list\": 50000,\n    \"status\": \"ACTIVE\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/sales/monthly-targets",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "monthly-targets"]
+        },
+        "description": "Create new monthly target. Auto-fill: customer name from customer_id, product name from product_code. Auto-calculate: total = quantity × price_list. Duplicate prevention: same area + month + year + customer_id + product_code."
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "POST",
+            "url": "{{base_url}}/sales/monthly-targets",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"area\": \"Jakarta\",\n    \"month\": \"January\",\n    \"year\": 2024,\n    \"customer_id\": 2,\n    \"product_code\": \"PRD001\",\n    \"quantity\": 100,\n    \"price_list\": 50000,\n    \"status\": \"ACTIVE\"\n}"
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"message\": \"Monthly target created successfully\",\n    \"meta\": {\n        \"timestamp\": \"2024-01-15T10:30:00Z\"\n    }\n}"
+        },
+        {
+          "name": "Error Response - Validation Failed",
+          "originalRequest": {
+            "method": "POST",
+            "url": "{{base_url}}/sales/monthly-targets",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"area\": \"Jakarta\",\n    \"month\": \"Jan\",\n    \"year\": 2019,\n    \"quantity\": 0,\n    \"price_list\": -1000\n}"
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"error\": \"Validation failed\",\n    \"details\": \"Quantity must be greater than zero\"\n}"
+        },
+        {
+          "name": "Error Response - Duplicate Entry",
+          "originalRequest": {
+            "method": "POST",
+            "url": "{{base_url}}/sales/monthly-targets",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"area\": \"Jakarta\",\n    \"month\": \"January\",\n    \"year\": 2024,\n    \"customer_id\": 2,\n    \"product_code\": \"PRD001\",\n    \"quantity\": 100,\n    \"price_list\": 50000\n}"
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"error\": \"Failed to create monthly target\",\n    \"details\": \"monthly target already exists for customer 'PT ABC Corp' with product 'PRD001' in January 2024, area 'Jakarta'\"\n}"
+        },
+        {
+          "name": "Error Response - Master Data Not Found",
+          "originalRequest": {
+            "method": "POST",
+            "url": "{{base_url}}/sales/monthly-targets",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"area\": \"Jakarta\",\n    \"month\": \"January\",\n    \"year\": 2024,\n    \"customer_id\": 999,\n    \"product_code\": \"PRD001\",\n    \"quantity\": 100,\n    \"price_list\": 50000\n}"
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"error\": \"Failed to create monthly target\",\n    \"details\": \"invalid customer: customer not found with ID: 999\"\n}"
+        },
+        {
+          "name": "Error Response - Invalid Month Format",
+          "originalRequest": {
+            "method": "POST",
+            "url": "{{base_url}}/sales/monthly-targets",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"area\": \"Jakarta\",\n    \"month\": \"Jan\",\n    \"year\": 2024,\n    \"customer_id\": 2,\n    \"product_code\": \"PRD001\",\n    \"quantity\": 100,\n    \"price_list\": 50000\n}"
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"error\": \"Invalid request data\",\n    \"details\": \"Key: 'MonthlyTargetRequestDTO.Month' Error:Field validation for 'Month' failed on the 'oneof' tag\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "✏️ Update Monthly Target",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"area\": \"Jakarta\",\n    \"month\": \"January\",\n    \"year\": 2024,\n    \"customer_id\": 2,\n    \"product_code\": \"PRD001\",\n    \"quantity\": 150,\n    \"price_list\": 55000,\n    \"status\": \"ACTIVE\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/sales/monthly-targets/1",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "monthly-targets", "1"]
+        },
+        "description": "Update existing monthly target. Validates target exists, prevents duplicates (excluding current record), auto-calculates total, and maintains data integrity with master data references."
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "PUT",
+            "url": "{{base_url}}/sales/monthly-targets/1",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"area\": \"Jakarta\",\n    \"month\": \"January\",\n    \"year\": 2024,\n    \"customer_id\": 2,\n    \"product_code\": \"PRD001\",\n    \"quantity\": 150,\n    \"price_list\": 55000,\n    \"status\": \"ACTIVE\"\n}"
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"message\": \"Monthly target updated successfully\",\n    \"meta\": {\n        \"id\": 1,\n        \"timestamp\": \"2024-01-15T10:30:00Z\"\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "🗑️ Delete Monthly Target",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/monthly-targets/1",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "monthly-targets", "1"]
+        },
+        "description": "Delete monthly target with soft delete (preserves audit trail). Validates target exists before deletion."
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "DELETE",
+            "url": "{{base_url}}/sales/monthly-targets/1"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"message\": \"Monthly target deleted successfully\",\n    \"meta\": {\n        \"deleted_id\": 1,\n        \"timestamp\": \"2024-01-15T10:30:00Z\"\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "📅 Get by Area, Month, Year",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/monthly-targets/by-period?area=Jakarta&month=January&year=2024",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "monthly-targets", "by-period"],
+          "query": [
+            {
+              "key": "area",
+              "value": "Jakarta",
+              "description": "Sales area (required)"
+            },
+            {
+              "key": "month",
+              "value": "January",
+              "description": "Month name (required): January, February, ..., December"
+            },
+            {
+              "key": "year",
+              "value": "2024",
+              "description": "Year (required): 2020 to current+5"
+            }
+          ]
+        },
+        "description": "Get monthly targets filtered by area, month, and year with enhanced validation. All parameters are required and validated."
+      },
+      "response": [
+        {
+          "name": "Success Response",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/monthly-targets/by-period?area=Jakarta&month=January&year=2024"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"area\": \"Jakarta\",\n            \"month\": \"January\",\n            \"year\": 2024,\n            \"customer_id\": 2,\n            \"customer\": \"PT ABC Corp\",\n            \"product_code\": \"PRD001\",\n            \"product_name\": \"Product A\",\n            \"quantity\": 100,\n            \"price_list\": 50000,\n            \"total\": 5000000,\n            \"status\": \"ACTIVE\",\n            \"created_at\": \"2024-01-15T10:30:00Z\",\n            \"updated_at\": \"2024-01-15T10:30:00Z\"\n        }\n    ],\n    \"meta\": {\n        \"filters\": {\n            \"area\": \"Jakarta\",\n            \"month\": \"January\",\n            \"year\": 2024\n        },\n        \"count\": 1,\n        \"searchable_fields\": {\n            \"string_fields\": [\n                \"area\",\n                \"month\",\n                \"customer\",\n                \"product_code\",\n                \"product_name\",\n                \"status\"\n            ],\n            \"numeric_fields\": [\n                \"year\",\n                \"customer_id\",\n                \"quantity\",\n                \"price_list\",\n                \"total\"\n            ]\n        },\n        \"timestamp\": \"2024-01-15T10:30:00Z\"\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "📥 Export to Excel",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/sales/monthly-targets/export?area=all&month=all&year=all",
+          "host": ["{{base_url}}"],
+          "path": ["sales", "monthly-targets", "export"],
+          "query": [
+            {
+              "key": "area",
+              "value": "all",
+              "description": "Filter by area (optional, default: all)"
+            },
+            {
+              "key": "month",
+              "value": "all",
+              "description": "Filter by month (optional, default: all)"
+            },
+            {
+              "key": "year",
+              "value": "all",
+              "description": "Filter by year (optional, default: all)"
+            }
+          ]
+        },
+        "description": "Export monthly targets to Excel. Validates data exists before export. Returns proper JSON errors if no data found. Excel columns: ID, Area, Month, Year, Customer ID, Customer, Product Code, Product Name, Quantity, Price List, Total, Status, Created At, Updated At."
+      },
+      "response": [
+        {
+          "name": "Success Response - Excel File",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/monthly-targets/export?area=all&month=all&year=all"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            },
+            {
+              "key": "Content-Disposition",
+              "value": "attachment; filename=monthly_targets_export.xlsx"
+            }
+          ],
+          "_postman_previewlanguage": "raw",
+          "body": "Binary Excel file content"
+        },
+        {
+          "name": "Error Response - No Data Found",
+          "originalRequest": {
+            "method": "GET",
+            "url": "{{base_url}}/sales/monthly-targets/export?area=Jakarta&month=January&year=2024"
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "_postman_previewlanguage": "json",
+          "body": "{\n    \"error\": \"No data found\",\n    \"details\": \"No monthly targets found matching the specified filters\",\n    \"filters\": {\n        \"area\": \"Jakarta\",\n        \"month\": \"January\",\n        \"year\": \"2024\"\n    }\n}"
+        }
+      ]
+    }
+  ]
+}

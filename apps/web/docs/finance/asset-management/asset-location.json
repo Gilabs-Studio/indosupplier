@@ -1,0 +1,322 @@
+{
+  "title": "Finance/Asset Location",
+  "description": "A comprehensive guide to the Asset Location API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/finance/asset-locations",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "city_id": 1,
+            "city_name": "Semarang",
+            "province_id": 1,
+            "province_name": "Central Java",
+            "name": "Head Office - Jakarta",
+            "address": "Jl. Sudirman No. 123, Jakarta Pusat, DKI Jakarta",
+            "latitude": -6.2088,
+            "longitude": 106.8456,
+            "assets_count": 3,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 2,
+            "city_id": 2,
+            "city_name": "Surabaya",
+            "province_id": 1,
+            "province_name": "Central Java",
+            "name": "Branch Office - Surabaya",
+            "address": "Jl. Tunjungan No. 45, Surabaya, Jawa Timur",
+            "latitude": -7.2575,
+            "longitude": 112.7521,
+            "assets_count": 1,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 3,
+            "city_id": 3,
+            "city_name": "Jakarta Pusat",
+            "province_id": 1,
+            "province_name": "Central Java",
+            "name": "Warehouse - Bandung",
+            "address": "Jl. Soekarno Hatta No. 78, Bandung, Jawa Barat",
+            "latitude": -6.9175,
+            "longitude": 107.6191,
+            "assets_count": 1,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 4,
+            "city_id": 1,
+            "city_name": "Semarang",
+            "province_id": 1,
+            "province_name": "Central Java",
+            "name": "IT Department - Jakarta",
+            "address": "Jl. Sudirman No. 123, Floor 15, Jakarta Pusat, DKI Jakarta",
+            "latitude": -6.2088,
+            "longitude": 106.8456,
+            "assets_count": 2,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 5,
+            "city_id": 1,
+            "city_name": "Semarang",
+            "province_id": 1,
+            "province_name": "Central Java",
+            "name": "Finance Department - Jakarta",
+            "address": "Jl. Sudirman No. 123, Floor 12, Jakarta Pusat, DKI Jakarta",
+            "latitude": -6.2088,
+            "longitude": 106.8456,
+            "assets_count": 0,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 6,
+            "city_id": 1,
+            "city_name": "Semarang",
+            "province_id": 1,
+            "province_name": "Central Java",
+            "name": "Sales Office - Surabaya",
+            "address": "Jl. Tunjungan No. 45, Floor 8, Surabaya, Jawa Timur",
+            "latitude": -7.2575,
+            "longitude": 112.7521,
+            "assets_count": 0,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 7,
+            "city_id": 1,
+            "city_name": "Semarang",
+            "province_id": 1,
+            "province_name": "Central Java",
+            "name": "Factory - Medan",
+            "address": "Jl. Gatot Subroto No. 12, Medan, Sumatera Utara",
+            "latitude": 3.5952,
+            "longitude": 98.6722,
+            "assets_count": 1,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 8,
+            "city_id": 1,
+            "city_name": "Semarang",
+            "province_id": 1,
+            "province_name": "Central Java",
+            "name": "Distribution Center - Makassar",
+            "address": "Jl. Pettarani No. 34, Makassar, Sulawesi Selatan",
+            "latitude": -5.1477,
+            "longitude": 119.4327,
+            "assets_count": 0,
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 8
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "city_id"],
+            "string_columns": ["name", "address"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "name",
+              "address",
+              "city_id",
+              "latitude",
+              "longitude",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "GET {{base_url}}/finance/asset-locations/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "city_id": 1,
+          "city_name": "Semarang",
+          "province_id": 1,
+          "province_name": "Central Java",
+          "name": "Head Office - Jakarta",
+          "address": "Jl. Sudirman No. 123, Jakarta Pusat, DKI Jakarta",
+          "latitude": -6.2088,
+          "longitude": 106.8456,
+          "assets_count": 3,
+          "created_at": "2025-10-29T18:25:20+07:00",
+          "updated_at": "2025-10-29T18:25:20+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET STATS",
+      "endpoint": "GET {{base_url}}/finance/asset-locations/stats",
+      "response": {
+        "data": {
+          "by_city": {
+            "top_cities": [
+              {
+                "city_id": 2,
+                "city_name": "Surabaya",
+                "count": 1
+              },
+              {
+                "city_id": 3,
+                "city_name": "Jakarta Pusat",
+                "count": 1
+              },
+              {
+                "city_id": 1,
+                "city_name": "Semarang",
+                "count": 6
+              }
+            ],
+            "total_cities": 3
+          },
+          "by_coordinates": {
+            "with_coordinates": 8,
+            "without_coordinates": 0
+          },
+          "total": 8
+        },
+        "message": "Asset location statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "GET {{base_url}}/finance/asset-locations/add",
+      "response": {
+        "data": {
+          "provinces": [
+            {
+              "id": 1,
+              "name": "Central Java",
+              "cities": [
+                {
+                  "id": 1,
+                  "name": "Semarang",
+                  "province_id": 1,
+                  "province_name": "Central Java"
+                },
+                {
+                  "id": 2,
+                  "name": "Surabaya",
+                  "province_id": 1,
+                  "province_name": "Central Java"
+                },
+                {
+                  "id": 3,
+                  "name": "Jakarta Pusat",
+                  "province_id": 1,
+                  "province_name": "Central Java"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "name": "East Java",
+              "cities": null
+            },
+            {
+              "id": 3,
+              "name": "Jakarta",
+              "cities": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/finance/asset-locations",
+      "body": {
+        "city_id": 3,
+        "name": "Gudang Utama Jakarta",
+        "address": "Jl. Raya Cakung No. 45, Jakarta Timur, DKI Jakarta",
+        "latitude": -6.195125,
+        "longitude": 106.882743
+      },
+      "response": {
+        "data": {
+          "id": 9,
+          "city_id": 3,
+          "city_name": "Jakarta Pusat",
+          "province_id": 1,
+          "province_name": "Central Java",
+          "name": "Gudang Utama Jakarta",
+          "address": "Jl. Raya Cakung No. 45, Jakarta Timur, DKI Jakarta",
+          "latitude": -6.195125,
+          "longitude": 106.882743,
+          "assets_count": 0,
+          "created_at": "2025-10-29T19:01:57+07:00",
+          "updated_at": "2025-10-29T19:01:57+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/finance/asset-locations/4",
+      "body": {
+        "city_id": 3,
+        "name": "Gudang Utama Jakarta",
+        "address": "Jl. Raya Cakung No. 45, Jakarta Timur, DKI Jakarta",
+        "latitude": -6.195125,
+        "longitude": 106.882743
+      },
+      "response": {
+        "data": {
+          "id": 9,
+          "city_id": 3,
+          "city_name": "Jakarta Pusat",
+          "province_id": 1,
+          "province_name": "Central Java",
+          "name": "Gudang Utama Jakarta",
+          "address": "Jl. Raya Cakung No. 45, Jakarta Timur, DKI Jakarta",
+          "latitude": -6.195125,
+          "longitude": 106.882743,
+          "assets_count": 0,
+          "created_at": "2025-10-29T19:01:57+07:00",
+          "updated_at": "2025-10-29T19:01:57+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/finance/asset-locations/4",
+      "response": {
+        "message": "Asset location deleted successfully"
+      }
+    }
+  ]
+}

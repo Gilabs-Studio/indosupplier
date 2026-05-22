@@ -1,0 +1,134 @@
+{
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/attendance/my-records",
+      "description": "Get current user's attendance records",
+      "parameters": {
+        "query": {
+          "page": {
+            "type": "integer",
+            "description": "Page number for pagination",
+            "default": 1,
+            "example": 1
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Number of items per page",
+            "default": 10,
+            "example": 10
+          },
+          "search": {
+            "type": "string",
+            "description": "Search term",
+            "required": false,
+            "example": "1"
+          },
+          "searchBy": {
+            "type": "string",
+            "description": "Field to search by",
+            "enum": ["id", "date", "status"],
+            "default": "id",
+            "example": "id"
+          },
+          "sort_by": {
+            "type": "string",
+            "description": "Field to sort by",
+            "enum": ["id", "date", "check_in_time", "check_out_time"],
+            "default": "id",
+            "example": "id"
+          },
+          "sort_order": {
+            "type": "string",
+            "description": "Sort order",
+            "enum": ["asc", "desc"],
+            "default": "asc",
+            "example": "asc"
+          },
+          "start_date": {
+            "type": "string",
+            "description": "Filter records from this date",
+            "format": "date",
+            "example": "2025-09-18"
+          },
+          "end_date": {
+            "type": "string",
+            "description": "Filter records until this date",
+            "format": "date",
+            "example": "2025-12-18"
+          }
+        }
+      },
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "date": "2025-10-03",
+            "check_in_time": "08:00:00",
+            "check_out_time": "17:00:00",
+            "status": "PRESENT",
+            "note": "",
+            "created_at": "2025-10-06T13:50:35+07:00",
+            "updated_at": "2025-10-06T13:50:35+07:00"
+          }
+        ],
+        "message": "My attendance records retrieved successfully",
+        "meta": {
+          "filter": {
+            "end_date": "2025-12-18",
+            "note": "Date filters apply to attendance date",
+            "start_date": "2025-09-18"
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "1",
+            "search_by": "id"
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "employee_id"],
+            "string_columns": ["note", "status"]
+          },
+          "sort": {
+            "sort_by": "id",
+            "sort_order": "asc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "employee_id",
+              "date",
+              "check_in_time",
+              "check_out_time",
+              "status",
+              "note",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      },
+      "error_responses": [
+        {
+          "status": 401,
+          "message": "Unauthorized",
+          "data": {
+            "error": "UNAUTHORIZED",
+            "details": "Invalid or expired token"
+          }
+        },
+        {
+          "status": 403,
+          "message": "Forbidden",
+          "data": {
+            "error": "FORBIDDEN",
+            "details": "Access denied to attendance records"
+          }
+        }
+      ]
+    }
+  ]
+}

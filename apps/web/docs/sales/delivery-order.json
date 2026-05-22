@@ -1,0 +1,755 @@
+{
+  "title": "delivery-order",
+  "description": "A comprehensive guide to the delivery-order API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/sales/delivery-orders?page=1&limit=10",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "sales_order": {
+              "id": 3,
+              "code": "SO-20250919-003"
+            },
+            "code": "DO-20250919-001",
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "delivery_date": "2025-09-11",
+            "status": "DELIVERED",
+            "items_count": 4,
+            "created_at": "2025-09-19T08:08:27Z",
+            "updated_at": "2025-09-19T08:08:27Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "sales_order_id", "created_by"],
+            "string_columns": ["code"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "delivery_date",
+              "status",
+              "created_at",
+              "updated_at",
+              "sales_order_id",
+              "created_by"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA with Search",
+      "endpoint": "GET {{base_url}}/sales/delivery-orders?page=1&limit=10&searchBy=id&search=1",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "sales_order": {
+              "id": 3,
+              "code": "SO-20250919-003"
+            },
+            "code": "DO-20250919-001",
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "delivery_date": "2025-09-11",
+            "status": "DELIVERED",
+            "items_count": 4,
+            "created_at": "2025-09-19T08:08:27Z",
+            "updated_at": "2025-09-19T08:08:27Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "1",
+            "searchBy": "id"
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "sales_order_id", "created_by"],
+            "string_columns": ["code"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "delivery_date",
+              "status",
+              "created_at",
+              "updated_at",
+              "sales_order_id",
+              "created_by"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA with Sorting by column",
+      "endpoint": "GET {{base_url}}/sales/delivery-orders?page=1&limit=10&sort_by=id&sort_order=asc",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "sales_order": {
+              "id": 3,
+              "code": "SO-20250919-003"
+            },
+            "code": "DO-20250919-001",
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "delivery_date": "2025-09-11",
+            "status": "DELIVERED",
+            "items_count": 4,
+            "created_at": "2025-09-19T08:08:27Z",
+            "updated_at": "2025-09-19T08:08:27Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "sales_order_id", "created_by"],
+            "string_columns": ["code"]
+          },
+          "sort": {
+            "sort_by": "id",
+            "sort_order": "asc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "delivery_date",
+              "status",
+              "created_at",
+              "updated_at",
+              "sales_order_id",
+              "created_by"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA with Date Range Filter",
+      "endpoint": "GET {{base_url}}/sales/delivery-orders?page=1&limit=10&start_date=2025-09-11&end_date=2025-09-11",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "sales_order": {
+              "id": 3,
+              "code": "SO-20250919-003"
+            },
+            "code": "DO-20250919-001",
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "delivery_date": "2025-09-11",
+            "status": "DELIVERED",
+            "items_count": 4,
+            "created_at": "2025-09-19T08:08:27Z",
+            "updated_at": "2025-09-19T08:08:27Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "2025-09-11",
+            "start_date": "2025-09-11"
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "sales_order_id", "created_by"],
+            "string_columns": ["code"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "delivery_date",
+              "status",
+              "created_at",
+              "updated_at",
+              "sales_order_id",
+              "created_by"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/sales/delivery-orders/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "sales_order": {
+            "id": 3,
+            "code": "SO-20250919-003"
+          },
+          "code": "DO-20250919-001",
+          "customer": {
+            "id": 1,
+            "name": "RSUD Tugurejo"
+          },
+          "delivery_date": "2025-09-11",
+          "status": "DELIVERED",
+          "items": [
+            {
+              "id": 1,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "inventory_batch_id": 2,
+              "quantity": 5
+            },
+            {
+              "id": 2,
+              "product": {
+                "id": 2,
+                "name": "Gloves (Box)",
+                "code": "MED-002",
+                "selling_price": 75000,
+                "image_url": ""
+              },
+              "inventory_batch_id": 1,
+              "quantity": 3
+            },
+            {
+              "id": 3,
+              "product": {
+                "id": 3,
+                "name": "Printer Paper A4",
+                "code": "OFF-001",
+                "selling_price": 45000,
+                "image_url": ""
+              },
+              "inventory_batch_id": 2,
+              "quantity": 10
+            },
+            {
+              "id": 4,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "inventory_batch_id": 2,
+              "quantity": 4
+            }
+          ],
+          "created_at": "2025-09-19T08:08:27Z",
+          "updated_at": "2025-09-19T08:08:27Z"
+        }
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "description": "Get necessary data for adding a new delivery order, such as sales orders.",
+      "endpoint": "GET {{base_url}}/sales/delivery-orders/add",
+      "response": {
+        "data": {
+          "sales_orders": [
+            {
+              "id": 2,
+              "customer": {
+                "id": 1,
+                "name": "RSUD Tugurejo"
+              },
+              "order_date": "2025-09-14",
+              "items": [
+                {
+                  "id": 3,
+                  "product": {
+                    "id": 1,
+                    "name": "Syringe 5ml",
+                    "code": "MED-001",
+                    "selling_price": 1500,
+                    "image_url": ""
+                  },
+                  "quantity": 5,
+                  "batches": [
+                    {
+                      "id": 1,
+                      "code": "BATCH-MED-001-001",
+                      "warehouse_id": 1,
+                      "quantity": 88,
+                      "expired_date": "2026-03-19"
+                    },
+                    {
+                      "id": 2,
+                      "code": "BATCH-MED-001-002",
+                      "warehouse_id": 1,
+                      "quantity": 0,
+                      "expired_date": "2026-09-19"
+                    }
+                  ]
+                },
+                {
+                  "id": 4,
+                  "product": {
+                    "id": 2,
+                    "name": "Gloves (Box)",
+                    "code": "MED-002",
+                    "selling_price": 75000,
+                    "image_url": ""
+                  },
+                  "quantity": 3,
+                  "batches": null
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/sales/delivery-orders",
+      "body": {
+        "sales_order_id": 5,
+        "delivery_date": "2025-09-20",
+        "items": [
+          {
+            "inventory_batch_id": 1,
+            "quantity": 2
+          },
+          {
+            "inventory_batch_id": 1,
+            "quantity": 2
+          }
+        ]
+      },
+      "response": {
+        "data": {
+          "id": 2,
+          "sales_order": {
+            "id": 5,
+            "code": "SO-20250919-0005"
+          },
+          "code": "DO-20250919-0002",
+          "customer": {
+            "id": 1,
+            "name": "RSUD Tugurejo"
+          },
+          "delivery_date": "2025-09-20",
+          "status": "PENDING",
+          "items": [
+            {
+              "id": 5,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "inventory_batch_id": 1,
+              "quantity": 2
+            },
+            {
+              "id": 6,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "inventory_batch_id": 1,
+              "quantity": 2
+            }
+          ],
+          "created_at": "2025-09-19T08:30:52Z",
+          "updated_at": "2025-09-19T08:30:52Z"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/sales/delivery-orders/2",
+      "body": {
+        "sales_order_id": 5,
+        "delivery_date": "2025-09-05",
+        "items": [
+          {
+            "inventory_batch_id": 1,
+            "quantity": 5
+          },
+          {
+            "inventory_batch_id": 1,
+            "quantity": 2
+          }
+        ]
+      },
+      "response": {
+        "data": {
+          "id": 2,
+          "sales_order": {
+            "id": 5,
+            "code": "SO-20250919-0005"
+          },
+          "code": "DO-20250919-0002",
+          "customer": {
+            "id": 1,
+            "name": "RSUD Tugurejo"
+          },
+          "delivery_date": "2025-09-05",
+          "status": "PENDING",
+          "items": [
+            {
+              "id": 7,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "inventory_batch_id": 1,
+              "quantity": 5
+            },
+            {
+              "id": 8,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "inventory_batch_id": 1,
+              "quantity": 2
+            }
+          ],
+          "created_at": "2025-09-19T08:30:52Z",
+          "updated_at": "2025-09-19T08:32:06Z"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/sales/delivery-orders/2",
+      "response": {
+        "message": "deleted"
+      }
+    },
+    {
+      "title": "GET PRINT DATA",
+      "endpoint": "GET {{base_url}}/sales/delivery-orders/2/print",
+      "response": {
+        "data": {
+          "id": 1,
+          "sales_order": {
+            "id": 3,
+            "code": "SO-20250919-003"
+          },
+          "code": "DO-20250919-001",
+          "customer": {
+            "id": 1,
+            "name": "RSUD Tugurejo"
+          },
+          "delivery_date": "2025-09-11",
+          "status": "DELIVERED",
+          "items": [
+            {
+              "id": 1,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "inventory_batch_id": 2,
+              "quantity": 5
+            },
+            {
+              "id": 2,
+              "product": {
+                "id": 2,
+                "name": "Gloves (Box)",
+                "code": "MED-002",
+                "selling_price": 75000,
+                "image_url": ""
+              },
+              "inventory_batch_id": 1,
+              "quantity": 3
+            },
+            {
+              "id": 3,
+              "product": {
+                "id": 3,
+                "name": "Printer Paper A4",
+                "code": "OFF-001",
+                "selling_price": 45000,
+                "image_url": ""
+              },
+              "inventory_batch_id": 2,
+              "quantity": 10
+            },
+            {
+              "id": 4,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "inventory_batch_id": 2,
+              "quantity": 4
+            }
+          ],
+          "created_at": "2025-09-19T08:08:27Z",
+          "updated_at": "2025-09-19T08:08:27Z"
+        }
+      }
+    },
+    {
+      "title": "CONFIRM SHIPPED STATUS DELIVERY ORDER",
+      "endpoint": "POST {{base_url}}/sales/delivery-orders/2/confirm",
+      "response": {
+        "data": {
+          "id": 2,
+          "sales_order": {
+            "id": 4,
+            "code": "SO-20250919-0004"
+          },
+          "code": "DO-20250919-0002",
+          "customer": {
+            "id": 1,
+            "name": "RSUD Tugurejo"
+          },
+          "delivery_date": "2025-09-21",
+          "status": "SHIPPED",
+          "items": [
+            {
+              "id": 5,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "inventory_batch_id": 1,
+              "quantity": 1
+            },
+            {
+              "id": 6,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "inventory_batch_id": 1,
+              "quantity": 2
+            }
+          ],
+          "created_at": "2025-09-19T08:39:23Z",
+          "updated_at": "2025-09-19T08:40:20Z"
+        },
+        "message": "confirmed"
+      }
+    },
+    {
+      "title": "CONFIRM DELIVERED STATUS DELIVERY ORDER",
+      "endpoint": "POST {{base_url}}/sales/delivery-orders/2/deliver",
+      "response": {
+        "data": {
+          "id": 2,
+          "sales_order": {
+            "id": 4,
+            "code": "SO-20250919-0004"
+          },
+          "code": "DO-20250919-0002",
+          "customer": {
+            "id": 1,
+            "name": "RSUD Tugurejo"
+          },
+          "delivery_date": "2025-09-21",
+          "status": "DELIVERED",
+          "items": [
+            {
+              "id": 5,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "inventory_batch_id": 1,
+              "quantity": 1
+            },
+            {
+              "id": 6,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "inventory_batch_id": 1,
+              "quantity": 2
+            }
+          ],
+          "created_at": "2025-09-19T08:39:23Z",
+          "updated_at": "2025-09-19T08:41:39Z"
+        },
+        "message": "delivered"
+      }
+    },
+    {
+      "title": "STATUS DEFINITIONS",
+      "status_definitions": {
+        "delivery_order_status": {
+          "PENDING": {
+            "description": "Initial status when delivery order is created",
+            "allowed_operations": [
+              "view",
+              "update",
+              "delete",
+              "confirm_shipped"
+            ],
+            "next_possible_status": ["SHIPPED"],
+            "business_rules": [
+              "Must be confirmed before proceeding to next steps",
+              "Can be updated or deleted"
+            ],
+            "color": "orange"
+          },
+          "SHIPPED": {
+            "description": "Delivery order has been shipped",
+            "allowed_operations": ["view", "confirm_delivered"],
+            "next_possible_status": ["DELIVERED"],
+            "business_rules": [
+              "Cannot be updated or deleted",
+              "Must be confirmed before proceeding to next steps",
+              "Cannot be deleted or updated"
+            ],
+            "color": "green"
+          },
+          "DELIVERED": {
+            "description": "Delivery order has been delivered",
+            "allowed_operations": ["view"],
+            "next_possible_status": [],
+            "business_rules": [
+              "Read-only status",
+              "Cannot be updated or deleted",
+              "Cannot be confirmed"
+            ],
+            "color": "blue"
+          }
+        }
+      }
+    },
+    {
+      "title": "BUSINESS RULES",
+      "business_rules": {
+        "delivery_order_creation": {
+          "sales_order_validation": "Sales order must exist and be in APPROVED status",
+          "duplicate_check": "Only one delivery order per sales order is allowed",
+          "inventory_validation": "All inventory batches must exist and have sufficient quantity",
+          "date_validation": "Delivery date must be valid YYYY-MM-DD format",
+          "code_generation": "Code is auto-generated in format DO-YYYYMMDD-XXXX"
+        },
+        "delivery_order_update": {
+          "status_restriction": "Only PENDING status can be updated",
+          "item_replacement": "Items are fully replaced if provided in update",
+          "inventory_validation": "New inventory batches must be validated",
+          "date_update": "Delivery date can be updated if provided"
+        },
+        "delivery_order_confirmation": {
+          "status_restriction": "Only PENDING status can be confirmed",
+          "inventory_check": "Must verify sufficient inventory before confirmation",
+          "stock_movement": "Creates stock OUT movements for each item",
+          "irreversible": "Once confirmed, cannot be reverted to PENDING",
+          "cogs_posting": "Posts COGS journal entries if cost basis available"
+        },
+        "delivery_order_delivery": {
+          "status_restriction": "Only SHIPPED status can be delivered",
+          "final_status": "DELIVERED is the final status",
+          "irreversible": "Once delivered, cannot be modified"
+        }
+      }
+    }
+  ]
+}

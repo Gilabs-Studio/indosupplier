@@ -1,0 +1,108 @@
+{
+  "title": "Data Master/configuration-system/areas",
+  "description": "A comprehensive guide to the Data Master API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/master-data/areas",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "name": "Area A",
+            "created_at": "2025-09-16T15:06:43+07:00",
+            "updated_at": "2025-09-16T15:06:43+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "2025-10-01",
+            "start_date": "2025-09-01"
+          },
+          "pagination": {
+            "limit": 1,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "1",
+            "search_by": "id"
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id"],
+            "string_columns": ["name"]
+          },
+          "sort": {
+            "sort_by": "name",
+            "sort_order": "desc"
+          },
+          "sortable_columns": {
+            "available_fields": ["id", "name", "created_at", "updated_at"]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA STATS",
+      "endpoint": "{{base_url}}/master-data/areas/stats",
+      "response": {
+        "data": {
+          "total": 3
+        },
+        "message": "Area statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/master-data/areas/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "name": "Area A",
+          "created_at": "2025-09-16T15:06:43+07:00",
+          "updated_at": "2025-09-16T15:06:43+07:00"
+        }
+      }
+    },
+
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/master-data/areas",
+      "body": {
+        "name": "Jawa Timur"
+      },
+      "response": {
+        "data": {
+          "id": 4,
+          "name": "Jawa Timur",
+          "created_at": "2025-09-16T15:22:50+07:00",
+          "updated_at": "2025-09-16T15:22:50+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/master-data/areas/2",
+      "body": {
+        "name": "Area Update"
+      },
+      "response": {
+        "data": {
+          "id": 2,
+          "name": "Area Update",
+          "created_at": "2025-09-16T15:06:43+07:00",
+          "updated_at": "2025-09-16T15:23:38+07:00"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/master-data/areas/2",
+      "response": {
+        "message": "deleted"
+      }
+    }
+  ]
+}

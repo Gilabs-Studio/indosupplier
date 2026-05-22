@@ -1,0 +1,1658 @@
+{
+  "title": "sales-order",
+  "description": "A comprehensive guide to the sales-order API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/sales/sales-orders?page=1&limit=10",
+      "response": {
+        "data": [
+          {
+            "id": 4,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "sales_quotation": {
+              "id": 9,
+              "code": "SQ-CF-20251021-001"
+            },
+            "code": "SO-CF-20251021-001",
+            "order_date": "2025-10-03",
+            "status": "APPROVED",
+            "status_delivery": "SHIPPED",
+            "status_invoice": "PAID",
+            "total_amount": 240000,
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 1,
+            "created_at": "2025-10-21T07:46:13Z",
+            "updated_at": "2025-10-21T07:46:13Z"
+          },
+          {
+            "id": 3,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 3,
+              "name": "Net 14"
+            },
+            "employee": {
+              "id": 3,
+              "name": "Viewer User"
+            },
+            "business_unit": {
+              "id": 3,
+              "name": "Finance Department"
+            },
+            "code": "SO-20251021-003",
+            "order_date": "2025-10-06",
+            "status": "CLOSED",
+            "status_delivery": "DELIVERED",
+            "status_invoice": "PAID",
+            "total_amount": 2372550,
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 4,
+            "created_at": "2025-10-21T07:46:13Z",
+            "updated_at": "2025-10-21T07:46:13Z"
+          },
+          {
+            "id": 2,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 2,
+              "name": "Net 7"
+            },
+            "employee": {
+              "id": 2,
+              "name": "John Doe"
+            },
+            "business_unit": {
+              "id": 2,
+              "name": "Marketing Department"
+            },
+            "code": "SO-20251021-002",
+            "order_date": "2025-10-16",
+            "status": "APPROVED",
+            "status_delivery": "NOT_CREATED",
+            "status_invoice": "NOT_CREATED",
+            "total_amount": 1376500,
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 2,
+            "created_at": "2025-10-21T07:46:13Z",
+            "updated_at": "2025-10-21T07:46:13Z"
+          },
+          {
+            "id": 1,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "code": "SO-20251021-001",
+            "order_date": "2025-10-11",
+            "status": "DRAFT",
+            "status_delivery": "NOT_CREATED",
+            "status_invoice": "NOT_CREATED",
+            "total_amount": 1315000,
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 2,
+            "created_at": "2025-10-21T07:46:13Z",
+            "updated_at": "2025-10-21T07:46:13Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 4
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": [
+              "id",
+              "customer_id",
+              "created_by",
+              "total_amount"
+            ],
+            "string_columns": ["code", "revision_comment"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "order_date",
+              "status",
+              "total_amount",
+              "created_at",
+              "updated_at",
+              "customer_id",
+              "created_by",
+              "revision_comment"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA with Search",
+      "endpoint": "GET {{base_url}}/sales/sales-orders?page=1&limit=10&searchBy=id&search=1",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "code": "SO-20251021-001",
+            "order_date": "2025-10-11",
+            "status": "DRAFT",
+            "status_delivery": "NOT_CREATED",
+            "status_invoice": "NOT_CREATED",
+            "total_amount": 1315000,
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 2,
+            "created_at": "2025-10-21T07:46:13Z",
+            "updated_at": "2025-10-21T07:46:13Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "1",
+            "searchBy": "id"
+          },
+          "searchable_columns": {
+            "numeric_columns": [
+              "id",
+              "customer_id",
+              "created_by",
+              "total_amount"
+            ],
+            "string_columns": ["code", "revision_comment"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "order_date",
+              "status",
+              "total_amount",
+              "created_at",
+              "updated_at",
+              "customer_id",
+              "created_by",
+              "revision_comment"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA with Sorting by column",
+      "endpoint": "GET {{base_url}}/sales/sales-orders?page=1&limit=10&sort_by=id&sort_order=asc",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "code": "SO-20251021-001",
+            "order_date": "2025-10-11",
+            "status": "DRAFT",
+            "status_delivery": "NOT_CREATED",
+            "status_invoice": "NOT_CREATED",
+            "total_amount": 1315000,
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 2,
+            "created_at": "2025-10-21T07:46:13Z",
+            "updated_at": "2025-10-21T07:46:13Z"
+          },
+          {
+            "id": 2,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 2,
+              "name": "Net 7"
+            },
+            "employee": {
+              "id": 2,
+              "name": "John Doe"
+            },
+            "business_unit": {
+              "id": 2,
+              "name": "Marketing Department"
+            },
+            "code": "SO-20251021-002",
+            "order_date": "2025-10-16",
+            "status": "APPROVED",
+            "status_delivery": "NOT_CREATED",
+            "status_invoice": "NOT_CREATED",
+            "total_amount": 1376500,
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 2,
+            "created_at": "2025-10-21T07:46:13Z",
+            "updated_at": "2025-10-21T07:46:13Z"
+          },
+          {
+            "id": 3,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 3,
+              "name": "Net 14"
+            },
+            "employee": {
+              "id": 3,
+              "name": "Viewer User"
+            },
+            "business_unit": {
+              "id": 3,
+              "name": "Finance Department"
+            },
+            "code": "SO-20251021-003",
+            "order_date": "2025-10-06",
+            "status": "CLOSED",
+            "status_delivery": "DELIVERED",
+            "status_invoice": "PAID",
+            "total_amount": 2372550,
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 4,
+            "created_at": "2025-10-21T07:46:13Z",
+            "updated_at": "2025-10-21T07:46:13Z"
+          },
+          {
+            "id": 4,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "sales_quotation": {
+              "id": 9,
+              "code": "SQ-CF-20251021-001"
+            },
+            "code": "SO-CF-20251021-001",
+            "order_date": "2025-10-03",
+            "status": "APPROVED",
+            "status_delivery": "SHIPPED",
+            "status_invoice": "PAID",
+            "total_amount": 240000,
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 1,
+            "created_at": "2025-10-21T07:46:13Z",
+            "updated_at": "2025-10-21T07:46:13Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 4
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": [
+              "id",
+              "customer_id",
+              "created_by",
+              "total_amount"
+            ],
+            "string_columns": ["code", "revision_comment"]
+          },
+          "sort": {
+            "sort_by": "id",
+            "sort_order": "asc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "order_date",
+              "status",
+              "total_amount",
+              "created_at",
+              "updated_at",
+              "customer_id",
+              "created_by",
+              "revision_comment"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA with Date Range Filter",
+      "endpoint": "GET {{base_url}}/sales/sales-orders?page=1&start_date=2025-10-03&end_date=2025-10-03&limit=10",
+      "response": {
+        "data": [
+          {
+            "id": 4,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "sales_quotation": {
+              "id": 9,
+              "code": "SQ-CF-20251021-001"
+            },
+            "code": "SO-CF-20251021-001",
+            "order_date": "2025-10-03",
+            "status": "APPROVED",
+            "status_delivery": "SHIPPED",
+            "status_invoice": "PAID",
+            "total_amount": 240000,
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            "items_count": 1,
+            "created_at": "2025-10-21T07:46:13Z",
+            "updated_at": "2025-10-21T07:46:13Z"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "2025-10-03",
+            "start_date": "2025-10-03"
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": [
+              "id",
+              "customer_id",
+              "created_by",
+              "total_amount"
+            ],
+            "string_columns": ["code", "revision_comment"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "order_date",
+              "status",
+              "total_amount",
+              "created_at",
+              "updated_at",
+              "customer_id",
+              "created_by",
+              "revision_comment"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/sales/sales-orders/2",
+      "response": {
+        "data": {
+          "id": 2,
+          "customer": {
+            "id": 1,
+            "name": "RSUD Tugurejo"
+          },
+          "payment_terms": {
+            "id": 2,
+            "name": "Net 7"
+          },
+          "employee": {
+            "id": 2,
+            "name": "John Doe"
+          },
+          "business_unit": {
+            "id": 2,
+            "name": "Marketing Department"
+          },
+          "code": "SO-20251021-002",
+          "order_date": "2025-10-16",
+          "status": "APPROVED",
+          "status_delivery": "NOT_CREATED",
+          "status_invoice": "NOT_CREATED",
+          "notes": "Sales Order yang sudah disetujui",
+          "subtotal": 1150000,
+          "tax_amount": 126500,
+          "tax_rate": 11,
+          "delivery_cost": 75000,
+          "other_cost": 25000,
+          "total_amount": 1376500,
+          "created_by": 1,
+          "created_by_user": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+          },
+          "revision_comment": "",
+          "items": [
+            {
+              "id": 3,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 5,
+              "price": 100000,
+              "discount": 5,
+              "subtotal": 475000
+            },
+            {
+              "id": 4,
+              "product": {
+                "id": 2,
+                "name": "Gloves (Box)",
+                "code": "MED-002",
+                "cost_price": 50000,
+                "selling_price": 75000,
+                "image_url": ""
+              },
+              "quantity": 3,
+              "price": 250000,
+              "discount": 10,
+              "subtotal": 675000
+            }
+          ],
+          "created_at": "2025-10-21T07:46:13Z",
+          "updated_at": "2025-10-21T07:46:13Z"
+        }
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "description": "Get necessary data for adding a new sales order, such as customers and products.",
+      "endpoint": "GET {{base_url}}/sales/sales-orders/add",
+      "response": {
+        "data": {
+          "business_units": [
+            {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            {
+              "id": 2,
+              "name": "Marketing Department"
+            },
+            {
+              "id": 3,
+              "name": "Finance Department"
+            },
+            {
+              "id": 4,
+              "name": "Human Resources"
+            },
+            {
+              "id": 5,
+              "name": "Operations"
+            }
+          ],
+          "customers": [
+            {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            {
+              "id": 2,
+              "name": "Klinik Sehat"
+            }
+          ],
+          "employees": [
+            {
+              "id": 1,
+              "name": "Administrator"
+            },
+            {
+              "id": 2,
+              "name": "John Doe"
+            },
+            {
+              "id": 3,
+              "name": "Viewer User"
+            }
+          ],
+          "payment_terms": [
+            {
+              "id": 1,
+              "name": "Cash on Delivery"
+            },
+            {
+              "id": 2,
+              "name": "Net 7"
+            },
+            {
+              "id": 3,
+              "name": "Net 14"
+            },
+            {
+              "id": 4,
+              "name": "Net 21"
+            },
+            {
+              "id": 5,
+              "name": "Net 30"
+            },
+            {
+              "id": 6,
+              "name": "Net 45"
+            },
+            {
+              "id": 7,
+              "name": "Net 60"
+            }
+          ],
+          "products": [
+            {
+              "id": 1,
+              "code": "MED-001",
+              "name": "Syringe 5ml",
+              "image_url": "",
+              "cost_price": 1000,
+              "selling_price": 1500
+            },
+            {
+              "id": 2,
+              "code": "MED-002",
+              "name": "Gloves (Box)",
+              "image_url": "",
+              "cost_price": 50000,
+              "selling_price": 75000
+            },
+            {
+              "id": 3,
+              "code": "OFF-001",
+              "name": "Printer Paper A4",
+              "image_url": "",
+              "cost_price": 30000,
+              "selling_price": 45000
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/sales/sales-orders",
+      "body": {
+        "customer_id": 1,
+        "payment_terms_id": 1,
+        "business_unit_id": 3,
+        "employee_id": 1,
+        "notes": "Draft quotation for office equipment",
+        "tax_rate": 11.0,
+        "delivery_cost": 50000,
+        "order_date": "2025-09-01",
+        "other_cost": 25000,
+        "items": [
+          {
+            "product_id": 1,
+            "quantity": 5,
+            "price": 1500,
+            "discount": 0
+          },
+          {
+            "product_id": 2,
+            "quantity": 10,
+            "price": 75000,
+            "discount": 5
+          }
+        ]
+      },
+      "response": {
+        "data": {
+          "id": 5,
+          "customer": {
+            "id": 1,
+            "name": "RSUD Tugurejo"
+          },
+          "payment_terms": {
+            "id": 1,
+            "name": "Cash on Delivery"
+          },
+          "employee": {
+            "id": 1,
+            "name": "Administrator"
+          },
+          "business_unit": {
+            "id": 3,
+            "name": "Finance Department"
+          },
+          "code": "SO-20251021-0004",
+          "order_date": "2025-09-01",
+          "status": "DRAFT",
+          "status_delivery": "NOT_CREATED",
+          "status_invoice": "NOT_CREATED",
+          "notes": "Draft quotation for office equipment",
+          "subtotal": 720000,
+          "tax_amount": 79200,
+          "tax_rate": 11,
+          "delivery_cost": 50000,
+          "other_cost": 25000,
+          "total_amount": 874200,
+          "created_by": 1,
+          "created_by_user": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+          },
+          "revision_comment": "",
+          "items": [
+            {
+              "id": 10,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 5,
+              "price": 1500,
+              "discount": 0,
+              "subtotal": 7500
+            },
+            {
+              "id": 11,
+              "product": {
+                "id": 2,
+                "name": "Gloves (Box)",
+                "code": "MED-002",
+                "cost_price": 50000,
+                "selling_price": 75000,
+                "image_url": ""
+              },
+              "quantity": 10,
+              "price": 75000,
+              "discount": 5,
+              "subtotal": 712500
+            }
+          ],
+          "created_at": "2025-10-21T09:22:39Z",
+          "updated_at": "2025-10-21T09:22:39Z"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/sales/sales-orders/1",
+      "body": {
+        "customer_id": 1,
+        "payment_terms_id": 1,
+        "business_unit_id": 3,
+        "employee_id": 1,
+        "quotation_date": "2025-09-17",
+        "notes": "Draft quotation for office equipment",
+        "tax_rate": 15.0,
+        "delivery_cost": 50000,
+        "order_date": "2025-09-01",
+        "other_cost": 25000,
+        "items": [
+          {
+            "product_id": 1,
+            "quantity": 5,
+            "price": 1500,
+            "discount": 0
+          },
+          {
+            "product_id": 2,
+            "quantity": 10,
+            "price": 75000,
+            "discount": 5
+          }
+        ]
+      },
+      "response": {
+        "data": {
+          "id": 1,
+          "customer": {
+            "id": 1,
+            "name": "RSUD Tugurejo"
+          },
+          "payment_terms": {
+            "id": 1,
+            "name": "Cash on Delivery"
+          },
+          "employee": {
+            "id": 1,
+            "name": "Administrator"
+          },
+          "business_unit": {
+            "id": 3,
+            "name": "Finance Department"
+          },
+          "code": "SO-20251021-001",
+          "order_date": "2025-09-01",
+          "status": "DRAFT",
+          "status_delivery": "NOT_CREATED",
+          "status_invoice": "NOT_CREATED",
+          "notes": "Draft quotation for office equipment",
+          "subtotal": 720000,
+          "tax_amount": 108000,
+          "tax_rate": 15,
+          "delivery_cost": 50000,
+          "other_cost": 25000,
+          "total_amount": 903000,
+          "created_by": 1,
+          "created_by_user": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+          },
+          "revision_comment": "",
+          "items": [
+            {
+              "id": 12,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 5,
+              "price": 1500,
+              "discount": 0,
+              "subtotal": 7500
+            },
+            {
+              "id": 13,
+              "product": {
+                "id": 2,
+                "name": "Gloves (Box)",
+                "code": "MED-002",
+                "cost_price": 50000,
+                "selling_price": 75000,
+                "image_url": ""
+              },
+              "quantity": 10,
+              "price": 75000,
+              "discount": 5,
+              "subtotal": 712500
+            }
+          ],
+          "created_at": "2025-10-21T07:46:13Z",
+          "updated_at": "2025-10-21T09:23:05Z"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/sales/sales-orders/1",
+      "response": {
+        "message": "deleted"
+      }
+    },
+    {
+      "title": "GET REPORT DATA",
+      "description": "Retrieve a report of all sales orders, including a summary of total orders and total amount for export data.",
+      "endpoint": "GET {{base_url}}/sales/sales-orders/report",
+      "response": {
+        "data": [
+          {
+            "id": 2,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 0,
+              "name": ""
+            },
+            "employee": {
+              "id": 0,
+              "name": ""
+            },
+            "business_unit": {
+              "id": 2,
+              "name": "Marketing Department"
+            },
+            "code": "SO-20251021-002",
+            "order_date": "2025-10-16",
+            "status": "APPROVED",
+            "status_delivery": "NOT_CREATED",
+            "status_invoice": "NOT_CREATED",
+            "notes": "Sales Order yang sudah disetujui",
+            "subtotal": 1150000,
+            "tax_amount": 126500,
+            "tax_rate": 11,
+            "delivery_cost": 75000,
+            "other_cost": 25000,
+            "total_amount": 1376500,
+            "created_by": 1,
+            "created_by_user": {
+              "id": 0,
+              "name": "",
+              "username": "",
+              "photo_profile": "",
+              "avatar_url": ""
+            },
+            "revision_comment": "",
+            "items": [
+              {
+                "id": 3,
+                "product": {
+                  "id": 0,
+                  "name": "",
+                  "code": "",
+                  "image_url": ""
+                },
+                "quantity": 5,
+                "price": 100000,
+                "discount": 5,
+                "subtotal": 475000
+              },
+              {
+                "id": 4,
+                "product": {
+                  "id": 0,
+                  "name": "",
+                  "code": "",
+                  "image_url": ""
+                },
+                "quantity": 3,
+                "price": 250000,
+                "discount": 10,
+                "subtotal": 675000
+              }
+            ],
+            "created_at": "2025-10-21T07:46:13Z",
+            "updated_at": "2025-10-21T07:46:13Z"
+          },
+          {
+            "id": 3,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 0,
+              "name": ""
+            },
+            "employee": {
+              "id": 0,
+              "name": ""
+            },
+            "business_unit": {
+              "id": 3,
+              "name": "Finance Department"
+            },
+            "code": "SO-20251021-003",
+            "order_date": "2025-10-06",
+            "status": "CLOSED",
+            "status_delivery": "DELIVERED",
+            "status_invoice": "PAID",
+            "notes": "Sales Order yang sudah selesai",
+            "subtotal": 2020500,
+            "tax_amount": 202050,
+            "tax_rate": 10,
+            "delivery_cost": 100000,
+            "other_cost": 50000,
+            "total_amount": 2372550,
+            "created_by": 1,
+            "created_by_user": {
+              "id": 0,
+              "name": "",
+              "username": "",
+              "photo_profile": "",
+              "avatar_url": ""
+            },
+            "revision_comment": "",
+            "items": [
+              {
+                "id": 5,
+                "product": {
+                  "id": 0,
+                  "name": "",
+                  "code": "",
+                  "image_url": ""
+                },
+                "quantity": 5,
+                "price": 100000,
+                "discount": 5,
+                "subtotal": 475000
+              },
+              {
+                "id": 6,
+                "product": {
+                  "id": 0,
+                  "name": "",
+                  "code": "",
+                  "image_url": ""
+                },
+                "quantity": 3,
+                "price": 250000,
+                "discount": 10,
+                "subtotal": 675000
+              },
+              {
+                "id": 7,
+                "product": {
+                  "id": 0,
+                  "name": "",
+                  "code": "",
+                  "image_url": ""
+                },
+                "quantity": 10,
+                "price": 50000,
+                "discount": 0,
+                "subtotal": 500000
+              },
+              {
+                "id": 8,
+                "product": {
+                  "id": 0,
+                  "name": "",
+                  "code": "",
+                  "image_url": ""
+                },
+                "quantity": 4,
+                "price": 95000,
+                "discount": 2.5,
+                "subtotal": 370500
+              }
+            ],
+            "created_at": "2025-10-21T07:46:13Z",
+            "updated_at": "2025-10-21T07:46:13Z"
+          },
+          {
+            "id": 4,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 0,
+              "name": ""
+            },
+            "employee": {
+              "id": 0,
+              "name": ""
+            },
+            "business_unit": {
+              "id": 1,
+              "name": "Sales Department"
+            },
+            "code": "SO-CF-20251021-001",
+            "order_date": "2025-10-03",
+            "status": "APPROVED",
+            "status_delivery": "SHIPPED",
+            "status_invoice": "PAID",
+            "notes": "Complete flow testing - Sales Order from SQ",
+            "subtotal": 150000,
+            "tax_amount": 15000,
+            "tax_rate": 10,
+            "delivery_cost": 50000,
+            "other_cost": 25000,
+            "total_amount": 240000,
+            "created_by": 1,
+            "created_by_user": {
+              "id": 0,
+              "name": "",
+              "username": "",
+              "photo_profile": "",
+              "avatar_url": ""
+            },
+            "revision_comment": "",
+            "items": [
+              {
+                "id": 9,
+                "product": {
+                  "id": 0,
+                  "name": "",
+                  "code": "",
+                  "image_url": ""
+                },
+                "quantity": 5,
+                "price": 1500,
+                "discount": 10,
+                "subtotal": 6750
+              }
+            ],
+            "created_at": "2025-10-21T07:46:13Z",
+            "updated_at": "2025-10-21T07:46:13Z"
+          },
+          {
+            "id": 5,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 0,
+              "name": ""
+            },
+            "employee": {
+              "id": 0,
+              "name": ""
+            },
+            "business_unit": {
+              "id": 3,
+              "name": "Finance Department"
+            },
+            "code": "SO-20251021-0004",
+            "order_date": "2025-09-01",
+            "status": "DRAFT",
+            "status_delivery": "NOT_CREATED",
+            "status_invoice": "NOT_CREATED",
+            "notes": "Draft quotation for office equipment",
+            "subtotal": 720000,
+            "tax_amount": 79200,
+            "tax_rate": 11,
+            "delivery_cost": 50000,
+            "other_cost": 25000,
+            "total_amount": 874200,
+            "created_by": 1,
+            "created_by_user": {
+              "id": 0,
+              "name": "",
+              "username": "",
+              "photo_profile": "",
+              "avatar_url": ""
+            },
+            "revision_comment": "",
+            "items": [
+              {
+                "id": 10,
+                "product": {
+                  "id": 0,
+                  "name": "",
+                  "code": "",
+                  "image_url": ""
+                },
+                "quantity": 5,
+                "price": 1500,
+                "discount": 0,
+                "subtotal": 7500
+              },
+              {
+                "id": 11,
+                "product": {
+                  "id": 0,
+                  "name": "",
+                  "code": "",
+                  "image_url": ""
+                },
+                "quantity": 10,
+                "price": 75000,
+                "discount": 5,
+                "subtotal": 712500
+              }
+            ],
+            "created_at": "2025-10-21T09:22:39Z",
+            "updated_at": "2025-10-21T09:22:39Z"
+          },
+          {
+            "id": 1,
+            "customer": {
+              "id": 1,
+              "name": "RSUD Tugurejo"
+            },
+            "payment_terms": {
+              "id": 0,
+              "name": ""
+            },
+            "employee": {
+              "id": 0,
+              "name": ""
+            },
+            "business_unit": {
+              "id": 3,
+              "name": "Finance Department"
+            },
+            "code": "SO-20251021-001",
+            "order_date": "2025-09-01",
+            "status": "DRAFT",
+            "status_delivery": "NOT_CREATED",
+            "status_invoice": "NOT_CREATED",
+            "notes": "Draft quotation for office equipment",
+            "subtotal": 720000,
+            "tax_amount": 108000,
+            "tax_rate": 15,
+            "delivery_cost": 50000,
+            "other_cost": 25000,
+            "total_amount": 903000,
+            "created_by": 1,
+            "created_by_user": {
+              "id": 0,
+              "name": "",
+              "username": "",
+              "photo_profile": "",
+              "avatar_url": ""
+            },
+            "revision_comment": "",
+            "items": [
+              {
+                "id": 12,
+                "product": {
+                  "id": 0,
+                  "name": "",
+                  "code": "",
+                  "image_url": ""
+                },
+                "quantity": 5,
+                "price": 1500,
+                "discount": 0,
+                "subtotal": 7500
+              },
+              {
+                "id": 13,
+                "product": {
+                  "id": 0,
+                  "name": "",
+                  "code": "",
+                  "image_url": ""
+                },
+                "quantity": 10,
+                "price": 75000,
+                "discount": 5,
+                "subtotal": 712500
+              }
+            ],
+            "created_at": "2025-10-21T07:46:13Z",
+            "updated_at": "2025-10-21T09:23:05Z"
+          }
+        ],
+        "summary": {
+          "total_orders": 5,
+          "total_amount": 5766250
+        }
+      }
+    },
+    {
+      "title": "REVISE SALES ORDER",
+      "endpoint": "POST {{base_url}}/sales/sales-orders/1/revise",
+      "body": {
+        "revision_comment": "Catatan revisi dari manager"
+      },
+      "response": {
+        "data": {
+          "id": 1,
+          "customer": {
+            "id": 1,
+            "name": "RSUD Tugurejo"
+          },
+          "payment_terms": {
+            "id": 1,
+            "name": "Cash on Delivery"
+          },
+          "employee": {
+            "id": 1,
+            "name": "Administrator"
+          },
+          "business_unit": {
+            "id": 3,
+            "name": "Finance Department"
+          },
+          "code": "SO-20251021-001",
+          "order_date": "2025-09-01",
+          "status": "REVISED",
+          "status_delivery": "NOT_CREATED",
+          "status_invoice": "NOT_CREATED",
+          "notes": "Draft quotation for office equipment",
+          "subtotal": 720000,
+          "tax_amount": 108000,
+          "tax_rate": 15,
+          "delivery_cost": 50000,
+          "other_cost": 25000,
+          "total_amount": 903000,
+          "created_by": 1,
+          "created_by_user": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+          },
+          "revision_comment": "Catatan revisi dari manager",
+          "items": [
+            {
+              "id": 12,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 5,
+              "price": 1500,
+              "discount": 0,
+              "subtotal": 7500
+            },
+            {
+              "id": 13,
+              "product": {
+                "id": 2,
+                "name": "Gloves (Box)",
+                "code": "MED-002",
+                "cost_price": 50000,
+                "selling_price": 75000,
+                "image_url": ""
+              },
+              "quantity": 10,
+              "price": 75000,
+              "discount": 5,
+              "subtotal": 712500
+            }
+          ],
+          "created_at": "2025-10-21T07:46:13Z",
+          "updated_at": "2025-10-21T09:23:46Z"
+        },
+        "message": "revised"
+      }
+    },
+    {
+      "title": "CONFIRM SALES ORDER",
+      "endpoint": "POST {{base_url}}/sales/sales-orders/5/confirm",
+      "response": {
+        "data": {
+          "id": 5,
+          "customer": {
+            "id": 1,
+            "name": "RSUD Tugurejo"
+          },
+          "payment_terms": {
+            "id": 1,
+            "name": "Cash on Delivery"
+          },
+          "employee": {
+            "id": 1,
+            "name": "Administrator"
+          },
+          "business_unit": {
+            "id": 3,
+            "name": "Finance Department"
+          },
+          "code": "SO-20251021-0004",
+          "order_date": "2025-09-01",
+          "status": "APPROVED",
+          "status_delivery": "NOT_CREATED",
+          "status_invoice": "NOT_CREATED",
+          "notes": "Draft quotation for office equipment",
+          "subtotal": 720000,
+          "tax_amount": 79200,
+          "tax_rate": 11,
+          "delivery_cost": 50000,
+          "other_cost": 25000,
+          "total_amount": 874200,
+          "created_by": 1,
+          "created_by_user": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+          },
+          "revision_comment": "",
+          "items": [
+            {
+              "id": 10,
+              "product": {
+                "id": 1,
+                "name": "Syringe 5ml",
+                "code": "MED-001",
+                "cost_price": 1000,
+                "selling_price": 1500,
+                "image_url": ""
+              },
+              "quantity": 5,
+              "price": 1500,
+              "discount": 0,
+              "subtotal": 7500
+            },
+            {
+              "id": 11,
+              "product": {
+                "id": 2,
+                "name": "Gloves (Box)",
+                "code": "MED-002",
+                "cost_price": 50000,
+                "selling_price": 75000,
+                "image_url": ""
+              },
+              "quantity": 10,
+              "price": 75000,
+              "discount": 5,
+              "subtotal": 712500
+            }
+          ],
+          "created_at": "2025-10-21T09:22:39Z",
+          "updated_at": "2025-10-21T09:24:09Z"
+        },
+        "message": "confirmed"
+      }
+    },
+    {
+      "title": "STATUS DEFINITIONS",
+      "status_definitions": {
+        "sales_order_status": {
+          "DRAFT": {
+            "description": "Initial status when sales order is created",
+            "allowed_operations": ["update", "delete", "confirm"],
+            "next_possible_status": ["APPROVED"],
+            "business_rules": [
+              "Can be updated or deleted",
+              "Cannot create delivery orders or invoices",
+              "Must be confirmed before proceeding to next steps"
+            ],
+            "color": "gray"
+          },
+          "APPROVED": {
+            "description": "Sales order has been confirmed and ready for processing",
+            "allowed_operations": [
+              "view",
+              "create_delivery_order",
+              "create_invoice"
+            ],
+            "next_possible_status": ["CLOSED"],
+            "business_rules": [
+              "Cannot be updated or deleted",
+              "Can create delivery orders and invoices",
+              "Ready for fulfillment process"
+            ],
+            "color": "green"
+          },
+          "REVISED": {
+            "description": "Sales order has been revised and need to be edited",
+            "allowed_operations": ["view", "update"],
+            "next_possible_status": ["DRAFT"],
+            "business_rules": [
+              "Cannot be updated or deleted",
+              "Can be updated",
+              "Ready for fulfillment process"
+            ],
+            "color": "orange"
+          },
+          "CLOSED": {
+            "description": "Sales order is completed (delivered and paid)",
+            "allowed_operations": ["view"],
+            "next_possible_status": [],
+            "business_rules": [
+              "Read-only status",
+              "All related processes completed",
+              "Cannot be modified"
+            ],
+            "color": "blue"
+          }
+        },
+        "delivery_status": {
+          "NOT_CREATED": {
+            "description": "Initial status when delivery order is not created",
+            "next_possible_status": ["PENDING"],
+            "color": "gray"
+          },
+          "PENDING": {
+            "description": "Delivery order has been created and waiting for shipping",
+            "next_possible_status": ["SHIPPED"],
+            "color": "orange"
+          },
+          "SHIPPED": {
+            "description": "Delivery order has been shipped",
+            "next_possible_status": ["DELIVERED"],
+            "color": "green"
+          },
+          "DELIVERED": {
+            "description": "Delivery order has been delivered",
+            "next_possible_status": [],
+            "color": "blue"
+          }
+        },
+        "invoice_status": {
+          "NOT_CREATED": {
+            "description": "Initial status when invoice is not created",
+            "next_possible_status": ["PENDING"],
+            "color": "gray"
+          },
+          "PENDING": {
+            "description": "Invoice has been created and waiting for payment",
+            "next_possible_status": ["PAID", "PARTIAL", "OVERDUE"],
+            "color": "orange"
+          },
+          "PAID": {
+            "description": "Invoice has been paid",
+            "next_possible_status": [],
+            "color": "blue"
+          },
+          "PARTIAL": {
+            "description": "Invoice is partially paid",
+            "next_possible_status": ["PAID"],
+            "color": "green"
+          },
+          "OVERDUE": {
+            "description": "Invoice is past due date",
+            "next_possible_status": ["PAID", "PARTIAL"],
+            "color": "red"
+          }
+        }
+      }
+    },
+    {
+      "title": "BUSINESS RULES",
+      "business_rules": {
+        "sales_order_creation": {
+          "customer_validation": "Customer must exist and be active",
+          "product_validation": "All products must exist and be active",
+          "quantity_validation": "Quantity must be greater than 0",
+          "price_calculation": "Price is automatically set from product selling price",
+          "subtotal_calculation": "Subtotal = quantity * price",
+          "total_calculation": "Total amount = sum of all item subtotals",
+          "code_generation": "Code is auto-generated in format SO-YYYYMMDD-XXXX"
+        },
+        "sales_order_update": {
+          "status_restriction": "Only DRAFT or REVISED status can be updated",
+          "item_replacement": "Items are fully replaced if provided in update",
+          "recalculation": "Total amount is recalculated after item changes",
+          "validation": "Same validation rules as creation apply"
+        },
+        "sales_order_revision": {
+          "status_restriction": "Only DRAFT status can be revised",
+          "prerequisite": "All items must be valid before revision"
+        },
+        "sales_order_deletion": {
+          "status_restriction": "Only DRAFT status can be deleted",
+          "cascade_delete": "All related items are also deleted",
+          "soft_delete": "Uses GORM soft delete functionality"
+        },
+        "sales_order_confirmation": {
+          "status_restriction": "Only DRAFT status can be confirmed",
+          "irreversible": "Once confirmed, cannot be reverted to DRAFT",
+          "prerequisite": "All items must be valid before confirmation"
+        }
+      }
+    }
+  ]
+}

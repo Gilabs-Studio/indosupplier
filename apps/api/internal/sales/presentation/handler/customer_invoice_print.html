@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Invoice - {{.Code}}</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 18mm 14mm 18mm;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 9.5pt;
+      color: #333;
+      line-height: 1.45;
+      background: #fff;
+    }
+
+    .page {
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+
+    .doc-label {
+      font-size: 22pt;
+      font-weight: 400;
+      color: #7a7a7a;
+      font-style: italic;
+      line-height: 1.1;
+    }
+
+    .company-block { text-align: right; }
+
+    .company-block .company-name {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #333;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .header-line {
+      height: 4px;
+      background: #4a5e8a;
+      margin-bottom: 16px;
+    }
+
+    /* ── Meta Grid ── */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 40px;
+      margin-bottom: 14px;
+      font-size: 9pt;
+    }
+
+    .meta-block { margin-bottom: 10px; }
+
+    .meta-block .meta-title {
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    .meta-row { display: flex; line-height: 1.6; }
+    .meta-row .lbl { color: #666; min-width: 130px; }
+    .meta-row .val { color: #000; font-weight: 500; }
+
+    .company-addr { font-size: 8.5pt; color: #555; line-height: 1.5; }
+
+    .customer-addr { font-size: 9pt; color: #000; line-height: 1.55; }
+    .customer-addr strong { font-weight: 700; }
+
+    /* ── Items Table ── */
+    .items-section { margin-bottom: 12px; }
+
+    table { width: 100%; border-collapse: collapse; }
+
+    thead th {
+      background: #4a5e8a;
+      color: #fff;
+      font-size: 8pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      padding: 7px 8px;
+      text-align: left;
+    }
+
+    thead th.text-right { text-align: right; }
+    thead th.text-center { text-align: center; }
+
+    tbody td {
+      padding: 6px 8px;
+      font-size: 9pt;
+      border-bottom: 1px solid #ddd;
+      vertical-align: top;
+      color: #333;
+    }
+
+    tbody td.text-right { text-align: right; }
+    tbody td.text-center { text-align: center; }
+
+    .product-code { font-size: 7.5pt; color: #999; }
+
+    /* ── Totals ── */
+    .totals-wrapper { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+
+    .totals-table { width: 260px; }
+
+    .totals-table .t-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 3px 0;
+      font-size: 9pt;
+      color: #333;
+      border-bottom: 1px solid #eee;
+    }
+
+    .totals-table .t-row.downpayment .t-val { color: #c00; }
+
+    .totals-table .t-row.grand {
+      border-top: 2px solid #4a5e8a;
+      border-bottom: 2px solid #4a5e8a;
+      padding: 6px 0;
+      margin-top: 2px;
+      font-weight: 700;
+      font-size: 10pt;
+      color: #000;
+    }
+
+    .totals-table .t-val { text-align: right; }
+
+    /* ── Notes ── */
+    .notes-section {
+      margin-bottom: 18px;
+      font-size: 8.5pt;
+      color: #555;
+    }
+
+    .notes-section h4 {
+      font-size: 8.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    /* ── Contact & Footer ── */
+    .contact-footer { margin-top: 8px; font-size: 8pt; color: #555; }
+
+    .thank-you {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 10pt;
+      font-weight: 700;
+      color: #4a5e8a;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .doc-footer {
+      margin-top: 24px;
+      padding-top: 10px;
+      border-top: 1px solid #ccc;
+      text-align: center;
+      font-size: 7.5pt;
+      color: #999;
+    }
+
+    /* ── Print Rules ── */
+    @media print {
+      body { background: #fff; }
+      .page { padding: 0; max-width: none; }
+      .no-print { display: none !important; }
+    }
+
+    @media screen {
+      .print-toolbar {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        background: #4a5e8a;
+        color: #fff;
+        padding: 10px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+      }
+
+      .print-toolbar button {
+        background: #fff;
+        color: #4a5e8a;
+        border: none;
+        padding: 8px 20px;
+        font-weight: 600;
+        font-size: 10pt;
+        cursor: pointer;
+      }
+
+      .print-toolbar button:hover { background: #e8ecf2; }
+      .page { margin-top: 56px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="print-toolbar no-print">
+    <span style="font-weight:600;">Customer Invoice &mdash; {{.Code}}</span>
+    <button onclick="window.print()">Print Document</button>
+  </div>
+
+  <div class="page">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="doc-label">Customer Invoice</div>
+      <div class="company-block">
+        <div class="company-name">{{.CompanyName}}</div>
+      </div>
+    </div>
+    <div class="header-line"></div>
+
+    <!-- Meta Information -->
+    <div class="meta-grid">
+      <!-- Left: Company details + Invoice meta -->
+      <div>
+        <div class="meta-block">
+          <div class="company-addr">
+            {{if .CompanyAddress}}{{.CompanyAddress}}<br>{{end}}
+            {{if .CompanyPhone}}Tel: {{.CompanyPhone}}{{end}}
+            {{if .CompanyEmail}}<br>{{.CompanyEmail}}{{end}}
+          </div>
+        </div>
+        <div class="meta-block">
+          <div class="meta-row"><span class="lbl">INVOICE NO:</span> <span class="val"># {{.Code}}</span></div>
+          {{if .InvoiceNumber}}<div class="meta-row"><span class="lbl">INVOICE NUMBER:</span> <span class="val">{{.InvoiceNumber}}</span></div>{{end}}
+          <div class="meta-row"><span class="lbl">INVOICE DATE:</span> <span class="val">{{.InvoiceDate}}</span></div>
+          {{if .DueDate}}<div class="meta-row"><span class="lbl">DUE DATE:</span> <span class="val">{{.DueDate}}</span></div>{{end}}
+          <div class="meta-row"><span class="lbl">STATUS:</span> <span class="val">{{.Status}}</span></div>
+          {{if .PaymentTerms}}<div class="meta-row"><span class="lbl">PAYMENT TERMS:</span> <span class="val">{{.PaymentTerms}}</span></div>{{end}}
+          {{if .SalesOrderCode}}<div class="meta-row"><span class="lbl">SALES ORDER:</span> <span class="val">{{.SalesOrderCode}}</span></div>{{end}}
+        </div>
+      </div>
+
+      <!-- Right: Customer -->
+      <div>
+        <div class="meta-block">
+          <div class="meta-title">Bill To:</div>
+          <div class="customer-addr">
+            {{if .CustomerName}}<strong>{{.CustomerName}}</strong><br>{{end}}
+            {{if .CustomerContact}}{{.CustomerContact}}<br>{{end}}
+            {{if .CustomerPhone}}{{.CustomerPhone}}<br>{{end}}
+            {{if .CustomerEmail}}{{.CustomerEmail}}{{end}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Items Table -->
+    <div class="items-section">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:32px" class="text-center">NO</th>
+            <th>DESCRIPTION</th>
+            <th class="text-right" style="width:60px">QUANTITY</th>
+            <th class="text-right" style="width:100px">UNIT PRICE</th>
+            <th class="text-right" style="width:100px">AMOUNT</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range $i, $item := .Items}}
+          <tr>
+            <td class="text-center">{{inc $i}}</td>
+            <td>
+              {{$item.ProductName}}
+              {{if $item.ProductCode}}<div class="product-code">{{$item.ProductCode}}</div>{{end}}
+            </td>
+            <td class="text-right">{{formatQty $item.Quantity}}</td>
+            <td class="text-right">{{formatMoney $item.Price}}</td>
+            <td class="text-right">{{formatMoney $item.Subtotal}}</td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Totals -->
+    <div class="totals-wrapper">
+      <div class="totals-table">
+        <div class="t-row">
+          <span class="t-lbl">SUB TOTAL</span>
+          <span class="t-val">{{formatMoney .Subtotal}}</span>
+        </div>
+        <div class="t-row">
+          <span class="t-lbl">TAX {{formatTax .TaxRate}}%</span>
+          <span class="t-val">{{formatMoney .TaxAmount}}</span>
+        </div>
+        {{if gt0 .DeliveryCost}}
+        <div class="t-row">
+          <span class="t-lbl">DELIVERY COST</span>
+          <span class="t-val">{{formatMoney .DeliveryCost}}</span>
+        </div>
+        {{end}}
+        {{if gt0 .OtherCost}}
+        <div class="t-row">
+          <span class="t-lbl">OTHER COST</span>
+          <span class="t-val">{{formatMoney .OtherCost}}</span>
+        </div>
+        {{end}}
+        {{if gt0 .DownPaymentAmount}}
+        <div class="t-row downpayment">
+          <span class="t-lbl">DOWN PAYMENT PAID</span>
+          <span class="t-val">-{{formatMoney .DownPaymentAmount}}</span>
+        </div>
+        {{end}}
+        <div class="t-row grand">
+          <span class="t-lbl">AMOUNT DUE</span>
+          <span class="t-val">{{formatMoney .Amount}}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    {{if .Notes}}
+    <div class="notes-section">
+      <h4>Notes</h4>
+      <p>{{.Notes}}</p>
+    </div>
+    {{end}}
+
+    <!-- Contact & Footer -->
+    <div class="contact-footer">
+      If you have any questions about this invoice, please contact<br>
+      {{if .CompanyPhone}}{{.CompanyPhone}}{{end}}
+      {{if .CompanyEmail}}, {{.CompanyEmail}}{{end}}
+    </div>
+
+    <div class="thank-you">Thank you for your business!</div>
+
+    <div class="doc-footer">
+      This document was generated on {{.PrintDate}} &mdash; {{.CompanyName}}
+    </div>
+
+  </div>
+
+  <script>
+    window.onload = function() { window.print(); };
+  </script>
+</body>
+</html>

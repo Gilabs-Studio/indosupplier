@@ -1,0 +1,292 @@
+{
+  "title": "Data Master/User Management/ User",
+  "description": "A comprehensive guide to the Data Master API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/master-data/users",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "is_active": true,
+            "created_at": "2025-09-11T10:57:14+07:00",
+            "updated_at": "2025-09-11T10:57:14+07:00",
+            "roles": [
+              {
+                "id": 1,
+                "name": "Admin",
+                "description": "Full Access",
+                "created_at": "2025-09-11T10:57:14+07:00",
+                "updated_at": "2025-09-11T10:57:14+07:00"
+              }
+            ]
+          },
+          {
+            "id": 2,
+            "name": "John Doe",
+            "username": "johndoe",
+            "photo_profile": "",
+            "is_active": true,
+            "created_at": "2025-09-11T10:57:14+07:00",
+            "updated_at": "2025-09-11T10:57:14+07:00",
+            "roles": [
+              {
+                "id": 2,
+                "name": "User",
+                "description": "Limited Access",
+                "created_at": "2025-09-11T10:57:14+07:00",
+                "updated_at": "2025-09-11T10:57:14+07:00"
+              }
+            ]
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 1,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "j",
+            "searchBy": "username"
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id"],
+            "string_columns": ["username", "name", "photo_profile"]
+          },
+          "sort": {
+            "sort_by": "name",
+            "sort_order": "asc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "name",
+              "username",
+              "email",
+              "photo_profile",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "GET {{base_url}}/master-data/users/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "name": "Administrator",
+          "username": "admin",
+          "photo_profile": "",
+          "is_active": true,
+          "created_at": "2025-09-11T10:57:14+07:00",
+          "updated_at": "2025-09-11T10:57:14+07:00",
+          "roles": [
+            {
+              "id": 1,
+              "name": "Admin",
+              "description": "Full Access",
+              "created_at": "2025-09-11T10:57:14+07:00",
+              "updated_at": "2025-09-11T10:57:14+07:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "GET DATA STATS",
+      "endpoint": "GET {{base_url}}/master-data/users/stats",
+      "response": {
+        "data": {
+          "total": 3
+        },
+        "message": "User statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "GET {{base_url}}/master-data/users/add",
+      "response": {
+        "data": {
+          "roles": [
+            {
+              "id": 1,
+              "name": "Admin",
+              "description": "Full Access",
+              "created_at": "2025-09-11T10:57:14+07:00",
+              "updated_at": "2025-09-11T10:57:14+07:00"
+            },
+            {
+              "id": 2,
+              "name": "User",
+              "description": "Limited Access",
+              "created_at": "2025-09-11T10:57:14+07:00",
+              "updated_at": "2025-09-11T10:57:14+07:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/master-data/users",
+      "body": [
+        {
+          "key": "name",
+          "value": "Admin Utama",
+          "description": "",
+          "type": "text",
+          "uuid": "0831502c-3060-4394-8649-d0f8ca56e2b5",
+          "enabled": true
+        },
+        {
+          "key": "username",
+          "value": "adminutama",
+          "description": "",
+          "type": "text",
+          "uuid": "a95d7f4b-3d0e-495c-99f6-8e406b095abe",
+          "enabled": true
+        },
+        {
+          "key": "password",
+          "value": "secret123",
+          "description": "",
+          "type": "text",
+          "uuid": "a3d59bff-7dc4-4579-9a75-3bf2fb77cd68",
+          "enabled": true
+        },
+        {
+          "key": "is_active",
+          "value": "true",
+          "description": "",
+          "type": "text",
+          "uuid": "d4dffcfa-0380-4805-ba28-d426236d6b88",
+          "enabled": true
+        },
+        {
+          "key": "photo_profile",
+          "description": "",
+          "type": "file",
+          "uuid": "cae5bf51-4e6c-404a-a156-f30202c1cb3e",
+          "enabled": true,
+          "value": ["postman-cloud:///1f0774b1-a50c-4980-922a-daf18df63abf"]
+        },
+        {
+          "key": "role_ids",
+          "value": "1",
+          "description": "",
+          "type": "text",
+          "uuid": "29a3894a-06bd-4a52-863e-61806a7d92d9",
+          "enabled": true
+        },
+        {
+          "key": "role_ids",
+          "value": "2",
+          "description": "",
+          "type": "text",
+          "uuid": "4ac7350b-d685-4540-aa43-006689d300b2",
+          "enabled": true
+        }
+      ],
+      "response": {
+        "data": {
+          "id": 3,
+          "name": "Admin Utama",
+          "username": "adminutama",
+          "photo_profile": "uploads/users/0e091854-a179-4931-be51-556eaa9a1ff6.jpg",
+          "is_active": true,
+          "created_at": "2025-09-11T12:33:39+07:00",
+          "updated_at": "2025-09-11T12:33:39+07:00",
+          "roles": null
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/master-data/users/2",
+      "body": [
+        {
+          "key": "name",
+          "value": "Admin Utama",
+          "type": "text",
+          "uuid": "0831502c-3060-4394-8649-d0f8ca56e2b5",
+          "enabled": true
+        },
+        {
+          "key": "username",
+          "value": "adminutama1",
+          "type": "text",
+          "uuid": "a95d7f4b-3d0e-495c-99f6-8e406b095abe",
+          "enabled": true
+        },
+        {
+          "key": "password",
+          "value": "secret123",
+          "type": "text",
+          "uuid": "a3d59bff-7dc4-4579-9a75-3bf2fb77cd68",
+          "enabled": true
+        },
+        {
+          "key": "is_active",
+          "value": "true",
+          "type": "text",
+          "uuid": "d4dffcfa-0380-4805-ba28-d426236d6b88",
+          "enabled": true
+        },
+        {
+          "key": "photo_profile",
+          "type": "file",
+          "uuid": "cae5bf51-4e6c-404a-a156-f30202c1cb3e",
+          "enabled": true,
+          "value": ["postman-cloud:///1f0774b1-a50c-4980-922a-daf18df63abf"]
+        },
+        {
+          "key": "role_ids",
+          "value": "1",
+          "type": "text",
+          "uuid": "29a3894a-06bd-4a52-863e-61806a7d92d9",
+          "enabled": true
+        },
+        {
+          "key": "role_ids",
+          "value": "2",
+          "type": "text",
+          "uuid": "4ac7350b-d685-4540-aa43-006689d300b2",
+          "enabled": true
+        }
+      ],
+      "response": {
+        "data": {
+          "id": 2,
+          "name": "Admin Utama",
+          "username": "adminutama1",
+          "photo_profile": "uploads/users/1ab3c1e0-1454-4249-954e-4aed71e9dcf9.jpg",
+          "is_active": true,
+          "created_at": "0001-01-01T00:00:00Z",
+          "updated_at": "2025-09-11T12:37:40+07:00",
+          "roles": null
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/master-data/users/2",
+      "response": {
+        "message": "deleted"
+      }
+    }
+  ]
+}

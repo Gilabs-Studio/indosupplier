@@ -1,0 +1,613 @@
+{
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/hrd/recruitment-requests",
+      "description": "Get list of recruitment requests",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "requested_by": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": ""
+            },
+            "department": {
+              "id": 1,
+              "name": "IT Department"
+            },
+            "position": {
+              "id": 1,
+              "name": "Software Engineer"
+            },
+            "request_date": "2025-10-03",
+            "required_count": 2,
+            "expected_start_date": "2025-11-01",
+            "job_description": "We are looking for a skilled software engineer to join our development team.",
+            "qualifications": "Bachelor's degree in Computer Science, 3+ years of experience in software development",
+            "status": "Draft",
+            "approved_by": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": ""
+            },
+            "notes": "",
+            "created_at": "2025-10-06T14:22:52+07:00",
+            "updated_at": "2025-10-06T14:22:52+07:00"
+          },
+          {
+            "id": 2,
+            "requested_by": {
+              "id": 2,
+              "name": "John Doe",
+              "username": "johndoe",
+              "photo_profile": "",
+              "avatar_url": ""
+            },
+            "department": {
+              "id": 2,
+              "name": "HR Department"
+            },
+            "position": {
+              "id": 2,
+              "name": "HR Manager"
+            },
+            "request_date": "2025-10-02",
+            "required_count": 1,
+            "expected_start_date": "2025-10-15",
+            "job_description": "Looking for an experienced HR Manager to oversee our human resources operations.",
+            "qualifications": "Bachelor's degree in Human Resources, 5+ years of HR management experience",
+            "status": "Submitted",
+            "approved_by": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": ""
+            },
+            "notes": "Urgent hiring needed",
+            "created_at": "2025-10-06T14:22:52+07:00",
+            "updated_at": "2025-10-06T14:22:52+07:00"
+          },
+          {
+            "id": 3,
+            "requested_by": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": ""
+            },
+            "department": {
+              "id": 3,
+              "name": "Finance Department"
+            },
+            "position": {
+              "id": 3,
+              "name": "Accountant"
+            },
+            "request_date": "2025-10-01",
+            "required_count": 1,
+            "expected_start_date": "2025-10-20",
+            "job_description": "Seeking a qualified accountant to manage financial records and reports.",
+            "qualifications": "Bachelor's degree in Accounting, CPA certification preferred",
+            "status": "Approved",
+            "approved_by": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": "",
+              "avatar_url": ""
+            },
+            "notes": "",
+            "created_at": "2025-10-06T14:22:52+07:00",
+            "updated_at": "2025-10-06T14:22:52+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "note": "Date filters apply to request_date field",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 15
+          },
+          "search": {
+            "search": "",
+            "search_by": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": [
+              "id",
+              "requested_by",
+              "department_id",
+              "position_id",
+              "required_count",
+              "approved_by"
+            ],
+            "string_columns": [
+              "job_description",
+              "qualifications",
+              "status",
+              "notes"
+            ]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": "desc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "requested_by",
+              "department_id",
+              "position_id",
+              "request_date",
+              "required_count",
+              "expected_start_date",
+              "status",
+              "approved_by",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hrd/recruitment-requests/stats",
+      "description": "Get recruitment requests statistics",
+      "response": {
+        "data": {
+          "total": 15,
+          "draft": 5,
+          "submitted": 4,
+          "approved": 3,
+          "rejected": 2,
+          "closed": 1
+        },
+        "message": "Recruitment request statistics retrieved successfully"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hrd/recruitment-requests/{id}",
+      "description": "Get recruitment request by ID",
+      "response": {
+        "data": {
+          "id": 1,
+          "requested_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "department": {
+            "id": 1,
+            "name": "IT Department"
+          },
+          "position": {
+            "id": 1,
+            "name": "Software Engineer"
+          },
+          "request_date": "2025-10-03",
+          "required_count": 2,
+          "expected_start_date": "2025-11-01",
+          "job_description": "We are looking for a skilled software engineer to join our development team.",
+          "qualifications": "Bachelor's degree in Computer Science, 3+ years of experience in software development",
+          "status": "Draft",
+          "approved_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "notes": "",
+          "created_at": "2025-10-06T14:22:52+07:00",
+          "updated_at": "2025-10-06T14:22:52+07:00"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "{{base_url}}/hrd/recruitment-requests/add",
+      "description": "Get recruitment ADD DATA FOR FORM",
+      "response": {
+        "data": {
+          "departments": [
+            {
+              "id": 1,
+              "name": "Team Support"
+            },
+            {
+              "id": 2,
+              "name": "Management"
+            },
+            {
+              "id": 3,
+              "name": "IT"
+            },
+            {
+              "id": 4,
+              "name": "HR"
+            },
+            {
+              "id": 5,
+              "name": "Procurement"
+            },
+            {
+              "id": 6,
+              "name": "Finance"
+            },
+            {
+              "id": 7,
+              "name": "Marketing"
+            },
+            {
+              "id": 8,
+              "name": "Operations"
+            }
+          ],
+          "positions": [
+            {
+              "id": 1,
+              "name": "PPIC"
+            },
+            {
+              "id": 2,
+              "name": "Marketing"
+            },
+            {
+              "id": 3,
+              "name": "TS Coordinator"
+            },
+            {
+              "id": 4,
+              "name": "TS Leader"
+            },
+            {
+              "id": 5,
+              "name": "Logistics"
+            },
+            {
+              "id": 6,
+              "name": "HRD"
+            },
+            {
+              "id": 7,
+              "name": "Product Support"
+            },
+            {
+              "id": 8,
+              "name": "Customer Service"
+            },
+            {
+              "id": 9,
+              "name": "Marketing Admin"
+            },
+            {
+              "id": 10,
+              "name": "Director"
+            },
+            {
+              "id": 11,
+              "name": "Intern"
+            },
+            {
+              "id": 12,
+              "name": "Finance"
+            },
+            {
+              "id": 13,
+              "name": "Marketing Supervisor"
+            },
+            {
+              "id": 14,
+              "name": "Admin"
+            },
+            {
+              "id": 15,
+              "name": "Team Support"
+            },
+            {
+              "id": 16,
+              "name": "Marketing Manager"
+            }
+          ]
+        },
+        "message": "Departments and positions retrieved successfully"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hrd/recruitment-requests",
+      "description": "Create new recruitment request",
+      "body": {
+        "department_id": 1,
+        "position_id": 1,
+        "request_date": "2025-10-06T00:00:00Z",
+        "required_count": 2,
+        "expected_start_date": "2025-11-01T00:00:00Z",
+        "job_description": "We are looking for a skilled software engineer to join our development team.",
+        "qualifications": "Bachelor's degree in Computer Science, 3+ years of experience in software development",
+        "notes": "Urgent hiring needed"
+      },
+      "response": {
+        "data": {
+          "id": 16,
+          "requested_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "department": {
+            "id": 1,
+            "name": "IT Department"
+          },
+          "position": {
+            "id": 1,
+            "name": "Software Engineer"
+          },
+          "request_date": "2025-10-06",
+          "required_count": 2,
+          "expected_start_date": "2025-11-01",
+          "job_description": "We are looking for a skilled software engineer to join our development team.",
+          "qualifications": "Bachelor's degree in Computer Science, 3+ years of experience in software development",
+          "status": "Draft",
+          "approved_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "notes": "Urgent hiring needed",
+          "created_at": "2025-10-06T14:28:23+07:00",
+          "updated_at": "2025-10-06T14:28:23+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/hrd/recruitment-requests/{id}",
+      "description": "Update recruitment request",
+      "body": {
+        "department_id": 1,
+        "position_id": 1,
+        "request_date": "2025-10-06T00:00:00Z",
+        "required_count": 3,
+        "expected_start_date": "2025-11-01T00:00:00Z",
+        "job_description": "We are looking for skilled software engineers to join our development team.",
+        "qualifications": "Bachelor's degree in Computer Science, 3+ years of experience in software development",
+        "notes": "Updated: Need 3 engineers instead of 2"
+      },
+      "response": {
+        "data": {
+          "id": 1,
+          "requested_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "department": {
+            "id": 1,
+            "name": "IT Department"
+          },
+          "position": {
+            "id": 1,
+            "name": "Software Engineer"
+          },
+          "request_date": "2025-10-06",
+          "required_count": 3,
+          "expected_start_date": "2025-11-01",
+          "job_description": "We are looking for skilled software engineers to join our development team.",
+          "qualifications": "Bachelor's degree in Computer Science, 3+ years of experience in software development",
+          "status": "Draft",
+          "approved_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "notes": "Updated: Need 3 engineers instead of 2",
+          "created_at": "2025-10-06T14:22:52+07:00",
+          "updated_at": "2025-10-06T14:28:41+07:00"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/hrd/recruitment-requests/{id}",
+      "description": "Delete recruitment request (only Draft status can be deleted)",
+      "response": {
+        "message": "deleted"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hrd/recruitment-requests/{id}/submit",
+      "description": "Submit recruitment request (changes status from Draft to Submitted)",
+      "response": {
+        "message": "recruitment request submitted",
+        "data": {
+          "id": 1,
+          "requested_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "department": {
+            "id": 1,
+            "name": "IT Department"
+          },
+          "position": {
+            "id": 1,
+            "name": "Software Engineer"
+          },
+          "request_date": "2025-10-06",
+          "required_count": 2,
+          "expected_start_date": "2025-11-01",
+          "job_description": "We are looking for a skilled software engineer to join our development team.",
+          "qualifications": "Bachelor's degree in Computer Science, 3+ years of experience in software development",
+          "status": "Submitted",
+          "approved_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "notes": "",
+          "created_at": "2025-10-06T14:22:52+07:00",
+          "updated_at": "2025-10-06T14:30:15+07:00"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hrd/recruitment-requests/{id}/approve",
+      "description": "Approve recruitment request (changes status from Submitted to Approved)",
+      "response": {
+        "message": "recruitment request approved",
+        "data": {
+          "id": 1,
+          "requested_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "department": {
+            "id": 1,
+            "name": "IT Department"
+          },
+          "position": {
+            "id": 1,
+            "name": "Software Engineer"
+          },
+          "request_date": "2025-10-06",
+          "required_count": 2,
+          "expected_start_date": "2025-11-01",
+          "job_description": "We are looking for a skilled software engineer to join our development team.",
+          "qualifications": "Bachelor's degree in Computer Science, 3+ years of experience in software development",
+          "status": "Approved",
+          "approved_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "notes": "",
+          "created_at": "2025-10-06T14:22:52+07:00",
+          "updated_at": "2025-10-06T14:35:20+07:00"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hrd/recruitment-requests/{id}/reject",
+      "description": "Reject recruitment request (changes status from Submitted to Rejected)",
+      "response": {
+        "message": "recruitment request rejected",
+        "data": {
+          "id": 1,
+          "requested_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "department": {
+            "id": 1,
+            "name": "IT Department"
+          },
+          "position": {
+            "id": 1,
+            "name": "Software Engineer"
+          },
+          "request_date": "2025-10-06",
+          "required_count": 2,
+          "expected_start_date": "2025-11-01",
+          "job_description": "We are looking for a skilled software engineer to join our development team.",
+          "qualifications": "Bachelor's degree in Computer Science, 3+ years of experience in software development",
+          "status": "Rejected",
+          "approved_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "notes": "",
+          "created_at": "2025-10-06T14:22:52+07:00",
+          "updated_at": "2025-10-06T14:40:10+07:00"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hrd/recruitment-requests/{id}/closed",
+      "description": "Close recruitment request (changes status from Approved to Closed)",
+      "response": {
+        "message": "recruitment request closed",
+        "data": {
+          "id": 1,
+          "requested_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "department": {
+            "id": 1,
+            "name": "IT Department"
+          },
+          "position": {
+            "id": 1,
+            "name": "Software Engineer"
+          },
+          "request_date": "2025-10-06",
+          "required_count": 2,
+          "expected_start_date": "2025-11-01",
+          "job_description": "We are looking for a skilled software engineer to join our development team.",
+          "qualifications": "Bachelor's degree in Computer Science, 3+ years of experience in software development",
+          "status": "Closed",
+          "approved_by": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": "",
+            "avatar_url": ""
+          },
+          "notes": "",
+          "created_at": "2025-10-06T14:22:52+07:00",
+          "updated_at": "2025-10-06T14:45:30+07:00"
+        }
+      }
+    }
+  ]
+}

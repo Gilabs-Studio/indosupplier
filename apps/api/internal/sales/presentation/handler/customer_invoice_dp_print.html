@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Down Payment Invoice - {{.Code}}</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 18mm 14mm 18mm;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 9.5pt;
+      color: #333;
+      line-height: 1.45;
+      background: #fff;
+    }
+
+    .page {
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+
+    .doc-label {
+      font-size: 22pt;
+      font-weight: 400;
+      color: #7a7a7a;
+      font-style: italic;
+      line-height: 1.1;
+    }
+
+    .company-block { text-align: right; }
+
+    .company-block .company-name {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #333;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .header-line {
+      height: 4px;
+      background: #4a5e8a;
+      margin-bottom: 16px;
+    }
+
+    /* ── Meta Grid ── */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 40px;
+      margin-bottom: 20px;
+      font-size: 9pt;
+    }
+
+    .meta-block { margin-bottom: 10px; }
+
+    .meta-block .meta-title {
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    .meta-row { display: flex; line-height: 1.6; }
+    .meta-row .lbl { color: #666; min-width: 140px; }
+    .meta-row .val { color: #000; font-weight: 500; }
+
+    .company-addr { font-size: 8.5pt; color: #555; line-height: 1.5; }
+
+    /* ── Amount Section ── */
+    .amount-section {
+      background: #f7f9fc;
+      border: 1px solid #c8d3e8;
+      border-radius: 4px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      max-width: 380px;
+      margin-left: auto;
+    }
+
+    .amount-section .amount-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      font-size: 9.5pt;
+      color: #333;
+      border-bottom: 1px solid #e0e7f0;
+    }
+
+    .amount-section .amount-row:last-child { border-bottom: none; }
+
+    .amount-section .amount-row.total {
+      border-top: 2px solid #4a5e8a;
+      border-bottom: 2px solid #4a5e8a;
+      margin-top: 4px;
+      padding: 8px 0;
+      font-weight: 700;
+      font-size: 11pt;
+      color: #000;
+    }
+
+    .amount-section .amount-lbl { color: #555; }
+    .amount-section .amount-val { font-weight: 600; text-align: right; }
+    .amount-section .amount-row.total .amount-val { color: #4a5e8a; }
+
+    /* ── Notes ── */
+    .notes-section {
+      margin-bottom: 24px;
+      font-size: 8.5pt;
+      color: #555;
+    }
+
+    .notes-section h4 {
+      font-size: 8.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    /* ── Signature ── */
+    .signature-section {
+      margin-top: 32px;
+      margin-bottom: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 40px;
+      font-size: 8.5pt;
+      color: #555;
+    }
+
+    .sig-block .sig-label { margin-bottom: 52px; }
+    .sig-block .sig-line {
+      border-top: 1px solid #333;
+      padding-top: 4px;
+      font-size: 8pt;
+      color: #666;
+    }
+
+    /* ── Contact & Footer ── */
+    .contact-footer { margin-top: 8px; font-size: 8pt; color: #555; }
+
+    .thank-you {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 10pt;
+      font-weight: 700;
+      color: #4a5e8a;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .doc-footer {
+      margin-top: 24px;
+      padding-top: 10px;
+      border-top: 1px solid #ccc;
+      text-align: center;
+      font-size: 7.5pt;
+      color: #999;
+    }
+
+    /* ── Print Rules ── */
+    @media print {
+      body { background: #fff; }
+      .page { padding: 0; max-width: none; }
+      .no-print { display: none !important; }
+    }
+
+    @media screen {
+      .print-toolbar {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        background: #4a5e8a;
+        color: #fff;
+        padding: 10px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+      }
+
+      .print-toolbar button {
+        background: #fff;
+        color: #4a5e8a;
+        border: none;
+        padding: 8px 20px;
+        font-weight: 600;
+        font-size: 10pt;
+        cursor: pointer;
+      }
+
+      .print-toolbar button:hover { background: #e8ecf2; }
+      .page { margin-top: 56px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="print-toolbar no-print">
+    <span style="font-weight:600;">Down Payment Invoice &mdash; {{.Code}}</span>
+    <button onclick="window.print()">Print Document</button>
+  </div>
+
+  <div class="page">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="doc-label">Down Payment Invoice</div>
+      <div class="company-block">
+        <div class="company-name">{{.CompanyName}}</div>
+      </div>
+    </div>
+    <div class="header-line"></div>
+
+    <!-- Meta Information -->
+    <div class="meta-grid">
+      <!-- Left: Company details + Invoice meta -->
+      <div>
+        <div class="meta-block">
+          <div class="company-addr">
+            {{if .CompanyAddress}}{{.CompanyAddress}}<br>{{end}}
+            {{if .CompanyPhone}}Tel: {{.CompanyPhone}}{{end}}
+            {{if .CompanyEmail}}<br>{{.CompanyEmail}}{{end}}
+          </div>
+        </div>
+        <div class="meta-block">
+          <div class="meta-row"><span class="lbl">INVOICE CODE:</span> <span class="val">{{.Code}}</span></div>
+          {{if .InvoiceNumber}}<div class="meta-row"><span class="lbl">INVOICE NUMBER:</span> <span class="val">{{.InvoiceNumber}}</span></div>{{end}}
+          <div class="meta-row"><span class="lbl">INVOICE DATE:</span> <span class="val">{{.InvoiceDate}}</span></div>
+          {{if .DueDate}}<div class="meta-row"><span class="lbl">DUE DATE:</span> <span class="val">{{.DueDate}}</span></div>{{end}}
+          <div class="meta-row"><span class="lbl">STATUS:</span> <span class="val">{{.Status}}</span></div>
+        </div>
+      </div>
+
+      <!-- Right: References -->
+      <div>
+        <div class="meta-block">
+          <div class="meta-title">References:</div>
+          {{if .SalesOrderCode}}<div class="meta-row"><span class="lbl">SALES ORDER:</span> <span class="val">{{.SalesOrderCode}}</span></div>{{end}}
+          {{if .RelatedInvoiceCode}}<div class="meta-row"><span class="lbl">RELATED INVOICE:</span> <span class="val">{{.RelatedInvoiceCode}}</span></div>{{end}}
+        </div>
+      </div>
+    </div>
+
+    <!-- Amount Section -->
+    <div class="amount-section">
+      <div class="amount-row">
+        <span class="amount-lbl">DOWN PAYMENT AMOUNT</span>
+        <span class="amount-val">{{formatMoney .Amount}}</span>
+      </div>
+      <div class="amount-row total">
+        <span class="amount-lbl">AMOUNT DUE</span>
+        <span class="amount-val">{{formatMoney .RemainingAmount}}</span>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    {{if .Notes}}
+    <div class="notes-section">
+      <h4>Notes</h4>
+      <p>{{.Notes}}</p>
+    </div>
+    {{end}}
+
+    <!-- Signature -->
+    <div class="signature-section">
+      <div class="sig-block">
+        <div class="sig-label">Authorized by:</div>
+        <div class="sig-line">{{.CompanyName}}</div>
+      </div>
+      <div class="sig-block">
+        <div class="sig-label">Received by:</div>
+        <div class="sig-line">Customer Signature &amp; Date</div>
+      </div>
+    </div>
+
+    <!-- Contact & Footer -->
+    <div class="contact-footer">
+      If you have any questions about this invoice, please contact<br>
+      {{if .CompanyPhone}}{{.CompanyPhone}}{{end}}
+      {{if .CompanyEmail}}, {{.CompanyEmail}}{{end}}
+    </div>
+
+    <div class="thank-you">Thank you for your business!</div>
+
+    <div class="doc-footer">
+      This document was generated on {{.PrintDate}} &mdash; {{.CompanyName}}
+    </div>
+
+  </div>
+
+  <script>
+    window.onload = function() { window.print(); };
+  </script>
+</body>
+</html>

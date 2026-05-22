@@ -1,0 +1,143 @@
+{
+  "title": "Data Master/Finance/banks",
+  "description": "A comprehensive guide to the Data Master API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "{{base_url}}/master-data/banks",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "name": "BCA",
+            "created_at": "2025-10-30T10:12:37+07:00",
+            "updated_at": "2025-10-30T10:12:37+07:00"
+          },
+          {
+            "id": 2,
+            "name": "BRI",
+            "created_at": "2025-10-30T10:12:37+07:00",
+            "updated_at": "2025-10-30T10:12:37+07:00"
+          },
+          {
+            "id": 3,
+            "name": "BNI",
+            "created_at": "2025-10-30T10:12:37+07:00",
+            "updated_at": "2025-10-30T10:12:37+07:00"
+          },
+          {
+            "id": 4,
+            "name": "Mandiri",
+            "created_at": "2025-10-30T10:12:37+07:00",
+            "updated_at": "2025-10-30T10:12:37+07:00"
+          },
+          {
+            "id": 5,
+            "name": "CIMB Niaga",
+            "created_at": "2025-10-30T10:12:37+07:00",
+            "updated_at": "2025-10-30T10:12:37+07:00"
+          },
+          {
+            "id": 6,
+            "name": "Permata",
+            "created_at": "2025-10-30T10:12:37+07:00",
+            "updated_at": "2025-10-30T10:12:37+07:00"
+          },
+          {
+            "id": 7,
+            "name": "Danamon",
+            "created_at": "2025-10-30T10:12:37+07:00",
+            "updated_at": "2025-10-30T10:12:37+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 7
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id"],
+            "string_columns": ["name"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": ["id", "name", "created_at", "updated_at"]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "GET {{base_url}}/master-data/banks/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "name": "BCA",
+          "created_at": "2025-10-30T10:12:37+07:00",
+          "updated_at": "2025-10-30T10:12:37+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET DATA Stats",
+      "endpoint": "GET {{base_url}}/master-data/banks/stats",
+      "response": {
+        "data": {
+          "total": 7
+        },
+        "message": "Bank statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/master-data/banks",
+      "body": {
+        "name": "Mandiri"
+      },
+      "response": {
+        "data": {
+          "id": 8,
+          "name": "Mandiri",
+          "created_at": "2025-10-30T10:16:01+07:00",
+          "updated_at": "2025-10-30T10:16:01+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/master-data/banks/2",
+      "body": {
+        "name": "Mandiri"
+      },
+      "response": {
+        "data": {
+          "id": 8,
+          "name": "Mandiri",
+          "created_at": "2025-10-30T10:16:01+07:00",
+          "updated_at": "2025-10-30T10:16:01+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/master-data/banks/2",
+      "response": {
+        "message": "deleted"
+      }
+    }
+  ]
+}

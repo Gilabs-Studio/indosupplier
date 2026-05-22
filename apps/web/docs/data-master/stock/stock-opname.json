@@ -1,0 +1,453 @@
+{
+  "title": "stock/stock-opnames",
+  "description": "A comprehensive guide to the Stock API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/stock/stock-opnames",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "warehouse_id": 1,
+            "opname_date": "2025-09-20T21:25:39+07:00",
+            "status": "DRAFT",
+            "created_by": 1,
+            "notes": "",
+            "warehouse": {
+              "id": 1,
+              "name": "Main Warehouse"
+            },
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": ""
+            },
+            "items": [
+              {
+                "id": 1,
+                "inventory_batch_id": 1,
+                "system_quantity": 100,
+                "counted_quantity": 95,
+                "difference": -5,
+                "expired_date": null,
+                "notes": "",
+                "inventory_batch": {
+                  "id": 1,
+                  "code": "BATCH-MED-001-001",
+                  "product": {
+                    "id": 1,
+                    "code": "MED-001",
+                    "name": "Syringe 5ml",
+                    "image_url": "",
+                    "cost_price": 0,
+                    "selling_price": 0
+                  },
+                  "warehouse": {
+                    "id": 1,
+                    "name": "Main Warehouse"
+                  },
+                  "expired_date": "2026-03-20T00:00:00Z",
+                  "quantity": 88
+                }
+              },
+              {
+                "id": 2,
+                "inventory_batch_id": 2,
+                "system_quantity": 50,
+                "counted_quantity": 52,
+                "difference": 2,
+                "expired_date": null,
+                "notes": "",
+                "inventory_batch": {
+                  "id": 2,
+                  "code": "BATCH-MED-001-002",
+                  "product": {
+                    "id": 1,
+                    "code": "MED-001",
+                    "name": "Syringe 5ml",
+                    "image_url": "",
+                    "cost_price": 0,
+                    "selling_price": 0
+                  },
+                  "warehouse": {
+                    "id": 1,
+                    "name": "Main Warehouse"
+                  },
+                  "expired_date": "2026-09-20T00:00:00Z",
+                  "quantity": 0
+                }
+              }
+            ],
+            "created_at": "2025-09-20T21:25:39+07:00",
+            "updated_at": "2025-09-20T21:25:39+07:00"
+          },
+          {
+            "id": 2,
+            "warehouse_id": 1,
+            "opname_date": "2025-09-19T21:25:39+07:00",
+            "status": "APPROVED",
+            "created_by": 1,
+            "notes": "",
+            "warehouse": {
+              "id": 1,
+              "name": "Main Warehouse"
+            },
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": ""
+            },
+            "items": [],
+            "created_at": "2025-09-20T21:25:39+07:00",
+            "updated_at": "2025-09-20T21:25:39+07:00"
+          },
+          {
+            "id": 3,
+            "warehouse_id": 1,
+            "opname_date": "2025-09-18T21:25:39+07:00",
+            "status": "DRAFT",
+            "created_by": 1,
+            "notes": "",
+            "warehouse": {
+              "id": 1,
+              "name": "Main Warehouse"
+            },
+            "created_by_user": {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "photo_profile": ""
+            },
+            "items": [],
+            "created_at": "2025-09-20T21:25:39+07:00",
+            "updated_at": "2025-09-20T21:25:39+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 3
+          },
+          "search": {
+            "search": "1",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "warehouse_id", "created_by"],
+            "string_columns": ["notes", "status"]
+          },
+          "sort": {
+            "sort_by": "id",
+            "sort_order": "asc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "opname_date",
+              "status",
+              "created_at",
+              "updated_at",
+              "warehouse_id",
+              "created_by"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA STATS",
+      "endpoint": "{{base_url}}/stock/stock-opnames/stats",
+      "response": {
+        "data": {
+          "approved": 1,
+          "draft": 2,
+          "total": 3
+        },
+        "message": "Stock opname statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/stock/stock-opnames/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "warehouse_id": 1,
+          "opname_date": "2025-09-20T21:25:39+07:00",
+          "status": "DRAFT",
+          "created_by": 1,
+          "notes": "",
+          "warehouse": {
+            "id": 1,
+            "name": "Main Warehouse"
+          },
+          "created_by_user": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": ""
+          },
+          "items": [
+            {
+              "id": 1,
+              "inventory_batch_id": 1,
+              "system_quantity": 100,
+              "counted_quantity": 95,
+              "difference": -5,
+              "expired_date": null,
+              "notes": "",
+              "inventory_batch": {
+                "id": 1,
+                "code": "BATCH-MED-001-001",
+                "product": {
+                  "id": 1,
+                  "code": "MED-001",
+                  "name": "Syringe 5ml",
+                  "image_url": "",
+                  "cost_price": 0,
+                  "selling_price": 0
+                },
+                "warehouse": {
+                  "id": 1,
+                  "name": "Main Warehouse"
+                },
+                "expired_date": "2026-03-20T00:00:00Z",
+                "quantity": 88
+              }
+            },
+            {
+              "id": 2,
+              "inventory_batch_id": 2,
+              "system_quantity": 50,
+              "counted_quantity": 52,
+              "difference": 2,
+              "expired_date": null,
+              "notes": "",
+              "inventory_batch": {
+                "id": 2,
+                "code": "BATCH-MED-001-002",
+                "product": {
+                  "id": 1,
+                  "code": "MED-001",
+                  "name": "Syringe 5ml",
+                  "image_url": "",
+                  "cost_price": 0,
+                  "selling_price": 0
+                },
+                "warehouse": {
+                  "id": 1,
+                  "name": "Main Warehouse"
+                },
+                "expired_date": "2026-09-20T00:00:00Z",
+                "quantity": 0
+              }
+            }
+          ],
+          "created_at": "2025-09-20T21:25:39+07:00",
+          "updated_at": "2025-09-20T21:25:39+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "{{base_url}}/stock/stock-opnames/add",
+      "response": {
+        "data": {
+          "products": [
+            {
+              "id": 1,
+              "name": "Syringe 5ml",
+              "code": "MED-001",
+              "cost_price": 1000,
+              "selling_price": 1500,
+              "image_url": "",
+              "inventory_batches": [
+                {
+                  "id": 1,
+                  "code": "BATCH-MED-001-001",
+                  "product": {
+                    "id": 1,
+                    "code": "MED-001",
+                    "name": "Syringe 5ml",
+                    "image_url": "",
+                    "cost_price": 0,
+                    "selling_price": 0
+                  },
+                  "warehouse": {
+                    "id": 1,
+                    "name": "Main Warehouse"
+                  },
+                  "expired_date": "2026-03-20T00:00:00Z",
+                  "quantity": 88
+                },
+                {
+                  "id": 2,
+                  "code": "BATCH-MED-001-002",
+                  "product": {
+                    "id": 1,
+                    "code": "MED-001",
+                    "name": "Syringe 5ml",
+                    "image_url": "",
+                    "cost_price": 0,
+                    "selling_price": 0
+                  },
+                  "warehouse": {
+                    "id": 1,
+                    "name": "Main Warehouse"
+                  },
+                  "expired_date": "2026-09-20T00:00:00Z",
+                  "quantity": 0
+                }
+              ]
+            }
+          ],
+          "warehouses": [
+            {
+              "id": 1,
+              "name": "Main Warehouse"
+            },
+            {
+              "id": 2,
+              "name": "Backup Warehouse"
+            }
+          ]
+        }
+      }
+    },
+
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/stock/stock-opnames",
+      "body": {
+        "warehouse_id": 1,
+        "opname_date": "2024-01-15T00:00:00Z",
+        "notes": "test",
+        "comments": "//   ini default ambil dari data Get add, user hanya dapat mengisi counted_quantity, expired_date, dan notes",
+        "items": [
+          {
+            "inventory_batch_id": 1,
+            "counted_quantity": 95,
+            "expired_date": "2024-12-31T00:00:00Z",
+            "notes": "Found 5 damaged items"
+          }
+        ]
+      },
+      "response": {
+        "data": {
+          "id": 4,
+          "warehouse_id": 1,
+          "opname_date": "2024-01-15T07:00:00+07:00",
+          "status": "DRAFT",
+          "created_by": 1,
+          "notes": "test",
+          "warehouse": {
+            "id": 1,
+            "name": "Main Warehouse"
+          },
+          "created_by_user": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": ""
+          },
+          "items": [
+            {
+              "id": 3,
+              "inventory_batch_id": 1,
+              "system_quantity": 88,
+              "counted_quantity": 95,
+              "difference": 7,
+              "expired_date": "2024-12-31T00:00:00Z",
+              "notes": "Found 5 damaged items",
+              "inventory_batch": {
+                "id": 1,
+                "code": "BATCH-MED-001-001",
+                "product": {
+                  "id": 1,
+                  "code": "MED-001",
+                  "name": "Syringe 5ml",
+                  "image_url": "",
+                  "cost_price": 0,
+                  "selling_price": 0
+                },
+                "warehouse": {
+                  "id": 1,
+                  "name": "Main Warehouse"
+                },
+                "expired_date": "2026-03-20T00:00:00Z",
+                "quantity": 88
+              }
+            }
+          ],
+          "created_at": "2025-09-20T22:03:38+07:00",
+          "updated_at": "2025-09-20T22:03:38+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/stock/stock-opnames/2",
+      "body": {
+        "warehouse_id": 1,
+        "opname_date": "2024-01-15T00:00:00Z",
+        "notes": "test",
+        "comments": "//   ini default ambil dari data Get add, user hanya dapat mengisi counted_quantity, expired_date, dan notes",
+        "items": [
+          {
+            "inventory_batch_id": 1,
+            "counted_quantity": 95,
+            "expired_date": "2024-12-31T00:00:00Z",
+            "notes": "Found 5 damaged items"
+          }
+        ]
+      },
+      "response": {
+        "data": {
+          "id": 3,
+          "warehouse_id": 1,
+          "opname_date": "2024-01-15T07:00:00+07:00",
+          "status": "DRAFT",
+          "created_by": 1,
+          "notes": "test",
+          "warehouse": {
+            "id": 1,
+            "name": "Main Warehouse"
+          },
+          "created_by_user": {
+            "id": 1,
+            "name": "Administrator",
+            "username": "admin",
+            "photo_profile": ""
+          },
+          "items": [],
+          "created_at": "2025-09-20T21:25:39+07:00",
+          "updated_at": "2025-09-20T22:04:20+07:00"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/stock/stock-opnames/2",
+      "response": {
+        "message": "deleted"
+      }
+    },
+    {
+      "title": "CONFIRM DATA",
+      "endpoint": "POST {{base_url}}/stock/stock-opnames/4/confirm",
+      "response": {
+        "message": "stock opname confirmed and inventory updated successfully"
+      }
+    }
+  ]
+}

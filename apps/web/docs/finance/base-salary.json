@@ -1,0 +1,274 @@
+{
+  "title": "Finance/base-salary",
+  "description": "A comprehensive guide to the Base Salary API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/finance/base-salary",
+      "response": {
+        "data": [
+          {
+            "employee_id": 1,
+            "employee_name": "John Doe",
+            "salary_count": 2,
+            "salaries": [
+              {
+                "id": 1,
+                "employee": {
+                  "id": 1,
+                  "name": "John Doe"
+                },
+                "effective_date": "2025-01-01",
+                "basic_salary": 15000000,
+                "notes": "Initial salary structure",
+                "status": "ACTIVE",
+                "created_at": "2025-01-15T10:30:00+07:00",
+                "updated_at": "2025-01-15T10:30:00+07:00"
+              },
+              {
+                "id": 2,
+                "employee": {
+                  "id": 1,
+                  "name": "John Doe"
+                },
+                "effective_date": "2025-06-01",
+                "basic_salary": 18000000,
+                "notes": "Salary increase after performance review",
+                "status": "Draft",
+                "created_at": "2025-01-15T11:00:00+07:00",
+                "updated_at": "2025-01-15T11:00:00+07:00"
+              }
+            ]
+          },
+          {
+            "employee_id": 2,
+            "employee_name": "Jane Smith",
+            "salary_count": 1,
+            "salaries": [
+              {
+                "id": 3,
+                "employee": {
+                  "id": 2,
+                  "name": "Jane Smith"
+                },
+                "effective_date": "2025-01-01",
+                "basic_salary": 12000000,
+                "notes": "New employee salary structure",
+                "status": "ACTIVE",
+                "created_at": "2025-01-15T09:00:00+07:00",
+                "updated_at": "2025-01-15T09:00:00+07:00"
+              }
+            ]
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 2
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "employee_id"],
+            "string_columns": ["notes", "status"],
+            "float_columns": ["basic_salary"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "effective_date",
+              "basic_salary",
+              "status",
+              "created_at",
+              "updated_at",
+              "employee_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/finance/base-salary/1",
+      "response": {
+        "data": {
+          "employee": {
+            "id": 1,
+            "name": "John Doe"
+          },
+          "salary_history": [
+            {
+              "id": 1,
+              "employee": {
+                "id": 1,
+                "name": "John Doe"
+              },
+              "effective_date": "2025-01-01",
+              "basic_salary": 15000000,
+              "notes": "Initial salary structure",
+              "status": "ACTIVE",
+              "created_at": "2025-01-15T10:30:00+07:00",
+              "updated_at": "2025-01-15T10:30:00+07:00"
+            },
+            {
+              "id": 2,
+              "employee": {
+                "id": 1,
+                "name": "John Doe"
+              },
+              "effective_date": "2025-06-01",
+              "basic_salary": 18000000,
+              "notes": "Salary increase after performance review",
+              "status": "Draft",
+              "created_at": "2025-01-15T11:00:00+07:00",
+              "updated_at": "2025-01-15T11:00:00+07:00"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "GET STATS",
+      "endpoint": "GET {{base_url}}/finance/base-salary/stats",
+      "response": {
+        "data": {
+          "total": 15,
+          "draft": 3,
+          "active": 10,
+          "inactive": 2,
+          "average_salary": 13500000,
+          "min_salary": 8000000,
+          "max_salary": 25000000
+        },
+        "message": "Salary statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "GET {{base_url}}/finance/base-salary/add",
+      "response": {
+        "data": {
+          "employees": [
+            {
+              "id": 1,
+              "name": "John Doe"
+            },
+            {
+              "id": 2,
+              "name": "Jane Smith"
+            },
+            {
+              "id": 3,
+              "name": "Bob Johnson"
+            },
+            {
+              "id": 4,
+              "name": "Alice Brown"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/finance/base-salary",
+      "body": {
+        "employee_id": 3,
+        "effective_date": "2025-02-01",
+        "basic_salary": 14000000,
+        "notes": "New salary structure for Bob Johnson"
+      },
+      "response": {
+        "data": {
+          "id": 4,
+          "employee": {
+            "id": 3,
+            "name": "Bob Johnson"
+          },
+          "effective_date": "2025-02-01",
+          "basic_salary": 14000000,
+          "notes": "New salary structure for Bob Johnson",
+          "status": "Draft",
+          "created_at": "2025-01-15T12:00:00+07:00",
+          "updated_at": "2025-01-15T12:00:00+07:00"
+        },
+        "message": "Salary structure created successfully"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/finance/base-salary/4",
+      "body": {
+        "employee_id": 3,
+        "effective_date": "2025-02-01",
+        "basic_salary": 14500000,
+        "notes": "Updated salary structure for Bob Johnson"
+      },
+      "response": {
+        "data": {
+          "id": 4,
+          "employee": {
+            "id": 3,
+            "name": "Bob Johnson"
+          },
+          "effective_date": "2025-02-01",
+          "basic_salary": 14500000,
+          "notes": "Updated salary structure for Bob Johnson",
+          "status": "Draft",
+          "created_at": "2025-01-15T12:00:00+07:00",
+          "updated_at": "2025-01-15T12:15:00+07:00"
+        },
+        "message": "Salary structure updated successfully"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/finance/base-salary/4",
+      "response": {
+        "message": "Salary structure deleted successfully",
+        "data": {
+          "id": 4
+        }
+      }
+    },
+    {
+      "title": "Approve Salary Structure",
+      "endpoint": "POST {{base_url}}/finance/base-salary/2/approve",
+      "response": {
+        "data": {
+          "id": 2,
+          "employee": {
+            "id": 1,
+            "name": "John Doe"
+          },
+          "effective_date": "2025-06-01",
+          "basic_salary": 18000000,
+          "notes": "Salary increase after performance review",
+          "status": "ACTIVE",
+          "created_at": "2025-01-15T11:00:00+07:00",
+          "updated_at": "2025-01-15T12:30:00+07:00"
+        },
+        "message": "Salary structure approved successfully"
+      }
+    },
+    {
+      "title": "Export Salary Structure",
+      "endpoint": "GET {{base_url}}/finance/base-salary/export",
+      "response": {
+        "message": "Salary structures exported successfully",
+        "download_url": "/downloads/salary_export_20250115_130000.xlsx"
+      }
+    }
+  ]
+}

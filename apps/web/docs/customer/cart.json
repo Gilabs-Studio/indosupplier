@@ -1,0 +1,464 @@
+{
+  "cart_api_documentation": {
+    "api_endpoints": {
+      "get_cart_items": {
+        "method": "GET",
+        "url": "/customer/cart-items",
+        "description": "Get all cart items for the authenticated customer",
+        "authentication": "Required",
+        "response": {
+          "status_code": 200,
+          "content_type": "application/json",
+          "body": {
+            "data": [
+              {
+                "id": 1,
+                "quantity": 2,
+                "product": {
+                  "id": 1,
+                  "name": "Product Name",
+                  "code": "PRD-001",
+                  "catalog_number": "CAT-001",
+                  "image_url": "https://example.com/image.jpg",
+                  "selling_price": 150000.00
+                },
+                "created_at": "2024-01-01T00:00:00Z",
+                "updated_at": "2024-01-01T00:00:00Z"
+              }
+            ]
+          }
+        },
+        "error_responses": {
+          "401": {
+            "description": "Unauthorized",
+            "body": {
+              "error": "unauthorized"
+            }
+          },
+          "404": {
+            "description": "Customer not found",
+            "body": {
+              "error": "customer not found for this user"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "body": {
+              "error": "Error message"
+            }
+          }
+        }
+      },
+      "get_cart_item_by_id": {
+        "method": "GET",
+        "url": "/customer/cart-items/:id",
+        "description": "Get a single cart item by ID (only if it belongs to the authenticated customer)",
+        "authentication": "Required",
+        "path_parameters": {
+          "id": {
+            "type": "uint",
+            "description": "Cart item ID",
+            "required": true,
+            "example": 1
+          }
+        },
+        "response": {
+          "status_code": 200,
+          "content_type": "application/json",
+          "body": {
+            "data": {
+              "id": 1,
+              "quantity": 2,
+              "product": {
+                "id": 1,
+                "name": "Product Name",
+                "code": "PRD-001",
+                "catalog_number": "CAT-001",
+                "image_url": "https://example.com/image.jpg",
+                "selling_price": 150000.00
+              },
+              "created_at": "2024-01-01T00:00:00Z",
+              "updated_at": "2024-01-01T00:00:00Z"
+            }
+          }
+        },
+        "error_responses": {
+          "400": {
+            "description": "Bad request - Invalid cart item id",
+            "body": {
+              "error": "invalid cart item id"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "body": {
+              "error": "unauthorized"
+            }
+          },
+          "403": {
+            "description": "Forbidden - Cart item does not belong to the customer",
+            "body": {
+              "error": "access denied"
+            }
+          },
+          "404": {
+            "description": "Cart item not found",
+            "body": {
+              "error": "cart item not found"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "body": {
+              "error": "Error message"
+            }
+          }
+        }
+      },
+      "create_cart_item": {
+        "method": "POST",
+        "url": "/customer/cart-items",
+        "description": "Create a new cart item",
+        "authentication": "Required",
+        "content_type": "application/json",
+        "request_body": {
+          "product_id": {
+            "type": "uint",
+            "description": "Product ID",
+            "required": true,
+            "example": 1
+          },
+          "quantity": {
+            "type": "int",
+            "description": "Quantity to add to cart",
+            "required": true,
+            "min_value": 1,
+            "example": 2
+          }
+        },
+        "response": {
+          "status_code": 201,
+          "content_type": "application/json",
+          "body": {
+            "message": "created",
+            "data": {
+              "id": 1,
+              "quantity": 2,
+              "product": {
+                "id": 1,
+                "name": "Product Name",
+                "code": "PRD-001",
+                "catalog_number": "CAT-001",
+                "image_url": "https://example.com/image.jpg",
+                "selling_price": 150000.00
+              },
+              "created_at": "2024-01-01T00:00:00Z",
+              "updated_at": "2024-01-01T00:00:00Z"
+            }
+          }
+        },
+        "error_responses": {
+          "400": {
+            "description": "Bad request - Invalid input data",
+            "body": {
+              "error": "Error message"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "body": {
+              "error": "unauthorized"
+            }
+          },
+          "404": {
+            "description": "Customer not found",
+            "body": {
+              "error": "customer not found for this user"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "body": {
+              "error": "Error message"
+            }
+          }
+        }
+      },
+      "update_cart_item": {
+        "method": "PUT",
+        "url": "/customer/cart-items/:id",
+        "description": "Update cart item quantity",
+        "authentication": "Required",
+        "content_type": "application/json",
+        "path_parameters": {
+          "id": {
+            "type": "uint",
+            "description": "Cart item ID",
+            "required": true,
+            "example": 1
+          }
+        },
+        "request_body": {
+          "quantity": {
+            "type": "int",
+            "description": "New quantity",
+            "required": true,
+            "min_value": 1,
+            "example": 3
+          }
+        },
+        "response": {
+          "status_code": 200,
+          "content_type": "application/json",
+          "body": {
+            "message": "updated",
+            "data": {
+              "id": 1,
+              "quantity": 3,
+              "product": {
+                "id": 1,
+                "name": "Product Name",
+                "code": "PRD-001",
+                "catalog_number": "CAT-001",
+                "image_url": "https://example.com/image.jpg",
+                "selling_price": 150000.00
+              },
+              "created_at": "2024-01-01T00:00:00Z",
+              "updated_at": "2024-01-01T00:00:00Z"
+            }
+          }
+        },
+        "error_responses": {
+          "400": {
+            "description": "Bad request - Invalid input data",
+            "body": {
+              "error": "invalid cart item id"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "body": {
+              "error": "unauthorized"
+            }
+          },
+          "403": {
+            "description": "Forbidden - Cart item does not belong to the customer",
+            "body": {
+              "error": "access denied"
+            }
+          },
+          "404": {
+            "description": "Cart item not found",
+            "body": {
+              "error": "cart item not found"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "body": {
+              "error": "Error message"
+            }
+          }
+        }
+      },
+      "delete_cart_item": {
+        "method": "DELETE",
+        "url": "/customer/cart-items/:id",
+        "description": "Delete a cart item",
+        "authentication": "Required",
+        "path_parameters": {
+          "id": {
+            "type": "uint",
+            "description": "Cart item ID",
+            "required": true,
+            "example": 1
+          }
+        },
+        "response": {
+          "status_code": 200,
+          "content_type": "application/json",
+          "body": {
+            "message": "deleted"
+          }
+        },
+        "error_responses": {
+          "400": {
+            "description": "Bad request - Invalid cart item id",
+            "body": {
+              "error": "invalid cart item id"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "body": {
+              "error": "unauthorized"
+            }
+          },
+          "403": {
+            "description": "Forbidden - Cart item does not belong to the customer",
+            "body": {
+              "error": "access denied"
+            }
+          },
+          "404": {
+            "description": "Cart item not found",
+            "body": {
+              "error": "cart item not found"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "body": {
+              "error": "Error message"
+            }
+          }
+        }
+      },
+      "checkout": {
+        "method": "POST",
+        "url": "/customer/marketplace/checkout",
+        "description": "Create a sales quotation from cart items and optionally remove cart items",
+        "authentication": "Required",
+        "content_type": "application/json",
+        "request_body": {
+          "notes": {
+            "type": "string",
+            "description": "Optional notes for the quotation",
+            "required": false,
+            "example": "Please deliver as soon as possible"
+          },
+          "items": {
+            "type": "array",
+            "description": "List of items to checkout",
+            "required": true,
+            "items": {
+              "product_id": {
+                "type": "uint",
+                "description": "Product ID",
+                "required": true,
+                "example": 1
+              },
+              "quantity": {
+                "type": "int",
+                "description": "Quantity to purchase",
+                "required": true,
+                "min_value": 1,
+                "example": 2
+              },
+              "price": {
+                "type": "float64",
+                "description": "Price per unit",
+                "required": true,
+                "min_value": 0,
+                "example": 150000.00
+              }
+            }
+          },
+          "cart_ids": {
+            "type": "array",
+            "description": "Optional array of cart item IDs to remove after checkout",
+            "required": false,
+            "items": {
+              "type": "uint",
+              "example": 1
+            }
+          }
+        },
+        "response": {
+          "status_code": 201,
+          "content_type": "application/json",
+          "body": {
+            "message": "quotation created and cart items removed",
+            "data": {
+              "id": 1,
+              "code": "SQ-20240101-0001",
+              "quotation_date": "2024-01-01",
+              "status": "DRAFT",
+              "notes": "Please deliver as soon as possible",
+              "subtotal": 300000.00,
+              "tax_amount": 33000.00,
+              "tax_rate": 11.0,
+              "delivery_cost": 0.0,
+              "other_cost": 0.0,
+              "total_amount": 333000.00,
+              "customer": {
+                "id": 1,
+                "name": "Customer Name"
+              },
+              "payment_terms": {
+                "id": 1,
+                "name": "Payment Terms Name"
+              },
+              "employee": {
+                "id": 1,
+                "name": "Employee Name"
+              },
+              "business_unit": {
+                "id": 1,
+                "name": "Business Unit Name"
+              },
+              "created_by_user": {
+                "id": 1,
+                "name": "User Name",
+                "username": "username",
+                "photo_profile": "",
+                "avatar_url": ""
+              },
+              "items": [
+                {
+                  "id": 1,
+                  "product": {
+                    "id": 1,
+                    "name": "Product Name",
+                    "code": "PRD-001",
+                    "cost_price": 100000.00,
+                    "selling_price": 150000.00,
+                    "image_url": "https://example.com/image.jpg"
+                  },
+                  "quantity": 2,
+                  "price": 150000.00,
+                  "discount": 0.0,
+                  "subtotal": 300000.00
+                }
+              ],
+              "created_at": "2024-01-01T00:00:00Z",
+              "updated_at": "2024-01-01T00:00:00Z"
+            }
+          }
+        },
+        "error_responses": {
+          "400": {
+            "description": "Bad request - Invalid input data",
+            "body": {
+              "error": "product not found"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "body": {
+              "error": "unauthorized"
+            }
+          },
+          "403": {
+            "description": "Forbidden - Cart item does not belong to the customer",
+            "body": {
+              "error": "access denied: cart item does not belong to you"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "body": {
+              "error": "customer not found for this user"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "body": {
+              "error": "Error message"
+            }
+          }
+        }
+      }
+    }
+  }
+}

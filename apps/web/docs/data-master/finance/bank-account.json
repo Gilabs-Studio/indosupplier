@@ -1,0 +1,262 @@
+{
+  "title": "Data Master/Finance/bank-accounts",
+  "description": "A comprehensive guide to the Data Master API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "{{base_url}}/master-data/bank-accounts",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "chart_of_account_id": 7,
+            "name": "Bank Mandiri - Main Account",
+            "account_number": "1234567890",
+            "account_holder": "PT. ERP Company",
+            "currency": "IDR",
+            "is_active": true,
+            "created_at": "2025-09-19T16:06:23+07:00",
+            "updated_at": "2025-09-19T16:06:23+07:00",
+            "chart_of_account": {
+              "id": 7,
+              "code": "1200",
+              "name": "Bank",
+              "type": "ASSET"
+            }
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "2026-09-09",
+            "start_date": "2025-09-09"
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "1",
+            "searchBy": "id"
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "chart_of_account_id"],
+            "string_columns": [
+              "name",
+              "account_number",
+              "account_holder",
+              "currency"
+            ]
+          },
+          "sort": {
+            "sort_by": "name",
+            "sort_order": "desc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "name",
+              "account_number",
+              "account_holder",
+              "currency",
+              "is_active",
+              "created_at",
+              "updated_at",
+              "chart_of_account_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA Stats",
+      "endpoint": "GET {{base_url}}/master-data/bank-accounts/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "chart_of_account_id": 7,
+          "name": "Bank Mandiri - Main Account",
+          "account_number": "1234567890",
+          "account_holder": "PT. ERP Company",
+          "currency": "IDR",
+          "is_active": true,
+          "created_at": "2025-09-19T16:06:23+07:00",
+          "updated_at": "2025-09-19T16:06:23+07:00",
+          "chart_of_account": {
+            "id": 7,
+            "code": "1200",
+            "name": "Bank",
+            "type": "ASSET"
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA Stats",
+      "endpoint": "GET {{base_url}}/master-data/bank-accounts/stats",
+      "response": {
+        "data": {
+          "total": 4
+        },
+        "message": "Bank account statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "GET {{base_url}}/master-data/bank-accounts/add",
+      "response": {
+        "data": {
+          "chart_of_accounts": [
+            {
+              "id": 1,
+              "code": "1000",
+              "name": "Assets",
+              "type": "ASSET"
+            },
+            {
+              "id": 2,
+              "code": "2000",
+              "name": "Liabilities",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 3,
+              "code": "3000",
+              "name": "Equity",
+              "type": "EQUITY"
+            },
+            {
+              "id": 4,
+              "code": "4000",
+              "name": "Revenue",
+              "type": "REVENUE"
+            },
+            {
+              "id": 5,
+              "code": "5000",
+              "name": "Expenses",
+              "type": "EXPENSE"
+            },
+            {
+              "id": 6,
+              "code": "1100",
+              "name": "Cash",
+              "type": "ASSET"
+            },
+            {
+              "id": 7,
+              "code": "1200",
+              "name": "Bank",
+              "type": "ASSET"
+            },
+            {
+              "id": 8,
+              "code": "1300",
+              "name": "Accounts Receivable",
+              "type": "ASSET"
+            },
+            {
+              "id": 9,
+              "code": "1400",
+              "name": "Inventory",
+              "type": "ASSET"
+            },
+            {
+              "id": 10,
+              "code": "2005",
+              "name": "GRNI",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 11,
+              "code": "2100",
+              "name": "Accounts Payable",
+              "type": "LIABILITY"
+            },
+            {
+              "id": 12,
+              "code": "3100",
+              "name": "Retained Earnings",
+              "type": "EQUITY"
+            },
+            {
+              "id": 13,
+              "code": "4100",
+              "name": "Sales Revenue",
+              "type": "REVENUE"
+            },
+            {
+              "id": 14,
+              "code": "5100",
+              "name": "Cost of Goods Sold",
+              "type": "EXPENSE"
+            },
+            {
+              "id": 15,
+              "code": "5200",
+              "name": "Operating Expenses",
+              "type": "EXPENSE"
+            },
+            {
+              "id": 16,
+              "code": "5900",
+              "name": "Inventory Adjustment",
+              "type": "REVENUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/master-data/bank-accounts",
+      "body": {
+        "chart_of_account_id": 1,
+        "name": "Bank BCA",
+        "account_number": "12345678980",
+        "account_holder": "PT Contoh Sejahtera",
+        "currency": "IDR",
+        "is_active": true
+      },
+      "response": {
+        "data": {
+          "id": 5,
+          "chart_of_account_id": 1,
+          "name": "Bank BCA",
+          "account_number": "12345678980",
+          "account_holder": "PT Contoh Sejahtera",
+          "currency": "IDR",
+          "is_active": true,
+          "created_at": "2025-09-19T16:33:11+07:00",
+          "updated_at": "2025-09-19T16:33:11+07:00",
+          "chart_of_account": {
+            "id": 1,
+            "code": "1000",
+            "name": "Assets",
+            "type": "ASSET"
+          }
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/master-data/bank-accounts/2",
+      "body": {
+        "chart_of_account_id": 1,
+        "name": "Bank BCA",
+        "account_number": "12345678966",
+        "account_holder": "PT Contoh Sejahtera",
+        "currency": "IDR",
+        "is_active": true
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/master-data/bank-accounts/2",
+      "response": {
+        "message": "deleted"
+      }
+    }
+  ]
+}

@@ -1,0 +1,407 @@
+{
+  "title": "Finance/Asset Depreciation",
+  "description": "A comprehensive guide to the Asset Depreciation API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/finance/asset-depreciations",
+      "response": {
+        "data": [
+          {
+            "id": 96,
+            "asset_id": 8,
+            "asset_code": "PAT-001",
+            "asset_name": "Software Algorithm Patent",
+            "period": "2025-09-29T00:00:00Z",
+            "depreciation_amount": 2000000,
+            "accumulated_depreciation": 24000000,
+            "book_value": 76000000,
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 24,
+            "asset_id": 2,
+            "asset_code": "COMP-002",
+            "asset_name": "HP EliteBook 850 Laptop",
+            "period": "2025-09-29T00:00:00Z",
+            "depreciation_amount": 360000,
+            "accumulated_depreciation": 4320000,
+            "book_value": 13680000,
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 84,
+            "asset_id": 7,
+            "asset_code": "BUILD-001",
+            "asset_name": "Office Building Floor 12",
+            "period": "2025-09-29T00:00:00Z",
+            "depreciation_amount": 40000000,
+            "accumulated_depreciation": 480000000,
+            "book_value": 1520000000,
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 48,
+            "asset_id": 4,
+            "asset_code": "VEH-001",
+            "asset_name": "Toyota Avanza 2022",
+            "period": "2025-09-29T00:00:00Z",
+            "depreciation_amount": 5000000,
+            "accumulated_depreciation": 60000000,
+            "book_value": 190000000,
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 12,
+            "asset_id": 1,
+            "asset_code": "",
+            "asset_name": "",
+            "period": "2025-09-29T00:00:00Z",
+            "depreciation_amount": 300000,
+            "accumulated_depreciation": 3600000,
+            "book_value": 11400000,
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 36,
+            "asset_id": 3,
+            "asset_code": "FURN-001",
+            "asset_name": "Executive Office Desk",
+            "period": "2025-09-29T00:00:00Z",
+            "depreciation_amount": 100000,
+            "accumulated_depreciation": 1200000,
+            "book_value": 3800000,
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 60,
+            "asset_id": 5,
+            "asset_code": "SOFT-001",
+            "asset_name": "Microsoft Office 365 Business",
+            "period": "2025-09-29T00:00:00Z",
+            "depreciation_amount": 240000,
+            "accumulated_depreciation": 2880000,
+            "book_value": 9120000,
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 72,
+            "asset_id": 6,
+            "asset_code": "MACH-001",
+            "asset_name": "Industrial Printer",
+            "period": "2025-09-29T00:00:00Z",
+            "depreciation_amount": 1000000,
+            "accumulated_depreciation": 12000000,
+            "book_value": 38000000,
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 23,
+            "asset_id": 2,
+            "asset_code": "COMP-002",
+            "asset_name": "HP EliteBook 850 Laptop",
+            "period": "2025-08-29T00:00:00Z",
+            "depreciation_amount": 360000,
+            "accumulated_depreciation": 3960000,
+            "book_value": 14040000,
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 35,
+            "asset_id": 3,
+            "asset_code": "FURN-001",
+            "asset_name": "Executive Office Desk",
+            "period": "2025-08-29T00:00:00Z",
+            "depreciation_amount": 100000,
+            "accumulated_depreciation": 1100000,
+            "book_value": 3900000,
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 96
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": [
+              "id",
+              "asset_id",
+              "depreciation_amount",
+              "accumulated_depreciation",
+              "journal_entry_id"
+            ],
+            "string_columns": ["status"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "asset_id",
+              "period",
+              "depreciation_amount",
+              "accumulated_depreciation",
+              "book_value",
+              "status",
+              "created_at",
+              "updated_at",
+              "journal_entry_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "GET {{base_url}}/finance/asset-depreciations/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "asset_id": 1,
+          "asset_code": "",
+          "asset_name": "",
+          "period": "2024-10-29T00:00:00Z",
+          "depreciation_amount": 300000,
+          "accumulated_depreciation": 300000,
+          "book_value": 14700000,
+          "status": "APPROVED",
+          "created_at": "2025-10-29T18:25:20+07:00",
+          "updated_at": "2025-10-29T18:25:20+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET STATS",
+      "endpoint": "GET {{base_url}}/finance/asset-depreciations/stats",
+      "response": {
+        "data": {
+          "by_asset": {
+            "top_assets": [
+              {
+                "asset_code": "PAT-001",
+                "asset_id": 8,
+                "asset_name": "Software Algorithm Patent",
+                "count": 12
+              },
+              {
+                "asset_code": "FURN-001",
+                "asset_id": 3,
+                "asset_name": "Executive Office Desk",
+                "count": 12
+              },
+              {
+                "asset_code": "SOFT-001",
+                "asset_id": 5,
+                "asset_name": "Microsoft Office 365 Business",
+                "count": 12
+              },
+              {
+                "asset_code": "",
+                "asset_id": 1,
+                "asset_name": "",
+                "count": 12
+              },
+              {
+                "asset_code": "COMP-002",
+                "asset_id": 2,
+                "asset_name": "HP EliteBook 850 Laptop",
+                "count": 12
+              },
+              {
+                "asset_code": "VEH-001",
+                "asset_id": 4,
+                "asset_name": "Toyota Avanza 2022",
+                "count": 12
+              },
+              {
+                "asset_code": "MACH-001",
+                "asset_id": 6,
+                "asset_name": "Industrial Printer",
+                "count": 12
+              },
+              {
+                "asset_code": "BUILD-001",
+                "asset_id": 7,
+                "asset_name": "Office Building Floor 12",
+                "count": 12
+              }
+            ],
+            "total_assets": 8
+          },
+          "by_status": {
+            "approved": 96,
+            "pending": 0
+          },
+          "financial": {
+            "total_accumulated_depreciation": 3822000000,
+            "total_depreciation_amount": 588000000
+          },
+          "total": 96
+        },
+        "message": "Asset depreciation statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "GET {{base_url}}/finance/asset-depreciations/add",
+      "response": {
+        "data": {
+          "assets": [
+            {
+              "id": 2,
+              "code": "COMP-002",
+              "name": "HP EliteBook 850 Laptop"
+            },
+            {
+              "id": 3,
+              "code": "FURN-001",
+              "name": "Executive Office Desk"
+            },
+            {
+              "id": 4,
+              "code": "VEH-001",
+              "name": "Toyota Avanza 2022"
+            },
+            {
+              "id": 5,
+              "code": "SOFT-001",
+              "name": "Microsoft Office 365 Business"
+            },
+            {
+              "id": 6,
+              "code": "MACH-001",
+              "name": "Industrial Printer"
+            },
+            {
+              "id": 7,
+              "code": "BUILD-001",
+              "name": "Office Building Floor 12"
+            },
+            {
+              "id": 8,
+              "code": "PAT-001",
+              "name": "Software Algorithm Patent"
+            },
+            {
+              "id": 9,
+              "code": "AST-20251029-0001",
+              "name": "Mesin Produksi Tekstil"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/finance/asset-depreciations",
+      "body": {
+        "asset_id": 1,
+        "period": "2025-09-30T00:00:00Z",
+        "depreciation_amount": 0,
+        "accumulated_depreciation": 0,
+        "book_value": 120000000
+      },
+      "response": {
+        "data": {
+          "id": 97,
+          "asset_id": 1,
+          "asset_code": "",
+          "asset_name": "",
+          "period": "2025-09-30T00:00:00Z",
+          "depreciation_amount": 0,
+          "accumulated_depreciation": 0,
+          "book_value": 120000000,
+          "status": "PENDING",
+          "created_at": "2025-10-29T19:07:50+07:00",
+          "updated_at": "2025-10-29T19:07:50+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/finance/asset-depreciations/4",
+      "body": {
+        "asset_id": 1,
+        "period": "2025-09-30T00:00:00Z",
+        "depreciation_amount": 0,
+        "accumulated_depreciation": 0,
+        "book_value": 120000000
+      },
+      "response": {
+        "data": {
+          "id": 97,
+          "asset_id": 1,
+          "asset_code": "",
+          "asset_name": "",
+          "period": "2025-09-30T00:00:00Z",
+          "depreciation_amount": 0,
+          "accumulated_depreciation": 0,
+          "book_value": 120000000,
+          "status": "PENDING",
+          "created_at": "2025-10-29T19:07:50+07:00",
+          "updated_at": "2025-10-29T19:07:50+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/finance/asset-depreciations/4",
+      "response": {
+        "message": "Asset depreciation deleted successfully"
+      }
+    },
+    {
+      "title": "Approve Asset Depreciation",
+      "endpoint": "POST {{base_url}}/finance/asset-depreciations/3/approve",
+      "body": {
+        "asset_category_id": 1,
+        "asset_location_id": 3,
+        "name": "Mesin Produksi Tekstil",
+        "acquisition_date": "2022-01-10T00:00:00Z",
+        "acquisition_cost": 500000000,
+        "accumulated_depreciation": 150000000,
+        "current_value": 350000000,
+        "status": "ACTIVE | INACTIVE",
+        "description": "Digunakan di pabrik utama Bandung untuk produksi kain."
+      },
+
+      "response": {
+        "error": "only pending depreciations can be approved"
+      }
+    }
+  ]
+}

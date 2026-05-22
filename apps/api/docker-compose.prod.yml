@@ -1,0 +1,123 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: gims-platform-db-prod
+    environment:
+      POSTGRES_USER: ${DB_USER:?DB_USER is required}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
+      POSTGRES_DB: ${DB_NAME:?DB_NAME is required}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - gims-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: gims-platform-redis-prod
+    command: redis-server --appendonly yes --appendfsync everysec --loglevel warning ${REDIS_PASSWORD:+--requirepass ${REDIS_PASSWORD}}
+    volumes:
+      - redis_data:/data
+    networks:
+      - gims-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gims-platform-api-prod
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      - GIN_MODE=${GIN_MODE:-release}
+      - PORT=8080
+      - ENV=${ENV:-production}
+      - APP_ENV=${APP_ENV:-production}
+
+      - RUN_MIGRATIONS=${RUN_MIGRATIONS:-false}
+      - RUN_SEEDERS=${RUN_SEEDERS:-false}
+
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=${DB_USER:?DB_USER is required}
+      - DB_PASSWORD=${DB_PASSWORD:?DB_PASSWORD is required}
+      - DB_NAME=${DB_NAME:?DB_NAME is required}
+      - DB_SSLMODE=${DB_SSLMODE:-disable}
+      - DB_MAX_OPEN_CONNS=${DB_MAX_OPEN_CONNS:-100}
+      - DB_MAX_IDLE_CONNS=${DB_MAX_IDLE_CONNS:-25}
+      - DB_CONN_MAX_LIFETIME_MINUTES=${DB_CONN_MAX_LIFETIME_MINUTES:-5}
+      - DB_CONN_MAX_IDLE_TIME_MINUTES=${DB_CONN_MAX_IDLE_TIME_MINUTES:-2}
+
+      - SERVER_READ_HEADER_TIMEOUT_SEC=${SERVER_READ_HEADER_TIMEOUT_SEC:-10}
+      - SERVER_READ_TIMEOUT_SEC=${SERVER_READ_TIMEOUT_SEC:-30}
+      - SERVER_WRITE_TIMEOUT_SEC=${SERVER_WRITE_TIMEOUT_SEC:-30}
+      - SERVER_IDLE_TIMEOUT_SEC=${SERVER_IDLE_TIMEOUT_SEC:-120}
+      - SERVER_SHUTDOWN_TIMEOUT_SEC=${SERVER_SHUTDOWN_TIMEOUT_SEC:-20}
+      - SERVER_MAX_HEADER_BYTES=${SERVER_MAX_HEADER_BYTES:-1048576}
+      - SERVER_MAX_BODY_BYTES=${SERVER_MAX_BODY_BYTES:-1048576}
+      - SERVER_MAX_MULTIPART_BODY_BYTES=${SERVER_MAX_MULTIPART_BODY_BYTES:-52428800}
+      - SERVER_MAX_MULTIPART_MEMORY_BYTES=${SERVER_MAX_MULTIPART_MEMORY_BYTES:-8388608}
+
+      - JWT_SECRET=${JWT_SECRET:?JWT_SECRET is required}
+      - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET:-}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-}
+      - JWT_ISSUER=${JWT_ISSUER:?JWT_ISSUER is required}
+      - JWT_ACCESS_TTL=${JWT_ACCESS_TTL:-24}
+      - JWT_REFRESH_TTL=${JWT_REFRESH_TTL:-7}
+
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - REDIS_DB=${REDIS_DB:-0}
+      - REDIS_DIAL_TIMEOUT_SEC=${REDIS_DIAL_TIMEOUT_SEC:-3}
+      - REDIS_READ_TIMEOUT_SEC=${REDIS_READ_TIMEOUT_SEC:-2}
+      - REDIS_WRITE_TIMEOUT_SEC=${REDIS_WRITE_TIMEOUT_SEC:-2}
+      - REDIS_POOL_SIZE=${REDIS_POOL_SIZE:-100}
+      - REDIS_MIN_IDLE_CONNS=${REDIS_MIN_IDLE_CONNS:-20}
+
+      # Retry-storm and multi-instance hardening
+      - RATE_LIMIT_GENERAL_REQUESTS=${RATE_LIMIT_GENERAL_REQUESTS:-120}
+      - RATE_LIMIT_GENERAL_WINDOW=${RATE_LIMIT_GENERAL_WINDOW:-60}
+      - RATE_LIMIT_PUBLIC_REQUESTS=${RATE_LIMIT_PUBLIC_REQUESTS:-200}
+      - RATE_LIMIT_PUBLIC_WINDOW=${RATE_LIMIT_PUBLIC_WINDOW:-60}
+      - RATE_LIMIT_LOGIN_GLOBAL_REQUESTS=${RATE_LIMIT_LOGIN_GLOBAL_REQUESTS:-50}
+      - RATE_LIMIT_LOGIN_GLOBAL_WINDOW=${RATE_LIMIT_LOGIN_GLOBAL_WINDOW:-60}
+      - RATE_LIMIT_FAIL_CLOSED_ON_REDIS_ERROR=${RATE_LIMIT_FAIL_CLOSED_ON_REDIS_ERROR:-true}
+
+      - STORAGE_UPLOAD_DIR=/app/uploads
+      - STORAGE_BASE_URL=${STORAGE_BASE_URL:-/uploads}
+      - STORAGE_MAX_UPLOAD_SIZE=${STORAGE_MAX_UPLOAD_SIZE:-10485760}
+
+      - APP_TIMEZONE=${APP_TIMEZONE:-Asia/Jakarta}
+      - PROXY_HEADERS_ENABLED=${PROXY_HEADERS_ENABLED:-false}
+      - TRUSTED_PROXIES=${TRUSTED_PROXIES:-}
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - gims-network
+
+networks:
+  gims-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  uploads_data:

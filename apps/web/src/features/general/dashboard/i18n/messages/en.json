@@ -1,0 +1,603 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "error": "Failed to load dashboard data. Please try again.",
+    "scopeRestrictedTitle": "Scope restricted",
+    "scopeRestrictedDescription": "This widget is hidden for the current permission scope.",
+    "loading": "Loading...",
+    "noData": "No data available",
+    "customize": "Customize",
+    "doneEditing": "Done",
+    "addWidget": "Add Widget",
+    "resetLayout": "Reset",
+    "emptyDashboard": "Your dashboard is empty. Add widgets to get started.",
+    "download": "Download",
+    "compareLastMonth": "Compare from last month",
+    "formula": "Formula",
+    "purpose": "Purpose",
+    "templatePicker": {
+      "title": "Choose your dashboard layout",
+      "description": "Pick a template to get started. You can customize it anytime.",
+      "useTemplate": "Use this template",
+      "templates": {
+        "erp": {
+          "name": "ERP",
+          "description": "Orders, revenue, inventory, and operational overview"
+        },
+        "crm": {
+          "name": "CRM",
+          "description": "Contacts, leads, deals, and activity tracking"
+        },
+        "pos": {
+          "name": "POS",
+          "description": "Outlet sales, live table, and best selling products"
+        },
+        "hr": {
+          "name": "HR",
+          "description": "Employee count, attendance, and leave management"
+        }
+      }
+    },
+    "onboarding": {
+      "welcome": "Welcome to GIMS!",
+      "chooseTypePrompt": "Let's get you set up. What type of business are you running?",
+      "setupChecklist": "Setup Checklist",
+      "checklistPrompt": "Complete these steps to get your workspace ready ({done}/{total} done)",
+      "dismiss": "Skip for now",
+      "markDone": "Complete setup",
+      "accessSetup": {
+        "title": "Role & employee access setup",
+        "description": "Set role permissions and employee access scope before your team starts using the workspace.",
+        "rolePermissions": "Configure role permissions",
+        "employeeAccessFnb": "Set employee access for outlets and cashier flow",
+        "employeeAccessOther": "Set employee access for warehouse and operations"
+      },
+      "types": {
+        "fnb": {
+          "label": "Food & Beverage",
+          "description": "Restaurant, café, catering, or any F&B operation"
+        },
+        "other": {
+          "label": "Other Business",
+          "description": "Retail, distribution, manufacturing, or services"
+        }
+      },
+      "steps": {
+        "company": {
+          "label": "Set up your company",
+          "description": "Add your company name, address, and basic info"
+        },
+        "fiscalYear": {
+          "label": "Setup Fiscal Years",
+          "description": "Set up at least one active fiscal year before you can record sales or purchase transactions."
+        },
+        "outlet": {
+          "label": "Create your first outlet",
+          "description": "Add the branch or location where you operate"
+        },
+        "floorLayout": {
+          "label": "Design your floor layout",
+          "description": "Arrange tables and sections for your venue"
+        },
+        "products": {
+          "label": "Add your products / menu",
+          "description": "Set up the items you sell or serve"
+        },
+        "warehouse": {
+          "label": "Create a warehouse",
+          "description": "Set up your main stock storage location"
+        },
+        "users": {
+          "label": "Invite team members",
+          "description": "Add staff accounts and assign roles"
+        }
+      }
+    },
+    "status": {
+      "good": "Healthy",
+      "warning": "Watch",
+      "danger": "Critical"
+    },
+    "categories": {
+      "erp": "ERP",
+      "crm": "CRM",
+      "pos": "POS",
+      "hr": "HR",
+      "finance": "Finance",
+      "other": "Other"
+    },
+    "revenueChart": {
+      "title": "Revenue Chart",
+      "subtitle": "Last 12 periods",
+      "revenue": "Revenue",
+      "costs": "Costs"
+    },
+    "stats": {
+      "totalBalance": "Total Balance",
+      "totalRevenue": "Total Revenue",
+      "totalExpense": "Total Expense",
+      "totalOrders": "Total Orders"
+    },
+    "bestSelling": {
+      "title": "Best Selling Products",
+      "subtitle": "Top-Selling Products at a Glance",
+      "itemsSold": "items sold"
+    },
+    "trackOrders": {
+      "title": "Track Sales Order",
+      "subtitle": "Monitor current sales orders and their linked fulfillment documents",
+      "newOrder": "New Order",
+      "onProgress": "On Progress",
+      "completed": "Completed",
+      "return": "Return",
+      "filterOrders": "Filter orders...",
+      "id": "ID",
+      "customerName": "Customer Name",
+      "issueDate": "Issue Date",
+      "amount": "Amount",
+      "status": "Status",
+      "export": "Export",
+      "fulfillment": {
+        "delivered": "delivered",
+        "pending": "pending",
+        "remaining": "remaining"
+      },
+      "columns": {
+        "code": "Code",
+        "status": "Status",
+        "fulfillment": "Fulfillment",
+        "do": "DO",
+        "invoice": "Invoice",
+        "totalAmount": "Total Amount"
+      }
+    },
+    "trackPurchaseOrders": {
+      "title": "Track Purchase Order",
+      "subtitle": "Monitor purchase orders and their linked receiving and invoice documents",
+      "columns": {
+        "code": "Code",
+        "status": "Status",
+        "fulfillment": "Fulfillment",
+        "gr": "GR",
+        "invoice": "Invoice",
+        "totalAmount": "Total Amount"
+      },
+      "fulfillment": {
+        "received": "received",
+        "pending": "pending",
+        "remaining": "remaining"
+      }
+    },
+    "widgetPicker": {
+      "title": "Add Widget",
+      "all": "All",
+      "added": "Added"
+    },
+    "widgets": {
+      "total_revenue": {
+        "title": "Total Revenue",
+        "description": "Total revenue across all sales channels"
+      },
+      "total_orders": {
+        "title": "Total Orders",
+        "description": "Number of sales orders in the period"
+      },
+      "total_customers": {
+        "title": "Total Customers",
+        "description": "Active customer count"
+      },
+      "total_products": {
+        "title": "Total Products",
+        "description": "Active product count in catalog"
+      },
+      "employee_count": {
+        "title": "Employees",
+        "description": "Total active employees"
+      },
+      "revenue_chart": {
+        "title": "Revenue Trend",
+        "description": "Monthly revenue trend chart"
+      },
+      "costs_chart": {
+        "title": "Costs Trend",
+        "description": "Monthly costs trend chart"
+      },
+      "revenue_vs_costs": {
+        "title": "Revenue vs Costs",
+        "description": "Comparison of revenue and costs"
+      },
+      "balance_overview": {
+        "title": "Balance",
+        "description": "Current account balance overview"
+      },
+      "costs_by_category": {
+        "title": "Costs by Category",
+        "description": "Breakdown of costs by category"
+      },
+      "invoices_summary": {
+        "title": "Invoices",
+        "description": "Invoice status summary",
+        "total": "Total",
+        "paid": "Paid",
+        "unpaid": "Unpaid",
+        "overdue": "Overdue"
+      },
+      "recent_invoices": {
+        "title": "Recent Invoices",
+        "description": "Latest invoice transactions"
+      },
+      "sales_performance": {
+        "title": "Sales Performance",
+        "description": "Top performing sales representatives"
+      },
+      "top_products": {
+        "title": "Top Products",
+        "description": "Best selling products",
+        "sold": "sold"
+      },
+      "delivery_status": {
+        "title": "Deliveries",
+        "description": "Delivery status overview",
+        "totalLabel": "total deliveries",
+        "pending": "Pending",
+        "inTransit": "In Transit",
+        "delivered": "Delivered"
+      },
+      "geographic_overview": {
+        "title": "Geographic Overview",
+        "description": "Regional performance map with GeoJSON",
+        "entries": "entries",
+        "low": "Low",
+        "high": "High"
+      },
+      "warehouse_overview": {
+        "title": "Warehouse Overview",
+        "description": "Stock and utilization per warehouse",
+        "items": "items",
+        "stockStatus": "Stock Status",
+        "inStock": "In Stock",
+        "lowStock": "Low Stock",
+        "outOfStock": "Out of Stock"
+      },
+      "pending_approvals_sales": {
+        "title": "Pending Approval - Sales",
+        "description": "Documents awaiting approval in the sales pipeline"
+      },
+      "pending_approvals_purchase": {
+        "title": "Pending Approval - Purchase",
+        "description": "Documents awaiting approval in the purchase pipeline"
+      },
+      "travel_planner_overview": {
+        "title": "Travel Planner Budget",
+        "description": "Budget, spend, and active trip plans",
+        "open": "Open Planner",
+        "utilization": "Budget Utilization",
+        "listTitle": "Active Plans",
+        "empty": "No travel plans found",
+        "metrics": {
+          "budget": "Budget",
+          "spent": "Spent",
+          "remaining": "Remaining"
+        }
+      },
+      "kpi_roe": {
+        "title": "ROE",
+        "description": "Return on Equity — Net Profit / Equity"
+      },
+      "kpi_net_profit_margin": {
+        "title": "Net Profit Margin",
+        "description": "Net Profit / Revenue — percentage of revenue that becomes net profit"
+      },
+      "kpi_gross_profit_margin": {
+        "title": "Gross Profit Margin",
+        "description": "Gross Profit / Revenue — pricing power indicator"
+      },
+      "kpi_inventory_turnover": {
+        "title": "Inventory Turnover",
+        "description": "COGS / Average Inventory — how many times inventory sells per year"
+      },
+      "kpi_dio": {
+        "title": "DIO",
+        "description": "Days Inventory Outstanding — average days stock is held before selling"
+      },
+      "kpi_ar_days": {
+        "title": "AR Days (DSO)",
+        "description": "Days Sales Outstanding — average days to collect receivables"
+      },
+      "kpi_ap_days": {
+        "title": "AP Days (DPO)",
+        "description": "Days Payable Outstanding — average days to pay suppliers"
+      },
+      "kpi_ccc": {
+        "title": "CCC",
+        "description": "Cash Conversion Cycle — total days cash is tied up in operations (DIO + DSO − DPO)"
+      },
+      "kpi_cost_per_delivery": {
+        "title": "Cost/Delivery",
+        "description": "Average cost per delivery — logistics efficiency metric"
+      },
+      "kpi_utilization_rate": {
+        "title": "Utilization Rate",
+        "description": "Fleet/capacity utilization — actual usage vs total capacity"
+      },
+      "kpi_otd_rate": {
+        "title": "OTD Rate",
+        "description": "On-Time Delivery Rate — percentage of deliveries on time (target >95%)"
+      },
+      "kpi_roa": {
+        "title": "ROA",
+        "description": "Return on Assets — how efficiently assets generate profit"
+      },
+      "kpi_asset_turnover": {
+        "title": "Asset Turnover",
+        "description": "Revenue / Total Assets — asset efficiency ratio"
+      },
+      "kpi_opex_vs_capex": {
+        "title": "Cost Structure",
+        "description": "OPEX vs CAPEX breakdown with depreciation tracking"
+      },
+      "owner_intelligence": {
+        "title": "Owner Intelligence",
+        "description": "Auto-generated business health analysis, bottleneck detection, and actionable insights"
+      },
+      "crm_total_contacts": {
+        "title": "Total Contacts",
+        "description": "Total CRM contacts"
+      },
+      "crm_active_leads": {
+        "title": "Active Leads",
+        "description": "Active leads in the pipeline",
+        "thisMonth": "new this month"
+      },
+      "crm_leads_list": {
+        "title": "Recent Leads",
+        "description": "Latest leads visible in the current scope",
+        "noLeads": "No leads available in scope"
+      },
+      "crm_pipeline_summary": {
+        "title": "Pipeline Summary",
+        "description": "Open deals by stage, limited to the current scope",
+        "noPipelineData": "No pipeline items in scope"
+      },
+      "crm_activity_summary": {
+        "title": "Activity Summary",
+        "description": "CRM activities scheduled today",
+        "activitiesToday": "activities today"
+      },
+      "pos_outlet_sales": {
+        "title": "Outlet Sales",
+        "description": "Today's revenue, served orders, and waiting queue per outlet",
+        "allOutlets": "All Outlets",
+        "loadMore": "Load More",
+        "todayRevenue": "Today Revenue",
+        "todayOrders": "Today Orders",
+        "servedOrders": "Served Orders",
+        "waitingOrders": "Waiting Orders",
+        "warningOrders": "Warnings",
+        "outlet": "Outlet",
+        "revenue": "Revenue",
+        "orders": "Orders",
+        "tables": "Tables"
+      },
+      "pos_live_table_overview": {
+        "title": "Live Table Overview",
+        "description": "Real-time table occupancy and service queue across outlets",
+        "allOutlets": "All Outlets",
+        "loadMore": "Load More",
+        "focusedTitle": "Focused outlet",
+        "openLiveTable": "Open Live Table",
+        "tables": "Tables",
+        "loadingTables": "Loading tables...",
+        "noTableLabels": "No table labels available",
+        "occupancy": "Table Occupancy",
+        "served": "served",
+        "waiting": "waiting",
+        "warnings": "warnings",
+        "waitingShort": "{count} waiting",
+        "warningShort": "{count} warnings",
+        "ordersShort": "orders"
+      },
+      "pos_cash_control": {
+        "title": "Active Tables",
+        "description": "Realtime active table list aligned with POS Live Table status",
+        "allOutlets": "All Outlets",
+        "loadMore": "Load More",
+        "focus": "Focus",
+        "focusedTitle": "Focused outlet",
+        "openLiveTable": "Open Live Table",
+        "activeTables": "{count} active tables",
+        "totalActiveTables": "Total active tables: {count}",
+        "noActiveTables": "No active tables",
+        "activeSessions": "{count} active sessions",
+        "servedRate": "{rate}% served",
+        "expectedCash": "Expected Cash",
+        "actualCash": "Actual Cash",
+        "cashVariance": "Variance",
+        "cashSales": "Cash Sales",
+        "cashCover": "Cash coverage",
+        "served": "Served",
+        "waiting": "Waiting",
+        "warnings": "Warnings",
+        "tableCoverage": "{occupied}/{total} tables occupied",
+        "varianceAlert": "Cash variance detected",
+        "warningAlert": "Operational warning detected",
+        "varianceSummary": "Variance of {variance} requires review.",
+        "warningSummary": "{count} warning items need attention."
+      },
+      "hr_attendance_today": {
+        "title": "Attendance Today",
+        "description": "Today's employee attendance summary",
+        "present": "Present",
+        "late": "Late",
+        "absent": "Absent",
+        "attendanceRate": "Attendance Rate"
+      },
+      "hr_pending_leaves": {
+        "title": "Pending Leaves",
+        "description": "Leave requests awaiting approval",
+        "pendingRequests": "pending requests"
+      }
+    },
+    "ownerKpi": {
+      "intelligence": {
+        "title": "Owner Intelligence"
+      },
+      "opex_vs_capex": {
+        "title": "Cost Structure"
+      },
+      "noData": "No analysis data available",
+      "noCostData": "No cost data available",
+      "primaryBottleneck": "Primary Bottleneck",
+      "insightsRecommendations": "Insights & Recommendations",
+      "insights": {
+        "roe_low": {
+          "title": "ROE critically low",
+          "description": "Return on Equity is {formatted} — investors expect at least 15%.",
+          "action": "Review pricing strategy and cost structure to improve net profit."
+        },
+        "gpm_low": {
+          "title": "Gross margin too thin",
+          "description": "Gross Profit Margin is {formatted} — indicates COGS eating into revenue.",
+          "action": "Negotiate better supplier pricing or increase selling prices."
+        },
+        "dio_high": {
+          "title": "Inventory sitting too long",
+          "description": "DIO is {formatted} — stock takes too many days to sell.",
+          "action": "Run clearance promotions for slow-moving inventory. Review reorder points."
+        },
+        "ccc_danger": {
+          "title": "Cash Conversion Cycle is dangerously long",
+          "description": "CCC is {formatted} — cash is stuck in operations too long. This can kill your business.",
+          "action": "Accelerate AR collection, extend AP terms, reduce inventory days."
+        },
+        "ar_slow": {
+          "title": "Receivables collection is slow",
+          "description": "AR Days (DSO) is {formatted} — customers are paying too slowly.",
+          "action": "Enforce stricter payment terms. Follow up on overdue invoices."
+        },
+        "otd_low": {
+          "title": "On-Time Delivery below target",
+          "description": "OTD Rate is {formatted} — target is >95%.",
+          "action": "Review route planning and fleet capacity. Investigate delivery bottlenecks."
+        },
+        "asset_poor": {
+          "title": "Asset efficiency is poor",
+          "description": "ROA is {formatted} — assets are not generating enough profit.",
+          "action": "Evaluate underutilized assets. Consider leasing instead of owning."
+        },
+        "opex_high": {
+          "title": "OPEX ratio is high",
+          "description": "Operating expenses are {formatted} of total costs — review operational efficiency.",
+          "action": "Identify and reduce non-essential operating expenses."
+        }
+      },
+      "opex": "OPEX",
+      "capex": "CAPEX",
+      "depreciation": "Depreciation",
+      "opexBreakdown": "OPEX Breakdown",
+      "capexBreakdown": "CAPEX Breakdown",
+      "healthStatus": {
+        "good": "Healthy Business",
+        "warning": "Attention Needed",
+        "danger": "Critical Condition"
+      },
+      "healthSummaries": {
+        "good": "Business is in healthy condition. All key metrics are within acceptable ranges.",
+        "warning": "Business needs attention. Some KPIs show early warning signs that should be addressed.",
+        "danger": "Business health is critical. Multiple KPIs indicate significant problems requiring immediate action."
+      },
+      "bottleneckSummaries": {
+        "inventory": "Inventory management is the primary bottleneck. Stock is sitting too long and eating into cashflow.",
+        "cashflow": "Cashflow is the primary concern. Cash conversion cycle is too long — immediate action needed.",
+        "asset": "Asset efficiency is the main issue. High CAPEX but low returns from assets.",
+        "logistics": "Logistics performance is lagging. Delivery metrics are below target.",
+        "profitability": "Profitability is under pressure. Margins are thin and returns are below expectations.",
+        "cost": "Cost structure needs optimization. Operating expenses are disproportionately high."
+      },
+      "areas": {
+        "inventory": "Inventory",
+        "cashflow": "Cashflow",
+        "asset": "Asset",
+        "logistics": "Logistics",
+        "profitability": "Profitability",
+        "cost": "Cost"
+      },
+      "metrics": {
+        "kpi_ccc": {
+          "formula": "DIO + DSO - DPO",
+          "purpose": "Cash conversion cycle — how many days cash is tied up in operations. The smaller the better. Most critical KPI for business."
+        },
+        "kpi_dio": {
+          "formula": "(Inventory / COGS) x 365",
+          "purpose": "Average days stock is held before selling. Lower = more efficient inventory management."
+        },
+        "kpi_ar_days": {
+          "formula": "(Receivables / Revenue) x 365",
+          "purpose": "Average days to collect receivables (DSO). Lower = faster cash collection."
+        },
+        "kpi_ap_days": {
+          "formula": "(Payables / COGS) x 365",
+          "purpose": "Average days to pay suppliers (DPO). Higher = better cashflow leverage."
+        },
+        "kpi_roe": {
+          "formula": "Net Profit / Equity x 100",
+          "purpose": "Return on Equity — how effectively owner's money generates profit. Target min 15%."
+        },
+        "kpi_roa": {
+          "formula": "Net Profit / Total Assets x 100",
+          "purpose": "Return on Assets — how efficiently total assets generate profit."
+        },
+        "kpi_net_profit_margin": {
+          "formula": "Net Profit / Revenue x 100",
+          "purpose": "Percentage of revenue that becomes net profit after all expenses. Target min 10%."
+        },
+        "kpi_gross_profit_margin": {
+          "formula": "Gross Profit / Revenue x 100",
+          "purpose": "Gross margin — difference between revenue and COGS. Indicator of pricing power."
+        },
+        "kpi_inventory_turnover": {
+          "formula": "COGS / Average Inventory",
+          "purpose": "How many times inventory is sold out in a year. Higher = fast stock rotation."
+        },
+        "kpi_asset_turnover": {
+          "formula": "Revenue / Total Assets",
+          "purpose": "How efficiently assets are used to generate revenue."
+        },
+        "kpi_cost_per_delivery": {
+          "formula": "Total Delivery Cost / Delivery Count",
+          "purpose": "Average cost per delivery. Monitor logistics operation efficiency."
+        },
+        "kpi_utilization_rate": {
+          "formula": "Actual Usage / Total Capacity x 100",
+          "purpose": "Fleet/capacity utilization rate. Target > 80%."
+        },
+        "kpi_otd_rate": {
+          "formula": "On-Time Delivery / Total Delivery x 100",
+          "purpose": "Percentage of deliveries on time. Target > 95%."
+        },
+        "kpi_opex_vs_capex": {
+          "formula": "OPEX vs CAPEX",
+          "purpose": "OPEX = operating expenses (salaries, rent, fuel). CAPEX = capital expenditures (trucks, equipment). Track depreciation for owner insight."
+        }
+      }
+    },
+    "approvals": {
+      "tabs": {
+        "quotations": "Quotations",
+        "salesOrders": "Sales Orders",
+        "deliveryOrders": "Delivery Orders",
+        "customerInvoices": "Invoices",
+        "requisitions": "Requisitions",
+        "purchaseOrders": "PO",
+        "goodsReceipts": "Goods Receipts",
+        "supplierInvoices": "Supplier Invoices"
+      },
+      "actions": {
+        "reviewNow": "Review Now",
+        "openModule": "Open Module"
+      },
+      "pendingCount": "Pending:",
+      "empty": "No pending approvals"
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "gims",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:web": "cd apps/web && pnpm dev",
+    "dev:web:setup": "cd apps/web && pnpm install",
+    "dev:web:clean": "cd apps/web && pnpm clean:cache",
+    "dev:api": "cd apps/api && docker compose down -v && docker compose up -d",
+    "dev:db": "cd apps/api && docker compose down -v && docker compose up -d postgres redis",
+    "dev:api:local": "cd apps/api && air",
+    "dev:local": "pnpm run dev:db & pnpm run dev:api:local",
+    "dev:web-api": "pnpm run dev:api & pnpm run dev:web",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "type-check": "turbo run check-types && turbo run lint --filter=@repo/web",
+    "test": "turbo run test",
+    "clean": "turbo run clean",
+    "k6:profiler": "k6 run --out json=k6/reports/profiler-$(date +%Y%m%d-%H%M%S).json k6/tests/endpoint-profiler.js",
+    "k6:profiler:local": "k6 run -e RELAXED=1 --out json=k6/reports/profiler-$(date +%Y%m%d-%H%M%S).json k6/tests/endpoint-profiler.js",
+    "k6:analyze": "node k6/scripts/analyze-report.js"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "prettier": "^3.6.2",
+    "turbo": "^2.9.14",
+    "typescript": "5.9.2"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@types/leaflet": "^1.9.21",
+    "leaflet": "^1.9.4",
+    "react-leaflet": "^5.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "ajv": "6.14.0",
+      "brace-expansion": "5.0.5",
+      "flatted": "3.4.2",
+      "minimatch": "9.0.7",
+      "picomatch": "4.0.4",
+      "js-yaml": "4.1.1",
+      "postcss": "8.5.10"
+    }
+  }
+}

@@ -1,0 +1,3394 @@
+{
+  "title": "DYNAMIC MENUS",
+  "description": "A comprehensive guide to the Dynamic Menus API response.",
+  "sections": [
+    {
+      "title": "GET DATA MENUS",
+      "endpoint": "GET {{base_url}}/auth/menus",
+      "response": {
+        "data": {
+          "menus": [
+            {
+              "id": 1,
+              "name": "Data Master",
+              "icon": "database",
+              "url": "/data-master",
+              "children": [
+                {
+                  "id": 2,
+                  "name": "Company Management",
+                  "icon": "building",
+                  "url": "/data-master/company",
+                  "children": [
+                    {
+                      "id": 8,
+                      "name": "Company",
+                      "icon": "building",
+                      "url": "/data-master/company/company",
+                      "actions": [
+                        {
+                          "id": 3,
+                          "code": "VIEW",
+                          "name": "View Company",
+                          "access": true
+                        },
+                        {
+                          "id": 4,
+                          "code": "CREATE",
+                          "name": "Create Company",
+                          "access": true
+                        },
+                        {
+                          "id": 5,
+                          "code": "EDIT",
+                          "name": "Edit Company",
+                          "access": true
+                        },
+                        {
+                          "id": 6,
+                          "code": "DELETE",
+                          "name": "Delete Company",
+                          "access": true
+                        },
+                        {
+                          "id": 7,
+                          "code": "DETAIL",
+                          "name": "Detail Company",
+                          "access": true
+                        },
+                        {
+                          "id": 8,
+                          "code": "IMPORT",
+                          "name": "Import Company",
+                          "access": true
+                        },
+                        {
+                          "id": 9,
+                          "code": "EXPORT",
+                          "name": "Export Company",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 9,
+                      "name": "Division",
+                      "icon": "grid",
+                      "url": "/data-master/company/division",
+                      "actions": [
+                        {
+                          "id": 10,
+                          "code": "VIEW",
+                          "name": "View Division",
+                          "access": true
+                        },
+                        {
+                          "id": 11,
+                          "code": "CREATE",
+                          "name": "Create Division",
+                          "access": true
+                        },
+                        {
+                          "id": 12,
+                          "code": "EDIT",
+                          "name": "Edit Division",
+                          "access": true
+                        },
+                        {
+                          "id": 13,
+                          "code": "DELETE",
+                          "name": "Delete Division",
+                          "access": true
+                        },
+                        {
+                          "id": 14,
+                          "code": "DETAIL",
+                          "name": "Detail Division",
+                          "access": true
+                        },
+                        {
+                          "id": 15,
+                          "code": "IMPORT",
+                          "name": "Import Division",
+                          "access": true
+                        },
+                        {
+                          "id": 16,
+                          "code": "EXPORT",
+                          "name": "Export Division",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 10,
+                      "name": "Job Position",
+                      "icon": "briefcase",
+                      "url": "/data-master/company/job-position",
+                      "actions": [
+                        {
+                          "id": 17,
+                          "code": "VIEW",
+                          "name": "View Job Position",
+                          "access": true
+                        },
+                        {
+                          "id": 18,
+                          "code": "CREATE",
+                          "name": "Create Job Position",
+                          "access": true
+                        },
+                        {
+                          "id": 19,
+                          "code": "EDIT",
+                          "name": "Edit Job Position",
+                          "access": true
+                        },
+                        {
+                          "id": 20,
+                          "code": "DELETE",
+                          "name": "Delete Job Position",
+                          "access": true
+                        },
+                        {
+                          "id": 21,
+                          "code": "DETAIL",
+                          "name": "Detail Job Position",
+                          "access": true
+                        },
+                        {
+                          "id": 22,
+                          "code": "IMPORT",
+                          "name": "Import Job Position",
+                          "access": true
+                        },
+                        {
+                          "id": 23,
+                          "code": "EXPORT",
+                          "name": "Export Job Position",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 11,
+                      "name": "Employee",
+                      "icon": "user",
+                      "url": "/data-master/company/employee",
+                      "actions": [
+                        {
+                          "id": 24,
+                          "code": "VIEW",
+                          "name": "View Employee",
+                          "access": true
+                        },
+                        {
+                          "id": 25,
+                          "code": "CREATE",
+                          "name": "Create Employee",
+                          "access": true
+                        },
+                        {
+                          "id": 26,
+                          "code": "EDIT",
+                          "name": "Edit Employee",
+                          "access": true
+                        },
+                        {
+                          "id": 27,
+                          "code": "DELETE",
+                          "name": "Delete Employee",
+                          "access": true
+                        },
+                        {
+                          "id": 28,
+                          "code": "DETAIL",
+                          "name": "Detail Employee",
+                          "access": true
+                        },
+                        {
+                          "id": 29,
+                          "code": "IMPORT",
+                          "name": "Import Employee",
+                          "access": true
+                        },
+                        {
+                          "id": 30,
+                          "code": "EXPORT",
+                          "name": "Export Employee",
+                          "access": true
+                        }
+                      ]
+                    }
+                  ],
+                  "actions": [
+                    {
+                      "id": 2,
+                      "code": "VIEW",
+                      "name": "View Company Management",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 3,
+                  "name": "User Management",
+                  "icon": "users",
+                  "url": "/data-master/user-management",
+                  "children": [
+                    {
+                      "id": 12,
+                      "name": "User",
+                      "icon": "user",
+                      "url": "/data-master/user-management/user",
+                      "actions": [
+                        {
+                          "id": 32,
+                          "code": "VIEW",
+                          "name": "View User",
+                          "access": true
+                        },
+                        {
+                          "id": 33,
+                          "code": "CREATE",
+                          "name": "Create User",
+                          "access": true
+                        },
+                        {
+                          "id": 34,
+                          "code": "EDIT",
+                          "name": "Edit User",
+                          "access": true
+                        },
+                        {
+                          "id": 35,
+                          "code": "DELETE",
+                          "name": "Delete User",
+                          "access": true
+                        },
+                        {
+                          "id": 36,
+                          "code": "DETAIL",
+                          "name": "Detail User",
+                          "access": true
+                        },
+                        {
+                          "id": 37,
+                          "code": "IMPORT",
+                          "name": "Import User",
+                          "access": true
+                        },
+                        {
+                          "id": 38,
+                          "code": "EXPORT",
+                          "name": "Export User",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 13,
+                      "name": "Role",
+                      "icon": "shield",
+                      "url": "/data-master/user-management/role",
+                      "actions": [
+                        {
+                          "id": 39,
+                          "code": "VIEW",
+                          "name": "View Role",
+                          "access": true
+                        },
+                        {
+                          "id": 40,
+                          "code": "CREATE",
+                          "name": "Create Role",
+                          "access": true
+                        },
+                        {
+                          "id": 41,
+                          "code": "EDIT",
+                          "name": "Edit Role",
+                          "access": true
+                        },
+                        {
+                          "id": 42,
+                          "code": "DELETE",
+                          "name": "Delete Role",
+                          "access": true
+                        },
+                        {
+                          "id": 43,
+                          "code": "DETAIL",
+                          "name": "Detail Role",
+                          "access": true
+                        },
+                        {
+                          "id": 44,
+                          "code": "IMPORT",
+                          "name": "Import Role",
+                          "access": true
+                        },
+                        {
+                          "id": 45,
+                          "code": "EXPORT",
+                          "name": "Export Role",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 14,
+                      "name": "Menu",
+                      "icon": "menu",
+                      "url": "/data-master/user-management/menu",
+                      "actions": [
+                        {
+                          "id": 46,
+                          "code": "VIEW",
+                          "name": "View Menu",
+                          "access": true
+                        },
+                        {
+                          "id": 47,
+                          "code": "CREATE",
+                          "name": "Create Menu",
+                          "access": true
+                        },
+                        {
+                          "id": 48,
+                          "code": "EDIT",
+                          "name": "Edit Menu",
+                          "access": true
+                        },
+                        {
+                          "id": 49,
+                          "code": "DELETE",
+                          "name": "Delete Menu",
+                          "access": true
+                        },
+                        {
+                          "id": 50,
+                          "code": "DETAIL",
+                          "name": "Detail Menu",
+                          "access": true
+                        },
+                        {
+                          "id": 51,
+                          "code": "IMPORT",
+                          "name": "Import Menu",
+                          "access": true
+                        },
+                        {
+                          "id": 52,
+                          "code": "EXPORT",
+                          "name": "Export Menu",
+                          "access": true
+                        }
+                      ]
+                    }
+                  ],
+                  "actions": [
+                    {
+                      "id": 31,
+                      "code": "VIEW",
+                      "name": "View User Management",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 4,
+                  "name": "Partner & Relation",
+                  "icon": "handshake",
+                  "url": "/data-master/partner",
+                  "children": [
+                    {
+                      "id": 15,
+                      "name": "Customer",
+                      "icon": "users",
+                      "url": "/data-master/partner/customer",
+                      "actions": [
+                        {
+                          "id": 54,
+                          "code": "VIEW",
+                          "name": "View Customer",
+                          "access": true
+                        },
+                        {
+                          "id": 55,
+                          "code": "CREATE",
+                          "name": "Create Customer",
+                          "access": true
+                        },
+                        {
+                          "id": 56,
+                          "code": "EDIT",
+                          "name": "Edit Customer",
+                          "access": true
+                        },
+                        {
+                          "id": 57,
+                          "code": "DELETE",
+                          "name": "Delete Customer",
+                          "access": true
+                        },
+                        {
+                          "id": 58,
+                          "code": "DETAIL",
+                          "name": "Detail Customer",
+                          "access": true
+                        },
+                        {
+                          "id": 59,
+                          "code": "IMPORT",
+                          "name": "Import Customer",
+                          "access": true
+                        },
+                        {
+                          "id": 60,
+                          "code": "EXPORT",
+                          "name": "Export Customer",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 16,
+                      "name": "Customer Type",
+                      "icon": "tag",
+                      "url": "/data-master/partner/customer-type",
+                      "actions": [
+                        {
+                          "id": 68,
+                          "code": "VIEW",
+                          "name": "View Customer Type",
+                          "access": true
+                        },
+                        {
+                          "id": 69,
+                          "code": "CREATE",
+                          "name": "Create Customer Type",
+                          "access": true
+                        },
+                        {
+                          "id": 70,
+                          "code": "EDIT",
+                          "name": "Edit Customer Type",
+                          "access": true
+                        },
+                        {
+                          "id": 71,
+                          "code": "DELETE",
+                          "name": "Delete Customer Type",
+                          "access": true
+                        },
+                        {
+                          "id": 72,
+                          "code": "DETAIL",
+                          "name": "Detail Customer Type",
+                          "access": true
+                        },
+                        {
+                          "id": 73,
+                          "code": "IMPORT",
+                          "name": "Import Customer Type",
+                          "access": true
+                        },
+                        {
+                          "id": 74,
+                          "code": "EXPORT",
+                          "name": "Export Customer Type",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 17,
+                      "name": "Customer Segment",
+                      "icon": "layers",
+                      "url": "/data-master/partner/customer-segment",
+                      "actions": [
+                        {
+                          "id": 75,
+                          "code": "VIEW",
+                          "name": "View Customer Segment",
+                          "access": true
+                        },
+                        {
+                          "id": 76,
+                          "code": "CREATE",
+                          "name": "Create Customer Segment",
+                          "access": true
+                        },
+                        {
+                          "id": 77,
+                          "code": "EDIT",
+                          "name": "Edit Customer Segment",
+                          "access": true
+                        },
+                        {
+                          "id": 78,
+                          "code": "DELETE",
+                          "name": "Delete Customer Segment",
+                          "access": true
+                        },
+                        {
+                          "id": 79,
+                          "code": "DETAIL",
+                          "name": "Detail Customer Segment",
+                          "access": true
+                        },
+                        {
+                          "id": 80,
+                          "code": "IMPORT",
+                          "name": "Import Customer Segment",
+                          "access": true
+                        },
+                        {
+                          "id": 81,
+                          "code": "EXPORT",
+                          "name": "Export Customer Segment",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 18,
+                      "name": "Procurement Type",
+                      "icon": "shopping-cart",
+                      "url": "/data-master/partner/procurement-type",
+                      "actions": [
+                        {
+                          "id": 82,
+                          "code": "VIEW",
+                          "name": "View Procurement Type",
+                          "access": true
+                        },
+                        {
+                          "id": 83,
+                          "code": "CREATE",
+                          "name": "Create Procurement Type",
+                          "access": true
+                        },
+                        {
+                          "id": 84,
+                          "code": "EDIT",
+                          "name": "Edit Procurement Type",
+                          "access": true
+                        },
+                        {
+                          "id": 85,
+                          "code": "DELETE",
+                          "name": "Delete Procurement Type",
+                          "access": true
+                        },
+                        {
+                          "id": 86,
+                          "code": "DETAIL",
+                          "name": "Detail Procurement Type",
+                          "access": true
+                        },
+                        {
+                          "id": 87,
+                          "code": "IMPORT",
+                          "name": "Import Procurement Type",
+                          "access": true
+                        },
+                        {
+                          "id": 88,
+                          "code": "EXPORT",
+                          "name": "Export Procurement Type",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 19,
+                      "name": "Supplier",
+                      "icon": "truck",
+                      "url": "/data-master/partner/supplier",
+                      "actions": [
+                        {
+                          "id": 61,
+                          "code": "VIEW",
+                          "name": "View Supplier",
+                          "access": true
+                        },
+                        {
+                          "id": 62,
+                          "code": "CREATE",
+                          "name": "Create Supplier",
+                          "access": true
+                        },
+                        {
+                          "id": 63,
+                          "code": "EDIT",
+                          "name": "Edit Supplier",
+                          "access": true
+                        },
+                        {
+                          "id": 64,
+                          "code": "DELETE",
+                          "name": "Delete Supplier",
+                          "access": true
+                        },
+                        {
+                          "id": 65,
+                          "code": "DETAIL",
+                          "name": "Detail Supplier",
+                          "access": true
+                        },
+                        {
+                          "id": 66,
+                          "code": "IMPORT",
+                          "name": "Import Supplier",
+                          "access": true
+                        },
+                        {
+                          "id": 67,
+                          "code": "EXPORT",
+                          "name": "Export Supplier",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 20,
+                      "name": "Supplier Type",
+                      "icon": "tag",
+                      "url": "/data-master/partner/supplier-type",
+                      "actions": [
+                        {
+                          "id": 89,
+                          "code": "VIEW",
+                          "name": "View Supplier Type",
+                          "access": true
+                        },
+                        {
+                          "id": 90,
+                          "code": "CREATE",
+                          "name": "Create Supplier Type",
+                          "access": true
+                        },
+                        {
+                          "id": 91,
+                          "code": "EDIT",
+                          "name": "Edit Supplier Type",
+                          "access": true
+                        },
+                        {
+                          "id": 92,
+                          "code": "DELETE",
+                          "name": "Delete Supplier Type",
+                          "access": true
+                        },
+                        {
+                          "id": 93,
+                          "code": "DETAIL",
+                          "name": "Detail Supplier Type",
+                          "access": true
+                        },
+                        {
+                          "id": 94,
+                          "code": "IMPORT",
+                          "name": "Import Supplier Type",
+                          "access": true
+                        },
+                        {
+                          "id": 95,
+                          "code": "EXPORT",
+                          "name": "Export Supplier Type",
+                          "access": true
+                        }
+                      ]
+                    }
+                  ],
+                  "actions": [
+                    {
+                      "id": 53,
+                      "code": "VIEW",
+                      "name": "View Partner & Relation",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 5,
+                  "name": "Product",
+                  "icon": "package",
+                  "url": "/data-master/product",
+                  "children": [
+                    {
+                      "id": 23,
+                      "name": "Business Units",
+                      "icon": "building-2",
+                      "url": "/data-master/product/business-units",
+                      "actions": [
+                        {
+                          "id": 97,
+                          "code": "VIEW",
+                          "name": "View Business Units",
+                          "access": true
+                        },
+                        {
+                          "id": 98,
+                          "code": "CREATE",
+                          "name": "Create Business Units",
+                          "access": true
+                        },
+                        {
+                          "id": 99,
+                          "code": "EDIT",
+                          "name": "Edit Business Units",
+                          "access": true
+                        },
+                        {
+                          "id": 100,
+                          "code": "DELETE",
+                          "name": "Delete Business Units",
+                          "access": true
+                        },
+                        {
+                          "id": 101,
+                          "code": "DETAIL",
+                          "name": "Detail Business Units",
+                          "access": true
+                        },
+                        {
+                          "id": 102,
+                          "code": "IMPORT",
+                          "name": "Import Business Units",
+                          "access": true
+                        },
+                        {
+                          "id": 103,
+                          "code": "EXPORT",
+                          "name": "Export Business Units",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 24,
+                      "name": "Product Segment",
+                      "icon": "layers",
+                      "url": "/data-master/product/product-segment",
+                      "actions": [
+                        {
+                          "id": 104,
+                          "code": "VIEW",
+                          "name": "View Product Segment",
+                          "access": true
+                        },
+                        {
+                          "id": 105,
+                          "code": "CREATE",
+                          "name": "Create Product Segment",
+                          "access": true
+                        },
+                        {
+                          "id": 106,
+                          "code": "EDIT",
+                          "name": "Edit Product Segment",
+                          "access": true
+                        },
+                        {
+                          "id": 107,
+                          "code": "DELETE",
+                          "name": "Delete Product Segment",
+                          "access": true
+                        },
+                        {
+                          "id": 108,
+                          "code": "DETAIL",
+                          "name": "Detail Product Segment",
+                          "access": true
+                        },
+                        {
+                          "id": 109,
+                          "code": "IMPORT",
+                          "name": "Import Product Segment",
+                          "access": true
+                        },
+                        {
+                          "id": 110,
+                          "code": "EXPORT",
+                          "name": "Export Product Segment",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 25,
+                      "name": "Product Category",
+                      "icon": "tag",
+                      "url": "/data-master/product/category",
+                      "actions": [
+                        {
+                          "id": 111,
+                          "code": "VIEW",
+                          "name": "View Product Category",
+                          "access": true
+                        },
+                        {
+                          "id": 112,
+                          "code": "CREATE",
+                          "name": "Create Product Category",
+                          "access": true
+                        },
+                        {
+                          "id": 113,
+                          "code": "EDIT",
+                          "name": "Edit Product Category",
+                          "access": true
+                        },
+                        {
+                          "id": 114,
+                          "code": "DELETE",
+                          "name": "Delete Product Category",
+                          "access": true
+                        },
+                        {
+                          "id": 115,
+                          "code": "DETAIL",
+                          "name": "Detail Product Category",
+                          "access": true
+                        },
+                        {
+                          "id": 116,
+                          "code": "IMPORT",
+                          "name": "Import Product Category",
+                          "access": true
+                        },
+                        {
+                          "id": 117,
+                          "code": "EXPORT",
+                          "name": "Export Product Category",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 26,
+                      "name": "Product Type",
+                      "icon": "package",
+                      "url": "/data-master/product/product-type",
+                      "actions": [
+                        {
+                          "id": 118,
+                          "code": "VIEW",
+                          "name": "View Product Type",
+                          "access": true
+                        },
+                        {
+                          "id": 119,
+                          "code": "CREATE",
+                          "name": "Create Product Type",
+                          "access": true
+                        },
+                        {
+                          "id": 120,
+                          "code": "EDIT",
+                          "name": "Edit Product Type",
+                          "access": true
+                        },
+                        {
+                          "id": 121,
+                          "code": "DELETE",
+                          "name": "Delete Product Type",
+                          "access": true
+                        },
+                        {
+                          "id": 122,
+                          "code": "DETAIL",
+                          "name": "Detail Product Type",
+                          "access": true
+                        },
+                        {
+                          "id": 123,
+                          "code": "IMPORT",
+                          "name": "Import Product Type",
+                          "access": true
+                        },
+                        {
+                          "id": 124,
+                          "code": "EXPORT",
+                          "name": "Export Product Type",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 27,
+                      "name": "Unit Of Measure",
+                      "icon": "ruler",
+                      "url": "/data-master/product/unit-measure",
+                      "actions": [
+                        {
+                          "id": 125,
+                          "code": "VIEW",
+                          "name": "View Unit Of Measure",
+                          "access": true
+                        },
+                        {
+                          "id": 126,
+                          "code": "CREATE",
+                          "name": "Create Unit Of Measure",
+                          "access": true
+                        },
+                        {
+                          "id": 127,
+                          "code": "EDIT",
+                          "name": "Edit Unit Of Measure",
+                          "access": true
+                        },
+                        {
+                          "id": 128,
+                          "code": "DELETE",
+                          "name": "Delete Unit Of Measure",
+                          "access": true
+                        },
+                        {
+                          "id": 129,
+                          "code": "DETAIL",
+                          "name": "Detail Unit Of Measure",
+                          "access": true
+                        },
+                        {
+                          "id": 130,
+                          "code": "IMPORT",
+                          "name": "Import Unit Of Measure",
+                          "access": true
+                        },
+                        {
+                          "id": 131,
+                          "code": "EXPORT",
+                          "name": "Export Unit Of Measure",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 28,
+                      "name": "Product",
+                      "icon": "box",
+                      "url": "/data-master/product/item",
+                      "actions": [
+                        {
+                          "id": 132,
+                          "code": "VIEW",
+                          "name": "View Product Item",
+                          "access": true
+                        },
+                        {
+                          "id": 133,
+                          "code": "CREATE",
+                          "name": "Create Product Item",
+                          "access": true
+                        },
+                        {
+                          "id": 134,
+                          "code": "EDIT",
+                          "name": "Edit Product Item",
+                          "access": true
+                        },
+                        {
+                          "id": 135,
+                          "code": "DELETE",
+                          "name": "Delete Product Item",
+                          "access": true
+                        },
+                        {
+                          "id": 136,
+                          "code": "DETAIL",
+                          "name": "Detail Product Item",
+                          "access": true
+                        },
+                        {
+                          "id": 137,
+                          "code": "IMPORT",
+                          "name": "Import Product Item",
+                          "access": true
+                        },
+                        {
+                          "id": 138,
+                          "code": "EXPORT",
+                          "name": "Export Product Item",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 29,
+                      "name": "Warehouse",
+                      "icon": "warehouse",
+                      "url": "/data-master/product/warehouse",
+                      "actions": [
+                        {
+                          "id": 139,
+                          "code": "VIEW",
+                          "name": "View Warehouse",
+                          "access": true
+                        },
+                        {
+                          "id": 140,
+                          "code": "CREATE",
+                          "name": "Create Warehouse",
+                          "access": true
+                        },
+                        {
+                          "id": 141,
+                          "code": "EDIT",
+                          "name": "Edit Warehouse",
+                          "access": true
+                        },
+                        {
+                          "id": 142,
+                          "code": "DELETE",
+                          "name": "Delete Warehouse",
+                          "access": true
+                        },
+                        {
+                          "id": 143,
+                          "code": "DETAIL",
+                          "name": "Detail Warehouse",
+                          "access": true
+                        },
+                        {
+                          "id": 144,
+                          "code": "EXPORT",
+                          "name": "Export Warehouse",
+                          "access": true
+                        },
+                        {
+                          "id": 145,
+                          "code": "PRINT",
+                          "name": "Print Warehouse",
+                          "access": true
+                        },
+                        {
+                          "id": 146,
+                          "code": "IMPORT",
+                          "name": "Import Warehouse",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 30,
+                      "name": "Inventory Batch",
+                      "icon": "layers",
+                      "url": "/data-master/product/inventory-batch",
+                      "actions": [
+                        {
+                          "id": 147,
+                          "code": "VIEW",
+                          "name": "View Inventory Batch",
+                          "access": true
+                        },
+                        {
+                          "id": 148,
+                          "code": "CREATE",
+                          "name": "Create Inventory Batch",
+                          "access": true
+                        },
+                        {
+                          "id": 149,
+                          "code": "EDIT",
+                          "name": "Edit Inventory Batch",
+                          "access": true
+                        },
+                        {
+                          "id": 150,
+                          "code": "DELETE",
+                          "name": "Delete Inventory Batch",
+                          "access": true
+                        },
+                        {
+                          "id": 151,
+                          "code": "DETAIL",
+                          "name": "Detail Inventory Batch",
+                          "access": true
+                        },
+                        {
+                          "id": 152,
+                          "code": "IMPORT",
+                          "name": "Import Inventory Batch",
+                          "access": true
+                        },
+                        {
+                          "id": 153,
+                          "code": "EXPORT",
+                          "name": "Export Inventory Batch",
+                          "access": true
+                        }
+                      ]
+                    }
+                  ],
+                  "actions": [
+                    {
+                      "id": 96,
+                      "code": "VIEW",
+                      "name": "View Product",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 6,
+                  "name": "Finance",
+                  "icon": "dollar-sign",
+                  "url": "/data-master/finance",
+                  "children": [
+                    {
+                      "id": 21,
+                      "name": "Bank Account",
+                      "icon": "credit-card",
+                      "url": "/data-master/finance/bank-account",
+                      "actions": [
+                        {
+                          "id": 155,
+                          "code": "VIEW",
+                          "name": "View Bank Account",
+                          "access": true
+                        },
+                        {
+                          "id": 156,
+                          "code": "CREATE",
+                          "name": "Create Bank Account",
+                          "access": true
+                        },
+                        {
+                          "id": 157,
+                          "code": "EDIT",
+                          "name": "Edit Bank Account",
+                          "access": true
+                        },
+                        {
+                          "id": 158,
+                          "code": "DELETE",
+                          "name": "Delete Bank Account",
+                          "access": true
+                        },
+                        {
+                          "id": 159,
+                          "code": "DETAIL",
+                          "name": "Detail Bank Account",
+                          "access": true
+                        },
+                        {
+                          "id": 160,
+                          "code": "IMPORT",
+                          "name": "Import Bank Account",
+                          "access": true
+                        },
+                        {
+                          "id": 161,
+                          "code": "EXPORT",
+                          "name": "Export Bank Account",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 22,
+                      "name": "Payment Terms",
+                      "icon": "clock",
+                      "url": "/data-master/finance/payment-terms",
+                      "actions": [
+                        {
+                          "id": 162,
+                          "code": "VIEW",
+                          "name": "View Payment Terms",
+                          "access": true
+                        },
+                        {
+                          "id": 163,
+                          "code": "CREATE",
+                          "name": "Create Payment Terms",
+                          "access": true
+                        },
+                        {
+                          "id": 164,
+                          "code": "EDIT",
+                          "name": "Edit Payment Terms",
+                          "access": true
+                        },
+                        {
+                          "id": 165,
+                          "code": "DELETE",
+                          "name": "Delete Payment Terms",
+                          "access": true
+                        },
+                        {
+                          "id": 166,
+                          "code": "DETAIL",
+                          "name": "Detail Payment Terms",
+                          "access": true
+                        },
+                        {
+                          "id": 167,
+                          "code": "IMPORT",
+                          "name": "Import Payment Terms",
+                          "access": true
+                        },
+                        {
+                          "id": 168,
+                          "code": "EXPORT",
+                          "name": "Export Payment Terms",
+                          "access": true
+                        }
+                      ]
+                    }
+                  ],
+                  "actions": [
+                    {
+                      "id": 154,
+                      "code": "VIEW",
+                      "name": "View Finance",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 7,
+                  "name": "System Configuration",
+                  "icon": "settings",
+                  "url": "/data-master/system",
+                  "children": [
+                    {
+                      "id": 31,
+                      "name": "Area",
+                      "icon": "map",
+                      "url": "/data-master/system/area",
+                      "actions": [
+                        {
+                          "id": 170,
+                          "code": "VIEW",
+                          "name": "View Area",
+                          "access": true
+                        },
+                        {
+                          "id": 171,
+                          "code": "CREATE",
+                          "name": "Create Area",
+                          "access": true
+                        },
+                        {
+                          "id": 172,
+                          "code": "EDIT",
+                          "name": "Edit Area",
+                          "access": true
+                        },
+                        {
+                          "id": 173,
+                          "code": "DELETE",
+                          "name": "Delete Area",
+                          "access": true
+                        },
+                        {
+                          "id": 174,
+                          "code": "DETAIL",
+                          "name": "Detail Area",
+                          "access": true
+                        },
+                        {
+                          "id": 175,
+                          "code": "IMPORT",
+                          "name": "Import Area",
+                          "access": true
+                        },
+                        {
+                          "id": 176,
+                          "code": "EXPORT",
+                          "name": "Export Area",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 32,
+                      "name": "City",
+                      "icon": "map-pin",
+                      "url": "/data-master/system/city",
+                      "actions": [
+                        {
+                          "id": 177,
+                          "code": "VIEW",
+                          "name": "View City",
+                          "access": true
+                        },
+                        {
+                          "id": 178,
+                          "code": "CREATE",
+                          "name": "Create City",
+                          "access": true
+                        },
+                        {
+                          "id": 179,
+                          "code": "EDIT",
+                          "name": "Edit City",
+                          "access": true
+                        },
+                        {
+                          "id": 180,
+                          "code": "DELETE",
+                          "name": "Delete City",
+                          "access": true
+                        },
+                        {
+                          "id": 181,
+                          "code": "DETAIL",
+                          "name": "Detail City",
+                          "access": true
+                        },
+                        {
+                          "id": 182,
+                          "code": "IMPORT",
+                          "name": "Import City",
+                          "access": true
+                        },
+                        {
+                          "id": 183,
+                          "code": "EXPORT",
+                          "name": "Export City",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 33,
+                      "name": "District",
+                      "icon": "map",
+                      "url": "/data-master/system/district",
+                      "actions": [
+                        {
+                          "id": 198,
+                          "code": "VIEW",
+                          "name": "View District",
+                          "access": true
+                        },
+                        {
+                          "id": 199,
+                          "code": "CREATE",
+                          "name": "Create District",
+                          "access": true
+                        },
+                        {
+                          "id": 200,
+                          "code": "EDIT",
+                          "name": "Edit District",
+                          "access": true
+                        },
+                        {
+                          "id": 201,
+                          "code": "DELETE",
+                          "name": "Delete District",
+                          "access": true
+                        },
+                        {
+                          "id": 202,
+                          "code": "DETAIL",
+                          "name": "Detail District",
+                          "access": true
+                        },
+                        {
+                          "id": 203,
+                          "code": "IMPORT",
+                          "name": "Import District",
+                          "access": true
+                        },
+                        {
+                          "id": 204,
+                          "code": "EXPORT",
+                          "name": "Export District",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 34,
+                      "name": "Village",
+                      "icon": "home",
+                      "url": "/data-master/system/village",
+                      "actions": [
+                        {
+                          "id": 205,
+                          "code": "VIEW",
+                          "name": "View Village",
+                          "access": true
+                        },
+                        {
+                          "id": 206,
+                          "code": "CREATE",
+                          "name": "Create Village",
+                          "access": true
+                        },
+                        {
+                          "id": 207,
+                          "code": "EDIT",
+                          "name": "Edit Village",
+                          "access": true
+                        },
+                        {
+                          "id": 208,
+                          "code": "DELETE",
+                          "name": "Delete Village",
+                          "access": true
+                        },
+                        {
+                          "id": 209,
+                          "code": "DETAIL",
+                          "name": "Detail Village",
+                          "access": true
+                        },
+                        {
+                          "id": 210,
+                          "code": "IMPORT",
+                          "name": "Import Village",
+                          "access": true
+                        },
+                        {
+                          "id": 211,
+                          "code": "EXPORT",
+                          "name": "Export Village",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 35,
+                      "name": "Chart Of Account",
+                      "icon": "pie-chart",
+                      "url": "/data-master/system/chart-account",
+                      "actions": [
+                        {
+                          "id": 184,
+                          "code": "VIEW",
+                          "name": "View Chart Of Account",
+                          "access": true
+                        },
+                        {
+                          "id": 185,
+                          "code": "CREATE",
+                          "name": "Create Chart Of Account",
+                          "access": true
+                        },
+                        {
+                          "id": 186,
+                          "code": "EDIT",
+                          "name": "Edit Chart Of Account",
+                          "access": true
+                        },
+                        {
+                          "id": 187,
+                          "code": "DELETE",
+                          "name": "Delete Chart Of Account",
+                          "access": true
+                        },
+                        {
+                          "id": 188,
+                          "code": "DETAIL",
+                          "name": "Detail Chart Of Account",
+                          "access": true
+                        },
+                        {
+                          "id": 189,
+                          "code": "IMPORT",
+                          "name": "Import Chart Of Account",
+                          "access": true
+                        },
+                        {
+                          "id": 190,
+                          "code": "EXPORT",
+                          "name": "Export Chart Of Account",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 36,
+                      "name": "Provinces",
+                      "icon": "globe",
+                      "url": "/data-master/system/provinces",
+                      "actions": [
+                        {
+                          "id": 191,
+                          "code": "VIEW",
+                          "name": "View Provinces",
+                          "access": true
+                        },
+                        {
+                          "id": 192,
+                          "code": "CREATE",
+                          "name": "Create Provinces",
+                          "access": true
+                        },
+                        {
+                          "id": 193,
+                          "code": "EDIT",
+                          "name": "Edit Provinces",
+                          "access": true
+                        },
+                        {
+                          "id": 194,
+                          "code": "DELETE",
+                          "name": "Delete Provinces",
+                          "access": true
+                        },
+                        {
+                          "id": 195,
+                          "code": "DETAIL",
+                          "name": "Detail Provinces",
+                          "access": true
+                        },
+                        {
+                          "id": 196,
+                          "code": "IMPORT",
+                          "name": "Import Provinces",
+                          "access": true
+                        },
+                        {
+                          "id": 197,
+                          "code": "EXPORT",
+                          "name": "Export Provinces",
+                          "access": true
+                        }
+                      ]
+                    }
+                  ],
+                  "actions": [
+                    {
+                      "id": 169,
+                      "code": "VIEW",
+                      "name": "View System Configuration",
+                      "access": true
+                    }
+                  ]
+                }
+              ],
+              "actions": [
+                {
+                  "id": 1,
+                  "code": "VIEW",
+                  "name": "View Data Master",
+                  "access": true
+                }
+              ]
+            },
+            {
+              "id": 37,
+              "name": "Sales",
+              "icon": "trending-up",
+              "url": "/sales",
+              "children": [
+                {
+                  "id": 38,
+                  "name": "Quotations",
+                  "icon": "file-text",
+                  "url": "/sales/quotations",
+                  "actions": [
+                    {
+                      "id": 213,
+                      "code": "VIEW",
+                      "name": "View Quotations",
+                      "access": true
+                    },
+                    {
+                      "id": 214,
+                      "code": "CREATE",
+                      "name": "Create Quotations",
+                      "access": true
+                    },
+                    {
+                      "id": 215,
+                      "code": "EDIT",
+                      "name": "Edit Quotations",
+                      "access": true
+                    },
+                    {
+                      "id": 216,
+                      "code": "DELETE",
+                      "name": "Delete Quotations",
+                      "access": true
+                    },
+                    {
+                      "id": 217,
+                      "code": "APPROVE",
+                      "name": "Approve Quotations",
+                      "access": true
+                    },
+                    {
+                      "id": 218,
+                      "code": "REJECT",
+                      "name": "Reject Quotations",
+                      "access": true
+                    },
+                    {
+                      "id": 219,
+                      "code": "CONVERT",
+                      "name": "Convert Quotations",
+                      "access": true
+                    },
+                    {
+                      "id": 220,
+                      "code": "DETAIL",
+                      "name": "Detail Quotations",
+                      "access": true
+                    },
+                    {
+                      "id": 221,
+                      "code": "EXPORT",
+                      "name": "Export Quotations",
+                      "access": true
+                    },
+                    {
+                      "id": 222,
+                      "code": "PRINT",
+                      "name": "Print Quotations",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 39,
+                  "name": "Sales Order",
+                  "icon": "file-text",
+                  "url": "/sales/order",
+                  "actions": [
+                    {
+                      "id": 223,
+                      "code": "VIEW",
+                      "name": "View Sales Order",
+                      "access": true
+                    },
+                    {
+                      "id": 224,
+                      "code": "CREATE",
+                      "name": "Create Sales Order",
+                      "access": true
+                    },
+                    {
+                      "id": 225,
+                      "code": "EDIT",
+                      "name": "Edit Sales Order",
+                      "access": true
+                    },
+                    {
+                      "id": 226,
+                      "code": "DELETE",
+                      "name": "Delete Sales Order",
+                      "access": true
+                    },
+                    {
+                      "id": 227,
+                      "code": "APPROVE",
+                      "name": "Approve Sales Order",
+                      "access": true
+                    },
+                    {
+                      "id": 228,
+                      "code": "DETAIL",
+                      "name": "Detail Sales Order",
+                      "access": true
+                    },
+                    {
+                      "id": 229,
+                      "code": "EXPORT",
+                      "name": "Export Sales Order",
+                      "access": true
+                    },
+                    {
+                      "id": 230,
+                      "code": "PRINT",
+                      "name": "Print Sales Order",
+                      "access": true
+                    },
+                    {
+                      "id": 231,
+                      "code": "REVISE",
+                      "name": "Revise Sales Order",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 40,
+                  "name": "Delivery Order",
+                  "icon": "truck",
+                  "url": "/sales/delivery-order",
+                  "actions": [
+                    {
+                      "id": 232,
+                      "code": "VIEW",
+                      "name": "View Delivery Order",
+                      "access": true
+                    },
+                    {
+                      "id": 233,
+                      "code": "CREATE",
+                      "name": "Create Delivery Order",
+                      "access": true
+                    },
+                    {
+                      "id": 234,
+                      "code": "EDIT",
+                      "name": "Edit Delivery Order",
+                      "access": true
+                    },
+                    {
+                      "id": 235,
+                      "code": "DELETE",
+                      "name": "Delete Delivery Order",
+                      "access": true
+                    },
+                    {
+                      "id": 236,
+                      "code": "APPROVE",
+                      "name": "Approve Delivery Order",
+                      "access": true
+                    },
+                    {
+                      "id": 237,
+                      "code": "DETAIL",
+                      "name": "Detail Delivery Order",
+                      "access": true
+                    },
+                    {
+                      "id": 238,
+                      "code": "EXPORT",
+                      "name": "Export Delivery Order",
+                      "access": true
+                    },
+                    {
+                      "id": 239,
+                      "code": "PRINT",
+                      "name": "Print Delivery Order",
+                      "access": true
+                    },
+                    {
+                      "id": 240,
+                      "code": "DELIVERED",
+                      "name": "Delivered Order",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 41,
+                  "name": "Customer Invoices",
+                  "icon": "file",
+                  "url": "/sales/customer-invoices",
+                  "actions": [
+                    {
+                      "id": 241,
+                      "code": "VIEW",
+                      "name": "View Customer Invoices",
+                      "access": true
+                    },
+                    {
+                      "id": 242,
+                      "code": "CREATE",
+                      "name": "Create Customer Invoices",
+                      "access": true
+                    },
+                    {
+                      "id": 243,
+                      "code": "EDIT",
+                      "name": "Edit Customer Invoices",
+                      "access": true
+                    },
+                    {
+                      "id": 244,
+                      "code": "DELETE",
+                      "name": "Delete Customer Invoices",
+                      "access": true
+                    },
+                    {
+                      "id": 245,
+                      "code": "APPROVE",
+                      "name": "Approve Customer Invoices",
+                      "access": true
+                    },
+                    {
+                      "id": 246,
+                      "code": "DETAIL",
+                      "name": "Detail Customer Invoices",
+                      "access": true
+                    },
+                    {
+                      "id": 247,
+                      "code": "EXPORT",
+                      "name": "Export Customer Invoices",
+                      "access": true
+                    },
+                    {
+                      "id": 248,
+                      "code": "PRINT",
+                      "name": "Print Customer Invoices",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 42,
+                  "name": "Customer Invoices Down Payment",
+                  "icon": "file-minus",
+                  "url": "/sales/customer-invoices-dp",
+                  "actions": [
+                    {
+                      "id": 249,
+                      "code": "VIEW",
+                      "name": "View Customer Invoices Down Payment",
+                      "access": true
+                    },
+                    {
+                      "id": 250,
+                      "code": "CREATE",
+                      "name": "Create Customer Invoices Down Payment",
+                      "access": true
+                    },
+                    {
+                      "id": 251,
+                      "code": "EDIT",
+                      "name": "Edit Customer Invoices Down Payment",
+                      "access": true
+                    },
+                    {
+                      "id": 252,
+                      "code": "DELETE",
+                      "name": "Delete Customer Invoices Down Payment",
+                      "access": true
+                    },
+                    {
+                      "id": 253,
+                      "code": "APPROVE",
+                      "name": "Approve Customer Invoices Down Payment",
+                      "access": true
+                    },
+                    {
+                      "id": 254,
+                      "code": "DETAIL",
+                      "name": "Detail Customer Invoices Down Payment",
+                      "access": true
+                    },
+                    {
+                      "id": 255,
+                      "code": "EXPORT",
+                      "name": "Export Customer Invoices Down Payment",
+                      "access": true
+                    },
+                    {
+                      "id": 256,
+                      "code": "PRINT",
+                      "name": "Print Customer Invoices Down Payment",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 43,
+                  "name": "Payment SO",
+                  "icon": "credit-card",
+                  "url": "/sales/payment",
+                  "actions": [
+                    {
+                      "id": 257,
+                      "code": "VIEW",
+                      "name": "View Payment SO",
+                      "access": true
+                    },
+                    {
+                      "id": 258,
+                      "code": "CREATE",
+                      "name": "Create Payment SO",
+                      "access": true
+                    },
+                    {
+                      "id": 259,
+                      "code": "EDIT",
+                      "name": "Edit Payment SO",
+                      "access": true
+                    },
+                    {
+                      "id": 260,
+                      "code": "DELETE",
+                      "name": "Delete Payment SO",
+                      "access": true
+                    },
+                    {
+                      "id": 261,
+                      "code": "APPROVE",
+                      "name": "Approve Payment SO",
+                      "access": true
+                    },
+                    {
+                      "id": 262,
+                      "code": "DETAIL",
+                      "name": "Detail Payment SO",
+                      "access": true
+                    },
+                    {
+                      "id": 263,
+                      "code": "EXPORT",
+                      "name": "Export Payment SO",
+                      "access": true
+                    },
+                    {
+                      "id": 264,
+                      "code": "PRINT",
+                      "name": "Print Payment SO",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 44,
+                  "name": "Receivables Recap",
+                  "icon": "file-chart",
+                  "url": "/sales/receivables-recap",
+                  "actions": [
+                    {
+                      "id": 265,
+                      "code": "VIEW",
+                      "name": "View Receivables Recap",
+                      "access": true
+                    },
+                    {
+                      "id": 266,
+                      "code": "EXPORT",
+                      "name": "Export Receivables Recap",
+                      "access": true
+                    },
+                    {
+                      "id": 267,
+                      "code": "PRINT",
+                      "name": "Print Receivables Recap",
+                      "access": true
+                    },
+                    {
+                      "id": 268,
+                      "code": "DETAIL",
+                      "name": "Detail Receivables Recap",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 45,
+                  "name": "Monthly Target",
+                  "icon": "target",
+                  "url": "/sales/monthly-target",
+                  "actions": [
+                    {
+                      "id": 269,
+                      "code": "VIEW",
+                      "name": "View Monthly Target",
+                      "access": true
+                    },
+                    {
+                      "id": 270,
+                      "code": "CREATE",
+                      "name": "Create Monthly Target",
+                      "access": true
+                    },
+                    {
+                      "id": 271,
+                      "code": "EDIT",
+                      "name": "Edit Monthly Target",
+                      "access": true
+                    },
+                    {
+                      "id": 272,
+                      "code": "DELETE",
+                      "name": "Delete Monthly Target",
+                      "access": true
+                    },
+                    {
+                      "id": 273,
+                      "code": "DETAIL",
+                      "name": "Detail Monthly Target",
+                      "access": true
+                    },
+                    {
+                      "id": 274,
+                      "code": "EXPORT",
+                      "name": "Export Monthly Target",
+                      "access": true
+                    },
+                    {
+                      "id": 275,
+                      "code": "PRINT",
+                      "name": "Print Monthly Target",
+                      "access": true
+                    },
+                    {
+                      "id": 276,
+                      "code": "APPROVE",
+                      "name": "Approve Monthly Target",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 46,
+                  "name": "Yearly Target",
+                  "icon": "calendar",
+                  "url": "/sales/yearly-target",
+                  "actions": [
+                    {
+                      "id": 277,
+                      "code": "VIEW",
+                      "name": "View Yearly Target",
+                      "access": true
+                    },
+                    {
+                      "id": 278,
+                      "code": "CREATE",
+                      "name": "Create Yearly Target",
+                      "access": true
+                    },
+                    {
+                      "id": 279,
+                      "code": "EDIT",
+                      "name": "Edit Yearly Target",
+                      "access": true
+                    },
+                    {
+                      "id": 280,
+                      "code": "DELETE",
+                      "name": "Delete Yearly Target",
+                      "access": true
+                    },
+                    {
+                      "id": 281,
+                      "code": "DETAIL",
+                      "name": "Detail Yearly Target",
+                      "access": true
+                    },
+                    {
+                      "id": 282,
+                      "code": "EXPORT",
+                      "name": "Export Yearly Target",
+                      "access": true
+                    },
+                    {
+                      "id": 283,
+                      "code": "PRINT",
+                      "name": "Print Yearly Target",
+                      "access": true
+                    },
+                    {
+                      "id": 284,
+                      "code": "APPROVE",
+                      "name": "Approve Yearly Target",
+                      "access": true
+                    }
+                  ]
+                }
+              ],
+              "actions": [
+                {
+                  "id": 212,
+                  "code": "VIEW",
+                  "name": "View Sales",
+                  "access": true
+                }
+              ]
+            },
+            {
+              "id": 47,
+              "name": "Purchase",
+              "icon": "shopping-cart",
+              "url": "/purchase",
+              "children": [
+                {
+                  "id": 48,
+                  "name": "Purchase Order",
+                  "icon": "file-text",
+                  "url": "/purchase/order",
+                  "actions": [
+                    {
+                      "id": 286,
+                      "code": "VIEW",
+                      "name": "View Purchase Order",
+                      "access": true
+                    },
+                    {
+                      "id": 287,
+                      "code": "CREATE",
+                      "name": "Create Purchase Order",
+                      "access": true
+                    },
+                    {
+                      "id": 288,
+                      "code": "EDIT",
+                      "name": "Edit Purchase Order",
+                      "access": true
+                    },
+                    {
+                      "id": 289,
+                      "code": "DELETE",
+                      "name": "Delete Purchase Order",
+                      "access": true
+                    },
+                    {
+                      "id": 290,
+                      "code": "APPROVE",
+                      "name": "Approve Purchase Order",
+                      "access": true
+                    },
+                    {
+                      "id": 291,
+                      "code": "DETAIL",
+                      "name": "Detail Purchase Order",
+                      "access": true
+                    },
+                    {
+                      "id": 292,
+                      "code": "EXPORT",
+                      "name": "Export Purchase Order",
+                      "access": true
+                    },
+                    {
+                      "id": 293,
+                      "code": "PRINT",
+                      "name": "Print Purchase Order",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 49,
+                  "name": "Purchase Requisitions",
+                  "icon": "clipboard-list",
+                  "url": "/purchase/requisitions",
+                  "actions": [
+                    {
+                      "id": 294,
+                      "code": "VIEW",
+                      "name": "View Purchase Requisitions",
+                      "access": true
+                    },
+                    {
+                      "id": 295,
+                      "code": "CREATE",
+                      "name": "Create Purchase Requisitions",
+                      "access": true
+                    },
+                    {
+                      "id": 296,
+                      "code": "EDIT",
+                      "name": "Edit Purchase Requisitions",
+                      "access": true
+                    },
+                    {
+                      "id": 297,
+                      "code": "DELETE",
+                      "name": "Delete Purchase Requisitions",
+                      "access": true
+                    },
+                    {
+                      "id": 298,
+                      "code": "APPROVE",
+                      "name": "Approve Purchase Requisitions",
+                      "access": true
+                    },
+                    {
+                      "id": 299,
+                      "code": "REJECT",
+                      "name": "Reject Purchase Requisitions",
+                      "access": true
+                    },
+                    {
+                      "id": 300,
+                      "code": "CONVERT",
+                      "name": "Convert Purchase Requisitions",
+                      "access": true
+                    },
+                    {
+                      "id": 301,
+                      "code": "DETAIL",
+                      "name": "Detail Purchase Requisitions",
+                      "access": true
+                    },
+                    {
+                      "id": 302,
+                      "code": "EXPORT",
+                      "name": "Export Purchase Requisitions",
+                      "access": true
+                    },
+                    {
+                      "id": 303,
+                      "code": "PRINT",
+                      "name": "Print Purchase Requisitions",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 50,
+                  "name": "Goods Receipt",
+                  "icon": "package",
+                  "url": "/purchase/goods-receipt",
+                  "actions": [
+                    {
+                      "id": 304,
+                      "code": "VIEW",
+                      "name": "View Goods Receipt",
+                      "access": true
+                    },
+                    {
+                      "id": 305,
+                      "code": "CREATE",
+                      "name": "Create Goods Receipt",
+                      "access": true
+                    },
+                    {
+                      "id": 306,
+                      "code": "EDIT",
+                      "name": "Edit Goods Receipt",
+                      "access": true
+                    },
+                    {
+                      "id": 307,
+                      "code": "DELETE",
+                      "name": "Delete Goods Receipt",
+                      "access": true
+                    },
+                    {
+                      "id": 308,
+                      "code": "APPROVE",
+                      "name": "Approve Goods Receipt",
+                      "access": true
+                    },
+                    {
+                      "id": 309,
+                      "code": "DETAIL",
+                      "name": "Detail Goods Receipt",
+                      "access": true
+                    },
+                    {
+                      "id": 310,
+                      "code": "EXPORT",
+                      "name": "Export Goods Receipt",
+                      "access": true
+                    },
+                    {
+                      "id": 311,
+                      "code": "PRINT",
+                      "name": "Print Goods Receipt",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 51,
+                  "name": "Supplier Invoices",
+                  "icon": "file",
+                  "url": "/purchase/supplier-invoices",
+                  "actions": [
+                    {
+                      "id": 312,
+                      "code": "VIEW",
+                      "name": "View Supplier Invoices",
+                      "access": true
+                    },
+                    {
+                      "id": 313,
+                      "code": "CREATE",
+                      "name": "Create Supplier Invoices",
+                      "access": true
+                    },
+                    {
+                      "id": 314,
+                      "code": "EDIT",
+                      "name": "Edit Supplier Invoices",
+                      "access": true
+                    },
+                    {
+                      "id": 315,
+                      "code": "DELETE",
+                      "name": "Delete Supplier Invoices",
+                      "access": true
+                    },
+                    {
+                      "id": 316,
+                      "code": "APPROVE",
+                      "name": "Approve Supplier Invoices",
+                      "access": true
+                    },
+                    {
+                      "id": 317,
+                      "code": "DETAIL",
+                      "name": "Detail Supplier Invoices",
+                      "access": true
+                    },
+                    {
+                      "id": 318,
+                      "code": "EXPORT",
+                      "name": "Export Supplier Invoices",
+                      "access": true
+                    },
+                    {
+                      "id": 319,
+                      "code": "PRINT",
+                      "name": "Print Supplier Invoices",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 52,
+                  "name": "Supplier Invoices Down Payment",
+                  "icon": "file-minus",
+                  "url": "/purchase/supplier-invoices-dp",
+                  "actions": [
+                    {
+                      "id": 320,
+                      "code": "VIEW",
+                      "name": "View Supplier Invoices Down Payment",
+                      "access": true
+                    },
+                    {
+                      "id": 321,
+                      "code": "CREATE",
+                      "name": "Create Supplier Invoices Down Payment",
+                      "access": true
+                    },
+                    {
+                      "id": 322,
+                      "code": "EDIT",
+                      "name": "Edit Supplier Invoices Down Payment",
+                      "access": true
+                    },
+                    {
+                      "id": 323,
+                      "code": "DELETE",
+                      "name": "Delete Supplier Invoices Down Payment",
+                      "access": true
+                    },
+                    {
+                      "id": 324,
+                      "code": "APPROVE",
+                      "name": "Approve Supplier Invoices Down Payment",
+                      "access": true
+                    },
+                    {
+                      "id": 325,
+                      "code": "DETAIL",
+                      "name": "Detail Supplier Invoices Down Payment",
+                      "access": true
+                    },
+                    {
+                      "id": 326,
+                      "code": "EXPORT",
+                      "name": "Export Supplier Invoices Down Payment",
+                      "access": true
+                    },
+                    {
+                      "id": 327,
+                      "code": "PRINT",
+                      "name": "Print Supplier Invoices Down Payment",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 53,
+                  "name": "Payment PO",
+                  "icon": "credit-card",
+                  "url": "/purchase/payment",
+                  "actions": [
+                    {
+                      "id": 328,
+                      "code": "VIEW",
+                      "name": "View Payment PO",
+                      "access": true
+                    },
+                    {
+                      "id": 329,
+                      "code": "CREATE",
+                      "name": "Create Payment PO",
+                      "access": true
+                    },
+                    {
+                      "id": 330,
+                      "code": "EDIT",
+                      "name": "Edit Payment PO",
+                      "access": true
+                    },
+                    {
+                      "id": 331,
+                      "code": "DELETE",
+                      "name": "Delete Payment PO",
+                      "access": true
+                    },
+                    {
+                      "id": 332,
+                      "code": "APPROVE",
+                      "name": "Approve Payment PO",
+                      "access": true
+                    },
+                    {
+                      "id": 333,
+                      "code": "DETAIL",
+                      "name": "Detail Payment PO",
+                      "access": true
+                    },
+                    {
+                      "id": 334,
+                      "code": "EXPORT",
+                      "name": "Export Payment PO",
+                      "access": true
+                    },
+                    {
+                      "id": 335,
+                      "code": "PRINT",
+                      "name": "Print Payment PO",
+                      "access": true
+                    }
+                  ]
+                }
+              ],
+              "actions": [
+                {
+                  "id": 285,
+                  "code": "VIEW",
+                  "name": "View Purchase",
+                  "access": true
+                }
+              ]
+            },
+            {
+              "id": 54,
+              "name": "Stock",
+              "icon": "package-2",
+              "url": "/stock",
+              "children": [
+                {
+                  "id": 55,
+                  "name": "Stock Opname",
+                  "icon": "clipboard-check",
+                  "url": "/stock/opname",
+                  "actions": [
+                    {
+                      "id": 337,
+                      "code": "VIEW",
+                      "name": "View Stock Opname",
+                      "access": true
+                    },
+                    {
+                      "id": 338,
+                      "code": "CREATE",
+                      "name": "Create Stock Opname",
+                      "access": true
+                    },
+                    {
+                      "id": 339,
+                      "code": "EDIT",
+                      "name": "Edit Stock Opname",
+                      "access": true
+                    },
+                    {
+                      "id": 340,
+                      "code": "DELETE",
+                      "name": "Delete Stock Opname",
+                      "access": true
+                    },
+                    {
+                      "id": 341,
+                      "code": "APPROVE",
+                      "name": "Approve Stock Opname",
+                      "access": true
+                    },
+                    {
+                      "id": 342,
+                      "code": "DETAIL",
+                      "name": "Detail Stock Opname",
+                      "access": true
+                    },
+                    {
+                      "id": 343,
+                      "code": "EXPORT",
+                      "name": "Export Stock Opname",
+                      "access": true
+                    },
+                    {
+                      "id": 344,
+                      "code": "PRINT",
+                      "name": "Print Stock Opname",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 56,
+                  "name": "Stock Valuation",
+                  "icon": "calculator",
+                  "url": "/stock/valuation",
+                  "actions": [
+                    {
+                      "id": 345,
+                      "code": "VIEW",
+                      "name": "View Stock Valuation",
+                      "access": true
+                    }
+                  ]
+                }
+              ],
+              "actions": [
+                {
+                  "id": 336,
+                  "code": "VIEW",
+                  "name": "View Stock",
+                  "access": true
+                }
+              ]
+            },
+            {
+              "id": 57,
+              "name": "Finance",
+              "icon": "dollar-sign",
+              "url": "/finance",
+              "children": [
+                {
+                  "id": 58,
+                  "name": "Journal",
+                  "icon": "book",
+                  "url": "/finance/journal",
+                  "children": [
+                    {
+                      "id": 67,
+                      "name": "Journal Entry",
+                      "icon": "book",
+                      "url": "/finance/journal/entry",
+                      "actions": [
+                        {
+                          "id": 348,
+                          "code": "VIEW",
+                          "name": "View Journal Entry",
+                          "access": true
+                        },
+                        {
+                          "id": 349,
+                          "code": "CREATE",
+                          "name": "Create Journal Entry",
+                          "access": true
+                        },
+                        {
+                          "id": 350,
+                          "code": "EDIT",
+                          "name": "Edit Journal Entry",
+                          "access": true
+                        },
+                        {
+                          "id": 351,
+                          "code": "DELETE",
+                          "name": "Delete Journal Entry",
+                          "access": true
+                        },
+                        {
+                          "id": 352,
+                          "code": "DETAIL",
+                          "name": "Detail Journal Entry",
+                          "access": true
+                        },
+                        {
+                          "id": 353,
+                          "code": "EXPORT",
+                          "name": "Export Journal Entry",
+                          "access": true
+                        },
+                        {
+                          "id": 354,
+                          "code": "PRINT",
+                          "name": "Print Journal Entry",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 68,
+                      "name": "Purchase Journal",
+                      "icon": "book",
+                      "url": "/finance/journal/purchase",
+                      "actions": [
+                        {
+                          "id": 392,
+                          "code": "VIEW",
+                          "name": "View Purchase Journal",
+                          "access": true
+                        },
+                        {
+                          "id": 393,
+                          "code": "DETAIL",
+                          "name": "Detail Purchase Journal",
+                          "access": true
+                        },
+                        {
+                          "id": 394,
+                          "code": "EXPORT",
+                          "name": "Export Purchase Journal",
+                          "access": true
+                        },
+                        {
+                          "id": 395,
+                          "code": "PRINT",
+                          "name": "Print Purchase Journal",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 69,
+                      "name": "Sales Journal",
+                      "icon": "book",
+                      "url": "/finance/journal/sales",
+                      "actions": [
+                        {
+                          "id": 396,
+                          "code": "VIEW",
+                          "name": "View Sales Journal",
+                          "access": true
+                        },
+                        {
+                          "id": 397,
+                          "code": "DETAIL",
+                          "name": "Detail Sales Journal",
+                          "access": true
+                        },
+                        {
+                          "id": 398,
+                          "code": "EXPORT",
+                          "name": "Export Sales Journal",
+                          "access": true
+                        },
+                        {
+                          "id": 399,
+                          "code": "PRINT",
+                          "name": "Print Sales Journal",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 70,
+                      "name": "Adjustment Journal",
+                      "icon": "edit-3",
+                      "url": "/finance/journal/adjustment",
+                      "actions": [
+                        {
+                          "id": 357,
+                          "code": "VIEW",
+                          "name": "View Adjustment Journal",
+                          "access": true
+                        },
+                        {
+                          "id": 358,
+                          "code": "CREATE",
+                          "name": "Create Adjustment Journal",
+                          "access": true
+                        },
+                        {
+                          "id": 359,
+                          "code": "EDIT",
+                          "name": "Edit Adjustment Journal",
+                          "access": true
+                        },
+                        {
+                          "id": 360,
+                          "code": "DELETE",
+                          "name": "Delete Adjustment Journal",
+                          "access": true
+                        },
+                        {
+                          "id": 361,
+                          "code": "DETAIL",
+                          "name": "Detail Adjustment Journal",
+                          "access": true
+                        },
+                        {
+                          "id": 362,
+                          "code": "EXPORT",
+                          "name": "Export Adjustment Journal",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 71,
+                      "name": "Valuation Journals",
+                      "icon": "calculator",
+                      "url": "/finance/journal/valuation",
+                      "actions": [
+                        {
+                          "id": 400,
+                          "code": "VIEW",
+                          "name": "View Valuation Journals",
+                          "access": true
+                        },
+                        {
+                          "id": 401,
+                          "code": "DETAIL",
+                          "name": "Detail Valuation Journals",
+                          "access": true
+                        },
+                        {
+                          "id": 402,
+                          "code": "EXPORT",
+                          "name": "Export Valuation Journals",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 72,
+                      "name": "Cash Bank Transaction Journal",
+                      "icon": "credit-card",
+                      "url": "/finance/journal/cashbank-transaction",
+                      "actions": [
+                        {
+                          "id": 403,
+                          "code": "VIEW",
+                          "name": "View Cash Bank Transaction Journal",
+                          "access": true
+                        },
+                        {
+                          "id": 404,
+                          "code": "DETAIL",
+                          "name": "Detail Cash Bank Transaction Journal",
+                          "access": true
+                        },
+                        {
+                          "id": 405,
+                          "code": "CREATE",
+                          "name": "Create Cash Bank Transaction Journal",
+                          "access": true
+                        },
+                        {
+                          "id": 406,
+                          "code": "EDIT",
+                          "name": "Edit Cash Bank Transaction Journal",
+                          "access": true
+                        },
+                        {
+                          "id": 407,
+                          "code": "DELETE",
+                          "name": "Delete Cash Bank Transaction Journal",
+                          "access": true
+                        },
+                        {
+                          "id": 408,
+                          "code": "EXPORT",
+                          "name": "Export Cash Bank Transaction Journal",
+                          "access": true
+                        }
+                      ]
+                    }
+                  ],
+                  "actions": [
+                    {
+                      "id": 347,
+                      "code": "VIEW",
+                      "name": "View Journal",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 59,
+                  "name": "General Ledger",
+                  "icon": "book-open",
+                  "url": "/finance/general-ledger",
+                  "actions": [
+                    {
+                      "id": 355,
+                      "code": "VIEW",
+                      "name": "View General Ledger",
+                      "access": true
+                    },
+                    {
+                      "id": 356,
+                      "code": "EXPORT",
+                      "name": "Export General Ledger",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 60,
+                  "name": "Balance Sheet",
+                  "icon": "file-text",
+                  "url": "/finance/balance-sheet",
+                  "actions": [
+                    {
+                      "id": 363,
+                      "code": "VIEW",
+                      "name": "View Balance Sheet",
+                      "access": true
+                    },
+                    {
+                      "id": 364,
+                      "code": "EXPORT",
+                      "name": "Export Balance Sheet",
+                      "access": true
+                    },
+                    {
+                      "id": 365,
+                      "code": "PRINT",
+                      "name": "Print Balance Sheet",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 61,
+                  "name": "Profit and Loss",
+                  "icon": "trending-up",
+                  "url": "/finance/profit-loss",
+                  "actions": [
+                    {
+                      "id": 366,
+                      "code": "VIEW",
+                      "name": "View Profit and Loss",
+                      "access": true
+                    },
+                    {
+                      "id": 367,
+                      "code": "EXPORT",
+                      "name": "Export Profit and Loss",
+                      "access": true
+                    },
+                    {
+                      "id": 368,
+                      "code": "PRINT",
+                      "name": "Print Profit and Loss",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 62,
+                  "name": "Budget",
+                  "icon": "calculator",
+                  "url": "/finance/budget",
+                  "actions": [
+                    {
+                      "id": 369,
+                      "code": "VIEW",
+                      "name": "View Budget",
+                      "access": true
+                    },
+                    {
+                      "id": 370,
+                      "code": "DETAIL",
+                      "name": "Detail Budget",
+                      "access": true
+                    },
+                    {
+                      "id": 371,
+                      "code": "CREATE",
+                      "name": "Create Budget",
+                      "access": true
+                    },
+                    {
+                      "id": 372,
+                      "code": "EDIT",
+                      "name": "Update Budget",
+                      "access": true
+                    },
+                    {
+                      "id": 373,
+                      "code": "DELETE",
+                      "name": "Delete Budget",
+                      "access": true
+                    },
+                    {
+                      "id": 374,
+                      "code": "APPROVE",
+                      "name": "Approve Budget",
+                      "access": true
+                    },
+                    {
+                      "id": 375,
+                      "code": "REJECT",
+                      "name": "Reject Budget",
+                      "access": true
+                    },
+                    {
+                      "id": 376,
+                      "code": "CLOSED",
+                      "name": "Closed Budget",
+                      "access": true
+                    },
+                    {
+                      "id": 377,
+                      "code": "EXPORT",
+                      "name": "Export Budget",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 63,
+                  "name": "Base Salary",
+                  "icon": "dollar-sign",
+                  "url": "/finance/base-salary",
+                  "actions": [
+                    {
+                      "id": 378,
+                      "code": "VIEW",
+                      "name": "View Base Salary",
+                      "access": true
+                    },
+                    {
+                      "id": 379,
+                      "code": "DETAIL",
+                      "name": "Detail Base Salary",
+                      "access": true
+                    },
+                    {
+                      "id": 380,
+                      "code": "EDIT",
+                      "name": "Edit Base Salary",
+                      "access": true
+                    },
+                    {
+                      "id": 381,
+                      "code": "CREATE",
+                      "name": "Create Base Salary",
+                      "access": true
+                    },
+                    {
+                      "id": 382,
+                      "code": "DELETE",
+                      "name": "Delete Base Salary",
+                      "access": true
+                    },
+                    {
+                      "id": 383,
+                      "code": "EXPORT",
+                      "name": "Export Base Salary",
+                      "access": true
+                    },
+                    {
+                      "id": 384,
+                      "code": "APPROVE",
+                      "name": "Approve Base Salary",
+                      "access": true
+                    },
+                    {
+                      "id": 385,
+                      "code": "PRINT",
+                      "name": "Print Base Salary",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 64,
+                  "name": "Non Trade Payables",
+                  "icon": "credit-card",
+                  "url": "/finance/non-trade-payables",
+                  "actions": [
+                    {
+                      "id": 386,
+                      "code": "VIEW",
+                      "name": "View Non Trade Payables",
+                      "access": true
+                    },
+                    {
+                      "id": 387,
+                      "code": "DETAIL",
+                      "name": "Detail Non Trade Payables",
+                      "access": true
+                    },
+                    {
+                      "id": 388,
+                      "code": "CREATE",
+                      "name": "Create Non Trade Payables",
+                      "access": true
+                    },
+                    {
+                      "id": 389,
+                      "code": "EDIT",
+                      "name": "Edit Non Trade Payables",
+                      "access": true
+                    },
+                    {
+                      "id": 390,
+                      "code": "DELETE",
+                      "name": "Delete Non Trade Payables",
+                      "access": true
+                    },
+                    {
+                      "id": 391,
+                      "code": "APPROVE",
+                      "name": "Approve Non Trade Payables",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 65,
+                  "name": "Asset Management",
+                  "icon": "briefcase",
+                  "url": "/finance/asset-management",
+                  "children": [
+                    {
+                      "id": 73,
+                      "name": "Asset List",
+                      "icon": "list",
+                      "url": "/finance/asset-management/asset-list",
+                      "actions": [
+                        {
+                          "id": 410,
+                          "code": "VIEW",
+                          "name": "View Asset List",
+                          "access": true
+                        },
+                        {
+                          "id": 411,
+                          "code": "CREATE",
+                          "name": "Create Asset List",
+                          "access": true
+                        },
+                        {
+                          "id": 412,
+                          "code": "DETAIL",
+                          "name": "Detail Asset List",
+                          "access": true
+                        },
+                        {
+                          "id": 413,
+                          "code": "EDIT",
+                          "name": "Edit Asset List",
+                          "access": true
+                        },
+                        {
+                          "id": 414,
+                          "code": "DELETE",
+                          "name": "Delete Asset List",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 74,
+                      "name": "Asset Category",
+                      "icon": "tag",
+                      "url": "/finance/asset-management/asset-category",
+                      "actions": [
+                        {
+                          "id": 415,
+                          "code": "VIEW",
+                          "name": "View Asset Category",
+                          "access": true
+                        },
+                        {
+                          "id": 416,
+                          "code": "CREATE",
+                          "name": "Create Asset Category",
+                          "access": true
+                        },
+                        {
+                          "id": 417,
+                          "code": "DETAIL",
+                          "name": "Detail Asset Category",
+                          "access": true
+                        },
+                        {
+                          "id": 418,
+                          "code": "EDIT",
+                          "name": "Edit Asset Category",
+                          "access": true
+                        },
+                        {
+                          "id": 419,
+                          "code": "DELETE",
+                          "name": "Delete Asset Category",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 75,
+                      "name": "Asset Location",
+                      "icon": "map-pin",
+                      "url": "/finance/asset-management/asset-location",
+                      "actions": [
+                        {
+                          "id": 420,
+                          "code": "VIEW",
+                          "name": "View Asset Location",
+                          "access": true
+                        },
+                        {
+                          "id": 421,
+                          "code": "CREATE",
+                          "name": "Create Asset Location",
+                          "access": true
+                        },
+                        {
+                          "id": 422,
+                          "code": "DETAIL",
+                          "name": "Detail Asset Location",
+                          "access": true
+                        },
+                        {
+                          "id": 423,
+                          "code": "EDIT",
+                          "name": "Edit Asset Location",
+                          "access": true
+                        },
+                        {
+                          "id": 424,
+                          "code": "DELETE",
+                          "name": "Delete Asset Location",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 76,
+                      "name": "Asset Transaction",
+                      "icon": "arrow-right-left",
+                      "url": "/finance/asset-management/asset-transaction",
+                      "actions": [
+                        {
+                          "id": 425,
+                          "code": "VIEW",
+                          "name": "View Asset Transaction",
+                          "access": true
+                        },
+                        {
+                          "id": 426,
+                          "code": "CREATE",
+                          "name": "Create Asset Transaction",
+                          "access": true
+                        },
+                        {
+                          "id": 427,
+                          "code": "DETAIL",
+                          "name": "Detail Asset Transaction",
+                          "access": true
+                        },
+                        {
+                          "id": 428,
+                          "code": "EDIT",
+                          "name": "Edit Asset Transaction",
+                          "access": true
+                        },
+                        {
+                          "id": 429,
+                          "code": "DELETE",
+                          "name": "Delete Asset Transaction",
+                          "access": true
+                        },
+                        {
+                          "id": 430,
+                          "code": "APPROVE",
+                          "name": "Approve Asset Transaction",
+                          "access": true
+                        }
+                      ]
+                    },
+                    {
+                      "id": 77,
+                      "name": "Asset Depreciation",
+                      "icon": "trending-down",
+                      "url": "/finance/asset-management/asset-depreciation",
+                      "actions": [
+                        {
+                          "id": 431,
+                          "code": "VIEW",
+                          "name": "View Asset Depreciation",
+                          "access": true
+                        },
+                        {
+                          "id": 432,
+                          "code": "CREATE",
+                          "name": "Create Asset Depreciation",
+                          "access": true
+                        },
+                        {
+                          "id": 433,
+                          "code": "DETAIL",
+                          "name": "Detail Asset Depreciation",
+                          "access": true
+                        },
+                        {
+                          "id": 434,
+                          "code": "EDIT",
+                          "name": "Edit Asset Depreciation",
+                          "access": true
+                        },
+                        {
+                          "id": 435,
+                          "code": "DELETE",
+                          "name": "Delete Asset Depreciation",
+                          "access": true
+                        },
+                        {
+                          "id": 436,
+                          "code": "APPROVE",
+                          "name": "Approve Asset Depreciation",
+                          "access": true
+                        }
+                      ]
+                    }
+                  ],
+                  "actions": [
+                    {
+                      "id": 409,
+                      "code": "VIEW",
+                      "name": "View Asset Management",
+                      "access": true
+                    }
+                  ]
+                },
+                {
+                  "id": 66,
+                  "name": "Up Country Cost",
+                  "icon": "globe",
+                  "url": "/finance/up-country-cost",
+                  "actions": [
+                    {
+                      "id": 437,
+                      "code": "VIEW",
+                      "name": "View Up Country Cost",
+                      "access": true
+                    },
+                    {
+                      "id": 438,
+                      "code": "DETAIL",
+                      "name": "Detail Up Country Cost",
+                      "access": true
+                    },
+                    {
+                      "id": 439,
+                      "code": "CREATE",
+                      "name": "Create Up Country Cost",
+                      "access": true
+                    },
+                    {
+                      "id": 440,
+                      "code": "EDIT",
+                      "name": "Edit Up Country Cost",
+                      "access": true
+                    },
+                    {
+                      "id": 441,
+                      "code": "DELETE",
+                      "name": "Delete Up Country Cost",
+                      "access": true
+                    },
+                    {
+                      "id": 442,
+                      "code": "EXPORT",
+                      "name": "Export Up Country Cost",
+                      "access": true
+                    },
+                    {
+                      "id": 443,
+                      "code": "APPROVE",
+                      "name": "Approve Up Country Cost",
+                      "access": true
+                    }
+                  ]
+                }
+              ],
+              "actions": [
+                {
+                  "id": 346,
+                  "code": "VIEW",
+                  "name": "View Finance",
+                  "access": true
+                }
+              ]
+            },
+            {
+              "id": 78,
+              "name": "HRD",
+              "icon": "users",
+              "url": "/hrd",
+              "children": [
+                {
+                  "id": 79,
+                  "name": "Attendance Dashboard",
+                  "icon": "calendar",
+                  "url": "/hrd/attendance",
+                  "actions": [
+                    {
+                      "id": 445,
+                      "code": "VIEW",
+                      "name": "View Attendance Dashboard",
+                      "access": true
+                    },
+                    {
+                      "id": 446,
+                      "code": "CREATE",
+                      "name": "Create Attendance Record",
+                      "access": true
+                    },
+                    {
+                      "id": 447,
+                      "code": "EDIT",
+                      "name": "Edit Attendance Record",
+                      "access": true
+                    },
+                    {
+                      "id": 448,
+                      "code": "DELETE",
+                      "name": "Delete Attendance Record",
+                      "access": true
+                    },
+                    {
+                      "id": 449,
+                      "code": "DETAIL",
+                      "name": "Detail Attendance Record",
+                      "access": true
+                    },
+                    {
+                      "id": 450,
+                      "code": "APPROVE",
+                      "name": "Approve Leave Request",
+                      "access": true
+                    },
+                    {
+                      "id": 451,
+                      "code": "REJECT",
+                      "name": "Reject Leave Request",
+                      "access": true
+                    },
+                    {
+                      "id": 452,
+                      "code": "EXPORT",
+                      "name": "Export Attendance Data",
+                      "access": true
+                    },
+                    {
+                      "id": 453,
+                      "code": "PRINT",
+                      "name": "Print Attendance Report",
+                      "access": true
+                    }
+                  ]
+                }
+              ],
+              "actions": [
+                {
+                  "id": 444,
+                  "code": "VIEW",
+                  "name": "View HRD",
+                  "access": true
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

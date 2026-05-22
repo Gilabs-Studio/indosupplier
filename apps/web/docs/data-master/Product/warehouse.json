@@ -1,0 +1,192 @@
+{
+  "title": "Data Master/Product/warehouses",
+  "description": "A comprehensive guide to the Data Master API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/master-data/warehouses",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "name": "Main Warehouse",
+            "address": "Jl. Gudang No.1",
+            "city": {
+              "id": 1,
+              "name": "Semarang",
+              "province_id": 1,
+              "province_name": "Central Java"
+            },
+            "latitude": null,
+            "longitude": null,
+            "created_at": "2025-09-16T14:03:20+07:00",
+            "updated_at": "2025-09-16T14:03:20+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 1,
+            "page": 1,
+            "total": 1
+          },
+          "search": {
+            "search": "1",
+            "searchBy": "id"
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "city_id"],
+            "string_columns": ["name", "address", "latitude", "longitude"]
+          },
+          "sort": {
+            "sort_by": "name",
+            "sort_order": "asc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "name",
+              "address",
+              "latitude",
+              "longitude",
+              "created_at",
+              "updated_at",
+              "city_id"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA STATS",
+      "endpoint": "{{base_url}}/master-data/warehouses/stats",
+      "response": {
+        "data": {
+          "total": 2
+        },
+        "message": "Warehouse statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "{{base_url}}/master-data/warehouses/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "name": "Main Warehouse",
+          "address": "Jl. Gudang No.1",
+          "city": {
+            "id": 1,
+            "name": "Semarang",
+            "province_id": 1,
+            "province_name": "Central Java"
+          },
+          "latitude": null,
+          "longitude": null,
+          "created_at": "2025-09-16T14:03:20+07:00",
+          "updated_at": "2025-09-16T14:03:20+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "{{base_url}}/master-data/warehouses/add",
+      "response": {
+        "data": {
+          "provinces": [
+            {
+              "id": 1,
+              "name": "Central Java",
+              "cities": [
+                {
+                  "id": 1,
+                  "name": "Semarang",
+                  "province_id": 1,
+                  "province_name": "Central Java"
+                },
+                {
+                  "id": 2,
+                  "name": "Surabaya",
+                  "province_id": 1,
+                  "province_name": "Central Java"
+                },
+                {
+                  "id": 3,
+                  "name": "Jakarta Pusat",
+                  "province_id": 1,
+                  "province_name": "Central Java"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "name": "East Java",
+              "cities": []
+            },
+            {
+              "id": 3,
+              "name": "Jakarta",
+              "cities": []
+            }
+          ]
+        }
+      }
+    },
+
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/master-data/warehouses",
+      "body": {
+        "name": "Gudang Utama",
+        "address": "Jl. Raya No. 123, Jakarta",
+        "city_id": 1,
+        "latitude": "-6.200000",
+        "longitude": "106.816666"
+      },
+      "response": {
+        "data": {
+          "id": 3,
+          "name": "Gudang Utama",
+          "address": "Jl. Raya No. 123, Jakarta",
+          "city": {
+            "id": 1,
+            "name": "Semarang",
+            "province_id": 1,
+            "province_name": "Central Java"
+          },
+          "latitude": "-6.200000",
+          "longitude": "106.816666",
+          "created_at": "2025-09-16T14:52:51+07:00",
+          "updated_at": "2025-09-16T14:52:51+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/master-data/warehouses/2",
+      "body": {
+        "name": "Admin Utama"
+      },
+      "response": {
+        "data": {
+          "id": 2,
+          "name": "Admin Utama",
+          "created_at": "2025-09-16T14:03:20+07:00",
+          "updated_at": "2025-09-16T14:32:00+07:00"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/master-data/warehouses/2",
+      "response": {
+        "message": "deleted"
+      }
+    }
+  ]
+}

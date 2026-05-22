@@ -1,0 +1,313 @@
+{
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/hrd/attendance-records",
+      "description": "Get list of attendance records",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "date": "2025-10-03",
+            "check_in_time": "08:00:00",
+            "check_out_time": "17:00:00",
+            "status": "PRESENT",
+            "note": "",
+            "created_at": "2025-10-06T14:22:52+07:00",
+            "updated_at": "2025-10-06T14:22:52+07:00"
+          },
+          {
+            "id": 11,
+            "employee": {
+              "id": 3,
+              "name": "Viewer User"
+            },
+            "date": "2025-10-03",
+            "check_in_time": "08:00:00",
+            "check_out_time": "17:00:00",
+            "status": "PRESENT",
+            "note": "",
+            "created_at": "2025-10-06T14:22:52+07:00",
+            "updated_at": "2025-10-06T14:22:52+07:00"
+          },
+          {
+            "id": 6,
+            "employee": {
+              "id": 2,
+              "name": "John Doe"
+            },
+            "date": "2025-10-03",
+            "check_in_time": "08:00:00",
+            "check_out_time": "17:00:00",
+            "status": "PRESENT",
+            "note": "",
+            "created_at": "2025-10-06T14:22:52+07:00",
+            "updated_at": "2025-10-06T14:22:52+07:00"
+          },
+          {
+            "id": 7,
+            "employee": {
+              "id": 2,
+              "name": "John Doe"
+            },
+            "date": "2025-10-02",
+            "check_in_time": "09:30:00",
+            "check_out_time": "17:30:00",
+            "status": "LATE",
+            "note": "",
+            "created_at": "2025-10-06T14:22:52+07:00",
+            "updated_at": "2025-10-06T14:22:52+07:00"
+          },
+          {
+            "id": 2,
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "date": "2025-10-02",
+            "check_in_time": "09:30:00",
+            "check_out_time": "17:30:00",
+            "status": "LATE",
+            "note": "",
+            "created_at": "2025-10-06T14:22:52+07:00",
+            "updated_at": "2025-10-06T14:22:52+07:00"
+          },
+          {
+            "id": 12,
+            "employee": {
+              "id": 3,
+              "name": "Viewer User"
+            },
+            "date": "2025-10-02",
+            "check_in_time": "09:30:00",
+            "check_out_time": "17:30:00",
+            "status": "LATE",
+            "note": "",
+            "created_at": "2025-10-06T14:22:52+07:00",
+            "updated_at": "2025-10-06T14:22:52+07:00"
+          },
+          {
+            "id": 8,
+            "employee": {
+              "id": 2,
+              "name": "John Doe"
+            },
+            "date": "2025-10-01",
+            "check_in_time": null,
+            "check_out_time": null,
+            "status": "ABSENT",
+            "note": "No attendance record",
+            "created_at": "2025-10-06T14:22:52+07:00",
+            "updated_at": "2025-10-06T14:22:52+07:00"
+          },
+          {
+            "id": 3,
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "date": "2025-10-01",
+            "check_in_time": null,
+            "check_out_time": null,
+            "status": "ABSENT",
+            "note": "No attendance record",
+            "created_at": "2025-10-06T14:22:52+07:00",
+            "updated_at": "2025-10-06T14:22:52+07:00"
+          },
+          {
+            "id": 13,
+            "employee": {
+              "id": 3,
+              "name": "Viewer User"
+            },
+            "date": "2025-10-01",
+            "check_in_time": null,
+            "check_out_time": null,
+            "status": "ABSENT",
+            "note": "No attendance record",
+            "created_at": "2025-10-06T14:22:52+07:00",
+            "updated_at": "2025-10-06T14:22:52+07:00"
+          },
+          {
+            "id": 4,
+            "employee": {
+              "id": 1,
+              "name": "Administrator"
+            },
+            "date": "2025-09-30",
+            "check_in_time": "08:00:00",
+            "check_out_time": "17:00:00",
+            "status": "PRESENT",
+            "note": "",
+            "created_at": "2025-10-06T14:22:52+07:00",
+            "updated_at": "2025-10-06T14:22:52+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "note": "Date filters apply to date field",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 15
+          },
+          "search": {
+            "search": "",
+            "search_by": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "employee_id"],
+            "string_columns": ["note", "status"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": "desc"
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "employee_id",
+              "date",
+              "check_in_time",
+              "check_out_time",
+              "status",
+              "note",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hrd/attendance-records/stats",
+      "description": "Get attendance records statistics",
+      "response": {
+        "data": {
+          "total": 15
+        },
+        "message": "Attendance record statistics retrieved successfully"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hrd/attendance-records/{id}",
+      "description": "Get attendance record by ID",
+      "response": {
+        "data": {
+          "id": 1,
+          "employee": {
+            "id": 1,
+            "name": "Administrator"
+          },
+          "date": "2025-10-03",
+          "check_in_time": "08:00:00",
+          "check_out_time": "17:00:00",
+          "status": "PRESENT",
+          "note": "",
+          "created_at": "2025-10-06T14:22:52+07:00",
+          "updated_at": "2025-10-06T14:22:52+07:00"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hrd/attendance-records/report",
+      "description": "Get report data for attendance records",
+      "response": {
+        "data": {
+          "employees": [
+            {
+              "id": 1,
+              "name": "Administrator"
+            },
+            {
+              "id": 2,
+              "name": "John Doe"
+            },
+            {
+              "id": 3,
+              "name": "Viewer User"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hrd/attendance-records",
+      "description": "Create new attendance record",
+      "body": {
+        "employee_id": 1,
+        "date": "2025-10-06T00:00:00Z",
+        "check_in_time": "2025-10-06T08:00:00Z",
+        "check_out_time": "2025-10-06T17:00:00Z",
+        "status": "PRESENT",
+        "note": "Hadir tepat waktu"
+      },
+      "response": {
+        "data": {
+          "id": 16,
+          "employee": {
+            "id": 1,
+            "name": "Administrator"
+          },
+          "date": "2025-10-06",
+          "check_in_time": "15:00:00",
+          "check_out_time": "00:00:00",
+          "status": "PRESENT",
+          "note": "Hadir tepat waktu",
+          "created_at": "2025-10-06T14:28:23+07:00",
+          "updated_at": "2025-10-06T14:28:23+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/hrd/attendance-records/{id}",
+      "description": "Update attendance record",
+      "body": {
+        "employee_id": 1,
+        "date": "2025-10-06T00:00:00Z",
+        "check_in_time": "2025-10-06T08:00:00Z",
+        "check_out_time": "2025-10-06T17:00:00Z",
+        "status": "PRESENT",
+        "note": "Hadir tepat waktu"
+      },
+      "response": {
+        "data": {
+          "id": 1,
+          "employee": {
+            "id": 1,
+            "name": "Administrator"
+          },
+          "date": "2025-10-06",
+          "check_in_time": "15:00:00",
+          "check_out_time": "00:00:00",
+          "status": "PRESENT",
+          "note": "Hadir tepat waktu",
+          "created_at": "2025-10-06T14:22:52+07:00",
+          "updated_at": "2025-10-06T14:28:41+07:00"
+        },
+        "message": "updated"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/hrd/attendance-records/{id}",
+      "description": "Delete attendance record",
+      "response": {
+        "message": "deleted"
+      }
+    }
+  ]
+}

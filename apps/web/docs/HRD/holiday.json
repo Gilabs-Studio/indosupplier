@@ -1,0 +1,129 @@
+{
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/hrd/holidays",
+      "description": "Get list of holidays",
+      "response": {
+        "data": [
+          {
+            "id": 1,
+            "date": "2025-12-25",
+            "description": "Hari Raya Natal",
+            "is_national": true,
+            "created_at": "2025-01-01T00:00:00Z",
+            "updated_at": "2025-01-01T00:00:00Z"
+          }
+        ],
+        "meta": {
+          "pagination": {
+            "total": 1,
+            "page": 1,
+            "limit": 10
+          },
+          "search": {
+            "search": "",
+            "search_by": ""
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "filter": {
+            "start_date": "",
+            "end_date": "",
+            "note": "Date filters apply to holiday date field"
+          },
+          "searchable_columns": {
+            "string_columns": ["description"],
+            "numeric_columns": ["id"]
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "date",
+              "description",
+              "is_national",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hrd/holidays/stats",
+      "description": "Get holiday statistics",
+      "response": {
+        "data": {
+          "total": 10
+        },
+        "message": "Holiday statistics retrieved successfully"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hrd/holidays/{id}",
+      "description": "Get holiday by ID",
+      "response": {
+        "data": {
+          "id": 1,
+          "date": "2025-12-25",
+          "description": "Hari Raya Natal",
+          "is_national": true,
+          "created_at": "2025-01-01T00:00:00Z",
+          "updated_at": "2025-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/hrd/holidays",
+      "description": "Create new holiday",
+      "body": {
+        "date": "2025-12-25",
+        "description": "Hari Raya Natal",
+        "is_national": true
+      },
+      "response": {
+        "data": {
+          "id": 1,
+          "date": "2025-12-25",
+          "description": "Hari Raya Natal",
+          "is_national": true,
+          "created_at": "2025-01-01T00:00:00Z",
+          "updated_at": "2025-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/hrd/holidays/{id}",
+      "description": "Update holiday",
+      "body": {
+        "date": "2025-12-25",
+        "description": "Hari Raya Natal",
+        "is_national": true
+      },
+      "response": {
+        "data": {
+          "id": 1,
+          "date": "2025-12-25",
+          "description": "Hari Raya Natal",
+          "is_national": true,
+          "created_at": "2025-01-01T00:00:00Z",
+          "updated_at": "2025-01-01T00:00:00Z"
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/hrd/holidays/{id}",
+      "description": "Delete holiday",
+      "response": {
+        "message": "deleted"
+      }
+    }
+  ]
+}

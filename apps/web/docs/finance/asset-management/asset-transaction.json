@@ -1,0 +1,735 @@
+{
+  "title": "Finance/Asset Transaction",
+  "description": "A comprehensive guide to the Asset Transaction API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "GET {{base_url}}/finance/asset-transactions",
+      "response": {
+        "data": [
+          {
+            "id": 35,
+            "asset_id": 9,
+            "asset_code": "AST-20251029-0001",
+            "asset_name": "Mesin Produksi Tekstil",
+            "transaction_type": "ACQUISITION",
+            "transaction_date": "2022-01-10T00:00:00Z",
+            "transaction_amount": 500000000,
+            "description": "Initial asset acquisition",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:53:02+07:00",
+            "updated_at": "2025-10-29T18:53:02+07:00"
+          },
+          {
+            "id": 2,
+            "asset_id": 1,
+            "asset_code": "",
+            "asset_name": "",
+            "transaction_type": "TRANSFER",
+            "transaction_date": "2023-07-15T00:00:00Z",
+            "transaction_amount": 0,
+            "description": "Transfer of Dell OptiPlex 7090 Desktop to different location",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 3,
+            "asset_id": 1,
+            "asset_code": "",
+            "asset_name": "",
+            "transaction_type": "REVALUATION",
+            "transaction_date": "2024-01-15T00:00:00Z",
+            "transaction_amount": 1500000,
+            "description": "Revaluation of Dell OptiPlex 7090 Desktop due to market conditions",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 4,
+            "asset_id": 1,
+            "asset_code": "",
+            "asset_name": "",
+            "transaction_type": "ADJUSTMENT",
+            "transaction_date": "2025-01-15T00:00:00Z",
+            "transaction_amount": -750000,
+            "description": "Adjustment of Dell OptiPlex 7090 Desktop due to damage assessment",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 5,
+            "asset_id": 2,
+            "asset_code": "COMP-002",
+            "asset_name": "HP EliteBook 850 Laptop",
+            "transaction_type": "ACQUISITION",
+            "transaction_date": "2023-03-20T00:00:00Z",
+            "transaction_amount": 18000000,
+            "description": "Initial acquisition of HP EliteBook 850 Laptop",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 6,
+            "asset_id": 2,
+            "asset_code": "COMP-002",
+            "asset_name": "HP EliteBook 850 Laptop",
+            "transaction_type": "TRANSFER",
+            "transaction_date": "2023-09-20T00:00:00Z",
+            "transaction_amount": 0,
+            "description": "Transfer of HP EliteBook 850 Laptop to different location",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 7,
+            "asset_id": 2,
+            "asset_code": "COMP-002",
+            "asset_name": "HP EliteBook 850 Laptop",
+            "transaction_type": "REVALUATION",
+            "transaction_date": "2024-03-20T00:00:00Z",
+            "transaction_amount": 1800000,
+            "description": "Revaluation of HP EliteBook 850 Laptop due to market conditions",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 8,
+            "asset_id": 2,
+            "asset_code": "COMP-002",
+            "asset_name": "HP EliteBook 850 Laptop",
+            "transaction_type": "ADJUSTMENT",
+            "transaction_date": "2025-03-20T00:00:00Z",
+            "transaction_amount": -900000,
+            "description": "Adjustment of HP EliteBook 850 Laptop due to damage assessment",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 9,
+            "asset_id": 3,
+            "asset_code": "FURN-001",
+            "asset_name": "Executive Office Desk",
+            "transaction_type": "ACQUISITION",
+            "transaction_date": "2022-06-10T00:00:00Z",
+            "transaction_amount": 5000000,
+            "description": "Initial acquisition of Executive Office Desk",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 10,
+            "asset_id": 3,
+            "asset_code": "FURN-001",
+            "asset_name": "Executive Office Desk",
+            "transaction_type": "TRANSFER",
+            "transaction_date": "2022-12-10T00:00:00Z",
+            "transaction_amount": 0,
+            "description": "Transfer of Executive Office Desk to different location",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 11,
+            "asset_id": 3,
+            "asset_code": "FURN-001",
+            "asset_name": "Executive Office Desk",
+            "transaction_type": "REVALUATION",
+            "transaction_date": "2023-06-10T00:00:00Z",
+            "transaction_amount": 500000,
+            "description": "Revaluation of Executive Office Desk due to market conditions",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 12,
+            "asset_id": 3,
+            "asset_code": "FURN-001",
+            "asset_name": "Executive Office Desk",
+            "transaction_type": "ADJUSTMENT",
+            "transaction_date": "2024-06-10T00:00:00Z",
+            "transaction_amount": -250000,
+            "description": "Adjustment of Executive Office Desk due to damage assessment",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 13,
+            "asset_id": 3,
+            "asset_code": "FURN-001",
+            "asset_name": "Executive Office Desk",
+            "transaction_type": "DISPOSAL",
+            "transaction_date": "2025-09-29T00:00:00Z",
+            "transaction_amount": 3200000,
+            "description": "Disposal of Executive Office Desk - sold to third party",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 14,
+            "asset_id": 4,
+            "asset_code": "VEH-001",
+            "asset_name": "Toyota Avanza 2022",
+            "transaction_type": "ACQUISITION",
+            "transaction_date": "2022-08-05T00:00:00Z",
+            "transaction_amount": 250000000,
+            "description": "Initial acquisition of Toyota Avanza 2022",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 15,
+            "asset_id": 4,
+            "asset_code": "VEH-001",
+            "asset_name": "Toyota Avanza 2022",
+            "transaction_type": "TRANSFER",
+            "transaction_date": "2023-02-05T00:00:00Z",
+            "transaction_amount": 0,
+            "description": "Transfer of Toyota Avanza 2022 to different location",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 16,
+            "asset_id": 4,
+            "asset_code": "VEH-001",
+            "asset_name": "Toyota Avanza 2022",
+            "transaction_type": "REVALUATION",
+            "transaction_date": "2023-08-05T00:00:00Z",
+            "transaction_amount": 25000000,
+            "description": "Revaluation of Toyota Avanza 2022 due to market conditions",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 17,
+            "asset_id": 4,
+            "asset_code": "VEH-001",
+            "asset_name": "Toyota Avanza 2022",
+            "transaction_type": "ADJUSTMENT",
+            "transaction_date": "2024-08-05T00:00:00Z",
+            "transaction_amount": -12500000,
+            "description": "Adjustment of Toyota Avanza 2022 due to damage assessment",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 1,
+            "asset_id": 1,
+            "asset_code": "",
+            "asset_name": "",
+            "transaction_type": "ACQUISITION",
+            "transaction_date": "2023-01-15T00:00:00Z",
+            "transaction_amount": 15000000,
+            "description": "Initial acquisition of Dell OptiPlex 7090 Desktop",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 19,
+            "asset_id": 5,
+            "asset_code": "SOFT-001",
+            "asset_name": "Microsoft Office 365 Business",
+            "transaction_type": "TRANSFER",
+            "transaction_date": "2023-07-01T00:00:00Z",
+            "transaction_amount": 0,
+            "description": "Transfer of Microsoft Office 365 Business to different location",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 20,
+            "asset_id": 5,
+            "asset_code": "SOFT-001",
+            "asset_name": "Microsoft Office 365 Business",
+            "transaction_type": "REVALUATION",
+            "transaction_date": "2024-01-01T00:00:00Z",
+            "transaction_amount": 1200000,
+            "description": "Revaluation of Microsoft Office 365 Business due to market conditions",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 21,
+            "asset_id": 5,
+            "asset_code": "SOFT-001",
+            "asset_name": "Microsoft Office 365 Business",
+            "transaction_type": "ADJUSTMENT",
+            "transaction_date": "2025-01-01T00:00:00Z",
+            "transaction_amount": -600000,
+            "description": "Adjustment of Microsoft Office 365 Business due to damage assessment",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 22,
+            "asset_id": 6,
+            "asset_code": "MACH-001",
+            "asset_name": "Industrial Printer",
+            "transaction_type": "ACQUISITION",
+            "transaction_date": "2021-12-15T00:00:00Z",
+            "transaction_amount": 50000000,
+            "description": "Initial acquisition of Industrial Printer",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 23,
+            "asset_id": 6,
+            "asset_code": "MACH-001",
+            "asset_name": "Industrial Printer",
+            "transaction_type": "TRANSFER",
+            "transaction_date": "2022-06-15T00:00:00Z",
+            "transaction_amount": 0,
+            "description": "Transfer of Industrial Printer to different location",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 24,
+            "asset_id": 6,
+            "asset_code": "MACH-001",
+            "asset_name": "Industrial Printer",
+            "transaction_type": "REVALUATION",
+            "transaction_date": "2022-12-15T00:00:00Z",
+            "transaction_amount": 5000000,
+            "description": "Revaluation of Industrial Printer due to market conditions",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 25,
+            "asset_id": 6,
+            "asset_code": "MACH-001",
+            "asset_name": "Industrial Printer",
+            "transaction_type": "ADJUSTMENT",
+            "transaction_date": "2023-12-15T00:00:00Z",
+            "transaction_amount": -2500000,
+            "description": "Adjustment of Industrial Printer due to damage assessment",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 26,
+            "asset_id": 6,
+            "asset_code": "MACH-001",
+            "asset_name": "Industrial Printer",
+            "transaction_type": "DISPOSAL",
+            "transaction_date": "2025-09-29T00:00:00Z",
+            "transaction_amount": 28000000,
+            "description": "Disposal of Industrial Printer - sold to third party",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 27,
+            "asset_id": 7,
+            "asset_code": "BUILD-001",
+            "asset_name": "Office Building Floor 12",
+            "transaction_type": "ACQUISITION",
+            "transaction_date": "2020-01-01T00:00:00Z",
+            "transaction_amount": 2000000000,
+            "description": "Initial acquisition of Office Building Floor 12",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 28,
+            "asset_id": 7,
+            "asset_code": "BUILD-001",
+            "asset_name": "Office Building Floor 12",
+            "transaction_type": "TRANSFER",
+            "transaction_date": "2020-07-01T00:00:00Z",
+            "transaction_amount": 0,
+            "description": "Transfer of Office Building Floor 12 to different location",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 29,
+            "asset_id": 7,
+            "asset_code": "BUILD-001",
+            "asset_name": "Office Building Floor 12",
+            "transaction_type": "REVALUATION",
+            "transaction_date": "2021-01-01T00:00:00Z",
+            "transaction_amount": 200000000,
+            "description": "Revaluation of Office Building Floor 12 due to market conditions",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 30,
+            "asset_id": 7,
+            "asset_code": "BUILD-001",
+            "asset_name": "Office Building Floor 12",
+            "transaction_type": "ADJUSTMENT",
+            "transaction_date": "2022-01-01T00:00:00Z",
+            "transaction_amount": -100000000,
+            "description": "Adjustment of Office Building Floor 12 due to damage assessment",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 31,
+            "asset_id": 8,
+            "asset_code": "PAT-001",
+            "asset_name": "Software Algorithm Patent",
+            "transaction_type": "ACQUISITION",
+            "transaction_date": "2022-05-20T00:00:00Z",
+            "transaction_amount": 100000000,
+            "description": "Initial acquisition of Software Algorithm Patent",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 32,
+            "asset_id": 8,
+            "asset_code": "PAT-001",
+            "asset_name": "Software Algorithm Patent",
+            "transaction_type": "TRANSFER",
+            "transaction_date": "2022-11-20T00:00:00Z",
+            "transaction_amount": 0,
+            "description": "Transfer of Software Algorithm Patent to different location",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 33,
+            "asset_id": 8,
+            "asset_code": "PAT-001",
+            "asset_name": "Software Algorithm Patent",
+            "transaction_type": "REVALUATION",
+            "transaction_date": "2023-05-20T00:00:00Z",
+            "transaction_amount": 10000000,
+            "description": "Revaluation of Software Algorithm Patent due to market conditions",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 34,
+            "asset_id": 8,
+            "asset_code": "PAT-001",
+            "asset_name": "Software Algorithm Patent",
+            "transaction_type": "ADJUSTMENT",
+            "transaction_date": "2024-05-20T00:00:00Z",
+            "transaction_amount": -5000000,
+            "description": "Adjustment of Software Algorithm Patent due to damage assessment",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          },
+          {
+            "id": 18,
+            "asset_id": 5,
+            "asset_code": "SOFT-001",
+            "asset_name": "Microsoft Office 365 Business",
+            "transaction_type": "ACQUISITION",
+            "transaction_date": "2023-01-01T00:00:00Z",
+            "transaction_amount": 12000000,
+            "description": "Initial acquisition of Microsoft Office 365 Business",
+            "status": "APPROVED",
+            "created_at": "2025-10-29T18:25:20+07:00",
+            "updated_at": "2025-10-29T18:25:20+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 100,
+            "page": 1,
+            "total": 35
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "asset_id", "transaction_amount"],
+            "string_columns": ["transaction_type", "description", "status"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "asset_id",
+              "transaction_type",
+              "transaction_date",
+              "transaction_amount",
+              "status",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "GET {{base_url}}/finance/asset-transactions/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "asset_id": 1,
+          "asset_code": "",
+          "asset_name": "",
+          "transaction_type": "ACQUISITION",
+          "transaction_date": "2023-01-15T00:00:00Z",
+          "transaction_amount": 15000000,
+          "description": "Initial acquisition of Dell OptiPlex 7090 Desktop",
+          "status": "APPROVED",
+          "created_at": "2025-10-29T18:25:20+07:00",
+          "updated_at": "2025-10-29T18:25:20+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET STATS",
+      "endpoint": "GET {{base_url}}/finance/asset-transactions/stats",
+      "response": {
+        "data": {
+          "by_asset": {
+            "top_assets": [
+              {
+                "asset_code": "",
+                "asset_id": 1,
+                "asset_name": "",
+                "count": 4
+              },
+              {
+                "asset_code": "FURN-001",
+                "asset_id": 3,
+                "asset_name": "Executive Office Desk",
+                "count": 5
+              },
+              {
+                "asset_code": "VEH-001",
+                "asset_id": 4,
+                "asset_name": "Toyota Avanza 2022",
+                "count": 4
+              },
+              {
+                "asset_code": "SOFT-001",
+                "asset_id": 5,
+                "asset_name": "Microsoft Office 365 Business",
+                "count": 4
+              },
+              {
+                "asset_code": "MACH-001",
+                "asset_id": 6,
+                "asset_name": "Industrial Printer",
+                "count": 5
+              },
+              {
+                "asset_code": "BUILD-001",
+                "asset_id": 7,
+                "asset_name": "Office Building Floor 12",
+                "count": 4
+              },
+              {
+                "asset_code": "PAT-001",
+                "asset_id": 8,
+                "asset_name": "Software Algorithm Patent",
+                "count": 4
+              },
+              {
+                "asset_code": "AST-20251029-0001",
+                "asset_id": 9,
+                "asset_name": "Mesin Produksi Tekstil",
+                "count": 1
+              },
+              {
+                "asset_code": "COMP-002",
+                "asset_id": 2,
+                "asset_name": "HP EliteBook 850 Laptop",
+                "count": 4
+              }
+            ],
+            "total_assets": 9
+          },
+          "by_status": {
+            "approved": 35,
+            "draft": 0
+          },
+          "by_type": {
+            "acquisition": 9,
+            "adjustment": 8,
+            "disposal": 2,
+            "revaluation": 8,
+            "transfer": 8
+          },
+          "financial": {
+            "total_transaction_amount": 3103700000
+          },
+          "total": 35
+        },
+        "message": "Asset transaction statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "GET {{base_url}}/finance/asset-transactions/add",
+      "response": {
+        "data": {
+          "assets": [
+            {
+              "id": 2,
+              "code": "COMP-002",
+              "name": "HP EliteBook 850 Laptop"
+            },
+            {
+              "id": 3,
+              "code": "FURN-001",
+              "name": "Executive Office Desk"
+            },
+            {
+              "id": 4,
+              "code": "VEH-001",
+              "name": "Toyota Avanza 2022"
+            },
+            {
+              "id": 5,
+              "code": "SOFT-001",
+              "name": "Microsoft Office 365 Business"
+            },
+            {
+              "id": 6,
+              "code": "MACH-001",
+              "name": "Industrial Printer"
+            },
+            {
+              "id": 7,
+              "code": "BUILD-001",
+              "name": "Office Building Floor 12"
+            },
+            {
+              "id": 8,
+              "code": "PAT-001",
+              "name": "Software Algorithm Patent"
+            },
+            {
+              "id": 9,
+              "code": "AST-20251029-0001",
+              "name": "Mesin Produksi Tekstil"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/finance/asset-transactions",
+      "body": {
+        "asset_id": 1,
+        "transaction_type": "DISPOSAL | REVALUATION | ADJUSTMENT",
+        "transaction_date": "2025-01-15T00:00:00Z",
+        "transaction_amount": 0,
+        "description": "Pemindahan aset ke cabang Surabaya."
+      },
+      "response": {
+        "data": {
+          "id": 36,
+          "asset_id": 1,
+          "asset_code": "",
+          "asset_name": "",
+          "transaction_type": "DISPOSAL",
+          "transaction_date": "2025-01-15T00:00:00Z",
+          "transaction_amount": 0,
+          "description": "Pemindahan aset ke cabang Surabaya.",
+          "status": "DRAFT",
+          "created_at": "2025-10-29T19:03:57+07:00",
+          "updated_at": "2025-10-29T19:03:57+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/finance/asset-transactions/4",
+      "body": {
+        "asset_id": 1,
+        "transaction_type": "DISPOSAL | REVALUATION | ADJUSTMENT",
+        "transaction_date": "2025-01-15T00:00:00Z",
+        "transaction_amount": 0,
+        "description": "Pemindahan aset ke cabang Surabaya."
+      },
+      "response": {
+        "data": {
+          "id": 36,
+          "asset_id": 1,
+          "asset_code": "",
+          "asset_name": "",
+          "transaction_type": "DISPOSAL",
+          "transaction_date": "2025-01-15T00:00:00Z",
+          "transaction_amount": 0,
+          "description": "Pemindahan aset ke cabang Surabaya.",
+          "status": "DRAFT",
+          "created_at": "2025-10-29T19:03:57+07:00",
+          "updated_at": "2025-10-29T19:03:57+07:00"
+        },
+        "message": "created"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/finance/asset-transactions/4",
+      "response": {
+        "message": "Asset transaction deleted successfully"
+      }
+    },
+    {
+      "title": "Approve Asset Transaction",
+      "endpoint": "POST {{base_url}}/finance/asset-transactions/2/approve",
+      "body": {
+        "asset_category_id": 1,
+        "asset_location_id": 3,
+        "name": "Mesin Produksi Tekstil",
+        "acquisition_date": "2022-01-10T00:00:00Z",
+        "acquisition_cost": 500000000,
+        "accumulated_depreciation": 150000000,
+        "current_value": 350000000,
+        "status": "ACTIVE | INACTIVE",
+        "description": "Digunakan di pabrik utama Bandung untuk produksi kain."
+      },
+      "response": {
+        "error": "only draft transactions can be approved"
+      }
+    }
+  ]
+}

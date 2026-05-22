@@ -1,0 +1,601 @@
+{
+  "title": "finance/up-country-cost",
+  "description": "A comprehensive guide to the Data Master API response.",
+  "sections": [
+    {
+      "title": "GET DATA",
+      "endpoint": "{{base_url}}/finance/up-country-cost",
+      "response": {
+        "data": [
+          {
+            "id": 3,
+            "code": "UCC-20251027-0003",
+            "purpose": "Sales Visit",
+            "location": "Bandung",
+            "start_date": "2024-03-05T00:00:00Z",
+            "end_date": "2024-03-07T00:00:00Z",
+            "status": "DRAFT",
+            "created_by": 1,
+            "notes": "Client visit for sales presentation",
+            "items": [
+              {
+                "id": 9,
+                "cost_type": "TRANSPORT",
+                "description": "Flight tickets",
+                "amount": 1500000
+              },
+              {
+                "id": 10,
+                "cost_type": "ACCOMMODATION",
+                "description": "Hotel accommodation",
+                "amount": 800000
+              },
+              {
+                "id": 11,
+                "cost_type": "MEAL",
+                "description": "Daily meals",
+                "amount": 300000
+              },
+              {
+                "id": 12,
+                "cost_type": "TRANSPORT",
+                "description": "Local transportation",
+                "amount": 200000
+              }
+            ],
+            "employees": [
+              {
+                "id": 1,
+                "name": "Administrator",
+                "username": "admin",
+                "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+              }
+            ],
+            "created_at": "2025-10-27T09:06:24+07:00",
+            "updated_at": "2025-10-27T09:06:24+07:00"
+          },
+          {
+            "id": 2,
+            "code": "UCC-20251027-0002",
+            "purpose": "Training Program",
+            "location": "Surabaya",
+            "start_date": "2024-02-10T00:00:00Z",
+            "end_date": "2024-02-12T00:00:00Z",
+            "status": "DRAFT",
+            "created_by": 2,
+            "notes": "Technical training for new employees",
+            "items": [
+              {
+                "id": 5,
+                "cost_type": "TRANSPORT",
+                "description": "Flight tickets",
+                "amount": 1500000
+              },
+              {
+                "id": 6,
+                "cost_type": "ACCOMMODATION",
+                "description": "Hotel accommodation",
+                "amount": 800000
+              },
+              {
+                "id": 7,
+                "cost_type": "MEAL",
+                "description": "Daily meals",
+                "amount": 300000
+              },
+              {
+                "id": 8,
+                "cost_type": "TRANSPORT",
+                "description": "Local transportation",
+                "amount": 200000
+              }
+            ],
+            "employees": [
+              {
+                "id": 1,
+                "name": "Administrator",
+                "username": "admin",
+                "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+              },
+              {
+                "id": 2,
+                "name": "John Doe",
+                "username": "johndoe",
+                "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=johndoe&backgroundColor=fecaca&size=200"
+              }
+            ],
+            "created_at": "2025-10-27T09:06:24+07:00",
+            "updated_at": "2025-10-27T09:06:24+07:00"
+          },
+          {
+            "id": 1,
+            "code": "UCC-20251027-0001",
+            "purpose": "Business Meeting with Client",
+            "location": "Jakarta",
+            "start_date": "2024-01-15T00:00:00Z",
+            "end_date": "2024-01-17T00:00:00Z",
+            "status": "APPROVED",
+            "created_by": 1,
+            "notes": "Meeting with PT. ABC for project discussion",
+            "items": [
+              {
+                "id": 1,
+                "cost_type": "TRANSPORT",
+                "description": "Flight tickets",
+                "amount": 1500000
+              },
+              {
+                "id": 2,
+                "cost_type": "ACCOMMODATION",
+                "description": "Hotel accommodation",
+                "amount": 800000
+              },
+              {
+                "id": 3,
+                "cost_type": "MEAL",
+                "description": "Daily meals",
+                "amount": 300000
+              },
+              {
+                "id": 4,
+                "cost_type": "TRANSPORT",
+                "description": "Local transportation",
+                "amount": 200000
+              }
+            ],
+            "employees": [
+              {
+                "id": 1,
+                "name": "Administrator",
+                "username": "admin",
+                "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+              }
+            ],
+            "created_at": "2025-10-27T09:06:24+07:00",
+            "updated_at": "2025-10-27T09:06:24+07:00"
+          }
+        ],
+        "meta": {
+          "filter": {
+            "end_date": "",
+            "start_date": ""
+          },
+          "pagination": {
+            "limit": 10,
+            "page": 1,
+            "total": 3
+          },
+          "search": {
+            "search": "",
+            "searchBy": ""
+          },
+          "searchable_columns": {
+            "numeric_columns": ["id", "created_by"],
+            "string_columns": ["code", "purpose", "location", "notes", "status"]
+          },
+          "sort": {
+            "sort_by": "",
+            "sort_order": ""
+          },
+          "sortable_columns": {
+            "available_fields": [
+              "id",
+              "code",
+              "purpose",
+              "location",
+              "start_date",
+              "end_date",
+              "status",
+              "created_by",
+              "created_at",
+              "updated_at"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "title": "GET DATA BY ID",
+      "endpoint": "GET {{base_url}}/finance/up-country-cost/1",
+      "response": {
+        "data": {
+          "id": 1,
+          "code": "UCC-20251027-0001",
+          "purpose": "Business Meeting with Client",
+          "location": "Jakarta",
+          "start_date": "2024-01-15T00:00:00Z",
+          "end_date": "2024-01-17T00:00:00Z",
+          "status": "APPROVED",
+          "created_by": 1,
+          "notes": "Meeting with PT. ABC for project discussion",
+          "items": [
+            {
+              "id": 1,
+              "cost_type": "TRANSPORT",
+              "description": "Flight tickets",
+              "amount": 1500000
+            },
+            {
+              "id": 2,
+              "cost_type": "ACCOMMODATION",
+              "description": "Hotel accommodation",
+              "amount": 800000
+            },
+            {
+              "id": 3,
+              "cost_type": "MEAL",
+              "description": "Daily meals",
+              "amount": 300000
+            },
+            {
+              "id": 4,
+              "cost_type": "TRANSPORT",
+              "description": "Local transportation",
+              "amount": 200000
+            }
+          ],
+          "employees": [
+            {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            }
+          ],
+          "created_at": "2025-10-27T09:06:24+07:00",
+          "updated_at": "2025-10-27T09:06:24+07:00"
+        }
+      }
+    },
+    {
+      "title": "GET ADD DATA",
+      "endpoint": "GET {{base_url}}/finance/up-country-cost/add",
+      "response": {
+        "data": {
+          "employees": [
+            {
+              "id": 4,
+              "name": "Tester User",
+              "username": "Tester",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=tester&backgroundColor=fecaca&size=200"
+            },
+            {
+              "id": 5,
+              "name": "Director",
+              "username": "director",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=director&backgroundColor=ccfbf1&size=200"
+            },
+            {
+              "id": 3,
+              "name": "Viewer User",
+              "username": "viewer",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=viewer&backgroundColor=fef3c7&size=200"
+            },
+            {
+              "id": 2,
+              "name": "John Doe",
+              "username": "johndoe",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=johndoe&backgroundColor=fecaca&size=200"
+            },
+            {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "title": "GET DATA STATS",
+      "endpoint": "GET {{base_url}}/finance/up-country-cost/stats",
+      "response": {
+        "data": {
+          "total": 3,
+          "draft": 2,
+          "approved": 1,
+          "total_amount": 2800000,
+          "average_amount": 700000,
+          "graphic_data": [
+            {
+              "cost_date": "2024-01-15T00:00:00Z",
+              "total_costs": 1,
+              "total_amount": 2800000
+            },
+            {
+              "cost_date": "2024-02-10T00:00:00Z",
+              "total_costs": 1,
+              "total_amount": 2800000
+            },
+            {
+              "cost_date": "2024-03-05T00:00:00Z",
+              "total_costs": 1,
+              "total_amount": 2800000
+            }
+          ]
+        },
+        "message": "Up country cost statistics retrieved successfully"
+      }
+    },
+    {
+      "title": "POST DATA",
+      "endpoint": "POST {{base_url}}/finance/up-country-cost",
+      "body": {
+        "purpose": "Survey lokasi pembangunan jembatan baru",
+        "location": "Kabupaten Sleman, Yogyakarta",
+        "start_date": "2025-10-20",
+        "end_date": "2025-10-23",
+        "notes": "Pastikan dokumentasi lengkap dan laporan dikumpulkan setelah kembali.",
+        "items": [
+          {
+            "cost_type": "TRANSPORT | ACCOMMODATION | MEAL | FUEL | OTHER",
+            "description": "Biaya transportasi menuju lokasi",
+            "amount": 1500000
+          },
+          {
+            "cost_type": "ACCOMMODATION",
+            "description": "Penginapan selama 3 malam",
+            "amount": 2100000
+          },
+          {
+            "cost_type": "MEAL",
+            "description": "Uang makan selama perjalanan",
+            "amount": 600000
+          },
+          {
+            "cost_type": "FUEL",
+            "description": "Bahan bakar kendaraan dinas",
+            "amount": 400000
+          },
+          {
+            "cost_type": "OTHER",
+            "description": "Biaya administrasi dan parkir",
+            "amount": 150000
+          }
+        ],
+        "employees_id": [1, 2]
+      },
+      "response": {
+        "data": {
+          "id": 4,
+          "code": "UCC-20251027-0004",
+          "purpose": "Survey lokasi pembangunan jembatan baru",
+          "location": "Kabupaten Sleman, Yogyakarta",
+          "start_date": "2025-10-20T00:00:00Z",
+          "end_date": "2025-10-23T00:00:00Z",
+          "status": "DRAFT",
+          "created_by": 1,
+          "notes": "Pastikan dokumentasi lengkap dan laporan dikumpulkan setelah kembali.",
+          "items": [
+            {
+              "id": 13,
+              "cost_type": "TRANSPORT",
+              "description": "Biaya transportasi menuju lokasi",
+              "amount": 1500000
+            },
+            {
+              "id": 14,
+              "cost_type": "ACCOMMODATION",
+              "description": "Penginapan selama 3 malam",
+              "amount": 2100000
+            },
+            {
+              "id": 15,
+              "cost_type": "MEAL",
+              "description": "Uang makan selama perjalanan",
+              "amount": 600000
+            },
+            {
+              "id": 16,
+              "cost_type": "FUEL",
+              "description": "Bahan bakar kendaraan dinas",
+              "amount": 400000
+            },
+            {
+              "id": 17,
+              "cost_type": "OTHER",
+              "description": "Biaya administrasi dan parkir",
+              "amount": 150000
+            }
+          ],
+          "employees": [
+            {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            {
+              "id": 2,
+              "name": "John Doe",
+              "username": "johndoe",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=johndoe&backgroundColor=fecaca&size=200"
+            }
+          ],
+          "created_at": "2025-10-27T09:19:30+07:00",
+          "updated_at": "2025-10-27T09:19:30+07:00"
+        },
+        "message": "Up country cost created successfully"
+      }
+    },
+    {
+      "title": "EDIT DATA",
+      "endpoint": "PUT {{base_url}}/finance/up-country-cost/2",
+      "body": {
+        "purpose": "Survey lokasi pembangunan jembatan baru",
+        "location": "Kabupaten Sleman, Yogyakarta",
+        "start_date": "2025-10-20",
+        "end_date": "2025-10-23",
+        "notes": "Pastikan dokumentasi lengkap dan laporan dikumpulkan setelah kembali.",
+        "items": [
+          {
+            "cost_type": "TRANSPORT | ACCOMMODATION | MEAL | FUEL | OTHER",
+            "description": "Biaya transportasi menuju lokasi",
+            "amount": 1500000
+          },
+          {
+            "cost_type": "ACCOMMODATION",
+            "description": "Penginapan selama 3 malam",
+            "amount": 2100000
+          },
+          {
+            "cost_type": "MEAL",
+            "description": "Uang makan selama perjalanan",
+            "amount": 600000
+          },
+          {
+            "cost_type": "FUEL",
+            "description": "Bahan bakar kendaraan dinas",
+            "amount": 400000
+          },
+          {
+            "cost_type": "OTHER",
+            "description": "Biaya administrasi dan parkir",
+            "amount": 150000
+          }
+        ],
+        "employees_id": [1, 2]
+      },
+      "response": {
+        "data": {
+          "id": 4,
+          "code": "UCC-20251027-0004",
+          "purpose": "Survey lokasi pembangunan jembatan baru",
+          "location": "Kabupaten Sleman, Yogyakarta",
+          "start_date": "2025-10-20T00:00:00Z",
+          "end_date": "2025-10-23T00:00:00Z",
+          "status": "DRAFT",
+          "created_by": 1,
+          "notes": "Pastikan dokumentasi lengkap dan laporan dikumpulkan setelah kembali.",
+          "items": [
+            {
+              "id": 13,
+              "cost_type": "TRANSPORT",
+              "description": "Biaya transportasi menuju lokasi",
+              "amount": 1500000
+            },
+            {
+              "id": 14,
+              "cost_type": "ACCOMMODATION",
+              "description": "Penginapan selama 3 malam",
+              "amount": 2100000
+            },
+            {
+              "id": 15,
+              "cost_type": "MEAL",
+              "description": "Uang makan selama perjalanan",
+              "amount": 600000
+            },
+            {
+              "id": 16,
+              "cost_type": "FUEL",
+              "description": "Bahan bakar kendaraan dinas",
+              "amount": 400000
+            },
+            {
+              "id": 17,
+              "cost_type": "OTHER",
+              "description": "Biaya administrasi dan parkir",
+              "amount": 150000
+            }
+          ],
+          "employees": [
+            {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            {
+              "id": 2,
+              "name": "John Doe",
+              "username": "johndoe",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=johndoe&backgroundColor=fecaca&size=200"
+            }
+          ],
+          "created_at": "2025-10-27T09:19:30+07:00",
+          "updated_at": "2025-10-27T09:19:30+07:00"
+        },
+        "message": "Up country cost updated successfully"
+      }
+    },
+    {
+      "title": "DELETE DATA",
+      "endpoint": "DELETE {{base_url}}/finance/up-country-cost/2",
+      "response": {
+        "message": "deleted"
+      }
+    },
+    {
+      "title": "APPROVE DATA",
+      "endpoint": "POST {{base_url}}/finance/up-country-cost/5/approve",
+      "response": {
+        "data": {
+          "id": 4,
+          "code": "UCC-20251027-0004",
+          "purpose": "Survey lokasi pembangunan jembatan baru",
+          "location": "Kabupaten Sleman, Yogyakarta",
+          "start_date": "2025-10-20T00:00:00Z",
+          "end_date": "2025-10-23T00:00:00Z",
+          "status": "APPROVED",
+          "created_by": 1,
+          "notes": "Pastikan dokumentasi lengkap dan laporan dikumpulkan setelah kembali.",
+          "items": [
+            {
+              "id": 13,
+              "cost_type": "TRANSPORT",
+              "description": "Biaya transportasi menuju lokasi",
+              "amount": 1500000
+            },
+            {
+              "id": 14,
+              "cost_type": "ACCOMMODATION",
+              "description": "Penginapan selama 3 malam",
+              "amount": 2100000
+            },
+            {
+              "id": 15,
+              "cost_type": "MEAL",
+              "description": "Uang makan selama perjalanan",
+              "amount": 600000
+            },
+            {
+              "id": 16,
+              "cost_type": "FUEL",
+              "description": "Bahan bakar kendaraan dinas",
+              "amount": 400000
+            },
+            {
+              "id": 17,
+              "cost_type": "OTHER",
+              "description": "Biaya administrasi dan parkir",
+              "amount": 150000
+            }
+          ],
+          "employees": [
+            {
+              "id": 1,
+              "name": "Administrator",
+              "username": "admin",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=admin&backgroundColor=fecaca&size=200"
+            },
+            {
+              "id": 2,
+              "name": "John Doe",
+              "username": "johndoe",
+              "avatar_url": "https://api.dicebear.com/9.x/lorelei/svg?seed=johndoe&backgroundColor=fecaca&size=200"
+            }
+          ],
+          "created_at": "2025-10-27T09:19:30+07:00",
+          "updated_at": "2025-10-27T09:22:28+07:00"
+        },
+        "message": "Up country cost approved successfully and journal entries created"
+      }
+    },
+    {
+      "title": "EXPORT DATA",
+      "endpoint": "GET {{base_url}}/finance/up-country-cost/export?format=excel"
+    }
+  ]
+}

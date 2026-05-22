@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Down Payment Invoice - {{.Code}}</title>
+  <style>
+    @page { size: A4; margin: 18mm 18mm 14mm 18mm; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, Helvetica, sans-serif; font-size: 9.5pt; color: #333; line-height: 1.45; background: #fff; }
+    .page { max-width: 210mm; margin: 0 auto; padding: 20px 24px; }
+
+    .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+    .doc-label { font-size: 22pt; font-weight: 400; color: #7a7a7a; font-style: italic; line-height: 1.1; }
+    .company-block { text-align: right; }
+    .company-block .company-name { font-size: 14pt; font-weight: 700; color: #333; text-transform: uppercase; letter-spacing: 0.04em; }
+    .company-block .company-detail { font-size: 8.5pt; color: #555; line-height: 1.5; }
+    .header-line { height: 4px; background: #5a7bbf; margin-bottom: 16px; }
+
+    .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; margin-bottom: 20px; font-size: 9pt; }
+    .meta-block .meta-title { font-size: 8pt; font-weight: 700; text-transform: uppercase; color: #333; margin-bottom: 4px; border-bottom: 1px solid #e0e7f0; padding-bottom: 3px; }
+    .meta-row { display: flex; line-height: 1.7; }
+    .meta-row .lbl { color: #666; min-width: 130px; }
+    .meta-row .val { color: #000; font-weight: 500; }
+    .status-badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 8pt; font-weight: 700; background: #e8f0fe; color: #3a5ebf; }
+
+    /* Amount highlight */
+    .amount-highlight { background: #5a7bbf; color: #fff; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; margin: 20px 0; border-radius: 3px; }
+    .amount-highlight .ah-label { font-size: 10pt; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .amount-highlight .ah-value { font-size: 14pt; font-weight: 700; }
+
+    .notes-box { margin-top: 16px; padding: 10px 12px; background: #f9fafb; border-left: 3px solid #5a7bbf; font-size: 8.5pt; color: #555; }
+    .notes-box strong { display: block; font-size: 8pt; text-transform: uppercase; color: #333; margin-bottom: 4px; }
+
+    .applied-list { margin-top: 16px; font-size: 8.5pt; color: #555; }
+    .applied-list strong { font-size: 8pt; text-transform: uppercase; color: #333; display: block; margin-bottom: 4px; }
+    .applied-list .tag { display: inline-block; background: #edf2ff; color: #3a5ebf; border-radius: 3px; padding: 2px 6px; margin: 2px; font-size: 8pt; font-weight: 500; }
+
+    .footer { margin-top: 24px; text-align: center; font-size: 7.5pt; color: #aaa; border-top: 1px solid #eee; padding-top: 8px; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="doc-label">Down Payment<br>Invoice</div>
+    <div class="company-block">
+      <div class="company-name">{{.CompanyName}}</div>
+      {{if .CompanyAddress}}<div class="company-detail">{{.CompanyAddress}}</div>{{end}}
+      {{if .CompanyPhone}}<div class="company-detail">Tel: {{.CompanyPhone}}</div>{{end}}
+      {{if .CompanyEmail}}<div class="company-detail">{{.CompanyEmail}}</div>{{end}}
+    </div>
+  </div>
+  <div class="header-line"></div>
+
+  <div class="meta-grid">
+    <div class="meta-block">
+      <div class="meta-title">Invoice Info</div>
+      <div class="meta-row"><span class="lbl">Invoice Code</span><span class="val">{{.Code}}</span></div>
+      {{if .InvoiceNumber}}<div class="meta-row"><span class="lbl">Invoice Number</span><span class="val">{{.InvoiceNumber}}</span></div>{{end}}
+      <div class="meta-row"><span class="lbl">Status</span><span class="val"><span class="status-badge">{{.Status}}</span></span></div>
+      <div class="meta-row"><span class="lbl">Invoice Date</span><span class="val">{{.InvoiceDate}}</span></div>
+      <div class="meta-row"><span class="lbl">Due Date</span><span class="val">{{.DueDate}}</span></div>
+    </div>
+    <div class="meta-block">
+      <div class="meta-title">References</div>
+      {{if .PurchaseOrderCode}}<div class="meta-row"><span class="lbl">Purchase Order</span><span class="val">{{.PurchaseOrderCode}}</span></div>{{end}}
+    </div>
+  </div>
+
+  <div class="amount-highlight">
+    <span class="ah-label">Down Payment Amount</span>
+    <span class="ah-value">{{formatMoney .Amount}}</span>
+  </div>
+
+  {{if .RegularInvoiceCodes}}
+  <div class="applied-list">
+    <strong>Applied to Invoices</strong>
+    {{range .RegularInvoiceCodes}}<span class="tag">{{.}}</span>{{end}}
+  </div>
+  {{end}}
+
+  {{if .Notes}}
+  <div class="notes-box"><strong>Notes</strong>{{.Notes}}</div>
+  {{end}}
+
+  <div class="footer">Printed on {{.PrintDate}} &nbsp;·&nbsp; SalesView &mdash; Down Payment Invoice {{.Code}}</div>
+</div>
+</body>
+</html>
