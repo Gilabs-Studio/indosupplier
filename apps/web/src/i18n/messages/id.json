@@ -154,7 +154,7 @@
   "auth": {
     "register": {
       "title": "Buat Akun Anda",
-      "description": "Daftarkan bisnis Anda di platform SalesView — tanpa kartu kredit",
+      "description": "Daftarkan bisnis Anda di platform Indosupplier — tanpa kartu kredit",
       "nameLabel": "Nama Lengkap",
       "namePlaceholder": "Masukkan nama lengkap Anda",
       "emailLabel": "Email Kerja",
@@ -168,7 +168,7 @@
       "submitting": "Membuat akun...",
       "alreadyHaveAccount": "Sudah punya akun?",
       "signIn": "Masuk",
-      "brandName": "SalesView",
+      "brandName": "Indosupplier",
       "brandBy": "",
       "companyLabel": "Nama Perusahaan",
       "companyOptional": "Opsional",

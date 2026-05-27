@@ -154,7 +154,7 @@
   "auth": {
     "register": {
       "title": "Create Your Account",
-      "description": "Set up your business on the SalesView platform — no credit card required",
+      "description": "Set up your business on the Indosupplier platform — no credit card required",
       "nameLabel": "Full Name",
       "namePlaceholder": "Enter your full name",
       "emailLabel": "Work Email",
@@ -168,7 +168,7 @@
       "submitting": "Creating account...",
       "alreadyHaveAccount": "Already have an account?",
       "signIn": "Sign In",
-      "brandName": "SalesView",
+      "brandName": "Indosupplier",
       "brandBy": "",
       "companyLabel": "Company name",
       "companyRequired": "Required",

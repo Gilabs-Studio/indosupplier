@@ -93,7 +93,7 @@ cp .env.example .env
 - `DB_PORT`: PostgreSQL port (default: 5432)
 - `DB_USER`: PostgreSQL user (default: postgres)
 - `DB_PASSWORD`: PostgreSQL password
-- `DB_NAME`: Database name (default: gims_erp)
+- `DB_NAME`: Database name (default: indosupplier_db)
 - `JWT_SECRET`: JWT secret key (min 32 characters)
 
 **Storage Configuration:**
@@ -129,7 +129,7 @@ docker-compose up -d postgres
 2. Create database:
 
 ```sql
-CREATE DATABASE gims_erp;
+CREATE DATABASE indosupplier_db;
 ```
 
 **Note**: Jika menggunakan local PostgreSQL, gunakan `DB_PORT=5432` di `.env` file.
@@ -181,8 +181,8 @@ docker-compose up --build
 
 ```bash
 cd apps/api
-docker build -t gims-api .
-docker run -p 8087:8087 gims-api
+docker build -t indosupplier-api .
+docker run -p 8088:8088 indosupplier-api
 ```
 
 ## API Endpoints

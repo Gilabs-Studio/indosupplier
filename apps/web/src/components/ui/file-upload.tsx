@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 /** Read CSRF token from cookie (same as api-client). Required for POST to API when CSRF is enabled. */
 function getCSRFToken(): string | null {
   if (typeof document === "undefined") return null;
-  const match = document.cookie.match(/(?:^|;\s*)gims_csrf_token=([^;]*)/);
+  const match = document.cookie.match(/(?:^|;\s*)indosupplier_csrf_token=([^;]*)/);
   return match ? decodeURIComponent(match[1]) : null;
 }
 
@@ -92,7 +92,7 @@ export function FileUpload({
       const formData = new FormData();
       formData.append("file", file);
 
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8087";
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8088";
       const inferredFolder = typeof window !== "undefined"
         ? inferUploadFolderFromPath(window.location.pathname)
         : "general";

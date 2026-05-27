@@ -38,7 +38,7 @@ COPY --from=builder /app/seed .
 RUN mkdir -p /app/uploads && chmod 755 /app/uploads
 
 # Expose port
-EXPOSE 8087
+EXPOSE 8088
 
 # Run the binary
 CMD ["./server"]

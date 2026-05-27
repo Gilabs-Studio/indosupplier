@@ -37,7 +37,7 @@ type ThemeContextValue = {
 };
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
-const THEME_EVENT = "gims-theme-storage-sync";
+const THEME_EVENT = "indosupplier-theme-storage-sync";
 
 function getSystemTheme(): "light" | "dark" {
   if (typeof window === "undefined") {

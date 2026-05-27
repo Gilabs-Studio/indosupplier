@@ -24,7 +24,7 @@ import {
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   // Check for the actual HttpOnly cookie set by the backend
-  const accessToken = request.cookies.get("gims_access_token")?.value;
+  const accessToken = request.cookies.get("indosupplier_access_token")?.value;
   const cookieLocale = getLocalePreferenceFromCookieValue(
     request.cookies.get(LOCALE_PREFERENCE_COOKIE)?.value,
   );

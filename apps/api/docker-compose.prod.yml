@@ -1,15 +1,15 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: gims-platform-db-prod
+    container_name: indosupplier-platform-db-prod
     environment:
       POSTGRES_USER: ${DB_USER:?DB_USER is required}
       POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
       POSTGRES_DB: ${DB_NAME:?DB_NAME is required}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - indosupplier_postgres_data:/var/lib/postgresql/data
     networks:
-      - gims-network
+      - indosupplier-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
       interval: 10s
@@ -19,12 +19,12 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: gims-platform-redis-prod
+    container_name: indosupplier-platform-redis-prod
     command: redis-server --appendonly yes --appendfsync everysec --loglevel warning ${REDIS_PASSWORD:+--requirepass ${REDIS_PASSWORD}}
     volumes:
-      - redis_data:/data
+      - indosupplier_redis_data:/data
     networks:
-      - gims-network
+      - indosupplier-network
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -36,7 +36,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: gims-platform-api-prod
+    container_name: indosupplier-platform-api-prod
     ports:
       - "${PORT:-8080}:8080"
     environment:
@@ -103,7 +103,7 @@ services:
       - PROXY_HEADERS_ENABLED=${PROXY_HEADERS_ENABLED:-false}
       - TRUSTED_PROXIES=${TRUSTED_PROXIES:-}
     volumes:
-      - uploads_data:/app/uploads
+      - indosupplier_uploads_data:/app/uploads
     depends_on:
       postgres:
         condition: service_healthy
@@ -111,13 +111,13 @@ services:
         condition: service_healthy
     restart: unless-stopped
     networks:
-      - gims-network
+      - indosupplier-network
 
 networks:
-  gims-network:
+  indosupplier-network:
     driver: bridge
 
 volumes:
-  postgres_data:
-  redis_data:
-  uploads_data:
+  indosupplier_postgres_data:
+  indosupplier_redis_data:
+  indosupplier_uploads_data:

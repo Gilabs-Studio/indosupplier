@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-export const SEO_BASE_URL = "https://salesview.id";
+export const SEO_BASE_URL = "https://indosupplier.id";
 export const SUPPORTED_SEO_LOCALES = ["id", "en"] as const;
 
 type SupportedLocale = (typeof SUPPORTED_SEO_LOCALES)[number];
@@ -105,7 +105,7 @@ export function buildLandingMetadata({
       url: `${SEO_BASE_URL}${canonicalPath}`,
       title,
       description,
-      siteName: "SalesView",
+      siteName: "Indosupplier",
       images: [
         {
           url: selectedImage,

@@ -1,4 +1,4 @@
-# GIMS Platform Knowledge Base
+# Indosupplier Platform Knowledge Base
 
 **Generated:** 2026-04-19
 **Stack:** Go 1.25+ (Gin/GORM) + Next.js 16 (React 19/Tailwind v4)
@@ -7,7 +7,7 @@
 ## Structure
 
 ```
-gims/
+indosupplier/
 ├── apps/
 │   ├── api/          # Go backend — see apps/api/AGENTS.md
 │   └── web/          # Next.js frontend — see apps/web/AGENTS.md
@@ -31,7 +31,7 @@ gims/
 ### Timezone (NEVER use bare `time.Now()`)
 
 ```go
-import "github.com/gilabs/gims/api/internal/core/apptime"
+import "github.com/gilabs/indosupplier/api/internal/core/apptime"
 
 now := apptime.Now()                        // Global
 now := apptime.NowForCompany(companyID)     // Per-company
@@ -47,7 +47,7 @@ Always use **full module path**, never relative:
 
 ```go
 // ✅ CORRECT
-import "github.com/gilabs/gims/api/internal/hrd/data/models"
+import "github.com/gilabs/indosupplier/api/internal/hrd/data/models"
 
 // ❌ WRONG — will fail
 import "internal/hrd/data/models"
@@ -65,7 +65,7 @@ Order: stdlib → external → internal. Run `go mod tidy` after new files.
 
 ### Multi-Tenant, Scope, and RBAC Awareness (CRITICAL)
 
-- GIMS is not RBAC-only. Access control is a combination of:
+- Indosupplier is not RBAC-only. Access control is a combination of:
 	- tenant isolation (`tenant_id`)
 	- permission checks (RBAC via permission code)
 	- data scope filtering (`permission_scope`, `scope_*` assignments)

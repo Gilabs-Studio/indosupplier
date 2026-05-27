@@ -11,7 +11,7 @@ export default async function NotFound() {
   // Note: This is a heuristic check - client-side will do proper verification
   // 1. Check if user has access token cookie (may indicate authenticated session)
   const cookieStore = await cookies();
-  const accessToken = cookieStore.get("gims_access_token")?.value;
+  const accessToken = cookieStore.get("indosupplier_access_token")?.value;
   const hasAccessToken = Boolean(accessToken);
   
   // 2. Check referer header for dashboard routes

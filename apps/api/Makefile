@@ -25,7 +25,7 @@ seed:
 # Usage: make analyze
 # Usage: make analyze MODULES=finance,sales FROM=2025-01-01 TO=2025-12-31
 analyze:
-	@echo "Running GIMS ERP Analyzer..."
+	@echo "Running Indosupplier ERP Analyzer..."
 	@if [ -n "$(MODULES)" ] && [ -n "$(FROM)" ] && [ -n "$(TO)" ]; then \
 		go run ./cmd/analyzer/main.go --module=$(MODULES) --from-date=$(FROM) --to-date=$(TO); \
 	elif [ -n "$(MODULES)" ]; then \
@@ -47,11 +47,11 @@ clean:
 
 # Build Docker image
 docker-build:
-	docker build -t gims-api .
+	docker build -t indosupplier-api .
 
 # Run Docker container
 docker-run:
-	docker run -p 8080:8080 gims-api
+	docker run -p 8080:8080 indosupplier-api
 
 # Start with docker-compose
 docker-up:

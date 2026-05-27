@@ -226,8 +226,8 @@ func setCSRFCookie(c *gin.Context, token string) {
 
 	if shouldUseCrossSiteCSRFCookie(c) {
 		sameSite = http.SameSiteNoneMode
-		// In production, set root domain so cookies work across all subdomains (e.g., .gilabs.id, .salesview.id)
-		// This allows sharing cookies between salesview.id, gims.gilabs.id, api.gilabs.id, etc.
+		// In production, set root domain so cookies work across all subdomains (e.g., .gilabs.id, .indosupplier.id)
+		// This allows sharing cookies between indosupplier.id, indosupplier.gilabs.id, api.gilabs.id, etc.
 		if config.AppConfig != nil && strings.ToLower(strings.TrimSpace(config.AppConfig.Server.Env)) == "production" {
 			domain = config.AppConfig.Server.RootDomain
 		}

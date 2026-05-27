@@ -55,7 +55,7 @@ type ServerConfig struct {
 	Timezone string // IANA timezone name (e.g. "Asia/Jakarta")
 	// FrontendBaseURL is the public web app origin used to build QR code / feedback URLs.
 	FrontendBaseURL string
-	// RootDomain is the root domain for setting cookies (e.g., ".salesview.id" or ".gilabs.id")
+	// RootDomain is the root domain for setting cookies (e.g., ".indosupplier.id" or ".gilabs.id")
 	// Used in production to share cookies across subdomains. Must include leading dot.
 	RootDomain              string
 	ReadHeaderTimeoutSec    int
@@ -177,7 +177,7 @@ func Load() error {
 			Env:                     envValue, // Use the env value we determined above
 			Timezone:                getEnv("APP_TIMEZONE", "Asia/Jakarta"),
 			FrontendBaseURL:         getEnv("FRONTEND_BASE_URL", "http://localhost:3000"),
-			RootDomain:              getEnv("ROOT_DOMAIN", ""), // e.g., ".salesview.id" or ".gilabs.id" for cookie sharing
+			RootDomain:              getEnv("ROOT_DOMAIN", ""), // e.g., ".indosupplier.id" or ".gilabs.id" for cookie sharing
 			ReadHeaderTimeoutSec:    getEnvAsInt("SERVER_READ_HEADER_TIMEOUT_SEC", 10),
 			ReadTimeoutSec:          getEnvAsInt("SERVER_READ_TIMEOUT_SEC", 30),
 			WriteTimeoutSec:         getEnvAsInt("SERVER_WRITE_TIMEOUT_SEC", 30),
@@ -206,7 +206,7 @@ func Load() error {
 			Port:                   getEnv("DB_PORT", "5432"),
 			User:                   getEnv("DB_USER", "postgres"),
 			Password:               getEnv("DB_PASSWORD", "postgres"),
-			DBName:                 getEnv("DB_NAME", "gims_erp"),
+			DBName:                 getEnv("DB_NAME", "indosupplier_db"),
 			SSLMode:                getEnv("DB_SSLMODE", "disable"),
 			MaxOpenConns:           getEnvAsInt("DB_MAX_OPEN_CONNS", 50),
 			MaxIdleConns:           getEnvAsInt("DB_MAX_IDLE_CONNS", 25),

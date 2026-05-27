@@ -50,9 +50,9 @@ sudo -u postgres psql
 Then in PostgreSQL shell:
 
 ```sql
-CREATE DATABASE gims_erp;
+CREATE DATABASE indosupplier_db;
 CREATE USER postgres WITH PASSWORD 'postgres';
-GRANT ALL PRIVILEGES ON DATABASE gims_erp TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE indosupplier_db TO postgres;
 \q
 ```
 
@@ -63,7 +63,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=your_password_here
-DB_NAME=gims_erp
+DB_NAME=indosupplier_db
 DB_SSLMODE=disable
 ```
 
@@ -103,7 +103,7 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=postgres
-DB_NAME=gims_erp
+DB_NAME=indosupplier_db
 DB_SSLMODE=disable
 
 # DB Pool / GORM (optional)
@@ -190,7 +190,7 @@ docker-compose ps
 4. Test connection manually:
 
 ```bash
-psql -h localhost -p 5432 -U postgres -d gims_erp
+psql -h localhost -p 5432 -U postgres -d indosupplier_db
 ```
 
 ### Database Doesn't Exist
@@ -199,12 +199,12 @@ Create the database:
 
 ```bash
 # Using Docker
-docker exec -it gims-db psql -U postgres
-CREATE DATABASE gims_erp;
+docker exec -it indosupplier-platform-db psql -U postgres
+CREATE DATABASE indosupplier_db;
 \q
 
 # Using local PostgreSQL
-createdb -U postgres gims_erp
+createdb -U postgres indosupplier_db
 ```
 
 ## Default Seeded Users

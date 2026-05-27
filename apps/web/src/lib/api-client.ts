@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { formatError } from "./i18n/error-messages";
 import { useRateLimitStore } from "./stores/useRateLimitStore";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8087";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8088";
 const CSRF_BOOTSTRAP_COOLDOWN_MS = 2000;
 const GLOBAL_TOAST_DEDUPE_WINDOW_MS = 2500;
 const MAX_RATE_LIMIT_WINDOW_SECONDS = 60 * 60;
@@ -33,7 +33,7 @@ export function emitAuthTelemetry(
 ): void {
   if (typeof window !== "undefined") {
     window.dispatchEvent(
-      new CustomEvent("salesview:auth-telemetry", {
+      new CustomEvent("indosupplier:auth-telemetry", {
         detail: {
           event,
           details,
@@ -197,7 +197,7 @@ export function getCSRFToken(): string | null {
   if (memoryCsrfToken) return memoryCsrfToken;
   if (typeof document === "undefined") return null;
   // Fallback to cookie if same-origin scenario
-  const match = document.cookie.match(/(?:^|;\s*)gims_csrf_token=([^;]*)/);
+  const match = document.cookie.match(/(?:^|;\s*)indosupplier_csrf_token=([^;]*)/);
   return match ? decodeURIComponent(match[1]) : null;
 }
 

@@ -43,20 +43,20 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   return {
-    metadataBase: new URL("https://salesview.id"),
+    metadataBase: new URL("https://indosupplier.id"),
     title: {
-      template: "%s | SalesView",
-      default: "SalesView - ERP, CRM, HRIS, POS & Finance",
+      template: "%s | Indosupplier",
+      default: "Indosupplier - ERP, CRM, HRIS, POS & Finance",
     },
     description:
-      "SalesView adalah software all-in-one ERP, CRM, HRIS, POS, dan Finance untuk bisnis Indonesia. Satu platform untuk operasional, penjualan, stok, HR, dan laporan keuangan.",
+      "Indosupplier adalah software all-in-one ERP, CRM, HRIS, POS, dan Finance untuk bisnis Indonesia. Satu platform untuk operasional, penjualan, stok, HR, dan laporan keuangan.",
     keywords: [
       "ERP Indonesia",
       "Aplikasi CRM",
       "Sistem HRIS",
       "Aplikasi Kasir POS",
       "Software Finance",
-      "SalesView",
+      "Indosupplier",
       "Manajemen Bisnis Terintegrasi",
       "All-in-one Software",
       "Vendor ERP",
@@ -72,32 +72,32 @@ export async function generateMetadata(): Promise<Metadata> {
       "sales management software",
       "software manajemen penjualan",
     ],
-    authors: [{ name: "SalesView" }],
-    creator: "SalesView",
-    publisher: "SalesView",
+    authors: [{ name: "Indosupplier" }],
+    creator: "Indosupplier",
+    publisher: "Indosupplier",
     openGraph: {
       type: "website",
       locale: locale === "id" ? "id_ID" : "en_US",
-      url: "https://salesview.id",
-      title: "SalesView - ERP, CRM, HRIS, POS & Finance",
+      url: "https://indosupplier.id",
+      title: "Indosupplier - ERP, CRM, HRIS, POS & Finance",
       description:
-        "SalesView adalah platform bisnis all-in-one untuk ERP, CRM, HRIS, POS, dan Finance di Indonesia.",
-      siteName: "SalesView",
+        "Indosupplier adalah platform bisnis all-in-one untuk ERP, CRM, HRIS, POS, dan Finance di Indonesia.",
+      siteName: "Indosupplier",
       images: [
         {
           url: "/screenshot/dashboard.webp",
           width: 1920,
           height: 1080,
-          alt: "SalesView dashboard preview",
+          alt: "Indosupplier dashboard preview",
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: "SalesView - ERP, CRM, HRIS, POS & Finance",
+      title: "Indosupplier - ERP, CRM, HRIS, POS & Finance",
       description:
-        "SalesView adalah platform bisnis all-in-one untuk ERP, CRM, HRIS, POS, dan Finance di Indonesia.",
-      creator: "@salesview",
+        "Indosupplier adalah platform bisnis all-in-one untuk ERP, CRM, HRIS, POS, dan Finance di Indonesia.",
+      creator: "@indosupplier",
       images: ["/screenshot/dashboard.webp"],
     },
     robots: {
@@ -112,7 +112,7 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     },
     alternates: {
-      canonical: "https://salesview.id",
+      canonical: "https://indosupplier.id",
       languages: getLanguageAlternates("/"),
     },
   };

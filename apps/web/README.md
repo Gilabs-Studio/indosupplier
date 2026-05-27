@@ -1,6 +1,6 @@
-# SalesView Web
+# Indosupplier Web
 
-Frontend application untuk SalesView menggunakan Next.js 16.
+Frontend application untuk Indosupplier menggunakan Next.js 16.
 
 ## Tech Stack
 

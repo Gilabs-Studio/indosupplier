@@ -1,17 +1,17 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: gims-platform-db
+    container_name: indosupplier-platform-db
     environment:
       POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
-      POSTGRES_DB: ${DB_NAME:-gims_erp}
+      POSTGRES_DB: ${DB_NAME:-indosupplier_db}
     ports:
       - "${DB_PORT:-5435}:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - indosupplier_postgres_data:/var/lib/postgresql/data
     networks:
-      - gims-network
+      - indosupplier-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
       interval: 10s
@@ -20,13 +20,13 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: gims-platform-redis
+    container_name: indosupplier-platform-redis
     ports:
       - "${REDIS_PORT:-6379}:6379"
     volumes:
-      - redis_data:/data
+      - indosupplier_redis_data:/data
     networks:
-      - gims-network
+      - indosupplier-network
     command: redis-server --save 60 1 --loglevel warning ${REDIS_PASSWORD:+--requirepass ${REDIS_PASSWORD}}
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -38,9 +38,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: gims-platform-api
+    container_name: indosupplier-platform-api
     ports:
-      - "${PORT:-8080}:8080"
+      - "${DOCKER_API_PORT:-8089}:8080"
     environment:
       - GIN_MODE=${GIN_MODE:-release}
       - PORT=8080
@@ -51,7 +51,7 @@ services:
       - DB_PORT=5432
       - DB_USER=${DB_USER:-postgres}
       - DB_PASSWORD=${DB_PASSWORD:-postgres}
-      - DB_NAME=${DB_NAME:-gims_erp}
+      - DB_NAME=${DB_NAME:-indosupplier_db}
       - DB_SSLMODE=${DB_SSLMODE:-disable}
       - JWT_SECRET=${JWT_SECRET}
       - JWT_ACCESS_TTL=${JWT_ACCESS_TTL:-24}
@@ -79,7 +79,7 @@ services:
       - R2_SECRET_ACCESS_KEY=${R2_SECRET_ACCESS_KEY}
       - R2_BUCKET_NAME=${R2_BUCKET_NAME}
     volumes:
-      - uploads_data:/app/uploads
+      - indosupplier_uploads_data:/app/uploads
     depends_on:
       postgres:
         condition: service_healthy
@@ -87,13 +87,13 @@ services:
         condition: service_healthy
     restart: unless-stopped
     networks:
-      - gims-network
+      - indosupplier-network
 
 networks:
-  gims-network:
+  indosupplier-network:
     driver: bridge
 
 volumes:
-  postgres_data:
-  uploads_data:
-  redis_data:
+  indosupplier_postgres_data:
+  indosupplier_uploads_data:
+  indosupplier_redis_data:

@@ -1,6 +1,6 @@
-# GIMS - GILABS Integrated Management System
+# Indosupplier - GILABS Integrated Management System
 
-Monorepo untuk GIMS (GILABS Integrated Management System) menggunakan Turborepo.
+Monorepo untuk Indosupplier (GILABS Integrated Management System) menggunakan Turborepo.
 
 ## Tech Stack
 
@@ -25,7 +25,7 @@ Monorepo untuk GIMS (GILABS Integrated Management System) menggunakan Turborepo.
 ## Struktur Project
 
 ```
-gims/
+indosupplier/
 ├── apps/
 │   ├── api/          # Go API backend (Gin)
 │   └── web/          # Next.js frontend
@@ -140,7 +140,7 @@ Server akan berjalan di `http://localhost:8080`
 Di root project (bukan di folder lain), tersedia script helper:
 
 ```bash
-cd D:\Files\Documents\Pekerjaan\Gilabs\gims
+cd D:\Files\Documents\Pekerjaan\Gilabs\indosupplier
 pnpm run dev:web-api-docker
 ```
 

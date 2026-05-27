@@ -2,7 +2,7 @@
 
 **Location:** `apps/api/`
 **Stack:** Go 1.25+, Gin, GORM, PostgreSQL, Redis
-**Module:** `github.com/gilabs/gims/api`
+**Module:** `github.com/gilabs/indosupplier/api`
 
 ## Architecture
 
@@ -33,7 +33,7 @@ After creating a new model, register in:
 
 ```go
 // apps/api/internal/core/infrastructure/database/migrate.go
-import finance "github.com/gilabs/gims/api/internal/finance/data/models"
+import finance "github.com/gilabs/indosupplier/api/internal/finance/data/models"
 
 // In migrateWithErrorHandling():
 &finance.Asset{},
@@ -45,7 +45,7 @@ import finance "github.com/gilabs/gims/api/internal/finance/data/models"
 import (
     "context"    // stdlib
     "github.com/gin-gonic/gin"  // external
-    "github.com/gilabs/gims/api/internal/finance/data/models"  // internal
+    "github.com/gilabs/indosupplier/api/internal/finance/data/models"  // internal
 )
 ```
 

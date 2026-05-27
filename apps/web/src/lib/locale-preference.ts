@@ -1,7 +1,7 @@
 import { routing } from "@/i18n/routing";
 import type { Locale } from "@/types/locale";
 
-export const LOCALE_PREFERENCE_COOKIE = "gims_locale_pref";
+export const LOCALE_PREFERENCE_COOKIE = "indosupplier_locale_pref";
 export const LOCALE_PREFERENCE_STORAGE_KEY = "locale";
 
 export function normalizeLocale(value: string | null | undefined): Locale | null {

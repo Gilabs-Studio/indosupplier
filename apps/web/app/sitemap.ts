@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://salesview.id";
+  const baseUrl = "https://indosupplier.id";
   const locales = ["id", "en"] as const;
 
   return locales.map((locale) => ({

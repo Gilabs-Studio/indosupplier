@@ -92,9 +92,9 @@ export function resolveImageUrl(
   ) {
     return url;
   }
-  // Try to use NEXT_PUBLIC_API_URL, fallback to localhost:8087
+  // Try to use NEXT_PUBLIC_API_URL, fallback to localhost:8088
   // Note: This needs to match the backend's static file serving URL
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8087";
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8088";
 
   // Clean up double slashes if url starts with /
   const cleanPath = url.startsWith("/") ? url.substring(1) : url;
