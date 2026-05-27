@@ -68,8 +68,8 @@ export function useLogin() {
         useAuthStore.setState({
           error: null,
         });
-        // Redirect to dashboard - don't set isLoading false, let redirect complete
-        router.replace("/dashboard");
+        // Redirect to locale root landing after successful login
+        router.replace("/");
         return; // Exit early, keep loading state until redirect
       }
     } catch (err) {

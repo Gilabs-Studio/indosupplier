@@ -24,7 +24,6 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Link } from "@/i18n/routing";
 import { AuthLayout } from "./auth-layout";
 import { loginSchema, type LoginFormData } from "../schemas/login.schema";
 import { useLogin } from "../hooks/use-login";
@@ -198,12 +197,6 @@ export default function LoginForm() {
                     <FieldLabel htmlFor="password">
                       {t("passwordLabel")}
                     </FieldLabel>
-                    <Link
-                      href="/forgot-password"
-                      className="text-xs font-medium text-primary hover:underline cursor-pointer"
-                    >
-                      {t("forgotPassword")}
-                    </Link>
                   </div>
                   <div className="relative">
                     <Input
@@ -279,16 +272,6 @@ export default function LoginForm() {
                 </Field>
               </FieldGroup>
             </form>
-
-            <div className="text-center text-sm text-muted-foreground">
-              {t("noAccount")}{" "}
-              <Link
-                href="/register"
-                className="font-medium text-primary hover:underline"
-              >
-                {t("createAccount")}
-              </Link>
-            </div>
           </CardContent>
         </Card>
       </motion.div>

@@ -117,75 +117,19 @@ function normalizeRateLimitResetTime(resetHeader: string | number): number | nul
   return parsed;
 }
 
-type ServerRole = {
-  code: string;
-  name: string;
-  data_scope?: "ALL" | "DIVISION" | "AREA" | "OUTLET" | "OWN";
-  is_owner?: boolean;
-};
-
-type ServerSubscriptionAccess = {
-  state?: "active" | "grace_period" | "suspended";
-  enforcement?: "full_access" | "hard_lock";
-  days_overdue?: number;
-  grace_period_days?: number;
-  force_billing_redirect?: boolean;
-  allow_read?: boolean;
-  allow_write?: boolean;
-  message?: string;
-  billing_path?: string;
-};
-
 type ServerUser = {
   id: string;
   name: string;
   email: string;
-  avatar_url: string;
-  employee_id?: string;
-  tenant_id?: string;
-  tenant_name?: string;
-  subscription_plan?: string;
-  subscription_access?: ServerSubscriptionAccess;
-  role?: ServerRole;
-  permissions?: Record<string, string>;
 } | null | undefined;
 
 function normalizeUserResponse(rawUser: ServerUser): User | null {
   if (!rawUser) return null;
 
-  const role = rawUser.role ?? { code: "", name: "", data_scope: "OWN" };
-  const dataScope: "ALL" | "DIVISION" | "AREA" | "OUTLET" | "OWN" =
-    role.data_scope ?? "OWN";
-
   return {
     id: rawUser.id,
     name: rawUser.name,
     email: rawUser.email,
-    avatar_url: rawUser.avatar_url,
-    employee_id: rawUser.employee_id ?? undefined,
-    role: {
-      code: role.code,
-      name: role.name,
-      data_scope: dataScope,
-      is_owner: role.is_owner ?? false,
-    },
-    permissions: rawUser.permissions ?? {},
-    tenant_id: rawUser.tenant_id ?? undefined,
-    tenant_name: rawUser.tenant_name ?? undefined,
-    subscription_plan: rawUser.subscription_plan ?? undefined,
-    subscription_access: rawUser.subscription_access
-      ? {
-          state: rawUser.subscription_access.state ?? "active",
-          enforcement: rawUser.subscription_access.enforcement ?? "full_access",
-          days_overdue: rawUser.subscription_access.days_overdue ?? 0,
-          grace_period_days: rawUser.subscription_access.grace_period_days ?? 7,
-          force_billing_redirect: rawUser.subscription_access.force_billing_redirect ?? false,
-          allow_read: rawUser.subscription_access.allow_read ?? true,
-          allow_write: rawUser.subscription_access.allow_write ?? true,
-          message: rawUser.subscription_access.message,
-          billing_path: rawUser.subscription_access.billing_path,
-        }
-      : undefined,
   };
 }
 

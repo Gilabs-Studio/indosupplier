@@ -50,7 +50,7 @@ export function useLoginGuard() {
     // Fast path: already verified this page load, skip round-trip
     if (isSessionVerified && localStorageAuth) {
       setIsRedirecting(true);
-      router.push("/dashboard");
+      router.push("/");
       return;
     }
 
@@ -71,7 +71,7 @@ export function useLoginGuard() {
         setUser(response.data.user);
         setSessionVerified(true);
         setIsRedirecting(true);
-        router.push("/dashboard");
+        router.push("/");
         return;
       }
 
