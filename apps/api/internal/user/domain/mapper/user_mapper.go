@@ -19,14 +19,9 @@ func ToUserResponse(u *models.User) *dto.UserResponse {
 		Email:     u.Email,
 		Name:      u.Name,
 		AvatarURL: u.AvatarURL,
-		RoleID:    u.RoleID,
 		Status:    u.Status,
 		CreatedAt: u.CreatedAt,
 		UpdatedAt: u.UpdatedAt,
-	}
-
-	if u.RoleID != "" {
-		resp.Role = &dto.RoleResponse{Code: u.RoleID, Name: u.RoleID}
 	}
 
 	return resp

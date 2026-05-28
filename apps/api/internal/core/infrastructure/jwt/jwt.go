@@ -18,10 +18,8 @@ var (
 )
 
 type Claims struct {
-	UserID   string `json:"user_id"`
-	Email    string `json:"email"`
-	Role     string `json:"role"`
-	TenantID string `json:"tenant_id,omitempty"`
+	UserID string `json:"user_id"`
+	Email  string `json:"email"`
 	jwt.RegisteredClaims
 }
 
@@ -113,13 +111,10 @@ func NewJWTManager(opts Options) *JWTManager {
 }
 
 // GenerateAccessToken generates a new access token.
-// tenantID is the tenant this user belongs to; empty for platform-level accounts.
-func (m *JWTManager) GenerateAccessToken(userID, email, role, tenantID string) (string, error) {
+func (m *JWTManager) GenerateAccessToken(userID, email string) (string, error) {
 	claims := &Claims{
-		UserID:   userID,
-		Email:    email,
-		Role:     role,
-		TenantID: tenantID,
+		UserID: userID,
+		Email:  email,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(apptime.Now().Add(m.accessTokenTTL)),
 			IssuedAt:  jwt.NewNumericDate(apptime.Now()),
@@ -257,7 +252,7 @@ func (m *JWTManager) ValidateToken(tokenString string) (*Claims, error) {
 		}
 
 		// Validate critical claims are not empty
-		if parsedClaims.UserID == "" || parsedClaims.Email == "" || parsedClaims.Role == "" {
+		if parsedClaims.UserID == "" || parsedClaims.Email == "" {
 			return nil, ErrInvalidToken
 		}
 

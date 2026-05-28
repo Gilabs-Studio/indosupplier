@@ -22,7 +22,6 @@ import (
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/jwt"
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/redis"
 	coreRouter "github.com/gilabs/indosupplier/api/internal/core/infrastructure/router"
-	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/security"
 	"github.com/gilabs/indosupplier/api/internal/core/logger"
 	"github.com/gilabs/indosupplier/api/internal/core/middleware"
 	"github.com/gilabs/indosupplier/api/internal/core/response"
@@ -105,7 +104,6 @@ func main() {
 	refreshTokenRepository := refreshTokenRepo.NewRefreshTokenRepository(database.DB)
 	userRepository := repositories.NewUserRepository(database.DB)
 
-	permissionService := security.NewPermissionService(database.DB)
 	auditService := audit.NewAuditService(database.DB)
 	eventPublisher := events.NewNoOpEventPublisher(true)
 
@@ -151,9 +149,9 @@ func main() {
 			response.SuccessResponse(c, gin.H{"message": "IndoSupplier API v1", "version": "1.0.0"}, nil)
 		})
 
-		authRouter.RegisterAuthRoutes(v1, authH, jwtManager, permissionService)
-		userRouter.RegisterUserRoutes(v1, userH, jwtManager, permissionService)
-		coreRouter.RegisterUploadRoutes(v1, jwtManager, permissionService)
+		authRouter.RegisterAuthRoutes(v1, authH, jwtManager)
+		userRouter.RegisterUserRoutes(v1, userH, jwtManager)
+		coreRouter.RegisterUploadRoutes(v1, jwtManager)
 	}
 
 	port := config.AppConfig.Server.Port

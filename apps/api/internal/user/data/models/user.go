@@ -9,12 +9,10 @@ import (
 
 type User struct {
 	ID        string         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
-	TenantID  string         `gorm:"column:tenant_id;type:uuid;index" json:"tenant_id,omitempty"`
 	Email     string         `gorm:"type:varchar(255);uniqueIndex;not null" json:"email"`
 	Password  string         `gorm:"type:varchar(255);not null" json:"-"`
 	Name      string         `gorm:"type:varchar(255);not null;index" json:"name"`
 	AvatarURL string         `gorm:"type:text" json:"avatar_url"`
-	RoleID    string         `gorm:"type:varchar(100);index" json:"role_id"`
 	Status    string         `gorm:"type:varchar(20);not null;default:'active';index" json:"status"`
 	CreatedAt time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt time.Time      `gorm:"autoUpdateTime;index" json:"updated_at"`

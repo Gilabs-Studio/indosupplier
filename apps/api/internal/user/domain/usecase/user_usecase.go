@@ -25,10 +25,8 @@ import (
 var (
 	ErrUserNotFound           = errors.New("user not found")
 	ErrUserAlreadyExists      = errors.New("user already exists")
-	ErrRoleNotFound           = errors.New("role not found")
 	ErrUserLimitReached       = errors.New("user limit reached")
 	ErrOwnerMutationForbidden = errors.New("owner user cannot be modified")
-	ErrDeleteAccountForbidden = errors.New("only tenant owner can request account deletion")
 )
 
 type UserLimitResponse struct {
@@ -47,7 +45,6 @@ type UserUsecase interface {
 	ChangePassword(ctx context.Context, id string, req *dto.ChangePasswordRequest) error
 	UpdateAvatar(ctx context.Context, id string, avatarURL string) error
 	Delete(ctx context.Context, id string) error
-	RequestAccountDeletion(ctx context.Context, id string) (*dto.TenantDeletionScheduleResponse, error)
 }
 
 type userUsecase struct {
@@ -67,7 +64,7 @@ func NewUserUsecase(
 }
 
 func userListCacheKey(req *dto.ListUsersRequest) string {
-	return fmt.Sprintf("users:list:page:%d:per_page:%d:search:%s:status:%s:role_id:%s", req.Page, req.PerPage, req.Search, req.Status, req.RoleID)
+	return fmt.Sprintf("users:list:page:%d:per_page:%d:search:%s:status:%s", req.Page, req.PerPage, req.Search, req.Status)
 }
 
 func userByIDCacheKey(id string) string {
@@ -198,7 +195,6 @@ func (u *userUsecase) Create(ctx context.Context, req *dto.CreateUserRequest) (*
 		Password:  string(hashedPassword),
 		Name:      req.Name,
 		AvatarURL: "https://api.dicebear.com/7.x/lorelei/svg?seed=" + url.QueryEscape(req.Email),
-		RoleID:    req.RoleID,
 		Status:    status,
 	}
 
@@ -211,12 +207,11 @@ func (u *userUsecase) Create(ctx context.Context, req *dto.CreateUserRequest) (*
 
 	u.invalidateCaches(ctx, usr.ID)
 
-	u.auditService.Log(ctx, "user.create", usr.ID, map[string]interface{}{"email": req.Email, "name": req.Name, "role": req.RoleID})
+	u.auditService.Log(ctx, "user.create", usr.ID, map[string]interface{}{"email": req.Email, "name": req.Name})
 	u.eventPublisher.PublishAsync(ctx, events.NewUserCreatedEvent(ctx, events.UserCreatedPayload{
 		UserID:    usr.ID,
 		Email:     usr.Email,
 		Name:      usr.Name,
-		RoleID:    usr.RoleID,
 		Status:    usr.Status,
 		CreatedAt: usr.CreatedAt,
 	}))
@@ -250,9 +245,6 @@ func (u *userUsecase) Update(ctx context.Context, id string, req *dto.UpdateUser
 	}
 	if req.Name != "" {
 		usr.Name = req.Name
-	}
-	if req.RoleID != "" {
-		usr.RoleID = req.RoleID
 	}
 	if req.Status != "" {
 		usr.Status = req.Status
@@ -328,10 +320,6 @@ func (u *userUsecase) Delete(ctx context.Context, id string) error {
 	}
 	u.invalidateCaches(ctx, id)
 	return nil
-}
-
-func (u *userUsecase) RequestAccountDeletion(ctx context.Context, id string) (*dto.TenantDeletionScheduleResponse, error) {
-	return nil, ErrDeleteAccountForbidden
 }
 
 func (u *userUsecase) invalidateCaches(ctx context.Context, userID string) {

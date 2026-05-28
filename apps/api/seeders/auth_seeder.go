@@ -31,7 +31,6 @@ func SeedUsers() error {
 		Password:  string(hashedPassword),
 		Name:      "Admin",
 		AvatarURL: fmt.Sprintf("https://api.dicebear.com/7.x/lorelei/svg?seed=%s", defaultEmail),
-		RoleID:    "admin",
 		Status:    "active",
 	}
 

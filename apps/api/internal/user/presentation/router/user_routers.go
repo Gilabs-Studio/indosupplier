@@ -8,12 +8,9 @@ import (
 	"github.com/gilabs/indosupplier/api/internal/user/presentation/handler"
 )
 
-func RegisterUserRoutes(rg *gin.RouterGroup, h *handler.UserHandler, jwtManager *jwt.JWTManager, permService interface {
-	GetPermissions(roleCode string) ([]string, error)
-	GetPermissionsWithScope(roleCode string) (map[string]string, error)
-}) {
+func RegisterUserRoutes(rg *gin.RouterGroup, h *handler.UserHandler, jwtManager *jwt.JWTManager) {
 	g := rg.Group("/users")
-	g.Use(middleware.AuthMiddleware(jwtManager, permService))
+	g.Use(middleware.AuthMiddleware(jwtManager))
 	{
 		g.GET("/available", h.GetAvailable)
 		g.GET("/limit", h.GetLimit)
@@ -26,7 +23,7 @@ func RegisterUserRoutes(rg *gin.RouterGroup, h *handler.UserHandler, jwtManager 
 	}
 
 	p := rg.Group("/profile")
-	p.Use(middleware.AuthMiddleware(jwtManager, permService))
+	p.Use(middleware.AuthMiddleware(jwtManager))
 	{
 		p.PUT("", h.UpdateProfile)
 		p.PUT("/password", h.ChangePassword)

@@ -138,7 +138,7 @@ func (c *Client) CreateInvoice(ctx context.Context, req CreateInvoiceRequest) (*
 // CreateRecurringPlanRequest holds the fields for creating a Xendit recurring plan.
 // Reference: https://docs.xendit.co/docs/subscriptions-overview
 type CreateRecurringPlanRequest struct {
-	ReferenceID      string                   `json:"reference_id"`     // Unique plan reference (e.g. "indosupplier_{tenantID}_{planSlug}")
+	ReferenceID      string                   `json:"reference_id"`     // Unique plan reference (e.g
 	CustomerID       string                   `json:"customer_id"`      // Xendit customer ID
 	RecurringAction  string                   `json:"recurring_action"` // "PAYMENT"
 	Currency         string                   `json:"currency"`         // "IDR"

@@ -46,8 +46,6 @@ type Meta struct {
 	Pagination *PaginationMeta        `json:"pagination,omitempty"`
 	Filters    map[string]interface{} `json:"filters,omitempty"`
 	Sort       *SortMeta              `json:"sort,omitempty"`
-	TenantID   string                 `json:"tenant_id,omitempty"`
-	OutletID   string                 `json:"outlet_id,omitempty"`
 	CreatedBy  string                 `json:"created_by,omitempty"`
 	UpdatedBy  string                 `json:"updated_by,omitempty"`
 	DeletedBy  string                 `json:"deleted_by,omitempty"`

@@ -72,7 +72,7 @@ func (u *authUsecase) Login(ctx context.Context, req *dto.LoginRequest) (*dto.Lo
 		return nil, ErrInvalidCredentials
 	}
 
-	accessToken, err := u.jwtManager.GenerateAccessToken(user.ID, user.Email, "user", user.TenantID)
+	accessToken, err := u.jwtManager.GenerateAccessToken(user.ID, user.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +88,6 @@ func (u *authUsecase) Login(ctx context.Context, req *dto.LoginRequest) (*dto.Lo
 	}
 
 	refreshTokenEntity := &refreshTokenModels.RefreshToken{
-		TenantID:  user.TenantID,
 		UserID:    user.ID,
 		TokenID:   tokenID,
 		ExpiresAt: apptime.Now().Add(u.jwtManager.RefreshTokenTTL()),
@@ -145,7 +144,7 @@ func (u *authUsecase) RefreshToken(ctx context.Context, refreshToken string) (*d
 		return nil, err
 	}
 
-	newAccessToken, err := u.jwtManager.GenerateAccessToken(user.ID, user.Email, "user", user.TenantID)
+	newAccessToken, err := u.jwtManager.GenerateAccessToken(user.ID, user.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -166,7 +165,6 @@ func (u *authUsecase) RefreshToken(ctx context.Context, refreshToken string) (*d
 	}
 
 	if err := u.refreshTokenRepo.Create(ctx, &refreshTokenModels.RefreshToken{
-		TenantID:  user.TenantID,
 		UserID:    user.ID,
 		TokenID:   newTokenID,
 		ExpiresAt: apptime.Now().Add(u.jwtManager.RefreshTokenTTL()),

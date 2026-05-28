@@ -11,7 +11,6 @@ import (
 // RefreshToken represents a refresh token entity
 type RefreshToken struct {
 	ID        string     `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
-	TenantID  string     `gorm:"column:tenant_id;type:uuid;index" json:"tenant_id,omitempty"`
 	UserID    string     `gorm:"type:uuid;not null;index" json:"user_id"`
 	TokenID   string     `gorm:"type:varchar(255);uniqueIndex;not null" json:"token_id"` // JWT ID (jti) claim
 	ExpiresAt time.Time  `gorm:"type:timestamp;not null;index" json:"expires_at"`

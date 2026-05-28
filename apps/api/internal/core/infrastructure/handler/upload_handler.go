@@ -61,28 +61,28 @@ func sanitizeFolderPath(rawFolder string, fallback string) string {
 	return strings.Join(sanitized, "/")
 }
 
-func resolveTenantID(c *gin.Context) string {
-	tenantID := sanitizePathSegment(c.GetString("tenant_id"))
-	if tenantID != "" {
-		return tenantID
+func resolveUploadNamespace(c *gin.Context) string {
+	userID := sanitizePathSegment(c.GetString("user_id"))
+	if userID != "" {
+		return userID
 	}
 
-	if rawTenantID := c.Request.Context().Value("tenant_id"); rawTenantID != nil {
-		if value, ok := rawTenantID.(string); ok {
-			tenantID = sanitizePathSegment(value)
-			if tenantID != "" {
-				return tenantID
+	if rawUserID := c.Request.Context().Value("user_id"); rawUserID != nil {
+		if value, ok := rawUserID.(string); ok {
+			userID = sanitizePathSegment(value)
+			if userID != "" {
+				return userID
 			}
 		}
 	}
 
-	return "unknown"
+	return "public"
 }
 
-func buildTenantScopedFolder(c *gin.Context, defaultModule string) string {
-	tenantID := resolveTenantID(c)
+func buildScopedFolder(c *gin.Context, defaultModule string) string {
+	namespace := resolveUploadNamespace(c)
 	moduleFolder := sanitizeFolderPath(c.Query("folder"), defaultModule)
-	return fmt.Sprintf("uploads/%s/%s", tenantID, moduleFolder)
+	return fmt.Sprintf("uploads/%s/%s", namespace, moduleFolder)
 }
 
 // UploadImage handles image upload requests
@@ -99,8 +99,8 @@ func (h *UploadHandler) UploadImage(c *gin.Context) {
 	}
 	defer file.Close()
 
-	// 2. Prepare upload config with tenant-first, module-based object key.
-	folder := buildTenantScopedFolder(c, "images")
+	// 2. Prepare upload config with user namespace and module-based object key.
+	folder := buildScopedFolder(c, "images")
 	uploadConfig := utils.FileUploadConfig{
 		MaxSize: config.AppConfig.Storage.MaxUploadSize,
 		Folder:  folder,
@@ -154,8 +154,8 @@ func (h *UploadHandler) UploadDocument(c *gin.Context) {
 	}
 	defer file.Close()
 
-	// 2. Prepare upload config with tenant-first, module-based object key.
-	folder := buildTenantScopedFolder(c, "documents")
+	// 2. Prepare upload config with user namespace and module-based object key.
+	folder := buildScopedFolder(c, "documents")
 	uploadConfig := utils.FileUploadConfig{
 		MaxSize: config.AppConfig.Storage.MaxUploadSize,
 		Folder:  folder,

@@ -25,7 +25,6 @@ type ErrorInfo struct {
 
 // ErrorCodeMap maps error codes to their HTTP status and messages
 var ErrorCodeMap = map[string]ErrorInfo{
-	// Validation Errors
 	"VALIDATION_ERROR": {
 		HTTPStatus: http.StatusBadRequest,
 		Message:    "Invalid request data",
@@ -33,10 +32,6 @@ var ErrorCodeMap = map[string]ErrorInfo{
 	"REQUIRED": {
 		HTTPStatus: http.StatusBadRequest,
 		Message:    "Field is required",
-	},
-	"INVALID_TYPE": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Invalid data type",
 	},
 	"INVALID_FORMAT": {
 		HTTPStatus: http.StatusBadRequest,
@@ -54,8 +49,6 @@ var ErrorCodeMap = map[string]ErrorInfo{
 		HTTPStatus: http.StatusBadRequest,
 		Message:    "Value exceeds maximum",
 	},
-
-	// Authentication & Authorization
 	"UNAUTHORIZED": {
 		HTTPStatus: http.StatusUnauthorized,
 		Message:    "Authentication token is invalid or expired",
@@ -72,33 +65,9 @@ var ErrorCodeMap = map[string]ErrorInfo{
 		HTTPStatus: http.StatusUnauthorized,
 		Message:    "Invalid token",
 	},
-	"TOKEN_MISSING": {
-		HTTPStatus: http.StatusUnauthorized,
-		Message:    "Token not found in header",
-	},
 	"ACCOUNT_DISABLED": {
 		HTTPStatus: http.StatusUnauthorized,
 		Message:    "Account is disabled",
-	},
-	"USER_NOT_FOUND": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "User not found",
-	},
-	"INVALID_RESET_TOKEN": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Reset token is invalid",
-	},
-	"RESET_TOKEN_EXPIRED": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Reset token has expired",
-	},
-	"RESET_TOKEN_ALREADY_USED": {
-		HTTPStatus: http.StatusConflict,
-		Message:    "Reset token has already been used",
-	},
-	"MISSING_TOKEN": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Token is required",
 	},
 	"REFRESH_TOKEN_REQUIRED": {
 		HTTPStatus: http.StatusBadRequest,
@@ -112,282 +81,17 @@ var ErrorCodeMap = map[string]ErrorInfo{
 		HTTPStatus: http.StatusForbidden,
 		Message:    "You do not have permission to access this resource",
 	},
-	"OUTLET_CLOSED": {
-		HTTPStatus: http.StatusConflict,
-		Message:    "This outlet is currently closed",
-	},
-	"PAYMENT_REQUIRED": {
-		HTTPStatus: http.StatusPaymentRequired,
-		Message:    "Subscription payment is required to continue",
-	},
-	"ACCOUNT_SUSPENDED": {
-		HTTPStatus: http.StatusForbidden,
-		Message:    "Account access is suspended due to subscription billing status",
-	},
-	"MODULE_NOT_ENTITLED": {
-		HTTPStatus: http.StatusForbidden,
-		Message:    "Your subscription plan does not include access to this module",
-	},
-
-	// Resource Errors
 	"NOT_FOUND": {
 		HTTPStatus: http.StatusNotFound,
 		Message:    "Resource not found",
 	},
+	"USER_NOT_FOUND": {
+		HTTPStatus: http.StatusNotFound,
+		Message:    "User not found",
+	},
 	"RESOURCE_ALREADY_EXISTS": {
 		HTTPStatus: http.StatusConflict,
 		Message:    "Resource already exists",
-	},
-	"SALES_TARGET_CONFLICT": {
-		HTTPStatus: http.StatusConflict,
-		Message:    "Sales target for selected employee and year already exists",
-	},
-	"EMAIL_ALREADY_TAKEN": {
-		HTTPStatus: http.StatusConflict,
-		Message:    "Email is already registered",
-	},
-	"SLUG_ALREADY_TAKEN": {
-		HTTPStatus: http.StatusConflict,
-		Message:    "Organization slug already in use",
-	},
-	"PENDING_REGISTRATION_NOT_FOUND": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "Pending registration not found or already finalized",
-	},
-	"INVALID_PAYLOAD": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Invalid payload",
-	},
-	"COMPANY_NAME_TAKEN": {
-		HTTPStatus: http.StatusConflict,
-		Message:    "Company name already in use",
-	},
-	"PRODUCT_NOT_FOUND": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "Product not found",
-	},
-	"CATEGORY_NOT_FOUND": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "Category not found",
-	},
-	"LEAD_NOT_FOUND": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "Lead not found",
-	},
-	"STAGE_NOT_FOUND": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "Pipeline stage not found",
-	},
-	"LEAVE_REQUEST_NOT_FOUND": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "Leave request not found",
-	},
-	"EMPLOYEE_NOT_FOUND": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "Employee not found",
-	},
-	"SALES_ORDER_NOT_FOUND": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "Sales order not found",
-	},
-	"SALES_QUOTATION_NOT_FOUND": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "Sales quotation not found",
-	},
-	"INVALID_ORDER_STATUS": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Cannot modify order in current status",
-	},
-
-	// HRD - Evaluation Errors (Sprint 15)
-	"EVALUATION_GROUP_NOT_FOUND": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "Evaluation group not found",
-	},
-	"EVALUATION_CRITERIA_NOT_FOUND": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "Evaluation criteria not found",
-	},
-	"EMPLOYEE_EVALUATION_NOT_FOUND": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "Employee evaluation not found",
-	},
-	"EVALUATION_GROUP_INACTIVE": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Evaluation group is not active",
-	},
-	"INVALID_STATUS_TRANSITION": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Invalid status transition",
-	},
-	// HRD - Recruitment Errors (Sprint 15)
-	"RECRUITMENT_REQUEST_NOT_FOUND": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "Recruitment request not found",
-	},
-	"RECRUITMENT_NOT_EDITABLE": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Recruitment request is not editable (only DRAFT status)",
-	},
-	"RECRUITMENT_NOT_OPEN": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Recruitment request is not open for updates",
-	},
-	"INVALID_SALARY_RANGE": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Salary range minimum must not exceed maximum",
-	},
-	"FILLED_EXCEEDS_REQUIRED": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Filled count cannot exceed required count",
-	},
-	"DIVISION_NOT_FOUND": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "Division not found",
-	},
-	"POSITION_NOT_FOUND": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "Job position not found",
-	},
-	"CONFLICT": {
-		HTTPStatus: http.StatusConflict,
-		Message:    "Conflict with current state",
-	},
-	"LEAD_ALREADY_CONVERTED": {
-		HTTPStatus: http.StatusConflict,
-		Message:    "Lead already converted",
-	},
-	"LEAD_CANNOT_CONVERT": {
-		HTTPStatus: http.StatusUnprocessableEntity,
-		Message:    "Lead cannot convert. Lead status must be 'qualified'",
-	},
-	"CRM_LEAD_INVALID_STATUS": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Invalid lead status",
-	},
-	"INVALID_LEAD_STATUS": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Invalid lead status",
-	},
-	"INVALID_LEAD_SOURCE": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Invalid lead source",
-	},
-	"ACCOUNT_CREATION_FAILED": {
-		HTTPStatus: http.StatusUnprocessableEntity,
-		Message:    "Failed to create account",
-	},
-	"CONTACT_CREATION_FAILED": {
-		HTTPStatus: http.StatusUnprocessableEntity,
-		Message:    "Failed to create contact",
-	},
-	"OPPORTUNITY_CREATION_FAILED": {
-		HTTPStatus: http.StatusUnprocessableEntity,
-		Message:    "Failed to create opportunity",
-	},
-
-	// CRM - Deal Conversion Errors
-	"DEAL_NOT_FOUND": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "Deal not found",
-	},
-	"DEAL_NOT_WON": {
-		HTTPStatus: http.StatusUnprocessableEntity,
-		Message:    "Deal must be won before converting to quotation",
-	},
-	"DEAL_ALREADY_CONVERTED": {
-		HTTPStatus: http.StatusConflict,
-		Message:    "Deal has already been converted to a quotation",
-	},
-	"DEAL_NO_ITEMS": {
-		HTTPStatus: http.StatusUnprocessableEntity,
-		Message:    "Deal must have product items before converting to quotation",
-	},
-	"DEAL_CUSTOMER_REQUIRED": {
-		HTTPStatus: http.StatusUnprocessableEntity,
-		Message:    "Deal must have a customer before converting to quotation",
-	},
-	"DEAL_INVALID_STAGE": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Invalid pipeline stage",
-	},
-	"DEAL_ALREADY_CLOSED": {
-		HTTPStatus: http.StatusUnprocessableEntity,
-		Message:    "Deal is already closed",
-	},
-	"DEAL_CLOSE_REASON_REQUIRED": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Close reason is required for lost deals",
-	},
-
-	// Plan / Quota Errors
-	"USER_LIMIT_REACHED": {
-		HTTPStatus: http.StatusUnprocessableEntity,
-		Message:    "User limit for this tenant has been reached. Upgrade your plan to add more users.",
-	},
-	"USER_COUNT_EXCEEDS_SYSTEM_LIMIT": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "User count exceeds the maximum allowed for registration",
-	},
-
-	// Sales Errors
-	"CREDIT_LIMIT_EXCEEDED": {
-		HTTPStatus: http.StatusUnprocessableEntity,
-		Message:    "Customer credit limit exceeded",
-	},
-
-	// POS Errors
-	"POS_ORDER_CANNOT_MODIFY": {
-		HTTPStatus: http.StatusConflict,
-		Message:    "POS order cannot be modified in its current state",
-	},
-	"POS_PRODUCT_NOT_AVAILABLE": {
-		HTTPStatus: http.StatusNotFound,
-		Message:    "POS product is not available",
-	},
-	"POS_ORDER_ALREADY_PAID": {
-		HTTPStatus: http.StatusConflict,
-		Message:    "POS order has already been paid",
-	},
-	"POS_INSUFFICIENT_PAYMENT": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Payment amount is insufficient",
-	},
-
-	// HRD - Leave Request Errors
-	"INSUFFICIENT_LEAVE_BALANCE": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Insufficient leave balance for this request",
-	},
-	"OVERLAPPING_LEAVE_REQUEST": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Leave request overlaps with existing request",
-	},
-	"INVALID_DATE_FORMAT": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Invalid date format. Use YYYY-MM-DD",
-	},
-	"INVALID_STATUS": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Invalid leave request status for this operation",
-	},
-	"INVALID_DATE": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Invalid date for this operation",
-	},
-	"INVALID_DURATION": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Invalid leave duration type",
-	},
-	"INSUFFICIENT_STOCK": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Insufficient stock for this operation",
-	},
-
-	// System Errors
-	"NOT_IMPLEMENTED": {
-		HTTPStatus: http.StatusNotImplemented,
-		Message:    "This feature is not implemented yet",
 	},
 	"INTERNAL_SERVER_ERROR": {
 		HTTPStatus: http.StatusInternalServerError,
@@ -401,17 +105,13 @@ var ErrorCodeMap = map[string]ErrorInfo{
 		HTTPStatus: http.StatusServiceUnavailable,
 		Message:    "Service is under maintenance. Please try again later",
 	},
+	"INVALID_REQUEST": {
+		HTTPStatus: http.StatusBadRequest,
+		Message:    "Invalid request",
+	},
 	"INVALID_REQUEST_BODY": {
 		HTTPStatus: http.StatusBadRequest,
 		Message:    "Invalid request body",
-	},
-	"INVALID_PATH_PARAM": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Invalid path parameter",
-	},
-	"INVALID_ID": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Invalid ID",
 	},
 	"INVALID_QUERY_PARAM": {
 		HTTPStatus: http.StatusBadRequest,
@@ -421,8 +121,6 @@ var ErrorCodeMap = map[string]ErrorInfo{
 		HTTPStatus: http.StatusRequestEntityTooLarge,
 		Message:    "Request body too large",
 	},
-
-	// File Upload Errors
 	"INVALID_FILE_TYPE": {
 		HTTPStatus: http.StatusUnsupportedMediaType,
 		Message:    "File type not allowed. Accepted formats: JPEG, PNG, GIF, WebP",
@@ -434,42 +132,6 @@ var ErrorCodeMap = map[string]ErrorInfo{
 	"INVALID_IMAGE": {
 		HTTPStatus: http.StatusBadRequest,
 		Message:    "Invalid or corrupted image file",
-	},
-
-	// AI Service Errors
-	"AI_ANALYSIS_FAILED": {
-		HTTPStatus: http.StatusInternalServerError,
-		Message:    "Failed to analyze visit report with AI",
-	},
-	"AI_CHAT_FAILED": {
-		HTTPStatus: http.StatusInternalServerError,
-		Message:    "Failed to get AI chat response",
-	},
-	"AI_SERVICE_NOT_CONFIGURED": {
-		HTTPStatus: http.StatusServiceUnavailable,
-		Message:    "AI service is not configured. Please configure Cerebras API key",
-	},
-
-	// Warehouse Business Rules
-	"WAREHOUSE_HAS_STOCK": {
-		HTTPStatus: http.StatusUnprocessableEntity,
-		Message:    "Warehouse cannot be deleted because it still has active stock. Transfer all inventory to another warehouse first.",
-	},
-	"XENDIT_CONNECTION_TEST_FAILED": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Failed to connect to Xendit. Please verify your secret key and account settings.",
-	},
-	"XENDIT_NOT_CONNECTED": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Digital payment is not available because Xendit is not connected",
-	},
-	"XENDIT_INVOICE_FAILED": {
-		HTTPStatus: http.StatusBadRequest,
-		Message:    "Failed to create digital payment invoice",
-	},
-	"BUDGET_CONTROL_FAILED": {
-		HTTPStatus: http.StatusUnprocessableEntity,
-		Message:    "Budget control validation failed",
 	},
 }
 
@@ -524,8 +186,10 @@ func UnauthorizedResponse(c *gin.Context, reason string) {
 // ForbiddenResponse creates a forbidden error response
 func ForbiddenResponse(c *gin.Context, requiredPermission string, userPermissions []string) {
 	details := map[string]interface{}{
-		"required_permission": requiredPermission,
-		"user_permissions":    userPermissions,
+		"reason": requiredPermission,
+	}
+	if len(userPermissions) > 0 {
+		details["details"] = userPermissions
 	}
 	ErrorResponse(c, "FORBIDDEN", details, nil)
 }

@@ -20,20 +20,20 @@ type idempotencyCacheEntry struct {
 	Body       json.RawMessage `json:"body"`
 }
 
-// GetOrSetIdempotency checks Redis for an existing response keyed by tenantID+key.
+// GetOrSetIdempotency checks Redis for an existing response keyed by userID+key.
 // If found it writes the cached response and returns true (caller should abort).
 // If not found it returns false; the caller processes the request normally and
 // must call SaveIdempotencyResult to persist the response.
 func GetOrSetIdempotency(
 	ctx context.Context,
-	tenantID, key string,
+	userID, key string,
 ) (*idempotencyCacheEntry, bool) {
 	client := infraRedis.GetClient()
 	if client == nil || key == "" {
 		return nil, false
 	}
 
-	redisKey := fmt.Sprintf("idempotency:%s:%s", tenantID, key)
+	redisKey := fmt.Sprintf("idempotency:%s:%s", userID, key)
 	raw, err := client.Get(ctx, redisKey).Bytes()
 	if err == redis.Nil {
 		return nil, false
@@ -53,7 +53,7 @@ func GetOrSetIdempotency(
 // SaveIdempotencyResult persists a completed response in Redis.
 func SaveIdempotencyResult(
 	ctx context.Context,
-	tenantID, key string,
+	userID, key string,
 	statusCode int,
 	body json.RawMessage,
 ) {
@@ -71,7 +71,7 @@ func SaveIdempotencyResult(
 		return
 	}
 
-	redisKey := fmt.Sprintf("idempotency:%s:%s", tenantID, key)
+	redisKey := fmt.Sprintf("idempotency:%s:%s", userID, key)
 	// Ignore Redis errors here — failing to cache is not fatal.
 	_ = client.Set(ctx, redisKey, data, idempotencyTTL).Err()
 }
@@ -107,15 +107,15 @@ func IdempotentRequest() gin.HandlerFunc {
 			return
 		}
 
-		tenantID, _ := c.Get("tenant_id")
-		tid, _ := tenantID.(string)
-		if tid == "" {
+		userID, _ := c.Get("user_id")
+		uid, _ := userID.(string)
+		if uid == "" {
 			c.Next()
 			return
 		}
 
 		// Return cached response if this key was already processed.
-		if entry, found := GetOrSetIdempotency(c.Request.Context(), tid, key); found {
+		if entry, found := GetOrSetIdempotency(c.Request.Context(), uid, key); found {
 			c.Data(entry.StatusCode, "application/json; charset=utf-8", entry.Body)
 			c.Abort()
 			return
@@ -134,7 +134,7 @@ func IdempotentRequest() gin.HandlerFunc {
 		if wrapper.statusCode >= 200 && wrapper.statusCode < 300 && len(wrapper.body) > 0 {
 			SaveIdempotencyResult(
 				c.Request.Context(),
-				tid,
+				uid,
 				key,
 				wrapper.statusCode,
 				json.RawMessage(wrapper.body),

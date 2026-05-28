@@ -11,16 +11,12 @@ import (
 
 // contextKeysToPropagate are string keys copied from request context into async job context.
 var contextKeysToPropagate = []string{
-	"tenant_id",
 	"user_id",
 	"user_email",
-	"user_role",
-	"user_permissions",
-	"user_permissions_scope",
 }
 
 // propagateRequestContext copies important values from both the request context
-// and gin context into a new background context so async jobs keep tenant/auth data
+// and gin context into a new background context so async jobs keep auth data
 // even when some middleware only sets values on gin.Context.
 func propagateRequestContext(c *gin.Context) context.Context {
 	ctx := context.Background()

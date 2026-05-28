@@ -12,7 +12,6 @@ type UserCreatedPayload struct {
 	UserID    string    `json:"user_id"`
 	Email     string    `json:"email"`
 	Name      string    `json:"name"`
-	RoleID    string    `json:"role_id"`
 	Status    string    `json:"status"`
 	CreatedAt time.Time `json:"created_at"`
 }
@@ -37,7 +36,6 @@ type UserUpdatedPayload struct {
 	UserID        string                 `json:"user_id"`
 	Email         string                 `json:"email,omitempty"`
 	Name          string                 `json:"name,omitempty"`
-	RoleID        string                 `json:"role_id,omitempty"`
 	Status        string                 `json:"status,omitempty"`
 	ChangedFields map[string]interface{} `json:"changed_fields,omitempty"`
 	UpdatedAt     time.Time              `json:"updated_at"`

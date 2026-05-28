@@ -23,23 +23,11 @@ func NewUserHandler(userUC usecase.UserUsecase) *UserHandler {
 }
 
 func toPresentationUser(u domainDTO.UserResponse) presentationDTO.UserResponseDTO {
-	roleCode := ""
-	roleName := ""
-	if u.Role != nil {
-		roleCode = u.Role.Code
-		roleName = u.Role.Name
-	}
-
 	return presentationDTO.UserResponseDTO{
 		ID:        u.ID,
 		Name:      u.Name,
 		Email:     u.Email,
 		AvatarURL: u.AvatarURL,
-		RoleID:    u.RoleID,
-		Role: presentationDTO.RoleDTO{
-			Code: roleCode,
-			Name: roleName,
-		},
 		Status:    u.Status,
 		CreatedAt: u.CreatedAt,
 	}
@@ -82,10 +70,6 @@ func (h *UserHandler) List(c *gin.Context) {
 	if req.Status != "" {
 		meta.Filters["status"] = req.Status
 	}
-	if req.RoleID != "" {
-		meta.Filters["role_id"] = req.RoleID
-	}
-
 	response.SuccessResponse(c, userDTOs, meta)
 }
 
@@ -323,28 +307,7 @@ func (h *UserHandler) UploadAvatar(c *gin.Context) {
 }
 
 func (h *UserHandler) RequestAccountDeletion(c *gin.Context) {
-	userIDVal, exists := c.Get("user_id")
-	if !exists {
-		errors.UnauthorizedResponse(c, "unauthorized")
-		return
-	}
-	id, ok := userIDVal.(string)
-	if !ok {
-		errors.InternalServerErrorResponse(c, "invalid user id in context")
-		return
-	}
-
-	result, err := h.userUC.RequestAccountDeletion(c.Request.Context(), id)
-	if err != nil {
-		if stderrors.Is(err, usecase.ErrDeleteAccountForbidden) {
-			errors.ForbiddenResponse(c, "only tenant owner can request account deletion", nil)
-			return
-		}
-		errors.InternalServerErrorResponse(c, err.Error())
-		return
-	}
-
-	response.SuccessResponse(c, result, &response.Meta{UpdatedBy: id})
+	errors.ForbiddenResponse(c, "account deletion is not available in core mode", nil)
 }
 
 func (h *UserHandler) GetLimit(c *gin.Context) {

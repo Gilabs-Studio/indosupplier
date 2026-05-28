@@ -4,16 +4,9 @@ import (
 	"context"
 
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 type txKey struct{}
-
-// Context key constants - duplicated from middleware package to avoid import cycle.
-// This MUST stay in sync with middleware.TenantIDKey.
-const (
-	tenantIDKey = "tenant_id"
-)
 
 // WithTx returns a new context with the transaction attached
 func WithTx(ctx context.Context, tx *gorm.DB) context.Context {
@@ -26,33 +19,14 @@ func GetTx(ctx context.Context) *gorm.DB {
 	return tx
 }
 
-// GetDB returns a *gorm.DB scoped to the current tenant from context.
-// - Tenant requests (tenant_id set): WHERE tenant_id = ? applied automatically.
-// - Unauthenticated requests: unscoped (login, webhooks, etc.).
-//
-// IMPORTANT: Repositories querying platform-wide tables without tenant_id
-// (geographic data, tenants table) must use r.db.WithContext(ctx) directly
-// instead of this function to avoid SQL column-not-found errors.
+// GetDB returns a *gorm.DB bound to request context and transaction (if any).
 func GetDB(ctx context.Context, fallback *gorm.DB) *gorm.DB {
 	var db *gorm.DB
 	if tx := GetTx(ctx); tx != nil {
-		// Propagate the request context into the transaction so that
-		// tenant_id is visible to any subsequent GetDB calls within the tx.
 		db = tx.WithContext(ctx)
 	} else {
 		db = fallback.WithContext(ctx)
 	}
-
-	// Apply tenant scope when the request carries a tenant_id.
-	if v := ctx.Value(tenantIDKey); v != nil {
-		if tid, ok := v.(string); ok && tid != "" {
-			return db.Where(clause.Eq{
-				Column: clause.Column{Table: clause.CurrentTable, Name: "tenant_id"},
-				Value:  tid,
-			})
-		}
-	}
-
 	return db
 }
 
