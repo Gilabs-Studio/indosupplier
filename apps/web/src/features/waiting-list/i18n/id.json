@@ -1,96 +1,94 @@
 {
   "waitingList": {
-    "title": "Gabung Waiting List Eksklusif",
-    "subtitle": "Dapatkan akses awal, prioritas onboarding, dan penawaran harga spesial saat IndoSupplier diluncurkan.",
+    "title": "Gabung Waitlist VIP",
+    "subtitle": "Kapasitas terbatas untuk kuartal ini. Daftar sekarang untuk dapat undangan prioritas, akses langsung ke produsen utama, dan gratis komisi transaksi",
     "form": {
       "name": "Nama Lengkap",
-      "namePlaceholder": "John Doe",
+      "namePlaceholder": "Tulis nama lengkap kamu",
       "email": "Alamat Email",
-      "emailPlaceholder": "john@company.com",
+      "emailPlaceholder": "nama@perusahaan.com",
       "companyName": "Nama Perusahaan",
-      "companyNamePlaceholder": "PT Maju Bersama",
+      "companyNamePlaceholder": "Contoh: PT Maju Bersama",
       "companyType": "Tipe Bisnis",
-      "companyTypePlaceholder": "Pilih tipe bisnis",
-      "supplier": "Pemasok / Distributor",
+      "companyTypePlaceholder": "Pilih tipe bisnis kamu",
+      "supplier": "Pemasok / Produsen",
       "buyer": "Pembeli / Pengecer",
       "other": "Bisnis Lainnya",
-      "phone": "Nomor Telepon (Opsional)",
-      "phonePlaceholder": "+62 812-3456-7890",
-      "notes": "Fitur apa yang paling Anda butuhkan? (Opsional)",
-      "notesPlaceholder": "Ceritakan kebutuhan operasional bisnis Anda...",
-      "submit": "Daftar Akses Awal",
-      "submitting": "Mendaftarkan...",
-      "successTitle": "Anda telah terdaftar!",
-      "successMessage": "Terima kasih telah bergabung dalam antrean kami. Kami akan menghubungi Anda segera setelah slot akses awal tersedia.",
+      "phone": "Nomor WhatsApp (Opsional)",
+      "phonePlaceholder": "Contoh: +62 812-3456-7890",
+      "notes": "Spesifikasi supplier yang sedang kamu cari? (Opsional)",
+      "notesPlaceholder": "Tulis jenis produk atau kriteria supplier yang kamu butuhkan",
+      "submit": "Ajukan Undangan Akses VIP",
+      "submitting": "Mengajukan Undangan...",
+      "successTitle": "Permohonan Diterima",
+      "successMessage": "Hebat! Perusahaan kamu sudah masuk antrean VIP. Kami akan memverifikasi profil bisnis kamu dan menghubungi via WhatsApp dalam 24 jam",
       "errors": {
         "emailRequired": "Email wajib diisi",
         "emailInvalid": "Masukkan alamat email yang valid",
         "nameRequired": "Nama wajib diisi",
         "companyNameRequired": "Nama perusahaan wajib diisi",
         "companyTypeRequired": "Tipe bisnis wajib diisi",
-        "alreadyRegistered": "Email ini sudah terdaftar dalam waiting list kami!"
+        "alreadyRegistered": "Email ini sudah terdaftar dalam waiting list VIP kami"
       }
     }
   },
   "landing": {
     "nav": {
       "signIn": "Masuk",
-      "earlyAccess": "Akses Awal"
+      "earlyAccess": "Akses VIP",
+      "about": "Tentang Kami",
+      "waitlist": "Akses VIP"
     },
     "hero": {
-      "badge": "Akses Awal — Slot Terbatas",
-      "headline": "Sistem Operasi untuk Perdagangan B2B Indonesia",
-      "subheadline": "Satukan pengadaan, penjualan, inventaris, dan kepatuhan pajak lokal (e-Faktur) dalam satu platform presisi untuk enterprise Indonesia.",
-      "cta": "Amankan Slot Anda",
-      "ctaSecondary": "Lihat Cara Kerjanya",
-      "trustLabel": "Dipercaya 200+ bisnis di Indonesia",
+      "badge": "Akses Terbatas — Khusus 50 Perusahaan Pertama",
+      "headline": "Cari & Beli Langsung dari Supplier yang Paling Cocok untuk Bisnis Kamu",
+      "subheadline": "Terjebak dengan supplier lambat, harga broker yang di-markup, atau bingung mencari partner yang pas? IndoSupplier mempertemukan kriteria spesifik kamu dengan produsen utama secara instan. Beli langsung, lebih hemat, dan gratis tanpa biaya komisi",
+      "cta": "Amankan Slot Eksklusif Bisnis Kamu",
+      "ctaSecondary": "Pelajari Selengkapnya",
+      "trustLabel": "Bergabung bersama 200+ pemilik bisnis & direktur utama lainnya",
       "stats": {
-        "users": "Pengguna beta",
-        "modules": "Modul utama",
-        "uptime": "SLA uptime"
+        "users": "Perusahaan Tergabung",
+        "modules": "Produsen Utama",
+        "uptime": "Kecocokan Sempurna"
       }
     },
     "features": {
-      "badge": "Kemampuan Platform",
-      "headline": "Semua yang dibutuhkan rantai pasokan Anda, tanpa lebih",
+      "badge": "Masalah yang Kami Selesaikan",
+      "headline": "Bikin pengadaan barang jadi instan dan tanpa ribet",
       "items": {
         "erp": {
-          "title": "ERP B2B & Inventaris",
-          "desc": "Kontrol stok multi-gudang, purchase order, dan penerimaan barang dengan presisi mutlak."
+          "title": "Pembelian Langsung (Direct Purchase)",
+          "desc": "Hubungkan pengadaan kamu langsung ke produsen utama. Tanpa broker, tanpa markup tersembunyi, dan jaminan harga tangan pertama"
         },
         "crm": {
-          "title": "CRM & Pipeline Penjualan",
-          "desc": "Pantau prospek, penawaran harga, dan hubungan pelanggan dari kontak pertama hingga pembayaran."
+          "title": "Pencocokan Cerdas & Instan",
+          "desc": "Tinggal masukkan kriteria kamu. Sistem kami akan mencocokkan bisnis kamu dengan supplier terpercaya dalam hitungan menit, bukan minggu"
         },
         "finance": {
-          "title": "Invoice & e-Faktur",
-          "desc": "Terbitkan invoice, kelola utang/piutang, dan otomatiskan pelaporan pajak Indonesia."
-        },
-        "hrd": {
-          "title": "HR & Absensi",
-          "desc": "Manajemen karyawan, penggajian, dan absensi sesuai peraturan ketenagakerjaan Indonesia."
+          "title": "Transaksi Tenang & Terverifikasi",
+          "desc": "Semua partner telah melalui verifikasi legalitas, kapasitas produksi, dan reputasi. Kerja sama lancar tanpa takut kena tipu"
         }
       }
     },
     "philosophy": {
-      "title": "Filosofi Utama",
-      "quote": "Menghubungkan setiap pembelian, gudang, dan laporan pajak dengan presisi mutlak. Kami membangun sistem operasi untuk perdagangan B2B Indonesia.",
-      "description": "IndoSupplier menyederhanakan operasional rantai pasok B2B Anda. Otomatiskan penerbitan invoice lokal, hubungkan alokasi stok multi-gudang, dan sinkronkan dengan standar e-Faktur Indonesia secara instan."
+      "title": "Filosofi Kami",
+      "quote": "Menemukan supplier yang cocok harusnya semudah memesan makanan. Kami percaya setiap bisnis layak mendapatkan akses langsung ke produsen terbaik tanpa hambatan perantara",
+      "description": "IndoSupplier lahir untuk mengakhiri drama pencarian supplier yang membuang waktu berminggu-minggu atau tertipu broker nakal. Kami memotong proses pengadaan tradisional menjadi platform digital langsung yang transparan, efisien, dan presisi"
     },
     "waitlist": {
-      "badge": "Waiting List Dibuka",
-      "headline": "Jadilah yang pertama saat kami meluncur",
-      "subheadline": "Bergabung dengan 200+ bisnis yang sudah mendaftar. Anggota awal mendapat diskon 30% di tahun pertama dan onboarding khusus.",
+      "badge": "Slot VIP Terbatas",
+      "headline": "Amankan keunggulan kompetitif bisnis kamu sekarang",
+      "subheadline": "Kami membatasi akses awal untuk menjaga kualitas pencocokan. Kuota pendaftaran batch ini sudah terisi 80%. Daftar sekarang sebelum kompetitor kamu mengamankan supplier terbaik terlebih dahulu",
       "benefits": {
-        "discount": "Diskon 30% untuk anggota awal",
-        "onboarding": "Sesi onboarding khusus",
-        "support": "Prioritas support & permintaan fitur",
-        "noCard": "Tidak perlu kartu kredit"
+        "discount": "Akses prioritas ke produsen tangan pertama",
+        "onboarding": "Bantuan pencarian & negosiasi supplier dari tim ahli kami",
+        "support": "Gratis biaya komisi transaksi selama 6 bulan pertama",
+        "noCard": "Pendaftaran instan tanpa biaya atau komitmen finansial"
       }
     },
     "footer": {
-      "copy": "© {year} IndoSupplier Platform. Hak cipta dilindungi.",
-      "tagline": "Dibangun untuk enterprise Indonesia."
+      "copy": "© {year} IndoSupplier Platform. Hak cipta dilindungi",
+      "tagline": "Platform Pembelian Langsung Supplier No. 1 di Indonesia"
     }
   }
 }

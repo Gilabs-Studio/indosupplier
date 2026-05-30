@@ -4,6 +4,8 @@ import { Link } from "@/i18n/routing";
 import WaitingListForm from "@/features/waiting-list/components/waiting-list-form";
 import LanguageSwitcher from "@/components/navigation/language-switcher";
 import { Button } from "@/components/ui/button";
+import { ScrollTextReveal } from "@/components/motion";
+
 
 export default async function LandingPage({
   params,
@@ -31,10 +33,10 @@ export default async function LandingPage({
               {t("features.badge")}
             </a>
             <a href="#about" className="hover:text-foreground transition-colors">
-              About
+              {t("nav.about")}
             </a>
             <a href="#join" className="hover:text-foreground transition-colors">
-              Waitlist
+              {t("nav.waitlist")}
             </a>
           </div>
 
@@ -145,7 +147,7 @@ export default async function LandingPage({
       </section>
 
       {/* ── SECTION 3: ABOUT / PHILOSOPHY ── */}
-      <section id="about" className="px-6 md:px-16 lg:px-24 py-20 md:py-28 bg-primary text-primary-foreground">
+      <section id="about" className="min-h-screen flex items-center px-6 md:px-16 lg:px-24 py-20 bg-primary text-primary-foreground relative overflow-hidden">
         <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Left Column: Huge typography statement */}
           <div className="lg:col-span-8 flex flex-col justify-between">
@@ -157,7 +159,7 @@ export default async function LandingPage({
                 className="font-light leading-[1.2] tracking-[-0.03em] max-w-[720px] text-primary-foreground"
                 style={{ fontSize: "clamp(2rem, 4.5vw, 3.4rem)" }}
               >
-                {t("philosophy.quote")}
+                <ScrollTextReveal text={t("philosophy.quote")} />
               </h2>
             </div>
           </div>
@@ -197,16 +199,22 @@ export default async function LandingPage({
             {/* Structured list in grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-[14px] font-light text-muted-foreground border-t border-border/80 pt-8">
               {[
-                { label: "30% off first year", desc: "Special pricing for early members." },
-                { label: "Onboarding session", desc: "Dedicated guidance from team." },
-                { label: "No credit card", desc: "No risk, join list immediately." },
-                { label: "Priority feedback", desc: "Request features directly." },
-              ].map((item) => (
-                <div key={item.label}>
-                  <h4 className="font-normal text-foreground mb-1 uppercase tracking-wider text-[12px]">
-                    {item.label}
-                  </h4>
-                  <p className="leading-relaxed">{item.desc}</p>
+                t("waitlist.benefits.discount"),
+                t("waitlist.benefits.onboarding"),
+                t("waitlist.benefits.support"),
+                t("waitlist.benefits.noCard"),
+              ].map((benefit, idx) => (
+                <div key={idx} className="flex gap-3 items-start">
+                  <svg
+                    className="h-5 w-5 text-foreground shrink-0 mt-0.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <p className="leading-relaxed text-muted-foreground">{benefit}</p>
                 </div>
               ))}
             </div>

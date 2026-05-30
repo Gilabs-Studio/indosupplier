@@ -1,96 +1,94 @@
 {
   "waitingList": {
-    "title": "Join the Exclusive Waitlist",
-    "subtitle": "Get early access, priority onboarding, and special pricing when IndoSupplier launches.",
+    "title": "Join the VIP Waitlist",
+    "subtitle": "Limited capacity for this quarter. Sign up today to receive a priority onboarding invitation, direct access to primary manufacturers, and free transaction commissions",
     "form": {
       "name": "Full Name",
-      "namePlaceholder": "John Doe",
+      "namePlaceholder": "Enter your full name",
       "email": "Email Address",
-      "emailPlaceholder": "john@company.com",
+      "emailPlaceholder": "name@company.com",
       "companyName": "Company Name",
-      "companyNamePlaceholder": "PT Maju Bersama",
+      "companyNamePlaceholder": "Example: PT Maju Bersama",
       "companyType": "Business Type",
-      "companyTypePlaceholder": "Select business type",
-      "supplier": "Supplier / Distributor",
+      "companyTypePlaceholder": "Select your business type",
+      "supplier": "Supplier / Manufacturer",
       "buyer": "Buyer / Retailer",
       "other": "Other Business",
-      "phone": "Phone Number (Optional)",
-      "phonePlaceholder": "+62 812-3456-7890",
-      "notes": "What features are you most interested in? (Optional)",
-      "notesPlaceholder": "Tell us about your business needs...",
-      "submit": "Secure Early Access",
-      "submitting": "Joining waitlist...",
-      "successTitle": "You're on the list!",
-      "successMessage": "Thank you for joining our waiting list. We will reach out to you with exclusive updates and early access slots.",
+      "phone": "WhatsApp Number (Optional)",
+      "phonePlaceholder": "Example: +62 812-3456-7890",
+      "notes": "What specific supplier capabilities do you need? (Optional)",
+      "notesPlaceholder": "Describe the types of products or suppliers you're looking for",
+      "submit": "Request VIP Access Invitation",
+      "submitting": "Submitting Request...",
+      "successTitle": "Application Received",
+      "successMessage": "Awesome! Your company has been placed on the VIP waitlist. We will verify your business profile and contact you via WhatsApp within 24 hours",
       "errors": {
         "emailRequired": "Email is required",
         "emailInvalid": "Please enter a valid email address",
         "nameRequired": "Name is required",
         "companyNameRequired": "Company name is required",
         "companyTypeRequired": "Business type is required",
-        "alreadyRegistered": "This email is already registered on our waiting list!"
+        "alreadyRegistered": "This email is already registered on our VIP waiting list"
       }
     }
   },
   "landing": {
     "nav": {
       "signIn": "Sign In",
-      "earlyAccess": "Early Access"
+      "earlyAccess": "VIP Access",
+      "about": "About Us",
+      "waitlist": "VIP Access"
     },
     "hero": {
-      "badge": "Early Access — Limited Spots",
-      "headline": "The Operating System for Indonesian B2B Commerce",
-      "subheadline": "Unify procurement, sales, inventory, and local tax compliance (e-Faktur) into a single precision platform built for Indonesian enterprises.",
-      "cta": "Secure Your Spot",
-      "ctaSecondary": "See How It Works",
-      "trustLabel": "Trusted by 200+ businesses in Indonesia",
+      "badge": "Limited Invitation — Exclusive to the First 50 Companies",
+      "headline": "Find & Buy Directly from the Perfect Supplier for Your Business",
+      "subheadline": "Tired of slow suppliers, marked-up broker prices, or struggling to find a compatible partner? IndoSupplier instantly matches your specific criteria with primary manufacturers. Buy direct, save more, and pay zero commission fees",
+      "cta": "Secure Your Business's VIP Spot",
+      "ctaSecondary": "Learn More",
+      "trustLabel": "Joined by 200+ business owners & managing directors",
       "stats": {
-        "users": "Beta users",
-        "modules": "Core modules",
-        "uptime": "Uptime SLA"
+        "users": "Joined Companies",
+        "modules": "Primary Manufacturers",
+        "uptime": "Perfect Match Rate"
       }
     },
     "features": {
-      "badge": "Platform Capabilities",
-      "headline": "Everything your supply chain needs, nothing it doesn't",
+      "badge": "The Problems We Solve",
+      "headline": "Make supplier sourcing instant and hassle-free",
       "items": {
         "erp": {
-          "title": "B2B ERP & Inventory",
-          "desc": "Multi-warehouse stock control, purchase orders, and goods receipts with absolute precision."
+          "title": "Direct Purchasing",
+          "desc": "Connect procurement directly to primary manufacturers. No middlemen, no hidden markups, and guaranteed first-hand pricing"
         },
         "crm": {
-          "title": "CRM & Sales Pipeline",
-          "desc": "Track leads, quotes, and client relationships from first contact to final payment."
+          "title": "Smart & Instant Matching",
+          "desc": "Enter your criteria. Our matching algorithm connects your business with trusted suppliers in minutes, not weeks"
         },
         "finance": {
-          "title": "Invoicing & e-Faktur",
-          "desc": "Generate invoices, manage AR/AP, and automate Indonesian tax reporting effortlessly."
-        },
-        "hrd": {
-          "title": "HR & Attendance",
-          "desc": "Employee management, payroll, and attendance tracking aligned with Indonesian labor law."
+          "title": "Verified & Secure Transactions",
+          "desc": "Every partner undergoes vetting for legalities, capacity, and track record. Work together smoothly without worry"
         }
       }
     },
     "philosophy": {
-      "title": "Core Philosophy",
-      "quote": "Connecting every purchase, warehouse, and tax report with absolute precision. We build operating systems for Indonesian B2B commerce.",
-      "description": "IndoSupplier streamlines your B2B commerce operations. Automate localized invoice creation, connect multi-warehouse stock allocations, and sync with local e-Faktur compliance standards out-of-the-box."
+      "title": "Our Philosophy",
+      "quote": "Finding the right supplier should be as simple as ordering food. We believe every business deserves direct access to top-tier manufacturers without middleman obstacles",
+      "description": "IndoSupplier was born to end the drama of sourcing processes that waste weeks or cost markup broker fees. We simplify sourcing into a transparent, direct digital platform that saves time and money"
     },
     "waitlist": {
-      "badge": "Waitlist Now Open",
-      "headline": "Be first when we launch",
-      "subheadline": "Join 200+ businesses already on the list. Early members get 30% off their first year and dedicated onboarding.",
+      "badge": "Limited VIP Access",
+      "headline": "Secure your competitive advantage today",
+      "subheadline": "We limit early access slots to ensure premium matching quality. This batch is currently 80% full. Sign up now before your competitors secure the best suppliers first",
       "benefits": {
-        "discount": "30% discount for early members",
-        "onboarding": "Dedicated onboarding session",
-        "support": "Priority support & feature requests",
-        "noCard": "No credit card required"
+        "discount": "Priority access to premium direct manufacturers",
+        "onboarding": "Sourcing and negotiation assistance from our expert team",
+        "support": "Zero platform commission fees for your first 6 months",
+        "noCard": "Instant sign-up with no fees or financial commitments"
       }
     },
     "footer": {
-      "copy": "© {year} IndoSupplier Platform. All rights reserved.",
-      "tagline": "Built for Indonesian enterprise."
+      "copy": "© {year} IndoSupplier Platform. All rights reserved",
+      "tagline": "The No.1 Direct Supplier Purchasing Platform in Indonesia"
     }
   }
 }

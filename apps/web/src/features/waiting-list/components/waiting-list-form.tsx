@@ -159,7 +159,7 @@ export default function WaitingListForm() {
       />
 
       {/* The card container */}
-      <div className="relative z-10 bg-card p-8 md:p-12 border border-border rounded-lg shadow-xs w-full">
+      <div className="relative z-10 bg-card p-4 md:p-6 border border-border rounded-lg shadow-xs w-full">
         <div className="w-full font-jost">
           <AnimatePresence mode="wait">
             {!isSuccess ? (
@@ -170,6 +170,7 @@ export default function WaitingListForm() {
                 exit={{ opacity: 0 }}
                 className="w-full"
               >
+                {/* eslint-disable-next-line react-hooks/refs */}
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                   {/* Name */}
                   <Field invalid={!!errors.name}>
