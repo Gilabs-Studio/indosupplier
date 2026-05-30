@@ -126,6 +126,11 @@ func shouldSkipCSRFMiddleware(c *gin.Context, path string) bool {
 		return true
 	}
 
+	// Public waiting list join endpoint is pre-session and bypasses CSRF.
+	if path == "/api/v1/waiting-list/join" {
+		return true
+	}
+
 	// Public feedback submission uses one-time URL token, not browser session CSRF.
 	return isPublicFeedbackSubmit(c.Request.Method, path)
 }
