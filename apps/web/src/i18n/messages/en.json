@@ -257,5 +257,60 @@
     }
   },
   "navigation": {
+  },
+  "waitingList": {
+    "title": "Join the Exclusive Waitlist",
+    "subtitle": "Get early access, priority onboarding, and special pricing when IndoSupplier launches.",
+    "form": {
+      "name": "Full Name",
+      "namePlaceholder": "John Doe",
+      "email": "Email Address",
+      "emailPlaceholder": "john@company.com",
+      "companyName": "Company Name",
+      "companyNamePlaceholder": "PT Maju Bersama",
+      "companyType": "Company Type",
+      "companyTypePlaceholder": "Select company type",
+      "supplier": "Supplier / Distributor",
+      "buyer": "Buyer / Retailer",
+      "other": "Other Business",
+      "phone": "Phone Number (Optional)",
+      "phonePlaceholder": "+62 812-3456-7890",
+      "notes": "What features are you most interested in? (Optional)",
+      "notesPlaceholder": "Tell us about your business needs...",
+      "submit": "Secure Early Access",
+      "submitting": "Joining waitlist...",
+      "successTitle": "You're on the list!",
+      "successMessage": "Thank you for joining our waiting list. We will reach out to you with exclusive updates and early access slots.",
+      "errors": {
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "nameRequired": "Name is required",
+        "companyNameRequired": "Company name is required",
+        "companyTypeRequired": "Company type is required",
+        "alreadyRegistered": "This email is already registered on our waiting list!"
+      }
+    }
+  },
+  "landing": {
+    "title": "Next-Gen Supply Chain & ERP for Indonesian Businesses",
+    "subtitle": "Streamline B2B sales, purchases, inventory, invoicing, and local tax (e-Faktur) integration in one premium platform.",
+    "featuresTitle": "Engineered for Indonesian Enterprise",
+    "featuresSubtitle": "No more scattered spreadsheets. Manage your business end-to-end with high efficiency.",
+    "ctaTitle": "Ready to Transform Your Operations?",
+    "ctaSubtitle": "Secure your spot on the waiting list today and receive a 30% discount on your first year.",
+    "featureList": {
+      "erp": {
+        "title": "B2B ERP & Inventory",
+        "desc": "Manage multi-warehouse stock, purchase orders, and goods receipts with absolute precision."
+      },
+      "crm": {
+        "title": "CRM & Sales Pipeline",
+        "desc": "Track leads, quotes, and client relationships from proposal to payment seamlessly."
+      },
+      "finance": {
+        "title": "Invoicing & Local Taxes",
+        "desc": "Generate professional invoices, manage accounts receivable/payable, and automate Indonesian tax formatting."
+      }
+    }
   }
 }

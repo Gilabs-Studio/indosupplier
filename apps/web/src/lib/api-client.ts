@@ -583,10 +583,11 @@ apiClient.interceptors.response.use(
       };
       const requestUrl = originalRequest?.url || "";
 
-      // Skip token refresh for authentication endpoints
+      // Skip token refresh for authentication endpoints & sysadmin endpoints
       if (
         requestUrl.includes("/auth/login") ||
-        requestUrl.includes("/auth/refresh")
+        requestUrl.includes("/auth/refresh") ||
+        requestUrl.includes("/sysadmin/")
       ) {
         return Promise.reject(error);
       }

@@ -28,10 +28,18 @@ import (
 	"github.com/gilabs/indosupplier/api/internal/core/storage"
 	refreshTokenRepo "github.com/gilabs/indosupplier/api/internal/refresh_token/data/repositories"
 	refreshTokenWorker "github.com/gilabs/indosupplier/api/internal/refresh_token/worker"
+	sysadminRepo "github.com/gilabs/indosupplier/api/internal/sysadmin/data/repositories"
+	sysadminUsecase "github.com/gilabs/indosupplier/api/internal/sysadmin/domain/usecase"
+	sysadminHandler "github.com/gilabs/indosupplier/api/internal/sysadmin/presentation/handler"
+	sysadminRouter "github.com/gilabs/indosupplier/api/internal/sysadmin/presentation/router"
 	"github.com/gilabs/indosupplier/api/internal/user/data/repositories"
 	userUsecase "github.com/gilabs/indosupplier/api/internal/user/domain/usecase"
 	userHandler "github.com/gilabs/indosupplier/api/internal/user/presentation/handler"
 	userRouter "github.com/gilabs/indosupplier/api/internal/user/presentation/router"
+	waitingListRepo "github.com/gilabs/indosupplier/api/internal/waiting_list/data/repositories"
+	waitingListUsecase "github.com/gilabs/indosupplier/api/internal/waiting_list/domain/usecase"
+	waitingListHandler "github.com/gilabs/indosupplier/api/internal/waiting_list/presentation/handler"
+	waitingListRouter "github.com/gilabs/indosupplier/api/internal/waiting_list/presentation/router"
 	"github.com/gilabs/indosupplier/api/seeders"
 )
 
@@ -103,6 +111,8 @@ func main() {
 
 	refreshTokenRepository := refreshTokenRepo.NewRefreshTokenRepository(database.DB)
 	userRepository := repositories.NewUserRepository(database.DB)
+	sysadminRepository := sysadminRepo.NewSystemAdminRepository(database.DB)
+	waitingListRepository := waitingListRepo.NewWaitingListRepository(database.DB)
 
 	auditService := audit.NewAuditService(database.DB)
 	eventPublisher := events.NewNoOpEventPublisher(true)
@@ -122,8 +132,13 @@ func main() {
 		redis.GetClient(),
 	)
 
+	sysadminUC := sysadminUsecase.NewSystemAdminUsecase(sysadminRepository, jwtManager)
+	waitingListUC := waitingListUsecase.NewWaitingListUsecase(waitingListRepository)
+
 	authH := authHandler.NewAuthHandler(authUC)
 	userH := userHandler.NewUserHandler(userUC)
+	sysadminH := sysadminHandler.NewSystemAdminHandler(sysadminUC, sysadminRepository)
+	waitingListH := waitingListHandler.NewWaitingListHandler(waitingListUC)
 
 	rtWorker := refreshTokenWorker.NewRefreshTokenCleanupWorker(refreshTokenRepository, 24*time.Hour)
 	rtWorker.Start()
@@ -151,6 +166,8 @@ func main() {
 
 		authRouter.RegisterAuthRoutes(v1, authH, jwtManager)
 		userRouter.RegisterUserRoutes(v1, userH, jwtManager)
+		sysadminRouter.RegisterSysadminAuthRoutes(v1, sysadminH, jwtManager, sysadminRepository)
+		waitingListRouter.RegisterWaitingListRoutes(v1, waitingListH, jwtManager, sysadminRepository)
 		coreRouter.RegisterUploadRoutes(v1, jwtManager)
 	}
 

@@ -252,5 +252,60 @@
     }
   },
   "navigation": {
+  },
+  "waitingList": {
+    "title": "Gabung Waiting List Eksklusif",
+    "subtitle": "Dapatkan akses awal, prioritas onboarding, dan penawaran harga spesial saat IndoSupplier diluncurkan.",
+    "form": {
+      "name": "Nama Lengkap",
+      "namePlaceholder": "John Doe",
+      "email": "Alamat Email",
+      "emailPlaceholder": "john@company.com",
+      "companyName": "Nama Perusahaan",
+      "companyNamePlaceholder": "PT Maju Bersama",
+      "companyType": "Tipe Bisnis",
+      "companyTypePlaceholder": "Pilih tipe bisnis",
+      "supplier": "Pemasok / Distributor",
+      "buyer": "Pembeli / Pengecer",
+      "other": "Bisnis Lainnya",
+      "phone": "Nomor Telepon (Opsional)",
+      "phonePlaceholder": "+62 812-3456-7890",
+      "notes": "Fitur apa yang paling Anda butuhkan? (Opsional)",
+      "notesPlaceholder": "Ceritakan kebutuhan operasional bisnis Anda...",
+      "submit": "Daftar Akses Awal",
+      "submitting": "Mendaftarkan...",
+      "successTitle": "Anda telah terdaftar!",
+      "successMessage": "Terima kasih telah bergabung dalam antrean kami. Kami akan menghubungi Anda segera setelah slot akses awal tersedia.",
+      "errors": {
+        "emailRequired": "Email wajib diisi",
+        "emailInvalid": "Masukkan alamat email yang valid",
+        "nameRequired": "Nama wajib diisi",
+        "companyNameRequired": "Nama perusahaan wajib diisi",
+        "companyTypeRequired": "Tipe bisnis wajib diisi",
+        "alreadyRegistered": "Email ini sudah terdaftar dalam waiting list kami!"
+      }
+    }
+  },
+  "landing": {
+    "title": "ERP & Rantai Pasok Modern untuk Bisnis Indonesia",
+    "subtitle": "Sederhanakan penjualan B2B, pembelian, inventaris multi-gudang, penagihan, dan integrasi pajak lokal (e-Faktur) dalam satu platform premium.",
+    "featuresTitle": "Didesain untuk Efisiensi Bisnis Indonesia",
+    "featuresSubtitle": "Tinggalkan lembar kerja manual yang berserakan. Kelola seluruh operasional bisnis Anda secara terpusat.",
+    "ctaTitle": "Siap Mengtransformasi Operasional Bisnis Anda?",
+    "ctaSubtitle": "Daftar di waiting list sekarang dan dapatkan diskon 30% untuk tahun pertama Anda.",
+    "featureList": {
+      "erp": {
+        "title": "ERP B2B & Inventaris",
+        "desc": "Kelola stok multi-gudang, purchase order, dan penerimaan barang dengan presisi mutlak."
+      },
+      "crm": {
+        "title": "CRM & Pipeline Penjualan",
+        "desc": "Pantau prospek, penawaran harga, dan hubungan pelanggan dari negosiasi hingga pembayaran."
+      },
+      "finance": {
+        "title": "Invoice & Pajak Lokal",
+        "desc": "Terbitkan invoice profesional, kelola utang/piutang, dan otomatiskan format pelaporan pajak Indonesia."
+      }
+    }
   }
 }
