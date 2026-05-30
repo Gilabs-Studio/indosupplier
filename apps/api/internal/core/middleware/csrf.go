@@ -100,29 +100,19 @@ func isPublicAuthEndpoint(path string) bool {
 	return false
 }
 
-func isPublicPOSSelfOrderEndpoint(path string) bool {
-	// Public POS self-order routes are authenticated by a one-time table token in the URL,
-	// not by a browser session cookie, so CSRF validation does not add protection here.
-	return strings.HasPrefix(path, "/api/v1/public/pos/tables/")
-}
-
 func shouldSkipCSRFMiddleware(c *gin.Context, path string) bool {
 	if isCRMLeadUpsertWebhookRequest(c.Request.Method, path) {
 		return true
 	}
 
 	// System admin login is pre-session and does not require CSRF.
-	if strings.HasPrefix(path, "/internal/sys-login") {
+	if path == "/api/v1/sysadmin/auth/login" {
 		return true
 	}
 
 	// Public auth endpoints (registration, plans, csrf token fetch) bypass CSRF
 	// since they're accessed before a session is established.
 	if isPublicAuthEndpoint(path) {
-		return true
-	}
-
-	if isPublicPOSSelfOrderEndpoint(path) {
 		return true
 	}
 

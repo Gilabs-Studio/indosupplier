@@ -213,7 +213,7 @@ export default async function LandingPage({
           </div>
 
           {/* Right Column (Form container) */}
-          <div className="bg-card p-8 md:p-12 border border-border rounded-lg shadow-xs">
+          <div className="relative">
             <WaitingListForm />
           </div>
         </div>
