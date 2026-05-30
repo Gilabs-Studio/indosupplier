@@ -10,16 +10,17 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground hover:bg-primary/90 gradient-primary hover:shadow-lg hover:shadow-primary/30 hover:-translate-y-0.5 active:translate-y-0",
+          "bg-primary text-primary-foreground hover:bg-primary/90 border border-transparent shadow-sm active:scale-[0.99]",
         destructive:
-          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 hover:shadow-lg hover:shadow-destructive/30 hover:-translate-y-0.5 active:translate-y-0",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm active:scale-[0.99]",
         outline:
-          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:border-primary/50 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0",
+          "border border-input bg-background shadow-xs hover:bg-secondary hover:text-secondary-foreground active:scale-[0.99]",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/85 shadow-xs active:scale-[0.99]",
         ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 hover:shadow-sm",
-        link: "text-primary underline-offset-4 hover:underline hover:text-primary/80",
+          "hover:bg-secondary hover:text-secondary-foreground active:scale-[0.99]",
+        link: "text-primary underline-offset-4 hover:underline",
+        cta: "bg-primary text-primary-foreground hover:bg-primary/95 text-[13px] tracking-widest uppercase font-medium px-8 py-4 shadow-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] h-auto rounded-md",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

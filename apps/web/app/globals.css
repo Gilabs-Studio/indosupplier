@@ -79,63 +79,63 @@
 @layer base {
   :root {
     /* Calm Light Theme - Much Softer on the Eyes */
-    --background: 220 14% 96%;     /* Soft cool gray background */
-    --foreground: 220 10% 20%;     /* Softer charcoal text (reduced glare) */
+    --background: 38 18% 90%;      /* Soft warm sand/beige background #EAE6DF */
+    --foreground: 24 10% 10%;      /* Softer stone/brown-black text #1C1917 */
     
     --card: 0 0% 100%;             /* Pure white for cards */
-    --card-foreground: 220 10% 20%;
+    --card-foreground: 24 10% 10%;
     
     --popover: 0 0% 100%;
-    --popover-foreground: 220 10% 20%;
+    --popover-foreground: 24 10% 10%;
     
-    --primary: 221 83% 53%;        /* Electric Blue var(--color-primary) */
-    --primary-foreground: 0 0% 100%; /* White */
+    --primary: 24 10% 10%;         /* Stone brown-black primary */
+    --primary-foreground: 0 0% 100%; /* White text */
     
-    --secondary: 220 14% 92%;      /* Calmer gray for secondary elements */
-    --secondary-foreground: 220 10% 20%;
+    --secondary: 60 4% 95%;        /* Warm light grey for secondary #F2F2F0 */
+    --secondary-foreground: 24 10% 10%;
     
-    --muted: 220 14% 92%;
-    --muted-foreground: 220 10% 45%; /* Softer muted text */
+    --muted: 60 4% 95%;            /* Soft warm grey for muted sections #F2F2F0 */
+    --muted-foreground: 24 10% 40%; /* Muted stone text */
     
-    --accent: 220 14% 92%;        /* Purple accent (light theme) */
-    --accent-foreground: 220 10% 20%;
+    --accent: 60 4% 95%;
+    --accent-foreground: 24 10% 10%;
 
-    --purple: 262 83% 58%;         /* Semantic purple (high-contrast) */
+    --purple: 262 83% 58%;
     --purple-foreground: 0 0% 100%;
 
-    --cyan: 187 100% 44%;          /* Semantic cyan */
+    --cyan: 187 100% 44%;
     --cyan-foreground: 0 0% 100%;
 
-    --rose: 340 82% 57%;           /* Semantic rose */
+    --rose: 340 82% 57%;
     --rose-foreground: 0 0% 100%;
     
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 220 14% 86%;         /* Slightly darker border for visibility */
-    --input: 220 14% 86%;          
-    --ring: 221 83% 53%;           /* Electric Blue var(--color-primary) */
+    --border: 38 8% 81%;           /* Warm sand border #D4D0C9 */
+    --input: 38 8% 81%;            /* Warm sand input border #D4D0C9 */
+    --ring: 24 10% 10%;               /* Focus ring matches text/primary */
     
-    --brand: 221 83% 53%;          /* Electric Blue var(--color-primary) */
+    --brand: 24 10% 10%;              /* Monochrome brand color */
     --brand-foreground: 0 0% 100%;
     
     /* Chart colors */
-    --chart-1: 221 83% 53%;        /* Electric Blue var(--color-primary) */
-    --chart-2: 142 76% 36%;        /* Green var(--color-success) */
-    --chart-3: 38 92% 50%;         /* Amber */
-    --chart-4: 0 84% 60%;          /* Red */
-    --chart-5: 262 83% 58%;        /* Purple */
+    --chart-1: 24 10% 10%;
+    --chart-2: 142 76% 36%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 0 84% 60%;
+    --chart-5: 262 83% 58%;
     
     --radius: 0.5rem;
 
     /* Sidebar (Detail sidebar + gap) - Dark */
-    --sidebar: 0 0% 15%;           /* Dark gray for detail sidebar and gap */
+    --sidebar: 0 0% 15%;
     --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary: 24 10% 10%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 20%;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 0 0% 22%;
-    --sidebar-ring: 221 83% 53%;
+    --sidebar-ring: 24 10% 10%;
     
     /* Sidebar Dark (Icon sidebar) */
     --sidebar-dark: 0 0% 10%;
@@ -153,8 +153,8 @@
     --popover: 0 0% 12%;
     --popover-foreground: 0 0% 100%;
     
-    --primary: 221 83% 53%;        /* Electric Blue var(--color-primary) */
-    --primary-foreground: 0 0% 100%; /* White */
+    --primary: 0 0% 100%;          /* White primary in dark mode */
+    --primary-foreground: 0 0% 10%; /* Dark text */
     
     --secondary: 0 0% 15%;
     --secondary-foreground: 0 0% 100%;
@@ -162,16 +162,16 @@
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 65%;
     
-    --accent: 0 0% 15%;          /* Purple accent (dark theme) */
+    --accent: 0 0% 15%;
     --accent-foreground: 0 0% 100%;
 
-    --purple: 262 83% 70%;         /* Semantic purple (high contrast in dark theme) */
+    --purple: 262 83% 70%;
     --purple-foreground: 0 0% 100%;
 
-    --cyan: 187 100% 44%;          /* Semantic cyan */
+    --cyan: 187 100% 44%;
     --cyan-foreground: 0 0% 100%;
 
-    --rose: 340 82% 57%;           /* Semantic rose */
+    --rose: 340 82% 57%;
     --rose-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
@@ -179,29 +179,29 @@
     
     --border: 0 0% 20%;
     --input: 0 0% 20%;
-    --ring: 221 83% 53%;           /* Electric Blue var(--color-primary) */
-    --brand: 221 83% 53%;
-    --brand-foreground: 0 0% 100%;
+    --ring: 0 0% 100%;
+    --brand: 0 0% 100%;
+    --brand-foreground: 0 0% 10%;
 
     /* Chart colors */
-    --chart-1: 221 83% 53%;        /* Electric Blue var(--color-primary) */
-    --chart-2: 142 76% 36%;        /* Green var(--color-success) */
-    --chart-3: 38 92% 50%;         /* Amber */
-    --chart-4: 0 84% 60%;          /* Red */
-    --chart-5: 262 83% 58%;        /* Purple */
+    --chart-1: 0 0% 100%;
+    --chart-2: 142 76% 36%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 0 84% 60%;
+    --chart-5: 262 83% 58%;
 
     /* Sidebar (Detail sidebar + gap) - Darker */
-    --sidebar: 0 0% 8%;            /* Very dark for detail sidebar and gap */
+    --sidebar: 0 0% 8%;
     --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 221 83% 53%;
-    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 10%;
     --sidebar-accent: 0 0% 12%;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 0 0% 15%;
-    --sidebar-ring: 221 83% 53%;
+    --sidebar-ring: 0 0% 100%;
     
     /* Sidebar Light (Icon sidebar) - Slightly lighter */
-    --sidebar-dark: 0 0% 14%;      /* Lighter than sidebar for icon sidebar */
+    --sidebar-dark: 0 0% 14%;
     --sidebar-dark-foreground: 0 0% 100%;
   }
 }
