@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Sora, Newsreader } from "next/font/google";
+import { Geist, Geist_Mono, Sora, Newsreader, Jost } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { getLanguageAlternates } from "@/lib/seo";
@@ -27,6 +27,13 @@ const accentFont = Newsreader({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   style: ["italic", "normal"],
+  display: "swap",
+});
+
+const jostFont = Jost({
+  variable: "--font-jost",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
   display: "swap",
 });
 
@@ -144,7 +151,7 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <head />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${headingFont.variable} ${accentFont.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${headingFont.variable} ${accentFont.variable} ${jostFont.variable} antialiased`}
       >
         {children}
       </body>

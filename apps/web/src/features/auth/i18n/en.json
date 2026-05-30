@@ -1,0 +1,36 @@
+{
+  "notFound": {
+    "label": "404",
+    "title": "Page Not Found",
+    "description": "The page you are looking for does not exist or has been moved.",
+    "backHome": "Back to Login"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "description": "Sign in to your account to continue",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "forgotPassword": "Forgot password?",
+      "rememberMe": "Remember me",
+      "submit": "Sign In",
+      "submitting": "Signing in...",
+      "verifyingSession": "Verifying session...",
+      "rateLimitMessage": "Too many login attempts. Please try again in {countdown}."
+    },
+    "block": {
+      "title": "Access Blocked",
+      "description": "You do not have permission to access this resource.",
+      "reason": "Your role has been removed or your permissions have been revoked. Please contact your administrator.",
+      "currentRole": "Current role:",
+      "goToLogin": "Back to Login",
+      "autoLogout": "You will be automatically logged out in a few seconds."
+    },
+    "roleInvalid": {
+      "title": "Access Revoked",
+      "description": "Your role has been deleted or your permissions have been revoked. You will be redirected."
+    }
+  }
+}

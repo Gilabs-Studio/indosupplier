@@ -812,4 +812,13 @@ apiClient.interceptors.response.use(
   },
 );
 
+export const publicApiClient = axios.create({
+  baseURL: `${API_BASE_URL}/api/v1`,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  timeout: 10000,
+  withCredentials: false,
+});
+
 export default apiClient;

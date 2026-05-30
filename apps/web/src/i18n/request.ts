@@ -3,12 +3,24 @@ import { getRequestConfig } from "next-intl/server";
 import type { Locale } from "@/types/locale";
 
 import { routing } from "./routing";
-import enMessages from "./messages/en.json";
-import idMessages from "./messages/id.json";
+
+// Feature-level English translations
+import authEn from "@/features/auth/i18n/en.json";
+import waitingListEn from "@/features/waiting-list/i18n/en.json";
+
+// Feature-level Indonesian translations
+import authId from "@/features/auth/i18n/id.json";
+import waitingListId from "@/features/waiting-list/i18n/id.json";
 
 const messages = {
-  en: enMessages,
-  id: idMessages,
+  en: {
+    ...authEn,
+    ...waitingListEn,
+  },
+  id: {
+    ...authId,
+    ...waitingListId,
+  },
 } as const;
 
 export default getRequestConfig(async ({ requestLocale }) => {

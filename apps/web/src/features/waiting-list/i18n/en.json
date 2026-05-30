@@ -1,0 +1,96 @@
+{
+  "waitingList": {
+    "title": "Join the Exclusive Waitlist",
+    "subtitle": "Get early access, priority onboarding, and special pricing when IndoSupplier launches.",
+    "form": {
+      "name": "Full Name",
+      "namePlaceholder": "John Doe",
+      "email": "Email Address",
+      "emailPlaceholder": "john@company.com",
+      "companyName": "Company Name",
+      "companyNamePlaceholder": "PT Maju Bersama",
+      "companyType": "Business Type",
+      "companyTypePlaceholder": "Select business type",
+      "supplier": "Supplier / Distributor",
+      "buyer": "Buyer / Retailer",
+      "other": "Other Business",
+      "phone": "Phone Number (Optional)",
+      "phonePlaceholder": "+62 812-3456-7890",
+      "notes": "What features are you most interested in? (Optional)",
+      "notesPlaceholder": "Tell us about your business needs...",
+      "submit": "Secure Early Access",
+      "submitting": "Joining waitlist...",
+      "successTitle": "You're on the list!",
+      "successMessage": "Thank you for joining our waiting list. We will reach out to you with exclusive updates and early access slots.",
+      "errors": {
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "nameRequired": "Name is required",
+        "companyNameRequired": "Company name is required",
+        "companyTypeRequired": "Business type is required",
+        "alreadyRegistered": "This email is already registered on our waiting list!"
+      }
+    }
+  },
+  "landing": {
+    "nav": {
+      "signIn": "Sign In",
+      "earlyAccess": "Early Access"
+    },
+    "hero": {
+      "badge": "Early Access — Limited Spots",
+      "headline": "The Operating System for Indonesian B2B Commerce",
+      "subheadline": "Unify procurement, sales, inventory, and local tax compliance (e-Faktur) into a single precision platform built for Indonesian enterprises.",
+      "cta": "Secure Your Spot",
+      "ctaSecondary": "See How It Works",
+      "trustLabel": "Trusted by 200+ businesses in Indonesia",
+      "stats": {
+        "users": "Beta users",
+        "modules": "Core modules",
+        "uptime": "Uptime SLA"
+      }
+    },
+    "features": {
+      "badge": "Platform Capabilities",
+      "headline": "Everything your supply chain needs, nothing it doesn't",
+      "items": {
+        "erp": {
+          "title": "B2B ERP & Inventory",
+          "desc": "Multi-warehouse stock control, purchase orders, and goods receipts with absolute precision."
+        },
+        "crm": {
+          "title": "CRM & Sales Pipeline",
+          "desc": "Track leads, quotes, and client relationships from first contact to final payment."
+        },
+        "finance": {
+          "title": "Invoicing & e-Faktur",
+          "desc": "Generate invoices, manage AR/AP, and automate Indonesian tax reporting effortlessly."
+        },
+        "hrd": {
+          "title": "HR & Attendance",
+          "desc": "Employee management, payroll, and attendance tracking aligned with Indonesian labor law."
+        }
+      }
+    },
+    "philosophy": {
+      "title": "Core Philosophy",
+      "quote": "Connecting every purchase, warehouse, and tax report with absolute precision. We build operating systems for Indonesian B2B commerce.",
+      "description": "IndoSupplier streamlines your B2B commerce operations. Automate localized invoice creation, connect multi-warehouse stock allocations, and sync with local e-Faktur compliance standards out-of-the-box."
+    },
+    "waitlist": {
+      "badge": "Waitlist Now Open",
+      "headline": "Be first when we launch",
+      "subheadline": "Join 200+ businesses already on the list. Early members get 30% off their first year and dedicated onboarding.",
+      "benefits": {
+        "discount": "30% discount for early members",
+        "onboarding": "Dedicated onboarding session",
+        "support": "Priority support & feature requests",
+        "noCard": "No credit card required"
+      }
+    },
+    "footer": {
+      "copy": "© {year} IndoSupplier Platform. All rights reserved.",
+      "tagline": "Built for Indonesian enterprise."
+    }
+  }
+}

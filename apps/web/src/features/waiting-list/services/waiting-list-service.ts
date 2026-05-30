@@ -1,9 +1,9 @@
-import { apiClient } from "@/lib/api-client";
+import { apiClient, publicApiClient } from "@/lib/api-client";
 import type { JoinWaitingListRequest, WaitingListEntry, WaitingListListResponse, SingleWaitingListResponse } from "../types";
 
 export const waitingListService = {
   async join(data: JoinWaitingListRequest): Promise<WaitingListEntry> {
-    const response = await apiClient.post<SingleWaitingListResponse>(
+    const response = await publicApiClient.post<SingleWaitingListResponse>(
       "/waiting-list/join",
       data
     );

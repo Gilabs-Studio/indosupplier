@@ -1,0 +1,36 @@
+{
+  "notFound": {
+    "label": "404",
+    "title": "Halaman Tidak Ditemukan",
+    "description": "Halaman yang Anda cari tidak ada atau telah dipindahkan.",
+    "backHome": "Kembali ke Login"
+  },
+  "auth": {
+    "login": {
+      "title": "Selamat Datang Kembali",
+      "description": "Masuk ke akun Anda untuk melanjutkan",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Masukkan email Anda",
+      "passwordLabel": "Kata Sandi",
+      "passwordPlaceholder": "Masukkan kata sandi Anda",
+      "forgotPassword": "Lupa kata sandi?",
+      "rememberMe": "Ingat saya",
+      "submit": "Masuk",
+      "submitting": "Masuk...",
+      "verifyingSession": "Memverifikasi sesi...",
+      "rateLimitMessage": "Terlalu banyak percobaan login. Silakan coba lagi dalam {countdown}."
+    },
+    "block": {
+      "title": "Akses Diblokir",
+      "description": "Anda tidak memiliki izin untuk mengakses sumber daya ini.",
+      "reason": "Peran Anda telah dihapus atau izin Anda telah dicabut. Silakan hubungi administrator Anda.",
+      "currentRole": "Peran saat ini:",
+      "goToLogin": "Kembali ke Login",
+      "autoLogout": "Anda akan otomatis keluar dalam beberapa detik."
+    },
+    "roleInvalid": {
+      "title": "Akses Dicabut",
+      "description": "Peran Anda telah dihapus atau izin Anda telah dicabut. Anda akan dialihkan."
+    }
+  }
+}

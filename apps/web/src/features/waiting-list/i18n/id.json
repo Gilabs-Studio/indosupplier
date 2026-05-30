@@ -1,0 +1,96 @@
+{
+  "waitingList": {
+    "title": "Gabung Waiting List Eksklusif",
+    "subtitle": "Dapatkan akses awal, prioritas onboarding, dan penawaran harga spesial saat IndoSupplier diluncurkan.",
+    "form": {
+      "name": "Nama Lengkap",
+      "namePlaceholder": "John Doe",
+      "email": "Alamat Email",
+      "emailPlaceholder": "john@company.com",
+      "companyName": "Nama Perusahaan",
+      "companyNamePlaceholder": "PT Maju Bersama",
+      "companyType": "Tipe Bisnis",
+      "companyTypePlaceholder": "Pilih tipe bisnis",
+      "supplier": "Pemasok / Distributor",
+      "buyer": "Pembeli / Pengecer",
+      "other": "Bisnis Lainnya",
+      "phone": "Nomor Telepon (Opsional)",
+      "phonePlaceholder": "+62 812-3456-7890",
+      "notes": "Fitur apa yang paling Anda butuhkan? (Opsional)",
+      "notesPlaceholder": "Ceritakan kebutuhan operasional bisnis Anda...",
+      "submit": "Daftar Akses Awal",
+      "submitting": "Mendaftarkan...",
+      "successTitle": "Anda telah terdaftar!",
+      "successMessage": "Terima kasih telah bergabung dalam antrean kami. Kami akan menghubungi Anda segera setelah slot akses awal tersedia.",
+      "errors": {
+        "emailRequired": "Email wajib diisi",
+        "emailInvalid": "Masukkan alamat email yang valid",
+        "nameRequired": "Nama wajib diisi",
+        "companyNameRequired": "Nama perusahaan wajib diisi",
+        "companyTypeRequired": "Tipe bisnis wajib diisi",
+        "alreadyRegistered": "Email ini sudah terdaftar dalam waiting list kami!"
+      }
+    }
+  },
+  "landing": {
+    "nav": {
+      "signIn": "Masuk",
+      "earlyAccess": "Akses Awal"
+    },
+    "hero": {
+      "badge": "Akses Awal — Slot Terbatas",
+      "headline": "Sistem Operasi untuk Perdagangan B2B Indonesia",
+      "subheadline": "Satukan pengadaan, penjualan, inventaris, dan kepatuhan pajak lokal (e-Faktur) dalam satu platform presisi untuk enterprise Indonesia.",
+      "cta": "Amankan Slot Anda",
+      "ctaSecondary": "Lihat Cara Kerjanya",
+      "trustLabel": "Dipercaya 200+ bisnis di Indonesia",
+      "stats": {
+        "users": "Pengguna beta",
+        "modules": "Modul utama",
+        "uptime": "SLA uptime"
+      }
+    },
+    "features": {
+      "badge": "Kemampuan Platform",
+      "headline": "Semua yang dibutuhkan rantai pasokan Anda, tanpa lebih",
+      "items": {
+        "erp": {
+          "title": "ERP B2B & Inventaris",
+          "desc": "Kontrol stok multi-gudang, purchase order, dan penerimaan barang dengan presisi mutlak."
+        },
+        "crm": {
+          "title": "CRM & Pipeline Penjualan",
+          "desc": "Pantau prospek, penawaran harga, dan hubungan pelanggan dari kontak pertama hingga pembayaran."
+        },
+        "finance": {
+          "title": "Invoice & e-Faktur",
+          "desc": "Terbitkan invoice, kelola utang/piutang, dan otomatiskan pelaporan pajak Indonesia."
+        },
+        "hrd": {
+          "title": "HR & Absensi",
+          "desc": "Manajemen karyawan, penggajian, dan absensi sesuai peraturan ketenagakerjaan Indonesia."
+        }
+      }
+    },
+    "philosophy": {
+      "title": "Filosofi Utama",
+      "quote": "Menghubungkan setiap pembelian, gudang, dan laporan pajak dengan presisi mutlak. Kami membangun sistem operasi untuk perdagangan B2B Indonesia.",
+      "description": "IndoSupplier menyederhanakan operasional rantai pasok B2B Anda. Otomatiskan penerbitan invoice lokal, hubungkan alokasi stok multi-gudang, dan sinkronkan dengan standar e-Faktur Indonesia secara instan."
+    },
+    "waitlist": {
+      "badge": "Waiting List Dibuka",
+      "headline": "Jadilah yang pertama saat kami meluncur",
+      "subheadline": "Bergabung dengan 200+ bisnis yang sudah mendaftar. Anggota awal mendapat diskon 30% di tahun pertama dan onboarding khusus.",
+      "benefits": {
+        "discount": "Diskon 30% untuk anggota awal",
+        "onboarding": "Sesi onboarding khusus",
+        "support": "Prioritas support & permintaan fitur",
+        "noCard": "Tidak perlu kartu kredit"
+      }
+    },
+    "footer": {
+      "copy": "© {year} IndoSupplier Platform. Hak cipta dilindungi.",
+      "tagline": "Dibangun untuk enterprise Indonesia."
+    }
+  }
+}
