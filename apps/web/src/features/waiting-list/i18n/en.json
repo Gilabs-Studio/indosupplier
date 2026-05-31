@@ -41,11 +41,11 @@
     },
     "hero": {
       "badge": "Limited Invitation — Exclusive to the First 50 Companies",
-      "headline": "Find & Buy Directly from the Perfect Supplier for Your Business",
-      "subheadline": "Tired of slow suppliers, marked-up broker prices, or struggling to find a compatible partner? IndoSupplier instantly matches your specific criteria with primary manufacturers. Buy direct, save more, and pay zero commission fees",
+      "headline": "Tired of Slow Suppliers? Buy Directly from Primary Manufacturers",
+      "subheadline": "Instantly match your specific business criteria. Zero broker markups and no commission fees.",
       "cta": "Join VIP Waitlist",
       "ctaSecondary": "Learn More",
-      "trustLabel": "Joined by 200+ business owners & managing directors",
+      "trustLabel": "",
       "stats": {
         "users": "Joined Companies",
         "modules": "Primary Manufacturers",

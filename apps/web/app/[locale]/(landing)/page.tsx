@@ -53,9 +53,6 @@ export default async function LandingPage({
                   {t("hero.cta")}
                 </a>
               </RainbowButton>
-              <span className="text-[13px] tracking-wider uppercase font-light text-muted-foreground">
-                {t("hero.trustLabel")}
-              </span>
             </div>
           </div>
 
