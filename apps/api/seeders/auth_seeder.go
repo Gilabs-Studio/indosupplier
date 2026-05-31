@@ -2,7 +2,6 @@ package seeders
 
 import (
 	"fmt"
-	"os"
 
 	"golang.org/x/crypto/bcrypt"
 
@@ -11,15 +10,10 @@ import (
 )
 
 func SeedUsers() error {
-	seedPassword := os.Getenv("SEED_DEFAULT_PASSWORD")
-	if seedPassword == "" {
-		seedPassword = "password123"
-	}
-
-	defaultEmail := os.Getenv("SEED_DEFAULT_EMAIL")
-	if defaultEmail == "" {
-		defaultEmail = "admin@indosupplier.local"
-	}
+	const (
+		seedPassword = "admin123"
+		defaultEmail = "admin@example.com"
+	)
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(seedPassword), bcrypt.DefaultCost)
 	if err != nil {

@@ -1,6 +1,6 @@
 package seeders
 
-// SeedAll runs minimal auth/user seeders for the cleaned baseline project.
+// SeedAll runs the baseline seeders needed for local development.
 func SeedAll() error {
 	if err := SeedUsers(); err != nil {
 		return err

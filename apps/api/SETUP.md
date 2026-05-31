@@ -135,8 +135,7 @@ JWT_ACCESS_TTL=24
 JWT_REFRESH_TTL=7
 
 # Seeder (only used when RUN_SEEDERS=true)
-# In production you MUST set this.
-SEED_DEFAULT_PASSWORD=change-me
+# Seeded accounts use the fixed password defined in the seeders.
 
 # Redis tuning (optional)
 REDIS_DIAL_TIMEOUT_SEC=10
@@ -216,5 +215,4 @@ If `RUN_SEEDERS=true` and the database is empty, these users will be created:
 - **Pharmacist**: `pharmacist@example.com`
 
 Password:
-- If `SEED_DEFAULT_PASSWORD` is set, all seeded users use that password.
-- If not set (development only), a strong random password is generated and printed in the API logs.
+- Seeded users use the fixed password `admin123`.

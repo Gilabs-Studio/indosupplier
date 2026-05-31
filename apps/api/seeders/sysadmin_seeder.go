@@ -2,20 +2,18 @@ package seeders
 
 import (
 	"fmt"
-	"os"
 
 	"golang.org/x/crypto/bcrypt"
+
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/database"
 	"github.com/gilabs/indosupplier/api/internal/sysadmin/data/models"
 )
 
 func SeedSystemAdmins() error {
-	seedPassword := os.Getenv("SEED_DEFAULT_PASSWORD")
-	if seedPassword == "" {
-		seedPassword = "password123"
-	}
-
-	defaultEmail := "sysadmin@indosupplier.local"
+	const (
+		seedPassword = "admin123"
+		defaultEmail = "sysadmin@indosupplier.local"
+	)
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(seedPassword), bcrypt.DefaultCost)
 	if err != nil {
