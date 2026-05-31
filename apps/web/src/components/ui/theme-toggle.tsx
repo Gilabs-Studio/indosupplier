@@ -295,7 +295,7 @@ export const useThemeToggle = ({
     if (typeof window === "undefined") return;
 
     const switchTheme = () => {
-      setTheme(theme === "light" ? "dark" : "light");
+      setTheme(resolvedTheme === "light" ? "dark" : "light");
     };
 
     if (!document.startViewTransition) {
@@ -305,7 +305,7 @@ export const useThemeToggle = ({
 
     document.startViewTransition(switchTheme);
   }, [
-    theme,
+    resolvedTheme,
     setTheme,
     variant,
     start,

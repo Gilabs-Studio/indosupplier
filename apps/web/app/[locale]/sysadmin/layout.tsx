@@ -38,9 +38,9 @@ export default function SysadminLayout({
 
   if (!mounted || isLoading || !isSessionVerified) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-50">
-        <Loader2 className="h-10 w-10 animate-spin text-blue-600 mb-4" />
-        <p className="text-sm font-semibold tracking-wide text-neutral-500">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground">
+        <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
+        <p className="text-sm font-semibold tracking-wide text-muted-foreground">
           Loading Admin Portal...
         </p>
       </div>
