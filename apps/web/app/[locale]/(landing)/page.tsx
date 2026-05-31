@@ -1,10 +1,12 @@
 import React from "react";
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 import WaitingListForm from "@/features/waiting-list/components/waiting-list-form";
 import { Header } from "@/components/navigation/header";
 import { ScrollTextReveal } from "@/components/motion";
+import { LightRays } from "@/components/ui/light-rays";
 import { RainbowButton } from "@/components/ui/rainbow-button";
-import { ShieldCheck, Handshake, Globe, Award } from "lucide-react";
+import { Handshake, Globe, Award, ShieldCheck } from "lucide-react";
 
 
 export default async function LandingPage({
@@ -26,8 +28,18 @@ export default async function LandingPage({
       >
         {/* Faint Background Map / Sketch Illustration */}
         <div 
-          className="absolute inset-0 z-0 bg-center bg-no-repeat bg-[length:150%_auto] md:bg-[length:105%_auto] opacity-10 pointer-events-none"
+          className="absolute inset-0 z-0 bg-center bg-no-repeat bg-size-[150%_auto] md:bg-size-[105%_auto] opacity-10 pointer-events-none"
           style={{ backgroundImage: "url('/hero.png')" }}
+        />
+
+        <LightRays
+          aria-hidden
+          className="z-1"
+          count={8}
+          color="rgba(255, 255, 255, 0.9)"
+          blur={44}
+          speed={18}
+          length="78vh"
         />
 
         <div className="max-w-4xl w-full mx-auto flex flex-col items-center justify-center text-center relative z-10">
@@ -79,52 +91,26 @@ export default async function LandingPage({
       </section>
 
       {/* ── SECTION 2: FEATURES / CAPABILITIES ── */}
-      <section id="features" className="px-6 md:px-16 lg:px-24 py-20 md:py-28 bg-secondary/35 border-t border-border/40">
+      <section id="features" className="px-6 md:px-16 lg:px-24 py-20 md:py-28 bg-secondary/8 border-t border-border/30">
         <div className="max-w-[1400px] w-full mx-auto">
-          <div className="mb-16">
-            <span className="text-[11px] uppercase tracking-widest font-medium text-muted-foreground block mb-3">
-              {t("features.badge")}
-            </span>
-            <h2 className="text-[28px] md:text-[36px] font-light tracking-tight text-foreground">
-              {t("features.headline")}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                key: "erp",
-                label: t("features.items.erp.title"),
-                desc: t("features.items.erp.desc"),
-              },
-              {
-                key: "crm",
-                label: t("features.items.crm.title"),
-                desc: t("features.items.crm.desc"),
-              },
-              {
-                key: "finance",
-                label: t("features.items.finance.title"),
-                desc: t("features.items.finance.desc"),
-              },
-            ].map((card, idx) => (
-              <div
-                key={card.key}
-                className="bg-card/50 border border-border/50 p-8 rounded-lg hover:bg-card hover:border-border transition-all duration-300 flex flex-col justify-between min-h-[200px]"
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="lg:col-span-7">
+              <span className="text-[11px] uppercase tracking-widest font-medium text-muted-foreground block mb-4">
+                {t("features.badge")}
+              </span>
+              <h2
+                className="font-light leading-[1.2] tracking-[-0.03em] max-w-[720px] text-foreground"
+                style={{ fontSize: "clamp(2rem, 4.5vw, 3.4rem)" }}
               >
-                <span className="text-[12px] uppercase tracking-wider font-light text-muted-foreground/60">
-                  0{idx + 1}
-                </span>
-                <div className="mt-12">
-                  <h3 className="text-[18px] font-normal text-foreground mb-3">
-                    {card.label}
-                  </h3>
-                  <p className="text-[14px] font-light leading-relaxed text-muted-foreground">
-                    {card.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
+                {t("features.headline")}
+              </h2>
+            </div>
+
+            <div className="lg:col-span-5 lg:pl-10">
+              <p className="text-[16px] font-light leading-relaxed text-muted-foreground/80 mt-4">
+                {t("features.summary")}
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -214,7 +200,13 @@ export default async function LandingPage({
       <footer className="py-3 px-6 md:px-16 lg:px-24 border-t border-border bg-background">
         <div className="max-w-[1400px] w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-[13px] font-light text-muted-foreground">
           <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="IndoSupplier Logo" className="h-5 w-auto object-contain" />
+            <Image
+              src="/logo.png"
+              alt="IndoSupplier Logo"
+              width={120}
+              height={24}
+              className="h-5 w-auto object-contain"
+            />
             <span className="font-normal tracking-widest uppercase text-foreground text-[13px]">
               IndoSupplier
             </span>

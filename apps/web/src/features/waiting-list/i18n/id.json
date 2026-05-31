@@ -64,6 +64,16 @@
     "features": {
       "badge": "Masalah yang Kami Selesaikan",
       "headline": "Bikin pengadaan barang jadi instan dan tanpa ribet",
+      "summary": "Dari kontak awal sampai pembelian terverifikasi, kami memangkas bagian sourcing yang paling lambat menjadi satu alur kerja yang jelas.",
+      "stats": {
+        "direct": "Harga langsung",
+        "speed": "Shortlist dalam hitungan menit",
+        "trust": "Partner terverifikasi"
+      },
+      "panel": {
+        "title": "Satu alur, lebih sedikit handoff",
+        "description": "Setiap langkah dirancang untuk mengurangi ketergantungan pada broker, mempercepat seleksi, dan membuat kepercayaan terlihat sebelum pesan pertama dikirim."
+      },
       "items": {
         "erp": {
           "title": "Pembelian Langsung (Direct Purchase)",

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, type CSSProperties } from "react"
+import { useMemo, type CSSProperties } from "react"
 import { motion } from "framer-motion"
 
 import { cn } from "@/lib/utils"
@@ -61,7 +61,7 @@ const Ray = ({
 }: LightRay) => {
   return (
     <motion.div
-      className="pointer-events-none absolute -top-[12%] left-[var(--ray-left)] h-[var(--light-rays-length)] w-[var(--ray-width)] origin-top -translate-x-1/2 rounded-full bg-linear-to-b from-[color-mix(in_srgb,var(--light-rays-color)_70%,transparent)] to-transparent opacity-0 mix-blend-normal blur-[var(--light-rays-blur)]"
+      className="pointer-events-none absolute -top-[12%] left-(--ray-left) h-(--light-rays-length) w-(--ray-width) origin-top -translate-x-1/2 rounded-full bg-linear-to-b from-[color-mix(in_srgb,var(--light-rays-color)_70%,transparent)] to-transparent opacity-0 mix-blend-normal blur-(--light-rays-blur)"
       style={
         {
           "--ray-left": `${left}%`,
@@ -95,12 +95,11 @@ export function LightRays({
   ref,
   ...props
 }: LightRaysProps) {
-  const [rays, setRays] = useState<LightRay[]>([])
   const cycleDuration = Math.max(speed, 0.1)
-
-  useEffect(() => {
-    setRays(createRays(count, cycleDuration))
-  }, [count, cycleDuration])
+  const rays = useMemo(
+    () => createRays(count, cycleDuration),
+    [count, cycleDuration]
+  )
 
   return (
     <div

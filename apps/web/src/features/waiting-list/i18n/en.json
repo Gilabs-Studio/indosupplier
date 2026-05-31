@@ -64,6 +64,16 @@
     "features": {
       "badge": "The Problems We Solve",
       "headline": "Make supplier sourcing instant and hassle-free",
+      "summary": "From first contact to verified purchase, we collapse the slowest parts of sourcing into one clear workflow.",
+      "stats": {
+        "direct": "Direct pricing",
+        "speed": "Shortlist in minutes",
+        "trust": "Verified partners"
+      },
+      "panel": {
+        "title": "One workflow, fewer handoffs",
+        "description": "Every step is shaped to reduce broker dependency, speed up selection, and make trust visible before the first message is sent."
+      },
       "items": {
         "erp": {
           "title": "Direct Purchasing",
