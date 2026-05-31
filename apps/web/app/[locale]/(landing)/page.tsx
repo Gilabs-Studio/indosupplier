@@ -2,10 +2,9 @@ import React from "react";
 import { getTranslations } from "next-intl/server";
 import WaitingListForm from "@/features/waiting-list/components/waiting-list-form";
 import { Header } from "@/components/navigation/header";
-import { Button } from "@/components/ui/button";
 import { ScrollTextReveal } from "@/components/motion";
-import { LightRays } from "@/components/ui/light-rays";
 import { RainbowButton } from "@/components/ui/rainbow-button";
+import { ShieldCheck, Handshake, Globe, Award } from "lucide-react";
 
 
 export default async function LandingPage({
@@ -22,47 +21,59 @@ export default async function LandingPage({
       <Header locale={locale} />
 
       {/* ── SECTION 1: HERO (Full Viewport Height) ── */}
-      <section className="min-h-screen flex items-center px-6 md:px-16 lg:px-24 pt-24 pb-12 md:py-20 relative overflow-hidden">
-        <LightRays
-          count={8}
-          color="rgba(255, 255, 255, 255)"
-          speed={18}
-          length="100vh"
-          className="absolute inset-0 z-0 pointer-events-none"
+      <section
+        className="min-h-[90vh] md:min-h-[95vh] flex items-center justify-center px-6 pt-32 pb-20 relative overflow-hidden bg-background"
+      >
+        {/* Faint Background Map / Sketch Illustration */}
+        <div 
+          className="absolute inset-0 z-0 bg-center bg-no-repeat bg-[length:150%_auto] md:bg-[length:105%_auto] opacity-10 pointer-events-none"
+          style={{ backgroundImage: "url('/hero.png')" }}
         />
-        <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center relative z-10">
-          {/* Hero Content Left */}
-          <div className="lg:col-span-7 flex flex-col justify-center">
-            {/* Main Headline */}
-            <h1
-              className="font-light leading-[1.08] tracking-[-0.04em] text-foreground mb-8 max-w-[850px] animate-fade-in"
-              style={{ fontSize: "clamp(2.8rem, 5.5vw, 4.8rem)" }}
-            >
-              {t("hero.headline")}
-            </h1>
 
-            {/* Subheadline */}
-            <p className="text-[17px] md:text-[19px] font-light leading-relaxed text-muted-foreground max-w-[580px] mb-12 animate-slide-up">
-              {t("hero.subheadline")}
-            </p>
+        <div className="max-w-4xl w-full mx-auto flex flex-col items-center justify-center text-center relative z-10">
+          {/* Main Headline */}
+          <h1
+            className="font-bold leading-[1.15] tracking-[-0.03em] text-foreground mb-6 max-w-3xl animate-fade-in"
+            style={{ fontSize: "clamp(2.3rem, 5.5vw, 4.2rem)" }}
+          >
+            {t("hero.headline")}
+          </h1>
 
-            {/* Call to action */}
-            <div className="flex flex-wrap items-center gap-8 animate-slide-up">
-              <RainbowButton asChild size="lg" className="text-[13px] font-semibold tracking-widest uppercase hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
-                <a href="#join">
-                  {t("hero.cta")}
-                </a>
-              </RainbowButton>
-            </div>
+          {/* Subheadline */}
+          <p className="text-[16px] md:text-[18px] font-normal leading-relaxed text-muted-foreground/80 max-w-2xl mb-10 animate-slide-up">
+            {t("hero.subheadline")}
+          </p>
+
+          {/* Call to action */}
+          <div className="flex flex-wrap items-center justify-center gap-8 animate-slide-up delay-100 relative z-20">
+            <RainbowButton asChild size="lg" className="text-[13px] font-semibold tracking-widest uppercase hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
+              <a href="#join">
+                {t("hero.cta")}
+              </a>
+            </RainbowButton>
           </div>
 
-          {/* Hero Visual Right */}
-          <div className="lg:col-span-5 flex justify-center animate-fade-in">
-            <img
-              src="/hero2.png"
-              alt="IndoSupplier Platform Visual"
-              className="w-full h-auto object-contain rounded-md"
-            />
+          {/* Trust Badges */}
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-xs md:text-sm font-medium text-muted-foreground/80 mt-10 animate-slide-up delay-200 relative z-10">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-[#d4af37] shrink-0" />
+              <span>{t("hero.badges.verified")}</span>
+            </div>
+            <div className="hidden md:block h-3.5 w-px bg-border/70 shrink-0" />
+            <div className="flex items-center gap-2">
+              <Handshake className="h-4.5 w-4.5 text-[#d4af37] shrink-0" />
+              <span>{t("hero.badges.secure")}</span>
+            </div>
+            <div className="hidden md:block h-3.5 w-px bg-border/70 shrink-0" />
+            <div className="flex items-center gap-2">
+              <Globe className="h-4 w-4 text-[#d4af37] shrink-0" />
+              <span>{t("hero.badges.direct")}</span>
+            </div>
+            <div className="hidden md:block h-3.5 w-px bg-border/70 shrink-0" />
+            <div className="flex items-center gap-2">
+              <Award className="h-4 w-4 text-[#d4af37] shrink-0" />
+              <span>{t("hero.badges.certifications")}</span>
+            </div>
           </div>
         </div>
       </section>
@@ -200,7 +211,7 @@ export default async function LandingPage({
       </section>
 
       {/* ── Footer ── */}
-      <footer className="py-12 px-6 md:px-16 lg:px-24 border-t border-border bg-background">
+      <footer className="py-3 px-6 md:px-16 lg:px-24 border-t border-border bg-background">
         <div className="max-w-[1400px] w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-[13px] font-light text-muted-foreground">
           <div className="flex items-center gap-3">
             <img src="/logo.png" alt="IndoSupplier Logo" className="h-5 w-auto object-contain" />

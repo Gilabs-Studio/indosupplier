@@ -41,11 +41,20 @@
     },
     "hero": {
       "badge": "Akses Terbatas — Khusus 50 Perusahaan Pertama",
-      "headline": "Pusing Cari Supplier? Beli Langsung dari Produsen Utama",
-      "subheadline": "Temukan partner spesifik bisnismu secara instan. Bebas markup broker dan tanpa biaya komisi.",
+      "headline": "Temukan Produsen & Supplier Indonesia Terverifikasi",
+      "subheadline": "Akses direktori terkurasi dari produsen, eksportir, dan penyedia bahan baku kelas atas di Indonesia. Terverifikasi, Andal, dan Langsung.",
       "cta": "Gabung Waitlist VIP",
       "ctaSecondary": "Pelajari Selengkapnya",
       "trustLabel": "",
+      "searchPlaceholder": "Cari produk, kategori, atau supplier...",
+      "searchSelect": "Seluruh Indonesia",
+      "searchButton": "CARI",
+      "badges": {
+        "verified": "Supplier Terverifikasi",
+        "secure": "Transaksi Aman",
+        "direct": "Ekspor Langsung",
+        "certifications": "Sertifikasi"
+      },
       "stats": {
         "users": "Perusahaan Tergabung",
         "modules": "Produsen Utama",

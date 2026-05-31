@@ -41,11 +41,20 @@
     },
     "hero": {
       "badge": "Limited Invitation — Exclusive to the First 50 Companies",
-      "headline": "Tired of Slow Suppliers? Buy Directly from Primary Manufacturers",
-      "subheadline": "Instantly match your specific business criteria. Zero broker markups and no commission fees.",
+      "headline": "Discover Verified Indonesian Suppliers",
+      "subheadline": "Access a curated directory of Indonesia's top-tier manufacturers, exporters, and raw material providers. Verified, Reliable, and Direct.",
       "cta": "Join VIP Waitlist",
       "ctaSecondary": "Learn More",
       "trustLabel": "",
+      "searchPlaceholder": "Search products, categories, or suppliers...",
+      "searchSelect": "All Indonesia",
+      "searchButton": "SEARCH",
+      "badges": {
+        "verified": "Verified Suppliers",
+        "secure": "Secure Trading",
+        "direct": "Direct Export",
+        "certifications": "Certifications"
+      },
       "stats": {
         "users": "Joined Companies",
         "modules": "Primary Manufacturers",
