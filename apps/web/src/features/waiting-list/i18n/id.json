@@ -18,8 +18,8 @@
       "phonePlaceholder": "Contoh: +62 812-3456-7890",
       "notes": "Spesifikasi supplier yang sedang kamu cari? (Opsional)",
       "notesPlaceholder": "Tulis jenis produk atau kriteria supplier yang kamu butuhkan",
-      "submit": "Ajukan Undangan Akses VIP",
-      "submitting": "Mengajukan Undangan...",
+      "submit": "Daftar Waitlist VIP",
+      "submitting": "Mendaftarkan...",
       "successTitle": "Permohonan Diterima",
       "successMessage": "Hebat! Perusahaan kamu sudah masuk antrean VIP. Kami akan memverifikasi profil bisnis kamu dan menghubungi via WhatsApp dalam 24 jam",
       "errors": {
@@ -43,7 +43,7 @@
       "badge": "Akses Terbatas — Khusus 50 Perusahaan Pertama",
       "headline": "Cari & Beli Langsung dari Supplier yang Paling Cocok untuk Bisnis Kamu",
       "subheadline": "Terjebak dengan supplier lambat, harga broker yang di-markup, atau bingung mencari partner yang pas? IndoSupplier mempertemukan kriteria spesifik kamu dengan produsen utama secara instan. Beli langsung, lebih hemat, dan gratis tanpa biaya komisi",
-      "cta": "Amankan Slot Eksklusif Bisnis Kamu",
+      "cta": "Gabung Waitlist VIP",
       "ctaSecondary": "Pelajari Selengkapnya",
       "trustLabel": "Bergabung bersama 200+ pemilik bisnis & direktur utama lainnya",
       "stats": {

@@ -1,10 +1,11 @@
 import React from "react";
 import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/routing";
 import WaitingListForm from "@/features/waiting-list/components/waiting-list-form";
-import LanguageSwitcher from "@/components/navigation/language-switcher";
+import { Header } from "@/components/navigation/header";
 import { Button } from "@/components/ui/button";
 import { ScrollTextReveal } from "@/components/motion";
+import { LightRays } from "@/components/ui/light-rays";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 
 
 export default async function LandingPage({
@@ -18,44 +19,18 @@ export default async function LandingPage({
   return (
     <div className="min-h-screen bg-background text-foreground font-jost antialiased selection:bg-primary selection:text-primary-foreground">
       {/* ── Navigation Header ── */}
-      <header className="w-full py-6 px-6 md:px-16 lg:px-24 z-50">
-        <div className="max-w-[1400px] mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="IndoSupplier Logo" className="h-6 w-auto object-contain" />
-            <span className="font-normal text-[15px] tracking-widest uppercase text-foreground">
-              IndoSupplier
-            </span>
-          </div>
-
-          {/* Center menu links */}
-          <div className="hidden md:flex items-center gap-12 text-[12px] tracking-widest uppercase font-light text-muted-foreground">
-            <a href="#features" className="hover:text-foreground transition-colors">
-              {t("features.badge")}
-            </a>
-            <a href="#about" className="hover:text-foreground transition-colors">
-              {t("nav.about")}
-            </a>
-            <a href="#join" className="hover:text-foreground transition-colors">
-              {t("nav.waitlist")}
-            </a>
-          </div>
-
-          {/* Right menu actions */}
-          <div className="flex items-center gap-6 text-[12px] font-medium tracking-widest uppercase">
-            <LanguageSwitcher currentLocale={locale} />
-            <Link
-              href="/login"
-              className="hover:underline text-foreground"
-            >
-              {t("nav.signIn")}
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Header locale={locale} />
 
       {/* ── SECTION 1: HERO (Full Viewport Height) ── */}
-      <section className="min-h-[calc(100vh-80px)] flex items-center px-6 md:px-16 lg:px-24 py-12 md:py-20 relative">
-        <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      <section className="min-h-screen flex items-center px-6 md:px-16 lg:px-24 pt-24 pb-12 md:py-20 relative overflow-hidden">
+        <LightRays
+          count={8}
+          color="rgba(255, 255, 255, 255)"
+          speed={18}
+          length="100vh"
+          className="absolute inset-0 z-0 pointer-events-none"
+        />
+        <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center relative z-10">
           {/* Hero Content Left */}
           <div className="lg:col-span-7 flex flex-col justify-center">
             {/* Main Headline */}
@@ -73,11 +48,11 @@ export default async function LandingPage({
 
             {/* Call to action */}
             <div className="flex flex-wrap items-center gap-8 animate-slide-up">
-              <Button variant="cta" asChild>
+              <RainbowButton asChild size="lg" className="text-[13px] font-semibold tracking-widest uppercase hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
                 <a href="#join">
                   {t("hero.cta")}
                 </a>
-              </Button>
+              </RainbowButton>
               <span className="text-[13px] tracking-wider uppercase font-light text-muted-foreground">
                 {t("hero.trustLabel")}
               </span>

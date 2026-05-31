@@ -44,6 +44,7 @@
   --color-rose: hsl(var(--rose));
   --color-rose-foreground: hsl(var(--rose-foreground));
   --animate-slide-up: slide-up 0.5s ease-out forwards;
+  --animate-rainbow: rainbow 2s infinite linear;
 
   @keyframes accordion-down {
     from { height: 0 }
@@ -74,10 +75,22 @@
     from { transform: translateY(20px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
   }
+
+  @keyframes rainbow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 }
 
 @layer base {
   :root {
+    --color-1: hsl(0 100% 63%);
+    --color-2: hsl(270 100% 63%);
+    --color-3: hsl(210 100% 63%);
+    --color-4: hsl(195 100% 63%);
+    --color-5: hsl(90 100% 63%);
+
     /* Calm Light Theme - Much Softer on the Eyes */
     --background: 38 18% 90%;      /* Soft warm sand/beige background #EAE6DF */
     --foreground: 24 10% 10%;      /* Softer stone/brown-black text #1C1917 */

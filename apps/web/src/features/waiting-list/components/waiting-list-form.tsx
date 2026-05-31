@@ -13,6 +13,7 @@ import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 
 const getWaitlistSchema = (t: (key: string) => string) =>
   z.object({
@@ -257,14 +258,14 @@ export default function WaitingListForm() {
                   </Field>
 
                   {/* Submit button */}
-                  <Button
+                  <RainbowButton
                     type="submit"
                     disabled={isSubmitting}
-                    variant="cta"
-                    className="w-full"
+                    size="lg"
+                    className="w-full text-sm font-semibold tracking-widest uppercase transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
                   >
                     {isSubmitting ? t("form.submitting") : t("form.submit")}
-                  </Button>
+                  </RainbowButton>
                 </form>
               </motion.div>
             ) : (
