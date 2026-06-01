@@ -4,7 +4,6 @@ import Image from "next/image";
 import WaitingListForm from "@/features/waiting-list/components/waiting-list-form";
 import { Header } from "@/components/navigation/header";
 import { ScrollTextReveal } from "@/components/motion";
-import { LightRays } from "@/components/ui/light-rays";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { Handshake, Globe, Award, ShieldCheck } from "lucide-react";
 
@@ -24,67 +23,67 @@ export default async function LandingPage({
 
       {/* ── SECTION 1: HERO (Full Viewport Height) ── */}
       <section
-        className="min-h-[90vh] md:min-h-[95vh] flex items-center justify-center px-6 pt-32 pb-20 relative overflow-hidden bg-background"
+        className="relative flex min-h-svh items-center justify-center overflow-hidden bg-background px-6 pt-28 pb-16 md:pt-32"
       >
-        {/* Faint Background Map / Sketch Illustration */}
-        <div 
-          className="absolute inset-0 z-0 bg-center bg-no-repeat bg-size-[150%_auto] md:bg-size-[105%_auto] opacity-10 pointer-events-none"
-          style={{ backgroundImage: "url('/hero.png')" }}
-        />
+        <div aria-hidden className="absolute inset-0">
+          <div
+            className="absolute inset-0 bg-center bg-cover bg-no-repeat opacity-50"
+            style={{ backgroundImage: "url('/hero.png')" }}
+          />
+          <div className="absolute inset-0 bg-linear-to-b from-background/10 via-background/15 to-background/55" />
+          <div className="absolute inset-x-0 top-0 h-32 bg-linear-to-b from-background/90 via-background/40 to-transparent" />
+          <div className="absolute inset-x-0 bottom-0 h-56 bg-linear-to-b from-transparent via-background/30 to-background" />
+        </div>
 
-        <LightRays
-          aria-hidden
-          className="z-1"
-          count={8}
-          color="rgba(255, 255, 255, 0.9)"
-          blur={44}
-          speed={18}
-          length="78vh"
-        />
+        <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center justify-center text-center">
+          <div className="relative isolate px-4 py-14 sm:px-8 sm:py-16">
+            <div
+              aria-hidden
+              className="absolute -inset-x-56 top-1/2 -z-10 h-184 -translate-y-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,1)_0%,rgba(255,255,250,1)_8%,rgba(255,253,242,0.98)_16%,rgba(255,247,228,0.9)_28%,rgba(255,238,196,0.64)_44%,rgba(255,232,170,0.28)_62%,transparent_86%)] blur-[150px] opacity-100 mix-blend-screen"
+            />
+            <div className="absolute -inset-x-[38%] -top-12 -z-10 h-56 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,1)_0%,rgba(255,255,255,0.98)_14%,rgba(255,255,255,0.62)_32%,rgba(255,255,255,0.18)_58%,transparent_84%)] blur-[110px] opacity-90" />
+            <div className="absolute -inset-x-[78%] -bottom-28 -z-10 h-96 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,244,219,1)_0%,rgba(255,237,199,0.96)_16%,rgba(255,223,165,0.6)_36%,rgba(255,223,165,0.2)_60%,transparent_84%)] blur-[210px] opacity-100 mix-blend-screen" />
+            <div className="absolute -inset-x-[34%] top-[10%] -z-10 h-52 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,1)_0%,rgba(255,255,255,0.9)_18%,rgba(255,250,238,0.54)_40%,rgba(255,248,235,0.18)_64%,transparent_84%)] blur-[90px] opacity-100" />
 
-        <div className="max-w-4xl w-full mx-auto flex flex-col items-center justify-center text-center relative z-10">
-          {/* Main Headline */}
-          <h1
-            className="font-bold leading-[1.15] tracking-[-0.03em] text-foreground mb-6 max-w-3xl animate-fade-in"
-            style={{ fontSize: "clamp(2.3rem, 5.5vw, 4.2rem)" }}
-          >
-            {t("hero.headline")}
-          </h1>
+            <h1
+              className="mb-6 max-w-4xl font-bold leading-[1.08] tracking-[-0.04em] text-foreground drop-shadow-[0_8px_72px_rgba(255,248,235,1)] animate-fade-in"
+              style={{ fontSize: "clamp(2.4rem, 5.7vw, 4.4rem)" }}
+            >
+              {t("hero.headline")}
+            </h1>
 
-          {/* Subheadline */}
-          <p className="text-[16px] md:text-[18px] font-normal leading-relaxed text-muted-foreground/80 max-w-2xl mb-10 animate-slide-up">
-            {t("hero.subheadline")}
-          </p>
+            <p className="mx-auto mb-10 max-w-2xl text-[16px] font-normal leading-relaxed text-muted-foreground/85 animate-slide-up md:text-[18px]">
+              {t("hero.subheadline")}
+            </p>
 
-          {/* Call to action */}
-          <div className="flex flex-wrap items-center justify-center gap-8 animate-slide-up delay-100 relative z-20">
-            <RainbowButton asChild size="lg" className="text-[13px] font-semibold tracking-widest uppercase hover:scale-[1.02] active:scale-[0.98] transition-all duration-300">
-              <a href="#join">
-                {t("hero.cta")}
-              </a>
-            </RainbowButton>
-          </div>
-
-          {/* Trust Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-xs md:text-sm font-medium text-muted-foreground/80 mt-10 animate-slide-up delay-200 relative z-10">
-            <div className="flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-[#d4af37] shrink-0" />
-              <span>{t("hero.badges.verified")}</span>
+            <div className="relative z-20 flex flex-wrap items-center justify-center gap-8 animate-slide-up delay-100">
+              <RainbowButton asChild size="lg" className="text-[13px] font-semibold tracking-widest uppercase transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
+                <a href="#join">
+                  {t("hero.cta")}
+                </a>
+              </RainbowButton>
             </div>
-            <div className="hidden md:block h-3.5 w-px bg-border/70 shrink-0" />
-            <div className="flex items-center gap-2">
-              <Handshake className="h-4.5 w-4.5 text-[#d4af37] shrink-0" />
-              <span>{t("hero.badges.secure")}</span>
-            </div>
-            <div className="hidden md:block h-3.5 w-px bg-border/70 shrink-0" />
-            <div className="flex items-center gap-2">
-              <Globe className="h-4 w-4 text-[#d4af37] shrink-0" />
-              <span>{t("hero.badges.direct")}</span>
-            </div>
-            <div className="hidden md:block h-3.5 w-px bg-border/70 shrink-0" />
-            <div className="flex items-center gap-2">
-              <Award className="h-4 w-4 text-[#d4af37] shrink-0" />
-              <span>{t("hero.badges.certifications")}</span>
+
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-xs font-medium text-muted-foreground/85 animate-slide-up delay-200 md:text-sm">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4 shrink-0 text-[#d4af37]" />
+                <span>{t("hero.badges.verified")}</span>
+              </div>
+              <div className="hidden h-3.5 w-px shrink-0 bg-border/70 md:block" />
+              <div className="flex items-center gap-2">
+                <Handshake className="h-4.5 w-4.5 shrink-0 text-[#d4af37]" />
+                <span>{t("hero.badges.secure")}</span>
+              </div>
+              <div className="hidden h-3.5 w-px shrink-0 bg-border/70 md:block" />
+              <div className="flex items-center gap-2">
+                <Globe className="h-4 w-4 shrink-0 text-[#d4af37]" />
+                <span>{t("hero.badges.direct")}</span>
+              </div>
+              <div className="hidden h-3.5 w-px shrink-0 bg-border/70 md:block" />
+              <div className="flex items-center gap-2">
+                <Award className="h-4 w-4 shrink-0 text-[#d4af37]" />
+                <span>{t("hero.badges.certifications")}</span>
+              </div>
             </div>
           </div>
         </div>

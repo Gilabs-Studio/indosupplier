@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import LanguageSwitcher from "@/components/navigation/language-switcher";
@@ -40,57 +41,53 @@ export function Header({ locale }: HeaderProps) {
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out py-5 px-6 md:px-16 lg:px-24 border-b border-transparent",
-        isVisible ? "translate-y-0" : "-translate-y-full",
-        !isAtTop && "border-border/10"
+        "fixed left-0 right-0 top-0 z-50 px-3 pt-3 transition-all duration-300 ease-in-out sm:px-4 md:px-6 lg:px-8",
+        isVisible ? "translate-y-0" : "-translate-y-full"
       )}
     >
-      {/* Progressive Blur Background Layer */}
       <div
         className={cn(
-          "absolute inset-0 -z-10 transition-opacity duration-300 pointer-events-none",
-          isAtTop ? "opacity-0" : "opacity-100"
+          "mx-auto max-w-[1400px] overflow-hidden rounded-[1.75rem] border border-border/25 bg-background/58 px-5 py-4 shadow-[0_20px_48px_-28px_hsl(var(--foreground)/0.48)] backdrop-blur-2xl transition-all duration-300 md:px-6 lg:px-8",
+          !isAtTop && "border-border/40 bg-background/82 shadow-[0_24px_54px_-32px_hsl(var(--foreground)/0.58)]"
         )}
-        style={{
-          background: "linear-gradient(to bottom, hsl(var(--background) / 0.8) 0%, hsl(var(--background) / 0.3) 70%, transparent 100%)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          maskImage: "linear-gradient(to bottom, black 65%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(to bottom, black 65%, transparent 100%)",
-        }}
-      />
+      >
+        <div
+          className="pointer-events-none absolute inset-0 -z-10"
+          style={{
+            background:
+              "linear-gradient(to bottom, hsl(var(--background) / 0.95) 0%, hsl(var(--background) / 0.72) 38%, hsl(var(--background) / 0.28) 100%)",
+          }}
+        />
 
-      <div className="max-w-[1400px] w-full mx-auto flex items-center justify-between relative z-10">
-        {/* Brand Logo */}
-        <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="IndoSupplier Logo" className="h-6 w-auto object-contain" />
-          <span className="font-normal text-[15px] tracking-widest uppercase text-foreground">
-            IndoSupplier
-          </span>
-        </div>
+        <div className="flex items-center justify-between gap-6">
+          {/* Brand Logo */}
+          <div className="flex items-center gap-3">
+            <Image src="/logo.png" alt="IndoSupplier Logo" width={120} height={24} className="h-6 w-auto object-contain" />
+            <span className="font-normal text-[15px] tracking-widest uppercase text-foreground">
+              IndoSupplier
+            </span>
+          </div>
 
-        {/* Center menu links */}
-        <div className="hidden md:flex items-center gap-12 text-[12px] tracking-widest uppercase font-light text-muted-foreground">
-          <a href="#features" className="hover:text-foreground transition-colors">
-            {t("features.badge")}
-          </a>
-          <a href="#about" className="hover:text-foreground transition-colors">
-            {t("nav.about")}
-          </a>
-          <a href="#join" className="hover:text-foreground transition-colors">
-            {t("nav.waitlist")}
-          </a>
-        </div>
+          {/* Center menu links */}
+          <div className="hidden md:flex items-center gap-12 text-[12px] tracking-widest uppercase font-medium text-foreground/55">
+            <a href="#features" className="transition-colors hover:text-foreground">
+              {t("features.badge")}
+            </a>
+            <a href="#about" className="transition-colors hover:text-foreground">
+              {t("nav.about")}
+            </a>
+            <a href="#join" className="transition-colors hover:text-foreground">
+              {t("nav.waitlist")}
+            </a>
+          </div>
 
-        {/* Right menu actions */}
-        <div className="flex items-center gap-6 text-[12px] font-medium tracking-widest uppercase">
-          <LanguageSwitcher currentLocale={locale} />
-          <Link
-            href="/login"
-            className="hover:underline text-foreground"
-          >
-            {t("nav.signIn")}
-          </Link>
+          {/* Right menu actions */}
+          <div className="flex items-center gap-6 text-[12px] font-medium tracking-widest uppercase">
+            <LanguageSwitcher currentLocale={locale} />
+            <Link href="/login" className="text-foreground transition-colors hover:opacity-80">
+              {t("nav.signIn")}
+            </Link>
+          </div>
         </div>
       </div>
     </header>
