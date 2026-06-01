@@ -35,9 +35,9 @@
   "landing": {
     "nav": {
       "signIn": "Sign In",
-      "earlyAccess": "VIP Access",
+      "earlyAccess": "Free VIP",
       "about": "About Us",
-      "waitlist": "VIP Access"
+      "waitlist": "Free VIP"
     },
     "hero": {
       "badge": "Limited Invitation — Exclusive to the First 50 Companies",

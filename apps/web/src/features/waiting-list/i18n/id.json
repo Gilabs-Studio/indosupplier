@@ -35,9 +35,9 @@
   "landing": {
     "nav": {
       "signIn": "Masuk",
-      "earlyAccess": "Akses VIP",
+      "earlyAccess": "Gratis VIP",
       "about": "Tentang Kami",
-      "waitlist": "Akses VIP"
+      "waitlist": "Gratis VIP"
     },
     "hero": {
       "badge": "Akses Terbatas — Khusus 50 Perusahaan Pertama",

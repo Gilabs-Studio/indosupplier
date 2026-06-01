@@ -184,8 +184,22 @@ export default async function LandingPage({
       </section>
 
       {/* ── SECTION 4: WAITING LIST / CONVERSION ── */}
-      <section id="join" className="px-6 md:px-16 lg:px-24 py-20 md:py-28 bg-secondary">
-        <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <section id="join" className="relative px-6 md:px-16 lg:px-24 py-20 md:py-28 bg-background overflow-hidden border-t border-border/30">
+        <div aria-hidden className="absolute inset-0">
+          {/* Progressive top/bottom fade of the background image */}
+          <div
+            className="absolute inset-0 bg-cover bg-no-repeat opacity-35 transition-opacity duration-500 bg-[position:65%_center] md:bg-right-center"
+            style={{
+              backgroundImage: "url('/waitlist_bg.png')",
+              maskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)"
+            }}
+          />
+          {/* Graduated background tint overlay for maximum text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-background/98 via-background/90 to-background/50 md:from-background/95 md:via-background/80 md:to-background/30" />
+        </div>
+
+        <div className="relative z-10 max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           {/* Left Column */}
           <div>
             <span className="text-[11px] tracking-widest font-jawa-palsu font-medium inline-block bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent mb-6">
