@@ -32,6 +32,7 @@
   --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-heading: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-jost: var(--font-jost), sans-serif;
+  --font-jawa-palsu: var(--font-jawa-palsu), sans-serif;
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
   --animate-collapsible-down: collapsible-down 0.2s ease-out;
@@ -91,72 +92,7 @@
     --color-4: hsl(195 100% 63%);
     --color-5: hsl(90 100% 63%);
 
-    /* Calm Light Theme - Much Softer on the Eyes */
-    --background: 38 18% 90%;      /* Soft warm sand/beige background #EAE6DF */
-    --foreground: 24 10% 10%;      /* Softer stone/brown-black text #1C1917 */
-    
-    --card: 0 0% 100%;             /* Pure white for cards */
-    --card-foreground: 24 10% 10%;
-    
-    --popover: 0 0% 100%;
-    --popover-foreground: 24 10% 10%;
-    
-    --primary: 24 10% 10%;         /* Stone brown-black primary */
-    --primary-foreground: 0 0% 100%; /* White text */
-    
-    --secondary: 60 4% 95%;        /* Warm light grey for secondary #F2F2F0 */
-    --secondary-foreground: 24 10% 10%;
-    
-    --muted: 60 4% 95%;            /* Soft warm grey for muted sections #F2F2F0 */
-    --muted-foreground: 24 10% 40%; /* Muted stone text */
-    
-    --accent: 60 4% 95%;
-    --accent-foreground: 24 10% 10%;
-
-    --purple: 262 83% 58%;
-    --purple-foreground: 0 0% 100%;
-
-    --cyan: 187 100% 44%;
-    --cyan-foreground: 0 0% 100%;
-
-    --rose: 340 82% 57%;
-    --rose-foreground: 0 0% 100%;
-    
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 38 8% 81%;           /* Warm sand border #D4D0C9 */
-    --input: 38 8% 81%;            /* Warm sand input border #D4D0C9 */
-    --ring: 24 10% 10%;               /* Focus ring matches text/primary */
-    
-    --brand: 24 10% 10%;              /* Monochrome brand color */
-    --brand-foreground: 0 0% 100%;
-    
-    /* Chart colors */
-    --chart-1: 24 10% 10%;
-    --chart-2: 142 76% 36%;
-    --chart-3: 38 92% 50%;
-    --chart-4: 0 84% 60%;
-    --chart-5: 262 83% 58%;
-    
-    --radius: 0.5rem;
-
-    /* Sidebar (Detail sidebar + gap) - Dark */
-    --sidebar: 0 0% 15%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 24 10% 10%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 20%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 22%;
-    --sidebar-ring: 24 10% 10%;
-    
-    /* Sidebar Dark (Icon sidebar) */
-    --sidebar-dark: 0 0% 10%;
-    --sidebar-dark-foreground: 0 0% 100%;
-  }
-
-  .dark {
-    /* Dark mode - keeping it monochrome but inverted */
+    /* Unified Dark Theme variables */
     --background: 0 0% 10%;
     --foreground: 0 0% 100%;
     
@@ -166,7 +102,7 @@
     --popover: 0 0% 12%;
     --popover-foreground: 0 0% 100%;
     
-    --primary: 0 0% 100%;          /* White primary in dark mode */
+    --primary: 0 0% 100%;          /* White primary */
     --primary-foreground: 0 0% 10%; /* Dark text */
     
     --secondary: 0 0% 15%;
@@ -203,7 +139,7 @@
     --chart-4: 0 84% 60%;
     --chart-5: 262 83% 58%;
 
-    /* Sidebar (Detail sidebar + gap) - Darker */
+    /* Sidebar (Detail sidebar + gap) */
     --sidebar: 0 0% 8%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 0 0% 100%;
@@ -213,9 +149,11 @@
     --sidebar-border: 0 0% 15%;
     --sidebar-ring: 0 0% 100%;
     
-    /* Sidebar Light (Icon sidebar) - Slightly lighter */
+    /* Sidebar Light (Icon sidebar) */
     --sidebar-dark: 0 0% 14%;
     --sidebar-dark-foreground: 0 0% 100%;
+
+    --radius: 0.5rem;
   }
 }
 
@@ -245,6 +183,11 @@
 
   *::-webkit-scrollbar-thumb:hover {
     background-color: hsl(221 83% 48%);
+  }
+
+  ::selection {
+    background-color: #E27D18;
+    color: #ffffff;
   }
 
   body {
@@ -323,6 +266,9 @@
   }
   .font-accent {
     font-family: var(--font-accent), serif;
+  }
+  .font-jawa-palsu {
+    font-family: var(--font-jawa-palsu), sans-serif;
   }
   
   /* Sidebar dark color utilities */
@@ -560,7 +506,7 @@
   background-color: hsl(var(--accent)) !important;
 }
 
-/* Dark mode adjustments */
-.dark [data-sonner-toast] {
+/* Sonner toast default shadow */
+[data-sonner-toast] {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2) !important;
 }

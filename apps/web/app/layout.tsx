@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Sora, Newsreader, Jost } from "next/font/google";
+import localFont from "next/font/local";
 import { getLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { getLanguageAlternates } from "@/lib/seo";
@@ -34,6 +35,12 @@ const jostFont = Jost({
   variable: "--font-jost",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
+  display: "swap",
+});
+
+const jawaPalsuFont = localFont({
+  src: "../public/font/jawapalsu.ttf",
+  variable: "--font-jawa-palsu",
   display: "swap",
 });
 
@@ -151,7 +158,7 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <head />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${headingFont.variable} ${accentFont.variable} ${jostFont.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${headingFont.variable} ${accentFont.variable} ${jostFont.variable} ${jawaPalsuFont.variable} antialiased`}
       >
         {children}
       </body>

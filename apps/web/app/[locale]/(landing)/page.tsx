@@ -17,7 +17,7 @@ export default async function LandingPage({
   const t = await getTranslations({ locale, namespace: "landing" });
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-jost antialiased selection:bg-primary selection:text-primary-foreground">
+    <div className="min-h-screen bg-background text-foreground font-jost antialiased">
       {/* ── Navigation Header ── */}
       <Header locale={locale} />
 
@@ -42,28 +42,21 @@ export default async function LandingPage({
         <div className="relative z-10 w-full max-w-[1400px] mx-auto flex flex-col justify-center items-start">
           <div className="max-w-2xl text-left relative isolate">
             {/* Title with distinct typography highlighting */}
-            {locale === "id" ? (
-              <h1 className="mb-5 font-sans text-[36px] sm:text-[48px] md:text-[56px] lg:text-[66px] font-bold leading-[1.1] tracking-[-0.03em] text-[#0F2942] dark:text-[#E2E8F0] animate-fade-in">
-                Menghubungkan <br className="hidden sm:inline" />
-                Dunia dengan <br />
-                <span className="font-serif italic text-[#9C7A59] dark:text-[#D4AF37] font-medium">Supplier Indonesia</span> <br />
-                Terpercaya
-              </h1>
-            ) : (
-              <h1 className="mb-5 font-sans text-[36px] sm:text-[48px] md:text-[56px] lg:text-[66px] font-bold leading-[1.1] tracking-[-0.03em] text-[#0F2942] dark:text-[#E2E8F0] animate-fade-in">
-                Connecting the <br className="hidden sm:inline" />
-                World with <br />
-                <span className="font-serif italic text-[#9C7A59] dark:text-[#D4AF37] font-medium">Indonesian Suppliers</span> <br />
-                Trusted & Verified
-              </h1>
-            )}
+            <h1 className="mb-5 font-sans text-[36px] sm:text-[48px] md:text-[56px] lg:text-[66px] font-bold leading-[1.1] tracking-[-0.03em] text-[#E2E8F0] animate-fade-in">
+              {t.rich("hero.title", {
+                br: () => <br />,
+                brHidden: () => <br className="hidden sm:inline" />,
+                spanClass: (chunks) => (
+                  <span className="font-jawa-palsu inline-block bg-gradient-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent font-medium">
+                    {chunks}
+                  </span>
+                ),
+              })}
+            </h1>
 
             {/* Subheadline copy */}
-            <p className="mb-8 max-w-xl text-[15px] sm:text-[16px] md:text-[17px] font-normal leading-relaxed text-[#5F6B7A] dark:text-neutral-400 animate-slide-up">
-              {locale === "id" 
-                ? "Temukan produsen, eksportir, dan supplier berkualitas dari seluruh Indonesia. Terverifikasi, andal, dan siap mendukung bisnis Anda ke level berikutnya."
-                : "Find quality manufacturers, exporters, and suppliers from all over Indonesia. Verified, reliable, and ready to support your business to the next level."
-              }
+            <p className="mb-8 max-w-xl text-[15px] sm:text-[16px] md:text-[17px] font-normal leading-relaxed text-neutral-400 animate-slide-up">
+              {t("hero.subheadline")}
             </p>
 
             {/* CTA Button container */}
@@ -76,54 +69,54 @@ export default async function LandingPage({
             </div>
 
             {/* Stats container using separator styling */}
-            <div className="mt-10 p-4 sm:p-5 bg-white/40 dark:bg-neutral-900/40 backdrop-blur-md border border-[#E8DCCB]/60 dark:border-neutral-800/60 rounded-[14px] flex flex-col md:flex-row items-stretch gap-6 md:gap-4 max-w-3xl text-left animate-slide-up delay-200">
+            <div className="mt-10 p-4 sm:p-5 bg-neutral-900/40 backdrop-blur-md border border-neutral-800/60 rounded-[14px] flex flex-col md:flex-row items-stretch gap-6 md:gap-4 max-w-3xl text-left animate-slide-up delay-200">
               {/* Item 1 */}
               <div className="flex items-start gap-3 flex-1">
-                <div className="p-2 bg-[#FAF6F0] dark:bg-neutral-800 rounded-lg text-[#9C7A59] dark:text-[#D4AF37] shrink-0 mt-0.5">
+                <div className="p-2 bg-neutral-800 text-[#FFB300] shrink-0 mt-0.5">
                   <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="text-xs sm:text-sm font-semibold text-[#0F2942] dark:text-neutral-200 leading-snug">
-                    {locale === "id" ? "100% Terverifikasi" : "100% Verified"}
+                  <h4 className="text-xs sm:text-sm font-semibold text-neutral-200 leading-snug">
+                    {t("hero.stats.verifiedTitle")}
                   </h4>
-                  <p className="text-[11px] sm:text-xs text-[#5F6B7A] dark:text-neutral-400 font-normal leading-normal mt-0.5">
-                    {locale === "id" ? "Supplier melalui proses verifikasi ketat" : "Suppliers undergo strict verification"}
+                  <p className="text-[11px] sm:text-xs text-neutral-400 font-normal leading-normal mt-0.5">
+                    {t("hero.stats.verifiedDesc")}
                   </p>
                 </div>
               </div>
 
               {/* Separator */}
-              <div className="hidden md:block w-px bg-[#E8DCCB] dark:bg-neutral-800 self-stretch my-1" />
+              <div className="hidden md:block w-px bg-neutral-800 self-stretch my-1" />
 
               {/* Item 2 */}
               <div className="flex items-start gap-3 flex-1">
-                <div className="p-2 bg-[#FAF6F0] dark:bg-neutral-800 rounded-lg text-[#9C7A59] dark:text-[#D4AF37] shrink-0 mt-0.5">
+                <div className="p-2 bg-neutral-800 text-[#FFB300] shrink-0 mt-0.5">
                   <Lock className="h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="text-xs sm:text-sm font-semibold text-[#0F2942] dark:text-neutral-200 leading-snug">
-                    {locale === "id" ? "Transaksi Aman" : "Secure Transactions"}
+                  <h4 className="text-xs sm:text-sm font-semibold text-neutral-200 leading-snug">
+                    {t("hero.stats.secureTitle")}
                   </h4>
-                  <p className="text-[11px] sm:text-xs text-[#5F6B7A] dark:text-neutral-400 font-normal leading-normal mt-0.5">
-                    {locale === "id" ? "Sistem pembayaran aman & terlindungi" : "Safe and protected payment systems"}
+                  <p className="text-[11px] sm:text-xs text-neutral-400 font-normal leading-normal mt-0.5">
+                    {t("hero.stats.secureDesc")}
                   </p>
                 </div>
               </div>
 
               {/* Separator */}
-              <div className="hidden md:block w-px bg-[#E8DCCB] dark:bg-neutral-800 self-stretch my-1" />
+              <div className="hidden md:block w-px bg-neutral-800 self-stretch my-1" />
 
               {/* Item 3 */}
               <div className="flex items-start gap-3 flex-1">
-                <div className="p-2 bg-[#FAF6F0] dark:bg-neutral-800 rounded-lg text-[#9C7A59] dark:text-[#D4AF37] shrink-0 mt-0.5">
+                <div className="p-2 bg-neutral-800 text-[#FFB300] shrink-0 mt-0.5">
                   <Headset className="h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="text-xs sm:text-sm font-semibold text-[#0F2942] dark:text-neutral-200 leading-snug">
-                    {locale === "id" ? "Support 24/7" : "24/7 Support"}
+                  <h4 className="text-xs sm:text-sm font-semibold text-neutral-200 leading-snug">
+                    {t("hero.stats.supportTitle")}
                   </h4>
-                  <p className="text-[11px] sm:text-xs text-[#5F6B7A] dark:text-neutral-400 font-normal leading-normal mt-0.5">
-                    {locale === "id" ? "Tim kami siap membantu kapan saja" : "Our support team is ready to help anytime"}
+                  <p className="text-[11px] sm:text-xs text-neutral-400 font-normal leading-normal mt-0.5">
+                    {t("hero.stats.supportDesc")}
                   </p>
                 </div>
               </div>
@@ -138,7 +131,7 @@ export default async function LandingPage({
         <div className="max-w-[1400px] w-full mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="lg:col-span-7">
-              <span className="text-[11px] uppercase tracking-widest font-medium text-muted-foreground block mb-4">
+              <span className="text-[11px] uppercase tracking-widest font-jawa-palsu font-medium text-muted-foreground block mb-4">
                 {t("features.badge")}
               </span>
               <h2
@@ -164,7 +157,7 @@ export default async function LandingPage({
           {/* Left Column: Huge typography statement */}
           <div className="lg:col-span-8 flex flex-col justify-between">
             <div>
-              <span className="text-[11px] uppercase tracking-widest font-medium text-primary-foreground/60 block mb-8">
+              <span className="text-[11px] uppercase tracking-widest font-jawa-palsu font-medium text-primary-foreground/60 block mb-8">
                 {t("philosophy.title")}
               </span>
               <h2
@@ -195,7 +188,7 @@ export default async function LandingPage({
         <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           {/* Left Column */}
           <div>
-            <span className="text-[11px] uppercase tracking-widest font-medium text-muted-foreground block mb-6">
+            <span className="text-[11px] uppercase tracking-widest font-jawa-palsu font-medium text-muted-foreground block mb-6">
               {t("waitlist.badge")}
             </span>
             <h2

@@ -42,7 +42,8 @@
     "hero": {
       "badge": "Akses Terbatas — Khusus 50 Perusahaan Pertama",
       "headline": "Temukan Produsen & Supplier Indonesia Terverifikasi",
-      "subheadline": "Akses direktori terkurasi dari produsen, eksportir, dan penyedia bahan baku kelas atas di Indonesia. Terverifikasi, Andal, dan Langsung.",
+      "title": "Menghubungkan <brHidden></brHidden> Dunia dengan <br></br> <spanClass>Supplier Indonesia</spanClass> <br></br> Terpercaya",
+      "subheadline": "Temukan produsen, eksportir, dan supplier berkualitas dari seluruh Indonesia. Terverifikasi, andal, dan siap mendukung bisnis Anda ke level berikutnya.",
       "cta": "Gabung Waitlist VIP",
       "ctaSecondary": "Pelajari Selengkapnya",
       "trustLabel": "",
@@ -56,9 +57,12 @@
         "certifications": "Sertifikasi"
       },
       "stats": {
-        "users": "Perusahaan Tergabung",
-        "modules": "Produsen Utama",
-        "uptime": "Kecocokan Sempurna"
+        "verifiedTitle": "100% Terverifikasi",
+        "verifiedDesc": "Supplier melalui proses verifikasi ketat",
+        "secureTitle": "Transaksi Aman",
+        "secureDesc": "Sistem pembayaran aman & terlindungi",
+        "supportTitle": "Support 24/7",
+        "supportDesc": "Tim kami siap membantu kapan saja"
       }
     },
     "features": {

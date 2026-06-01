@@ -6,7 +6,6 @@ import type { Locale } from "@/types/locale";
 
 import { ReactQueryProvider } from "@/lib/react-query";
 import ErrorBoundary from "@/components/error-boundary";
-import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "sonner";
 import "../globals.css";
 
@@ -28,17 +27,10 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
       <ErrorBoundary>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          forcedTheme="dark"
-          disableTransitionOnChange
-        >
-          <ReactQueryProvider>
-            {children}
-            <Toaster position="top-right" offset={80} />
-          </ReactQueryProvider>
-        </ThemeProvider>
+        <ReactQueryProvider>
+          {children}
+          <Toaster position="top-right" offset={80} />
+        </ReactQueryProvider>
       </ErrorBoundary>
     </NextIntlClientProvider>
   );

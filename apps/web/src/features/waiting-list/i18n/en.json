@@ -42,7 +42,8 @@
     "hero": {
       "badge": "Limited Invitation — Exclusive to the First 50 Companies",
       "headline": "Discover Verified Indonesian Suppliers",
-      "subheadline": "Access a curated directory of Indonesia's top-tier manufacturers, exporters, and raw material providers. Verified, Reliable, and Direct.",
+      "title": "Connecting the <brHidden></brHidden> World with <br></br> <spanClass>Indonesian Suppliers</spanClass> <br></br> Trusted & Verified",
+      "subheadline": "Find quality manufacturers, exporters, and suppliers from all over Indonesia. Verified, reliable, and ready to support your business to the next level.",
       "cta": "Join VIP Waitlist",
       "ctaSecondary": "Learn More",
       "trustLabel": "",
@@ -56,9 +57,12 @@
         "certifications": "Certifications"
       },
       "stats": {
-        "users": "Joined Companies",
-        "modules": "Primary Manufacturers",
-        "uptime": "Perfect Match Rate"
+        "verifiedTitle": "100% Verified",
+        "verifiedDesc": "Suppliers undergo strict verification",
+        "secureTitle": "Secure Transactions",
+        "secureDesc": "Safe and protected payment systems",
+        "supportTitle": "24/7 Support",
+        "supportDesc": "Our support team is ready to help anytime"
       }
     },
     "features": {
