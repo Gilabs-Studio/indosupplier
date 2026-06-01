@@ -5,7 +5,7 @@ import WaitingListForm from "@/features/waiting-list/components/waiting-list-for
 import { Header } from "@/components/navigation/header";
 import { ScrollTextReveal } from "@/components/motion";
 import { RainbowButton } from "@/components/ui/rainbow-button";
-import { Handshake, Globe, Award, ShieldCheck } from "lucide-react";
+import { ShieldCheck, Lock, Headset } from "lucide-react";
 
 
 export default async function LandingPage({
@@ -21,42 +21,53 @@ export default async function LandingPage({
       {/* ── Navigation Header ── */}
       <Header locale={locale} />
 
-      {/* ── SECTION 1: HERO (Full Viewport Height) ── */}
+      {/* ── SECTION 1: HERO ── */}
       <section
-        className="relative flex min-h-svh items-center justify-center overflow-hidden bg-background px-6 pt-28 pb-16 md:pt-32"
+        className="relative flex min-h-svh items-center justify-start overflow-visible bg-background px-6 md:px-16 lg:px-24 pt-28 pb-20 md:pt-32 md:pb-20"
       >
         <div aria-hidden className="absolute inset-0">
+          {/* Progressive top/bottom fade of the background image */}
           <div
-            className="absolute inset-0 bg-center bg-cover bg-no-repeat opacity-50"
-            style={{ backgroundImage: "url('/hero.png')" }}
+            className="absolute inset-0 bg-[position:35%_center] md:bg-right-center bg-cover bg-no-repeat opacity-95 transition-opacity duration-500"
+            style={{
+              backgroundImage: "url('/hero.png')",
+              maskImage: "linear-gradient(to bottom, transparent 0%, black 12%, black 90%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 12%, black 90%, transparent 100%)"
+            }}
           />
-          <div className="absolute inset-0 bg-linear-to-b from-background/10 via-background/15 to-background/55" />
-          <div className="absolute inset-x-0 top-0 h-32 bg-linear-to-b from-background/90 via-background/40 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-56 bg-linear-to-b from-transparent via-background/30 to-background" />
+          {/* Graduated background tint overlay for maximum text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-transparent md:from-background/90 md:via-background/55 md:to-transparent" />
         </div>
 
-        <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center justify-center text-center">
-          <div className="relative isolate px-4 py-14 sm:px-8 sm:py-16">
-            <div
-              aria-hidden
-              className="absolute -inset-x-56 top-1/2 -z-10 h-184 -translate-y-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,1)_0%,rgba(255,255,250,1)_8%,rgba(255,253,242,0.98)_16%,rgba(255,247,228,0.9)_28%,rgba(255,238,196,0.64)_44%,rgba(255,232,170,0.28)_62%,transparent_86%)] blur-[150px] opacity-100 mix-blend-screen"
-            />
-            <div className="absolute -inset-x-[38%] -top-12 -z-10 h-56 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,1)_0%,rgba(255,255,255,0.98)_14%,rgba(255,255,255,0.62)_32%,rgba(255,255,255,0.18)_58%,transparent_84%)] blur-[110px] opacity-90" />
-            <div className="absolute -inset-x-[78%] -bottom-28 -z-10 h-96 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,244,219,1)_0%,rgba(255,237,199,0.96)_16%,rgba(255,223,165,0.6)_36%,rgba(255,223,165,0.2)_60%,transparent_84%)] blur-[210px] opacity-100 mix-blend-screen" />
-            <div className="absolute -inset-x-[34%] top-[10%] -z-10 h-52 rounded-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,1)_0%,rgba(255,255,255,0.9)_18%,rgba(255,250,238,0.54)_40%,rgba(255,248,235,0.18)_64%,transparent_84%)] blur-[90px] opacity-100" />
+        <div className="relative z-10 w-full max-w-[1400px] mx-auto flex flex-col justify-center items-start">
+          <div className="max-w-2xl text-left relative isolate">
+            {/* Title with distinct typography highlighting */}
+            {locale === "id" ? (
+              <h1 className="mb-5 font-sans text-[36px] sm:text-[48px] md:text-[56px] lg:text-[66px] font-bold leading-[1.1] tracking-[-0.03em] text-[#0F2942] dark:text-[#E2E8F0] animate-fade-in">
+                Menghubungkan <br className="hidden sm:inline" />
+                Dunia dengan <br />
+                <span className="font-serif italic text-[#9C7A59] dark:text-[#D4AF37] font-medium">Supplier Indonesia</span> <br />
+                Terpercaya
+              </h1>
+            ) : (
+              <h1 className="mb-5 font-sans text-[36px] sm:text-[48px] md:text-[56px] lg:text-[66px] font-bold leading-[1.1] tracking-[-0.03em] text-[#0F2942] dark:text-[#E2E8F0] animate-fade-in">
+                Connecting the <br className="hidden sm:inline" />
+                World with <br />
+                <span className="font-serif italic text-[#9C7A59] dark:text-[#D4AF37] font-medium">Indonesian Suppliers</span> <br />
+                Trusted & Verified
+              </h1>
+            )}
 
-            <h1
-              className="mb-6 max-w-4xl font-bold leading-[1.08] tracking-[-0.04em] text-foreground drop-shadow-[0_8px_72px_rgba(255,248,235,1)] animate-fade-in"
-              style={{ fontSize: "clamp(2.4rem, 5.7vw, 4.4rem)" }}
-            >
-              {t("hero.headline")}
-            </h1>
-
-            <p className="mx-auto mb-10 max-w-2xl text-[16px] font-normal leading-relaxed text-muted-foreground/85 animate-slide-up md:text-[18px]">
-              {t("hero.subheadline")}
+            {/* Subheadline copy */}
+            <p className="mb-8 max-w-xl text-[15px] sm:text-[16px] md:text-[17px] font-normal leading-relaxed text-[#5F6B7A] dark:text-neutral-400 animate-slide-up">
+              {locale === "id" 
+                ? "Temukan produsen, eksportir, dan supplier berkualitas dari seluruh Indonesia. Terverifikasi, andal, dan siap mendukung bisnis Anda ke level berikutnya."
+                : "Find quality manufacturers, exporters, and suppliers from all over Indonesia. Verified, reliable, and ready to support your business to the next level."
+              }
             </p>
 
-            <div className="relative z-20 flex flex-wrap items-center justify-center gap-8 animate-slide-up delay-100">
+            {/* CTA Button container */}
+            <div className="relative z-20 flex justify-start gap-8 animate-slide-up delay-100">
               <RainbowButton asChild size="lg" className="text-[13px] font-semibold tracking-widest uppercase transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
                 <a href="#join">
                   {t("hero.cta")}
@@ -64,33 +75,66 @@ export default async function LandingPage({
               </RainbowButton>
             </div>
 
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-xs font-medium text-muted-foreground/85 animate-slide-up delay-200 md:text-sm">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 shrink-0 text-[#d4af37]" />
-                <span>{t("hero.badges.verified")}</span>
+            {/* Stats container using separator styling */}
+            <div className="mt-10 p-4 sm:p-5 bg-white/40 dark:bg-neutral-900/40 backdrop-blur-md border border-[#E8DCCB]/60 dark:border-neutral-800/60 rounded-[14px] flex flex-col md:flex-row items-stretch gap-6 md:gap-4 max-w-3xl text-left animate-slide-up delay-200">
+              {/* Item 1 */}
+              <div className="flex items-start gap-3 flex-1">
+                <div className="p-2 bg-[#FAF6F0] dark:bg-neutral-800 rounded-lg text-[#9C7A59] dark:text-[#D4AF37] shrink-0 mt-0.5">
+                  <ShieldCheck className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-semibold text-[#0F2942] dark:text-neutral-200 leading-snug">
+                    {locale === "id" ? "100% Terverifikasi" : "100% Verified"}
+                  </h4>
+                  <p className="text-[11px] sm:text-xs text-[#5F6B7A] dark:text-neutral-400 font-normal leading-normal mt-0.5">
+                    {locale === "id" ? "Supplier melalui proses verifikasi ketat" : "Suppliers undergo strict verification"}
+                  </p>
+                </div>
               </div>
-              <div className="hidden h-3.5 w-px shrink-0 bg-border/70 md:block" />
-              <div className="flex items-center gap-2">
-                <Handshake className="h-4.5 w-4.5 shrink-0 text-[#d4af37]" />
-                <span>{t("hero.badges.secure")}</span>
+
+              {/* Separator */}
+              <div className="hidden md:block w-px bg-[#E8DCCB] dark:bg-neutral-800 self-stretch my-1" />
+
+              {/* Item 2 */}
+              <div className="flex items-start gap-3 flex-1">
+                <div className="p-2 bg-[#FAF6F0] dark:bg-neutral-800 rounded-lg text-[#9C7A59] dark:text-[#D4AF37] shrink-0 mt-0.5">
+                  <Lock className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-semibold text-[#0F2942] dark:text-neutral-200 leading-snug">
+                    {locale === "id" ? "Transaksi Aman" : "Secure Transactions"}
+                  </h4>
+                  <p className="text-[11px] sm:text-xs text-[#5F6B7A] dark:text-neutral-400 font-normal leading-normal mt-0.5">
+                    {locale === "id" ? "Sistem pembayaran aman & terlindungi" : "Safe and protected payment systems"}
+                  </p>
+                </div>
               </div>
-              <div className="hidden h-3.5 w-px shrink-0 bg-border/70 md:block" />
-              <div className="flex items-center gap-2">
-                <Globe className="h-4 w-4 shrink-0 text-[#d4af37]" />
-                <span>{t("hero.badges.direct")}</span>
-              </div>
-              <div className="hidden h-3.5 w-px shrink-0 bg-border/70 md:block" />
-              <div className="flex items-center gap-2">
-                <Award className="h-4 w-4 shrink-0 text-[#d4af37]" />
-                <span>{t("hero.badges.certifications")}</span>
+
+              {/* Separator */}
+              <div className="hidden md:block w-px bg-[#E8DCCB] dark:bg-neutral-800 self-stretch my-1" />
+
+              {/* Item 3 */}
+              <div className="flex items-start gap-3 flex-1">
+                <div className="p-2 bg-[#FAF6F0] dark:bg-neutral-800 rounded-lg text-[#9C7A59] dark:text-[#D4AF37] shrink-0 mt-0.5">
+                  <Headset className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-semibold text-[#0F2942] dark:text-neutral-200 leading-snug">
+                    {locale === "id" ? "Support 24/7" : "24/7 Support"}
+                  </h4>
+                  <p className="text-[11px] sm:text-xs text-[#5F6B7A] dark:text-neutral-400 font-normal leading-normal mt-0.5">
+                    {locale === "id" ? "Tim kami siap membantu kapan saja" : "Our support team is ready to help anytime"}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
       </section>
 
       {/* ── SECTION 2: FEATURES / CAPABILITIES ── */}
-      <section id="features" className="px-6 md:px-16 lg:px-24 py-20 md:py-28 bg-secondary/8 border-t border-border/30">
+      <section id="features" className="px-6 md:px-16 lg:px-24 pt-32 pb-20 md:pt-40 md:pb-28 bg-secondary/8 border-t border-border/30">
         <div className="max-w-[1400px] w-full mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="lg:col-span-7">

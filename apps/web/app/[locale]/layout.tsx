@@ -30,8 +30,8 @@ export default async function LocaleLayout({
       <ErrorBoundary>
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
-          enableSystem
+          defaultTheme="dark"
+          forcedTheme="dark"
           disableTransitionOnChange
         >
           <ReactQueryProvider>

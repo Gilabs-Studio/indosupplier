@@ -269,7 +269,7 @@ export const useThemeToggle = ({
   start?: AnimationStart;
   blur?: boolean;
 } = {}) => {
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
 
   const styleId = "theme-transition-styles";
@@ -347,8 +347,7 @@ export const ThemeToggleButton = ({
     <button
       type="button"
       className={cn(
-        "inline-flex h-8 w-8 items-center justify-center rounded-full bg-background/80 text-muted-foreground shadow-sm transition-all duration-200 hover:bg-accent/60 active:scale-95",
-        isDarkResolved ? "text-foreground" : "",
+        "inline-flex h-9 w-9 items-center justify-center rounded-lg border border-neutral-200/80 dark:border-neutral-800/80 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors shadow-sm cursor-pointer",
         className,
       )}
       onClick={toggleTheme}

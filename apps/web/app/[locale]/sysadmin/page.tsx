@@ -27,7 +27,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ThemeToggleButton } from "@/components/ui/theme-toggle";
 
 export default function SysadminDashboard() {
   const { admin, logout } = useSysadminStore();
@@ -160,7 +159,6 @@ export default function SysadminDashboard() {
               Refresh
             </Button>
 
-            <ThemeToggleButton className="border border-border bg-background hover:bg-muted" />
 
             <div className="h-6 w-px bg-border hidden sm:block" />
 

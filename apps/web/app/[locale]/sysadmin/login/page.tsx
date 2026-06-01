@@ -14,7 +14,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
-import { ThemeToggleButton } from "@/components/ui/theme-toggle";
 import { LightRays } from "@/components/ui/light-rays";
 
 const loginSchema = z.object({
@@ -70,10 +69,6 @@ export default function SysadminLoginPage() {
       {/* Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.03)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
-      {/* Theme Toggle Button */}
-      <div className="absolute top-6 right-6 z-20">
-        <ThemeToggleButton className="shadow-md border border-border bg-card hover:bg-muted" />
-      </div>
 
       <div className="w-full max-w-md space-y-8 z-10">
         <div className="text-center space-y-3">
