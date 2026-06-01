@@ -262,7 +262,7 @@ export default function WaitingListForm() {
                     type="submit"
                     disabled={isSubmitting}
                     size="lg"
-                    className="w-full text-sm font-semibold tracking-widest uppercase transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                    className="w-full text-sm font-semibold tracking-widest transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
                   >
                     {isSubmitting ? t("form.submitting") : t("form.submit")}
                   </RainbowButton>
@@ -284,7 +284,7 @@ export default function WaitingListForm() {
                 <Button
                   onClick={() => setIsSuccess(false)}
                   variant="outline"
-                  className="px-6 py-3 text-[13px] uppercase tracking-wider cursor-pointer"
+                  className="px-6 py-3 text-[13px] tracking-wider cursor-pointer"
                 >
                   {t("title")}
                 </Button>

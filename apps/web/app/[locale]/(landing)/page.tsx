@@ -10,9 +10,9 @@ import { ShieldCheck, Lock, Headset } from "lucide-react";
 
 export default async function LandingPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ locale: string }>;
-}) {
+}>) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "landing" });
 
@@ -28,7 +28,7 @@ export default async function LandingPage({
         <div aria-hidden className="absolute inset-0">
           {/* Progressive top/bottom fade of the background image */}
           <div
-            className="absolute inset-0 bg-[position:35%_center] md:bg-right-center bg-cover bg-no-repeat opacity-95 transition-opacity duration-500"
+            className="absolute inset-0 bg-position-[35%_center] md:bg-right-center bg-cover bg-no-repeat opacity-95 transition-opacity duration-500"
             style={{
               backgroundImage: "url('/hero.png')",
               maskImage: "linear-gradient(to bottom, transparent 0%, black 12%, black 90%, transparent 100%)",
@@ -36,7 +36,7 @@ export default async function LandingPage({
             }}
           />
           {/* Graduated background tint overlay for maximum text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-transparent md:from-background/90 md:via-background/55 md:to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-r from-background/95 via-background/80 to-transparent md:from-background/90 md:via-background/55 md:to-transparent" />
         </div>
 
         <div className="relative z-10 w-full max-w-[1400px] mx-auto flex flex-col justify-center items-start">
@@ -47,7 +47,7 @@ export default async function LandingPage({
                 br: () => <br />,
                 brHidden: () => <br className="hidden sm:inline" />,
                 spanClass: (chunks) => (
-                  <span className="font-jawa-palsu inline-block bg-gradient-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent font-medium">
+                  <span className="font-jawa-palsu inline-block bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent font-medium">
                     {chunks}
                   </span>
                 ),
@@ -61,7 +61,7 @@ export default async function LandingPage({
 
             {/* CTA Button container */}
             <div className="relative z-20 flex justify-start gap-8 animate-slide-up delay-100">
-              <RainbowButton asChild size="lg" className="text-[13px] font-semibold tracking-widest uppercase transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
+              <RainbowButton asChild size="lg" className="text-[13px] font-semibold tracking-widest transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
                 <a href="#join">
                   {t("hero.cta")}
                 </a>
@@ -131,7 +131,7 @@ export default async function LandingPage({
         <div className="max-w-[1400px] w-full mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="lg:col-span-7">
-              <span className="text-[11px] uppercase tracking-widest font-jawa-palsu font-medium text-muted-foreground block mb-4">
+              <span className="text-[11px] tracking-widest font-jawa-palsu font-medium inline-block bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent mb-4">
                 {t("features.badge")}
               </span>
               <h2
@@ -157,7 +157,7 @@ export default async function LandingPage({
           {/* Left Column: Huge typography statement */}
           <div className="lg:col-span-8 flex flex-col justify-between">
             <div>
-              <span className="text-[11px] uppercase tracking-widest font-jawa-palsu font-medium text-primary-foreground/60 block mb-8">
+              <span className="text-[11px] tracking-widest font-jawa-palsu font-medium inline-block bg-linear-to-r from-[#E27D18] to-[#E27D18] bg-clip-text text-transparent mb-8">
                 {t("philosophy.title")}
               </span>
               <h2
@@ -175,7 +175,7 @@ export default async function LandingPage({
               {t("philosophy.description")}
             </p>
             <div className="h-px bg-primary-foreground/20 w-full mb-8" />
-            <div className="flex justify-between items-center text-[13px] uppercase tracking-wider font-light text-primary-foreground/75">
+            <div className="flex justify-between items-center text-[13px] tracking-wider font-light text-primary-foreground/75">
               <span>Optimized for Indonesia</span>
               <span>EST. 2026</span>
             </div>
@@ -188,7 +188,7 @@ export default async function LandingPage({
         <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           {/* Left Column */}
           <div>
-            <span className="text-[11px] uppercase tracking-widest font-jawa-palsu font-medium text-muted-foreground block mb-6">
+            <span className="text-[11px] tracking-widest font-jawa-palsu font-medium inline-block bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent mb-6">
               {t("waitlist.badge")}
             </span>
             <h2
@@ -243,14 +243,14 @@ export default async function LandingPage({
               height={24}
               className="h-5 w-auto object-contain"
             />
-            <span className="font-normal tracking-widest uppercase text-foreground text-[13px]">
+            <span className="font-normal tracking-widest text-foreground text-[13px]">
               IndoSupplier
             </span>
           </div>
           <span>
             {t("footer.copy", { year: new Date().getFullYear() })}
           </span>
-          <span className="uppercase tracking-wider text-muted-foreground/80">
+          <span className="tracking-wider text-muted-foreground/80">
             {t("footer.tagline")}
           </span>
         </div>

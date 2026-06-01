@@ -8,58 +8,47 @@ export default async function NotFound() {
   const locale = await getLocale();
   
   // Check if user might be in dashboard context
-  // Note: This is a heuristic check - client-side will do proper verification
-  // 1. Check if user has access token cookie (may indicate authenticated session)
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("indosupplier_access_token")?.value;
   const hasAccessToken = Boolean(accessToken);
   
-  // 2. Check referer header for dashboard routes
   const headersList = await headers();
   const referer = headersList.get("referer") || "";
   const isDashboardReferer = referer.includes("/dashboard");
   
-  // Determine if this is likely a dashboard route not-found
-  // Note: Cookie presence is not a guarantee of valid session,
-  // but provides better UX by redirecting to dashboard if likely in that context
   const isDashboardRoute = hasAccessToken || isDashboardReferer;
   
-  // Determine redirect URL
   const redirectUrl = isDashboardRoute 
     ? `/${locale}/dashboard` 
-    : `/${locale}/login`;
+    : `/${locale}/`;
   
-  // Dashboard layout has 4rem header, so adjust min-height
-  // For non-dashboard, use full screen height
-  // Note: We can't use DashboardLayout here because root not-found.tsx
-  // is not wrapped by [locale]/layout.tsx that provides NextIntlClientProvider
-  // So we just use conditional styling to match dashboard appearance
   const containerClass = isDashboardRoute
-    ? "flex min-h-[calc(100vh-4rem)] items-center justify-center px-4"
-    : "flex min-h-screen items-center justify-center px-4";
+    ? "flex min-h-[calc(100vh-4rem)] items-center justify-center px-6 bg-background text-foreground"
+    : "flex min-h-screen items-center justify-center px-6 bg-background text-foreground";
   
-  // Use div for dashboard (will be wrapped by DashboardLayout from route group if available)
-  // Use main for non-dashboard (standalone page)
   const Container = isDashboardRoute ? "div" : "main";
 
   return (
     <Container className={containerClass}>
-      <div className="flex flex-col items-center text-center space-y-3">
-        <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-muted-foreground">
+      <div className="flex flex-col items-center text-center max-w-md antialiased">
+        <h1 className="font-jawa-palsu text-[80px] sm:text-[110px] font-medium leading-none bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent animate-fade-in select-none">
           {t("label")}
-        </p>
-
-        <h1 className="text-base sm:text-lg font-semibold text-foreground">
-          {t("title")}
         </h1>
 
-        <p className="max-w-sm text-xs sm:text-sm text-muted-foreground">
+        <h2 className="font-jawa-palsu text-lg sm:text-xl font-light text-foreground/90 tracking-wide mt-6 animate-slide-up">
+          {t("title")}
+        </h2>
+
+        <p className="max-w-xs text-xs sm:text-sm text-neutral-400 font-light leading-relaxed mt-3 animate-slide-up delay-100">
           {t("description")}
         </p>
 
-        <Button asChild size="sm" className="mt-2">
-          <Link href={redirectUrl}>{t("backHome")}</Link>
-        </Button>
+        <Link
+          href={redirectUrl}
+          className="mt-8 text-[13px] tracking-widest text-[#FFB300] hover:text-[#E27D18] transition-colors duration-300 animate-slide-up delay-200"
+        >
+          {t("backHome")}
+        </Link>
       </div>
     </Container>
   );

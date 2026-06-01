@@ -7,7 +7,6 @@ import type { Locale } from "@/types/locale";
 import { ReactQueryProvider } from "@/lib/react-query";
 import ErrorBoundary from "@/components/error-boundary";
 import { Toaster } from "sonner";
-import "../globals.css";
 
 export default async function LocaleLayout({
   children,
