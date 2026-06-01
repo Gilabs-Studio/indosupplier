@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -68,7 +68,7 @@ export default function SysadminDashboard() {
         buyers: buyerCount,
         pending: pendingCount,
       });
-    } catch (error) {
+    } catch {
       toast.error("Failed to load waiting list entries.");
     } finally {
       setIsLoading(false);
@@ -76,7 +76,10 @@ export default function SysadminDashboard() {
   }, [page, limit, statusFilter]);
 
   useEffect(() => {
-    fetchEntries();
+    const timer = setTimeout(() => {
+      fetchEntries();
+    }, 0);
+    return () => clearTimeout(timer);
   }, [fetchEntries]);
 
   const handleUpdateStatus = async (id: string, newStatus: string) => {
@@ -84,7 +87,7 @@ export default function SysadminDashboard() {
       await waitingListService.updateStatus(id, newStatus);
       toast.success(`Entry marked as ${newStatus}`);
       fetchEntries();
-    } catch (error) {
+    } catch {
       toast.error("Failed to update status.");
     }
   };
@@ -95,7 +98,7 @@ export default function SysadminDashboard() {
       await waitingListService.delete(id);
       toast.success("Entry deleted successfully.");
       fetchEntries();
-    } catch (error) {
+    } catch {
       toast.error("Failed to delete entry.");
     }
   };

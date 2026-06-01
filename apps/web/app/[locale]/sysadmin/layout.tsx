@@ -12,12 +12,15 @@ export default function SysadminLayout({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { admin, isAuthenticated, isSessionVerified, isLoading, checkSession } = useSysadminStore();
+  const { isAuthenticated, isSessionVerified, isLoading, checkSession } = useSysadminStore();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    checkSession();
+    const timer = setTimeout(() => {
+      setMounted(true);
+      checkSession();
+    }, 0);
+    return () => clearTimeout(timer);
   }, [checkSession]);
 
   useEffect(() => {

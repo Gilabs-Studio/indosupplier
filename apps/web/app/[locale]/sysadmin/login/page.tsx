@@ -8,6 +8,7 @@ import * as z from "zod";
 import { toast } from "sonner";
 import { useSysadminStore } from "@/features/sysadmin/stores/use-sysadmin-store";
 import { sysadminService } from "@/features/sysadmin/services/sysadmin-service";
+import axios from "axios";
 import { Loader2, Lock, Mail, ShieldAlert } from "lucide-react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -47,14 +48,18 @@ export default function SysadminLoginPage() {
       setAdmin(payload.admin);
       toast.success("Successfully logged in as admin!");
       router.push("/sysadmin");
-    } catch (error: any) {
-      const apiCode = error?.response?.data?.error?.code;
-      if (apiCode === "INVALID_CREDENTIALS") {
-        toast.error("Invalid admin email or password.");
-      } else if (apiCode === "ACCOUNT_DISABLED") {
-        toast.error("This administrator account has been disabled.");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const apiCode = error.response?.data?.error?.code;
+        if (apiCode === "INVALID_CREDENTIALS") {
+          toast.error("Invalid admin email or password.");
+        } else if (apiCode === "ACCOUNT_DISABLED") {
+          toast.error("This administrator account has been disabled.");
+        } else {
+          toast.error(error.response?.data?.error?.message || "Login failed. Please try again.");
+        }
       } else {
-        toast.error(error?.response?.data?.error?.message || "Login failed. Please try again.");
+        toast.error("Login failed. Please try again.");
       }
     } finally {
       setIsSubmitting(false);
