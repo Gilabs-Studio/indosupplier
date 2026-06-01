@@ -298,3 +298,64 @@ That supplier finishes registration in 12 minutes and has their profile live by 
 Rizky checks the admin panel: 3 of the 4 who registered have profiles that are less than 30% complete (no photos, no product listing). He sends personalized follow-up messages to each with specific tips ("Coba tambah foto produk dulu Pak, itu yang paling penting buat buyer asing").
 
 By end of the week, all 3 have completed enough of their profiles to appear in search results.
+
+---
+
+## Scenario 8 — Buyer Uses AI Search Agent and Confirms Results
+
+**Who:** Andre, operations manager at a food manufacturing company in West Java.
+
+**Goal:** Find suitable coconut shell charcoal briquette suppliers for industrial heating with constraints on location, price, and responsiveness.
+
+---
+
+**Step 1 — Buyer Enters Natural Language Request**
+
+Andre opens AI Search and types:
+
+*"Bantu saya mencari arang briquettes untuk pembakaran, supplier di Jawa, harga kompetitif, bisa kirim rutin bulanan."*
+
+He adds initial constraints:
+- Preferred location: Java
+- Budget: mid-range
+- Certification preference: export-ready is a plus
+
+**Step 2 — AI Extracts and Confirms Intent**
+
+The AI shows extracted intent as editable chips:
+- coconut shell charcoal briquette
+- industrial combustion fuel
+- regular monthly supply
+- location: Java
+- price: competitive
+
+Andre removes one irrelevant chip and clicks **Run AI Search**.
+
+**Step 3 — AI Agent Runs Autonomous Retrieval**
+
+The AI agent executes internal search steps automatically:
+- calls supplier search with expanded keywords (charcoal briquette, coconut charcoal, fuel briquette)
+- filters by location and basic trust criteria
+- checks profile quality and response rate
+- estimates budget fit where price indicators exist
+
+**Step 4 — Recommendation Page Appears**
+
+Andre sees a dedicated recommendation page with:
+- Best Match (top-ranked suppliers)
+- Budget-Friendly Alternatives
+- Backup Candidates
+
+Each card includes a match score and a short explanation:
+- "Strong product match + East Java + high response rate"
+- "Good price fit but lower response speed"
+
+**Step 5 — Buyer Confirms Before Action**
+
+Andre selects 3 suppliers and clicks **Confirm Selection**.
+
+No message is sent automatically until this confirmation step. After confirmation, Andre continues to Multi-Supplier RFQ flow from the selected list.
+
+**Outcome**
+
+Andre completes shortlisting in under 10 minutes with higher confidence because the agent explains why each supplier is recommended.
