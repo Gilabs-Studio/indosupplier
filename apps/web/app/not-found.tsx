@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { headers, cookies } from "next/headers";
 import { getTranslations, getLocale } from "next-intl/server";
-import { Button } from "@/components/ui/button";
 
 export default async function NotFound() {
   const t = await getTranslations("notFound");
@@ -31,11 +30,11 @@ export default async function NotFound() {
   return (
     <Container className={containerClass}>
       <div className="flex flex-col items-center text-center max-w-md antialiased">
-        <h1 className="font-jawa-palsu text-[80px] sm:text-[110px] font-medium leading-none bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent animate-fade-in select-none">
+        <h1 className="font-macondo text-[80px] sm:text-[110px] font-medium leading-none bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent animate-fade-in select-none">
           {t("label")}
         </h1>
 
-        <h2 className="font-jawa-palsu text-lg sm:text-xl font-light text-foreground/90 tracking-wide mt-6 animate-slide-up">
+        <h2 className="font-macondo text-lg sm:text-xl font-light text-foreground/90 tracking-wide mt-6 animate-slide-up">
           {t("title")}
         </h2>
 

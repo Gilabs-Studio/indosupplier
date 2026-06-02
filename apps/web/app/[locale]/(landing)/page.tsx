@@ -47,7 +47,7 @@ export default async function LandingPage({
                 br: () => <br />,
                 brHidden: () => <br className="hidden sm:inline" />,
                 spanClass: (chunks) => (
-                  <span className="font-jawa-palsu inline-block bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent font-medium">
+                  <span className="font-macondo inline-block bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent font-medium">
                     {chunks}
                   </span>
                 ),
@@ -139,7 +139,7 @@ export default async function LandingPage({
         <div className="max-w-[1400px] w-full mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="lg:col-span-7">
-              <span className="text-[11px] tracking-widest font-jawa-palsu font-medium inline-block bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent mb-4">
+              <span className="text-[11px] tracking-widest font-macondo font-medium inline-block bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent mb-4">
                 {t("features.badge")}
               </span>
               <h2
@@ -165,7 +165,7 @@ export default async function LandingPage({
           {/* Left Column: Huge typography statement */}
           <div className="lg:col-span-8 flex flex-col justify-between">
             <div>
-              <span className="text-[11px] tracking-widest font-jawa-palsu font-medium inline-block bg-linear-to-r from-[#E27D18] to-[#E27D18] bg-clip-text text-transparent mb-8">
+              <span className="text-[11px] tracking-widest font-macondo font-medium inline-block bg-linear-to-r from-[#E27D18] to-[#E27D18] bg-clip-text text-transparent mb-8">
                 {t("philosophy.title")}
               </span>
               <h2
@@ -210,7 +210,7 @@ export default async function LandingPage({
         <div className="relative z-10 max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           {/* Left Column */}
           <div>
-            <span className="text-[11px] tracking-widest font-jawa-palsu font-medium inline-block bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent mb-6">
+            <span className="text-[11px] tracking-widest font-macondo font-medium inline-block bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent mb-6">
               {t("waitlist.badge")}
             </span>
             <h2
