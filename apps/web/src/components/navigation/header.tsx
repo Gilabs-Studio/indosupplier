@@ -51,7 +51,7 @@ export function Header({ locale }: HeaderProps) {
           "mx-auto max-w-[1400px] overflow-hidden transition-all duration-300 px-5 py-3 md:px-6 lg:px-8",
           isAtTop
             ? "border border-transparent bg-transparent shadow-none backdrop-blur-none"
-            : "rounded-[1.75rem] border border-border/25 bg-background/58 shadow-[0_20px_48px_-28px_hsl(var(--foreground)/0.48)] backdrop-blur-2xl"
+            : "rounded-[1.75rem] border border-[#333333]/25 bg-[#1a1a1a]/[0.58] shadow-[0_20px_48px_-28px_hsl(0_0%_100%/0.48)] backdrop-blur-2xl"
         )}
       >
         {!isAtTop && (
@@ -59,7 +59,7 @@ export function Header({ locale }: HeaderProps) {
             className="pointer-events-none absolute inset-0 -z-10"
             style={{
               background:
-                "linear-gradient(to bottom, hsl(var(--background) / 0.95) 0%, hsl(var(--background) / 0.72) 38%, hsl(var(--background) / 0.28) 100%)",
+                "linear-gradient(to bottom, hsl(0 0% 10% / 0.95) 0%, hsl(0 0% 10% / 0.72) 38%, hsl(0 0% 10% / 0.28) 100%)",
             }}
           />
         )}
@@ -68,32 +68,32 @@ export function Header({ locale }: HeaderProps) {
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
             <Image src="/logo.png" alt="IndoSupplier Logo" width={120} height={24} className="h-6 w-auto object-contain" />
-            <span className="font-normal text-[15px] tracking-widest uppercase text-foreground">
+            <span className="font-normal text-[15px] tracking-widest uppercase text-[#ffffff]">
               IndoSupplier
             </span>
           </Link>
 
           {/* Center menu links */}
-          <div className="hidden md:flex items-center gap-10 text-[12px] tracking-widest uppercase font-semibold text-foreground/70">
-            <a href="#join" className="transition-colors hover:text-foreground flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-10 text-[12px] tracking-widest uppercase font-semibold text-[#ffffff]/70">
+            <a href="#join" className="transition-colors hover:text-[#ffffff] flex items-center gap-1">
               {locale === "id" ? "Cari Supplier" : "Find Supplier"}
               <svg className="h-3 w-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
               </svg>
             </a>
-            <a href="#features" className="transition-colors hover:text-foreground">
+            <a href="#features" className="transition-colors hover:text-[#ffffff]">
               {locale === "id" ? "Kategori" : "Categories"}
             </a>
-            <a href="#join" className="transition-colors hover:text-foreground flex items-center gap-1">
+            <a href="#join" className="transition-colors hover:text-[#ffffff] flex items-center gap-1">
               {locale === "id" ? "Layanan" : "Services"}
               <svg className="h-3 w-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
               </svg>
             </a>
-            <a href="#about" className="transition-colors hover:text-foreground">
+            <a href="#about" className="transition-colors hover:text-[#ffffff]">
               {t("nav.about")}
             </a>
-            <a href="#join" className="transition-colors hover:text-foreground">
+            <a href="#join" className="transition-colors hover:text-[#ffffff]">
               {locale === "id" ? "Untuk Bisnis" : "For Business"}
             </a>
           </div>
@@ -101,7 +101,15 @@ export function Header({ locale }: HeaderProps) {
           {/* Right menu actions */}
           <div className="flex items-center gap-4 text-[12px] font-medium tracking-widest uppercase">
             <LanguageSwitcher currentLocale={locale} />
-            <RainbowButton asChild size="sm" className="text-[11px] font-semibold tracking-wider uppercase transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
+            <RainbowButton
+              asChild
+              size="sm"
+              className="text-[11px] font-semibold tracking-wider uppercase transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+              style={{
+                background: "linear-gradient(hsl(0 0% 100%),hsl(0 0% 100%)),linear-gradient(hsl(0 0% 100%) 50%,color-mix(in srgb,hsl(0 0% 100%) 60%,transparent) 80%,transparent),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))",
+                color: "#1a1a1a"
+              }}
+            >
               <a href="#join">
                 {t("nav.waitlist")}
               </a>

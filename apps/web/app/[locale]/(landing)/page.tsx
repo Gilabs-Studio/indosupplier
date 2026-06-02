@@ -17,13 +17,13 @@ export default async function LandingPage({
   const t = await getTranslations({ locale, namespace: "landing" });
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-jost antialiased">
+    <div className="min-h-screen bg-[#1a1a1a] text-[#ffffff] font-jost antialiased">
       {/* ── Navigation Header ── */}
       <Header locale={locale} />
 
       {/* ── SECTION 1: HERO ── */}
       <section
-        className="relative flex min-h-svh items-center justify-start overflow-visible bg-background px-6 md:px-16 lg:px-24 pt-28 pb-20 md:pt-32 md:pb-20"
+        className="relative flex min-h-svh items-center justify-start overflow-visible bg-[#1a1a1a] px-6 md:px-16 lg:px-24 pt-28 pb-20 md:pt-32 md:pb-20"
       >
         <div aria-hidden className="absolute inset-0">
           {/* Progressive top/bottom fade of the background image */}
@@ -36,7 +36,7 @@ export default async function LandingPage({
             }}
           />
           {/* Graduated background tint overlay for maximum text readability */}
-          <div className="absolute inset-0 bg-linear-to-r from-background/95 via-background/80 to-transparent md:from-background/90 md:via-background/55 md:to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-r from-[#1a1a1a]/95 via-[#1a1a1a]/80 to-transparent md:from-[#1a1a1a]/90 md:via-[#1a1a1a]/55 md:to-transparent" />
         </div>
 
         <div className="relative z-10 w-full max-w-[1400px] mx-auto flex flex-col justify-center items-start">
@@ -61,7 +61,15 @@ export default async function LandingPage({
 
             {/* CTA Button container */}
             <div className="relative z-20 flex justify-start gap-8 animate-slide-up delay-100">
-              <RainbowButton asChild size="lg" className="text-[13px] font-semibold tracking-widest transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]">
+              <RainbowButton
+                asChild
+                size="lg"
+                className="text-[13px] font-semibold tracking-widest transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                style={{
+                  background: "linear-gradient(hsl(0 0% 100%),hsl(0 0% 100%)),linear-gradient(hsl(0 0% 100%) 50%,color-mix(in srgb,hsl(0 0% 100%) 60%,transparent) 80%,transparent),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))",
+                  color: "#1a1a1a"
+                }}
+              >
                 <a href="#join">
                   {t("hero.cta")}
                 </a>
@@ -127,7 +135,7 @@ export default async function LandingPage({
       </section>
 
       {/* ── SECTION 2: FEATURES / CAPABILITIES ── */}
-      <section id="features" className="px-6 md:px-16 lg:px-24 pt-32 pb-20 md:pt-40 md:pb-28 bg-secondary/8 border-t border-border/30">
+      <section id="features" className="px-6 md:px-16 lg:px-24 pt-32 pb-20 md:pt-40 md:pb-28 bg-[#262626]/[0.08] border-t border-[#333333]/30">
         <div className="max-w-[1400px] w-full mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="lg:col-span-7">
@@ -135,7 +143,7 @@ export default async function LandingPage({
                 {t("features.badge")}
               </span>
               <h2
-                className="font-light leading-[1.2] tracking-[-0.03em] max-w-[720px] text-foreground"
+                className="font-light leading-[1.2] tracking-[-0.03em] max-w-[720px] text-[#ffffff]"
                 style={{ fontSize: "clamp(2rem, 4.5vw, 3.4rem)" }}
               >
                 {t("features.headline")}
@@ -143,7 +151,7 @@ export default async function LandingPage({
             </div>
 
             <div className="lg:col-span-5 lg:pl-10">
-              <p className="text-[16px] font-light leading-relaxed text-muted-foreground/80 mt-4">
+              <p className="text-[16px] font-light leading-relaxed text-[#a6a6a6]/80 mt-4">
                 {t("features.summary")}
               </p>
             </div>
@@ -152,7 +160,7 @@ export default async function LandingPage({
       </section>
 
       {/* ── SECTION 3: ABOUT / PHILOSOPHY ── */}
-      <section id="about" className="min-h-screen flex items-center px-6 md:px-16 lg:px-24 py-20 bg-primary text-primary-foreground relative overflow-hidden">
+      <section id="about" className="min-h-screen flex items-center px-6 md:px-16 lg:px-24 py-20 bg-[#ffffff] text-[#1a1a1a] relative overflow-hidden">
         <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Left Column: Huge typography statement */}
           <div className="lg:col-span-8 flex flex-col justify-between">
@@ -161,7 +169,7 @@ export default async function LandingPage({
                 {t("philosophy.title")}
               </span>
               <h2
-                className="font-light leading-[1.2] tracking-[-0.03em] max-w-[720px] text-primary-foreground"
+                className="font-light leading-[1.2] tracking-[-0.03em] max-w-[720px] text-[#1a1a1a]"
                 style={{ fontSize: "clamp(2rem, 4.5vw, 3.4rem)" }}
               >
                 <ScrollTextReveal text={t("philosophy.quote")} />
@@ -171,11 +179,11 @@ export default async function LandingPage({
 
           {/* Right Column: Detailed narrative */}
           <div className="lg:col-span-4 lg:pl-8 flex flex-col justify-end">
-            <p className="text-[16px] font-light leading-relaxed text-primary-foreground/80 mb-8">
+            <p className="text-[16px] font-light leading-relaxed text-[#1a1a1a]/80 mb-8">
               {t("philosophy.description")}
             </p>
-            <div className="h-px bg-primary-foreground/20 w-full mb-8" />
-            <div className="flex justify-between items-center text-[13px] tracking-wider font-light text-primary-foreground/75">
+            <div className="h-px bg-[#1a1a1a]/20 w-full mb-8" />
+            <div className="flex justify-between items-center text-[13px] tracking-wider font-light text-[#1a1a1a]/75">
               <span>Optimized for Indonesia</span>
               <span>EST. 2026</span>
             </div>
@@ -184,7 +192,7 @@ export default async function LandingPage({
       </section>
 
       {/* ── SECTION 4: WAITING LIST / CONVERSION ── */}
-      <section id="join" className="relative px-6 md:px-16 lg:px-24 py-20 md:py-28 bg-background overflow-hidden border-t border-border/30">
+      <section id="join" className="relative px-6 md:px-16 lg:px-24 py-20 md:py-28 bg-[#1a1a1a] overflow-hidden border-t border-[#333333]/30">
         <div aria-hidden className="absolute inset-0">
           {/* Progressive top/bottom fade of the background image */}
           <div
@@ -196,7 +204,7 @@ export default async function LandingPage({
             }}
           />
           {/* Graduated background tint overlay for maximum text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background/98 via-background/90 to-background/50 md:from-background/95 md:via-background/80 md:to-background/30" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a]/98 via-[#1a1a1a]/90 to-[#1a1a1a]/50 md:from-[#1a1a1a]/95 md:via-[#1a1a1a]/80 md:to-[#1a1a1a]/30" />
         </div>
 
         <div className="relative z-10 max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -206,17 +214,17 @@ export default async function LandingPage({
               {t("waitlist.badge")}
             </span>
             <h2
-              className="font-light leading-[1.08] tracking-[-0.04em] text-foreground mb-6"
+              className="font-light leading-[1.08] tracking-[-0.04em] text-[#ffffff] mb-6"
               style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)" }}
             >
               {t("waitlist.headline")}
             </h2>
-            <p className="text-[17px] font-light leading-relaxed text-muted-foreground mb-12 max-w-[500px]">
+            <p className="text-[17px] font-light leading-relaxed text-[#a6a6a6] mb-12 max-w-[500px]">
               {t("waitlist.subheadline")}
             </p>
 
             {/* Structured list in grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-[14px] font-light text-muted-foreground border-t border-border/80 pt-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-[14px] font-light text-[#a6a6a6] border-t border-[#333333]/80 pt-8">
               {[
                 t("waitlist.benefits.discount"),
                 t("waitlist.benefits.onboarding"),
@@ -225,7 +233,7 @@ export default async function LandingPage({
               ].map((benefit, idx) => (
                 <div key={idx} className="flex gap-3 items-start">
                   <svg
-                    className="h-5 w-5 text-foreground shrink-0 mt-0.5"
+                    className="h-5 w-5 text-[#ffffff] shrink-0 mt-0.5"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -233,7 +241,7 @@ export default async function LandingPage({
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
-                  <p className="leading-relaxed text-muted-foreground">{benefit}</p>
+                  <p className="leading-relaxed text-[#a6a6a6]">{benefit}</p>
                 </div>
               ))}
             </div>
@@ -247,8 +255,8 @@ export default async function LandingPage({
       </section>
 
       {/* ── Footer ── */}
-      <footer className="py-3 px-6 md:px-16 lg:px-24 border-t border-border bg-background">
-        <div className="max-w-[1400px] w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-[13px] font-light text-muted-foreground">
+      <footer className="py-3 px-6 md:px-16 lg:px-24 border-t border-[#333333] bg-[#1a1a1a]">
+        <div className="max-w-[1400px] w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-[13px] font-light text-[#a6a6a6]">
           <div className="flex items-center gap-3">
             <Image
               src="/logo.png"
@@ -257,14 +265,14 @@ export default async function LandingPage({
               height={24}
               className="h-5 w-auto object-contain"
             />
-            <span className="font-normal tracking-widest text-foreground text-[13px]">
+            <span className="font-normal tracking-widest text-[#ffffff] text-[13px]">
               IndoSupplier
             </span>
           </div>
           <span>
             {t("footer.copy", { year: new Date().getFullYear() })}
           </span>
-          <span className="tracking-wider text-muted-foreground/80">
+          <span className="tracking-wider text-[#a6a6a6]/80">
             {t("footer.tagline")}
           </span>
         </div>
