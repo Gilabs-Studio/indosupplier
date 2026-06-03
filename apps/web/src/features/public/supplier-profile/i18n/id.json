@@ -1,0 +1,38 @@
+{
+  "public": {
+    "supplier": {
+      "businessType": "Jenis Bisnis",
+      "established": "Tahun Berdiri",
+      "employees": "Jumlah Karyawan",
+      "location": "Lokasi",
+      "verifiedStatus": "Status Verifikasi",
+      "contactInfo": "Informasi Kontak",
+      "phone": "Nomor Telepon",
+      "email": "Alamat Email",
+      "website": "Situs Web",
+      "address": "Alamat Kantor",
+      "products": "Katalog Produk",
+      "certifications": "Sertifikasi",
+      "overview": "Ikhtisar Perusahaan",
+      "requestQuote": "Minta Penawaran Harga (RFQ)",
+      "quoteSubject": "Subjek RFQ",
+      "quoteMessage": "Jelaskan kebutuhan Anda...",
+      "quoteQuantity": "Jumlah yang Dibutuhkan",
+      "btnSendQuote": "Kirim Permintaan",
+      "quoteSuccess": "Permintaan penawaran Anda berhasil dikirim!",
+      "verifiedSupplier": "Supplier Terverifikasi",
+      "notVerified": "Supplier Scaffold",
+      "businessInfo": "Informasi Bisnis",
+      "phoneLabel": "Nomor Telepon",
+      "emailLabel": "Alamat Email",
+      "websiteLabel": "Situs Web",
+      "emptyOverview": "Profil supplier ini saat ini kosong. Tidak ada detail latar belakang, ikhtisar perusahaan, atau informasi operasional yang diambil dari API backend.",
+      "emptyProductsTitle": "0 Produk",
+      "emptyProductsDesc": "Tidak ada produk terdaftar untuk supplier ini di katalog database.",
+      "emptyCertsTitle": "0 Sertifikasi",
+      "emptyCertsDesc": "Tidak ada sertifikasi bisnis atau kualitas yang diunggah oleh supplier ini.",
+      "backButton": "Kembali",
+      "na": "N/A"
+    }
+  }
+}

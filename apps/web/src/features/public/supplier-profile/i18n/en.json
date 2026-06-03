@@ -1,0 +1,38 @@
+{
+  "public": {
+    "supplier": {
+      "businessType": "Business Type",
+      "established": "Year Established",
+      "employees": "No. of Employees",
+      "location": "Location",
+      "verifiedStatus": "Verification Status",
+      "contactInfo": "Contact Information",
+      "phone": "Phone Number",
+      "email": "Email Address",
+      "website": "Website",
+      "address": "Office Address",
+      "products": "Products Catalog",
+      "certifications": "Certifications",
+      "overview": "Company Overview",
+      "requestQuote": "Request a Quote",
+      "quoteSubject": "RFQ Subject",
+      "quoteMessage": "Describe your requirements...",
+      "quoteQuantity": "Quantity Needed",
+      "btnSendQuote": "Send Request",
+      "quoteSuccess": "Your quote request has been sent successfully!",
+      "verifiedSupplier": "Verified Supplier",
+      "notVerified": "Scaffold Supplier",
+      "businessInfo": "Business Information",
+      "phoneLabel": "Phone Number",
+      "emailLabel": "Email Address",
+      "websiteLabel": "Website",
+      "emptyOverview": "This supplier profile is currently empty. There is no background details, company overview, or operational information retrieved from the backend API.",
+      "emptyProductsTitle": "0 Products",
+      "emptyProductsDesc": "No products registered for this supplier in the database catalog.",
+      "emptyCertsTitle": "0 Certifications",
+      "emptyCertsDesc": "No business or quality certifications uploaded by this supplier.",
+      "backButton": "Back",
+      "na": "N/A"
+    }
+  }
+}

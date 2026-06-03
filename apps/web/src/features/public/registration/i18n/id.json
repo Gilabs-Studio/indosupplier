@@ -1,0 +1,29 @@
+{
+  "public": {
+    "register": {
+      "title": "Gabung Platform Indosupplier",
+      "subtitle": "Pilih jenis akun Anda untuk memulai di marketplace B2B.",
+      "joinAs": "Saya ingin bergabung sebagai:",
+      "supplier": "Supplier (Penjual)",
+      "supplierDesc": "Saya ingin mempromosikan produk saya, menerima RFQ, dan menjual ke pembeli bisnis.",
+      "buyer": "Buyer (Pembeli)",
+      "buyerDesc": "Saya ingin mencari supplier terverifikasi, meminta penawaran harga, dan mengelola pengadaan.",
+      "btnNext": "Lanjutkan Pendaftaran",
+      "formTitleSupplier": "Detail Pendaftaran Supplier",
+      "formTitleBuyer": "Detail Pendaftaran Buyer",
+      "companyName": "Nama Perusahaan / Bisnis",
+      "contactName": "Nama Kontak Person",
+      "phone": "Nomor Telepon Bisnis",
+      "email": "Alamat Email Bisnis",
+      "desc": "Deskripsi singkat kebutuhan bisnis / produk Anda",
+      "btnSubmit": "Kirim Aplikasi",
+      "successTitle": "Pendaftaran Diterima!",
+      "successDesc": "Terima kasih telah mendaftar. Tim kami akan meninjau profil Anda dan menghubungi Anda dalam 24 jam.",
+      "backButton": "Kembali",
+      "stepLabel": "Langkah {current} dari {total}",
+      "registerAnother": "Daftar Akun Lain",
+      "descPlaceholderSupplier": "Sebutkan produk utama atau pengalaman ekspor Anda...",
+      "descPlaceholderBuyer": "Jelaskan kebutuhan pengadaan atau persyaratan bahan baku Anda..."
+    }
+  }
+}

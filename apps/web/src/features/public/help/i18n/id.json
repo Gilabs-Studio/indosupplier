@@ -1,0 +1,27 @@
+{
+  "public": {
+    "help": {
+      "title": "Pusat Bantuan & Dukungan",
+      "subtitle": "Cari tutorial, panduan, dan hubungi dukungan jika Anda membutuhkan bantuan.",
+      "placeholder": "Cari artikel bantuan, panduan, topik...",
+      "categories": "Kategori Bantuan",
+      "general": "Memulai",
+      "account": "Akun & Keamanan",
+      "supplierHelp": "Panduan Supplier",
+      "buyerHelp": "Panduan Buyer",
+      "payments": "Penagihan & Pembayaran",
+      "popularArticles": "Artikel Populer",
+      "contactUs": "Masih butuh bantuan?",
+      "contactDesc": "Kirim pesan kepada kami dan tim dukungan kami akan segera menghubungi Anda kembali.",
+      "subject": "Subjek",
+      "message": "Detail pertanyaan atau masalah Anda...",
+      "btnSendMessage": "Kirim Pesan",
+      "messageSuccess": "Pesan Anda berhasil dikirim! Kami akan menjawab dalam beberapa jam.",
+      "articlesCount": "{count} artikel",
+      "art1": "Bagaimana cara memverifikasi Profil Supplier saya?",
+      "art2": "Membuat dan Menyiarkan RFQ sebagai Pembeli",
+      "art3": "Memahami Langganan Supplier Premium",
+      "art4": "Mengatur Ulang Kata Sandi Akun & Autentikasi Dua Faktor"
+    }
+  }
+}

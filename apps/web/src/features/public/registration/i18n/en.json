@@ -1,0 +1,29 @@
+{
+  "public": {
+    "register": {
+      "title": "Join Indosupplier Platform",
+      "subtitle": "Select your account type to get started with B2B marketplace.",
+      "joinAs": "I want to join as:",
+      "supplier": "Supplier (Seller)",
+      "supplierDesc": "I want to promote my products, receive RFQs, and sell to business buyers.",
+      "buyer": "Buyer",
+      "buyerDesc": "I want to search for verified suppliers, request quotes, and manage procurement.",
+      "btnNext": "Continue Registration",
+      "formTitleSupplier": "Supplier Registration Details",
+      "formTitleBuyer": "Buyer Registration Details",
+      "companyName": "Company / Business Name",
+      "contactName": "Contact Person Name",
+      "phone": "Business Phone Number",
+      "email": "Business Email Address",
+      "desc": "Short description of your business needs / products",
+      "btnSubmit": "Submit Application",
+      "successTitle": "Application Received!",
+      "successDesc": "Thank you for registering. Our team will review your profile and contact you within 24 hours.",
+      "backButton": "Back",
+      "stepLabel": "Step {current} of {total}",
+      "registerAnother": "Register Another Account",
+      "descPlaceholderSupplier": "List your main products or export experience...",
+      "descPlaceholderBuyer": "Describe your procurement needs or raw material requirements..."
+    }
+  }
+}

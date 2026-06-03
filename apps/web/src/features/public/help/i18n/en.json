@@ -1,0 +1,27 @@
+{
+  "public": {
+    "help": {
+      "title": "Help & Support Center",
+      "subtitle": "Search tutorials, guides, and contact support if you need assistance.",
+      "placeholder": "Search articles, guides, topics...",
+      "categories": "Help Categories",
+      "general": "Getting Started",
+      "account": "Account & Security",
+      "supplierHelp": "Supplier Guides",
+      "buyerHelp": "Buyer Guides",
+      "payments": "Billing & Payments",
+      "popularArticles": "Popular Articles",
+      "contactUs": "Still need help?",
+      "contactDesc": "Send us a message and our support team will get back to you shortly.",
+      "subject": "Subject",
+      "message": "Detail your question or problem...",
+      "btnSendMessage": "Send Message",
+      "messageSuccess": "Your message has been sent successfully! We'll reply within a few hours.",
+      "articlesCount": "{count} articles",
+      "art1": "How to verify my Supplier Profile?",
+      "art2": "Creating and Broadcasting RFQ as a Buyer",
+      "art3": "Understanding Premium Supplier Subscriptions",
+      "art4": "Resetting your Account Password & Two-Factor Authentication"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "public": {
+    "search": {
+      "heroTitle": "Find Verified Indonesian Suppliers",
+      "heroSubtitle": "Connect directly with trusted manufacturers, distributors, and wholesalers across Indonesia.",
+      "placeholder": "Search suppliers by product, industry, or company name...",
+      "regionSelect": "Select Location",
+      "btnSearch": "SEARCH",
+      "filterTitle": "Filters",
+      "filterCategory": "Industry Category",
+      "filterRegion": "Region / Location",
+      "filterCert": "Certifications",
+      "filterVerification": "Verification",
+      "verifiedOnly": "Verified Suppliers Only",
+      "btnApply": "Apply Filters",
+      "btnReset": "Reset All",
+      "resultsCount": "Found {count} matching suppliers",
+      "noResults": "No suppliers found",
+      "noResultsDesc": "Try adjusting your filters or search keywords.",
+      "cardVerified": "Verified Business",
+      "cardProducts": "Key Products:",
+      "cardCertifications": "Certifications:",
+      "btnViewProfile": "View Profile",
+      "btnContact": "Send RFQ",
+      "categoryDiscovery": "Explore Categories",
+      "recentSearch": "Recent Searches",
+      "featuredSuppliers": "Featured Suppliers",
+      "establishedShort": "Est. {year}",
+      "employeeCountShort": "{count} employees"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "public": {
+    "navbar": {
+      "search": "Supplier Search",
+      "categories": "Categories",
+      "help": "Help Center",
+      "faq": "FAQ",
+      "signIn": "Sign In",
+      "register": "Register",
+      "allRegions": "All Regions",
+      "jakarta": "Jakarta",
+      "surabaya": "Surabaya",
+      "bandung": "Bandung",
+      "semarang": "Semarang",
+      "medan": "Medan",
+      "makassar": "Makassar"
+    },
+    "demoHome": {
+      "badge": "B2B Marketplace Portal",
+      "title": "Indonesian Supplier Directory",
+      "subtitle": "Accelerate your sourcing with verified Indonesian manufacturers and suppliers. Request quotes, analyze products, and expand your supply chain.",
+      "btnSearch": "SEARCH SUPPLIERS",
+      "btnRegister": "REGISTER NOW",
+      "verifiedTitle": "Verified Suppliers",
+      "verifiedDesc": "Rigorous verification of legal credentials, factory sites, and export capabilities.",
+      "rfqTitle": "Instant RFQs",
+      "rfqDesc": "Submit quote requests to multiple suppliers in one click. Receive responses within 24h.",
+      "directTitle": "Direct B2B Negotiation",
+      "directDesc": "Cut middlemen cost. Connect directly with authentic Indonesian factories.",
+      "trustTitle": "Backed by Indosupplier Trust System",
+      "nibVerified": "NIB Verified",
+      "factoryInspection": "Factory Inspection",
+      "exportCompliant": "Export Compliant",
+      "secureChat": "Secure Chat",
+      "footerDesc": "The premier B2B marketplace platform connecting verified suppliers and business buyers across Indonesia."
+    }
+  }
+}

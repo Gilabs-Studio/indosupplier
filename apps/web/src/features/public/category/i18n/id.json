@@ -1,0 +1,18 @@
+{
+  "public": {
+    "categories": {
+      "title": "Cari Supplier berdasarkan Kategori",
+      "subtitle": "Temukan produsen dan supplier grosir yang dikelompokkan berdasarkan industri.",
+      "viewSuppliers": "Lihat Supplier",
+      "manufacturing": "Manufaktur & Industri",
+      "agriculture": "Pertanian & Pangan",
+      "textile": "Tekstil & Pakaian",
+      "chemical": "Kimia & Plastik",
+      "furniture": "Mebel & Kerajinan Kayu",
+      "construction": "Konstruksi & Properti",
+      "electronics": "Elektronik & Kelistrikan",
+      "automotive": "Otomotif & Suku Cadang",
+      "countSuffix": "Supplier"
+    }
+  }
+}

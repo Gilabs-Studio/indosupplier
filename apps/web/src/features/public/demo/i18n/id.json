@@ -1,0 +1,38 @@
+{
+  "public": {
+    "navbar": {
+      "search": "Cari Supplier",
+      "categories": "Kategori",
+      "help": "Pusat Bantuan",
+      "faq": "FAQ",
+      "signIn": "Masuk",
+      "register": "Daftar",
+      "allRegions": "Semua Wilayah",
+      "jakarta": "Jakarta",
+      "surabaya": "Surabaya",
+      "bandung": "Bandung",
+      "semarang": "Semarang",
+      "medan": "Medan",
+      "makassar": "Makassar"
+    },
+    "demoHome": {
+      "badge": "Portal Marketplace B2B",
+      "title": "Direktori Supplier Indonesia",
+      "subtitle": "Percepat pengadaan Anda dengan produsen dan supplier terverifikasi di Indonesia. Minta penawaran, analisis produk, dan perluas rantai pasok Anda.",
+      "btnSearch": "CARI SUPPLIER",
+      "btnRegister": "DAFTAR SEKARANG",
+      "verifiedTitle": "Supplier Terverifikasi",
+      "verifiedDesc": "Verifikasi ketat dokumen hukum, lokasi pabrik, dan kapasitas ekspor.",
+      "rfqTitle": "RFQ Instan",
+      "rfqDesc": "Kirim permintaan penawaran ke banyak supplier dalam sekali klik. Terima respons dalam 24 jam.",
+      "directTitle": "Negosiasi B2B Langsung",
+      "directDesc": "Pangkas biaya perantara. Hubungkan langsung dengan pabrik asli Indonesia.",
+      "trustTitle": "Didukung Sistem Kepercayaan Indosupplier",
+      "nibVerified": "Terverifikasi NIB",
+      "factoryInspection": "Inspeksi Pabrik",
+      "exportCompliant": "Kepatuhan Ekspor",
+      "secureChat": "Obrolan Aman",
+      "footerDesc": "Platform marketplace B2B utama yang menghubungkan supplier terverifikasi dengan pembeli bisnis di seluruh Indonesia."
+    }
+  }
+}

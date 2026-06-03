@@ -1,0 +1,16 @@
+{
+  "public": {
+    "faq": {
+      "title": "Tanya Jawab (FAQ)",
+      "subtitle": "Pertanyaan umum sekeliling penggunaan marketplace Indosupplier.",
+      "q1": "Bagaimana Indosupplier memverifikasi supplier?",
+      "a1": "Kami memverifikasi supplier melalui pengecekan izin usaha (NIB, SIUP), pengecekan foto kantor/pabrik, dan dalam beberapa kasus, kunjungan fisik langsung oleh admin sistem. Supplier terverifikasi mendapatkan lencana di profil mereka.",
+      "q2": "Apakah ada biaya untuk menggunakan platform ini?",
+      "a2": "Mencari supplier dan mengirimkan RFQ gratis bagi pembeli. Supplier dapat memilih antara paket gratis dengan listing terbatas atau berlangganan premium yang membuka lencana verifikasi dan visibilitas prioritas.",
+      "q3": "Bagaimana cara mengirim RFQ?",
+      "a3": "Anda dapat mengirim RFQ secara langsung dengan mengunjungi profil supplier dan mengklik tombol 'Kirim RFQ', atau dengan membuat broadcast RFQ dari dashboard buyer Anda.",
+      "q4": "Apakah saya bisa melakukan impor dan ekspor produk?",
+      "a4": "Ya, platform kami dioptimalkan untuk perdagangan lokal Indonesia maupun transaksi ekspor, dengan dukungan verifikasi dokumen internasional."
+    }
+  }
+}

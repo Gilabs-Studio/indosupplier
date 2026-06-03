@@ -1,0 +1,16 @@
+{
+  "public": {
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Common questions about using the Indosupplier marketplace.",
+      "q1": "How does Indosupplier verify suppliers?",
+      "a1": "We verify suppliers through business license checks (NIB, SIUP), office/factory photo checks, and in some cases, system admin physical site visits. Verified suppliers get a badge on their profile.",
+      "q2": "Is there a fee to use the platform?",
+      "a2": "Searching for suppliers and submitting RFQs is free for buyers. Suppliers can choose between a free tier with limited listings or a premium subscription that unlocks verified badges and priority visibility.",
+      "q3": "How do I send an RFQ?",
+      "a3": "You can send a direct RFQ by visiting a supplier's profile and clicking the 'Send RFQ' button, or by creating a broadcast RFQ from your buyer dashboard.",
+      "q4": "Can I import and export products?",
+      "a4": "Yes, our platform is optimized for local Indonesian trade as well as export transactions, supporting international documentation verification."
+    }
+  }
+}

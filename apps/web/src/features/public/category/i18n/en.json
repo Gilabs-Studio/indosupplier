@@ -1,0 +1,18 @@
+{
+  "public": {
+    "categories": {
+      "title": "Browse Suppliers by Category",
+      "subtitle": "Discover manufacturers and wholesale suppliers categorized by industry.",
+      "viewSuppliers": "View Suppliers",
+      "manufacturing": "Manufacturing & Industrial",
+      "agriculture": "Agriculture & Food",
+      "textile": "Textiles & Apparel",
+      "chemical": "Chemicals & Plastics",
+      "furniture": "Furniture & Wood Crafts",
+      "construction": "Construction & Real Estate",
+      "electronics": "Electronics & Electrical",
+      "automotive": "Automotive & Parts",
+      "countSuffix": "Suppliers"
+    }
+  }
+}

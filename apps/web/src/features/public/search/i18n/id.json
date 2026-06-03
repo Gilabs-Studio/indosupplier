@@ -1,0 +1,32 @@
+{
+  "public": {
+    "search": {
+      "heroTitle": "Temukan Supplier Indonesia Terverifikasi",
+      "heroSubtitle": "Terhubung langsung dengan produsen, distributor, dan grosir terpercaya di seluruh Indonesia.",
+      "placeholder": "Cari supplier berdasarkan produk, industri, atau nama perusahaan...",
+      "regionSelect": "Pilih Lokasi",
+      "btnSearch": "CARI",
+      "filterTitle": "Filter",
+      "filterCategory": "Kategori Industri",
+      "filterRegion": "Wilayah / Lokasi",
+      "filterCert": "Sertifikasi",
+      "filterVerification": "Verifikasi",
+      "verifiedOnly": "Hanya Supplier Terverifikasi",
+      "btnApply": "Terapkan Filter",
+      "btnReset": "Reset Semua",
+      "resultsCount": "Menampilkan {count} supplier yang cocok",
+      "noResults": "Supplier tidak ditemukan",
+      "noResultsDesc": "Coba sesuaikan filter Anda atau gunakan kata kunci pencarian yang lain.",
+      "cardVerified": "Bisnis Terverifikasi",
+      "cardProducts": "Produk Utama:",
+      "cardCertifications": "Sertifikasi:",
+      "btnViewProfile": "Lihat Profil",
+      "btnContact": "Kirim RFQ",
+      "categoryDiscovery": "Jelajahi Kategori",
+      "recentSearch": "Pencarian Terakhir",
+      "featuredSuppliers": "Supplier Unggulan",
+      "establishedShort": "Berdiri {year}",
+      "employeeCountShort": "{count} karyawan"
+    }
+  }
+}
