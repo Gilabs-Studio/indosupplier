@@ -23,13 +23,6 @@ RUN CGO_ENABLED=1 GOOS=linux go build \
     -o server \
     ./cmd/api/main.go
 
-RUN CGO_ENABLED=1 GOOS=linux go build \
-    -a \
-    -trimpath \
-    -ldflags="-s -w" \
-    -o seed \
-    ./cmd/tools/seed/main.go
-
 # =========================================================
 # Runtime stage
 # =========================================================
@@ -45,13 +38,12 @@ RUN apk add --no-cache \
 WORKDIR /app
 
 COPY --from=builder /app/server /app/server
-COPY --from=builder /app/seed /app/seed
 
 RUN mkdir -p /app/uploads \
     && chown -R appuser:appgroup /app
 
 USER appuser
 
-EXPOSE 8088
+EXPOSE 8089
 
 CMD ["./server"]
