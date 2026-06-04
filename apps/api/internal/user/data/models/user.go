@@ -13,6 +13,7 @@ type User struct {
 	Password  string         `gorm:"type:varchar(255);not null" json:"-"`
 	Name      string         `gorm:"type:varchar(255);not null;index" json:"name"`
 	AvatarURL string         `gorm:"type:text" json:"avatar_url"`
+	Role      string         `gorm:"type:varchar(30);not null;default:'user';index" json:"role"`
 	Status    string         `gorm:"type:varchar(20);not null;default:'active';index" json:"status"`
 	CreatedAt time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt time.Time      `gorm:"autoUpdateTime;index" json:"updated_at"`
@@ -26,6 +27,9 @@ func (User) TableName() string {
 func (u *User) BeforeCreate(tx *gorm.DB) error {
 	if u.ID == "" {
 		u.ID = uuid.New().String()
+	}
+	if u.Role == "" {
+		u.Role = "user"
 	}
 	return nil
 }

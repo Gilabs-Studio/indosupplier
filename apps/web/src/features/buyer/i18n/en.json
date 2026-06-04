@@ -1,0 +1,139 @@
+{
+  "buyer": {
+    "layout": {
+      "creditLimit": "Sourcing Credit Limit",
+      "buyerAccount": "Buyer Account",
+      "dashboard": "Dashboard",
+      "rfqList": "RFQ List",
+      "wishlist": "Wishlist",
+      "compare": "Compare Suppliers",
+      "profile": "Profile Settings",
+      "support": "Support Center",
+      "active": "Active & Verified",
+      "logout": "Log Out"
+    },
+    "dashboard": {
+      "title": "Sourcing Dashboard",
+      "subtitle": "Manage your requests for quotation (RFQ) and find the best suppliers in one place.",
+      "searchSupplier": "Search Suppliers",
+      "createRfq": "Create New RFQ",
+      "statsActiveRfqs": "Active RFQs",
+      "statsSavedSuppliers": "Saved Suppliers",
+      "statsNotifications": "Unread Notifications",
+      "recentRfqs": "Your Recent RFQs",
+      "allRfqs": "All RFQs",
+      "repliesCount": "{count} offers received",
+      "suggestedTitle": "Verified Supplier Recommendations",
+      "guideTitle": "How sourcing works on IndoSupplier?",
+      "guideStep1Title": "Create RFQ",
+      "guideStep1Desc": "Write a clear description of the materials/products you need, including quantity and target port.",
+      "guideStep2Title": "Receive Quotes",
+      "guideStep2Desc": "Our system broadcasts your RFQ to hundreds of verified suppliers matching your specifications.",
+      "guideStep3Title": "Compare & Deal",
+      "guideStep3Desc": "Evaluate quotes, MOQ, and supplier capabilities directly from your chat inbox."
+    },
+    "bookmarks": {
+      "title": "Supplier Wishlist",
+      "subtitle": "List of suppliers you saved for comparison or future contact.",
+      "compareCount": "Compare ({count}) Suppliers",
+      "emptyTitle": "Wishlist is empty",
+      "emptyDesc": "Search for new suppliers and click the bookmark icon to save them here.",
+      "cardProducts": "Key Products",
+      "compareCheckbox": "Compare",
+      "btnProfile": "Profile",
+      "btnRfq": "RFQ"
+    },
+    "compare": {
+      "title": "Compare Suppliers",
+      "subtitle": "Side-by-side comparison of specifications, MOQ, certifications, and production capacity.",
+      "emptyTitle": "No suppliers to compare",
+      "emptyDesc": "Please search for suppliers or open your Wishlist to choose suppliers to compare.",
+      "btnBack": "Back to Wishlist",
+      "criteria": "Criteria",
+      "rating": "Rating & Reviews",
+      "verification": "Verification Status",
+      "moq": "Minimum Order Quantity (MOQ)",
+      "capacity": "Production Capacity",
+      "response": "Average Response Time",
+      "certifications": "Certifications",
+      "action": "Action",
+      "sendRfq": "Send RFQ"
+    },
+    "rfqList": {
+      "title": "Request for Quotation (RFQ) List",
+      "subtitle": "Monitor request status from various suppliers for your sourcing needs.",
+      "btnCreate": "Create New RFQ",
+      "tabAll": "All RFQs",
+      "tabWaiting": "Waiting for Quotes",
+      "tabReceived": "Offers Received",
+      "tabCompleted": "Completed",
+      "searchPlaceholder": "Search RFQs...",
+      "colId": "ID & Date",
+      "colProduct": "Product / Material",
+      "colQty": "Quantity",
+      "colDestination": "Shipping Destination",
+      "colStatus": "Status",
+      "colAction": "Action",
+      "emptyRfqs": "No RFQs found"
+    },
+    "rfqCreate": {
+      "backLink": "Back to RFQ List",
+      "title": "Create New Request for Quotation (RFQ)",
+      "subtitle": "Describe your B2B sourcing requirements to get official quotations from verified suppliers.",
+      "tipsTitle": "Effective Sourcing Tips",
+      "tipsDesc": "Include technical specs, required certificates (e.g. Halal, SNI, BPOM), and target port to get fast, accurate quotes.",
+      "labelProduct": "Product / Material Name",
+      "required": "required",
+      "placeholderProduct": "e.g., Organic Coconut Sugar, Quartz Mesh 325",
+      "labelCategory": "Industry Category",
+      "labelVolume": "Required Volume",
+      "labelUnit": "Unit",
+      "labelDestination": "Target Port / Shipping Address",
+      "placeholderDestination": "e.g., Tanjung Priok (FOB), Tanjung Perak, or Rotterdam Port (CIF)",
+      "labelDescription": "Detailed Specification Requirements",
+      "placeholderDescription": "Write complete technical specs, desired packaging (bag/drum/bulk), delivery timeline, required test report certificates, etc.",
+      "labelAttachment": "Specification Document Attachment (PDF/DOCX/JPG)",
+      "uploadPlaceholder": "Click to upload or drag & drop laboratory test report (COA) / design files",
+      "uploadLimit": "Max file size: 10MB",
+      "btnCancel": "Cancel",
+      "btnSubmit": "Send & Broadcast RFQ"
+    },
+    "rfqDetail": {
+      "title": "Request for Quotation Details",
+      "subtitle": "View your sourcing specifications and evaluate quotations submitted by suppliers.",
+      "tabQuotes": "Quotations Received ({count})",
+      "tabDetails": "RFQ Specifications",
+      "noQuotes": "No quotations received yet.",
+      "offerPrice": "Quoted Price",
+      "moq": "Supplier MOQ",
+      "btnAccept": "Accept Offer",
+      "btnChat": "Chat Supplier"
+    },
+    "profile": {
+      "title": "Profile Settings",
+      "subtitle": "Manage your personal information, B2B company profile, and settings.",
+      "tabPersonal": "Personal Data",
+      "tabCompany": "Company Profile",
+      "tabDocuments": "Verification Documents",
+      "saveBtn": "Save Settings",
+      "saveSuccess": "Profile updated successfully!"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "subtitle": "Monitor all RFQ updates, new quotations, and supplier chats."
+    },
+    "onboarding": {
+      "title": "Buyer Onboarding",
+      "subtitle": "Complete your B2B profile to start creating sourcing RFQs.",
+      "btnSubmit": "Complete Registration"
+    },
+    "support": {
+      "title": "Support Center",
+      "subtitle": "Need assistance? Submit a support ticket or contact our customer service team.",
+      "btnCreate": "Submit New Ticket",
+      "ticketSubject": "Ticket Subject",
+      "ticketStatus": "Status",
+      "ticketDate": "Date Created"
+    }
+  }
+}

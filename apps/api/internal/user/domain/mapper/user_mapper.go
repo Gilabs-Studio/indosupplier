@@ -19,6 +19,7 @@ func ToUserResponse(u *models.User) *dto.UserResponse {
 		Email:     u.Email,
 		Name:      u.Name,
 		AvatarURL: u.AvatarURL,
+		Role:      u.Role,
 		Status:    u.Status,
 		CreatedAt: u.CreatedAt,
 		UpdatedAt: u.UpdatedAt,

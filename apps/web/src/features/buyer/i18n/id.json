@@ -1,0 +1,139 @@
+{
+  "buyer": {
+    "layout": {
+      "creditLimit": "Limit Kredit Sourcing",
+      "buyerAccount": "Buyer Account",
+      "dashboard": "Dashboard",
+      "rfqList": "Daftar RFQ",
+      "wishlist": "Wishlist",
+      "compare": "Bandingkan Supplier",
+      "profile": "Pengaturan Profil",
+      "support": "Pusat Bantuan",
+      "active": "Aktif & Terverifikasi",
+      "logout": "Log Out"
+    },
+    "dashboard": {
+      "title": "Sourcing Dashboard",
+      "subtitle": "Kelola permintaan penawaran (RFQ) dan temukan supplier terbaik di satu tempat.",
+      "searchSupplier": "Cari Supplier",
+      "createRfq": "Buat RFQ Baru",
+      "statsActiveRfqs": "Active RFQs",
+      "statsSavedSuppliers": "Saved Suppliers",
+      "statsNotifications": "Unread Notifications",
+      "recentRfqs": "RFQ Terbaru Anda",
+      "allRfqs": "Semua RFQ",
+      "repliesCount": "{count} penawaran masuk",
+      "suggestedTitle": "Rekomendasi Supplier Terverifikasi",
+      "guideTitle": "Bagaimana cara kerja sourcing di IndoSupplier?",
+      "guideStep1Title": "Buat RFQ",
+      "guideStep1Desc": "Tulis deskripsi material/produk yang Anda butuhkan secara jelas termasuk kuantitas dan pelabuhan tujuan.",
+      "guideStep2Title": "Dapatkan Penawaran",
+      "guideStep2Desc": "Sistem kami menyebarkan RFQ ke ratusan supplier terverifikasi yang cocok dengan spesifikasi Anda.",
+      "guideStep3Title": "Bandingkan & Deal",
+      "guideStep3Desc": "Evaluasi penawaran harga, MOQ, dan kapabilitas supplier bersangkutan langsung dari chat inbox."
+    },
+    "bookmarks": {
+      "title": "Wishlist Supplier",
+      "subtitle": "Daftar supplier yang Anda simpan untuk perbandingan atau kontak masa depan.",
+      "compareCount": "Bandingkan ({count}) Supplier",
+      "emptyTitle": "Wishlist kosong",
+      "emptyDesc": "Cari supplier baru dan klik ikon bookmark untuk menyimpannya di sini.",
+      "cardProducts": "Produk Utama",
+      "compareCheckbox": "Bandingkan",
+      "btnProfile": "Profil",
+      "btnRfq": "RFQ"
+    },
+    "compare": {
+      "title": "Bandingkan Supplier",
+      "subtitle": "Analisis perbandingan spesifikasi, MOQ, sertifikasi, dan kapasitas produksi secara side-by-side.",
+      "emptyTitle": "Tidak ada supplier untuk dibandingkan",
+      "emptyDesc": "Silakan cari supplier atau buka Wishlist untuk memilih supplier yang ingin dibandingkan.",
+      "btnBack": "Kembali ke Wishlist",
+      "criteria": "Kriteria",
+      "rating": "Rating & Ulasan",
+      "verification": "Verifikasi",
+      "moq": "Minimum Order (MOQ)",
+      "capacity": "Kapasitas Produksi",
+      "response": "Rata-rata Respon",
+      "certifications": "Sertifikasi",
+      "action": "Aksi",
+      "sendRfq": "Kirim RFQ"
+    },
+    "rfqList": {
+      "title": "Daftar Permintaan Penawaran (RFQ)",
+      "subtitle": "Monitor status penawaran dari berbagai supplier untuk kebutuhan pengadaan Anda.",
+      "btnCreate": "Buat RFQ Baru",
+      "tabAll": "Semua RFQ",
+      "tabWaiting": "Menunggu Kutipan",
+      "tabReceived": "Penawaran Masuk",
+      "tabCompleted": "Selesai",
+      "searchPlaceholder": "Cari RFQ...",
+      "colId": "ID & Tanggal",
+      "colProduct": "Produk / Material",
+      "colQty": "Kuantitas",
+      "colDestination": "Tujuan Pengiriman",
+      "colStatus": "Status",
+      "colAction": "Aksi",
+      "emptyRfqs": "Tidak ada RFQ ditemukan"
+    },
+    "rfqCreate": {
+      "backLink": "Kembali ke Daftar RFQ",
+      "title": "Buat Permintaan Penawaran (RFQ) Baru",
+      "subtitle": "Deskripsikan kebutuhan pengadaan B2B Anda untuk mendapatkan kutipan penawaran resmi dari para supplier terverifikasi.",
+      "tipsTitle": "Tips Sourcing Efektif",
+      "tipsDesc": "Tulis spesifikasi teknis, sertifikasi wajib (misal: Halal, SNI, BPOM), dan target pelabuhan tujuan untuk mempercepat supplier memberikan penawaran harga yang akurat.",
+      "labelProduct": "Nama Produk / Material",
+      "required": "wajib",
+      "placeholderProduct": "Contoh: Coconut Sugar Organic Grade, Quartz Mesh 325",
+      "labelCategory": "Kategori Industri",
+      "labelVolume": "Volume Kebutuhan",
+      "labelUnit": "Satuan",
+      "labelDestination": "Pelabuhan Tujuan / Alamat Pengiriman",
+      "placeholderDestination": "Contoh: Tanjung Priok (FOB), Tanjung Perak, atau Rotterdam Port (CIF)",
+      "labelDescription": "Detail Deskripsi Spesifikasi",
+      "placeholderDescription": "Tuliskan spesifikasi teknis lengkap, kemasan yang diinginkan (bag/drum/bulk), jangka waktu pengiriman, sertifikat sertifikasi uji lab yang harus dilampirkan, dll.",
+      "labelAttachment": "Lampiran Dokumen Spesifikasi (PDF/DOCX/JPG)",
+      "uploadPlaceholder": "Klik untuk upload atau drag & drop file spesifikasi uji lab (COA) / desain",
+      "uploadLimit": "Maksimal ukuran file: 10MB",
+      "btnCancel": "Batal",
+      "btnSubmit": "Kirim & Sebarkan RFQ"
+    },
+    "rfqDetail": {
+      "title": "Detail Permintaan Penawaran",
+      "subtitle": "Lihat spesifikasi pengadaan dan evaluasi harga penawaran dari supplier.",
+      "tabQuotes": "Penawaran Masuk ({count})",
+      "tabDetails": "Spesifikasi RFQ",
+      "noQuotes": "Belum ada penawaran resmi yang masuk.",
+      "offerPrice": "Harga Penawaran",
+      "moq": "MOQ Supplier",
+      "btnAccept": "Terima Penawaran",
+      "btnChat": "Chat Supplier"
+    },
+    "profile": {
+      "title": "Pengaturan Profil",
+      "subtitle": "Atur data diri, informasi perusahaan, dan preferensi akun B2B Anda.",
+      "tabPersonal": "Data Pribadi",
+      "tabCompany": "Profil Perusahaan",
+      "tabDocuments": "Dokumen Legalitas",
+      "saveBtn": "Simpan Pengaturan",
+      "saveSuccess": "Profil berhasil disimpan!"
+    },
+    "notifications": {
+      "title": "Notifikasi",
+      "subtitle": "Monitor semua update RFQ, penawaran masuk, dan pesan dari supplier."
+    },
+    "onboarding": {
+      "title": "Onboarding Buyer",
+      "subtitle": "Lengkapi informasi profil B2B Anda untuk langsung mulai membuat RFQ.",
+      "btnSubmit": "Selesaikan Pendaftaran"
+    },
+    "support": {
+      "title": "Pusat Bantuan",
+      "subtitle": "Butuh bantuan? Kirim tiket dukungan atau hubungi tim customer service kami.",
+      "btnCreate": "Kirim Tiket Baru",
+      "ticketSubject": "Subjek Tiket",
+      "ticketStatus": "Status Tiket",
+      "ticketDate": "Tanggal Pembuatan"
+    }
+  }
+}

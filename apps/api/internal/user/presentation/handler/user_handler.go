@@ -28,6 +28,7 @@ func toPresentationUser(u domainDTO.UserResponse) presentationDTO.UserResponseDT
 		Name:      u.Name,
 		Email:     u.Email,
 		AvatarURL: u.AvatarURL,
+		Role:      u.Role,
 		Status:    u.Status,
 		CreatedAt: u.CreatedAt,
 	}
@@ -69,6 +70,9 @@ func (h *UserHandler) List(c *gin.Context) {
 	}
 	if req.Status != "" {
 		meta.Filters["status"] = req.Status
+	}
+	if req.Role != "" {
+		meta.Filters["role"] = req.Role
 	}
 	response.SuccessResponse(c, userDTOs, meta)
 }

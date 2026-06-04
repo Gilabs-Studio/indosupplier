@@ -64,7 +64,7 @@ func NewUserUsecase(
 }
 
 func userListCacheKey(req *dto.ListUsersRequest) string {
-	return fmt.Sprintf("users:list:page:%d:per_page:%d:search:%s:status:%s", req.Page, req.PerPage, req.Search, req.Status)
+	return fmt.Sprintf("users:list:page:%d:per_page:%d:search:%s:role:%s:status:%s", req.Page, req.PerPage, req.Search, req.Role, req.Status)
 }
 
 func userByIDCacheKey(id string) string {
@@ -189,12 +189,17 @@ func (u *userUsecase) Create(ctx context.Context, req *dto.CreateUserRequest) (*
 	if status == "" {
 		status = "active"
 	}
+	role := req.Role
+	if role == "" {
+		role = "user"
+	}
 
 	usr := &models.User{
 		Email:     req.Email,
 		Password:  string(hashedPassword),
 		Name:      req.Name,
 		AvatarURL: "https://api.dicebear.com/7.x/lorelei/svg?seed=" + url.QueryEscape(req.Email),
+		Role:      role,
 		Status:    status,
 	}
 
@@ -245,6 +250,9 @@ func (u *userUsecase) Update(ctx context.Context, id string, req *dto.UpdateUser
 	}
 	if req.Name != "" {
 		usr.Name = req.Name
+	}
+	if req.Role != "" {
+		usr.Role = req.Role
 	}
 	if req.Status != "" {
 		usr.Status = req.Status

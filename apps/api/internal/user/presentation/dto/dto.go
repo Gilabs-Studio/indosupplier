@@ -8,6 +8,7 @@ type UserResponseDTO struct {
 	Name      string    `json:"name"`
 	Email     string    `json:"email"`
 	AvatarURL string    `json:"avatar_url"`
+	Role      string    `json:"role"`
 	Status    string    `json:"status"`
 	CreatedAt time.Time `json:"created_at"`
 }

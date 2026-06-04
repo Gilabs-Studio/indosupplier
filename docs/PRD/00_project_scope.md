@@ -27,9 +27,13 @@ The growth strategy for the supply side is **direct outreach**: the IndoSupplier
 
 ---
 
-## User Types (Roles)
+## User Types (Personas & Roles)
 
-The platform has **three distinct user types**, each with a completely separate interface, dashboard, and feature set.
+A user registers a single account (role: `user`). Every registered user can act as **both a Buyer and a Supplier simultaneously** (Tokopedia/B2B marketplace style), without needing separate accounts.
+
+- **Buyer Persona**: Access search, bookmarking, supplier comparisons, and RFQ sending.
+- **Supplier Persona**: "Open a shop" by creating a Supplier Profile, listing products, and responding to incoming RFQs.
+- **Admin Role**: System administrators with separate management panels and access controls.
 
 ---
 
@@ -80,7 +84,6 @@ An Indonesian company or producer offering products or services to buyers.
 - Upgrade to premium subscription tiers
 
 **What they cannot do:**
-- Access the buyer dashboard or search interface
 - See other suppliers' RFQ conversations
 - See the exact bid amounts of competing suppliers in an auction (only their own rank position)
 

@@ -33,10 +33,17 @@ Prinsip MVP:
 - Password
 - Name
 - AvatarURL
+- Role (varchar(30), default: 'user' - can be 'user', 'admin')
 - Status
 - CreatedAt
 - UpdatedAt
 - DeletedAt
+
+*Relasi:*
+- Has-One `BuyerProfile` (optional, 1:1)
+- Has-One `SupplierProfile` (optional, 1:1)
+- Has-Many `RefreshToken` (1:N)
+- Has-Many `AuditLog` (1:N)
 
 ### WaitingList
 - ID

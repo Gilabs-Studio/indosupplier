@@ -26,6 +26,9 @@ import (
 	"github.com/gilabs/indosupplier/api/internal/core/middleware"
 	"github.com/gilabs/indosupplier/api/internal/core/response"
 	"github.com/gilabs/indosupplier/api/internal/core/storage"
+	platformUsecase "github.com/gilabs/indosupplier/api/internal/platform/domain/usecase"
+	platformHandler "github.com/gilabs/indosupplier/api/internal/platform/presentation/handler"
+	platformRouter "github.com/gilabs/indosupplier/api/internal/platform/presentation/router"
 	refreshTokenRepo "github.com/gilabs/indosupplier/api/internal/refresh_token/data/repositories"
 	refreshTokenWorker "github.com/gilabs/indosupplier/api/internal/refresh_token/worker"
 	sysadminRepo "github.com/gilabs/indosupplier/api/internal/sysadmin/data/repositories"
@@ -134,11 +137,13 @@ func main() {
 
 	sysadminUC := sysadminUsecase.NewSystemAdminUsecase(sysadminRepository, jwtManager)
 	waitingListUC := waitingListUsecase.NewWaitingListUsecase(waitingListRepository)
+	platformUC := platformUsecase.NewPlatformUsecase()
 
 	authH := authHandler.NewAuthHandler(authUC)
 	userH := userHandler.NewUserHandler(userUC)
 	sysadminH := sysadminHandler.NewSystemAdminHandler(sysadminUC, sysadminRepository)
 	waitingListH := waitingListHandler.NewWaitingListHandler(waitingListUC)
+	platformH := platformHandler.NewPlatformHandler(platformUC)
 
 	rtWorker := refreshTokenWorker.NewRefreshTokenCleanupWorker(refreshTokenRepository, 24*time.Hour)
 	rtWorker.Start()
@@ -168,6 +173,7 @@ func main() {
 		userRouter.RegisterUserRoutes(v1, userH, jwtManager)
 		sysadminRouter.RegisterSysadminAuthRoutes(v1, sysadminH, jwtManager, sysadminRepository)
 		waitingListRouter.RegisterWaitingListRoutes(v1, waitingListH, jwtManager, sysadminRepository)
+		platformRouter.RegisterPlatformRoutes(v1, platformH, jwtManager)
 		coreRouter.RegisterUploadRoutes(v1, jwtManager)
 	}
 

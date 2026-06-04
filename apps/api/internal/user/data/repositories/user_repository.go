@@ -64,6 +64,9 @@ func (r *userRepository) List(ctx context.Context, req *dto.ListUsersRequest) ([
 	if req.Status != "" {
 		query = query.Where("users.status = ?", req.Status)
 	}
+	if req.Role != "" {
+		query = query.Where("users.role = ?", req.Role)
+	}
 
 	if err := query.Count(&total).Error; err != nil {
 		return nil, 0, err

@@ -15,6 +15,7 @@ import publicRegisterEn from "@/features/public/registration/i18n/en.json";
 import publicHelpEn from "@/features/public/help/i18n/en.json";
 import publicFaqEn from "@/features/public/faq/i18n/en.json";
 import publicDemoEn from "@/features/public/demo/i18n/en.json";
+import buyerEn from "@/features/buyer/i18n/en.json";
 
 // Feature-level Indonesian translations
 import authId from "@/features/auth/i18n/id.json";
@@ -27,12 +28,14 @@ import publicRegisterId from "@/features/public/registration/i18n/id.json";
 import publicHelpId from "@/features/public/help/i18n/id.json";
 import publicFaqId from "@/features/public/faq/i18n/id.json";
 import publicDemoId from "@/features/public/demo/i18n/id.json";
+import buyerId from "@/features/buyer/i18n/id.json";
 
 const messages = {
   en: {
     ...authEn,
     ...indosupplierEn,
     ...waitingListEn,
+    ...buyerEn,
     public: {
       ...publicSearchEn.public,
       ...publicCategoryEn.public,
@@ -47,6 +50,7 @@ const messages = {
     ...authId,
     ...indosupplierId,
     ...waitingListId,
+    ...buyerId,
     public: {
       ...publicSearchId.public,
       ...publicCategoryId.public,
