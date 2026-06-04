@@ -40,6 +40,7 @@ func CORSMiddleware() gin.HandlerFunc {
 		"https://indosupplier.id",
 		"https://www.indosupplier.id",
 		"https://indosupplier-api-688849728115.asia-southeast2.run.app",
+		"https://api.indosuppliers.com",
 	}
 
 	// Add production origins from environment variable
