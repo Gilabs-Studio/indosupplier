@@ -16,10 +16,10 @@
       "other": "Other Business",
       "phone": "WhatsApp Number (Optional)",
       "phonePlaceholder": "Example: +62 812-3456-7890",
-      "notes": "What specific supplier capabilities do you need? (Optional)",
-      "notesPlaceholder": "Describe the types of products or suppliers you're looking for",
-      "submit": "Request VIP Access Invitation",
-      "submitting": "Submitting Request...",
+      "notes": "What specific features do you need? (Optional)",
+      "notesPlaceholder": "Describe the features you're looking for",
+      "submit": "Join VIP Waitlist",
+      "submitting": "Submitting...",
       "successTitle": "Application Received",
       "successMessage": "Awesome! Your company has been placed on the VIP waitlist. We will verify your business profile and contact you via WhatsApp within 24 hours",
       "errors": {
@@ -35,26 +35,49 @@
   "landing": {
     "nav": {
       "signIn": "Sign In",
-      "earlyAccess": "VIP Access",
+      "earlyAccess": "Free VIP",
       "about": "About Us",
-      "waitlist": "VIP Access"
+      "waitlist": "Free VIP"
     },
     "hero": {
       "badge": "Limited Invitation — Exclusive to the First 50 Companies",
-      "headline": "Find & Buy Directly from the Perfect Supplier for Your Business",
-      "subheadline": "Tired of slow suppliers, marked-up broker prices, or struggling to find a compatible partner? IndoSupplier instantly matches your specific criteria with primary manufacturers. Buy direct, save more, and pay zero commission fees",
-      "cta": "Secure Your Business's VIP Spot",
+      "headline": "Discover Verified Indonesian Suppliers",
+      "title": "Connecting the <brHidden></brHidden> World with <br></br> <spanClass>Indonesian Suppliers</spanClass> <br></br> Trusted & Verified",
+      "subheadline": "Find quality manufacturers, exporters, and suppliers from all over Indonesia. Verified, reliable, and ready to support your business to the next level.",
+      "cta": "Join VIP Waitlist",
       "ctaSecondary": "Learn More",
-      "trustLabel": "Joined by 200+ business owners & managing directors",
+      "trustLabel": "",
+      "searchPlaceholder": "Search products, categories, or suppliers...",
+      "searchSelect": "All Indonesia",
+      "searchButton": "SEARCH",
+      "badges": {
+        "verified": "Verified Suppliers",
+        "secure": "Secure Trading",
+        "direct": "Direct Export",
+        "certifications": "Certifications"
+      },
       "stats": {
-        "users": "Joined Companies",
-        "modules": "Primary Manufacturers",
-        "uptime": "Perfect Match Rate"
+        "verifiedTitle": "100% Verified",
+        "verifiedDesc": "Suppliers undergo strict verification",
+        "secureTitle": "Secure Transactions",
+        "secureDesc": "Safe and protected payment systems",
+        "supportTitle": "24/7 Support",
+        "supportDesc": "Our support team is ready to help anytime"
       }
     },
     "features": {
       "badge": "The Problems We Solve",
       "headline": "Make supplier sourcing instant and hassle-free",
+      "summary": "From first contact to verified purchase, we collapse the slowest parts of sourcing into one clear workflow.",
+      "stats": {
+        "direct": "Direct pricing",
+        "speed": "Shortlist in minutes",
+        "trust": "Verified partners"
+      },
+      "panel": {
+        "title": "One workflow, fewer handoffs",
+        "description": "Every step is shaped to reduce broker dependency, speed up selection, and make trust visible before the first message is sent."
+      },
       "items": {
         "erp": {
           "title": "Direct Purchasing",

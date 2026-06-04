@@ -106,7 +106,7 @@ func shouldSkipCSRFMiddleware(c *gin.Context, path string) bool {
 	}
 
 	// System admin login is pre-session and does not require CSRF.
-	if path == "/api/v1/sysadmin/auth/login" {
+	if path == "/api/v1/sysadmin/auth/login" || path == "/api/v1/sysadmin/auth/logout" {
 		return true
 	}
 

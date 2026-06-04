@@ -1,162 +1,175 @@
 import React from "react";
 import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/routing";
+import Image from "next/image";
 import WaitingListForm from "@/features/waiting-list/components/waiting-list-form";
-import LanguageSwitcher from "@/components/navigation/language-switcher";
-import { Button } from "@/components/ui/button";
+import { Header } from "@/components/navigation/header";
 import { ScrollTextReveal } from "@/components/motion";
+import { RainbowButton } from "@/components/ui/rainbow-button";
+import { ShieldCheck, Lock, Headset } from "lucide-react";
 
 
 export default async function LandingPage({
   params,
-}: {
+}: Readonly<{
   params: Promise<{ locale: string }>;
-}) {
+}>) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "landing" });
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-jost antialiased selection:bg-primary selection:text-primary-foreground">
+    <div className="min-h-screen bg-[#1a1a1a] text-[#ffffff] font-jost antialiased">
       {/* ── Navigation Header ── */}
-      <header className="w-full py-6 px-6 md:px-16 lg:px-24 z-50">
-        <div className="max-w-[1400px] mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="IndoSupplier Logo" className="h-6 w-auto object-contain" />
-            <span className="font-normal text-[15px] tracking-widest uppercase text-foreground">
-              IndoSupplier
-            </span>
-          </div>
+      <Header locale={locale} />
 
-          {/* Center menu links */}
-          <div className="hidden md:flex items-center gap-12 text-[12px] tracking-widest uppercase font-light text-muted-foreground">
-            <a href="#features" className="hover:text-foreground transition-colors">
-              {t("features.badge")}
-            </a>
-            <a href="#about" className="hover:text-foreground transition-colors">
-              {t("nav.about")}
-            </a>
-            <a href="#join" className="hover:text-foreground transition-colors">
-              {t("nav.waitlist")}
-            </a>
-          </div>
-
-          {/* Right menu actions */}
-          <div className="flex items-center gap-6 text-[12px] font-medium tracking-widest uppercase">
-            <LanguageSwitcher currentLocale={locale} />
-            <Link
-              href="/login"
-              className="hover:underline text-foreground"
-            >
-              {t("nav.signIn")}
-            </Link>
-          </div>
+      {/* ── SECTION 1: HERO ── */}
+      <section
+        className="relative flex min-h-svh items-center justify-start overflow-visible bg-[#1a1a1a] px-6 md:px-16 lg:px-24 pt-28 pb-20 md:pt-32 md:pb-20"
+      >
+        <div aria-hidden className="absolute inset-0">
+          {/* Progressive top/bottom fade of the background image */}
+          <div
+            className="absolute inset-0 bg-position-[35%_center] md:bg-right-center bg-cover bg-no-repeat opacity-95 transition-opacity duration-500"
+            style={{
+              backgroundImage: "url('/hero.png')",
+              maskImage: "linear-gradient(to bottom, transparent 0%, black 12%, black 90%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 12%, black 90%, transparent 100%)"
+            }}
+          />
+          {/* Graduated background tint overlay for maximum text readability */}
+          <div className="absolute inset-0 bg-linear-to-r from-[#1a1a1a]/95 via-[#1a1a1a]/80 to-transparent md:from-[#1a1a1a]/90 md:via-[#1a1a1a]/55 md:to-transparent" />
         </div>
-      </header>
 
-      {/* ── SECTION 1: HERO (Full Viewport Height) ── */}
-      <section className="min-h-[calc(100vh-80px)] flex items-center px-6 md:px-16 lg:px-24 py-12 md:py-20 relative">
-        <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          {/* Hero Content Left */}
-          <div className="lg:col-span-7 flex flex-col justify-center">
-            {/* Main Headline */}
-            <h1
-              className="font-light leading-[1.08] tracking-[-0.04em] text-foreground mb-8 max-w-[850px] animate-fade-in"
-              style={{ fontSize: "clamp(2.8rem, 5.5vw, 4.8rem)" }}
-            >
-              {t("hero.headline")}
+        <div className="relative z-10 w-full max-w-[1400px] mx-auto flex flex-col justify-center items-start">
+          <div className="max-w-2xl text-left relative isolate">
+            {/* Title with distinct typography highlighting */}
+            <h1 className="mb-5 font-sans text-[36px] sm:text-[48px] md:text-[56px] lg:text-[66px] font-bold leading-[1.1] tracking-[-0.03em] text-[#E2E8F0] animate-fade-in">
+              {t.rich("hero.title", {
+                br: () => <br />,
+                brHidden: () => <br className="hidden sm:inline" />,
+                spanClass: (chunks) => (
+                  <span className="font-macondo inline-block bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent font-medium">
+                    {chunks}
+                  </span>
+                ),
+              })}
             </h1>
 
-            {/* Subheadline */}
-            <p className="text-[17px] md:text-[19px] font-light leading-relaxed text-muted-foreground max-w-[580px] mb-12 animate-slide-up">
+            {/* Subheadline copy */}
+            <p className="mb-8 max-w-xl text-[15px] sm:text-[16px] md:text-[17px] font-normal leading-relaxed text-neutral-400 animate-slide-up">
               {t("hero.subheadline")}
             </p>
 
-            {/* Call to action */}
-            <div className="flex flex-wrap items-center gap-8 animate-slide-up">
-              <Button variant="cta" asChild>
+            {/* CTA Button container */}
+            <div className="relative z-20 flex justify-start gap-8 animate-slide-up delay-100">
+              <RainbowButton
+                asChild
+                size="lg"
+                className="text-[13px] font-semibold tracking-widest transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                style={{
+                  background: "linear-gradient(hsl(0 0% 100%),hsl(0 0% 100%)),linear-gradient(hsl(0 0% 100%) 50%,color-mix(in srgb,hsl(0 0% 100%) 60%,transparent) 80%,transparent),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))",
+                  color: "#1a1a1a"
+                }}
+              >
                 <a href="#join">
                   {t("hero.cta")}
                 </a>
-              </Button>
-              <span className="text-[13px] tracking-wider uppercase font-light text-muted-foreground">
-                {t("hero.trustLabel")}
-              </span>
+              </RainbowButton>
             </div>
-          </div>
 
-          {/* Hero Visual Right */}
-          <div className="lg:col-span-5 flex justify-center animate-fade-in">
-            <img
-              src="/hero2.png"
-              alt="IndoSupplier Platform Visual"
-              className="w-full h-auto object-contain rounded-md"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ── SECTION 2: FEATURES / CAPABILITIES ── */}
-      <section id="features" className="px-6 md:px-16 lg:px-24 py-20 md:py-28 bg-secondary/35 border-t border-border/40">
-        <div className="max-w-[1400px] w-full mx-auto">
-          <div className="mb-16">
-            <span className="text-[11px] uppercase tracking-widest font-medium text-muted-foreground block mb-3">
-              {t("features.badge")}
-            </span>
-            <h2 className="text-[28px] md:text-[36px] font-light tracking-tight text-foreground">
-              {t("features.headline")}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                key: "erp",
-                label: t("features.items.erp.title"),
-                desc: t("features.items.erp.desc"),
-              },
-              {
-                key: "crm",
-                label: t("features.items.crm.title"),
-                desc: t("features.items.crm.desc"),
-              },
-              {
-                key: "finance",
-                label: t("features.items.finance.title"),
-                desc: t("features.items.finance.desc"),
-              },
-            ].map((card, idx) => (
-              <div
-                key={card.key}
-                className="bg-card/50 border border-border/50 p-8 rounded-lg hover:bg-card hover:border-border transition-all duration-300 flex flex-col justify-between min-h-[200px]"
-              >
-                <span className="text-[12px] uppercase tracking-wider font-light text-muted-foreground/60">
-                  0{idx + 1}
-                </span>
-                <div className="mt-12">
-                  <h3 className="text-[18px] font-normal text-foreground mb-3">
-                    {card.label}
-                  </h3>
-                  <p className="text-[14px] font-light leading-relaxed text-muted-foreground">
-                    {card.desc}
+            {/* Stats container using separator styling */}
+            <div className="mt-10 p-4 sm:p-5 bg-neutral-900/40 backdrop-blur-md border border-neutral-800/60 rounded-[14px] flex flex-col md:flex-row items-stretch gap-6 md:gap-4 max-w-3xl text-left animate-slide-up delay-200">
+              {/* Item 1 */}
+              <div className="flex items-start gap-3 flex-1">
+                <div className="p-2 bg-neutral-800 text-[#FFB300] shrink-0 mt-0.5">
+                  <ShieldCheck className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-semibold text-neutral-200 leading-snug">
+                    {t("hero.stats.verifiedTitle")}
+                  </h4>
+                  <p className="text-[11px] sm:text-xs text-neutral-400 font-normal leading-normal mt-0.5">
+                    {t("hero.stats.verifiedDesc")}
                   </p>
                 </div>
               </div>
-            ))}
+
+              {/* Separator */}
+              <div className="hidden md:block w-px bg-neutral-800 self-stretch my-1" />
+
+              {/* Item 2 */}
+              <div className="flex items-start gap-3 flex-1">
+                <div className="p-2 bg-neutral-800 text-[#FFB300] shrink-0 mt-0.5">
+                  <Lock className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-semibold text-neutral-200 leading-snug">
+                    {t("hero.stats.secureTitle")}
+                  </h4>
+                  <p className="text-[11px] sm:text-xs text-neutral-400 font-normal leading-normal mt-0.5">
+                    {t("hero.stats.secureDesc")}
+                  </p>
+                </div>
+              </div>
+
+              {/* Separator */}
+              <div className="hidden md:block w-px bg-neutral-800 self-stretch my-1" />
+
+              {/* Item 3 */}
+              <div className="flex items-start gap-3 flex-1">
+                <div className="p-2 bg-neutral-800 text-[#FFB300] shrink-0 mt-0.5">
+                  <Headset className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs sm:text-sm font-semibold text-neutral-200 leading-snug">
+                    {t("hero.stats.supportTitle")}
+                  </h4>
+                  <p className="text-[11px] sm:text-xs text-neutral-400 font-normal leading-normal mt-0.5">
+                    {t("hero.stats.supportDesc")}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      {/* ── SECTION 2: FEATURES / CAPABILITIES ── */}
+      <section id="features" className="px-6 md:px-16 lg:px-24 pt-32 pb-20 md:pt-40 md:pb-28 bg-[#262626]/[0.08] border-t border-[#333333]/30">
+        <div className="max-w-[1400px] w-full mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="lg:col-span-7">
+              <span className="text-[11px] tracking-widest font-macondo font-medium inline-block bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent mb-4">
+                {t("features.badge")}
+              </span>
+              <h2
+                className="font-light leading-[1.2] tracking-[-0.03em] max-w-[720px] text-[#ffffff]"
+                style={{ fontSize: "clamp(2rem, 4.5vw, 3.4rem)" }}
+              >
+                {t("features.headline")}
+              </h2>
+            </div>
+
+            <div className="lg:col-span-5 lg:pl-10">
+              <p className="text-[16px] font-light leading-relaxed text-[#a6a6a6]/80 mt-4">
+                {t("features.summary")}
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── SECTION 3: ABOUT / PHILOSOPHY ── */}
-      <section id="about" className="min-h-screen flex items-center px-6 md:px-16 lg:px-24 py-20 bg-primary text-primary-foreground relative overflow-hidden">
+      <section id="about" className="min-h-screen flex items-center px-6 md:px-16 lg:px-24 py-20 bg-[#ffffff] text-[#1a1a1a] relative overflow-hidden">
         <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Left Column: Huge typography statement */}
           <div className="lg:col-span-8 flex flex-col justify-between">
             <div>
-              <span className="text-[11px] uppercase tracking-widest font-medium text-primary-foreground/60 block mb-8">
+              <span className="text-[11px] tracking-widest font-macondo font-medium inline-block bg-linear-to-r from-[#E27D18] to-[#E27D18] bg-clip-text text-transparent mb-8">
                 {t("philosophy.title")}
               </span>
               <h2
-                className="font-light leading-[1.2] tracking-[-0.03em] max-w-[720px] text-primary-foreground"
+                className="font-light leading-[1.2] tracking-[-0.03em] max-w-[720px] text-[#1a1a1a]"
                 style={{ fontSize: "clamp(2rem, 4.5vw, 3.4rem)" }}
               >
                 <ScrollTextReveal text={t("philosophy.quote")} />
@@ -166,11 +179,11 @@ export default async function LandingPage({
 
           {/* Right Column: Detailed narrative */}
           <div className="lg:col-span-4 lg:pl-8 flex flex-col justify-end">
-            <p className="text-[16px] font-light leading-relaxed text-primary-foreground/80 mb-8">
+            <p className="text-[16px] font-light leading-relaxed text-[#1a1a1a]/80 mb-8">
               {t("philosophy.description")}
             </p>
-            <div className="h-px bg-primary-foreground/20 w-full mb-8" />
-            <div className="flex justify-between items-center text-[13px] uppercase tracking-wider font-light text-primary-foreground/75">
+            <div className="h-px bg-[#1a1a1a]/20 w-full mb-8" />
+            <div className="flex justify-between items-center text-[13px] tracking-wider font-light text-[#1a1a1a]/75">
               <span>Optimized for Indonesia</span>
               <span>EST. 2026</span>
             </div>
@@ -179,25 +192,39 @@ export default async function LandingPage({
       </section>
 
       {/* ── SECTION 4: WAITING LIST / CONVERSION ── */}
-      <section id="join" className="px-6 md:px-16 lg:px-24 py-20 md:py-28 bg-secondary">
-        <div className="max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <section id="join" className="relative px-6 md:px-16 lg:px-24 py-20 md:py-28 bg-[#1a1a1a] overflow-hidden border-t border-[#333333]/30">
+        <div aria-hidden className="absolute inset-0">
+          {/* Progressive top/bottom fade of the background image */}
+          <div
+            className="absolute inset-0 bg-cover bg-no-repeat opacity-35 transition-opacity duration-500 bg-[position:65%_center] md:bg-right-center"
+            style={{
+              backgroundImage: "url('/waitlist_bg.png')",
+              maskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)"
+            }}
+          />
+          {/* Graduated background tint overlay for maximum text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a]/98 via-[#1a1a1a]/90 to-[#1a1a1a]/50 md:from-[#1a1a1a]/95 md:via-[#1a1a1a]/80 md:to-[#1a1a1a]/30" />
+        </div>
+
+        <div className="relative z-10 max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           {/* Left Column */}
           <div>
-            <span className="text-[11px] uppercase tracking-widest font-medium text-muted-foreground block mb-6">
+            <span className="text-[11px] tracking-widest font-macondo font-medium inline-block bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent mb-6">
               {t("waitlist.badge")}
             </span>
             <h2
-              className="font-light leading-[1.08] tracking-[-0.04em] text-foreground mb-6"
+              className="font-light leading-[1.08] tracking-[-0.04em] text-[#ffffff] mb-6"
               style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)" }}
             >
               {t("waitlist.headline")}
             </h2>
-            <p className="text-[17px] font-light leading-relaxed text-muted-foreground mb-12 max-w-[500px]">
+            <p className="text-[17px] font-light leading-relaxed text-[#a6a6a6] mb-12 max-w-[500px]">
               {t("waitlist.subheadline")}
             </p>
 
             {/* Structured list in grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-[14px] font-light text-muted-foreground border-t border-border/80 pt-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-[14px] font-light text-[#a6a6a6] border-t border-[#333333]/80 pt-8">
               {[
                 t("waitlist.benefits.discount"),
                 t("waitlist.benefits.onboarding"),
@@ -206,7 +233,7 @@ export default async function LandingPage({
               ].map((benefit, idx) => (
                 <div key={idx} className="flex gap-3 items-start">
                   <svg
-                    className="h-5 w-5 text-foreground shrink-0 mt-0.5"
+                    className="h-5 w-5 text-[#ffffff] shrink-0 mt-0.5"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -214,7 +241,7 @@ export default async function LandingPage({
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
-                  <p className="leading-relaxed text-muted-foreground">{benefit}</p>
+                  <p className="leading-relaxed text-[#a6a6a6]">{benefit}</p>
                 </div>
               ))}
             </div>
@@ -228,18 +255,24 @@ export default async function LandingPage({
       </section>
 
       {/* ── Footer ── */}
-      <footer className="py-12 px-6 md:px-16 lg:px-24 border-t border-border bg-background">
-        <div className="max-w-[1400px] w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-[13px] font-light text-muted-foreground">
+      <footer className="py-3 px-6 md:px-16 lg:px-24 border-t border-[#333333] bg-[#1a1a1a]">
+        <div className="max-w-[1400px] w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-[13px] font-light text-[#a6a6a6]">
           <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="IndoSupplier Logo" className="h-5 w-auto object-contain" />
-            <span className="font-normal tracking-widest uppercase text-foreground text-[13px]">
+            <Image
+              src="/logo.png"
+              alt="IndoSupplier Logo"
+              width={120}
+              height={24}
+              className="h-5 w-auto object-contain"
+            />
+            <span className="font-normal tracking-widest text-[#ffffff] text-[13px]">
               IndoSupplier
             </span>
           </div>
           <span>
             {t("footer.copy", { year: new Date().getFullYear() })}
           </span>
-          <span className="uppercase tracking-wider text-muted-foreground/80">
+          <span className="tracking-wider text-[#a6a6a6]/80">
             {t("footer.tagline")}
           </span>
         </div>
