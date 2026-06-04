@@ -41,6 +41,7 @@ func CORSMiddleware() gin.HandlerFunc {
 		"https://www.indosupplier.id",
 		"https://indosupplier-api-688849728115.asia-southeast2.run.app",
 		"https://api.indosuppliers.com",
+		"https://indosupplier-web.vercel.app"
 	}
 
 	// Add production origins from environment variable
