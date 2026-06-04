@@ -13,6 +13,7 @@ import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { RainbowButton } from "@/components/ui/rainbow-button";
 
 const getWaitlistSchema = (t: (key: string) => string) =>
   z.object({
@@ -159,7 +160,7 @@ export default function WaitingListForm() {
       />
 
       {/* The card container */}
-      <div className="relative z-10 bg-card p-4 md:p-6 border border-border rounded-lg shadow-xs w-full">
+      <div className="relative z-10 bg-[#1f1f1f] p-4 md:p-6 border border-[#333333] rounded-lg shadow-xs w-full">
         <div className="w-full font-jost">
           <AnimatePresence mode="wait">
             {!isSuccess ? (
@@ -179,6 +180,7 @@ export default function WaitingListForm() {
                       type="text"
                       placeholder={t("form.namePlaceholder")}
                       {...register("name")}
+                      className="border-[#333333] bg-[#1a1a1a] text-[#ffffff] placeholder:text-[#a6a6a6] focus-visible:border-[#ffffff] focus-visible:ring-[#ffffff] group-data-[invalid=true]/field:border-[#ef4444] group-data-[invalid=true]/field:focus-visible:ring-[#ef4444]"
                     />
                     {errors.name && (
                       <FieldError>{errors.name.message}</FieldError>
@@ -192,6 +194,7 @@ export default function WaitingListForm() {
                       type="email"
                       placeholder={t("form.emailPlaceholder")}
                       {...register("email")}
+                      className="border-[#333333] bg-[#1a1a1a] text-[#ffffff] placeholder:text-[#a6a6a6] focus-visible:border-[#ffffff] focus-visible:ring-[#ffffff] group-data-[invalid=true]/field:border-[#ef4444] group-data-[invalid=true]/field:focus-visible:ring-[#ef4444]"
                     />
                     {errors.email && (
                       <FieldError>{errors.email.message}</FieldError>
@@ -206,6 +209,7 @@ export default function WaitingListForm() {
                         type="text"
                         placeholder={t("form.companyNamePlaceholder")}
                         {...register("company_name")}
+                        className="border-[#333333] bg-[#1a1a1a] text-[#ffffff] placeholder:text-[#a6a6a6] focus-visible:border-[#ffffff] focus-visible:ring-[#ffffff] group-data-[invalid=true]/field:border-[#ef4444] group-data-[invalid=true]/field:focus-visible:ring-[#ef4444]"
                       />
                       {errors.company_name && (
                         <FieldError>{errors.company_name.message}</FieldError>
@@ -217,13 +221,13 @@ export default function WaitingListForm() {
                       <div className="relative">
                         <select
                           {...register("company_type")}
-                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 group-data-[invalid=true]/field:border-destructive group-data-[invalid=true]/field:focus-visible:ring-destructive appearance-none bg-transparent"
+                          className="flex h-10 w-full rounded-md border border-[#333333] bg-[#1a1a1a] text-[#ffffff] px-3 py-2 text-sm focus-visible:outline-none focus-visible:border-[#ffffff] focus-visible:ring-1 focus-visible:ring-[#ffffff] disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 group-data-[invalid=true]/field:border-[#ef4444] group-data-[invalid=true]/field:focus-visible:ring-[#ef4444] appearance-none"
                         >
                           <option value="supplier">{t("form.supplier")}</option>
                           <option value="buyer">{t("form.buyer")}</option>
                           <option value="other">{t("form.other")}</option>
                         </select>
-                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-muted-foreground">
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[#a6a6a6]">
                           <svg className="fill-current h-4 w-4" viewBox="0 0 20 20">
                             <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                           </svg>
@@ -242,6 +246,7 @@ export default function WaitingListForm() {
                       type="text"
                       placeholder={t("form.phonePlaceholder")}
                       {...register("phone")}
+                      className="border-[#333333] bg-[#1a1a1a] text-[#ffffff] placeholder:text-[#a6a6a6] focus-visible:border-[#ffffff] focus-visible:ring-[#ffffff]"
                     />
                   </Field>
 
@@ -252,19 +257,23 @@ export default function WaitingListForm() {
                       rows={3}
                       placeholder={t("form.notesPlaceholder")}
                       {...register("notes")}
-                      className="resize-none"
+                      className="border-[#333333] bg-[#1a1a1a] text-[#ffffff] placeholder:text-[#a6a6a6] focus-visible:border-[#ffffff] focus-visible:ring-[#ffffff] resize-none"
                     />
                   </Field>
 
                   {/* Submit button */}
-                  <Button
+                  <RainbowButton
                     type="submit"
                     disabled={isSubmitting}
-                    variant="cta"
-                    className="w-full"
+                    size="lg"
+                    className="w-full text-sm font-semibold tracking-widest transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                    style={{
+                      background: "linear-gradient(hsl(0 0% 100%),hsl(0 0% 100%)),linear-gradient(hsl(0 0% 100%) 50%,color-mix(in srgb,hsl(0 0% 100%) 60%,transparent) 80%,transparent),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))",
+                      color: "#1a1a1a"
+                    }}
                   >
                     {isSubmitting ? t("form.submitting") : t("form.submit")}
-                  </Button>
+                  </RainbowButton>
                 </form>
               </motion.div>
             ) : (
@@ -274,16 +283,16 @@ export default function WaitingListForm() {
                 animate={{ opacity: 1 }}
                 className="text-center py-12"
               >
-                <h3 className="text-[24px] font-normal text-foreground mb-4 tracking-tight">
+                <h3 className="text-[24px] font-normal text-[#ffffff] mb-4 tracking-tight">
                   {t("form.successTitle")}
                 </h3>
-                <p className="text-[15px] font-light text-muted-foreground leading-relaxed max-w-sm mx-auto mb-8">
+                <p className="text-[15px] font-light text-[#a6a6a6] leading-relaxed max-w-sm mx-auto mb-8">
                   {t("form.successMessage")}
                 </p>
                 <Button
                   onClick={() => setIsSuccess(false)}
                   variant="outline"
-                  className="px-6 py-3 text-[13px] uppercase tracking-wider cursor-pointer"
+                  className="px-6 py-3 text-[13px] tracking-wider cursor-pointer border-[#333333] bg-[#1a1a1a] text-[#ffffff] hover:bg-[#262626] hover:text-[#ffffff]"
                 >
                   {t("title")}
                 </Button>

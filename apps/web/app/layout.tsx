@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Sora, Newsreader, Jost } from "next/font/google";
+import { Geist, Geist_Mono, Sora, Newsreader, Jost, Macondo } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { getLanguageAlternates } from "@/lib/seo";
 import type { Locale } from "@/types/locale";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,13 @@ const jostFont = Jost({
   variable: "--font-jost",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
+  display: "swap",
+});
+
+const macondoFont = Macondo({
+  variable: "--font-macondo",
+  subsets: ["latin"],
+  weight: ["400"],
   display: "swap",
 });
 
@@ -151,7 +159,7 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <head />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${headingFont.variable} ${accentFont.variable} ${jostFont.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${headingFont.variable} ${accentFont.variable} ${jostFont.variable} ${macondoFont.variable} antialiased`}
       >
         {children}
       </body>

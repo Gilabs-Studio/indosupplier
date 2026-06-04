@@ -79,7 +79,7 @@ export const useSysadminStore = create<SysadminStore>()((set, get) => ({
         isLoading: false,
       });
       return admin;
-    } catch (err: any) {
+    } catch {
       set({
         admin: null,
         isAuthenticated: false,
