@@ -7,6 +7,15 @@ import { ScrollTextReveal } from "@/components/motion";
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { ShieldCheck, Lock, Headset } from "lucide-react";
 
+const heroTitleFormats = {
+  br: () => <br />,
+  brHidden: () => <br className="hidden sm:inline" />,
+  spanClass: (chunks: React.ReactNode) => (
+    <span className="font-macondo inline-block bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent font-medium">
+      {chunks}
+    </span>
+  ),
+};
 
 export default async function LandingPage({
   params,
@@ -40,18 +49,10 @@ export default async function LandingPage({
         </div>
 
         <div className="relative z-10 w-full max-w-[1400px] mx-auto flex flex-col justify-center items-start">
-          <div className="max-w-2xl text-left relative isolate">
+          <div className="max-w-3xl text-left relative isolate">
             {/* Title with distinct typography highlighting */}
-            <h1 className="mb-5 font-sans text-[36px] sm:text-[48px] md:text-[56px] lg:text-[66px] font-bold leading-[1.1] tracking-[-0.03em] text-[#E2E8F0] animate-fade-in">
-              {t.rich("hero.title", {
-                br: () => <br />,
-                brHidden: () => <br className="hidden sm:inline" />,
-                spanClass: (chunks) => (
-                  <span className="font-macondo inline-block bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent font-medium">
-                    {chunks}
-                  </span>
-                ),
-              })}
+            <h1 className="mb-5 font-sans text-[47px] sm:text-[62px] md:text-[73px] lg:text-[86px] font-bold leading-[1.1] tracking-[-0.03em] text-[#E2E8F0] animate-fade-in">
+              {t.rich("hero.title", heroTitleFormats)}
             </h1>
 
             {/* Subheadline copy */}
@@ -64,69 +65,69 @@ export default async function LandingPage({
               <RainbowButton
                 asChild
                 size="lg"
-                className="text-[13px] font-semibold tracking-widest transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                className="text-[13px] font-semibold tracking-widest transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-lg hover:shadow-primary/30 cursor-pointer"
                 style={{
                   background: "linear-gradient(hsl(0 0% 100%),hsl(0 0% 100%)),linear-gradient(hsl(0 0% 100%) 50%,color-mix(in srgb,hsl(0 0% 100%) 60%,transparent) 80%,transparent),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))",
                   color: "#1a1a1a"
                 }}
               >
-                <a href="#join">
+                <a href="#join" className="cursor-pointer">
                   {t("hero.cta")}
                 </a>
               </RainbowButton>
             </div>
+          </div>
 
-            {/* Stats container using separator styling */}
-            <div className="mt-10 p-4 sm:p-5 bg-neutral-900/40 backdrop-blur-md border border-neutral-800/60 rounded-[14px] flex flex-col md:flex-row items-stretch gap-6 md:gap-4 max-w-3xl text-left animate-slide-up delay-200">
-              {/* Item 1 */}
-              <div className="flex items-start gap-3 flex-1">
-                <div className="p-2 bg-neutral-800 text-[#FFB300] shrink-0 mt-0.5">
-                  <ShieldCheck className="h-5 w-5" />
-                </div>
-                <div>
-                  <h4 className="text-xs sm:text-sm font-semibold text-neutral-200 leading-snug">
-                    {t("hero.stats.verifiedTitle")}
-                  </h4>
-                  <p className="text-[11px] sm:text-xs text-neutral-400 font-normal leading-normal mt-0.5">
-                    {t("hero.stats.verifiedDesc")}
-                  </p>
-                </div>
+          {/* Stats container using separator styling */}
+          <div className="mt-10 p-4 sm:p-5 bg-neutral-900/40 backdrop-blur-md border border-neutral-800/60 rounded-[14px] flex flex-col md:flex-row items-stretch gap-6 md:gap-4 w-full max-w-3xl text-left animate-slide-up delay-200">
+            {/* Item 1 */}
+            <div className="flex items-start gap-3 flex-1">
+              <div className="p-2 bg-neutral-800 text-[#FFB300] shrink-0 mt-0.5 rounded-lg">
+                <ShieldCheck className="h-5 w-5" />
               </div>
-
-              {/* Separator */}
-              <div className="hidden md:block w-px bg-neutral-800 self-stretch my-1" />
-
-              {/* Item 2 */}
-              <div className="flex items-start gap-3 flex-1">
-                <div className="p-2 bg-neutral-800 text-[#FFB300] shrink-0 mt-0.5">
-                  <Lock className="h-5 w-5" />
-                </div>
-                <div>
-                  <h4 className="text-xs sm:text-sm font-semibold text-neutral-200 leading-snug">
-                    {t("hero.stats.secureTitle")}
-                  </h4>
-                  <p className="text-[11px] sm:text-xs text-neutral-400 font-normal leading-normal mt-0.5">
-                    {t("hero.stats.secureDesc")}
-                  </p>
-                </div>
+              <div>
+                <h4 className="text-xs sm:text-sm font-semibold text-neutral-200 leading-snug">
+                  {t("hero.stats.verifiedTitle")}
+                </h4>
+                <p className="text-[11px] sm:text-xs text-neutral-400 font-normal leading-normal mt-0.5">
+                  {t("hero.stats.verifiedDesc")}
+                </p>
               </div>
+            </div>
 
-              {/* Separator */}
-              <div className="hidden md:block w-px bg-neutral-800 self-stretch my-1" />
+            {/* Separator */}
+            <div className="hidden md:block w-px bg-neutral-800 self-stretch my-1" />
 
-              {/* Item 3 */}
-              <div className="flex items-start gap-3 flex-1">
-                <div className="p-2 bg-neutral-800 text-[#FFB300] shrink-0 mt-0.5">
-                  <Headset className="h-5 w-5" />
-                </div>
-                <div>
-                  <h4 className="text-xs sm:text-sm font-semibold text-neutral-200 leading-snug">
-                    {t("hero.stats.supportTitle")}
-                  </h4>
-                  <p className="text-[11px] sm:text-xs text-neutral-400 font-normal leading-normal mt-0.5">
-                    {t("hero.stats.supportDesc")}
-                  </p>
-                </div>
+            {/* Item 2 */}
+            <div className="flex items-start gap-3 flex-1">
+              <div className="p-2 bg-neutral-800 text-[#FFB300] shrink-0 mt-0.5 rounded-lg">
+                <Lock className="h-5 w-5" />
+              </div>
+              <div>
+                <h4 className="text-xs sm:text-sm font-semibold text-neutral-200 leading-snug">
+                  {t("hero.stats.secureTitle")}
+                </h4>
+                <p className="text-[11px] sm:text-xs text-neutral-400 font-normal leading-normal mt-0.5">
+                  {t("hero.stats.secureDesc")}
+                </p>
+              </div>
+            </div>
+
+            {/* Separator */}
+            <div className="hidden md:block w-px bg-neutral-800 self-stretch my-1" />
+
+            {/* Item 3 */}
+            <div className="flex items-start gap-3 flex-1">
+              <div className="p-2 bg-neutral-800 text-[#FFB300] shrink-0 mt-0.5 rounded-lg">
+                <Headset className="h-5 w-5" />
+              </div>
+              <div>
+                <h4 className="text-xs sm:text-sm font-semibold text-neutral-200 leading-snug">
+                  {t("hero.stats.supportTitle")}
+                </h4>
+                <p className="text-[11px] sm:text-xs text-neutral-400 font-normal leading-normal mt-0.5">
+                  {t("hero.stats.supportDesc")}
+                </p>
               </div>
             </div>
           </div>
@@ -135,7 +136,7 @@ export default async function LandingPage({
       </section>
 
       {/* ── SECTION 2: FEATURES / CAPABILITIES ── */}
-      <section id="features" className="px-6 md:px-16 lg:px-24 pt-32 pb-20 md:pt-40 md:pb-28 bg-[#262626]/[0.08] border-t border-[#333333]/30">
+      <section id="features" className="px-6 md:px-16 lg:px-24 pt-32 pb-20 md:pt-40 md:pb-28 bg-[#262626]/8 border-t border-[#333333]/30">
         <div className="max-w-[1400px] w-full mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="lg:col-span-7">
@@ -200,7 +201,7 @@ export default async function LandingPage({
         {/* Background image layer */}
         <div aria-hidden className="absolute inset-0 pointer-events-none">
           <div
-            className="absolute inset-0 bg-cover bg-no-repeat opacity-25 transition-opacity duration-500 bg-[position:65%_center] md:bg-right-center"
+            className="absolute inset-0 bg-cover bg-no-repeat opacity-25 transition-opacity duration-500 bg-position-[65%_center] md:bg-right-center"
             style={{
               backgroundImage: "url('/waitlist_bg.png')",
               maskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)",
@@ -208,7 +209,7 @@ export default async function LandingPage({
             }}
           />
           {/* Deep gradient tint for readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a]/98 via-[#1a1a1a]/90 to-[#1a1a1a]/60 md:from-[#1a1a1a]/98 md:via-[#1a1a1a]/85 md:to-[#1a1a1a]/40" />
+          <div className="absolute inset-0 bg-linear-to-r from-[#1a1a1a]/98 via-[#1a1a1a]/90 to-[#1a1a1a]/60 md:from-[#1a1a1a]/98 md:via-[#1a1a1a]/85 md:to-[#1a1a1a]/40" />
           {/* Decorative ambient glow */}
           <div className="absolute top-1/4 right-0 w-[400px] h-[400px] bg-[#FFB300]/4 rounded-full blur-[100px] pointer-events-none" />
         </div>
@@ -235,8 +236,8 @@ export default async function LandingPage({
                   t("waitlist.benefits.onboarding"),
                   t("waitlist.benefits.support"),
                   t("waitlist.benefits.noCard"),
-                ].map((benefit, idx) => (
-                  <div key={idx} className="flex gap-3 items-start">
+                ].map((benefit) => (
+                  <div key={benefit} className="flex gap-3 items-start">
                     <svg
                       className="h-5 w-5 text-[#FFB300] shrink-0 mt-0.5"
                       fill="none"
@@ -261,7 +262,7 @@ export default async function LandingPage({
                   { value: t("waitlist.stats.savingsValue"), label: t("waitlist.stats.savingsLabel") },
                 ].map((stat, idx) => (
                   <div
-                    key={idx}
+                    key={stat.label}
                     className={`flex flex-col justify-center p-4 sm:p-5 bg-[#1f1f1f]/60 backdrop-blur-sm ${
                       idx < 3 ? "border-r border-[#333333]/60" : ""
                     } ${idx >= 2 ? "border-t border-[#333333]/60 sm:border-t-0" : ""}`}
