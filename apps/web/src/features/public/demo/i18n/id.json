@@ -13,7 +13,15 @@
       "bandung": "Bandung",
       "semarang": "Semarang",
       "medan": "Medan",
-      "makassar": "Makassar"
+      "makassar": "Makassar",
+      "cart": "Keranjang",
+      "cartEmpty": "Keranjang belanja Anda kosong",
+      "notification": "Notifikasi",
+      "transaction": "Transaksi",
+      "update": "Update",
+      "viewAll": "Lihat Semua",
+      "view": "Lihat",
+      "shop": "Toko"
     },
     "demoHome": {
       "badge": "Portal Marketplace B2B",

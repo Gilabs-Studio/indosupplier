@@ -13,7 +13,15 @@
       "bandung": "Bandung",
       "semarang": "Semarang",
       "medan": "Medan",
-      "makassar": "Makassar"
+      "makassar": "Makassar",
+      "cart": "Cart",
+      "cartEmpty": "Your shopping cart is empty",
+      "notification": "Notification",
+      "transaction": "Transactions",
+      "update": "Updates",
+      "viewAll": "View All",
+      "view": "View",
+      "shop": "Shop"
     },
     "demoHome": {
       "badge": "B2B Marketplace Portal",
