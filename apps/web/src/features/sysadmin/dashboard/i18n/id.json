@@ -1,0 +1,63 @@
+{
+  "title": "Selamat datang kembali, {name}!",
+  "subtitle": "Ini adalah ringkasan kinerja platform IndoSupplier hari ini. Anda memiliki akses penuh untuk meninjau waitlist dan mengkonfigurasi sistem.",
+  "refresh": "Perbarui",
+  "totalRegistrations": "Total Registrasi",
+  "totalRegistrationsDesc": "Registrasi terkumpul di waitlist",
+  "suppliers": "Suppliers",
+  "suppliersDesc": "Akses awal supplier baru",
+  "buyers": "Buyers",
+  "buyersDesc": "Akses awal buyer baru",
+  "needReview": "Butuh Review",
+  "needReviewDesc": "Registrasi belum disetujui",
+  "recentRegistrations": "Registrasi Terbaru",
+  "recentRegistrationsDesc": "5 pendaftar waitlist terakhir masuk sistem",
+  "viewAll": "Lihat Semua",
+  "adminInfo": "Informasi Admin",
+  "securityStatus": "Status Keamanan",
+  "securityStatusDesc": "Sistem Aktif & Terlindungi",
+  "featureShortcuts": "Pintasan Fitur",
+  "manageWaitlist": "Kelola Registrasi Waitlist",
+  "noRecentRegistrations": "Belum ada registrasi baru",
+  "errorLoad": "Gagal memuat data ringkasan dashboard.",
+  "layout": {
+    "loading": "Memuat Portal Admin...",
+    "searchPlaceholder": "Cari menu, registrasi, atau log sistem di sini...",
+    "notificationAlert": "Anda memiliki 3 persetujuan waitlist yang tertunda.",
+    "signOutConfirm": "Apakah Anda yakin ingin keluar?",
+    "signOut": "Keluar",
+    "menu": {
+      "dashboard": "Dasbor",
+      "waitingList": "Daftar Tunggu",
+      "suppliers": "Pemasok",
+      "buyers": "Pembeli",
+      "adReviews": "Ulasan Iklan",
+      "auctions": "Lelang",
+      "categories": "Kategori",
+      "subscriptionPlans": "Paket Langganan",
+      "supportTickets": "Tiket Dukungan",
+      "faqManagement": "Manajemen FAQ",
+      "reviewsModeration": "Moderasi Ulasan",
+      "abuseReports": "Laporan Pelanggaran",
+      "auditLogs": "Log Audit"
+    }
+  },
+  "login": {
+    "title": "Admin IndoSupplier",
+    "subtitle": "Masuk untuk mengakses konfigurasi sistem & daftar tunggu",
+    "cardTitle": "Portal Admin",
+    "cardDescription": "Hanya untuk personel resmi. Aktivitas dicatat.",
+    "emailLabel": "Email Admin",
+    "passwordLabel": "Kata Sandi",
+    "submit": "Masuk ke Dasbor",
+    "submitting": "Masuk...",
+    "success": "Berhasil masuk sebagai admin!",
+    "errors": {
+      "emailInvalid": "Silakan masukkan email yang valid",
+      "passwordRequired": "Kata sandi wajib diisi",
+      "invalidCredentials": "Email atau kata sandi admin salah.",
+      "accountDisabled": "Akun administrator ini telah dinonaktifkan.",
+      "generic": "Gagal masuk. Silakan coba lagi."
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import React from "react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
-import WaitingListForm from "@/features/waiting-list/components/waiting-list-form";
+import WaitingListForm from "@/features/sysadmin/waiting-list/components/waiting-list-form";
 import { Header } from "@/components/navigation/header";
 import { ScrollTextReveal } from "@/components/motion";
 import { RainbowButton } from "@/components/ui/rainbow-button";

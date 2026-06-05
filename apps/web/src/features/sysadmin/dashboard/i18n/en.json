@@ -1,0 +1,63 @@
+{
+  "title": "Welcome back, {name}!",
+  "subtitle": "This is a summary of IndoSupplier platform performance today. You have full access to review the waitlist and configure the system.",
+  "refresh": "Update",
+  "totalRegistrations": "Total Registrations",
+  "totalRegistrationsDesc": "Registrations collected in waitlist",
+  "suppliers": "Suppliers",
+  "suppliersDesc": "New early access suppliers",
+  "buyers": "Buyers",
+  "buyersDesc": "New early access buyers",
+  "needReview": "Needs Review",
+  "needReviewDesc": "Registrations not yet approved",
+  "recentRegistrations": "Recent Registrations",
+  "recentRegistrationsDesc": "Last 5 waitlist registrants entering the system",
+  "viewAll": "View All",
+  "adminInfo": "Admin Information",
+  "securityStatus": "Security Status",
+  "securityStatusDesc": "System Active & Protected",
+  "featureShortcuts": "Feature Shortcuts",
+  "manageWaitlist": "Manage Waitlist Registrations",
+  "noRecentRegistrations": "No new registrations yet",
+  "errorLoad": "Failed to load dashboard summary data.",
+  "layout": {
+    "loading": "Loading Admin Portal...",
+    "searchPlaceholder": "Search menu, registration, or system log here...",
+    "notificationAlert": "You have 3 waitlist approvals pending review.",
+    "signOutConfirm": "Are you sure you want to sign out?",
+    "signOut": "Sign Out",
+    "menu": {
+      "dashboard": "Dashboard",
+      "waitingList": "Waiting List",
+      "suppliers": "Suppliers",
+      "buyers": "Buyers",
+      "adReviews": "Ad Reviews",
+      "auctions": "Auctions",
+      "categories": "Categories",
+      "subscriptionPlans": "Subscription Plans",
+      "supportTickets": "Support Tickets",
+      "faqManagement": "FAQ Management",
+      "reviewsModeration": "Reviews Moderation",
+      "abuseReports": "Abuse Reports",
+      "auditLogs": "Audit Logs"
+    }
+  },
+  "login": {
+    "title": "IndoSupplier Admin",
+    "subtitle": "Sign in to access system configurations & waiting lists",
+    "cardTitle": "Admin Portal",
+    "cardDescription": "Authorized personnel only. Activities are logged.",
+    "emailLabel": "Admin Email",
+    "passwordLabel": "Password",
+    "submit": "Sign In to Dashboard",
+    "submitting": "Signing In...",
+    "success": "Successfully logged in as admin!",
+    "errors": {
+      "emailInvalid": "Please enter a valid email address",
+      "passwordRequired": "Password is required",
+      "invalidCredentials": "Invalid admin email or password.",
+      "accountDisabled": "This administrator account has been disabled.",
+      "generic": "Login failed. Please try again."
+    }
+  }
+}

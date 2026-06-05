@@ -189,3 +189,26 @@ The admin panel lives on a separate subdomain (`admin.indosupplier.id`) and is n
 - Categories with highest buyer intent (most RFQs relative to number of suppliers)
 
 **All dashboards can be filtered by date range and exported to Excel.**
+
+---
+
+## Implementation Status & Route Mapping (Sysadmin Portal)
+
+All admin panel features have been consolidated and implemented under the `/sysadmin` portal (with a consistent **Tokopedia Seller** style UI with green emerald accents). The old `/admin/*` routes have been migrated to these active paths:
+
+| Module / Feature | Next.js Page Route | Features & Interactions | Status |
+| --- | --- | --- | --- |
+| Dashboard | `/sysadmin` | Main stats overview and entry points | Active |
+| Waiting List | `/sysadmin/waiting-list` | Review, approve/reject supplier waitlist applications | Active |
+| Suppliers | `/sysadmin/suppliers` | Directory, NIB checks, promote verification level (1-3), suspend/ban | Active |
+| Buyers | `/sysadmin/buyers` | Directory, quality scores, suspend account | Active |
+| Ad Reviews | `/sysadmin/ads` | Ad creative queue, review status, metrics dashboard | Active |
+| Auctions | `/sysadmin/auctions` | Active bidder monitor, session builder modal | Active |
+| Categories | `/sysadmin/categories` | Master hierarchy tree, parent selection, inline sorting | Active |
+| Subscription Plans | `/sysadmin/subscription-plans` | Pricing editor, billing cycle filters, active status toggles | Active |
+| Support Tickets | `/sysadmin/support` | Chat console, self-assignment panel, internal notes | Active |
+| FAQ Management | `/sysadmin/faq` | Article editor, topic tags, multi-language toggles, live preview | Active |
+| Reviews Moderation | `/sysadmin/reviews` | Rating filters, status badges, inline response modal | Active |
+| Abuse Reports | `/sysadmin/abuse-reports` | Complaint queue, reporter/reported details, warning/suspend action | Active |
+| Audit Logs | `/sysadmin/audit-logs` | Chronological activity feed, search by actor/action, JSON inspector | Active |
+

@@ -7,7 +7,7 @@ import { routing } from "./routing";
 // Feature-level English translations
 import authEn from "@/features/auth/i18n/en.json";
 import indosupplierEn from "@/features/indosupplier/i18n/en.json";
-import waitingListEn from "@/features/waiting-list/i18n/en.json";
+import waitingListEn from "@/features/sysadmin/waiting-list/i18n/en.json";
 import publicSearchEn from "@/features/public/search/i18n/en.json";
 import publicCategoryEn from "@/features/public/category/i18n/en.json";
 import publicSupplierEn from "@/features/public/supplier-profile/i18n/en.json";
@@ -17,10 +17,25 @@ import publicFaqEn from "@/features/public/faq/i18n/en.json";
 import publicDemoEn from "@/features/public/demo/i18n/en.json";
 import buyerEn from "@/features/buyer/i18n/en.json";
 
+// Sysadmin English translations
+import faqEn from "@/features/sysadmin/faq/i18n/en.json";
+import reviewsEn from "@/features/sysadmin/reviews/i18n/en.json";
+import subscriptionPlansEn from "@/features/sysadmin/subscription-plans/i18n/en.json";
+import suppliersEn from "@/features/sysadmin/suppliers/i18n/en.json";
+import supportEn from "@/features/sysadmin/support/i18n/en.json";
+import dashboardEn from "@/features/sysadmin/dashboard/i18n/en.json";
+import waitingListAdminEn from "@/features/sysadmin/waiting-list/i18n/admin-en.json";
+import buyersEn from "@/features/sysadmin/buyers/i18n/en.json";
+import adsEn from "@/features/sysadmin/ads/i18n/en.json";
+import categoriesEn from "@/features/sysadmin/categories/i18n/en.json";
+import abuseReportsEn from "@/features/sysadmin/abuse-reports/i18n/en.json";
+import auditLogsEn from "@/features/sysadmin/audit-logs/i18n/en.json";
+import auctionsEn from "@/features/sysadmin/auctions/i18n/en.json";
+
 // Feature-level Indonesian translations
 import authId from "@/features/auth/i18n/id.json";
 import indosupplierId from "@/features/indosupplier/i18n/id.json";
-import waitingListId from "@/features/waiting-list/i18n/id.json";
+import waitingListId from "@/features/sysadmin/waiting-list/i18n/id.json";
 import publicSearchId from "@/features/public/search/i18n/id.json";
 import publicCategoryId from "@/features/public/category/i18n/id.json";
 import publicSupplierId from "@/features/public/supplier-profile/i18n/id.json";
@@ -30,12 +45,40 @@ import publicFaqId from "@/features/public/faq/i18n/id.json";
 import publicDemoId from "@/features/public/demo/i18n/id.json";
 import buyerId from "@/features/buyer/i18n/id.json";
 
+// Sysadmin Indonesian translations
+import faqId from "@/features/sysadmin/faq/i18n/id.json";
+import reviewsId from "@/features/sysadmin/reviews/i18n/id.json";
+import subscriptionPlansId from "@/features/sysadmin/subscription-plans/i18n/id.json";
+import suppliersId from "@/features/sysadmin/suppliers/i18n/id.json";
+import supportId from "@/features/sysadmin/support/i18n/id.json";
+import dashboardId from "@/features/sysadmin/dashboard/i18n/id.json";
+import waitingListAdminId from "@/features/sysadmin/waiting-list/i18n/admin-id.json";
+import buyersId from "@/features/sysadmin/buyers/i18n/id.json";
+import adsId from "@/features/sysadmin/ads/i18n/id.json";
+import categoriesId from "@/features/sysadmin/categories/i18n/id.json";
+import abuseReportsId from "@/features/sysadmin/abuse-reports/i18n/id.json";
+import auditLogsId from "@/features/sysadmin/audit-logs/i18n/id.json";
+import auctionsId from "@/features/sysadmin/auctions/i18n/id.json";
+
 const messages = {
   en: {
     ...authEn,
     ...indosupplierEn,
     ...waitingListEn,
     ...buyerEn,
+    sysadminFaq: faqEn,
+    sysadminReviews: reviewsEn,
+    sysadminSubscriptionPlans: subscriptionPlansEn,
+    sysadminSuppliers: suppliersEn,
+    sysadminSupport: supportEn,
+    sysadminDashboard: dashboardEn,
+    sysadminWaitingList: waitingListAdminEn,
+    sysadminBuyers: buyersEn,
+    sysadminAds: adsEn,
+    sysadminCategories: categoriesEn,
+    sysadminAbuseReports: abuseReportsEn,
+    sysadminAuditLogs: auditLogsEn,
+    sysadminAuctions: auctionsEn,
     public: {
       ...publicSearchEn.public,
       ...publicCategoryEn.public,
@@ -51,6 +94,19 @@ const messages = {
     ...indosupplierId,
     ...waitingListId,
     ...buyerId,
+    sysadminFaq: faqId,
+    sysadminReviews: reviewsId,
+    sysadminSubscriptionPlans: subscriptionPlansId,
+    sysadminSuppliers: suppliersId,
+    sysadminSupport: supportId,
+    sysadminDashboard: dashboardId,
+    sysadminWaitingList: waitingListAdminId,
+    sysadminBuyers: buyersId,
+    sysadminAds: adsId,
+    sysadminCategories: categoriesId,
+    sysadminAbuseReports: abuseReportsId,
+    sysadminAuditLogs: auditLogsId,
+    sysadminAuctions: auctionsId,
     public: {
       ...publicSearchId.public,
       ...publicCategoryId.public,
