@@ -8,7 +8,7 @@
  * These correspond to the --color-* definitions in globals.css
  */
 const COLOR_TEMPLATE_MAP: Record<string, string> = {
-  "var(--color-primary)": "#3B82F6",           // 221 83% 53% - Electric Blue
+  "var(--color-primary)": "#E27D18",           // 30 81% 49% - Orange Primary
   "var(--color-secondary)": "#E5E7EB",         // 220 14% 92%
   "var(--color-destructive)": "#EF4444",       // 0 84.2% 60.2% - Red
   "var(--color-accent)": "#E5E7EB",            // 220 14% 92%
@@ -30,7 +30,7 @@ const COLOR_TEMPLATE_MAP: Record<string, string> = {
  * @returns Normalized color value (hex string)
  */
 export function normalizeColorForAPI(color: string | null | undefined): string {
-  if (!color) return "#3B82F6"; // Default to primary blue
+  if (!color) return "#E27D18"; // Default to primary orange
 
   const trimmed = color.trim();
 
@@ -44,8 +44,8 @@ export function normalizeColorForAPI(color: string | null | undefined): string {
     return trimmed;
   }
 
-  // Fallback to primary blue
-  return "#3B82F6";
+  // Fallback to primary orange
+  return "#E27D18";
 }
 
 /**

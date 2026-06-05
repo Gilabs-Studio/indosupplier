@@ -102,7 +102,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 10%;
     
-    --primary: 0 0% 10%;
+    --primary: 30 81% 49%;
     --primary-foreground: 0 0% 100%;
     
     --secondary: 0 0% 96%;
@@ -119,8 +119,8 @@
     
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 0 0% 10%;
-    --brand: 0 0% 10%;
+    --ring: 30 81% 49%;
+    --brand: 30 81% 49%;
     --brand-foreground: 0 0% 100%;
 
     /* Chart colors */
@@ -143,68 +143,7 @@
     --radius: 0.5rem;
   }
 
-  .dark {
-    /* Unified Dark Theme variables */
-    --background: 0 0% 10%;
-    --foreground: 0 0% 100%;
-    
-    --card: 0 0% 12%;
-    --card-foreground: 0 0% 100%;
-    
-    --popover: 0 0% 12%;
-    --popover-foreground: 0 0% 100%;
-    
-    --primary: 0 0% 100%;          /* White primary */
-    --primary-foreground: 0 0% 10%; /* Dark text */
-    
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 100%;
-    
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 65%;
-    
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 100%;
 
-    --purple: 262 83% 70%;
-    --purple-foreground: 0 0% 100%;
-
-    --cyan: 187 100% 44%;
-    --cyan-foreground: 0 0% 100%;
-
-    --rose: 340 82% 57%;
-    --rose-foreground: 0 0% 100%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 0 0% 100%;
-    --brand: 0 0% 100%;
-    --brand-foreground: 0 0% 10%;
-
-    /* Chart colors */
-    --chart-1: 0 0% 100%;
-    --chart-2: 142 76% 36%;
-    --chart-3: 38 92% 50%;
-    --chart-4: 0 84% 60%;
-    --chart-5: 262 83% 58%;
-
-    /* Sidebar (Detail sidebar + gap) */
-    --sidebar: 0 0% 8%;
-    --sidebar-foreground: 0 0% 100%;
-    --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 0 0% 10%;
-    --sidebar-accent: 0 0% 12%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 15%;
-    --sidebar-ring: 0 0% 100%;
-    
-    /* Sidebar Light (Icon sidebar) */
-    --sidebar-dark: 0 0% 14%;
-    --sidebar-dark-foreground: 0 0% 100%;
-  }
 }
 
 @layer base {
@@ -232,7 +171,7 @@
   }
 
   *::-webkit-scrollbar-thumb:hover {
-    background-color: hsl(221 83% 48%);
+    background-color: hsl(30 81% 44%);
   }
 
   ::selection {
@@ -544,7 +483,7 @@
 }
 
 [data-sonner-toast] [data-button]:hover {
-  background-color: hsl(221 83% 48%) !important;
+  background-color: hsl(30 81% 44%) !important;
 }
 
 [data-sonner-toast] [data-cancel-button] {
