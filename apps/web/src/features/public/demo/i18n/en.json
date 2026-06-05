@@ -32,7 +32,37 @@
       "factoryInspection": "Factory Inspection",
       "exportCompliant": "Export Compliant",
       "secureChat": "Secure Chat",
-      "footerDesc": "The premier B2B marketplace platform connecting verified suppliers and business buyers across Indonesia."
+      "footerDesc": "The premier B2B marketplace platform connecting verified suppliers and business buyers across Indonesia.",
+      
+      "cariYangTerbaik": "Search the Best",
+      "supplierBaru": "New Supplier",
+      "supplierPremium": "Premium Supplier",
+      "komoditasTani": "Agricultural Commodities",
+      "bahanBaku": "Raw Materials",
+      "beritaB2B": "B2B News",
+      "bandingkan": "Compare",
+      "subSupplierBaru": "Attractive Offers",
+      "subSupplierPremium": "Verified Factories",
+      "subKomoditasTani": "Spices & Coffee Beans",
+      "subBahanBaku": "Textiles & Metals",
+      "subBeritaB2B": "Analysis & Trends",
+      "subBandingkan": "Compare Suppliers",
+      
+      "beritaTitle": "Business News And Reviews",
+      "bacaSemuaBerita": "READ ALL LATEST NEWS...",
+      "komparasiTitle": "Popular Supplier Comparison",
+      "bandingkanLebihBanyak": "COMPARE MORE...",
+      "produkTitle": "Popular Products",
+      "lihatSemuaProduk": "VIEW ALL PRODUCTS...",
+      "videoTitle": "Latest Videos in IndoSupplier",
+      "lihatSemuaVideo": "VIEW ALL VIDEOS...",
+      
+      "minOrder": "Min. Order",
+      "kapasitas": "Capacity",
+      "waktuBalas": "Chat Response",
+      "alignment": "Alignment",
+      "lamaOperasional": "Operational",
+      "kembaliKeAtas": "Back to Top"
     }
   }
 }

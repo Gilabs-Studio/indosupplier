@@ -20,3 +20,5 @@ export function PublicLayout({ children, locale }: PublicLayoutProps) {
     </div>
   );
 }
+
+

@@ -32,7 +32,36 @@
       "factoryInspection": "Inspeksi Pabrik",
       "exportCompliant": "Kepatuhan Ekspor",
       "secureChat": "Obrolan Aman",
-      "footerDesc": "Platform marketplace B2B utama yang menghubungkan supplier terverifikasi dengan pembeli bisnis di seluruh Indonesia."
+      "footerDesc": "Platform marketplace B2B utama yang menghubungkan supplier terverifikasi dengan pembeli bisnis di seluruh Indonesia.",
+      
+      "cariYangTerbaik": "Cari Yang Terbaik",
+      "supplierBaru": "Supplier Baru",
+      "supplierPremium": "Supplier Premium",
+      "komoditasTani": "Komoditas Tani",
+      "bahanBaku": "Bahan Baku",
+      "beritaB2B": "Berita B2B",
+      "bandingkan": "Bandingkan",
+      "subSupplierBaru": "Penawaran Menarik",
+      "subSupplierPremium": "Pabrik Terverifikasi",
+      "subKomoditasTani": "Rempah & Biji Kopi",
+      "subBahanBaku": "Tekstil & Logam",
+      "subBeritaB2B": "Analisis & Tren",
+      "subBandingkan": "Bandingkan Supplier",
+      
+      "beritaTitle": "Berita Bisnis Dan Review",
+      "bacaSemuaBerita": "BACA SEMUA BERITA TERBARU...",
+      "komparasiTitle": "Komparasi Supplier Populer",
+      "bandingkanLebihBanyak": "BANDINGKAN LEBIH BANYAK...",
+      "produkTitle": "Produk Terpopuler",
+      "lihatSemuaProduk": "LIHAT SEMUA PRODUK...",
+      "videoTitle": "Video Terbaru di IndoSupplier",
+      "lihatSemuaVideo": "LIHAT SEMUA VIDEO...",
+      
+      "minOrder": "Min. Order",
+      "kapasitas": "Kapasitas",
+      "waktuBalas": "Balas Chat",
+      "lamaOperasional": "Operasional",
+      "kembaliKeAtas": "Kembali ke Atas"
     }
   }
 }
