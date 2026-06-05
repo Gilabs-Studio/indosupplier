@@ -10,14 +10,14 @@ function FieldGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="field-group"
-      className={cn("group/field-group flex w-full flex-col gap-6", className)}
+      className={cn("group/field-group flex w-full flex-col gap-4", className)}
       {...props}
     />
   );
 }
 
 const fieldVariants = cva(
-  "group/field flex w-full gap-3 data-[invalid=true]:text-destructive",
+  "group/field flex w-full gap-1.5 data-[invalid=true]:text-destructive",
   {
     variants: {
       orientation: {

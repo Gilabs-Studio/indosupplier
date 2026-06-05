@@ -20,7 +20,16 @@
       "verifyingSession": "Memverifikasi sesi...",
       "rateLimitMessage": "Terlalu banyak percobaan login. Silakan coba lagi dalam {countdown}.",
       "noAccount": "Belum punya akun?",
-      "registerLink": "Daftar"
+      "registerLink": "Daftar",
+      "badge": "Platform Sourcing B2B",
+      "marketingTitle": "Sourcing Produk & Supplier Tanpa Hambatan",
+      "marketingSubtitle": "Kelola seluruh permintaan penawaran (RFQ), berdiskusi dengan supplier terverifikasi, dan memantau pesanan ekspor Anda di satu dashboard.",
+      "benefit1Title": "Akses Cepat ke RFQ",
+      "benefit1Desc": "Buat dan negosiasikan permintaan penawaran harga secara langsung.",
+      "benefit2Title": "Keamanan Dokumen Ekspor",
+      "benefit2Desc": "Unggah dan validasi perizinan kepabeanan dengan aman.",
+      "benefit3Title": "Notifikasi Real-time",
+      "benefit3Desc": "Dapatkan info terbaru tentang penawaran baru dari supplier."
     },
     "block": {
       "title": "Akses Diblokir",

@@ -7,16 +7,9 @@ import { Link } from "@/i18n/routing";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, ShieldCheck, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import {
   Field,
   FieldError,
@@ -25,7 +18,6 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { AuthLayout } from "./auth-layout";
 import { loginSchema, type LoginFormData } from "../schemas/login.schema";
 import { useLogin } from "../hooks/use-login";
 import { useLoginGuard } from "../hooks/use-login-guard";
@@ -163,29 +155,67 @@ export default function LoginForm({
   }
 
   return (
-    <AuthLayout compact={isPaymentSuccessView}>
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="w-full"
-      >
-        <Card className="border border-border/60 bg-card/90 shadow-sm">
-          <CardHeader className="space-y-2 px-6 pb-2 pt-6">
-            <CardTitle className="text-2xl">{t("title")}</CardTitle>
-            <CardDescription className="text-sm text-muted-foreground">
-              {t("description")}
-            </CardDescription>
+    <div className="bg-muted/30 relative overflow-hidden flex flex-col justify-center min-h-screen pt-14 w-full">
+      {/* Ambient background glows */}
+      <div className="absolute top-0 left-1/4 -translate-x-1/2 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-12 right-1/4 translate-x-1/2 w-96 h-96 bg-cyan/5 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="mx-auto grid w-full max-w-7xl gap-8 lg:grid-cols-[1fr_440px] lg:items-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12 relative z-10">
+        {/* Left marketing column */}
+        <section className="space-y-6 pt-4 lg:pt-10">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1 text-xs font-semibold text-primary">
+            <ShieldCheck className="h-3.5 w-3.5" />
+            {t("badge") || "Platform Sourcing B2B"}
+          </div>
+          <div className="max-w-xl space-y-3">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl font-heading leading-tight">
+              {t("marketingTitle") || "Sourcing Produk & Supplier Tanpa Hambatan"}
+            </h1>
+            <p className="text-sm leading-6 text-muted-foreground font-light">
+              {t("marketingSubtitle") || "Masuk untuk mengelola permintaan penawaran (RFQ), berdiskusi dengan supplier terverifikasi, dan memantau pesanan ekspor Anda."}
+            </p>
+          </div>
+          <div className="space-y-6 pt-4">
+            {[
+              { title: t("benefit1Title") || "Akses Cepat ke RFQ", desc: t("benefit1Desc") || "Buat dan negosiasikan permintaan penawaran harga secara langsung." },
+              { title: t("benefit2Title") || "Keamanan Dokumen Ekspor", desc: t("benefit2Desc") || "Unggah dan validasi perizinan kepabeanan dengan aman." },
+              { title: t("benefit3Title") || "Notifikasi Real-time", desc: t("benefit3Desc") || "Dapatkan info terbaru tentang penawaran baru dari supplier." }
+            ].map((b, i) => (
+              <div key={i} className="flex gap-4 items-start group">
+                <div className="h-10 w-10 rounded-lg bg-card border border-border flex items-center justify-center text-primary shrink-0 group-hover:scale-110 transition-transform">
+                  <CheckCircle className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-foreground leading-snug">{b.title}</h4>
+                  <p className="text-xs text-muted-foreground font-light leading-relaxed mt-0.5">{b.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Right form column */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.25 }}
+          className="w-full"
+        >
+          <div className="bg-card text-card-foreground border border-border rounded-lg p-6 shadow-xs space-y-4">
+            <div className="space-y-1">
+              <h2 className="text-xl font-bold text-foreground">{t("title")}</h2>
+              <p className="text-sm text-muted-foreground">{t("description")}</p>
+            </div>
+
             {isVerifying && (
               <div className="rounded-md border border-border/60 bg-muted/50 px-3 py-2 text-sm text-muted-foreground">
                 {t("verifyingSession") || "Verifying session..."}
               </div>
             )}
-          </CardHeader>
-          <CardContent className="space-y-5 px-6 pb-6 pt-2">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-              <FieldGroup className="space-y-4">
-                <Field className="space-y-2">
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <FieldGroup className="gap-4">
+                <Field>
                   <FieldLabel htmlFor="email">{t("emailLabel") || "Email"}</FieldLabel>
                   <Input
                     id="email"
@@ -194,14 +224,14 @@ export default function LoginForm({
                     {...register("email")}
                     disabled={isFormLoading}
                     aria-invalid={!!errors.email}
-                    className="h-11"
+                    className="h-10"
                   />
                   {errors.email && (
                     <FieldError>{errors.email.message}</FieldError>
                   )}
                 </Field>
 
-                <Field className="space-y-2">
+                <Field>
                   <div className="flex items-center justify-between">
                     <FieldLabel htmlFor="password">
                       {t("passwordLabel")}
@@ -215,13 +245,13 @@ export default function LoginForm({
                       {...register("password")}
                       disabled={isFormLoading}
                       aria-invalid={!!errors.password}
-                      className="h-11 pr-10"
+                      className="h-10 pr-10"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       disabled={isFormLoading}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                       aria-label={
                         showPassword ? "Hide password" : "Show password"
                       }
@@ -238,17 +268,19 @@ export default function LoginForm({
                   )}
                 </Field>
 
-                <Field>
-                  <label className="flex cursor-pointer items-center gap-2">
-                    <Checkbox
-                      {...register("rememberMe")}
-                      disabled={isFormLoading}
-                    />
-                    <span className="text-sm text-muted-foreground">
-                      {t("rememberMe")}
-                    </span>
-                  </label>
-                </Field>
+                <div className="flex items-center justify-between">
+                  <Field>
+                    <label className="flex cursor-pointer items-center gap-2">
+                      <Checkbox
+                        {...register("rememberMe")}
+                        disabled={isFormLoading}
+                      />
+                      <span className="text-xs text-muted-foreground">
+                        {t("rememberMe")}
+                      </span>
+                    </label>
+                  </Field>
+                </div>
 
                 {errors.root && (
                   <Field>
@@ -272,7 +304,7 @@ export default function LoginForm({
                   <Button
                     type="submit"
                     disabled={isFormLoading || isRateLimited}
-                    className="h-11 w-full text-sm font-semibold tracking-wide"
+                    className="h-10 w-full text-sm font-semibold tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all shadow-xs cursor-pointer"
                   >
                     <ButtonLoading loading={isFormLoading} loadingText={t("submitting")}>
                       {t("submit")}
@@ -283,13 +315,13 @@ export default function LoginForm({
             </form>
             <p className="text-center text-sm text-muted-foreground">
               {t("noAccount")}{" "}
-              <Link href={registerHref} className="font-semibold text-primary hover:underline">
+              <Link href={registerHref} className="font-semibold text-primary hover:underline cursor-pointer">
                 {t("registerLink")}
               </Link>
             </p>
-          </CardContent>
-        </Card>
-      </motion.div>
-    </AuthLayout>
+          </div>
+        </motion.div>
+      </div>
+    </div>
   );
 }

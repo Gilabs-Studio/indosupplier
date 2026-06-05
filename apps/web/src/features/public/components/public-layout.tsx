@@ -7,16 +7,25 @@ import { PublicFooter } from "./public-footer";
 interface PublicLayoutProps {
   children: React.ReactNode;
   locale: string;
+  showFooter?: boolean;
+  overlapNavbar?: boolean;
 }
 
-export function PublicLayout({ children, locale }: PublicLayoutProps) {
+export function PublicLayout({
+  children,
+  locale,
+  showFooter = true,
+  overlapNavbar = false,
+}: Readonly<PublicLayoutProps>) {
   return (
-    <div className="min-h-screen bg-background text-foreground font-jost antialiased flex flex-col justify-between">
-      <div>
-        <PublicNavbar locale={locale} />
-        <main>{children}</main>
+    <div className="min-h-screen bg-background text-foreground font-jost antialiased flex flex-col justify-between relative">
+      <div className="w-full flex-1 flex flex-col">
+        <div className={overlapNavbar ? "absolute top-0 left-0 right-0 z-50" : "w-full"}>
+          <PublicNavbar locale={locale} />
+        </div>
+        <main className="flex-1 flex flex-col">{children}</main>
       </div>
-      <PublicFooter />
+      {showFooter && <PublicFooter />}
     </div>
   );
 }

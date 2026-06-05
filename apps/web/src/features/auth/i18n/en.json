@@ -20,7 +20,16 @@
       "verifyingSession": "Verifying session...",
       "rateLimitMessage": "Too many login attempts. Please try again in {countdown}.",
       "noAccount": "Don't have an account?",
-      "registerLink": "Register"
+      "registerLink": "Register",
+      "badge": "B2B Sourcing Platform",
+      "marketingTitle": "Seamless Product & Supplier Sourcing",
+      "marketingSubtitle": "Manage your RFQs, chat with verified suppliers, and track your export orders in a single integrated dashboard.",
+      "benefit1Title": "Quick RFQ Access",
+      "benefit1Desc": "Create and negotiate price quotes directly.",
+      "benefit2Title": "Secure Export Documents",
+      "benefit2Desc": "Upload and validate customs permits securely.",
+      "benefit3Title": "Real-time Notifications",
+      "benefit3Desc": "Get live updates on new supplier offers."
     },
     "block": {
       "title": "Access Blocked",
