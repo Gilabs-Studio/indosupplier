@@ -24,14 +24,13 @@ import {
   Check,
   ChevronRight,
   ImagePlus,
-  Tag,
   FileText,
   DollarSign,
-  Package,
   Sparkles,
   X,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 /* ─────────────────────────────────────────────
    Step definition
@@ -47,6 +46,7 @@ type StepId = (typeof STEPS)[number]["id"];
 
 export function ProductCreateMinimalistPage() {
   const router = useRouter();
+  const t = useTranslations("supplier.products");
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [submitting, setSubmitting] = useState(false);
 
@@ -54,6 +54,21 @@ export function ProductCreateMinimalistPage() {
   const { mutate: createProduct, isPending: isCreating } = useCreateProduct();
   const { mutateAsync: uploadImage, isPending: isUploading } =
     useUploadProductImage();
+
+  const getStepLabel = (id: string) => {
+    switch (id) {
+      case "info":
+        return t("stepInfo");
+      case "price":
+        return t("stepPrice");
+      case "photos":
+        return t("stepPhotos");
+      case "settings":
+        return t("stepSettings");
+      default:
+        return "";
+    }
+  };
 
   const {
     register,
@@ -155,22 +170,25 @@ export function ProductCreateMinimalistPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* ── Slim Top Bar ─────────────────────────────────────────────────── */}
-      <div className="sticky top-0 z-40 bg-background/90 backdrop-blur-md border-b border-border/60">
+      <div className="sticky top-0 z-40 bg-background/90 backdrop-blur-md border-b border-border">
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-4">
           <button
             onClick={() => router.push("/supplier/products")}
-            className="h-8 w-8 rounded-lg border border-border/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-border hover:bg-muted/40 transition-all cursor-pointer shrink-0"
+            className="h-8 w-8 rounded-lg border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-border hover:bg-muted/40 transition-all cursor-pointer shrink-0"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
           </button>
 
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-bold text-foreground truncate">
-              {watchName || "Produk Baru"}
+            <p className="text-sm font-extrabold text-foreground truncate">
+              {watchName || t("addProduct")}
             </p>
             <p className="text-[10px] text-muted-foreground">
-              Langkah {currentStep + 1} dari {STEPS.length} —{" "}
-              {STEPS[currentStep].label}
+              {t("stepOf", {
+                current: currentStep + 1,
+                total: STEPS.length,
+                label: getStepLabel(STEPS[currentStep].id),
+              })}
             </p>
           </div>
 
@@ -193,7 +211,7 @@ export function ProductCreateMinimalistPage() {
         </div>
 
         {/* Progress bar */}
-        <div className="h-0.5 bg-border/40">
+        <div className="h-0.5 bg-border">
           <motion.div
             className="h-full bg-primary"
             animate={{ width: `${progress}%` }}
@@ -210,28 +228,27 @@ export function ProductCreateMinimalistPage() {
             {currentStep === 0 && (
               <StepWrapper key="step-info">
                 <StepHeader
-                  icon={<FileText className="h-5 w-5 text-primary" />}
-                  title="Informasi Produk"
-                  description="Lengkapi nama, kategori, dan deskripsi dasar produk."
+                  title={t("productInfoTitle")}
+                  description={t("productInfoDesc")}
                 />
 
                 <div className="space-y-6">
-                  <MinimalField label="Nama Produk" required error={errors.name?.message as string}>
+                  <MinimalField label={t("productName")} required error={errors.name?.message}>
                     <Input
                       id="name"
-                      placeholder="Contoh: Beras Premium Putih 25kg"
-                      className="h-11 text-sm border-border/80 focus:ring-2 focus:ring-primary/15"
+                      placeholder={t("namePlaceholder")}
+                      className="h-11 text-sm border-border focus:ring-2 focus:ring-primary/15"
                       {...register("name")}
                     />
                   </MinimalField>
 
-                  <MinimalField label="Kategori" required error={errors.category_id?.message as string}>
+                  <MinimalField label={t("category")} required error={errors.category_id?.message as string}>
                     <select
                       id="category_id"
-                      className="w-full h-11 px-3 bg-background border border-border/80 text-sm rounded-lg outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all cursor-pointer text-foreground"
+                      className="w-full h-11 px-3 bg-background border border-border text-sm rounded-lg outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all cursor-pointer text-foreground"
                       {...register("category_id")}
                     >
-                      <option value="">Pilih kategori…</option>
+                      <option value="">{t("selectCategory")}</option>
                       {categories?.map((cat) => (
                         <option key={cat.id} value={cat.id}>
                           {cat.name}
@@ -240,12 +257,12 @@ export function ProductCreateMinimalistPage() {
                     </select>
                   </MinimalField>
 
-                  <MinimalField label="Deskripsi" error={errors.description?.message as string}>
+                  <MinimalField label={t("description")} error={errors.description?.message as string}>
                     <Textarea
                       id="description"
-                      placeholder="Jelaskan spesifikasi, standar ekspor, kemasan, dan keunggulan produk Anda…"
+                      placeholder={t("descriptionPlaceholder")}
                       rows={6}
-                      className="resize-none text-sm border-border/80 focus:ring-2 focus:ring-primary/15"
+                      className="resize-none text-sm border-border focus:ring-2 focus:ring-primary/15"
                       {...register("description")}
                     />
                   </MinimalField>
@@ -257,16 +274,15 @@ export function ProductCreateMinimalistPage() {
             {currentStep === 1 && (
               <StepWrapper key="step-price">
                 <StepHeader
-                  icon={<DollarSign className="h-5 w-5 text-primary" />}
-                  title="Harga & Ketentuan Pesanan"
-                  description="Tetapkan harga, mata uang, dan jumlah minimum order (MOQ)."
+                  title={t("pricingTerms")}
+                  description={t("pricingTermsDesc")}
                 />
 
                 <div className="space-y-6">
                   {/* Price + Currency in one row */}
                   <div className="grid grid-cols-3 gap-3">
                     <div className="col-span-2">
-                      <MinimalField label="Harga Mulai" required error={errors.starting_price?.message as string}>
+                      <MinimalField label={t("price")} required error={errors.starting_price?.message as string}>
                         <Controller
                           control={control}
                           name="starting_price"
@@ -277,39 +293,39 @@ export function ProductCreateMinimalistPage() {
                               onChange={onChange}
                               onBlur={onBlur}
                               ref={ref}
-                              placeholder="Contoh: 150.000"
-                              className="h-11 border-border/80 focus:ring-2 focus:ring-primary/15"
+                              placeholder={t("pricePlaceholder")}
+                              className="h-11 border-border focus:ring-2 focus:ring-primary/15"
                             />
                           )}
                         />
                       </MinimalField>
                     </div>
                     <div className="col-span-1">
-                      <MinimalField label="Mata Uang" error={errors.currency?.message as string}>
+                      <MinimalField label={t("currency")} error={errors.currency?.message as string}>
                         <Input
                           id="currency"
-                          placeholder="IDR"
-                          className="h-11 text-sm border-border/80 focus:ring-2 focus:ring-primary/15"
+                          placeholder={t("currencyPlaceholder")}
+                          className="h-11 text-sm border-border focus:ring-2 focus:ring-primary/15"
                           {...register("currency")}
                         />
                       </MinimalField>
                     </div>
                   </div>
 
-                  <MinimalField label="Min. Order (MOQ)" required error={errors.moq?.message as string}>
+                  <MinimalField label={t("moq")} required error={errors.moq?.message as string}>
                     <Input
                       id="moq"
-                      placeholder="Contoh: 20 Ton, 100 Karung…"
-                      className="h-11 text-sm border-border/80 focus:ring-2 focus:ring-primary/15"
+                      placeholder={t("moqPlaceholder")}
+                      className="h-11 text-sm border-border focus:ring-2 focus:ring-primary/15"
                       {...register("moq")}
                     />
                   </MinimalField>
 
-                  <MinimalField label="Kapasitas Pasokan" error={errors.capacity_text?.message as string}>
+                  <MinimalField label={t("capacity")} error={errors.capacity_text?.message as string}>
                     <Input
                       id="capacity_text"
-                      placeholder="Contoh: 500 Ton / Bulan"
-                      className="h-11 text-sm border-border/80 focus:ring-2 focus:ring-primary/15"
+                      placeholder={t("capacityPlaceholder")}
+                      className="h-11 text-sm border-border focus:ring-2 focus:ring-primary/15"
                       {...register("capacity_text")}
                     />
                   </MinimalField>
@@ -321,9 +337,8 @@ export function ProductCreateMinimalistPage() {
             {currentStep === 2 && (
               <StepWrapper key="step-photos">
                 <StepHeader
-                  icon={<ImagePlus className="h-5 w-5 text-primary" />}
-                  title="Foto Produk"
-                  description="Tambahkan foto yang menarik. Foto pertama akan menjadi cover utama."
+                  title={t("photos")}
+                  description={t("photosDesc")}
                 />
 
                 {/* Upload Drop Zone */}
@@ -332,13 +347,13 @@ export function ProductCreateMinimalistPage() {
                     className={`border-2 border-dashed rounded-xl p-10 flex flex-col items-center justify-center gap-3 transition-all ${
                       isUploading
                         ? "border-primary/40 bg-primary/5"
-                        : "border-border/60 hover:border-primary/50 hover:bg-muted/30"
+                        : "border-border hover:border-primary/50 hover:bg-muted/30"
                     }`}
                   >
                     {isUploading ? (
                       <>
                         <Loader2 className="h-6 w-6 animate-spin text-primary" />
-                        <p className="text-sm font-medium text-primary">Mengunggah…</p>
+                        <p className="text-sm font-medium text-primary">{t("saving")}</p>
                       </>
                     ) : (
                       <>
@@ -347,10 +362,10 @@ export function ProductCreateMinimalistPage() {
                         </div>
                         <div className="text-center">
                           <p className="text-sm font-semibold text-foreground">
-                            Klik untuk upload foto
+                            {t("uploadClick")}
                           </p>
                           <p className="text-[11px] text-muted-foreground mt-0.5">
-                            PNG, JPG, WebP — maks. 5MB per file
+                            {t("uploadHint")}
                           </p>
                         </div>
                       </>
@@ -370,7 +385,7 @@ export function ProductCreateMinimalistPage() {
                 {photoFields.length > 0 && (
                   <div className="mt-6">
                     <p className="text-xs text-muted-foreground mb-3 font-medium">
-                      {photoFields.length} foto diunggah
+                      {t("photosUploaded", { count: photoFields.length })}
                     </p>
                     <div className="grid grid-cols-3 gap-3">
                       <AnimatePresence>
@@ -382,7 +397,7 @@ export function ProductCreateMinimalistPage() {
                               initial={{ opacity: 0, scale: 0.85 }}
                               animate={{ opacity: 1, scale: 1 }}
                               exit={{ opacity: 0, scale: 0.85 }}
-                              className="relative group rounded-lg overflow-hidden border border-border/80 aspect-square bg-muted/10"
+                              className="relative group rounded-lg overflow-hidden border border-border aspect-square bg-muted/10"
                             >
                               {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img
@@ -392,13 +407,13 @@ export function ProductCreateMinimalistPage() {
                               />
                               {isCover && (
                                 <div className="absolute top-1.5 left-1.5 bg-primary text-primary-foreground text-[9px] font-bold px-1.5 py-0.5 rounded">
-                                  Cover
+                                  {t("coverLabel")}
                                 </div>
                               )}
                               <button
                                 type="button"
                                 onClick={() => removePhoto(index)}
-                                className="absolute top-1.5 right-1.5 h-6 w-6 rounded bg-background/90 border border-border/60 flex items-center justify-center text-muted-foreground hover:text-destructive transition-all cursor-pointer opacity-0 group-hover:opacity-100"
+                                className="absolute top-1.5 right-1.5 h-6 w-6 rounded bg-background/90 border border-border flex items-center justify-center text-muted-foreground hover:text-destructive transition-all cursor-pointer opacity-0 group-hover:opacity-100"
                               >
                                 <X className="h-3 w-3" />
                               </button>
@@ -416,13 +431,12 @@ export function ProductCreateMinimalistPage() {
             {currentStep === 3 && (
               <StepWrapper key="step-settings">
                 <StepHeader
-                  icon={<Sparkles className="h-5 w-5 text-primary" />}
-                  title="Pengaturan Produk"
-                  description="Atur visibilitas dan prioritas tampil produk Anda."
+                  title={t("settingsTitle")}
+                  description={t("settingsDesc")}
                 />
 
                 {/* Featured toggle */}
-                <div className="rounded-xl border border-border/80 bg-card p-5">
+                <div className="rounded-xl border border-border bg-card p-5">
                   <div className="flex items-center justify-between gap-6">
                     <div className="flex items-start gap-3">
                       <div
@@ -440,11 +454,10 @@ export function ProductCreateMinimalistPage() {
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-foreground">
-                          Produk Unggulan
+                          {t("isFeatured")}
                         </p>
                         <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-                          Tampilkan produk ini di posisi teratas profil supplier Anda untuk
-                          meningkatkan visibilitas kepada pembeli potensial.
+                          {t("featuredDesc")}
                         </p>
                       </div>
                     </div>
@@ -463,21 +476,19 @@ export function ProductCreateMinimalistPage() {
                 </div>
 
                 {/* Summary Preview Card */}
-                <div className="mt-6 rounded-xl border border-border/60 bg-muted/20 overflow-hidden">
-                  <div className="px-5 py-3 border-b border-border/60">
+                <div className="mt-6 rounded-xl border border-border bg-muted/20 overflow-hidden">
+                  <div className="px-5 py-3 border-b border-border">
                     <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
-                      Ringkasan Produk
+                      {t("summaryTitle")}
                     </p>
                   </div>
-                  <SummaryRow icon={<Tag className="h-3 w-3" />} label="Nama" value={watch("name") || "—"} />
+                  <SummaryRow label={t("summaryName")} value={watch("name") || "—"} />
                   <SummaryRow
-                    icon={<Package className="h-3 w-3" />}
-                    label="Kategori"
+                    label={t("summaryCategory")}
                     value={categories?.find((c) => c.id === watch("category_id"))?.name || "—"}
                   />
                   <SummaryRow
-                    icon={<DollarSign className="h-3 w-3" />}
-                    label="Harga Mulai"
+                    label={t("summaryPrice")}
                     value={
                       (watch("starting_price") as number) > 0
                         ? `${watch("currency")} ${Number(watch("starting_price") as number).toLocaleString("id-ID")}`
@@ -485,14 +496,12 @@ export function ProductCreateMinimalistPage() {
                     }
                   />
                   <SummaryRow
-                    icon={<FileText className="h-3 w-3" />}
-                    label="MOQ"
+                    label={t("summaryMOQ")}
                     value={watch("moq") || "—"}
                   />
                   <SummaryRow
-                    icon={<ImagePlus className="h-3 w-3" />}
-                    label="Foto"
-                    value={`${photoFields.length} foto`}
+                    label={t("summaryPhotos")}
+                    value={t("photosUploaded", { count: photoFields.length })}
                   />
                 </div>
               </StepWrapper>
@@ -501,17 +510,17 @@ export function ProductCreateMinimalistPage() {
         </div>
 
         {/* ── Sticky Navigation ──────────────────────────────────────────── */}
-        <div className="sticky bottom-0 z-40 bg-background/90 backdrop-blur-md border-t border-border/60">
+        <div className="sticky bottom-0 z-40 bg-background/90 backdrop-blur-md border-t border-border">
           <div className="max-w-2xl mx-auto px-4 py-4 flex items-center gap-3">
             {currentStep > 0 ? (
               <Button
                 type="button"
                 variant="outline"
                 onClick={goPrev}
-                className="cursor-pointer border-border/80 hover:bg-muted text-sm font-medium"
+                className="cursor-pointer border-border hover:bg-muted text-sm font-medium"
               >
                 <ArrowLeft className="h-3.5 w-3.5 mr-1.5" />
-                Kembali
+                {t("back")}
               </Button>
             ) : (
               <Button
@@ -520,7 +529,7 @@ export function ProductCreateMinimalistPage() {
                 onClick={() => router.push("/supplier/products")}
                 className="cursor-pointer text-muted-foreground hover:text-foreground text-sm"
               >
-                Batal
+                {t("cancel")}
               </Button>
             )}
 
@@ -535,12 +544,12 @@ export function ProductCreateMinimalistPage() {
                 {isCreating || submitting ? (
                   <>
                     <Loader2 className="h-3.5 w-3.5 animate-spin mr-2" />
-                    Menyimpan…
+                    {t("saving")}
                   </>
                 ) : (
                   <>
                     <Check className="h-3.5 w-3.5 mr-2" />
-                    Simpan Produk
+                    {t("save")}
                   </>
                 )}
               </Button>
@@ -550,7 +559,7 @@ export function ProductCreateMinimalistPage() {
                 onClick={goNext}
                 className="cursor-pointer bg-primary text-primary-foreground font-bold px-6 py-2.5 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-lg hover:shadow-primary/25 text-sm"
               >
-                Lanjut
+                {t("next")}
                 <ChevronRight className="h-3.5 w-3.5 ml-1.5" />
               </Button>
             )}
@@ -578,21 +587,16 @@ function StepWrapper({ children }: { children: React.ReactNode }) {
 }
 
 function StepHeader({
-  icon,
   title,
   description,
 }: {
-  icon: React.ReactNode;
   title: string;
   description: string;
 }) {
   return (
-    <div className="space-y-1 pb-2 border-b border-border/60">
-      <div className="flex items-center gap-2.5">
-        {icon}
-        <h2 className="text-xl font-extrabold text-foreground tracking-tight">{title}</h2>
-      </div>
-      <p className="text-sm text-muted-foreground pl-7">{description}</p>
+    <div className="space-y-1 pb-3.5 border-b border-border">
+      <h2 className="text-xl font-extrabold text-foreground tracking-tight">{title}</h2>
+      <p className="text-sm text-muted-foreground">{description}</p>
     </div>
   );
 }
@@ -621,21 +625,18 @@ function MinimalField({
 }
 
 function SummaryRow({
-  icon,
   label,
   value,
 }: {
-  icon: React.ReactNode;
   label: string;
   value: string;
 }) {
   return (
-    <div className="flex items-center justify-between px-5 py-3 border-b border-border/40 last:border-0">
-      <span className="flex items-center gap-2 text-xs text-muted-foreground">
-        <span className="text-primary/60">{icon}</span>
+    <div className="flex items-center justify-between px-5 py-3.5 border-b border-border last:border-0">
+      <span className="text-sm text-foreground/80">
         {label}
       </span>
-      <span className="text-xs font-semibold text-foreground max-w-[60%] text-right truncate">
+      <span className="text-sm font-semibold text-foreground max-w-[60%] text-right truncate">
         {value}
       </span>
     </div>

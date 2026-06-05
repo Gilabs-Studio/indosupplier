@@ -14,7 +14,7 @@ import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { productFormSchema } from "../schemas/products.schema";
 import { useSupplierProduct, useCategories, useCreateProduct, useUpdateProduct, useUploadProductImage } from "../hooks/useProducts";
-import { ArrowLeft, Save, Upload, Trash2, Star, Loader2, Layers, ShoppingBag, Eye } from "lucide-react";
+import { ArrowLeft, Save, Upload, Trash2, Star, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion, AnimatePresence } from "framer-motion";
@@ -62,19 +62,8 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
     name: "photos",
   });
 
-  // Watch values for real-time live preview
-  const watchName = watch("name") as string;
-  const watchCategoryId = watch("category_id") as string;
-  const watchDescription = watch("description") as string;
-  const watchMoq = watch("moq") as string;
-  const watchStartingPrice = watch("starting_price") as number | undefined;
-  const watchCurrency = watch("currency") as string;
-  const watchCapacityText = watch("capacity_text") as string;
   const watchIsFeatured = watch("is_featured") as boolean;
   const watchPhotos = (watch("photos") || []) as { file_url: string; caption?: string; sort_order: number; id?: string }[];
-
-  // Find selected category name for the live preview
-  const selectedCategoryName = categories?.find(c => c.id === watchCategoryId)?.name || "Uncategorized";
 
   // Reset form with product values when editing
   useEffect(() => {
@@ -149,7 +138,7 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 pb-32 text-left space-y-8 relative">
       {/* Header */}
-      <div className="flex items-center gap-4 pb-5 border-b border-border/60">
+      <div className="flex items-center gap-4 pb-5 border-b border-border">
         <Button
           type="button"
           variant="outline"
@@ -160,13 +149,11 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div className="space-y-1">
-          <h1 className="text-2xl font-bold tracking-tight text-foreground font-heading">
-            {isCreate ? t("addProduct") : `${t("editProduct")}`}
+          <h1 className="text-2xl font-extrabold tracking-tight text-foreground font-heading">
+            {isCreate ? t("addProduct") : t("editProduct")}
           </h1>
           <p className="text-xs text-muted-foreground">
-            {isCreate
-              ? "Tambahkan produk baru ke dalam katalog grosir Anda dengan pratinjau instan."
-              : "Ubah detail, spesifikasi, dan kelola galeri gambar produk Anda."}
+            {isCreate ? t("createProductDescription") : t("editProductDescription")}
           </p>
         </div>
       </div>
@@ -182,21 +169,20 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
             className="lg:col-span-2 space-y-8"
           >
             {/* Spesifikasi Utama Card */}
-            <Card className="border border-border/80 bg-linear-to-b from-card to-card/98 shadow-sm rounded-xl overflow-hidden">
-              <CardHeader className="pb-4 border-b border-border/40">
-                <CardTitle className="text-sm font-bold font-heading tracking-tight flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-primary" />
-                  Spesifikasi Utama
+            <Card className="border border-border bg-card shadow-sm rounded-xl overflow-hidden">
+              <CardHeader className="pb-4 border-b border-border">
+                <CardTitle className="text-sm font-extrabold font-heading tracking-tight">
+                  {t("mainSpecs")}
                 </CardTitle>
-                <CardDescription className="text-xs">Informasi umum mengenai produk Anda.</CardDescription>
+                <CardDescription className="text-xs">{t("mainSpecsDesc")}</CardDescription>
               </CardHeader>
               <CardContent className="pt-6 space-y-4">
                 <Field>
                   <FieldLabel htmlFor="name" className="text-xs font-semibold text-foreground/80">{t("productName")}</FieldLabel>
                   <Input
                     id="name"
-                    placeholder="Masukkan nama produk lengkap"
-                    className="focus:ring-2 focus:ring-primary/20 transition-all border-border/80 rounded-lg py-5.5 text-sm"
+                    placeholder={t("namePlaceholder")}
+                    className="focus:ring-2 focus:ring-primary/20 transition-all border-border rounded-lg py-5.5 text-sm"
                     {...register("name")}
                   />
                   {errors.name && <FieldError>{errors.name.message}</FieldError>}
@@ -207,7 +193,7 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
                     <FieldLabel htmlFor="category_id" className="text-xs font-semibold text-foreground/80">{t("category")}</FieldLabel>
                     <select
                       id="category_id"
-                      className="w-full px-3 py-2 bg-card border border-border/80 text-sm rounded-lg outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer h-10"
+                      className="w-full px-3 py-2 bg-card border border-border text-sm rounded-lg outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer h-10"
                       {...register("category_id")}
                     >
                       <option value="">{t("selectCategory")}</option>
@@ -224,8 +210,8 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
                     <FieldLabel htmlFor="capacity_text" className="text-xs font-semibold text-foreground/80">{t("capacity")}</FieldLabel>
                     <Input
                       id="capacity_text"
-                      placeholder="e.g. 500 Ton / Bulan"
-                      className="focus:ring-2 focus:ring-primary/20 transition-all border-border/80 rounded-lg h-10"
+                      placeholder={t("capacityPlaceholder")}
+                      className="focus:ring-2 focus:ring-primary/20 transition-all border-border rounded-lg h-10"
                       {...register("capacity_text")}
                     />
                     {errors.capacity_text && <FieldError>{errors.capacity_text.message}</FieldError>}
@@ -236,9 +222,9 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
                   <FieldLabel htmlFor="description" className="text-xs font-semibold text-foreground/80">{t("description")}</FieldLabel>
                   <Textarea
                     id="description"
-                    placeholder="Deskripsi produk, spesifikasi teknis, standar ekspor, kemasan, dll."
+                    placeholder={t("descriptionPlaceholder")}
                     rows={6}
-                    className="resize-none focus:ring-2 focus:ring-primary/20 transition-all border-border/80 rounded-lg"
+                    className="resize-none focus:ring-2 focus:ring-primary/20 transition-all border-border rounded-lg"
                     {...register("description")}
                   />
                   {errors.description && <FieldError>{errors.description.message}</FieldError>}
@@ -247,13 +233,12 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
             </Card>
 
             {/* Ketentuan Harga Card */}
-            <Card className="border border-border/80 bg-linear-to-b from-card to-card/98 shadow-sm rounded-xl overflow-hidden">
-              <CardHeader className="pb-4 border-b border-border/40">
-                <CardTitle className="text-sm font-bold font-heading tracking-tight flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-primary" />
-                  Ketentuan Harga & Minimum Order
+            <Card className="border border-border bg-card shadow-sm rounded-xl overflow-hidden">
+              <CardHeader className="pb-4 border-b border-border">
+                <CardTitle className="text-sm font-extrabold font-heading tracking-tight">
+                  {t("pricingTerms")}
                 </CardTitle>
-                <CardDescription className="text-xs">Atur harga mulai produk dan batas minimum kuantitas pesanan.</CardDescription>
+                <CardDescription className="text-xs">{t("pricingTermsDesc")}</CardDescription>
               </CardHeader>
               <CardContent className="pt-6">
                 <FieldGroup className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -269,8 +254,8 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
                           onChange={onChange}
                           onBlur={onBlur}
                           ref={ref}
-                          placeholder="e.g. 15.000"
-                          className="focus:ring-2 focus:ring-primary/20 border-border/80 rounded-lg h-10"
+                          placeholder={t("pricePlaceholder")}
+                          className="focus:ring-2 focus:ring-primary/20 border-border rounded-lg h-10"
                         />
                       )}
                     />
@@ -281,8 +266,8 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
                     <FieldLabel htmlFor="currency" className="text-xs font-semibold text-foreground/80">{t("currency")}</FieldLabel>
                     <Input
                       id="currency"
-                      placeholder="e.g. IDR"
-                      className="focus:ring-2 focus:ring-primary/20 border-border/80 rounded-lg h-10"
+                      placeholder={t("currencyPlaceholder")}
+                      className="focus:ring-2 focus:ring-primary/20 border-border rounded-lg h-10"
                       {...register("currency")}
                     />
                     {errors.currency && <FieldError>{errors.currency.message}</FieldError>}
@@ -292,8 +277,8 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
                     <FieldLabel htmlFor="moq" className="text-xs font-semibold text-foreground/80">{t("moq")}</FieldLabel>
                     <Input
                       id="moq"
-                      placeholder="e.g. 20 Ton"
-                      className="focus:ring-2 focus:ring-primary/20 border-border/80 rounded-lg h-10"
+                      placeholder={t("moqPlaceholder")}
+                      className="focus:ring-2 focus:ring-primary/20 border-border rounded-lg h-10"
                       {...register("moq")}
                     />
                     {errors.moq && <FieldError>{errors.moq.message}</FieldError>}
@@ -303,7 +288,7 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
             </Card>
           </motion.div>
 
-          {/* Right Column (Gallery & Status / Live Preview) */}
+          {/* Right Column (Gallery & Status) */}
           <motion.div 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -311,17 +296,16 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
             className="space-y-8"
           >
             {/* Foto & Galeri Card */}
-            <Card className="border border-border/80 bg-linear-to-b from-card to-card/98 shadow-sm rounded-xl overflow-hidden">
-              <CardHeader className="pb-4 border-b border-border/40">
-                <CardTitle className="text-sm font-bold font-heading tracking-tight flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-primary" />
+            <Card className="border border-border bg-card shadow-sm rounded-xl overflow-hidden">
+              <CardHeader className="pb-4 border-b border-border">
+                <CardTitle className="text-sm font-extrabold font-heading tracking-tight">
                   {t("photos")}
                 </CardTitle>
-                <CardDescription className="text-xs">Upload minimal 1 gambar. Gambar pertama akan menjadi cover utama.</CardDescription>
+                <CardDescription className="text-xs">{t("photosDesc")}</CardDescription>
               </CardHeader>
               <CardContent className="pt-6 space-y-4">
                 {/* Dashed Upload Button */}
-                <label className="border-2 border-dashed border-border/80 hover:border-primary/50 transition-all rounded-lg p-5 flex flex-col items-center justify-center gap-1.5 cursor-pointer bg-muted/10 hover:bg-muted/20 relative group">
+                <label className="border-2 border-dashed border-border hover:border-primary/50 transition-all rounded-lg p-5 flex flex-col items-center justify-center gap-1.5 cursor-pointer bg-muted/10 hover:bg-muted/20 relative group">
                   {isUploading ? (
                     <Loader2 className="h-5 w-5 animate-spin text-primary" />
                   ) : (
@@ -330,9 +314,9 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
                     </div>
                   )}
                   <span className="text-xs font-semibold text-foreground">
-                    {isUploading ? "Mengunggah..." : t("addPhoto")}
+                    {isUploading ? t("saving") : t("addPhoto")}
                   </span>
-                  <span className="text-[9px] text-muted-foreground">PNG, JPG, WebP (Max 5MB)</span>
+                  <span className="text-[9px] text-muted-foreground">{t("uploadHint")}</span>
                   <input
                     type="file"
                     multiple
@@ -355,11 +339,11 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
                           animate={{ opacity: 1, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
                           className={`flex flex-col p-2.5 border rounded-lg bg-muted/5 relative group transition-all hover:bg-muted/10 ${
-                            isCover ? "border-primary/60" : "border-border/60"
+                            isCover ? "border-primary/60" : "border-border"
                           }`}
                         >
                           <div className="flex items-center gap-3">
-                            <div className="relative h-11 w-11 rounded border border-border/80 overflow-hidden bg-background shrink-0">
+                            <div className="relative h-11 w-11 rounded border border-border overflow-hidden bg-background shrink-0">
                               {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img
                                 src={field.file_url}
@@ -368,15 +352,15 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
                               />
                               {isCover && (
                                 <div className="absolute inset-0 bg-primary/90 flex items-center justify-center">
-                                  <span className="text-[7px] font-bold text-primary-foreground tracking-wider uppercase">Cover</span>
+                                  <span className="text-[7px] font-bold text-primary-foreground tracking-wider uppercase">{t("coverLabel")}</span>
                                 </div>
                               )}
                             </div>
                             
                             <div className="flex-1 min-w-0 space-y-1">
                               <Input
-                                placeholder="Caption / Keterangan"
-                                className="h-7 text-xs py-0.5 px-2 focus:ring-1 focus:ring-primary/20 border-border/80 rounded"
+                                placeholder={t("captionPlaceholder")}
+                                className="h-7 text-xs py-0.5 px-2 focus:ring-1 focus:ring-primary/20 border-border rounded"
                                 {...register(`photos.${index}.caption`)}
                               />
                             </div>
@@ -401,7 +385,7 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
             </Card>
 
             {/* Unggulkan Switch Card */}
-            <Card className="border border-border/80 bg-gradient-to-r from-amber-500/5 to-card/50 shadow-xs rounded-xl overflow-hidden transition-all hover:border-amber-500/30">
+            <Card className="border border-border bg-gradient-to-r from-amber-500/5 to-card/50 shadow-xs rounded-xl overflow-hidden transition-all hover:border-amber-500/30">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between gap-4">
                   <div className="space-y-0.5 text-left flex-1">
@@ -429,92 +413,6 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
                 </div>
               </CardContent>
             </Card>
-
-            {/* Unlimited Budget Element: LIVE INTERACTIVE PREVIEW */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold tracking-wider text-muted-foreground flex items-center gap-1.5 uppercase">
-                  <Eye className="h-3.5 w-3.5 text-primary" />
-                  Pratinjau Live Pembeli
-                </span>
-                <span className="flex h-2 w-2 relative">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-success"></span>
-                </span>
-              </div>
-
-              {/* Renders a premium, dynamic copy of the card */}
-              <Card className="overflow-hidden border border-border shadow-md rounded-xl bg-card flex flex-col justify-between h-[420px] relative group text-left transition-all duration-300">
-                {/* Image Section */}
-                <div className="h-[180px] bg-muted/20 relative overflow-hidden shrink-0 border-b border-border w-full">
-                  {watchPhotos.length > 0 ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={watchPhotos[0].file_url}
-                      alt="Preview Cover"
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-103"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground gap-2">
-                      <ShoppingBag className="h-8 w-8 opacity-40 animate-pulse" />
-                      <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">Upload Foto Produk</span>
-                    </div>
-                  )}
-
-                  {watchIsFeatured && (
-                    <Badge className="absolute top-3 left-3 bg-amber-500 hover:bg-amber-600 text-white border-0 flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full select-none">
-                      <Star className="h-3 w-3 fill-white" /> Featured
-                    </Badge>
-                  )}
-                </div>
-
-                {/* Content Section */}
-                <CardContent className="p-5 flex-1 flex flex-col justify-between">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-1 text-[10px] text-muted-foreground font-semibold uppercase tracking-wider">
-                      <Layers className="h-3 w-3" />
-                      <span>{selectedCategoryName}</span>
-                    </div>
-
-                    <h3 className="font-bold text-foreground text-sm leading-tight tracking-tight line-clamp-2 min-h-[1.25rem]">
-                      {watchName || "Nama Produk Anda"}
-                    </h3>
-
-                    <p className="text-[11px] text-muted-foreground line-clamp-2 min-h-[1.75rem]">
-                      {watchDescription || "Deskripsi lengkap mengenai produk, spesifikasi ekspor, dan keunggulan akan tampil di sini..."}
-                    </p>
-                  </div>
-
-                  {/* Info list */}
-                  <div className="space-y-1.5 pt-2 border-t border-border mt-2">
-                    <div className="flex justify-between items-center text-[11px]">
-                      <span className="text-muted-foreground">Min. Order (MOQ)</span>
-                      <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 text-[9px] font-bold rounded-full px-2 py-0.2">
-                        {watchMoq || "1"}
-                      </Badge>
-                    </div>
-
-                    <div className="flex justify-between items-center text-[11px]">
-                      <span className="text-muted-foreground">Capacity</span>
-                      <span className="font-semibold text-foreground truncate max-w-[130px]">{watchCapacityText || "-"}</span>
-                    </div>
-
-                    <div className="flex justify-between items-baseline pt-1">
-                      <span className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider">Starting Price</span>
-                      <span className="font-extrabold text-foreground text-sm">
-                        {watchStartingPrice !== undefined && watchStartingPrice > 0 ? (
-                          <>
-                            {watchCurrency} {Number(watchStartingPrice).toLocaleString("id-ID")}
-                          </>
-                        ) : (
-                          "Hubungi Seller"
-                        )}
-                      </span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
           </motion.div>
         </div>
 
@@ -538,7 +436,7 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
               {isCreating || isUpdating ? (
                 <>
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  {isCreate ? "Menyimpan..." : "Memperbarui..."}
+                  {isCreate ? t("saving") : t("updating")}
                 </>
               ) : (
                 <>

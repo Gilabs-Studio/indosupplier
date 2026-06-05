@@ -70,6 +70,13 @@ GIMS menggunakan **Tailwind CSS v4** dengan integrasi CSS-native theme. Pengatur
     *   `text-destructive`, `bg-destructive`
     *   Semantic colors: `success` (`--color-success`), `warning` (`--color-warning`), `purple`, `cyan`, `rose`.
 
+### 🔤 Sistem Tipografi & Font (Tokopedia Style)
+Untuk memastikan keterbacaan tinggi dan gaya minimalis yang profesional, ikuti standar tipografi berikut:
+*   **Body Text:** Gunakan ukuran standard `1rem` (`text-base`) atau `0.875rem` (`text-sm`) dengan `font-weight: 400` (normal/regular) dan warna solid `text-foreground`. Hindari pembungkusan teks dengan `font-weight: 200`.
+*   **Product Name / Heading:** Gunakan font berbobot tebal `font-extrabold` atau `font-weight: 800`, ukuran `1.28571rem` (`text-lg` atau setara), line-height `24px`.
+*   **Price Text:** Gunakan font `font-extrabold` atau `font-weight: 800`, ukuran `2rem` (`text-3xl` atau setara), line-height `34px`, warna solid `text-foreground`.
+*   **Border Clarity:** Semua garis tepi harus menggunakan warna solid `border-border` untuk kontras yang jelas, bukan `border-border/60` atau yang lebih tipis/faint.
+
 ### 📐 Aturan Sudut (Border Radius Restriction)
 GIMS menerapkan pembatasan radius sudut (rounded corners) secara global untuk menjaga konsistensi UI. Di dalam `globals.css` terdapat rule:
 ```css

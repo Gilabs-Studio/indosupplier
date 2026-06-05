@@ -10,19 +10,13 @@ import {
   ArrowLeft,
   Edit2,
   Star,
-  Layers,
-  Package,
-  TrendingUp,
   ChevronLeft,
   ChevronRight,
   ZoomIn,
   ShoppingBag,
-  DollarSign,
-  Box,
-  Calendar,
-  Clock,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 interface ProductViewPageProps {
   id: string;
@@ -30,6 +24,7 @@ interface ProductViewPageProps {
 
 export function ProductViewPage({ id }: ProductViewPageProps) {
   const router = useRouter();
+  const t = useTranslations("supplier.products");
   const { data: product, isLoading } = useSupplierProduct(id);
   const [activePhoto, setActivePhoto] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -84,16 +79,16 @@ export function ProductViewPage({ id }: ProductViewPageProps) {
     return (
       <div className="max-w-6xl mx-auto px-4 py-24 text-center">
         <ShoppingBag className="h-12 w-12 mx-auto text-muted-foreground/40 mb-4" />
-        <h2 className="text-lg font-semibold text-foreground mb-2">Produk tidak ditemukan</h2>
+        <h2 className="text-lg font-extrabold text-foreground mb-2">{t("productNotFound")}</h2>
         <p className="text-sm text-muted-foreground mb-6">
-          Produk yang Anda cari tidak tersedia atau telah dihapus.
+          {t("productNotFoundDesc")}
         </p>
         <Button
           onClick={() => router.push("/supplier/products")}
           variant="outline"
           className="cursor-pointer"
         >
-          <ArrowLeft className="h-4 w-4 mr-2" /> Kembali ke Katalog
+          <ArrowLeft className="h-4 w-4 mr-2" /> {t("backToCatalog")}
         </Button>
       </div>
     );
@@ -113,7 +108,7 @@ export function ProductViewPage({ id }: ProductViewPageProps) {
           className="flex items-center gap-1.5 hover:text-foreground transition-colors cursor-pointer font-medium"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
-          Katalog Produk
+          {t("title")}
         </button>
         <span>/</span>
         <span className="text-foreground font-semibold truncate max-w-[200px]">
@@ -131,7 +126,7 @@ export function ProductViewPage({ id }: ProductViewPageProps) {
           className="lg:col-span-3 space-y-3"
         >
           {/* Main Image */}
-          <div className="relative rounded-xl overflow-hidden border border-border/80 bg-muted/10 aspect-[4/3] group">
+          <div className="relative rounded-xl overflow-hidden border border-border bg-muted/10 aspect-[4/3] group">
             {photos.length > 0 ? (
               <>
                 <AnimatePresence mode="wait">
@@ -150,7 +145,7 @@ export function ProductViewPage({ id }: ProductViewPageProps) {
                 {/* Zoom button */}
                 <button
                   onClick={() => setLightboxOpen(true)}
-                  className="absolute top-3 right-3 h-8 w-8 rounded-lg bg-background/80 backdrop-blur-sm border border-border/60 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-background transition-all cursor-pointer opacity-0 group-hover:opacity-100"
+                  className="absolute top-3 right-3 h-8 w-8 rounded-lg bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-background transition-all cursor-pointer opacity-0 group-hover:opacity-100"
                 >
                   <ZoomIn className="h-3.5 w-3.5" />
                 </button>
@@ -160,13 +155,13 @@ export function ProductViewPage({ id }: ProductViewPageProps) {
                   <>
                     <button
                       onClick={prevPhoto}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-lg bg-background/80 backdrop-blur-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-background transition-all cursor-pointer opacity-0 group-hover:opacity-100"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-lg bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-foreground hover:bg-background transition-all cursor-pointer opacity-0 group-hover:opacity-100"
                     >
                       <ChevronLeft className="h-4 w-4" />
                     </button>
                     <button
                       onClick={nextPhoto}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-lg bg-background/80 backdrop-blur-sm border border-border/60 flex items-center justify-center text-foreground hover:bg-background transition-all cursor-pointer opacity-0 group-hover:opacity-100"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-lg bg-background/80 backdrop-blur-sm border border-border flex items-center justify-center text-foreground hover:bg-background transition-all cursor-pointer opacity-0 group-hover:opacity-100"
                     >
                       <ChevronRight className="h-4 w-4" />
                     </button>
@@ -175,7 +170,7 @@ export function ProductViewPage({ id }: ProductViewPageProps) {
 
                 {/* Photo counter */}
                 {hasManyPhotos && (
-                  <div className="absolute bottom-3 right-3 bg-background/80 backdrop-blur-sm text-foreground text-[10px] font-bold px-2.5 py-1 rounded-full border border-border/60">
+                  <div className="absolute bottom-3 right-3 bg-background/80 backdrop-blur-sm text-foreground text-[10px] font-bold px-2.5 py-1 rounded-full border border-border">
                     {activePhoto + 1} / {photos.length}
                   </div>
                 )}
@@ -205,7 +200,7 @@ export function ProductViewPage({ id }: ProductViewPageProps) {
                   className={`shrink-0 h-16 w-16 rounded-lg border-2 overflow-hidden transition-all cursor-pointer ${
                     idx === activePhoto
                       ? "border-primary shadow-sm shadow-primary/20"
-                      : "border-border/60 hover:border-border opacity-70 hover:opacity-100"
+                      : "border-border hover:border-border opacity-70 hover:opacity-100"
                   }`}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -219,21 +214,16 @@ export function ProductViewPage({ id }: ProductViewPageProps) {
             </div>
           )}
 
-          {/* ── Description Section ──────────────────────────────────────── */}
-          <div className="rounded-xl border border-border/80 bg-card overflow-hidden">
-            <div className="px-5 py-3.5 border-b border-border/60 flex items-center gap-2">
-              <Package className="h-3.5 w-3.5 text-primary" />
-              <span className="text-xs font-bold text-foreground tracking-tight">Deskripsi Produk</span>
-            </div>
-            <div className="px-5 py-4">
-              {product.description ? (
-                <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
-                  {product.description}
-                </p>
-              ) : (
-                <p className="text-sm text-muted-foreground italic">Belum ada deskripsi produk.</p>
-              )}
-            </div>
+          {/* ── Description Section (Plain layout, Tokopedia Style) ────────────────── */}
+          <div className="pt-6 pb-2 space-y-3">
+            <h3 className="text-base font-extrabold text-foreground tracking-tight">{t("description")}</h3>
+            {product.description ? (
+              <p className="text-sm text-foreground leading-relaxed whitespace-pre-line">
+                {product.description}
+              </p>
+            ) : (
+              <p className="text-sm text-muted-foreground italic">{t("noDescription")}</p>
+            )}
           </div>
         </motion.div>
 
@@ -242,93 +232,81 @@ export function ProductViewPage({ id }: ProductViewPageProps) {
           initial={{ opacity: 0, x: 16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.45, delay: 0.1 }}
-          className="lg:col-span-2 space-y-5 lg:sticky lg:top-6"
+          className="lg:col-span-2 space-y-6 lg:sticky lg:top-6"
         >
           {/* Category */}
-          <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
-            <Layers className="h-3 w-3" />
+          <div className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
             <span>{product.category?.name || "Uncategorized"}</span>
           </div>
 
           {/* Product Name */}
-          <div className="space-y-1">
-            <h1 className="text-2xl font-extrabold text-foreground tracking-tight leading-tight">
+          <div className="space-y-1 pb-4 border-b border-border">
+            <h1 className="text-[1.28571rem] font-extrabold text-foreground tracking-tight leading-6">
               {product.name}
             </h1>
             {product.is_featured && (
-              <div className="flex items-center gap-1.5 text-amber-500 text-xs font-semibold">
+              <div className="flex items-center gap-1.5 text-amber-500 text-xs font-bold pt-1">
                 <Star className="h-3.5 w-3.5 fill-amber-500" />
-                Produk Unggulan
+                {t("featuredProduct")}
               </div>
             )}
           </div>
 
-          {/* Price Card */}
-          <div className="rounded-xl bg-primary/5 border border-primary/15 p-4 space-y-1">
-            <div className="text-[10px] font-bold uppercase tracking-widest text-primary/70">
-              Harga Mulai Dari
+          {/* Price starting from - Plain text layout, no Card container (Tokopedia style) */}
+          <div className="space-y-1 pb-5 border-b border-border">
+            <div className="text-xs text-muted-foreground">
+              {t("priceStartingFrom")}
             </div>
-            <div className="text-3xl font-black text-foreground tracking-tight">
+            <div className="text-[2rem] font-extrabold text-foreground tracking-tight leading-[34px]">
               {product.starting_price > 0 ? (
                 <>
-                  <span className="text-lg font-bold text-muted-foreground mr-1">
+                  <span className="text-lg font-extrabold text-muted-foreground mr-1">
                     {product.currency}
                   </span>
                   {product.starting_price.toLocaleString("id-ID")}
                 </>
               ) : (
-                <span className="text-xl text-muted-foreground font-semibold">Hubungi Supplier</span>
+                <span className="text-xl text-muted-foreground font-semibold">{t("contactSupplier")}</span>
               )}
             </div>
-            <div className="text-[10px] text-muted-foreground">
-              *Harga dapat bervariasi tergantung kuantitas pesanan
+            <div className="text-[10px] text-muted-foreground pt-0.5">
+              {t("priceNote")}
             </div>
           </div>
 
-          {/* Specs Grid */}
-          <div className="rounded-xl border border-border/80 bg-card overflow-hidden">
-            <div className="px-4 py-3 border-b border-border/60 flex items-center gap-2">
-              <TrendingUp className="h-3.5 w-3.5 text-primary" />
-              <span className="text-xs font-bold text-foreground">Spesifikasi & Ketentuan</span>
-            </div>
-            <div className="divide-y divide-border/60">
+          {/* Specs List - Plain border-b divider layout, no card wrapper (Tokopedia style) */}
+          <div className="space-y-3 pb-5 border-b border-border">
+            <h3 className="text-sm font-extrabold text-foreground">{t("productSpecs")}</h3>
+            <div className="space-y-1.5">
               <SpecRow
-                icon={<Box className="h-3.5 w-3.5" />}
-                label="Min. Order (MOQ)"
+                label={t("moq")}
                 value={product.moq || "N/A"}
                 highlight
               />
               <SpecRow
-                icon={<TrendingUp className="h-3.5 w-3.5" />}
-                label="Kapasitas Pasokan"
+                label={t("capacity")}
                 value={product.capacity_text || "N/A"}
               />
               <SpecRow
-                icon={<DollarSign className="h-3.5 w-3.5" />}
-                label="Mata Uang"
+                label={t("currency")}
                 value={product.currency || "IDR"}
               />
               <SpecRow
-                icon={<Layers className="h-3.5 w-3.5" />}
-                label="Kategori"
+                label={t("category")}
                 value={product.category?.name || "Uncategorized"}
               />
             </div>
           </div>
 
-          {/* Timestamps */}
-          <div className="rounded-xl border border-border/60 bg-muted/5 p-4 space-y-2">
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-muted-foreground flex items-center gap-1.5">
-                <Calendar className="h-3 w-3" /> Ditambahkan
-              </span>
-              <span className="font-medium text-foreground">{formatDate(product.created_at)}</span>
+          {/* Timestamps - Clean inline spacing */}
+          <div className="text-xs text-muted-foreground space-y-2 pb-5 border-b border-border">
+            <div className="flex items-center justify-between">
+              <span>{t("addedAt")}</span>
+              <span className="font-semibold text-foreground">{formatDate(product.created_at)}</span>
             </div>
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-muted-foreground flex items-center gap-1.5">
-                <Clock className="h-3 w-3" /> Diperbarui
-              </span>
-              <span className="font-medium text-foreground">{formatDate(product.updated_at)}</span>
+            <div className="flex items-center justify-between">
+              <span>{t("updatedAt")}</span>
+              <span className="font-semibold text-foreground">{formatDate(product.updated_at)}</span>
             </div>
           </div>
 
@@ -340,7 +318,7 @@ export function ProductViewPage({ id }: ProductViewPageProps) {
             >
               <Link href={`/supplier/products/${product.id}/edit`}>
                 <Edit2 className="h-4 w-4 mr-2" />
-                Edit Produk
+                {t("editProduct")}
               </Link>
             </Button>
             <Button
@@ -349,7 +327,7 @@ export function ProductViewPage({ id }: ProductViewPageProps) {
               className="w-full cursor-pointer border-border hover:bg-muted transition-all text-sm"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Kembali ke Katalog
+              {t("backToCatalog")}
             </Button>
           </div>
         </motion.div>
@@ -415,28 +393,25 @@ export function ProductViewPage({ id }: ProductViewPageProps) {
 
 // ── Helper Components ─────────────────────────────────────────────────────────
 function SpecRow({
-  icon,
   label,
   value,
   highlight = false,
 }: {
-  icon: React.ReactNode;
   label: string;
   value: string;
   highlight?: boolean;
 }) {
   return (
-    <div className="flex items-center justify-between px-4 py-3 gap-4">
-      <span className="flex items-center gap-2 text-xs text-muted-foreground shrink-0">
-        <span className="text-primary/60">{icon}</span>
+    <div className="flex items-center justify-between py-1.5 gap-4">
+      <span className="text-sm text-muted-foreground shrink-0">
         {label}
       </span>
       {highlight ? (
-        <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 text-[11px] font-bold px-2.5">
+        <Badge variant="outline" className="bg-primary/5 text-primary border-primary/25 text-xs font-bold px-2 py-0.5">
           {value}
         </Badge>
       ) : (
-        <span className="text-xs font-semibold text-foreground text-right">{value}</span>
+        <span className="text-sm font-semibold text-foreground text-right">{value}</span>
       )}
     </div>
   );

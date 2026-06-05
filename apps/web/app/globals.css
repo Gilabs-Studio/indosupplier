@@ -181,21 +181,21 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-weight: 200; /* Light 200 for better readability while maintaining minimalism */
+    font-weight: 400; /* Standard font weight for optimal clarity and Tokopedia style */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
 
   p {
-    font-weight: 200; /* Light 200 for better readability while maintaining minimalism */
-    letter-spacing: 0.01em; /* Slightly increase letter spacing for better contrast */
-    line-height: 1.6; /* Improve line height for readability */
+    font-weight: 400; /* Standard font weight for optimal clarity */
+    letter-spacing: 0.01em;
+    line-height: 1.6;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading tracking-tight;
-    font-weight: 400; /* Regular 400 for headers */
+    font-weight: 700; /* Strong bold headers for distinct hierarchy */
   }
 }
 

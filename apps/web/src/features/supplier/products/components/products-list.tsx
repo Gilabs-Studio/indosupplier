@@ -35,7 +35,7 @@ export function SupplierProductsList() {
   return (
     <div className="space-y-6 text-left">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border/80 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border pb-6">
         <div className="space-y-1">
           <h1 className="text-2xl font-bold tracking-tight text-foreground font-heading">
             {t("title")}
@@ -151,13 +151,12 @@ export function SupplierProductsList() {
                   <CardContent className="p-5 flex-1 flex flex-col justify-between">
                     <div className="space-y-2.5">
                       {/* Category Label */}
-                      <div className="flex items-center gap-1 text-[11px] text-muted-foreground font-semibold uppercase tracking-wider">
-                        <Layers className="h-3 w-3" />
+                      <div className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider">
                         <span>{product.category?.name || "Uncategorized"}</span>
                       </div>
 
                       {/* Title */}
-                      <h3 className="font-bold text-foreground text-base leading-tight tracking-tight line-clamp-2">
+                      <h3 className="font-extrabold text-foreground text-base leading-tight tracking-tight line-clamp-2">
                         {product.name}
                       </h3>
 
@@ -168,7 +167,7 @@ export function SupplierProductsList() {
                     </div>
 
                     {/* Metadata and Pricing */}
-                    <div className="space-y-2 pt-3 border-t border-border mt-3">
+                    <div className="space-y-2.5 pt-4 border-t border-border mt-4">
                       <div className="flex justify-between items-center text-xs">
                         <span className="text-muted-foreground">MOQ</span>
                         <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 text-[10px] font-bold rounded-full px-2 py-0.5">
@@ -177,19 +176,19 @@ export function SupplierProductsList() {
                       </div>
 
                       <div className="flex justify-between items-center text-xs">
-                        <span className="text-muted-foreground">Capacity</span>
+                        <span className="text-muted-foreground">{t("capacity")}</span>
                         <span className="font-semibold text-foreground truncate max-w-[150px]">{product.capacity_text || "N/A"}</span>
                       </div>
 
                       <div className="flex justify-between items-baseline pt-1">
-                        <span className="text-[11px] text-muted-foreground uppercase font-bold tracking-wider">Price</span>
+                        <span className="text-[11px] text-muted-foreground uppercase font-bold tracking-wider">{t("price")}</span>
                         <span className="font-extrabold text-foreground text-sm">
                           {product.starting_price > 0 ? (
                             <>
                               {product.currency} {product.starting_price.toLocaleString("id-ID")}
                             </>
                           ) : (
-                            "Inquire"
+                            t("contactSupplier")
                           )}
                         </span>
                       </div>
@@ -198,7 +197,7 @@ export function SupplierProductsList() {
                 </Link>
 
                 {/* Actions Footer */}
-                <div className="p-5 pt-0 border-t border-border/80 flex items-center justify-end gap-2 shrink-0">
+                <div className="px-5 py-4 border-t border-border flex items-center justify-end gap-2 shrink-0">
                   <Button
                     asChild
                     variant="outline"
@@ -206,7 +205,7 @@ export function SupplierProductsList() {
                     className="h-8 text-xs font-semibold border-border hover:border-muted-foreground cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0"
                   >
                     <Link href={`/supplier/products/${product.id}/edit`}>
-                      <Edit2 className="mr-1.5 h-3.5 w-3.5" /> Edit
+                      <Edit2 className="mr-1.5 h-3.5 w-3.5" /> {t("editProduct")}
                     </Link>
                   </Button>
                   <Button
