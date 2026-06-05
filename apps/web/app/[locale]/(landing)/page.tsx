@@ -192,64 +192,98 @@ export default async function LandingPage({
       </section>
 
       {/* ── SECTION 4: WAITING LIST / CONVERSION ── */}
-      <section id="join" className="relative px-6 md:px-16 lg:px-24 py-20 md:py-28 bg-[#1a1a1a] overflow-hidden border-t border-[#333333]/30">
-        <div aria-hidden className="absolute inset-0">
-          {/* Progressive top/bottom fade of the background image */}
+      <section
+        id="join"
+        aria-label={t("waitlist.headline")}
+        className="relative flex flex-col min-h-screen px-6 md:px-16 lg:px-24 py-24 md:py-32 bg-[#1a1a1a] overflow-hidden border-t border-[#333333]/30"
+      >
+        {/* Background image layer */}
+        <div aria-hidden className="absolute inset-0 pointer-events-none">
           <div
-            className="absolute inset-0 bg-cover bg-no-repeat opacity-35 transition-opacity duration-500 bg-[position:65%_center] md:bg-right-center"
+            className="absolute inset-0 bg-cover bg-no-repeat opacity-25 transition-opacity duration-500 bg-[position:65%_center] md:bg-right-center"
             style={{
               backgroundImage: "url('/waitlist_bg.png')",
               maskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)",
               WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)"
             }}
           />
-          {/* Graduated background tint overlay for maximum text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a]/98 via-[#1a1a1a]/90 to-[#1a1a1a]/50 md:from-[#1a1a1a]/95 md:via-[#1a1a1a]/80 md:to-[#1a1a1a]/30" />
+          {/* Deep gradient tint for readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a]/98 via-[#1a1a1a]/90 to-[#1a1a1a]/60 md:from-[#1a1a1a]/98 md:via-[#1a1a1a]/85 md:to-[#1a1a1a]/40" />
+          {/* Decorative ambient glow */}
+          <div className="absolute top-1/4 right-0 w-[400px] h-[400px] bg-[#FFB300]/4 rounded-full blur-[100px] pointer-events-none" />
         </div>
 
-        <div className="relative z-10 max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          {/* Left Column */}
-          <div>
-            <span className="text-[11px] tracking-widest font-macondo font-medium inline-block bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent mb-6">
-              {t("waitlist.badge")}
-            </span>
-            <h2
-              className="font-light leading-[1.08] tracking-[-0.04em] text-[#ffffff] mb-6"
-              style={{ fontSize: "clamp(2.4rem, 5vw, 4rem)" }}
-            >
-              {t("waitlist.headline")}
-            </h2>
-            <p className="text-[17px] font-light leading-relaxed text-[#a6a6a6] mb-12 max-w-[500px]">
-              {t("waitlist.subheadline")}
-            </p>
+        <div className="relative z-10 max-w-[1400px] w-full mx-auto flex flex-col flex-1">
+          {/* ── Main Grid: Left copy + Right form ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 xl:gap-24 flex-1 items-center">
+            {/* Left Column */}
+            <div className="lg:col-span-7 flex flex-col justify-center">
+              <h2
+                className="font-light leading-[1.08] tracking-[-0.04em] text-[#ffffff] mb-6"
+                style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.8rem)" }}
+              >
+                {t("waitlist.headline")}
+              </h2>
+              <p className="text-[17px] font-light leading-relaxed text-[#a6a6a6] mb-10 max-w-[520px]">
+                {t("waitlist.subheadline")}
+              </p>
 
-            {/* Structured list in grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-[14px] font-light text-[#a6a6a6] border-t border-[#333333]/80 pt-8">
-              {[
-                t("waitlist.benefits.discount"),
-                t("waitlist.benefits.onboarding"),
-                t("waitlist.benefits.support"),
-                t("waitlist.benefits.noCard"),
-              ].map((benefit, idx) => (
-                <div key={idx} className="flex gap-3 items-start">
-                  <svg
-                    className="h-5 w-5 text-[#ffffff] shrink-0 mt-0.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
+              {/* Benefits list */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-[14px] font-light text-[#a6a6a6] border-t border-[#333333]/80 pt-8 mb-12">
+                {[
+                  t("waitlist.benefits.discount"),
+                  t("waitlist.benefits.onboarding"),
+                  t("waitlist.benefits.support"),
+                  t("waitlist.benefits.noCard"),
+                ].map((benefit, idx) => (
+                  <div key={idx} className="flex gap-3 items-start">
+                    <svg
+                      className="h-5 w-5 text-[#FFB300] shrink-0 mt-0.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      aria-hidden
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <p className="leading-relaxed text-[#a6a6a6]">{benefit}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Platform Stats Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-0 border border-[#333333]/60 rounded-lg overflow-hidden">
+                {[
+                  { value: t("waitlist.stats.suppliersValue"), label: t("waitlist.stats.suppliersLabel") },
+                  { value: t("waitlist.stats.categoriesValue"), label: t("waitlist.stats.categoriesLabel") },
+                  { value: t("waitlist.stats.buyersValue"), label: t("waitlist.stats.buyersLabel") },
+                  { value: t("waitlist.stats.savingsValue"), label: t("waitlist.stats.savingsLabel") },
+                ].map((stat, idx) => (
+                  <div
+                    key={idx}
+                    className={`flex flex-col justify-center p-4 sm:p-5 bg-[#1f1f1f]/60 backdrop-blur-sm ${
+                      idx < 3 ? "border-r border-[#333333]/60" : ""
+                    } ${idx >= 2 ? "border-t border-[#333333]/60 sm:border-t-0" : ""}`}
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <p className="leading-relaxed text-[#a6a6a6]">{benefit}</p>
-                </div>
-              ))}
+                    <span
+                      className="font-macondo font-medium bg-linear-to-r from-[#E27D18] to-[#FFB300] bg-clip-text text-transparent leading-none mb-1"
+                      style={{ fontSize: "clamp(1.25rem, 2vw, 1.6rem)" }}
+                    >
+                      {stat.value}
+                    </span>
+                    <span className="text-[11px] text-[#a6a6a6] font-light leading-snug">{stat.label}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Right Column (Form container) */}
-          <div className="relative">
-            <WaitingListForm />
+            {/* Right Column: Form */}
+            <div className="lg:col-span-5 flex flex-col justify-center">
+              {/* Form header above card */}
+
+              <WaitingListForm />
+            </div>
           </div>
         </div>
       </section>

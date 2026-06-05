@@ -107,7 +107,25 @@
         "onboarding": "Sourcing and negotiation assistance from our expert team",
         "support": "Zero platform commission fees for your first 6 months",
         "noCard": "Instant sign-up with no fees or financial commitments"
-      }
+      },
+      "urgency": {
+        "label": "Quota Filled",
+        "spotsLeft": "Only {count} spots left out of 50",
+        "batchLabel": "First Batch — Q3 2026"
+      },
+      "stats": {
+        "suppliersLabel": "Suppliers Ready",
+        "suppliersValue": "500+",
+        "categoriesLabel": "Product Categories",
+        "categoriesValue": "120+",
+        "buyersLabel": "Buyers Registered",
+        "buyersValue": "1,200+",
+        "savingsLabel": "Savings vs Broker Pricing",
+        "savingsValue": "Up to 40%"
+      },
+      "trustBadge": "Trusted by Indonesian Business Owners",
+      "formTitle": "Sign Up Now — Free",
+      "formSubtitle": "Get priority access and 0% commission for 6 months"
     },
     "footer": {
       "copy": "© {year} IndoSupplier Platform. All rights reserved",

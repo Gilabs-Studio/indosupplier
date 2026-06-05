@@ -107,7 +107,25 @@
         "onboarding": "Bantuan pencarian & negosiasi supplier dari tim ahli kami",
         "support": "Gratis biaya komisi transaksi selama 6 bulan pertama",
         "noCard": "Pendaftaran instan tanpa biaya atau komitmen finansial"
-      }
+      },
+      "urgency": {
+        "label": "Kuota Terisi",
+        "spotsLeft": "Hanya {count} slot tersisa dari 50",
+        "batchLabel": "Batch Pertama — Q3 2026"
+      },
+      "stats": {
+        "suppliersLabel": "Supplier Siap",
+        "suppliersValue": "500+",
+        "categoriesLabel": "Kategori Produk",
+        "categoriesValue": "120+",
+        "buyersLabel": "Buyer Mendaftar",
+        "buyersValue": "1.200+",
+        "savingsLabel": "Hemat dari Harga Broker",
+        "savingsValue": "Hingga 40%"
+      },
+      "trustBadge": "Dipercaya oleh Pemilik Bisnis Indonesia",
+      "formTitle": "Daftar Sekarang — Gratis",
+      "formSubtitle": "Dapatkan akses prioritas dan 0% komisi selama 6 bulan"
     },
     "footer": {
       "copy": "© {year} IndoSupplier Platform. Hak cipta dilindungi",
