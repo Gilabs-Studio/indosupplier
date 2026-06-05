@@ -7,19 +7,11 @@ import { PublicLayout } from "@/features/public/components/public-layout";
 import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { useDemoHome } from "../hooks/use-demo-home";
 import { AiSearchInput } from "@/features/public/components/ai-search-input";
 import {
-  Factory,
-  Layers,
-  ShieldCheck,
   Play,
   ArrowUp,
-  Scale,
-  FileText,
-  Award,
-  Sprout,
   Star,
   ChevronRight,
   CheckCircle,
@@ -590,6 +582,7 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
                 <div>
                   {/* Clean full-bleed thumbnail layout */}
                   <div className="h-[145px] overflow-hidden bg-muted relative">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={article.imageUrl}
                       alt={article.title}
@@ -656,6 +649,7 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
               <div>
                 {/* Full-bleed product image */}
                 <div className="h-[155px] overflow-hidden bg-muted relative">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={product.imageUrl}
                     alt={product.name}
@@ -794,6 +788,7 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
               >
                 {/* Thumbnail play overlay */}
                 <div className="h-[145px] relative overflow-hidden rounded-lg bg-neutral-900 border border-border shadow-xs">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={video.imageUrl}
                     alt={video.title}

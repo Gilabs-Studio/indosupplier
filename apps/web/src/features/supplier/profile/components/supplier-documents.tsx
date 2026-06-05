@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
 import { FileCheck, FileText, Upload, Trash2, CheckCircle2 } from "lucide-react";
+import { DeleteDialog } from "@/components/ui/delete-dialog";
 
 export function SupplierDocuments() {
   const t = useTranslations("supplier.profile");
@@ -32,11 +33,10 @@ export function SupplierDocuments() {
     );
   };
 
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
   const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to delete this document reference?")) {
-      setDocs(docs.map(d => d.id === id ? { ...d, file: "", number: "", status: "empty" } : d));
-      toast.success("Document removed.");
-    }
+    setDeleteId(id);
   };
 
   const getStatusBadge = (status: string) => {
@@ -123,6 +123,18 @@ export function SupplierDocuments() {
           </div>
         </CardContent>
       </Card>
+
+      <DeleteDialog
+        open={!!deleteId}
+        onOpenChange={(open) => !open && setDeleteId(null)}
+        onConfirm={() => {
+          if (deleteId) {
+            setDocs(docs.map(d => d.id === deleteId ? { ...d, file: "", number: "", status: "empty" } : d));
+            toast.success("Document removed.");
+          }
+        }}
+        itemName="document reference"
+      />
     </div>
   );
 }

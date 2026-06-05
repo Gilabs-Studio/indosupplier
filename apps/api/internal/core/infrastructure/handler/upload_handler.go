@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"log"
 	"strings"
 	"unicode"
 
@@ -123,6 +124,7 @@ func (h *UploadHandler) UploadImage(c *gin.Context) {
 				"error": "corrupted or invalid image file",
 			}, nil)
 		default:
+			log.Printf("[ERROR] UploadImage internal error: %v", err)
 			errors.InternalServerErrorResponse(c, "failed to process upload")
 		}
 		return
@@ -174,6 +176,7 @@ func (h *UploadHandler) UploadDocument(c *gin.Context) {
 				"max_size": config.AppConfig.Storage.MaxUploadSize,
 			}, nil)
 		default:
+			log.Printf("[ERROR] UploadDocument internal error: %v", err)
 			errors.InternalServerErrorResponse(c, "failed to process upload")
 		}
 		return

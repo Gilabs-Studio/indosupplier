@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/routing";
@@ -38,7 +38,6 @@ interface PublicNavbarProps {
 export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
   const t = useTranslations("public.navbar");
   const buyerLayoutT = useTranslations("buyer.layout");
-  const buyerNotificationsT = useTranslations("buyer.notifications");
   const buyerProfileT = useTranslations("buyer.profile");
   const router = useRouter();
   const { user, isAuthenticated, logout } = useAuthStore();

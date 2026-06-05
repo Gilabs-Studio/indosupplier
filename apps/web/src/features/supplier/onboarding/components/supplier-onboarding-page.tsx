@@ -187,12 +187,21 @@ export function SupplierOnboardingPage() {
 
       toast.success(t("success"));
       router.push("/supplier/dashboard");
-    } catch (err: any) {
-      const fieldErrors = err?.response?.data?.error?.field_errors;
+    } catch (err: unknown) {
+      const apiError = err as {
+        response?: {
+          data?: {
+            error?: {
+              field_errors?: Array<{ field: string; message?: string }>;
+            };
+          };
+        };
+      };
+      const fieldErrors = apiError?.response?.data?.error?.field_errors;
       if (fieldErrors && Array.isArray(fieldErrors)) {
         const mappedErrors: Record<string, string> = {};
         let firstErrorStep = 5;
-        fieldErrors.forEach((fe: any) => {
+        fieldErrors.forEach((fe: { field: string; message?: string }) => {
           let fieldKey = fe.field;
           if (fieldKey === "company_name") fieldKey = "companyName";
           else if (fieldKey === "primary_category") fieldKey = "primaryCategory";

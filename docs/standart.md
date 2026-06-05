@@ -125,6 +125,27 @@ Komponen `Input` bawaan (`@/components/ui/input.tsx`) telah diprogram dengan sta
 1.  **Auto-select:** Teks akan otomatis terblok/terseleksi saat input mendapatkan fokus (`onFocus`), kecuali untuk input tipe date, time, color, dan file.
 2.  **Filter Numeric Input:** Untuk input tipe `number`, komponen otomatis mencegah input karakter non-angka kecuali tombol navigasi, minus di awal, dan satu buah titik desimal.
 
+### 🗑️ Dialog Konfirmasi Hapus (Delete Confirmation Dialog)
+Untuk menjaga konsistensi UI, **DILARANG** menggunakan native `confirm()` browser untuk aksi penghapusan.
+- **Wajib menggunakan** komponen `DeleteDialog` dari `@/components/ui/delete-dialog.tsx`.
+- Contoh penggunaan:
+  ```tsx
+  import { DeleteDialog } from "@/components/ui/delete-dialog";
+  
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  
+  <DeleteDialog
+    open={!!deleteId}
+    onOpenChange={(open) => !open && setDeleteId(null)}
+    onConfirm={async () => {
+      if (deleteId) {
+        await handleDelete(deleteId);
+      }
+    }}
+    itemName="product"
+  />
+  ```
+
 ---
 
 ## 5. Lokalisasi & Navigasi Rute (i18n)

@@ -26,6 +26,16 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 interface SupplierLayoutProps {
   children: React.ReactNode;
@@ -40,6 +50,7 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
   const [mounted, setMounted] = useState(false);
   const [isAuthorizing, setIsAuthorizing] = useState(true);
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const hasSupplierAccess =
     user?.capabilities.supplier === true || !!user?.supplier_profile;
@@ -164,7 +175,7 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
         {
           name: t("menu.products"),
           icon: Building2,
-          url: "/supplier/profile/products",
+          url: "/supplier/products",
         },
         {
           name: t("menu.rfqs"),
@@ -303,12 +314,7 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
         <div className="p-3 border-t border-border/80 space-y-1">
           {/* Sign Out Button */}
           <button
-            onClick={() => {
-              if (confirm(t("signOutConfirm"))) {
-                logout();
-                router.push("/login");
-              }
-            }}
+            onClick={() => setShowLogoutConfirm(true)}
             className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-200 group cursor-pointer ${
               isSidebarExpanded ? "justify-start" : "justify-center"
             }`}
@@ -400,6 +406,33 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
           </div>
         </main>
       </div>
+
+      <Dialog open={showLogoutConfirm} onOpenChange={setShowLogoutConfirm}>
+        <DialogContent size="sm">
+          <DialogHeader>
+            <DialogTitle className="font-heading">{t("signOut")}</DialogTitle>
+            <DialogDescription>{t("signOutConfirm")}</DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <DialogClose asChild>
+              <Button variant="outline" className="cursor-pointer">
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button
+              variant="destructive"
+              className="cursor-pointer"
+              onClick={() => {
+                setShowLogoutConfirm(false);
+                logout();
+                router.push("/login");
+              }}
+            >
+              {t("signOut")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

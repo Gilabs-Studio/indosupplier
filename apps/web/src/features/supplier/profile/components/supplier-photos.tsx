@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Image as ImageIcon, Upload, Trash2, Eye } from "lucide-react";
+import { DeleteDialog } from "@/components/ui/delete-dialog";
 
 export function SupplierPhotos() {
   const t = useTranslations("supplier.profile");
@@ -14,6 +15,8 @@ export function SupplierPhotos() {
     { id: "PH-02", name: "Bulk Raw Materials Warehouse.jpg", url: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=500&auto=format&fit=crop" },
     { id: "PH-03", name: "Office Headquarters Front Lobby.jpg", url: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&auto=format&fit=crop" },
   ]);
+
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const handleUploadClick = () => {
     // Simulate photo upload
@@ -27,10 +30,7 @@ export function SupplierPhotos() {
   };
 
   const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to delete this photo from your company gallery?")) {
-      setPhotos(photos.filter((p) => p.id !== id));
-      toast.success("Photo removed from gallery.");
-    }
+    setDeleteId(id);
   };
 
   return (
@@ -93,6 +93,18 @@ export function SupplierPhotos() {
           </Card>
         ))}
       </div>
+
+      <DeleteDialog
+        open={!!deleteId}
+        onOpenChange={(open) => !open && setDeleteId(null)}
+        onConfirm={() => {
+          if (deleteId) {
+            setPhotos(photos.filter((p) => p.id !== deleteId));
+            toast.success("Photo removed from gallery.");
+          }
+        }}
+        itemName="photo"
+      />
     </div>
   );
 }

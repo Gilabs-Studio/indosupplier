@@ -28,6 +28,8 @@ import supplierSupportEn from "@/features/supplier/support/i18n/en.json";
 import supplierReviewsEn from "@/features/supplier/reviews/i18n/en.json";
 import supplierNotificationsEn from "@/features/supplier/notifications/i18n/en.json";
 import supplierOnboardingEn from "@/features/supplier/onboarding/i18n/en.json";
+import { productsEn } from "@/features/supplier/products/i18n/en";
+
 
 // Sysadmin English translations
 import faqEn from "@/features/sysadmin/faq/i18n/en.json";
@@ -68,6 +70,8 @@ import supplierSupportId from "@/features/supplier/support/i18n/id.json";
 import supplierReviewsId from "@/features/supplier/reviews/i18n/id.json";
 import supplierNotificationsId from "@/features/supplier/notifications/i18n/id.json";
 import supplierOnboardingId from "@/features/supplier/onboarding/i18n/id.json";
+import { productsId } from "@/features/supplier/products/i18n/id";
+
 
 // Sysadmin Indonesian translations
 import faqId from "@/features/sysadmin/faq/i18n/id.json";
@@ -115,7 +119,8 @@ const messages = {
       ...supplierSupportEn,
       ...supplierReviewsEn,
       ...supplierNotificationsEn,
-      ...supplierOnboardingEn
+      ...supplierOnboardingEn,
+      products: productsEn
     },
     public: {
       ...publicSearchEn.public,
@@ -157,7 +162,8 @@ const messages = {
       ...supplierSupportId,
       ...supplierReviewsId,
       ...supplierNotificationsId,
-      ...supplierOnboardingId
+      ...supplierOnboardingId,
+      products: productsId
     },
     public: {
       ...publicSearchId.public,

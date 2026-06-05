@@ -42,5 +42,8 @@ func NewEngine(jwtManager *jwt.JWTManager) *gin.Engine {
 		r.Use(middleware.CSRF()) // Add CSRF protection
 	}
 
+	// Statically serve uploads folder for local filesystem fallback
+	r.Static("/uploads", "./uploads")
+
 	return r
 }

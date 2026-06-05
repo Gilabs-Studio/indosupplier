@@ -14,6 +14,7 @@ export default function SupplierLayout({
   const portalKeywords = [
     "/supplier/dashboard",
     "/supplier/profile",
+    "/supplier/products",
     "/supplier/billing",
     "/supplier/subscription",
     "/supplier/verification",

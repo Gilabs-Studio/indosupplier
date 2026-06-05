@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
 import { Award, Plus, Trash2, Calendar, Upload } from "lucide-react";
+import { DeleteDialog } from "@/components/ui/delete-dialog";
 
 export function SupplierCertifications() {
   const t = useTranslations("supplier.profile");
@@ -42,11 +43,10 @@ export function SupplierCertifications() {
     toast.success("Certificate uploaded for compliance check!");
   };
 
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
   const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to remove this certificate?")) {
-      setCerts(certs.filter((c) => c.id !== id));
-      toast.success("Certificate removed.");
-    }
+    setDeleteId(id);
   };
 
   const getStatusBadge = (status: string) => {
@@ -175,6 +175,18 @@ export function SupplierCertifications() {
           </Card>
         </div>
       )}
+
+      <DeleteDialog
+        open={!!deleteId}
+        onOpenChange={(open) => !open && setDeleteId(null)}
+        onConfirm={() => {
+          if (deleteId) {
+            setCerts(certs.filter((c) => c.id !== deleteId));
+            toast.success("Certificate removed.");
+          }
+        }}
+        itemName="certificate"
+      />
     </div>
   );
 }

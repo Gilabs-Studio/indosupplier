@@ -64,8 +64,11 @@ export function AiSearchInput({ locale }: AiSearchInputProps) {
         setIsDeleting(true);
       }, 2000);
     } else if (isDeleting && charIndex === 0) {
-      setIsDeleting(false);
-      setPhraseIndex((prev) => (prev + 1) % phrases.length);
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        setIsDeleting(false);
+        setPhraseIndex((prev) => (prev + 1) % phrases.length);
+      }, 200);
     }
 
     return () => clearTimeout(timer);

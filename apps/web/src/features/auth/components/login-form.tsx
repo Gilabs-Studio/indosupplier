@@ -38,7 +38,6 @@ export default function LoginForm({
   const t = useTranslations("auth.login");
   const searchParams = useSearchParams();
   const hasShownPaymentToast = useRef(false);
-  const isPaymentSuccessView = searchParams.get("payment") === "success";
 
   /**
    * useLoginGuard handles authentication verification:

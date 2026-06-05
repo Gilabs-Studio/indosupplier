@@ -4,12 +4,16 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"log"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
+	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/config"
 )
 
 var (
@@ -40,31 +44,68 @@ func Init(accountID, accessKeyID, secretKey, bucketName, pubURL string) error {
 }
 
 // Upload stores data under the given key in the R2 bucket and returns the public URL.
+// Falls back to local filesystem if R2 configuration is empty or upload fails.
 func Upload(ctx context.Context, key string, data []byte, contentType string) (string, error) {
-	_, err := client.PutObject(ctx, &s3.PutObjectInput{
-		Bucket:        aws.String(bucket),
-		Key:           aws.String(key),
-		Body:          bytes.NewReader(data),
-		ContentType:   aws.String(contentType),
-		ContentLength: aws.Int64(int64(len(data))),
-	})
-	if err != nil {
-		return "", fmt.Errorf("storage: R2 upload failed for key %q: %w", key, err)
+	var uploadErr error
+	if client != nil {
+		_, uploadErr = client.PutObject(ctx, &s3.PutObjectInput{
+			Bucket:        aws.String(bucket),
+			Key:           aws.String(key),
+			Body:          bytes.NewReader(data),
+			ContentType:   aws.String(contentType),
+			ContentLength: aws.Int64(int64(len(data))),
+		})
+		if uploadErr == nil {
+			return URL(key), nil
+		}
+		log.Printf("[WARN] R2 upload failed for key %q: %v. Falling back to local filesystem storage.", key, uploadErr)
+	} else {
+		log.Printf("[WARN] R2 storage client is not initialized. Falling back to local filesystem storage.")
 	}
 
-	return URL(key), nil
+	// Local filesystem fallback:
+	// key is e.g. "uploads/user_id/products/uuid.webp"
+	localPath := filepath.Clean(key)
+	dir := filepath.Dir(localPath)
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return "", fmt.Errorf("storage fallback: failed to create local directories: %w", err)
+	}
+
+	if err := os.WriteFile(localPath, data, 0644); err != nil {
+		return "", fmt.Errorf("storage fallback: failed to write local file: %w", err)
+	}
+
+	port := "8088"
+	if config.AppConfig != nil && config.AppConfig.Server.Port != "" {
+		port = config.AppConfig.Server.Port
+	}
+
+	localURL := fmt.Sprintf("http://localhost:%s/%s", port, key)
+	log.Printf("[INFO] Local file fallback saved successfully. URL: %s", localURL)
+	return localURL, nil
 }
 
 // Delete removes the object identified by key from the R2 bucket.
 func Delete(ctx context.Context, key string) error {
-	_, err := client.DeleteObject(ctx, &s3.DeleteObjectInput{
-		Bucket: aws.String(bucket),
-		Key:    aws.String(key),
-	})
-	if err != nil {
-		return fmt.Errorf("storage: R2 delete failed for key %q: %w", key, err)
+	if client != nil {
+		_, err := client.DeleteObject(ctx, &s3.DeleteObjectInput{
+			Bucket: aws.String(bucket),
+			Key:    aws.String(key),
+		})
+		if err == nil {
+			return nil
+		}
+		log.Printf("[WARN] R2 delete failed for key %q: %v. Attempting local deletion fallback.", key, err)
 	}
 
+	// Local filesystem fallback:
+	localPath := filepath.Clean(key)
+	if _, err := os.Stat(localPath); err == nil {
+		if err := os.Remove(localPath); err != nil {
+			return fmt.Errorf("storage fallback: failed to delete local file: %w", err)
+		}
+		log.Printf("[INFO] Local file deleted successfully: %s", localPath)
+	}
 	return nil
 }
 
@@ -72,6 +113,18 @@ func Delete(ctx context.Context, key string) error {
 func DeleteByPrefix(ctx context.Context, prefix string) error {
 	trimmed := strings.TrimSpace(prefix)
 	if trimmed == "" {
+		return nil
+	}
+
+	if client == nil {
+		log.Printf("[WARN] R2 storage client is not initialized. Attempting local directory deletion fallback.")
+		localPath := filepath.Clean(trimmed)
+		if _, err := os.Stat(localPath); err == nil {
+			if err := os.RemoveAll(localPath); err != nil {
+				return fmt.Errorf("storage fallback: failed to delete local directory: %w", err)
+			}
+			log.Printf("[INFO] Local directory deleted successfully: %s", localPath)
+		}
 		return nil
 	}
 

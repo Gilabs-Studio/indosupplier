@@ -114,10 +114,13 @@ type SupplierProduct struct {
 	CapacityText      string         `gorm:"type:varchar(255)" json:"capacity_text"`
 	IsFeatured        bool           `gorm:"not null;default:false;index" json:"is_featured"`
 	SortOrder         int            `gorm:"not null;default:0;index" json:"sort_order"`
-	CreatedAt         time.Time      `gorm:"autoCreateTime" json:"created_at"`
-	UpdatedAt         time.Time      `gorm:"autoUpdateTime;index" json:"updated_at"`
-	DeletedAt         gorm.DeletedAt `gorm:"index" json:"-"`
+	Photos            []SupplierProductPhoto `gorm:"foreignKey:SupplierProductID;constraint:OnDelete:CASCADE" json:"photos"`
+	Category          *Category              `gorm:"foreignKey:CategoryID" json:"category,omitempty"`
+	CreatedAt         time.Time              `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt         time.Time              `gorm:"autoUpdateTime;index" json:"updated_at"`
+	DeletedAt         gorm.DeletedAt         `gorm:"index" json:"-"`
 }
+
 
 func (SupplierProduct) TableName() string {
 	return "supplier_products"

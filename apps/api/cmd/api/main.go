@@ -44,6 +44,11 @@ import (
 	waitingListHandler "github.com/gilabs/indosupplier/api/internal/waiting_list/presentation/handler"
 	waitingListRouter "github.com/gilabs/indosupplier/api/internal/waiting_list/presentation/router"
 	"github.com/gilabs/indosupplier/api/seeders"
+
+	supplierRepo "github.com/gilabs/indosupplier/api/internal/supplier/data/repositories"
+	supplierUsecase "github.com/gilabs/indosupplier/api/internal/supplier/domain/usecase"
+	supplierHandler "github.com/gilabs/indosupplier/api/internal/supplier/presentation/handler"
+	supplierRouter "github.com/gilabs/indosupplier/api/internal/supplier/presentation/router"
 )
 
 func initInfrastructure() {
@@ -148,6 +153,11 @@ func main() {
 	rtWorker := refreshTokenWorker.NewRefreshTokenCleanupWorker(refreshTokenRepository, 24*time.Hour)
 	rtWorker.Start()
 
+	productRepository := supplierRepo.NewProductRepository(database.DB)
+	productUC := supplierUsecase.NewProductUsecase(userRepository, productRepository)
+	productH := supplierHandler.NewProductHandler(productUC)
+
+
 	r := coreRouter.NewEngine(jwtManager)
 
 	r.Use(middleware.MetricsMiddleware())
@@ -175,6 +185,7 @@ func main() {
 		waitingListRouter.RegisterWaitingListRoutes(v1, waitingListH, jwtManager, sysadminRepository)
 		platformRouter.RegisterPlatformRoutes(v1, platformH, jwtManager)
 		coreRouter.RegisterUploadRoutes(v1, jwtManager)
+		supplierRouter.RegisterProductRoutes(v1, productH, jwtManager)
 	}
 
 	port := config.AppConfig.Server.Port

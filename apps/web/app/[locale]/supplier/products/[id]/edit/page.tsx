@@ -1,5 +1,5 @@
 import React from "react";
-import { SupplierProductEdit } from "@/features/supplier/profile/components/supplier-product-edit";
+import { ProductDetailPage } from "@/features/supplier/products/components/product-detail-page";
 
 export default async function SupplierProductEditPage({
   params,
@@ -7,5 +7,5 @@ export default async function SupplierProductEditPage({
   readonly params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  return <SupplierProductEdit id={id} />;
+  return <ProductDetailPage id={id} isCreate={false} />;
 }

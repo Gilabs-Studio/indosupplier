@@ -46,7 +46,7 @@ export function SupplierDashboardPage() {
         </div>
         <div className="flex gap-3">
           <Button asChild variant="outline" className="cursor-pointer transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-md border-border">
-            <Link href="/supplier/profile/products/create">
+            <Link href="/supplier/products/create">
               <PlusIcon className="mr-2 h-4 w-4" />
               Upload Product
             </Link>
