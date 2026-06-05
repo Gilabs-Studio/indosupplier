@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { PublicLayout } from "@/features/public/components/public-layout";
 import { Link } from "@/i18n/routing";
@@ -480,55 +481,55 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
                   {
                     label: t("supplierBaru"),
                     sub: t("subSupplierBaru"),
-                    icon: Factory,
-                    color: "bg-primary/10 text-primary border-primary/20",
+                    image: "/images/categories/cat-new-supplier.png",
                     link: "/demo/search",
                   },
                   {
                     label: t("supplierPremium"),
                     sub: t("subSupplierPremium"),
-                    icon: Award,
-                    color: "bg-cyan/15 text-cyan border-cyan/35",
+                    image: "/images/categories/cat-premium-supplier.png",
                     link: "/demo/search?verified=true",
                   },
                   {
                     label: t("komoditasTani"),
                     sub: t("subKomoditasTani"),
-                    icon: Sprout,
-                    color: "bg-success/10 text-success border-success/20",
+                    image: "/images/categories/cat-agriculture.png",
                     link: "/demo/search?category=agriculture",
                   },
                   {
                     label: t("bahanBaku"),
                     sub: t("subBahanBaku"),
-                    icon: Layers,
-                    color: "bg-purple/10 text-purple border-purple/20",
+                    image: "/images/categories/cat-raw-material.png",
                     link: "/demo/search?category=manufacturing",
                   },
                   {
                     label: t("beritaB2B"),
                     sub: t("subBeritaB2B"),
-                    icon: FileText,
-                    color: "bg-rose/10 text-rose border-rose/20",
+                    image: "/images/categories/cat-news.png",
                     link: "/demo/help",
                   },
                   {
                     label: t("bandingkan"),
                     sub: t("subBandingkan"),
-                    icon: Scale,
-                    color: "bg-cyan/10 text-cyan border-cyan/20",
+                    image: "/images/categories/cat-compare.png",
                     link: "/demo/compare",
                   },
                 ].map((item, idx) => {
-                  const Icon = item.icon;
                   return (
                     <Link
                       key={idx}
                       href={item.link}
                       className="flex flex-col items-center justify-between p-4 border border-border bg-card rounded-lg hover:border-primary hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/5 active:translate-y-0 transition-all duration-300 cursor-pointer text-center group"
                     >
-                      <div className={`p-3 rounded-full mb-3 border ${item.color} group-hover:scale-105 transition-transform`}>
-                        <Icon className="h-5 w-5" />
+                      <div className="relative w-16 h-16 mb-2 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+                        <Image
+                          src={item.image}
+                          alt={item.label}
+                          width={56}
+                          height={56}
+                          className="object-contain"
+                          priority={idx < 6}
+                        />
                       </div>
                       <div className="space-y-1">
                         <span className="block text-xs sm:text-sm font-bold text-foreground group-hover:text-primary transition-colors leading-tight">
