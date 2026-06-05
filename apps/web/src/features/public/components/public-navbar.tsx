@@ -39,6 +39,8 @@ export function PublicNavbar({ locale }: PublicNavbarProps) {
   const router = useRouter();
   const { user, isAuthenticated, logout } = useAuthStore();
   const [searchQuery, setSearchQuery] = useState("");
+  const hasSupplierAccess =
+    user?.capabilities.supplier === true || !!user?.supplier_profile;
 
   const handleLogout = async () => {
     try {
@@ -146,7 +148,7 @@ export function PublicNavbar({ locale }: PublicNavbarProps) {
 
               {/* Toko (Supplier Hub) Link/Dropdown */}
               <div className="hidden sm:block">
-                {user?.role === "supplier" ? (
+                {hasSupplierAccess ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <button className="flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-primary cursor-pointer transition-colors p-1 rounded-lg">
@@ -213,7 +215,7 @@ export function PublicNavbar({ locale }: PublicNavbarProps) {
                       <p className="text-xs text-muted-foreground leading-none">{user?.email}</p>
                       <div className="pt-1.5">
                         <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
-                          {user?.role === "supplier" ? "Buyer & Supplier" : "Buyer Account"}
+                          {hasSupplierAccess ? "Buyer & Supplier" : "Buyer Account"}
                         </span>
                       </div>
                     </div>
@@ -251,7 +253,7 @@ export function PublicNavbar({ locale }: PublicNavbarProps) {
                   <div className="block sm:hidden">
                     <DropdownMenuSeparator className="my-1 border-border" />
                     <div className="px-2 py-1 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Supplier Hub</div>
-                    {user?.role === "supplier" ? (
+                    {hasSupplierAccess ? (
                       <>
                         <DropdownMenuItem asChild className="focus:bg-secondary focus:text-foreground cursor-pointer rounded-lg">
                           <Link href="/supplier/dashboard" className="flex items-center gap-2 w-full px-2 py-1.5 text-sm">

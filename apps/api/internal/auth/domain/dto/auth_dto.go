@@ -13,8 +13,20 @@ type LoginResponse struct {
 }
 
 type UserResponse struct {
-	ID    string `json:"id"`
-	Name  string `json:"name"`
-	Email string `json:"email"`
-	Role  string `json:"role"`
+	ID              string                      `json:"id"`
+	Name            string                      `json:"name"`
+	Email           string                      `json:"email"`
+	Capabilities    AccountCapabilitiesResponse `json:"capabilities"`
+	BuyerProfile    *AccountProfileRefResponse  `json:"buyer_profile,omitempty"`
+	SupplierProfile *AccountProfileRefResponse  `json:"supplier_profile,omitempty"`
+}
+
+type AccountCapabilitiesResponse struct {
+	Buyer    bool `json:"buyer"`
+	Supplier bool `json:"supplier"`
+}
+
+type AccountProfileRefResponse struct {
+	ID     string `json:"id"`
+	Status string `json:"status,omitempty"`
 }

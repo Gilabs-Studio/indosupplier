@@ -17,9 +17,20 @@ var (
 	ErrExpiredToken = errors.New("token has expired")
 )
 
+const (
+	TokenSubjectUser        = "user"
+	TokenSubjectSystemAdmin = "system_admin"
+)
+
 type Claims struct {
-	UserID string `json:"user_id"`
-	Email  string `json:"email"`
+	UserID      string `json:"user_id"`
+	Email       string `json:"email"`
+	SubjectType string `json:"subject_type"`
+	jwt.RegisteredClaims
+}
+
+type refreshClaims struct {
+	SubjectType string `json:"subject_type"`
 	jwt.RegisteredClaims
 }
 
@@ -110,11 +121,21 @@ func NewJWTManager(opts Options) *JWTManager {
 	}
 }
 
-// GenerateAccessToken generates a new access token.
+// GenerateAccessToken generates a new end-user access token.
 func (m *JWTManager) GenerateAccessToken(userID, email string) (string, error) {
+	return m.generateAccessToken(userID, email, TokenSubjectUser)
+}
+
+// GenerateSystemAdminAccessToken generates a new system-admin access token.
+func (m *JWTManager) GenerateSystemAdminAccessToken(adminID, email string) (string, error) {
+	return m.generateAccessToken(adminID, email, TokenSubjectSystemAdmin)
+}
+
+func (m *JWTManager) generateAccessToken(subjectID, email, subjectType string) (string, error) {
 	claims := &Claims{
-		UserID: userID,
-		Email:  email,
+		UserID:      subjectID,
+		Email:       email,
+		SubjectType: subjectType,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(apptime.Now().Add(m.accessTokenTTL)),
 			IssuedAt:  jwt.NewNumericDate(apptime.Now()),
@@ -131,15 +152,27 @@ func (m *JWTManager) GenerateAccessToken(userID, email string) (string, error) {
 	return token.SignedString([]byte(m.accessSecretKey))
 }
 
-// GenerateRefreshToken generates a new refresh token
+// GenerateRefreshToken generates a new end-user refresh token.
 func (m *JWTManager) GenerateRefreshToken(userID string) (string, error) {
-	claims := &jwt.RegisteredClaims{
-		ExpiresAt: jwt.NewNumericDate(apptime.Now().Add(m.refreshTokenTTL)),
-		IssuedAt:  jwt.NewNumericDate(apptime.Now()),
-		NotBefore: jwt.NewNumericDate(apptime.Now()),
-		ID:        uuid.New().String(),
-		Subject:   userID,
-		Issuer:    m.issuer,
+	return m.generateRefreshToken(userID, TokenSubjectUser)
+}
+
+// GenerateSystemAdminRefreshToken generates a new system-admin refresh token.
+func (m *JWTManager) GenerateSystemAdminRefreshToken(adminID string) (string, error) {
+	return m.generateRefreshToken(adminID, TokenSubjectSystemAdmin)
+}
+
+func (m *JWTManager) generateRefreshToken(subjectID, subjectType string) (string, error) {
+	claims := &refreshClaims{
+		SubjectType: subjectType,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(apptime.Now().Add(m.refreshTokenTTL)),
+			IssuedAt:  jwt.NewNumericDate(apptime.Now()),
+			NotBefore: jwt.NewNumericDate(apptime.Now()),
+			ID:        uuid.New().String(),
+			Subject:   subjectID,
+			Issuer:    m.issuer,
+		},
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -255,6 +288,9 @@ func (m *JWTManager) ValidateToken(tokenString string) (*Claims, error) {
 		if parsedClaims.UserID == "" || parsedClaims.Email == "" {
 			return nil, ErrInvalidToken
 		}
+		if parsedClaims.SubjectType == "" {
+			parsedClaims.SubjectType = TokenSubjectUser
+		}
 
 		// Validate timestamps are valid
 		if parsedClaims.NotBefore != nil && parsedClaims.NotBefore.Time.IsZero() {
@@ -275,36 +311,11 @@ func (m *JWTManager) ValidateToken(tokenString string) (*Claims, error) {
 
 // ValidateRefreshToken validates a refresh token and returns user ID
 func (m *JWTManager) ValidateRefreshToken(tokenString string) (string, error) {
-	kid := tokenKIDFromString(tokenString)
-
-	var lastErr error
-	for _, secret := range m.refreshSecretsToTry(kid) {
-		claims := &jwt.RegisteredClaims{}
-		token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil, ErrInvalidToken
-			}
-			return []byte(secret), nil
-		})
-		if err != nil {
-			lastErr = err
-			continue
-		}
-		parsedClaims, ok := token.Claims.(*jwt.RegisteredClaims)
-		if !ok || !token.Valid {
-			lastErr = ErrInvalidToken
-			continue
-		}
-		if m.issuer != "" && parsedClaims.Issuer != m.issuer {
-			return "", ErrInvalidToken
-		}
-		return parsedClaims.Subject, nil
+	subjectID, _, err := m.validateRefreshTokenWithID(tokenString, TokenSubjectUser)
+	if err != nil {
+		return "", err
 	}
-
-	if lastErr != nil && errors.Is(lastErr, jwt.ErrTokenExpired) {
-		return "", ErrExpiredToken
-	}
-	return "", ErrInvalidToken
+	return subjectID, nil
 }
 
 // ExtractRefreshTokenID extracts the token ID (jti) from a refresh token
@@ -313,7 +324,7 @@ func (m *JWTManager) ExtractRefreshTokenID(tokenString string) (string, error) {
 
 	var lastErr error
 	for _, secret := range m.refreshSecretsToTry(kid) {
-		claims := &jwt.RegisteredClaims{}
+		claims := &refreshClaims{}
 		token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, ErrInvalidToken
@@ -324,7 +335,7 @@ func (m *JWTManager) ExtractRefreshTokenID(tokenString string) (string, error) {
 			lastErr = err
 			continue
 		}
-		parsedClaims, ok := token.Claims.(*jwt.RegisteredClaims)
+		parsedClaims, ok := token.Claims.(*refreshClaims)
 		if !ok || !token.Valid {
 			lastErr = ErrInvalidToken
 			continue
@@ -346,11 +357,15 @@ func (m *JWTManager) ExtractRefreshTokenID(tokenString string) (string, error) {
 
 // ValidateRefreshTokenWithID validates a refresh token and returns both user ID and token ID
 func (m *JWTManager) ValidateRefreshTokenWithID(tokenString string) (userID string, tokenID string, err error) {
+	return m.validateRefreshTokenWithID(tokenString, TokenSubjectUser)
+}
+
+func (m *JWTManager) validateRefreshTokenWithID(tokenString string, requiredSubjectType string) (subjectID string, tokenID string, err error) {
 	kid := tokenKIDFromString(tokenString)
 
 	var lastErr error
 	for _, secret := range m.refreshSecretsToTry(kid) {
-		claims := &jwt.RegisteredClaims{}
+		claims := &refreshClaims{}
 		token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, ErrInvalidToken
@@ -361,12 +376,19 @@ func (m *JWTManager) ValidateRefreshTokenWithID(tokenString string) (userID stri
 			lastErr = err
 			continue
 		}
-		parsedClaims, ok := token.Claims.(*jwt.RegisteredClaims)
+		parsedClaims, ok := token.Claims.(*refreshClaims)
 		if !ok || !token.Valid {
 			lastErr = ErrInvalidToken
 			continue
 		}
 		if m.issuer != "" && parsedClaims.Issuer != m.issuer {
+			return "", "", ErrInvalidToken
+		}
+		subjectType := parsedClaims.SubjectType
+		if subjectType == "" {
+			subjectType = TokenSubjectUser
+		}
+		if requiredSubjectType != "" && subjectType != requiredSubjectType {
 			return "", "", ErrInvalidToken
 		}
 		if parsedClaims.ID == "" {

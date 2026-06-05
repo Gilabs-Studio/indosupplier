@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+
 	"github.com/gilabs/indosupplier/api/internal/core/errors"
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/jwt"
 	"github.com/gilabs/indosupplier/api/internal/sysadmin/data/repositories"
@@ -51,6 +52,11 @@ func SysadminAuthMiddleware(jwtManager *jwt.JWTManager, repo repositories.System
 			c.Abort()
 			return
 		}
+		if claims.SubjectType != jwt.TokenSubjectSystemAdmin {
+			errors.ErrorResponse(c, "TOKEN_INVALID", nil, nil)
+			c.Abort()
+			return
+		}
 
 		// Verify admin exists in the database
 		admin, err := repo.FindByID(c.Request.Context(), claims.UserID)
@@ -62,12 +68,12 @@ func SysadminAuthMiddleware(jwtManager *jwt.JWTManager, repo repositories.System
 
 		c.Set("admin_id", admin.ID)
 		c.Set("admin_email", admin.Email)
-		c.Set("admin_role", admin.Role)
+		c.Set("admin_permission_set", admin.PermissionSet)
 
 		reqCtx := c.Request.Context()
 		reqCtx = context.WithValue(reqCtx, "admin_id", admin.ID)
 		reqCtx = context.WithValue(reqCtx, "admin_email", admin.Email)
-		reqCtx = context.WithValue(reqCtx, "admin_role", admin.Role)
+		reqCtx = context.WithValue(reqCtx, "admin_permission_set", admin.PermissionSet)
 		c.Request = c.Request.WithContext(reqCtx)
 
 		c.Next()

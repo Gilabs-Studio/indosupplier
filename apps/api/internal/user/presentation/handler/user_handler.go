@@ -23,15 +23,31 @@ func NewUserHandler(userUC usecase.UserUsecase) *UserHandler {
 }
 
 func toPresentationUser(u domainDTO.UserResponse) presentationDTO.UserResponseDTO {
-	return presentationDTO.UserResponseDTO{
+	resp := presentationDTO.UserResponseDTO{
 		ID:        u.ID,
 		Name:      u.Name,
 		Email:     u.Email,
 		AvatarURL: u.AvatarURL,
-		Role:      u.Role,
 		Status:    u.Status,
+		Capabilities: presentationDTO.AccountCapabilitiesDTO{
+			Buyer:    u.Capabilities.Buyer,
+			Supplier: u.Capabilities.Supplier,
+		},
 		CreatedAt: u.CreatedAt,
 	}
+	if u.BuyerProfile != nil {
+		resp.BuyerProfile = &presentationDTO.AccountProfileRefDTO{
+			ID:     u.BuyerProfile.ID,
+			Status: u.BuyerProfile.Status,
+		}
+	}
+	if u.SupplierProfile != nil {
+		resp.SupplierProfile = &presentationDTO.AccountProfileRefDTO{
+			ID:     u.SupplierProfile.ID,
+			Status: u.SupplierProfile.Status,
+		}
+	}
+	return resp
 }
 
 func (h *UserHandler) List(c *gin.Context) {
@@ -70,9 +86,6 @@ func (h *UserHandler) List(c *gin.Context) {
 	}
 	if req.Status != "" {
 		meta.Filters["status"] = req.Status
-	}
-	if req.Role != "" {
-		meta.Filters["role"] = req.Role
 	}
 	response.SuccessResponse(c, userDTOs, meta)
 }

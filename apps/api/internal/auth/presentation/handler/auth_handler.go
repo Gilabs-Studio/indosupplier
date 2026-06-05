@@ -109,6 +109,31 @@ func clearAuthCookies(c *gin.Context) {
 	})
 }
 
+func toAuthUserDTO(user *dto.UserResponse) authDTO.UserDTO {
+	resp := authDTO.UserDTO{
+		ID:    user.ID,
+		Name:  user.Name,
+		Email: user.Email,
+		Capabilities: authDTO.AccountCapabilitiesDTO{
+			Buyer:    user.Capabilities.Buyer,
+			Supplier: user.Capabilities.Supplier,
+		},
+	}
+	if user.BuyerProfile != nil {
+		resp.BuyerProfile = &authDTO.AccountProfileRefDTO{
+			ID:     user.BuyerProfile.ID,
+			Status: user.BuyerProfile.Status,
+		}
+	}
+	if user.SupplierProfile != nil {
+		resp.SupplierProfile = &authDTO.AccountProfileRefDTO{
+			ID:     user.SupplierProfile.ID,
+			Status: user.SupplierProfile.Status,
+		}
+	}
+	return resp
+}
+
 func (h *AuthHandler) Login(c *gin.Context) {
 	var req dto.LoginRequest
 
@@ -138,11 +163,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	setAuthCookies(c, loginResponse.Token, loginResponse.RefreshToken)
 
 	resp := authDTO.LoginResponseDTO{
-		User: authDTO.UserDTO{
-			ID:    loginResponse.User.ID,
-			Name:  loginResponse.User.Name,
-			Email: loginResponse.User.Email,
-		},
+		User:         toAuthUserDTO(loginResponse.User),
 		AccessToken:  "",
 		RefreshToken: "",
 	}
@@ -176,11 +197,7 @@ func (h *AuthHandler) RefreshToken(c *gin.Context) {
 	setAuthCookies(c, loginResponse.Token, loginResponse.RefreshToken)
 
 	resp := authDTO.LoginResponseDTO{
-		User: authDTO.UserDTO{
-			ID:    loginResponse.User.ID,
-			Name:  loginResponse.User.Name,
-			Email: loginResponse.User.Email,
-		},
+		User:         toAuthUserDTO(loginResponse.User),
 		AccessToken:  "",
 		RefreshToken: "",
 	}

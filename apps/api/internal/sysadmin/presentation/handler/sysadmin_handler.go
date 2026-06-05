@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/gin-gonic/gin"
+
 	coreErrors "github.com/gilabs/indosupplier/api/internal/core/errors"
 	"github.com/gilabs/indosupplier/api/internal/core/response"
 	"github.com/gilabs/indosupplier/api/internal/sysadmin/data/repositories"
@@ -16,6 +17,8 @@ type SystemAdminHandler struct {
 	uc   usecase.SystemAdminUsecase
 	repo repositories.SystemAdminRepository
 }
+
+const adminCookiePath = "/api/v1/sysadmin"
 
 func NewSystemAdminHandler(uc usecase.SystemAdminUsecase, repo repositories.SystemAdminRepository) *SystemAdminHandler {
 	return &SystemAdminHandler{
@@ -45,8 +48,8 @@ func (h *SystemAdminHandler) Login(c *gin.Context) {
 		return
 	}
 
-	// Set cookie option for session
-	c.SetCookie("indosupplier_admin_token", res.Token, int(res.ExpiresIn), "/", "", false, true)
+	// Scope admin session cookies to sysadmin routes so they are not sent to user-facing APIs.
+	c.SetCookie("indosupplier_admin_token", res.Token, int(res.ExpiresIn), adminCookiePath, "", false, true)
 
 	response.SuccessResponse(c, res, nil)
 }
@@ -69,6 +72,6 @@ func (h *SystemAdminHandler) Me(c *gin.Context) {
 }
 
 func (h *SystemAdminHandler) Logout(c *gin.Context) {
-	c.SetCookie("indosupplier_admin_token", "", -1, "/", "", false, true)
+	c.SetCookie("indosupplier_admin_token", "", -1, adminCookiePath, "", false, true)
 	response.SuccessResponse(c, gin.H{"message": "Logged out successfully"}, nil)
 }

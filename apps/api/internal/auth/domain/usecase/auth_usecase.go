@@ -55,6 +55,35 @@ func NewAuthUsecase(
 	}
 }
 
+func (u *authUsecase) toAuthUserResponse(ctx context.Context, userID, name, email string) *dto.UserResponse {
+	resp := &dto.UserResponse{
+		ID:    userID,
+		Name:  name,
+		Email: email,
+		Capabilities: dto.AccountCapabilitiesResponse{
+			Buyer: true,
+		},
+	}
+
+	accountCtx, err := u.userRepo.FindAccountContext(ctx, userID)
+	if err != nil || accountCtx == nil {
+		return resp
+	}
+
+	if accountCtx.BuyerProfileID != "" {
+		resp.BuyerProfile = &dto.AccountProfileRefResponse{ID: accountCtx.BuyerProfileID}
+	}
+	if accountCtx.SupplierProfileID != "" {
+		resp.Capabilities.Supplier = true
+		resp.SupplierProfile = &dto.AccountProfileRefResponse{
+			ID:     accountCtx.SupplierProfileID,
+			Status: accountCtx.SupplierStatus,
+		}
+	}
+
+	return resp
+}
+
 func (u *authUsecase) Login(ctx context.Context, req *dto.LoginRequest) (*dto.LoginResponse, error) {
 	user, err := u.userRepo.FindByEmail(ctx, req.Email)
 	if err != nil {
@@ -99,12 +128,7 @@ func (u *authUsecase) Login(ctx context.Context, req *dto.LoginRequest) (*dto.Lo
 	}
 
 	return &dto.LoginResponse{
-		User: &dto.UserResponse{
-			ID:    user.ID,
-			Name:  user.Name,
-			Email: user.Email,
-			Role:  user.Role,
-		},
+		User:         u.toAuthUserResponse(ctx, user.ID, user.Name, user.Email),
 		Token:        accessToken,
 		RefreshToken: refreshToken,
 		ExpiresIn:    int(u.jwtManager.AccessTokenTTL().Seconds()),
@@ -175,12 +199,7 @@ func (u *authUsecase) RefreshToken(ctx context.Context, refreshToken string) (*d
 	}
 
 	return &dto.LoginResponse{
-		User: &dto.UserResponse{
-			ID:    user.ID,
-			Name:  user.Name,
-			Email: user.Email,
-			Role:  user.Role,
-		},
+		User:         u.toAuthUserResponse(ctx, user.ID, user.Name, user.Email),
 		Token:        newAccessToken,
 		RefreshToken: newRefreshToken,
 		ExpiresIn:    int(u.jwtManager.AccessTokenTTL().Seconds()),

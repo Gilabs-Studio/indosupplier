@@ -21,11 +21,11 @@ func SeedSystemAdmins() error {
 	}
 
 	admin := &models.SystemAdmin{
-		Email:     defaultEmail,
-		Password:  string(hashedPassword),
-		Name:      "System Admin",
-		Role:      "super_admin",
-		Status:    "active",
+		Email:         defaultEmail,
+		Password:      string(hashedPassword),
+		Name:          "System Admin",
+		PermissionSet: "super_admin",
+		Status:        "active",
 	}
 
 	var existing models.SystemAdmin

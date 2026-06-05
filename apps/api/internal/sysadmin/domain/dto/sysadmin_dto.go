@@ -6,11 +6,12 @@ type SysadminLoginRequest struct {
 }
 
 type SysadminResponse struct {
-	ID     string `json:"id"`
-	Email  string `json:"email"`
-	Name   string `json:"name"`
-	Role   string `json:"role"`
-	Status string `json:"status"`
+	ID            string   `json:"id"`
+	Email         string   `json:"email"`
+	Name          string   `json:"name"`
+	PermissionSet string   `json:"permission_set"`
+	Permissions   []string `json:"permissions"`
+	Status        string   `json:"status"`
 }
 
 type SysadminLoginResponse struct {

@@ -121,6 +121,18 @@ type ServerUser = {
   id: string;
   name: string;
   email: string;
+  capabilities?: {
+    buyer?: boolean;
+    supplier?: boolean;
+  };
+  buyer_profile?: {
+    id: string;
+    status?: string;
+  } | null;
+  supplier_profile?: {
+    id: string;
+    status?: string;
+  } | null;
 } | null | undefined;
 
 function normalizeUserResponse(rawUser: ServerUser): User | null {
@@ -130,6 +142,12 @@ function normalizeUserResponse(rawUser: ServerUser): User | null {
     id: rawUser.id,
     name: rawUser.name,
     email: rawUser.email,
+    capabilities: {
+      buyer: rawUser.capabilities?.buyer ?? true,
+      supplier: rawUser.capabilities?.supplier ?? !!rawUser.supplier_profile,
+    },
+    buyer_profile: rawUser.buyer_profile ?? null,
+    supplier_profile: rawUser.supplier_profile ?? null,
   };
 }
 

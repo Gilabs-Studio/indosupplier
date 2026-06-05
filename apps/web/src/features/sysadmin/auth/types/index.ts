@@ -2,7 +2,8 @@ export interface SystemAdmin {
   id: string;
   email: string;
   name: string;
-  role: string;
+  permission_set: string;
+  permissions: string[];
   status: string;
 }
 

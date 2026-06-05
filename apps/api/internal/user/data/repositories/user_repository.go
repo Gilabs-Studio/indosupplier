@@ -17,6 +17,7 @@ type UserRepository interface {
 	FindByEmail(ctx context.Context, email string) (*models.User, error)
 	List(ctx context.Context, req *dto.ListUsersRequest) ([]models.User, int64, error)
 	FindAvailable(ctx context.Context, search string, excludeEmployeeID string) ([]models.User, error)
+	FindAccountContext(ctx context.Context, userID string) (*dto.AccountContext, error)
 	Count(ctx context.Context) (int64, error)
 	Create(ctx context.Context, u *models.User) error
 	Update(ctx context.Context, u *models.User) error
@@ -63,9 +64,6 @@ func (r *userRepository) List(ctx context.Context, req *dto.ListUsersRequest) ([
 	}
 	if req.Status != "" {
 		query = query.Where("users.status = ?", req.Status)
-	}
-	if req.Role != "" {
-		query = query.Where("users.role = ?", req.Role)
 	}
 
 	if err := query.Count(&total).Error; err != nil {
@@ -145,4 +143,40 @@ func (r *userRepository) FindAvailable(ctx context.Context, search string, exclu
 
 	err := query.Order("users.name ASC").Limit(50).Find(&users).Error
 	return users, err
+}
+
+func (r *userRepository) FindAccountContext(ctx context.Context, userID string) (*dto.AccountContext, error) {
+	accountCtx := &dto.AccountContext{}
+
+	type buyerRow struct {
+		ID string
+	}
+	var buyer buyerRow
+	if err := r.getDB(ctx).
+		Table("buyer_profiles").
+		Select("id").
+		Where("user_id = ?", userID).
+		Limit(1).
+		Scan(&buyer).Error; err != nil {
+		return nil, err
+	}
+	accountCtx.BuyerProfileID = buyer.ID
+
+	type supplierRow struct {
+		ID     string
+		Status string
+	}
+	var supplier supplierRow
+	if err := r.getDB(ctx).
+		Table("supplier_profiles").
+		Select("id, status").
+		Where("user_id = ?", userID).
+		Limit(1).
+		Scan(&supplier).Error; err != nil {
+		return nil, err
+	}
+	accountCtx.SupplierProfileID = supplier.ID
+	accountCtx.SupplierStatus = supplier.Status
+
+	return accountCtx, nil
 }

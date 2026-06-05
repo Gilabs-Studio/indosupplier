@@ -5,10 +5,11 @@ import (
 	"errors"
 
 	"golang.org/x/crypto/bcrypt"
+
+	jwtManager "github.com/gilabs/indosupplier/api/internal/core/infrastructure/jwt"
 	"github.com/gilabs/indosupplier/api/internal/sysadmin/data/repositories"
 	"github.com/gilabs/indosupplier/api/internal/sysadmin/domain/dto"
 	"github.com/gilabs/indosupplier/api/internal/sysadmin/domain/mapper"
-	jwtManager "github.com/gilabs/indosupplier/api/internal/core/infrastructure/jwt"
 )
 
 var (
@@ -46,13 +47,13 @@ func (u *systemAdminUsecase) Login(ctx context.Context, req dto.SysadminLoginReq
 		return dto.SysadminLoginResponse{}, ErrInvalidCredentials
 	}
 
-	accessToken, err := u.jwtManager.GenerateAccessToken(sa.ID, sa.Email)
+	accessToken, err := u.jwtManager.GenerateSystemAdminAccessToken(sa.ID, sa.Email)
 	if err != nil {
 		return dto.SysadminLoginResponse{}, err
 	}
 
 	// We can also generate a refresh token if needed, or simply reuse the access token
-	refreshToken, err := u.jwtManager.GenerateRefreshToken(sa.ID)
+	refreshToken, err := u.jwtManager.GenerateSystemAdminRefreshToken(sa.ID)
 	if err != nil {
 		return dto.SysadminLoginResponse{}, err
 	}

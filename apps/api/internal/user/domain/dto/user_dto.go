@@ -2,34 +2,39 @@ package dto
 
 import "time"
 
-type RoleResponse struct {
-	Code string `json:"code"`
-	Name string `json:"name"`
+type AccountCapabilitiesResponse struct {
+	Buyer    bool `json:"buyer"`
+	Supplier bool `json:"supplier"`
+}
+
+type AccountProfileRefResponse struct {
+	ID     string `json:"id"`
+	Status string `json:"status,omitempty"`
 }
 
 type UserResponse struct {
-	ID        string    `json:"id"`
-	Email     string    `json:"email"`
-	Name      string    `json:"name"`
-	AvatarURL string    `json:"avatar_url"`
-	Role      string    `json:"role"`
-	Status    string    `json:"status"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID              string                      `json:"id"`
+	Email           string                      `json:"email"`
+	Name            string                      `json:"name"`
+	AvatarURL       string                      `json:"avatar_url"`
+	Status          string                      `json:"status"`
+	Capabilities    AccountCapabilitiesResponse `json:"capabilities"`
+	BuyerProfile    *AccountProfileRefResponse  `json:"buyer_profile,omitempty"`
+	SupplierProfile *AccountProfileRefResponse  `json:"supplier_profile,omitempty"`
+	CreatedAt       time.Time                   `json:"created_at"`
+	UpdatedAt       time.Time                   `json:"updated_at"`
 }
 
 type CreateUserRequest struct {
 	Email    string `json:"email" binding:"required,email"`
 	Password string `json:"password" binding:"required,min=6"`
 	Name     string `json:"name" binding:"required,min=3"`
-	Role     string `json:"role" binding:"omitempty,oneof=user admin buyer supplier"`
 	Status   string `json:"status" binding:"omitempty,oneof=active inactive"`
 }
 
 type UpdateUserRequest struct {
 	Email  string `json:"email" binding:"omitempty,email"`
 	Name   string `json:"name" binding:"omitempty,min=3"`
-	Role   string `json:"role" binding:"omitempty,oneof=user admin buyer supplier"`
 	Status string `json:"status" binding:"omitempty,oneof=active inactive"`
 }
 
@@ -54,6 +59,11 @@ type ListUsersRequest struct {
 	Page    int    `form:"page" binding:"omitempty,min=1"`
 	PerPage int    `form:"per_page" binding:"omitempty,min=1,max=100"`
 	Search  string `form:"search" binding:"omitempty"`
-	Role    string `form:"role" binding:"omitempty,oneof=user admin buyer supplier"`
 	Status  string `form:"status" binding:"omitempty,oneof=active inactive"`
+}
+
+type AccountContext struct {
+	BuyerProfileID    string
+	SupplierProfileID string
+	SupplierStatus    string
 }

@@ -18,6 +18,19 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  capabilities: AccountCapabilities;
+  buyer_profile?: AccountProfileRef | null;
+  supplier_profile?: AccountProfileRef | null;
+}
+
+export interface AccountCapabilities {
+  buyer: boolean;
+  supplier: boolean;
+}
+
+export interface AccountProfileRef {
+  id: string;
+  status?: string;
 }
 
 export interface AuthState {

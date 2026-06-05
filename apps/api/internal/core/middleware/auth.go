@@ -4,9 +4,10 @@ import (
 	"context"
 	"strings"
 
+	"github.com/gin-gonic/gin"
+
 	"github.com/gilabs/indosupplier/api/internal/core/errors"
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/jwt"
-	"github.com/gin-gonic/gin"
 )
 
 // AuthMiddleware validates JWT token and sets user context.
@@ -47,6 +48,11 @@ func AuthMiddleware(jwtManager *jwt.JWTManager) gin.HandlerFunc {
 		}
 
 		if claims.UserID == "" || claims.Email == "" {
+			errors.ErrorResponse(c, "TOKEN_INVALID", nil, nil)
+			c.Abort()
+			return
+		}
+		if claims.SubjectType != jwt.TokenSubjectUser {
 			errors.ErrorResponse(c, "TOKEN_INVALID", nil, nil)
 			c.Abort()
 			return

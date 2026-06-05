@@ -298,7 +298,7 @@ export default function SysadminLayoutComponent({ children }: SysadminLayoutProp
               <div className="hidden sm:flex flex-col text-left">
                 <span className="text-xs font-semibold text-foreground leading-none">{admin?.name || "System Admin"}</span>
                 <span className="text-[10px] text-muted-foreground font-normal capitalize mt-0.5 leading-none">
-                  {admin?.role?.replace("_", " ") || "Super Admin"}
+                  {admin?.permission_set?.replace("_", " ") || "Super Admin"}
                 </span>
               </div>
             </div>

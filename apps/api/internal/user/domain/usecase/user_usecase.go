@@ -64,11 +64,19 @@ func NewUserUsecase(
 }
 
 func userListCacheKey(req *dto.ListUsersRequest) string {
-	return fmt.Sprintf("users:list:page:%d:per_page:%d:search:%s:role:%s:status:%s", req.Page, req.PerPage, req.Search, req.Role, req.Status)
+	return fmt.Sprintf("users:list:page:%d:per_page:%d:search:%s:status:%s", req.Page, req.PerPage, req.Search, req.Status)
 }
 
 func userByIDCacheKey(id string) string {
 	return fmt.Sprintf("users:id:%s", id)
+}
+
+func (u *userUsecase) toUserResponse(ctx context.Context, usr *models.User) *dto.UserResponse {
+	accountCtx, err := u.userRepo.FindAccountContext(ctx, usr.ID)
+	if err != nil {
+		return mapper.ToUserResponse(usr)
+	}
+	return mapper.ToUserResponse(usr, accountCtx)
 }
 
 func (u *userUsecase) List(ctx context.Context, req *dto.ListUsersRequest) ([]dto.UserResponse, *utils.PaginationResult, error) {
@@ -92,7 +100,7 @@ func (u *userUsecase) List(ctx context.Context, req *dto.ListUsersRequest) ([]dt
 
 	responses := make([]dto.UserResponse, len(users))
 	for i, usr := range users {
-		responses[i] = *mapper.ToUserResponse(&usr)
+		responses[i] = *u.toUserResponse(ctx, &usr)
 	}
 
 	page := req.Page
@@ -144,7 +152,7 @@ func (u *userUsecase) GetByID(ctx context.Context, id string) (*dto.UserResponse
 		return nil, err
 	}
 
-	resp := mapper.ToUserResponse(usr)
+	resp := u.toUserResponse(ctx, usr)
 	if u.redis != nil {
 		payload, _ := json.Marshal(resp)
 		u.redis.Set(ctx, cacheKey, payload, 15*time.Minute)
@@ -189,17 +197,11 @@ func (u *userUsecase) Create(ctx context.Context, req *dto.CreateUserRequest) (*
 	if status == "" {
 		status = "active"
 	}
-	role := req.Role
-	if role == "" {
-		role = "user"
-	}
-
 	usr := &models.User{
 		Email:     req.Email,
 		Password:  string(hashedPassword),
 		Name:      req.Name,
 		AvatarURL: "https://api.dicebear.com/7.x/lorelei/svg?seed=" + url.QueryEscape(req.Email),
-		Role:      role,
 		Status:    status,
 	}
 
@@ -226,7 +228,7 @@ func (u *userUsecase) Create(ctx context.Context, req *dto.CreateUserRequest) (*
 		return nil, err
 	}
 
-	return mapper.ToUserResponse(created), nil
+	return u.toUserResponse(ctx, created), nil
 }
 
 func (u *userUsecase) Update(ctx context.Context, id string, req *dto.UpdateUserRequest) (*dto.UserResponse, error) {
@@ -251,9 +253,6 @@ func (u *userUsecase) Update(ctx context.Context, id string, req *dto.UpdateUser
 	if req.Name != "" {
 		usr.Name = req.Name
 	}
-	if req.Role != "" {
-		usr.Role = req.Role
-	}
 	if req.Status != "" {
 		usr.Status = req.Status
 	}
@@ -266,7 +265,7 @@ func (u *userUsecase) Update(ctx context.Context, id string, req *dto.UpdateUser
 	}
 
 	u.invalidateCaches(ctx, usr.ID)
-	return mapper.ToUserResponse(usr), nil
+	return u.toUserResponse(ctx, usr), nil
 }
 
 func (u *userUsecase) UpdateProfile(ctx context.Context, id string, req *dto.UpdateProfileRequest) (*dto.UserResponse, error) {
