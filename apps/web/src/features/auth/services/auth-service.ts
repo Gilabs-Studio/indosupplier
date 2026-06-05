@@ -3,7 +3,13 @@ import apiClient, {
   emitAuthTelemetry,
   setCSRFTokenMemory,
 } from "@/lib/api-client";
-import type { LoginRequest, LoginResponse } from "../types";
+import type {
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+  SupplierOnboardingRequest,
+  UserResponse,
+} from "../types";
 
 const REFRESH_SINGLE_FLIGHT_RESET_MS = 500;
 
@@ -130,8 +136,25 @@ export const authService = {
     return response.data;
   },
 
+  async register(
+    payload: RegisterRequest,
+    csrfToken?: string | null,
+  ): Promise<LoginResponse> {
+    const response = await apiClient.post<LoginResponse>(
+      "/auth/register",
+      payload,
+      csrfToken ? { headers: { "X-CSRF-Token": csrfToken } } : undefined,
+    );
+    return response.data;
+  },
+
   async refreshToken(): Promise<LoginResponse> {
     return refreshTokenOnce();
+  },
+
+  async becomeSupplier(payload: SupplierOnboardingRequest): Promise<UserResponse> {
+    const response = await apiClient.post<UserResponse>("/auth/supplier-profile", payload);
+    return response.data;
   },
 
   async getMe(): Promise<LoginResponse> {

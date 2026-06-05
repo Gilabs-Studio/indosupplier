@@ -7,6 +7,7 @@ import type { Locale } from "@/types/locale";
 import { ReactQueryProvider } from "@/lib/react-query";
 import ErrorBoundary from "@/components/error-boundary";
 import { Toaster } from "sonner";
+import { AuthSessionBootstrap } from "@/features/auth/components/auth-session-bootstrap";
 
 export default async function LocaleLayout({
   children,
@@ -27,6 +28,7 @@ export default async function LocaleLayout({
     <NextIntlClientProvider locale={locale} messages={messages}>
       <ErrorBoundary>
         <ReactQueryProvider>
+          <AuthSessionBootstrap />
           {children}
           <Toaster position="top-right" offset={80} />
         </ReactQueryProvider>

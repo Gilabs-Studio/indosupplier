@@ -6,6 +6,10 @@ import type { AuthError } from "../types/errors";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
+interface UseLoginOptions {
+  redirectTo?: string;
+}
+
 function getSafeLoginErrorMessage(error: AuthError): string {
   const status = error.response?.status;
   if (status && status >= 500) {
@@ -19,9 +23,10 @@ function getSafeLoginErrorMessage(error: AuthError): string {
   );
 }
 
-export function useLogin() {
+export function useLogin(options: UseLoginOptions = {}) {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const redirectTo = options.redirectTo ?? "/dashboard";
   const {
     setUser,
     setSessionVerified,
@@ -68,8 +73,7 @@ export function useLogin() {
         useAuthStore.setState({
           error: null,
         });
-        // Redirect to locale root landing after successful login
-        router.replace("/");
+        router.replace(redirectTo);
         return; // Exit early, keep loading state until redirect
       }
     } catch (err) {

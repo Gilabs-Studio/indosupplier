@@ -1,13 +1,16 @@
 {
   "onboarding": {
-    "title": "Welcome to IndoSupplier Seller Portal!",
-    "subtitle": "Follow these quick steps to set up your business account and start selling.",
-    "step1": "General Information",
-    "step2": "Tax & Legal Info",
-    "step3": "First Product Upload",
+    "title": "Register as an IndoSupplier Supplier",
+    "subtitle": "Your account stays a buyer account too. Complete these 5 quick steps to activate your supplier profile.",
+    "step1": "Category",
+    "step2": "Location",
+    "step3": "Contact",
+    "step4": "Company",
+    "step5": "Description",
     "btnNext": "Next Step",
     "btnBack": "Back",
-    "btnComplete": "Complete Onboarding",
-    "success": "Onboarding completed! Welcome aboard."
+    "btnComplete": "Activate Supplier Profile",
+    "success": "Supplier profile created successfully.",
+    "failed": "Supplier registration failed. Please try again."
   }
 }

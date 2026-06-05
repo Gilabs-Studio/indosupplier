@@ -9,8 +9,8 @@ import (
 
 type Category struct {
 	ID          string         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
-	ParentID    string         `gorm:"type:uuid;index" json:"parent_id"`
-	Slug        string         `gorm:"type:varchar(160);not null;uniqueIndex" json:"slug"`
+	ParentID    *string        `gorm:"type:uuid;index;uniqueIndex:idx_categories_slug_parent" json:"parent_id"`
+	Slug        string         `gorm:"type:varchar(160);not null;index;uniqueIndex:idx_categories_slug_parent" json:"slug"`
 	Name        string         `gorm:"type:varchar(180);not null;index" json:"name"`
 	Description string         `gorm:"type:text" json:"description"`
 	IconURL     string         `gorm:"type:text" json:"icon_url"`

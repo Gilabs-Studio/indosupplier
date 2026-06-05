@@ -18,7 +18,9 @@
       "submit": "Masuk",
       "submitting": "Masuk...",
       "verifyingSession": "Memverifikasi sesi...",
-      "rateLimitMessage": "Terlalu banyak percobaan login. Silakan coba lagi dalam {countdown}."
+      "rateLimitMessage": "Terlalu banyak percobaan login. Silakan coba lagi dalam {countdown}.",
+      "noAccount": "Belum punya akun?",
+      "registerLink": "Daftar"
     },
     "block": {
       "title": "Akses Diblokir",

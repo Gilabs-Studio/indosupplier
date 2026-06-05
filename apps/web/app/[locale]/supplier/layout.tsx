@@ -20,7 +20,6 @@ export default function SupplierLayout({
     "/supplier/rfq",
     "/supplier/auction",
     "/supplier/notifications",
-    "/supplier/onboarding",
     "/supplier/support",
     "/supplier/ads",
     "/supplier/reviews"

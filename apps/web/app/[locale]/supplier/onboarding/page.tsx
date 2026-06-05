@@ -1,6 +1,14 @@
-import React from "react";
-import { SupplierOnboardingPage } from "@/features/supplier/onboarding/components/supplier-onboarding-page";
+"use client";
 
-export default function SupplierOnboardingPageRoute() {
-  return <SupplierOnboardingPage />;
+import { useEffect } from "react";
+import { useRouter } from "@/i18n/routing";
+
+export default function SupplierOnboardingRedirectPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/supplier/register");
+  }, [router]);
+
+  return null;
 }

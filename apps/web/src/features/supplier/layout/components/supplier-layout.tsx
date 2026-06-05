@@ -36,9 +36,13 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
-  const { user, logout } = useAuthStore();
+  const { user, isAuthenticated, isSessionVerified, setUser, setSessionVerified, logout } = useAuthStore();
   const [mounted, setMounted] = useState(false);
+  const [isAuthorizing, setIsAuthorizing] = useState(true);
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+
+  const hasSupplierAccess =
+    user?.capabilities.supplier === true || !!user?.supplier_profile;
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -47,7 +51,96 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
     return () => clearTimeout(timer);
   }, []);
 
-  if (!mounted) {
+  useEffect(() => {
+    if (!mounted) {
+      return;
+    }
+
+    let isCancelled = false;
+
+    const authorizeSupplierPortal = async () => {
+      if (isSessionVerified && isAuthenticated) {
+        if (!hasSupplierAccess && pathname !== "/supplier/register") {
+          router.replace("/supplier/register");
+          return;
+        }
+
+        if (hasSupplierAccess && (pathname === "/supplier/onboarding" || pathname === "/supplier/register")) {
+          router.replace("/supplier/dashboard");
+          return;
+        }
+
+        setIsAuthorizing(false);
+        return;
+      }
+
+      try {
+        const { authService } = await import("@/features/auth/services/auth-service");
+
+        try {
+          await authService.prefetchCSRFToken();
+        } catch {
+          // Ignore CSRF prefetch failures and let refresh-token decide.
+        }
+
+        const response = await authService.getMe();
+        const authenticatedUser = response?.data?.user;
+
+        if (!authenticatedUser) {
+          throw new Error("UNAUTHENTICATED_SUPPLIER_PORTAL");
+        }
+
+        if (isCancelled) {
+          return;
+        }
+
+        setUser(authenticatedUser);
+        setSessionVerified(true);
+
+        const authenticatedHasSupplierAccess =
+          authenticatedUser.capabilities.supplier === true || !!authenticatedUser.supplier_profile;
+
+        if (!authenticatedHasSupplierAccess && pathname !== "/supplier/register") {
+          router.replace("/supplier/register");
+          return;
+        }
+
+        if (authenticatedHasSupplierAccess && (pathname === "/supplier/onboarding" || pathname === "/supplier/register")) {
+          router.replace("/supplier/dashboard");
+          return;
+        }
+
+        setIsAuthorizing(false);
+      } catch {
+        if (isCancelled) {
+          return;
+        }
+
+        logout();
+        const { fullAuthCleanup } = await import("@/features/auth/utils/clear-auth-cookies");
+        await fullAuthCleanup();
+        router.replace(`/login?redirectTo=${encodeURIComponent(pathname)}`);
+      }
+    };
+
+    void authorizeSupplierPortal();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [
+    hasSupplierAccess,
+    isAuthenticated,
+    isSessionVerified,
+    logout,
+    mounted,
+    pathname,
+    router,
+    setSessionVerified,
+    setUser,
+  ]);
+
+  if (!mounted || isAuthorizing) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground">
         <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />

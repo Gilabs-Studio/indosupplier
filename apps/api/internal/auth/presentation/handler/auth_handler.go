@@ -171,6 +171,82 @@ func (h *AuthHandler) Login(c *gin.Context) {
 	response.SuccessResponse(c, resp, nil)
 }
 
+func (h *AuthHandler) Register(c *gin.Context) {
+	var req dto.RegisterRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		if validationErrors, ok := err.(validator.ValidationErrors); ok {
+			errors.HandleValidationError(c, validationErrors)
+			return
+		}
+		errors.InvalidRequestBodyResponse(c)
+		return
+	}
+
+	registerResponse, err := h.authUC.Register(c.Request.Context(), &req)
+	if err != nil {
+		if err == usecase.ErrUserAlreadyExists {
+			errors.ErrorResponse(c, "RESOURCE_ALREADY_EXISTS", map[string]interface{}{
+				"resource": "user",
+				"field":    "email",
+				"value":    req.Email,
+			}, nil)
+			return
+		}
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	setAuthCookies(c, registerResponse.Token, registerResponse.RefreshToken)
+
+	resp := authDTO.LoginResponseDTO{
+		User:         toAuthUserDTO(registerResponse.User),
+		AccessToken:  "",
+		RefreshToken: "",
+	}
+
+	response.SuccessResponseCreated(c, resp, nil)
+}
+
+func (h *AuthHandler) BecomeSupplier(c *gin.Context) {
+	userIDVal, exists := c.Get("user_id")
+	if !exists {
+		errors.UnauthorizedResponse(c, "unauthorized")
+		return
+	}
+	userID, ok := userIDVal.(string)
+	if !ok || userID == "" {
+		errors.ErrorResponse(c, "TOKEN_INVALID", nil, nil)
+		return
+	}
+
+	var req dto.SupplierOnboardingRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		if validationErrors, ok := err.(validator.ValidationErrors); ok {
+			errors.HandleValidationError(c, validationErrors)
+			return
+		}
+		errors.InvalidRequestBodyResponse(c)
+		return
+	}
+
+	user, err := h.authUC.BecomeSupplier(c.Request.Context(), userID, &req)
+	if err != nil {
+		if err == usecase.ErrUserNotFound {
+			errors.ErrorResponse(c, "USER_NOT_FOUND", map[string]interface{}{"user_id": userID}, nil)
+			return
+		}
+		if err == usecase.ErrUserInactive {
+			errors.ErrorResponse(c, "ACCOUNT_DISABLED", map[string]interface{}{"reason": "User account is inactive"}, nil)
+			return
+		}
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, gin.H{"user": toAuthUserDTO(user)}, nil)
+}
+
 func (h *AuthHandler) RefreshToken(c *gin.Context) {
 	refreshToken, err := c.Cookie("indosupplier_refresh_token")
 	if err != nil || refreshToken == "" {

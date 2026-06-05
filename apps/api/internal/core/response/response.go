@@ -4,15 +4,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gilabs/indosupplier/api/internal/core/apptime"
 	"github.com/gin-gonic/gin"
-)
+	"github.com/google/uuid"
 
-// GetTimezoneWIB returns the application timezone.
-// Deprecated: Use apptime.Location() directly instead.
-func GetTimezoneWIB() *time.Location {
-	return apptime.Location()
-}
+	"github.com/gilabs/indosupplier/api/internal/core/apptime"
+)
 
 // APIResponse represents the standard API response structure
 type APIResponse struct {
@@ -232,18 +228,7 @@ func getRequestID(c *gin.Context) string {
 
 // generateRequestID generates a unique request ID
 func generateRequestID() string {
-	// Simple implementation - in production use UUID
-	return "req_" + time.Now().Format("20060102150405") + "_" + randomString(8)
-}
-
-// randomString generates random string (simple implementation)
-func randomString(length int) string {
-	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	b := make([]byte, length)
-	for i := range b {
-		b[i] = charset[time.Now().UnixNano()%int64(len(charset))]
-	}
-	return string(b)
+	return "req_" + uuid.NewString()
 }
 
 // NewPaginationMeta creates pagination metadata

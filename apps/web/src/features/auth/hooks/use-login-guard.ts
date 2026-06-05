@@ -2,6 +2,10 @@ import { useEffect, useState, useCallback, useRef, useSyncExternalStore } from "
 import { useRouter } from "@/i18n/routing";
 import { useAuthStore } from "../stores/use-auth-store";
 
+interface UseLoginGuardOptions {
+  redirectTo?: string;
+}
+
 const subscribeToHydration = (callback: () => void) => {
   callback();
   return () => {};
@@ -21,8 +25,9 @@ const getHydrationServerSnapshot = () => false;
  * - shouldShowLoginForm: true once hydrated and not redirecting
  * - isRateLimited: true when backend returns 429
  */
-export function useLoginGuard() {
+export function useLoginGuard(options: UseLoginGuardOptions = {}) {
   const router = useRouter();
+  const redirectTo = options.redirectTo ?? "/dashboard";
   const {
     isAuthenticated: localStorageAuth,
     isSessionVerified,
@@ -50,7 +55,7 @@ export function useLoginGuard() {
     // Fast path: already verified this page load, skip round-trip
     if (isSessionVerified && localStorageAuth) {
       setIsRedirecting(true);
-      router.push("/");
+      router.push(redirectTo);
       return;
     }
 
@@ -71,7 +76,7 @@ export function useLoginGuard() {
         setUser(response.data.user);
         setSessionVerified(true);
         setIsRedirecting(true);
-        router.push("/");
+        router.push(redirectTo);
         return;
       }
 
@@ -103,7 +108,7 @@ export function useLoginGuard() {
     } finally {
       setIsVerifying(false);
     }
-  }, [isSessionVerified, localStorageAuth, router, setUser, setSessionVerified, logout]);
+  }, [isSessionVerified, localStorageAuth, redirectTo, router, setUser, setSessionVerified, logout]);
   //   ^ removed: isRedirecting (guarded by ref)
 
   useEffect(() => {

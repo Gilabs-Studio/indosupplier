@@ -89,6 +89,7 @@ func isPublicAuthEndpoint(path string) bool {
 	// after successful login when browser cookies are set.
 	publicAuthPaths := []string{
 		"/api/v1/auth/login",
+		"/api/v1/auth/register",
 		"/api/v1/auth/csrf",
 		"/api/v1/auth/refresh-token",
 	}

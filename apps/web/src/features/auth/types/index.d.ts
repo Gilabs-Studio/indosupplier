@@ -5,12 +5,49 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+  company_name?: string;
+  industry?: string;
+}
+
+export interface SupplierOnboardingRequest {
+  company_name: string;
+  primary_category: string;
+  subcategory: string;
+  province_id: string;
+  city_id: string;
+  phone: string;
+  whatsapp: string;
+  email: string;
+  website?: string;
+  company_type: string;
+  tax_status: string;
+  npwp?: string;
+  nib?: string;
+  address?: string;
+  business_hours?: string;
+  timezone?: string;
+  description: string;
+  first_product_name?: string;
+  first_product_price?: string;
+}
+
 export interface LoginResponse {
   success: boolean;
   data: {
     user: User;
     access_token: string; // Empty in strict mode (HttpOnly cookies)
     refresh_token: string; // Empty in strict mode (HttpOnly cookies)
+  };
+}
+
+export interface UserResponse {
+  success: boolean;
+  data: {
+    user: User;
   };
 }
 

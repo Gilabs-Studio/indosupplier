@@ -5,280 +5,253 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { toast } from "sonner";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { Eye, EyeOff, ShieldCheck } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 import { PublicLayout } from "@/features/public/components/public-layout";
-import { Field, FieldLabel, FieldError } from "@/components/ui/field";
+import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { ShieldCheck, User, Store, ArrowRight, ArrowLeft } from "lucide-react";
+import { Link, useRouter } from "@/i18n/routing";
+import { authService } from "@/features/auth/services/auth-service";
+import { useAuthStore } from "@/features/auth/stores/use-auth-store";
+import type { AuthError } from "@/features/auth/types/errors";
 
 interface PublicRegistrationPageProps {
   locale: string;
 }
 
-const getRegSchema = (t: (key: string) => string) =>
-  z.object({
-    companyName: z.string().min(2, t("companyName")),
-    contactName: z.string().min(2, t("contactName")),
-    phone: z.string().min(6, t("phone")),
-    email: z.string().email(),
-    description: z.string().optional(),
-  });
+const getRegisterSchema = (t: (key: string) => string) =>
+  z
+    .object({
+      name: z.string().min(2, t("nameError")),
+      email: z.string().email(t("emailError")),
+      password: z.string().min(6, t("passwordError")),
+      confirmPassword: z.string().min(6, t("passwordError")),
+      companyName: z.string().optional(),
+      industry: z.string().optional(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("confirmPasswordError"),
+      path: ["confirmPassword"],
+    });
 
-type RegFormData = z.infer<ReturnType<typeof getRegSchema>>;
+type RegisterFormData = z.infer<ReturnType<typeof getRegisterSchema>>;
+
+function getSafeRegisterError(error: unknown): string {
+  const authError = error as AuthError;
+  return (
+    authError.response?.data?.error?.message ||
+    authError.message ||
+    "Registration failed. Please try again."
+  );
+}
 
 export function PublicRegistrationPage({ locale }: PublicRegistrationPageProps) {
   const tReg = useTranslations("public.register");
-  const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [accountType, setAccountType] = useState<"supplier" | "buyer" | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { setUser, setSessionVerified } = useAuthStore();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<RegFormData>({
-    resolver: zodResolver(getRegSchema(tReg)),
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(getRegisterSchema(tReg)),
     defaultValues: {
-      companyName: "",
-      contactName: "",
-      phone: "",
+      name: "",
       email: "",
-      description: "",
+      password: "",
+      confirmPassword: "",
+      companyName: "",
+      industry: "",
     },
   });
 
-  const handleNextStep = () => {
-    if (!accountType) {
-      toast.error("Please select how you want to join first.");
-      return;
-    }
-    setStep(2);
-  };
+  const onSubmit = async (data: RegisterFormData) => {
+    try {
+      const csrfToken = await authService.prefetchCSRFToken();
+      const response = await authService.register(
+        {
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          company_name: data.companyName?.trim() || undefined,
+          industry: data.industry?.trim() || undefined,
+        },
+        csrfToken,
+      );
 
-  const onSubmit = () => {
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setStep(3);
-      reset();
-    }, 1500);
+      if (response.success && response.data?.user) {
+        queryClient.clear();
+        setUser(response.data.user);
+        setSessionVerified(true);
+        router.replace("/dashboard");
+      }
+    } catch (error) {
+      setError("root", { message: getSafeRegisterError(error) });
+    }
   };
 
   return (
     <PublicLayout locale={locale}>
-      <div className="bg-muted py-16 md:py-24 min-h-[70vh] flex items-center justify-center">
-        <div className="w-full max-w-[540px] mx-auto px-4">
-          <AnimatePresence mode="wait">
-             {step === 1 && (
-              <motion.div
-                key="step1"
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                className="bg-card border border-border shadow-sm rounded-2xl p-6 md:p-10 space-y-8"
-              >
-                <div className="text-center space-y-2">
-                  <h1 className="text-3xl font-bold text-foreground font-heading tracking-tight">
-                    {tReg("title")}
-                  </h1>
-                  <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-                    {tReg("subtitle")}
-                  </p>
+      <div className="min-h-[calc(100vh-4rem)] bg-muted/40 px-4 py-10 sm:py-14">
+        <div className="mx-auto grid w-full max-w-5xl gap-8 lg:grid-cols-[1fr_440px] lg:items-start">
+          <section className="space-y-6 pt-4 lg:pt-10">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1 text-xs font-semibold text-muted-foreground">
+              <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+              {tReg("badge")}
+            </div>
+            <div className="max-w-xl space-y-3">
+              <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                {tReg("title")}
+              </h1>
+              <p className="text-sm leading-6 text-muted-foreground sm:text-base">
+                {tReg("subtitle")}
+              </p>
+            </div>
+            <div className="grid max-w-xl gap-3 sm:grid-cols-3">
+              {["benefitSearch", "benefitRfq", "benefitSupplier"].map((key) => (
+                <div key={key} className="rounded-lg border border-border bg-background p-4">
+                  <p className="text-sm font-semibold text-foreground">{tReg(key)}</p>
                 </div>
+              ))}
+            </div>
+          </section>
 
-                <div className="space-y-4">
-                  <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    {tReg("joinAs")}
-                  </h3>
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+            className="rounded-xl border border-border bg-background p-6 shadow-sm"
+          >
+            <div className="mb-6 space-y-1">
+              <h2 className="text-xl font-bold text-foreground">{tReg("formTitle")}</h2>
+              <p className="text-sm text-muted-foreground">{tReg("formSubtitle")}</p>
+            </div>
 
-                  <div className="grid gap-4">
-                    {/* Buyer Selection Option */}
-                    <button
-                      onClick={() => setAccountType("buyer")}
-                      className={`flex gap-4 p-5 rounded-xl border text-left transition-all duration-300 cursor-pointer ${
-                        accountType === "buyer"
-                          ? "border-primary bg-muted ring-1 ring-primary"
-                          : "border-border bg-card hover:border-muted-foreground"
-                      }`}
-                    >
-                      <div className="p-3 bg-primary text-primary-foreground rounded-lg shrink-0">
-                        <User className="h-5 w-5" />
-                      </div>
-                      <div className="space-y-1">
-                        <h4 className="font-bold text-foreground text-sm">{tReg("buyer")}</h4>
-                        <p className="text-xs text-muted-foreground leading-relaxed">
-                          {tReg("buyerDesc")}
-                        </p>
-                      </div>
-                    </button>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+              <FieldGroup className="space-y-4">
+                <Field invalid={!!errors.name}>
+                  <FieldLabel htmlFor="name">{tReg("name")}</FieldLabel>
+                  <Input
+                    id="name"
+                    placeholder={tReg("namePlaceholder")}
+                    {...register("name")}
+                    disabled={isSubmitting}
+                    className="h-11"
+                  />
+                  {errors.name && <FieldError>{errors.name.message}</FieldError>}
+                </Field>
 
-                    {/* Supplier Selection Option */}
-                    <button
-                      onClick={() => setAccountType("supplier")}
-                      className={`flex gap-4 p-5 rounded-xl border text-left transition-all duration-300 cursor-pointer ${
-                        accountType === "supplier"
-                          ? "border-primary bg-muted ring-1 ring-primary"
-                          : "border-border bg-card hover:border-muted-foreground"
-                      }`}
-                    >
-                      <div className="p-3 bg-primary text-primary-foreground rounded-lg shrink-0">
-                        <Store className="h-5 w-5" />
-                      </div>
-                      <div className="space-y-1">
-                        <h4 className="font-bold text-foreground text-sm">{tReg("supplier")}</h4>
-                        <p className="text-xs text-muted-foreground leading-relaxed">
-                          {tReg("supplierDesc")}
-                        </p>
-                      </div>
-                    </button>
-                  </div>
-                </div>
+                <Field invalid={!!errors.email}>
+                  <FieldLabel htmlFor="email">{tReg("email")}</FieldLabel>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder={tReg("emailPlaceholder")}
+                    {...register("email")}
+                    disabled={isSubmitting}
+                    className="h-11"
+                  />
+                  {errors.email && <FieldError>{errors.email.message}</FieldError>}
+                </Field>
 
-                <Button
-                  onClick={handleNextStep}
-                  className="w-full bg-primary text-primary-foreground hover:bg-primary/95 py-6 font-semibold tracking-wider flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  {tReg("btnNext")}
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </motion.div>
-            )}
-
-            {step === 2 && (
-              <motion.div
-                key="step2"
-                initial={{ opacity: 0, x: 25 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -25 }}
-                className="bg-card border border-border shadow-sm rounded-2xl p-6 md:p-10 space-y-8"
-              >
-                <div className="flex items-center justify-between pb-4 border-b border-border">
-                  <button
-                    onClick={() => setStep(1)}
-                    className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-xs font-semibold cursor-pointer"
-                  >
-                    <ArrowLeft className="h-4 w-4" />
-                    {tReg("backButton")}
-                  </button>
-                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
-                    {tReg("stepLabel", { current: 2, total: 2 })}
-                  </span>
-                </div>
-
-                <div className="space-y-1">
-                  <h2 className="text-2xl font-bold text-foreground font-heading">
-                    {accountType === "supplier"
-                      ? tReg("formTitleSupplier")
-                      : tReg("formTitleBuyer")}
-                  </h2>
-                </div>
-
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                <div className="grid gap-4 sm:grid-cols-2">
                   <Field invalid={!!errors.companyName}>
-                    <FieldLabel>{tReg("companyName")}</FieldLabel>
+                    <FieldLabel htmlFor="companyName">{tReg("companyName")}</FieldLabel>
                     <Input
-                      type="text"
-                      placeholder="e.g. PT Maju Jaya"
+                      id="companyName"
+                      placeholder={tReg("companyNamePlaceholder")}
                       {...register("companyName")}
-                      className="bg-card border-border focus-visible:border-muted-foreground focus-visible:ring-0"
+                      disabled={isSubmitting}
+                      className="h-11"
                     />
                     {errors.companyName && <FieldError>{errors.companyName.message}</FieldError>}
                   </Field>
 
-                  <Field invalid={!!errors.contactName}>
-                    <FieldLabel>{tReg("contactName")}</FieldLabel>
+                  <Field invalid={!!errors.industry}>
+                    <FieldLabel htmlFor="industry">{tReg("industry")}</FieldLabel>
                     <Input
-                      type="text"
-                      placeholder="e.g. John Doe"
-                      {...register("contactName")}
-                      className="bg-card border-border focus-visible:border-muted-foreground focus-visible:ring-0"
+                      id="industry"
+                      placeholder={tReg("industryPlaceholder")}
+                      {...register("industry")}
+                      disabled={isSubmitting}
+                      className="h-11"
                     />
-                    {errors.contactName && <FieldError>{errors.contactName.message}</FieldError>}
+                    {errors.industry && <FieldError>{errors.industry.message}</FieldError>}
                   </Field>
+                </div>
 
-                  <Field invalid={!!errors.phone}>
-                    <FieldLabel>{tReg("phone")}</FieldLabel>
+                <Field invalid={!!errors.password}>
+                  <FieldLabel htmlFor="password">{tReg("password")}</FieldLabel>
+                  <div className="relative">
                     <Input
-                      type="text"
-                      placeholder="e.g. 08123456789"
-                      {...register("phone")}
-                      className="bg-card border-border focus-visible:border-muted-foreground focus-visible:ring-0"
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder={tReg("passwordPlaceholder")}
+                      {...register("password")}
+                      disabled={isSubmitting}
+                      className="h-11 pr-10"
                     />
-                    {errors.phone && <FieldError>{errors.phone.message}</FieldError>}
-                  </Field>
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((value) => !value)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      aria-label={showPassword ? tReg("hidePassword") : tReg("showPassword")}
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
+                  {errors.password && <FieldError>{errors.password.message}</FieldError>}
+                </Field>
 
-                  <Field invalid={!!errors.email}>
-                    <FieldLabel>{tReg("email")}</FieldLabel>
+                <Field invalid={!!errors.confirmPassword}>
+                  <FieldLabel htmlFor="confirmPassword">{tReg("confirmPassword")}</FieldLabel>
+                  <div className="relative">
                     <Input
-                      type="email"
-                      placeholder="e.g. info@company.com"
-                      {...register("email")}
-                      className="bg-card border-border focus-visible:border-muted-foreground focus-visible:ring-0"
+                      id="confirmPassword"
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder={tReg("confirmPasswordPlaceholder")}
+                      {...register("confirmPassword")}
+                      disabled={isSubmitting}
+                      className="h-11 pr-10"
                     />
-                    {errors.email && <FieldError>{errors.email.message}</FieldError>}
-                  </Field>
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword((value) => !value)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      aria-label={showConfirmPassword ? tReg("hidePassword") : tReg("showPassword")}
+                    >
+                      {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
+                  {errors.confirmPassword && <FieldError>{errors.confirmPassword.message}</FieldError>}
+                </Field>
 
+                {errors.root && (
                   <Field>
-                    <FieldLabel>{tReg("desc")}</FieldLabel>
-                    <Textarea
-                      rows={3}
-                      placeholder={
-                        accountType === "supplier"
-                          ? tReg("descPlaceholderSupplier")
-                          : tReg("descPlaceholderBuyer")
-                      }
-                      {...register("description")}
-                      className="bg-card border-border focus-visible:border-muted-foreground resize-none"
-                    />
+                    <FieldError>{errors.root.message}</FieldError>
                   </Field>
+                )}
 
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full bg-primary text-primary-foreground hover:bg-primary/95 py-6 font-semibold tracking-wider cursor-pointer"
-                  >
-                    {isSubmitting ? "Submitting..." : tReg("btnSubmit")}
-                  </Button>
-                </form>
-              </motion.div>
-            )}
-
-            {step === 3 && (
-              <motion.div
-                key="step3"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="bg-card border border-border shadow-sm rounded-2xl p-10 text-center space-y-6"
-              >
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500">
-                  <ShieldCheck className="h-8 w-8" />
-                </div>
-
-                <div className="space-y-2">
-                  <h2 className="text-2xl font-bold text-foreground font-heading">
-                    {tReg("successTitle")}
-                  </h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto">
-                    {tReg("successDesc")}
-                  </p>
-                </div>
-
-                <Button
-                  onClick={() => {
-                    setAccountType(null);
-                    setStep(1);
-                  }}
-                  className="bg-primary text-primary-foreground hover:bg-primary/95 font-semibold cursor-pointer px-8"
-                >
-                  {tReg("registerAnother")}
+                <Button type="submit" disabled={isSubmitting} className="h-11 w-full font-semibold">
+                  {isSubmitting ? tReg("submitting") : tReg("submit")}
                 </Button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </FieldGroup>
+            </form>
+
+            <p className="mt-5 text-center text-sm text-muted-foreground">
+              {tReg("hasAccount")}{" "}
+              <Link href="/login" className="font-semibold text-primary hover:underline">
+                {tReg("loginLink")}
+              </Link>
+            </p>
+          </motion.div>
         </div>
       </div>
     </PublicLayout>

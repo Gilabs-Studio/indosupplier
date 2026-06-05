@@ -18,7 +18,9 @@
       "submit": "Sign In",
       "submitting": "Signing in...",
       "verifyingSession": "Verifying session...",
-      "rateLimitMessage": "Too many login attempts. Please try again in {countdown}."
+      "rateLimitMessage": "Too many login attempts. Please try again in {countdown}.",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Register"
     },
     "block": {
       "title": "Access Blocked",

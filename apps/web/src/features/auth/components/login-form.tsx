@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
+import { Link } from "@/i18n/routing";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
@@ -33,7 +34,15 @@ import { useRateLimitCountdown } from "@/lib/hooks/useRateLimitCountdown";
 import { useRateLimitStore } from "@/lib/stores/useRateLimitStore";
 import { ButtonLoading } from "@/components/loading";
 
-export default function LoginForm() {
+interface LoginFormProps {
+  redirectTo?: string;
+  registerHref?: string;
+}
+
+export default function LoginForm({
+  redirectTo = "/dashboard",
+  registerHref = "/register",
+}: LoginFormProps) {
   const t = useTranslations("auth.login");
   const searchParams = useSearchParams();
   const hasShownPaymentToast = useRef(false);
@@ -48,8 +57,8 @@ export default function LoginForm() {
    *
    * CRITICAL: Never trust localStorage.isAuthenticated directly.
    */
-  const { isLoading: isVerifying, shouldShowLoginForm } = useLoginGuard();
-  const { handleLogin, isLoading, error, clearError } = useLogin();
+  const { isLoading: isVerifying, shouldShowLoginForm } = useLoginGuard({ redirectTo });
+  const { handleLogin, isLoading, error, clearError } = useLogin({ redirectTo });
   const [showPassword, setShowPassword] = useState(false);
 
   // Rate limit countdown hook - shows toast notification with countdown
@@ -272,6 +281,12 @@ export default function LoginForm() {
                 </Field>
               </FieldGroup>
             </form>
+            <p className="text-center text-sm text-muted-foreground">
+              {t("noAccount")}{" "}
+              <Link href={registerHref} className="font-semibold text-primary hover:underline">
+                {t("registerLink")}
+              </Link>
+            </p>
           </CardContent>
         </Card>
       </motion.div>

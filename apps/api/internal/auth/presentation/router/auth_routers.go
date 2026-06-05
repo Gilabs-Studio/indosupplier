@@ -12,12 +12,14 @@ func RegisterAuthRoutes(rg *gin.RouterGroup, h *handler.AuthHandler, jwtManager 
 	g := rg.Group("/auth")
 	{
 		g.POST("/login", middleware.RateLimitMiddleware("login"), h.Login)
+		g.POST("/register", middleware.RateLimitMiddleware("login"), h.Register)
 		g.POST("/refresh-token", middleware.RateLimitMiddleware("refresh"), h.RefreshToken)
 		g.GET("/csrf", middleware.RateLimitMiddleware("public"), h.GetCSRFToken)
 
 		protected := g.Group("")
 		protected.Use(middleware.AuthMiddleware(jwtManager))
 		{
+			protected.POST("/supplier-profile", h.BecomeSupplier)
 			protected.POST("/logout", h.Logout)
 		}
 	}

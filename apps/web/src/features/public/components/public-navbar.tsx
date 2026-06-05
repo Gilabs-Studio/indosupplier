@@ -19,15 +19,18 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   ChevronDown,
   Store,
-  User,
-  Heart,
-  RefreshCw,
   LogOut,
   Bell,
   LayoutDashboard,
   Search,
   Mail,
   Package,
+  FileText,
+  Heart,
+  LifeBuoy,
+  RefreshCw,
+  Scale,
+  Settings2,
 } from "lucide-react";
 
 interface PublicNavbarProps {
@@ -36,6 +39,9 @@ interface PublicNavbarProps {
 
 export function PublicNavbar({ locale }: PublicNavbarProps) {
   const t = useTranslations("public.navbar");
+  const buyerLayoutT = useTranslations("buyer.layout");
+  const buyerNotificationsT = useTranslations("buyer.notifications");
+  const buyerProfileT = useTranslations("buyer.profile");
   const router = useRouter();
   const { user, isAuthenticated, logout } = useAuthStore();
   const [searchQuery, setSearchQuery] = useState("");
@@ -127,7 +133,13 @@ export function PublicNavbar({ locale }: PublicNavbarProps) {
               {/* Message & Notification Icons */}
               <div className="flex items-center gap-1.5">
                 {/* Inbox/Messages */}
-                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground cursor-pointer h-9 w-9 rounded-full relative" asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  title={buyerLayoutT("rfqList")}
+                  className="text-muted-foreground hover:text-foreground cursor-pointer h-9 w-9 rounded-full relative"
+                  asChild
+                >
                   <Link href="/rfq">
                     <Mail className="h-5 w-5" />
                     <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary" />
@@ -135,7 +147,13 @@ export function PublicNavbar({ locale }: PublicNavbarProps) {
                 </Button>
 
                 {/* Notifications */}
-                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground cursor-pointer h-9 w-9 rounded-full relative" asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  title={buyerNotificationsT("title")}
+                  className="text-muted-foreground hover:text-foreground cursor-pointer h-9 w-9 rounded-full relative"
+                  asChild
+                >
                   <Link href="/notifications">
                     <Bell className="h-5 w-5" />
                     <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-destructive" />
@@ -146,40 +164,17 @@ export function PublicNavbar({ locale }: PublicNavbarProps) {
               {/* Vertical Divider */}
               <div className="hidden sm:block h-5 w-[1px] bg-border" />
 
-              {/* Toko (Supplier Hub) Link/Dropdown */}
+              {/* Toko (Supplier Hub) Link */}
               <div className="hidden sm:block">
                 {hasSupplierAccess ? (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <button className="flex items-center gap-1.5 text-sm font-medium text-foreground hover:text-primary cursor-pointer transition-colors p-1 rounded-lg">
-                        <Store className="h-4.5 w-4.5 text-primary" />
-                        <span>Toko</span>
-                        <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
-                      </button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-56 p-2 bg-background border border-border rounded-xl shadow-lg animate-in fade-in-50 slide-in-from-top-1">
-                      <DropdownMenuLabel className="font-bold px-2 py-1 text-[10px] text-muted-foreground uppercase tracking-wider">Supplier Hub</DropdownMenuLabel>
-                      <DropdownMenuSeparator className="my-1 border-border" />
-                      <DropdownMenuItem asChild className="focus:bg-secondary cursor-pointer rounded-lg">
-                        <Link href="/supplier/dashboard" className="flex items-center gap-2 w-full px-2 py-1.5 text-sm">
-                          <LayoutDashboard className="h-4 w-4 text-muted-foreground" />
-                          <span>Dashboard Toko</span>
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild className="focus:bg-secondary cursor-pointer rounded-lg">
-                        <Link href="/supplier/profile/products" className="flex items-center gap-2 w-full px-2 py-1.5 text-sm">
-                          <Package className="h-4 w-4 text-muted-foreground" />
-                          <span>Kelola Produk</span>
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild className="focus:bg-secondary cursor-pointer rounded-lg">
-                        <Link href="/supplier/rfq" className="flex items-center gap-2 w-full px-2 py-1.5 text-sm">
-                          <RefreshCw className="h-4 w-4 text-muted-foreground" />
-                          <span>RFQ Masuk</span>
-                        </Link>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="sm"
+                    className="border-primary text-primary hover:bg-primary/5 hover:-translate-y-0.5 active:translate-y-0 shadow-xs transition-all duration-300 cursor-pointer"
+                  >
+                    <Link href="/supplier/dashboard">Dashboard Toko</Link>
+                  </Button>
                 ) : (
                   <Button
                     asChild
@@ -187,7 +182,7 @@ export function PublicNavbar({ locale }: PublicNavbarProps) {
                     size="sm"
                     className="border-primary text-primary hover:bg-primary/5 hover:-translate-y-0.5 active:translate-y-0 shadow-xs transition-all duration-300 cursor-pointer"
                   >
-                    <Link href="/supplier/onboarding">Buka Toko Gratis</Link>
+                    <Link href="/supplier/register">Daftar Supplier</Link>
                   </Button>
                 )}
               </div>
@@ -208,84 +203,113 @@ export function PublicNavbar({ locale }: PublicNavbarProps) {
                     <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-64 p-2 bg-background border border-border rounded-xl shadow-lg animate-in fade-in-50 slide-in-from-top-1">
-                  <DropdownMenuLabel className="font-normal px-2 py-1.5">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-semibold text-foreground leading-none">{user?.name}</p>
-                      <p className="text-xs text-muted-foreground leading-none">{user?.email}</p>
-                      <div className="pt-1.5">
-                        <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
-                          {hasSupplierAccess ? "Buyer & Supplier" : "Buyer Account"}
-                        </span>
+                <DropdownMenuContent align="end" className="w-[calc(100vw-2rem)] max-w-[420px] p-0 bg-background border border-border rounded-xl shadow-xl animate-in fade-in-50 slide-in-from-top-1 overflow-hidden">
+                  <DropdownMenuLabel className="font-normal p-4">
+                    <div className="flex items-center gap-3 rounded-lg border border-border bg-card px-3 py-3 shadow-xs">
+                      <Avatar className="h-12 w-12 border border-border">
+                        <AvatarImage src={`https://api.dicebear.com/7.x/lorelei/svg?seed=${user?.email}`} alt={user?.name} />
+                        <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
+                          {user?.name?.slice(0, 2).toUpperCase() ?? "US"}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-base font-bold text-foreground">{user?.name}</p>
+                        <p className="truncate text-xs text-muted-foreground">{user?.email}</p>
                       </div>
                     </div>
                   </DropdownMenuLabel>
-                  
-                  <DropdownMenuSeparator className="my-1 border-border" />
-                  <div className="px-2 py-1 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Buyer Hub</div>
-                  
-                  <DropdownMenuItem asChild className="focus:bg-secondary focus:text-foreground cursor-pointer rounded-lg">
-                    <Link href="/rfq" className="flex items-center gap-2 w-full px-2 py-1.5 text-sm">
-                      <RefreshCw className="h-4 w-4 text-muted-foreground" />
-                      <span>Pembelian (RFQ)</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="focus:bg-secondary focus:text-foreground cursor-pointer rounded-lg">
-                    <Link href="/bookmarks" className="flex items-center gap-2 w-full px-2 py-1.5 text-sm">
-                      <Heart className="h-4 w-4 text-muted-foreground" />
-                      <span>Wishlist</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="focus:bg-secondary focus:text-foreground cursor-pointer rounded-lg">
-                    <Link href="/compare" className="flex items-center gap-2 w-full px-2 py-1.5 text-sm">
-                      <ChevronDown className="h-4 w-4 rotate-90 text-muted-foreground" />
-                      <span>Bandingkan Supplier</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="focus:bg-secondary focus:text-foreground cursor-pointer rounded-lg">
-                    <Link href="/profile" className="flex items-center gap-2 w-full px-2 py-1.5 text-sm">
-                      <User className="h-4 w-4 text-muted-foreground" />
-                      <span>Pengaturan Profil</span>
-                    </Link>
-                  </DropdownMenuItem>
 
-                  {/* Mobile Supplier Options */}
-                  <div className="block sm:hidden">
-                    <DropdownMenuSeparator className="my-1 border-border" />
-                    <div className="px-2 py-1 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Supplier Hub</div>
-                    {hasSupplierAccess ? (
-                      <>
-                        <DropdownMenuItem asChild className="focus:bg-secondary focus:text-foreground cursor-pointer rounded-lg">
-                          <Link href="/supplier/dashboard" className="flex items-center gap-2 w-full px-2 py-1.5 text-sm">
-                            <LayoutDashboard className="h-4 w-4 text-muted-foreground" />
-                            <span>Dashboard Toko</span>
+                  <div className="grid grid-cols-1 gap-0 px-4 pb-4 sm:grid-cols-[1.1fr_0.9fr]">
+                    <div className="space-y-3 border-b border-border pb-3 sm:border-b-0 sm:border-r sm:pb-0 sm:pr-4">
+                      <div className="rounded-lg border border-border bg-card px-3 py-3 text-sm">
+                        <p className="font-semibold text-foreground">{buyerLayoutT("buyerAccount")}</p>
+                        <p className="mt-1 text-xs text-muted-foreground">
+                          {user?.buyer_profile?.status || user?.email}
+                        </p>
+                        <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                          <Link href="/dashboard" className="rounded-lg border border-border px-3 py-2 text-muted-foreground hover:bg-secondary">
+                            {buyerLayoutT("dashboard")}
                           </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild className="focus:bg-secondary focus:text-foreground cursor-pointer rounded-lg">
-                          <Link href="/supplier/profile/products" className="flex items-center gap-2 w-full px-2 py-1.5 text-sm">
-                            <Package className="h-4 w-4 text-muted-foreground" />
-                            <span>Kelola Produk</span>
+                          <Link href="/notifications" className="rounded-lg border border-border px-3 py-2 text-muted-foreground hover:bg-secondary">
+                            {buyerNotificationsT("title")}
                           </Link>
-                        </DropdownMenuItem>
-                      </>
-                    ) : (
-                      <DropdownMenuItem asChild className="focus:bg-primary/5 focus:text-primary cursor-pointer rounded-lg">
-                        <Link href="/supplier/onboarding" className="flex items-center gap-2 w-full px-2 py-1.5 text-sm font-medium text-primary">
-                          <Store className="h-4 w-4" />
-                          <span>Buka Toko Gratis</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1 pt-3 sm:pl-4 sm:pt-0">
+                      <DropdownMenuItem asChild className="focus:bg-secondary focus:text-foreground cursor-pointer rounded-lg">
+                        <Link href="/dashboard" className="flex items-center gap-2 w-full px-2 py-2 text-sm">
+                          <LayoutDashboard className="h-4 w-4 text-muted-foreground" />
+                          <span>{buyerLayoutT("dashboard")}</span>
                         </Link>
                       </DropdownMenuItem>
-                    )}
-                  </div>
+                      <DropdownMenuItem asChild className="focus:bg-secondary focus:text-foreground cursor-pointer rounded-lg">
+                        <Link href="/rfq" className="flex items-center gap-2 w-full px-2 py-2 text-sm">
+                          <RefreshCw className="h-4 w-4 text-muted-foreground" />
+                          <span>{buyerLayoutT("rfqList")}</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild className="focus:bg-secondary focus:text-foreground cursor-pointer rounded-lg">
+                        <Link href="/bookmarks" className="flex items-center gap-2 w-full px-2 py-2 text-sm">
+                          <Heart className="h-4 w-4 text-muted-foreground" />
+                          <span>{buyerLayoutT("wishlist")}</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild className="focus:bg-secondary focus:text-foreground cursor-pointer rounded-lg">
+                        <Link href="/compare" className="flex items-center gap-2 w-full px-2 py-2 text-sm">
+                          <Scale className="h-4 w-4 text-muted-foreground" />
+                          <span>{buyerLayoutT("compare")}</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild className="focus:bg-secondary focus:text-foreground cursor-pointer rounded-lg">
+                        <Link href="/profile/documents" className="flex items-center gap-2 w-full px-2 py-2 text-sm">
+                          <FileText className="h-4 w-4 text-muted-foreground" />
+                          <span>{buyerProfileT("tabDocuments")}</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild className="focus:bg-secondary focus:text-foreground cursor-pointer rounded-lg">
+                        <Link href="/profile" className="flex items-center gap-2 w-full px-2 py-2 text-sm">
+                          <Settings2 className="h-4 w-4 text-muted-foreground" />
+                          <span>{buyerLayoutT("profile")}</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild className="focus:bg-secondary focus:text-foreground cursor-pointer rounded-lg">
+                        <Link href="/support" className="flex items-center gap-2 w-full px-2 py-2 text-sm">
+                          <LifeBuoy className="h-4 w-4 text-muted-foreground" />
+                          <span>{buyerLayoutT("support")}</span>
+                        </Link>
+                      </DropdownMenuItem>
 
-                  <DropdownMenuSeparator className="my-1 border-border" />
-                  <DropdownMenuItem
-                    onClick={handleLogout}
-                    className="focus:bg-destructive/10 focus:text-destructive text-destructive cursor-pointer rounded-lg flex items-center gap-2 px-2 py-1.5 text-sm"
-                  >
-                    <LogOut className="h-4 w-4" />
-                    <span>Log Out</span>
-                  </DropdownMenuItem>
+                      <div className="block sm:hidden">
+                        <DropdownMenuSeparator className="my-1 border-border" />
+                        {hasSupplierAccess ? (
+                          <DropdownMenuItem asChild className="focus:bg-secondary focus:text-foreground cursor-pointer rounded-lg">
+                            <Link href="/supplier/dashboard" className="flex items-center gap-2 w-full px-2 py-2 text-sm">
+                              <Store className="h-4 w-4 text-muted-foreground" />
+                              <span>Dashboard Toko</span>
+                            </Link>
+                          </DropdownMenuItem>
+                        ) : (
+                          <DropdownMenuItem asChild className="focus:bg-primary/5 focus:text-primary cursor-pointer rounded-lg">
+                            <Link href="/supplier/register" className="flex items-center gap-2 w-full px-2 py-2 text-sm font-medium text-primary">
+                              <Store className="h-4 w-4" />
+                              <span>Daftar Supplier</span>
+                            </Link>
+                          </DropdownMenuItem>
+                        )}
+                      </div>
+
+                      <DropdownMenuSeparator className="my-2 border-border" />
+                      <DropdownMenuItem
+                        onClick={handleLogout}
+                        className="focus:bg-destructive/10 focus:text-destructive text-muted-foreground cursor-pointer rounded-lg flex items-center gap-2 px-2 py-2 text-sm"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span>Keluar</span>
+                      </DropdownMenuItem>
+                    </div>
+                  </div>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -300,7 +324,7 @@ export function PublicNavbar({ locale }: PublicNavbarProps) {
                 size="sm"
                 className="bg-primary text-primary-foreground hover:bg-primary/90 hover:-translate-y-0.5 active:translate-y-0 shadow-xs transition-all duration-300 cursor-pointer"
               >
-                <Link href="/demo/register">{t("register")}</Link>
+                <Link href="/register">{t("register")}</Link>
               </Button>
             </div>
           )}
