@@ -1,0 +1,11 @@
+{
+  "verification": {
+    "title": "Supplier Account Verification",
+    "subtitle": "Track your progress towards becoming a Verified Gold Supplier on IndoSupplier.",
+    "progress": "Verification Progress",
+    "stepEmail": "Email Address Verified",
+    "stepDocs": "Legal Documents Uploaded (NIB, NPWP)",
+    "stepReview": "Document Compliance Review",
+    "stepVisit": "Physical Office Verification Visit"
+  }
+}

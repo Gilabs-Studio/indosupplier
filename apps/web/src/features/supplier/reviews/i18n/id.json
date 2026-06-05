@@ -1,0 +1,13 @@
+{
+  "reviews": {
+    "title": "Ulasan Pembeli & Penilaian Toko",
+    "subtitle": "Kelola masukan pembeli, rata-rata bintang, dan berikan tanggapan untuk membangun reputasi.",
+    "totalReviews": "Total Ulasan",
+    "avgRating": "Rata-rata Rating",
+    "btnReply": "Balas",
+    "replyModalTitle": "Balas Masukan Pembeli",
+    "replyPlaceholder": "Tulis tanggapan profesional untuk pembeli ini...",
+    "btnSubmitReply": "Kirim Balasan",
+    "replySuccess": "Tanggapan berhasil dikirim!"
+  }
+}

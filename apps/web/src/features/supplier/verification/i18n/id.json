@@ -1,0 +1,11 @@
+{
+  "verification": {
+    "title": "Verifikasi Akun Pemasok",
+    "subtitle": "Pantau kemajuan Anda menuju verifikasi Gold Supplier di IndoSupplier.",
+    "progress": "Kemajuan Verifikasi",
+    "stepEmail": "Alamat Email Terverifikasi",
+    "stepDocs": "Dokumen Legal Diunggah (NIB, NPWP)",
+    "stepReview": "Tinjauan Kepatuhan Dokumen",
+    "stepVisit": "Kunjungan Verifikasi Kantor Fisik"
+  }
+}

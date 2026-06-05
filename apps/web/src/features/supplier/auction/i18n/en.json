@@ -1,0 +1,24 @@
+{
+  "auction": {
+    "listTitle": "Premium Slot Auctions",
+    "listSubtitle": "Bid for premium placement tags and top supplier search slots.",
+    "activeAuctions": "Active Auctions",
+    "upcomingAuctions": "Upcoming Auctions",
+    "wonAuctions": "Won Auctions",
+    "tableSlot": "Slot Name",
+    "tableCurrentBid": "Current Bid",
+    "tableTimeLeft": "Time Left",
+    "tableBidsCount": "Bids",
+    "actionPlace": "Bid Now",
+    "actionDetail": "View Console",
+    "consoleTitle": "Live Bidding Console",
+    "consoleSubtitle": "Place your bids in real-time. Winning bid gets exclusive slot placement.",
+    "startingPrice": "Starting Price",
+    "currentHighBid": "Current Highest Bid",
+    "minIncrement": "Minimum Increment",
+    "bidHistory": "Bidding History",
+    "yourBid": "Your Bid Amount (IDR)",
+    "btnBid": "Place Bid",
+    "bidSuccess": "Bid placed successfully!"
+  }
+}

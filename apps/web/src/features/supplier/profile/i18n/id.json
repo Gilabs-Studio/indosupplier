@@ -1,0 +1,24 @@
+{
+  "profile": {
+    "certsTitle": "Sertifikasi & Standarisasi",
+    "certsSubtitle": "Tambahkan sertifikat ISO, Halal, SNI, atau kepatuhan perdagangan internasional untuk mendapatkan lencana.",
+    "btnUpload": "Unggah Sertifikat",
+    "certName": "Nama Sertifikat",
+    "issuer": "Lembaga Penerbit",
+    "validUntil": "Berlaku Hingga",
+    "status": "Status Verifikasi",
+    "photosTitle": "Galeri Foto Perusahaan",
+    "photosSubtitle": "Unggah foto pabrik, gudang, kantor, dan tim Anda untuk membangun kepercayaan dengan pembeli.",
+    "btnUploadPhoto": "Tambah Foto Baru",
+    "docsTitle": "Daftar Dokumen Legalitas",
+    "docsSubtitle": "Sediakan izin usaha pemerintah yang wajib untuk aktivasi akun.",
+    "docName": "Nama Dokumen",
+    "docNumber": "Nomor Dokumen/Referensi",
+    "file": "Berkas yang Diunggah",
+    "statusVerified": "Terverifikasi",
+    "statusPending": "Sedang Diverifikasi",
+    "statusEmpty": "Belum Diunggah",
+    "previewTitle": "Pratinjau Profil Supplier",
+    "previewSubtitle": "Ini adalah bagaimana profil toko dan katalog Anda akan terlihat oleh calon pembeli."
+  }
+}

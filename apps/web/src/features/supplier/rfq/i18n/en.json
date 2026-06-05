@@ -1,0 +1,32 @@
+{
+  "rfq": {
+    "listTitle": "RFQ Sourcing Market",
+    "listSubtitle": "Find active procurement requests matching your categories and submit quotes.",
+    "tableId": "RFQ ID",
+    "tableProduct": "Product Request",
+    "tableQty": "Quantity",
+    "tablePort": "Target Port",
+    "tableDate": "Post Date",
+    "tableStatus": "Status",
+    "actionSubmit": "Submit Quote",
+    "actionView": "View Details",
+    "detailTitle": "RFQ Specifications",
+    "detailSubtitle": "Review the buyer's detailed requirements and offer your best pricing quote.",
+    "buyerInfo": "Buyer Information",
+    "companyName": "Company Name",
+    "established": "Established",
+    "location": "Location",
+    "specs": "Technical Specifications",
+    "reqQty": "Required Quantity",
+    "shippingTerm": "Shipping Term",
+    "targetBudget": "Target Budget",
+    "targetDate": "Target Delivery Date",
+    "formTitle": "Submit Quote Proposal",
+    "formPrice": "Your Offer Price (per Unit/Ton)",
+    "formMinQty": "Minimum Order Quantity (MOQ)",
+    "formDeliveryTime": "Estimated Lead Time (Days)",
+    "formNotes": "Proposal Notes / Special Terms",
+    "btnSubmit": "Send Proposal",
+    "submitSuccess": "Proposal sent successfully!"
+  }
+}

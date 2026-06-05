@@ -1,0 +1,16 @@
+{
+  "billing": {
+    "title": "Billing & Financial Ledger",
+    "subtitle": "Track your invoices, payments, and registered payment methods.",
+    "outstanding": "Outstanding Invoices",
+    "payoutBank": "Linked Payout Bank Account",
+    "paymentHistory": "Payment History",
+    "invoiceNo": "Invoice No",
+    "description": "Description",
+    "amount": "Amount",
+    "status": "Status",
+    "dueDate": "Due Date",
+    "actionPay": "Pay Now",
+    "actionDownload": "Download PDF"
+  }
+}

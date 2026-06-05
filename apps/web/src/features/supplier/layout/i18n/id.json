@@ -1,0 +1,24 @@
+{
+  "layout": {
+    "loading": "Memuat Portal Pemasok...",
+    "searchPlaceholder": "Cari produk, pesanan, dan fitur disini...",
+    "notificationAlert": "Anda memiliki penawaran RFQ baru yang tertunda.",
+    "signOutConfirm": "Apakah Anda yakin ingin keluar?",
+    "signOut": "Keluar",
+    "online": "Aktif",
+    "menu": {
+      "dashboard": "Dasbor",
+      "profile": "Profil Perusahaan",
+      "products": "Produk & Katalog",
+      "rfqs": "Penawaran RFQ",
+      "ads": "Kampanye Iklan",
+      "auctions": "Lelang",
+      "billing": "Tagihan",
+      "subscription": "Langganan",
+      "verification": "Verifikasi",
+      "support": "Pusat Bantuan",
+      "reviews": "Ulasan & Masukan",
+      "settings": "Pengaturan"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "billing": {
+    "title": "Tagihan & Buku Besar Keuangan",
+    "subtitle": "Pantau tagihan Anda, pembayaran, dan metode pembayaran terdaftar.",
+    "outstanding": "Tagihan Belum Terbayar",
+    "payoutBank": "Akun Rekening Bank Terdaftar",
+    "paymentHistory": "Riwayat Pembayaran",
+    "invoiceNo": "No Tagihan",
+    "description": "Deskripsi",
+    "amount": "Jumlah",
+    "status": "Status",
+    "dueDate": "Jatuh Tempo",
+    "actionPay": "Bayar Sekarang",
+    "actionDownload": "Unduh PDF"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "subscription": {
+    "title": "Paket Keanggotaan Pemasok",
+    "subtitle": "Tingkatkan paket akun Anda untuk membuka jangkauan penawaran pembeli maksimal dan alat premium.",
+    "activePlan": "Paket Aktif Anda",
+    "current": "Paket Aktif Saat Ini",
+    "upgrade": "Tingkatkan ke",
+    "btnBuy": "Beli Paket",
+    "periodYear": "/ tahun",
+    "periodMonth": "/ bulan"
+  }
+}

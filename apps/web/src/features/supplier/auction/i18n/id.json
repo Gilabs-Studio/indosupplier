@@ -1,0 +1,24 @@
+{
+  "auction": {
+    "listTitle": "Lelang Slot Premium",
+    "listSubtitle": "Ikuti lelang untuk memperebutkan tag penempatan premium dan posisi teratas pencarian supplier.",
+    "activeAuctions": "Lelang Aktif",
+    "upcomingAuctions": "Lelang Mendatang",
+    "wonAuctions": "Lelang yang Dimenangkan",
+    "tableSlot": "Nama Slot",
+    "tableCurrentBid": "Tawaran Saat Ini",
+    "tableTimeLeft": "Sisa Waktu",
+    "tableBidsCount": "Tawaran",
+    "actionPlace": "Tawar Sekarang",
+    "actionDetail": "Lihat Konsol",
+    "consoleTitle": "Konsol Lelang Langsung",
+    "consoleSubtitle": "Kirim penawaran Anda secara langsung. Penawaran tertinggi mendapatkan penempatan slot eksklusif.",
+    "startingPrice": "Harga Awal",
+    "currentHighBid": "Tawaran Tertinggi Saat Ini",
+    "minIncrement": "Kenaikan Minimum",
+    "bidHistory": "Riwayat Penawaran",
+    "yourBid": "Jumlah Penawaran Anda (IDR)",
+    "btnBid": "Kirim Penawaran",
+    "bidSuccess": "Penawaran berhasil dikirim!"
+  }
+}

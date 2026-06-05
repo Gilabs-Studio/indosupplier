@@ -1,0 +1,8 @@
+{
+  "notifications": {
+    "title": "Supplier Notification Center",
+    "subtitle": "Read recent system notifications, billing updates, and message logs.",
+    "btnMarkAll": "Mark All as Read",
+    "noNotifications": "No notifications found."
+  }
+}

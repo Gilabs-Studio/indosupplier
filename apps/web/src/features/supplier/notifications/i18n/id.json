@@ -1,0 +1,8 @@
+{
+  "notifications": {
+    "title": "Pusat Notifikasi Pemasok",
+    "subtitle": "Baca pemberitahuan sistem terbaru, pembaruan tagihan, dan log pesan.",
+    "btnMarkAll": "Tandai Semua Telah Dibaca",
+    "noNotifications": "Tidak ada notifikasi yang ditemukan."
+  }
+}

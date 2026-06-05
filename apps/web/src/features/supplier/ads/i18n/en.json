@@ -1,0 +1,29 @@
+{
+  "ads": {
+    "listTitle": "Advertising Campaigns",
+    "listSubtitle": "Promote your catalog items to reach active buyers on IndoSupplier.",
+    "btnCreate": "Create Campaign",
+    "statImpressions": "Total Impressions",
+    "statClicks": "Total Clicks",
+    "statSpend": "Total Spend",
+    "statCtr": "Average CTR",
+    "tableCampaign": "Campaign Name",
+    "tableProduct": "Product",
+    "tableBudget": "Daily Budget",
+    "tableBid": "Bid per Click",
+    "tableStatus": "Status",
+    "statusActive": "Active",
+    "statusPaused": "Paused",
+    "statusEnded": "Ended",
+    "createTitle": "Create Ad Campaign",
+    "createSubtitle": "Define your budget and bid to start displaying your products at the top of search results.",
+    "formName": "Campaign Name",
+    "formProduct": "Select Product to Advertise",
+    "formBudget": "Daily Budget (IDR)",
+    "formBid": "Bid per Click (IDR)",
+    "btnSubmit": "Launch Campaign",
+    "createSuccess": "Campaign launched successfully!",
+    "detailTitle": "Campaign Reports",
+    "detailSubtitle": "Analyze clicks, cost performance, and conversion analytics for this campaign."
+  }
+}

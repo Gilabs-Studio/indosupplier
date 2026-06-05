@@ -1,0 +1,32 @@
+{
+  "rfq": {
+    "listTitle": "Pasar Penawaran RFQ",
+    "listSubtitle": "Temukan permintaan pengadaan aktif yang sesuai dengan kategori Anda dan kirim penawaran.",
+    "tableId": "ID RFQ",
+    "tableProduct": "Permintaan Produk",
+    "tableQty": "Jumlah",
+    "tablePort": "Pelabuhan Tujuan",
+    "tableDate": "Tanggal Kirim",
+    "tableStatus": "Status",
+    "actionSubmit": "Kirim Penawaran",
+    "actionView": "Lihat Detail",
+    "detailTitle": "Spesifikasi RFQ",
+    "detailSubtitle": "Tinjau detail kebutuhan pembeli dan tawarkan harga terbaik Anda.",
+    "buyerInfo": "Informasi Pembeli",
+    "companyName": "Nama Perusahaan",
+    "established": "Didirikan",
+    "location": "Lokasi",
+    "specs": "Spesifikasi Teknis",
+    "reqQty": "Jumlah yang Dibutuhkan",
+    "shippingTerm": "Syarat Pengiriman",
+    "targetBudget": "Target Anggaran",
+    "targetDate": "Target Tanggal Pengiriman",
+    "formTitle": "Kirim Proposal Penawaran",
+    "formPrice": "Harga Penawaran Anda (per Unit/Ton)",
+    "formMinQty": "Kuantitas Minimum Order (MOQ)",
+    "formDeliveryTime": "Perkiraan Waktu Pengiriman (Hari)",
+    "formNotes": "Catatan Proposal / Ketentuan Khusus",
+    "btnSubmit": "Kirim Proposal",
+    "submitSuccess": "Proposal berhasil dikirim!"
+  }
+}

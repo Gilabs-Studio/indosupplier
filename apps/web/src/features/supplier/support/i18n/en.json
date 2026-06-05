@@ -1,0 +1,19 @@
+{
+  "support": {
+    "title": "Support Center",
+    "subtitle": "Need assistance? Raise support tickets or chat directly with our helpdesk representatives.",
+    "btnCreate": "Create Ticket",
+    "tableId": "Ticket ID",
+    "tableSubject": "Subject",
+    "tableCategory": "Category",
+    "tableStatus": "Status",
+    "tableUpdated": "Last Updated",
+    "statusOpen": "Open",
+    "statusResolved": "Resolved",
+    "statusClosed": "Closed",
+    "chatTitle": "Support Ticket Chat",
+    "chatSubtitle": "Discuss issues and receive assistance from our customer support agents.",
+    "btnSend": "Send Message",
+    "placeholder": "Type your message here..."
+  }
+}

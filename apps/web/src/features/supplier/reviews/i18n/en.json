@@ -1,0 +1,13 @@
+{
+  "reviews": {
+    "title": "Buyer Reviews & Store Rating",
+    "subtitle": "Manage buyer feedback, average ratings, and submit replies to build store reputation.",
+    "totalReviews": "Total Reviews",
+    "avgRating": "Average Rating",
+    "btnReply": "Reply",
+    "replyModalTitle": "Reply to Feedback",
+    "replyPlaceholder": "Write a professional response to this buyer...",
+    "btnSubmitReply": "Submit Reply",
+    "replySuccess": "Reply submitted successfully!"
+  }
+}

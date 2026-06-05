@@ -1,0 +1,24 @@
+{
+  "layout": {
+    "loading": "Loading Supplier Portal...",
+    "searchPlaceholder": "Search products, orders, and features...",
+    "notificationAlert": "You have new RFQ quotes pending review.",
+    "signOutConfirm": "Are you sure you want to sign out?",
+    "signOut": "Sign Out",
+    "online": "Online",
+    "menu": {
+      "dashboard": "Dashboard",
+      "profile": "Company Profile",
+      "products": "Products & Catalog",
+      "rfqs": "RFQ Sourcing",
+      "ads": "Ad Campaigns",
+      "auctions": "Auctions",
+      "billing": "Billing",
+      "subscription": "Subscription",
+      "verification": "Verification",
+      "support": "Support Center",
+      "reviews": "Reviews & Feedback",
+      "settings": "Settings"
+    }
+  }
+}

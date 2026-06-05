@@ -1,0 +1,19 @@
+{
+  "support": {
+    "title": "Pusat Bantuan",
+    "subtitle": "Butuh bantuan? Buat tiket dukungan atau mengobrol langsung dengan staf bantuan kami.",
+    "btnCreate": "Buat Tiket",
+    "tableId": "ID Tiket",
+    "tableSubject": "Subjek",
+    "tableCategory": "Kategori",
+    "tableStatus": "Status",
+    "tableUpdated": "Terakhir Diperbarui",
+    "statusOpen": "Buka",
+    "statusResolved": "Selesai",
+    "statusClosed": "Ditutup",
+    "chatTitle": "Obrolan Tiket Dukungan",
+    "chatSubtitle": "Diskusikan masalah dan dapatkan bantuan dari staf dukungan kami.",
+    "btnSend": "Kirim Pesan",
+    "placeholder": "Ketik pesan Anda disini..."
+  }
+}

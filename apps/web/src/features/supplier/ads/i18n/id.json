@@ -1,0 +1,29 @@
+{
+  "ads": {
+    "listTitle": "Kampanye Iklan",
+    "listSubtitle": "Promosikan produk katalog Anda untuk menjangkau pembeli aktif di IndoSupplier.",
+    "btnCreate": "Buat Kampanye",
+    "statImpressions": "Total Implikasi",
+    "statClicks": "Total Klik",
+    "statSpend": "Total Biaya",
+    "statCtr": "Rata-rata CTR",
+    "tableCampaign": "Nama Kampanye",
+    "tableProduct": "Produk",
+    "tableBudget": "Anggaran Harian",
+    "tableBid": "Tawaran per Klik",
+    "tableStatus": "Status",
+    "statusActive": "Aktif",
+    "statusPaused": "Dihentikan",
+    "statusEnded": "Berakhir",
+    "createTitle": "Buat Kampanye Iklan",
+    "createSubtitle": "Tentukan anggaran dan harga klik untuk mulai menampilkan produk Anda di bagian atas hasil pencarian.",
+    "formName": "Nama Kampanye",
+    "formProduct": "Pilih Produk untuk Diiklankan",
+    "formBudget": "Anggaran Harian (IDR)",
+    "formBid": "Biaya per Klik (IDR)",
+    "btnSubmit": "Mulai Kampanye",
+    "createSuccess": "Kampanye berhasil dijalankan!",
+    "detailTitle": "Laporan Kampanye",
+    "detailSubtitle": "Analisis klik, performa biaya, dan analitik konversi untuk kampanye ini."
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "profile": {
+    "certsTitle": "Certifications & Standardizations",
+    "certsSubtitle": "Add ISO, Halal, SNI, or international trade compliance certificates to earn badges.",
+    "btnUpload": "Upload Certificate",
+    "certName": "Certificate Name",
+    "issuer": "Issuing Body",
+    "validUntil": "Valid Until",
+    "status": "Verification Status",
+    "photosTitle": "Company Photo Gallery",
+    "photosSubtitle": "Upload photos of your factories, warehouses, offices, and team to build trust with buyers.",
+    "btnUploadPhoto": "Add New Photo",
+    "docsTitle": "Legal Documents Checklist",
+    "docsSubtitle": "Provide mandatory government business permits for account activation.",
+    "docName": "Document Name",
+    "docNumber": "Document Reference Number",
+    "file": "Uploaded File",
+    "statusVerified": "Verified",
+    "statusPending": "Under Verification",
+    "statusEmpty": "Not Uploaded",
+    "previewTitle": "Supplier Profile Preview",
+    "previewSubtitle": "This is how your store profile card and catalog appear to prospective buyers."
+  }
+}

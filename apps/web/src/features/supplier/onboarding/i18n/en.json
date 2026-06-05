@@ -1,0 +1,13 @@
+{
+  "onboarding": {
+    "title": "Welcome to IndoSupplier Seller Portal!",
+    "subtitle": "Follow these quick steps to set up your business account and start selling.",
+    "step1": "General Information",
+    "step2": "Tax & Legal Info",
+    "step3": "First Product Upload",
+    "btnNext": "Next Step",
+    "btnBack": "Back",
+    "btnComplete": "Complete Onboarding",
+    "success": "Onboarding completed! Welcome aboard."
+  }
+}

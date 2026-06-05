@@ -1,0 +1,12 @@
+{
+  "subscription": {
+    "title": "Membership Subscription Plans",
+    "subtitle": "Upgrade your account plan to unlock maximum buyer inquiry reach and premium tools.",
+    "activePlan": "Your Active Plan",
+    "current": "Current Active Plan",
+    "upgrade": "Upgrade to",
+    "btnBuy": "Upgrade Plan",
+    "periodYear": "/ year",
+    "periodMonth": "/ month"
+  }
+}
