@@ -60,7 +60,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const isId = locale === "id";
 
   return {
-    metadataBase: new URL("https://indosupplier.id"),
+    metadataBase: new URL("https://indosuppliers.id"),
     title: {
       template: "%s | IndoSupplier",
       default: isId
@@ -117,7 +117,7 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
       locale: isId ? "id_ID" : "en_US",
       alternateLocale: isId ? "en_US" : "id_ID",
-      url: "https://indosupplier.id",
+      url: "https://indosuppliers.id",
       title: isId
         ? "IndoSupplier — Platform Marketplace Supplier Indonesia Terverifikasi"
         : "IndoSupplier — Find Verified Indonesian Suppliers & Manufacturers",
@@ -159,7 +159,7 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     },
     alternates: {
-      canonical: "https://indosupplier.id",
+      canonical: "https://indosuppliers.id",
       languages: getLanguageAlternates("/"),
     },
     category: "business",
@@ -176,12 +176,12 @@ export const viewport: Viewport = {
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "@id": "https://indosupplier.id/#organization",
+  "@id": "https://indosuppliers.id/#organization",
   name: "IndoSupplier",
-  url: "https://indosupplier.id",
+  url: "https://indosuppliers.id",
   logo: {
     "@type": "ImageObject",
-    url: "https://indosupplier.id/logo.png",
+    url: "https://indosuppliers.id/logo.png",
     width: 200,
     height: 60,
   },
@@ -204,20 +204,20 @@ const organizationSchema = {
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "@id": "https://indosupplier.id/#website",
-  url: "https://indosupplier.id",
+  "@id": "https://indosuppliers.id/#website",
+  url: "https://indosuppliers.id",
   name: "IndoSupplier",
   description:
     "Platform marketplace B2B untuk menemukan supplier dan produsen terverifikasi di Indonesia",
   publisher: {
-    "@id": "https://indosupplier.id/#organization",
+    "@id": "https://indosuppliers.id/#organization",
   },
   inLanguage: ["id-ID", "en-US"],
   potentialAction: {
     "@type": "SearchAction",
     target: {
       "@type": "EntryPoint",
-      urlTemplate: "https://indosupplier.id/id?q={search_term_string}",
+      urlTemplate: "https://indosuppliers.id/id?q={search_term_string}",
     },
     "query-input": {
       "@type": "PropertyValueSpecification",
@@ -233,7 +233,7 @@ const softwareApplicationSchema = {
   name: "IndoSupplier",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
-  url: "https://indosupplier.id",
+  url: "https://indosuppliers.id",
   description:
     "Platform marketplace B2B Indonesia: temukan supplier, produsen, dan eksportir terverifikasi dengan mudah dan cepat.",
   offers: {
@@ -243,7 +243,7 @@ const softwareApplicationSchema = {
     description: "Pendaftaran gratis untuk buyer dan supplier",
   },
   publisher: {
-    "@id": "https://indosupplier.id/#organization",
+    "@id": "https://indosuppliers.id/#organization",
   },
 };
 
