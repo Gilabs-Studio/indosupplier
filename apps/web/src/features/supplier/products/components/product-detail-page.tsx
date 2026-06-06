@@ -9,12 +9,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldLabel, FieldGroup, FieldError } from "@/components/ui/field";
 import { Switch } from "@/components/ui/switch";
 import { NumericInput } from "@/components/ui/numeric-input";
-import { Badge } from "@/components/ui/badge";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { productFormSchema } from "../schemas/products.schema";
 import { useSupplierProduct, useCategories, useCreateProduct, useUpdateProduct, useUploadProductImage } from "../hooks/useProducts";
-import { ArrowLeft, Save, Upload, Trash2, Star, Loader2 } from "lucide-react";
+import { ArrowLeft, Upload, Trash2, Star, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion, AnimatePresence } from "framer-motion";
@@ -24,7 +23,7 @@ interface ProductDetailPageProps {
   isCreate?: boolean;
 }
 
-export function ProductDetailPage({ id, isCreate = false }: ProductDetailPageProps) {
+export function ProductDetailPage({ id, isCreate = false }: Readonly<ProductDetailPageProps>) {
   const router = useRouter();
   const t = useTranslations("supplier.products");
 
@@ -87,12 +86,12 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
     const files = e.target.files;
     if (!files) return;
 
-    for (let i = 0; i < files.length; i++) {
+    for (const file of Array.from(files)) {
       try {
-        const result = await uploadImage(files[i]);
+        const result = await uploadImage(file);
         appendPhoto({
           file_url: result.url,
-          caption: files[i].name,
+          caption: file.name,
           sort_order: watchPhotos.length,
         });
       } catch (err) {
@@ -102,12 +101,15 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = (values: any) => {
-    if (isCreate) {
-      createProduct(values, {
-        onSuccess: () => router.push("/supplier/products"),
-      });
-    } else if (id) {
+  const handleCreateProduct = (values: any) => {
+    createProduct(values, {
+      onSuccess: () => router.push("/supplier/products"),
+    });
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleUpdateProduct = (values: any) => {
+    if (id) {
       updateProduct(
         { id, data: values },
         {
@@ -116,6 +118,8 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
       );
     }
   };
+
+  const onSubmit = isCreate ? handleCreateProduct : handleUpdateProduct;
 
   if (isLoadingProduct && !isCreate) {
     return (
@@ -138,18 +142,18 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 pb-32 text-left space-y-8 relative">
       {/* Header */}
-      <div className="flex items-center gap-4 pb-5 border-b border-border">
+      <div className="flex items-center gap-3 pb-5 border-b border-border">
         <Button
           type="button"
-          variant="outline"
+          variant="ghost"
           size="icon"
           onClick={() => router.push("/supplier/products")}
-          className="h-10 w-10 cursor-pointer border-border transition-all hover:bg-muted"
+          className="h-10 w-10 cursor-pointer text-muted-foreground hover:text-primary hover:bg-muted rounded-full transition-all duration-200"
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-5 w-5" />
         </Button>
         <div className="space-y-1">
-          <h1 className="text-2xl font-extrabold tracking-tight text-foreground font-heading">
+          <h1 className="text-xl font-bold tracking-tight text-foreground font-heading">
             {isCreate ? t("addProduct") : t("editProduct")}
           </h1>
           <p className="text-xs text-muted-foreground">
@@ -347,7 +351,7 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
                               {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img
                                 src={field.file_url}
-                                alt={`Photo ${index}`}
+                                alt={`Product detail ${index + 1}`}
                                 className="h-full w-full object-cover"
                               />
                               {isCover && (
@@ -385,7 +389,7 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
             </Card>
 
             {/* Unggulkan Switch Card */}
-            <Card className="border border-border bg-gradient-to-r from-amber-500/5 to-card/50 shadow-xs rounded-xl overflow-hidden transition-all hover:border-amber-500/30">
+            <Card className="border border-border bg-linear-to-r from-amber-500/5 to-card/50 shadow-xs rounded-xl overflow-hidden transition-all hover:border-amber-500/30">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between gap-4">
                   <div className="space-y-0.5 text-left flex-1">
@@ -417,13 +421,13 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
         </div>
 
         {/* Sticky Bottom Actions Bar */}
-        <div className="fixed bottom-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-md border-t border-border py-4 shadow-md">
-          <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
+        <div className="fixed bottom-0 left-0 right-0 z-40 bg-background/80 backdrop-blur-md border-t border-border py-4 shadow-[0_-4px_10px_rgba(0,0,0,0.04)]">
+          <div className="max-w-6xl mx-auto px-4 flex items-center justify-end gap-3">
             <Button
               type="button"
               variant="outline"
               onClick={() => router.push("/supplier/products")}
-              className="cursor-pointer border-border hover:bg-muted font-medium px-5 transition-all text-xs"
+              className="cursor-pointer border-primary text-primary hover:bg-primary/5 hover:border-primary/80 font-bold px-6 py-2.5 h-10 text-xs rounded-lg transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 shadow-xs"
             >
               {t("cancel")}
             </Button>
@@ -431,7 +435,7 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
             <Button
               type="submit"
               disabled={isCreating || isUpdating}
-              className="bg-primary text-primary-foreground hover:bg-primary/95 cursor-pointer font-bold px-6 py-2.5 text-xs flex items-center gap-1.5 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-md hover:shadow-primary/20"
+              className="bg-primary hover:bg-primary/95 text-primary-foreground cursor-pointer font-bold px-8 py-2.5 h-10 text-xs flex items-center gap-1.5 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-md hover:shadow-primary/20 rounded-lg disabled:opacity-50 disabled:pointer-events-none"
             >
               {isCreating || isUpdating ? (
                 <>
@@ -440,7 +444,6 @@ export function ProductDetailPage({ id, isCreate = false }: ProductDetailPagePro
                 </>
               ) : (
                 <>
-                  <Save className="h-3.5 w-3.5" />
                   {isCreate ? t("save") : t("saveChanges")}
                 </>
               )}
