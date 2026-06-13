@@ -60,6 +60,9 @@ type SupplierProfile struct {
 	ReviewCount            int            `gorm:"not null;default:0" json:"review_count"`
 	ProfileCompleteness    int            `gorm:"not null;default:0" json:"profile_completeness"`
 	Status                 string         `gorm:"type:varchar(40);not null;default:'draft';index" json:"status"`
+	NIB                    string         `gorm:"type:varchar(80);index" json:"nib"`
+	EstablishedYear        string         `gorm:"type:varchar(80)" json:"established_year"`
+	EmployeesCount         string         `gorm:"type:varchar(80)" json:"employees_count"`
 	CreatedAt              time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt              time.Time      `gorm:"autoUpdateTime;index" json:"updated_at"`
 	DeletedAt              gorm.DeletedAt `gorm:"index" json:"-"`

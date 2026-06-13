@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { usePathname, useRouter, Link } from "@/i18n/routing";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
 import { useTranslations, useLocale } from "next-intl";
+import { useSupplierProfile } from "@/features/supplier/profile/hooks/useProfile";
 import {
   LayoutDashboard,
   Inbox,
@@ -20,9 +21,9 @@ import {
   Gavel,
   CreditCard,
   Receipt,
-  BadgeCheck,
   Headset,
-  Star
+  Star,
+  AlertCircle
 } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -51,6 +52,17 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
   const [isAuthorizing, setIsAuthorizing] = useState(true);
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const { data: profile } = useSupplierProfile();
+  const [isVerified, setIsVerified] = useState(true);
+
+  useEffect(() => {
+    const isLocalVerified = typeof window !== "undefined" && localStorage.getItem("supplier_verified") === "true";
+    if (profile) {
+      setIsVerified(profile.status === "active" || isLocalVerified);
+    } else {
+      setIsVerified(isLocalVerified);
+    }
+  }, [profile, pathname]);
 
   const hasSupplierAccess =
     user?.capabilities.supplier === true || !!user?.supplier_profile;
@@ -206,11 +218,6 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
           name: t("menu.profile"),
           icon: User,
           url: "/supplier/profile",
-        },
-        {
-          name: t("menu.verification"),
-          icon: BadgeCheck,
-          url: "/supplier/verification",
         },
         {
           name: t("menu.subscription"),
@@ -401,7 +408,30 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
 
         {/* Content body wrapper with smooth fade transition */}
         <main className="flex-1 bg-muted/10 p-6 md:p-8 animate-fade-in overflow-y-auto">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-6xl mx-auto space-y-6">
+            {!isVerified && (
+              <div className="bg-card border border-border/80 border-l-4 border-l-primary/90 p-4.5 rounded-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 select-none shadow-xs transition-all duration-300 hover:shadow-md">
+                <div className="flex items-center gap-3.5 text-left">
+                  <div className="h-9 w-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                    <AlertCircle className="h-5 w-5" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-extrabold text-[10px] uppercase tracking-wider text-primary">
+                      {t("warningBannerBadge")}
+                    </span>
+                    <span className="text-xs text-muted-foreground font-medium mt-1 leading-relaxed">
+                      {t("warningBannerMessage")}
+                    </span>
+                  </div>
+                </div>
+                <Link
+                  href="/supplier/verification"
+                  className="border border-primary text-primary hover:bg-primary hover:text-primary-foreground px-4 py-2 rounded-lg text-xs font-bold transition-all duration-300 cursor-pointer shrink-0 self-start sm:self-auto hover:-translate-y-0.5 active:translate-y-0 hover:shadow-lg hover:shadow-primary/20 flex items-center gap-1.5"
+                >
+                  {t("warningBannerButton")}
+                </Link>
+              </div>
+            )}
             {children}
           </div>
         </main>

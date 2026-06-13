@@ -1,12 +1,91 @@
 {
   "subscription": {
-    "title": "Membership Subscription Plans",
-    "subtitle": "Upgrade your account plan to unlock maximum buyer inquiry reach and premium tools.",
-    "activePlan": "Your Active Plan",
-    "current": "Current Active Plan",
-    "upgrade": "Upgrade to",
-    "btnBuy": "Upgrade Plan",
-    "periodYear": "/ year",
-    "periodMonth": "/ month"
+    "title": "Subscription & Financials",
+    "subtitle": "Manage your B2B supplier service package, feature usage quota, and billing documents.",
+    "loading": "Loading...",
+    "tabOverview": "Subscription Overview",
+    "tabPlans": "Plan Options",
+    "tabHistory": "Invoice History",
+    "activePlanLabel": "Active Service Plan",
+    "badgeActive": "Active",
+    "rateLabel": "Subscription rate:",
+    "renewalLabel": "Will renew automatically on",
+    "usageTitle": "Feature Usage This Month",
+    "usageSubtitle": "Usage limits you have consumed during the active billing cycle.",
+    "productUploadsLimitLabel": "Uploaded Products Catalog",
+    "rfqBidsLimitLabel": "RFQ Bids Sent",
+    "auctionSlotsLimitLabel": "Active Auction Slot Participation",
+    "unlimited": "Unlimited",
+    "plansTitle": "Marketing Plan Options",
+    "plansSubtitle": "Choose the package that best fits your B2B sales volume and business proposal needs.",
+    "badgeCurrentPlan": "Active Plan",
+    "currentPlanButton": "Your Current Plan",
+    "upgradeButton": "Upgrade Plan",
+    "upgradingButton": "Upgrading...",
+    "historyTitle": "Invoice History Documents",
+    "historySubtitle": "Download copies of official receipts for corporate tax reporting requirements.",
+    "invoiceTableDate": "Date",
+    "invoiceTableDesc": "Description",
+    "invoiceTableAmount": "Amount",
+    "invoiceTableStatus": "Status",
+    "invoiceTableDownload": "Download",
+    "invoiceStatusPaid": "Paid",
+    "invoiceDescGoldAnnual": "GIMS Gold Enterprise - Annual plan",
+    "invoiceDescSilverUpgrade": "GIMS Silver Pro - Upgrade from Free",
+    "invoiceDescGoldUpgrade": "GIMS Gold Enterprise - Subscription Upgrade",
+    "invoiceDescSilverUpgradeSub": "GIMS Silver Pro - Subscription Upgrade",
+    "invoiceDescBronzeUpgrade": "GIMS Bronze Seller - Subscription Upgrade",
+    "plans": {
+      "free": {
+        "name": "Free Basic",
+        "price": "Rp 0",
+        "period": "/ month",
+        "features": [
+          "Directory listing basic",
+          "Upload max. 3 products",
+          "Send 1 RFQ bid / month",
+          "Standard support"
+        ]
+      },
+      "bronze": {
+        "name": "Bronze Seller",
+        "price": "Rp 2.000.000",
+        "period": "/ year",
+        "features": [
+          "Verified Bronze badge",
+          "Upload max. 15 products",
+          "Send 5 RFQ bids / month",
+          "Standard search placement",
+          "Email support SLA 24 hours"
+        ]
+      },
+      "silver": {
+        "name": "Silver Pro",
+        "price": "Rp 5.000.000",
+        "period": "/ year",
+        "features": [
+          "Verified Silver badge",
+          "Upload max. 50 products",
+          "Send 15 RFQ bids / month",
+          "Medium search placement boost",
+          "1 active auction slot",
+          "Chat support SLA 12 hours"
+        ]
+      },
+      "gold": {
+        "name": "Gold Enterprise",
+        "price": "Rp 12.000.000",
+        "period": "/ year",
+        "features": [
+          "Verified Gold badge",
+          "Unlimited product uploads",
+          "Unlimited RFQ bids",
+          "Priority search placement top-tier",
+          "Unlimited active auction slots",
+          "Priority support 24/7",
+          "Marketing analysis reports"
+        ]
+      }
+    }
   }
 }

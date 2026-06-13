@@ -157,6 +157,10 @@ func main() {
 	productUC := supplierUsecase.NewProductUsecase(userRepository, productRepository)
 	productH := supplierHandler.NewProductHandler(productUC)
 
+	portalRepository := supplierRepo.NewPortalRepository(database.DB)
+	portalUC := supplierUsecase.NewPortalUsecase(portalRepository)
+	portalH := supplierHandler.NewSupplierPortalHandler(portalUC)
+
 
 	r := coreRouter.NewEngine(jwtManager)
 
@@ -186,6 +190,7 @@ func main() {
 		platformRouter.RegisterPlatformRoutes(v1, platformH, jwtManager)
 		coreRouter.RegisterUploadRoutes(v1, jwtManager)
 		supplierRouter.RegisterProductRoutes(v1, productH, jwtManager)
+		supplierRouter.RegisterSupplierPortalRoutes(v1, portalH, jwtManager)
 	}
 
 	port := config.AppConfig.Server.Port

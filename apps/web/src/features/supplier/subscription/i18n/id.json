@@ -1,12 +1,91 @@
 {
   "subscription": {
-    "title": "Paket Keanggotaan Pemasok",
-    "subtitle": "Tingkatkan paket akun Anda untuk membuka jangkauan penawaran pembeli maksimal dan alat premium.",
-    "activePlan": "Paket Aktif Anda",
-    "current": "Paket Aktif Saat Ini",
-    "upgrade": "Tingkatkan ke",
-    "btnBuy": "Beli Paket",
-    "periodYear": "/ tahun",
-    "periodMonth": "/ bulan"
+    "title": "Langganan & Keuangan",
+    "subtitle": "Kelola paket layanan supplier B2B Anda, kuota pemakaian fitur, dan dokumen pembayaran.",
+    "loading": "Memuat...",
+    "tabOverview": "Ikhtisar Langganan",
+    "tabPlans": "Pilihan Paket",
+    "tabHistory": "Riwayat Invoice",
+    "activePlanLabel": "Paket Layanan Aktif",
+    "badgeActive": "Aktif",
+    "rateLabel": "Tarif langganan:",
+    "renewalLabel": "Akan diperbarui secara otomatis pada tanggal",
+    "usageTitle": "Penggunaan Fitur Bulan Ini",
+    "usageSubtitle": "Kuota pemakaian yang sudah Anda gunakan pada siklus penagihan aktif.",
+    "productUploadsLimitLabel": "Katalog Produk Terunggah",
+    "rfqBidsLimitLabel": "Penawaran RFQ Dikirim",
+    "auctionSlotsLimitLabel": "Partisipasi Slot Lelang Aktif",
+    "unlimited": "Tanpa Batas",
+    "plansTitle": "Pilihan Paket Pemasaran",
+    "plansSubtitle": "Pilih paket yang paling sesuai dengan volume penjualan B2B dan kebutuhan penawaran bisnis Anda.",
+    "badgeCurrentPlan": "Paket Aktif",
+    "currentPlanButton": "Paket Anda Saat Ini",
+    "upgradeButton": "Upgrade Paket",
+    "upgradingButton": "Sedang Ditingkatkan...",
+    "historyTitle": "Riwayat Dokumen Invoice",
+    "historySubtitle": "Unduh salinan bukti pembayaran resmi untuk kebutuhan pelaporan pajak perusahaan.",
+    "invoiceTableDate": "Tanggal",
+    "invoiceTableDesc": "Keterangan",
+    "invoiceTableAmount": "Jumlah",
+    "invoiceTableStatus": "Status",
+    "invoiceTableDownload": "Unduh",
+    "invoiceStatusPaid": "Lunas",
+    "invoiceDescGoldAnnual": "GIMS Gold Enterprise - Rencana Tahunan",
+    "invoiceDescSilverUpgrade": "GIMS Silver Pro - Upgrade dari Free",
+    "invoiceDescGoldUpgrade": "GIMS Gold Enterprise - Upgrade Langganan",
+    "invoiceDescSilverUpgradeSub": "GIMS Silver Pro - Upgrade Langganan",
+    "invoiceDescBronzeUpgrade": "GIMS Bronze Seller - Upgrade Langganan",
+    "plans": {
+      "free": {
+        "name": "Free Basic",
+        "price": "Rp 0",
+        "period": "/ bulan",
+        "features": [
+          "Pencatatan direktori dasar",
+          "Upload maks. 3 produk",
+          "Kirim 1 penawaran RFQ / bulan",
+          "Standard support"
+        ]
+      },
+      "bronze": {
+        "name": "Bronze Seller",
+        "price": "Rp 2.000.000",
+        "period": "/ tahun",
+        "features": [
+          "Lencana Verified Bronze",
+          "Upload maks. 15 produk",
+          "Kirim 5 penawaran RFQ / bulan",
+          "Standard search placement",
+          "Email support SLA 24 jam"
+        ]
+      },
+      "silver": {
+        "name": "Silver Pro",
+        "price": "Rp 5.000.000",
+        "period": "/ tahun",
+        "features": [
+          "Lencana Verified Silver",
+          "Upload maks. 50 produk",
+          "Kirim 15 penawaran RFQ / bulan",
+          "Medium search placement boost",
+          "1 slot lelang aktif",
+          "Chat support SLA 12 jam"
+        ]
+      },
+      "gold": {
+        "name": "Gold Enterprise",
+        "price": "Rp 12.000.000",
+        "period": "/ tahun",
+        "features": [
+          "Lencana Verified Gold",
+          "Upload produk tanpa batas",
+          "Kirim penawaran RFQ tanpa batas",
+          "Priority search placement top-tier",
+          "Slot lelang aktif tanpa batas",
+          "Support prioritas 24/7",
+          "Laporan analisis pemasaran"
+        ]
+      }
+    }
   }
 }

@@ -6,6 +6,9 @@
     "signOutConfirm": "Apakah Anda yakin ingin keluar?",
     "signOut": "Keluar",
     "online": "Aktif",
+    "warningBannerBadge": "AKUN BELUM DIVERIFIKASI",
+    "warningBannerMessage": "Akun supplier Anda belum aktif. Lakukan verifikasi profil bisnis untuk mendapatkan lencana Gold Supplier dan mulai menerima RFQ dari pembeli.",
+    "warningBannerButton": "Verifikasi Sekarang →",
     "menu": {
       "dashboard": "Dasbor",
       "profile": "Profil Perusahaan",
