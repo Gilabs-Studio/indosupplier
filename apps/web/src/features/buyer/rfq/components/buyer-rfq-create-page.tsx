@@ -5,35 +5,79 @@ import { useTranslations } from "next-intl";
 import { BuyerLayout } from "../../components/buyer-layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Link, useRouter } from "@/i18n/routing";
-import { Field, FieldLabel, FieldGroup } from "@/components/ui/field";
+import { Link } from "@/i18n/routing";
+import { Field, FieldLabel, FieldGroup, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-  FileUp,
-  ArrowLeft,
-  Info,
-} from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { rfqSchema, type RfqFormData } from "../schemas/rfq.schema";
+import { useCreateRfq } from "../hooks/useBuyerRfqs";
+import { FileUp, ArrowLeft, Info } from "lucide-react";
+import { toast } from "sonner";
 
 export function BuyerRfqCreatePage() {
   const t = useTranslations("buyer.rfqCreate");
-  const router = useRouter();
-  
-  const [productName, setProductName] = useState("");
-  const [category, setCategory] = useState("manufacturing");
-  const [quantity, setQuantity] = useState("");
-  const [unit, setUnit] = useState("Ton");
-  const [targetPort, setTargetPort] = useState("");
-  const [description, setDescription] = useState("");
+  const { mutate: createRfq, isPending: isCreating } = useCreateRfq();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!productName || !quantity || !targetPort) {
-      alert("Harap isi semua kolom wajib!");
-      return;
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadedFileName, setUploadedFileName] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<RfqFormData>({
+    resolver: zodResolver(rfqSchema),
+    defaultValues: {
+      product_name: "",
+      category: "manufacturing",
+      quantity: "",
+      unit: "Ton",
+      target_port: "",
+      description: "",
+      attachment_url: "",
+    },
+  });
+
+  const attachmentUrl = watch("attachment_url");
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error("Ukuran file maksimal 10MB!");
+        return;
+      }
+
+      try {
+        setIsUploading(true);
+        const { rfqService } = await import("../services/rfq.service");
+        const res = await rfqService.uploadSpecFile(file);
+        
+        setValue("attachment_url", res.url);
+        setUploadedFileName(file.name);
+        toast.success("Dokumen spesifikasi berhasil diunggah!");
+      } catch (err) {
+        console.error(err);
+        toast.error("Gagal mengunggah berkas spesifikasi.");
+      } finally {
+        setIsUploading(false);
+      }
     }
+  };
 
-    alert("RFQ berhasil dibuat dan disebarkan ke supplier terverifikasi!");
-    router.push("/rfq");
+  const onSubmit = (data: RfqFormData) => {
+    createRfq({
+      product_name: data.product_name,
+      category: data.category,
+      quantity: data.quantity,
+      unit: data.unit,
+      target_port: data.target_port,
+      description: data.description,
+      attachment_url: data.attachment_url,
+    });
   };
 
   return (
@@ -59,21 +103,22 @@ export function BuyerRfqCreatePage() {
         {/* Form Card */}
         <Card className="border border-border rounded-xl bg-card shadow-xs overflow-hidden">
           <CardContent className="p-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <FieldGroup className="space-y-5">
                 {/* Product Name */}
                 <Field className="space-y-2">
-                  <FieldLabel htmlFor="productName">
+                  <FieldLabel htmlFor="product_name">
                     {t("labelProduct")} <span className="text-destructive">*</span>
                   </FieldLabel>
                   <Input
-                    id="productName"
-                    value={productName}
-                    onChange={(e) => setProductName(e.target.value)}
+                    id="product_name"
                     placeholder={t("placeholderProduct")}
-                    required
+                    {...register("product_name")}
                     className="cursor-pointer"
                   />
+                  {errors.product_name && (
+                    <FieldError>{errors.product_name.message}</FieldError>
+                  )}
                 </Field>
 
                 {/* Category & Unit */}
@@ -82,8 +127,7 @@ export function BuyerRfqCreatePage() {
                     <FieldLabel htmlFor="category">{t("labelCategory")}</FieldLabel>
                     <select
                       id="category"
-                      value={category}
-                      onChange={(e) => setCategory(e.target.value)}
+                      {...register("category")}
                       className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-hidden cursor-pointer"
                     >
                       <option value="manufacturing">Manufaktur & Material</option>
@@ -91,6 +135,9 @@ export function BuyerRfqCreatePage() {
                       <option value="textile">Tekstil & Konveksi</option>
                       <option value="furniture">Furnitur & Kayu</option>
                     </select>
+                    {errors.category && (
+                      <FieldError>{errors.category.message}</FieldError>
+                    )}
                   </Field>
 
                   <div className="grid grid-cols-2 gap-2">
@@ -100,20 +147,19 @@ export function BuyerRfqCreatePage() {
                       </FieldLabel>
                       <Input
                         id="quantity"
-                        type="text"
-                        value={quantity}
-                        onChange={(e) => setQuantity(e.target.value)}
                         placeholder="Qty"
-                        required
+                        {...register("quantity")}
                         className="cursor-pointer"
                       />
+                      {errors.quantity && (
+                        <FieldError>{errors.quantity.message}</FieldError>
+                      )}
                     </Field>
                     <Field className="space-y-2">
                       <FieldLabel htmlFor="unit">{t("labelUnit")}</FieldLabel>
                       <select
                         id="unit"
-                        value={unit}
-                        onChange={(e) => setUnit(e.target.value)}
+                        {...register("unit")}
                         className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-hidden cursor-pointer"
                       >
                         <option value="Ton">Ton</option>
@@ -121,23 +167,27 @@ export function BuyerRfqCreatePage() {
                         <option value="Pcs">Pcs</option>
                         <option value="Container">20ft Container</option>
                       </select>
+                      {errors.unit && (
+                        <FieldError>{errors.unit.message}</FieldError>
+                      )}
                     </Field>
                   </div>
                 </div>
 
                 {/* Shipping Destination */}
                 <Field className="space-y-2">
-                  <FieldLabel htmlFor="targetPort">
+                  <FieldLabel htmlFor="target_port">
                     {t("labelDestination")} <span className="text-destructive">*</span>
                   </FieldLabel>
                   <Input
-                    id="targetPort"
-                    value={targetPort}
-                    onChange={(e) => setTargetPort(e.target.value)}
+                    id="target_port"
                     placeholder={t("placeholderDestination")}
-                    required
+                    {...register("target_port")}
                     className="cursor-pointer"
                   />
+                  {errors.target_port && (
+                    <FieldError>{errors.target_port.message}</FieldError>
+                  )}
                 </Field>
 
                 {/* Description Requirements */}
@@ -146,19 +196,33 @@ export function BuyerRfqCreatePage() {
                   <textarea
                     id="description"
                     rows={4}
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
                     placeholder={t("placeholderDescription")}
+                    {...register("description")}
                     className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-hidden"
                   />
+                  {errors.description && (
+                    <FieldError>{errors.description.message}</FieldError>
+                  )}
                 </Field>
 
                 {/* File Attachment */}
                 <Field className="space-y-2">
                   <FieldLabel>{t("labelAttachment")}</FieldLabel>
-                  <div className="border border-dashed border-border hover:border-primary/50 transition-colors rounded-lg p-6 text-center cursor-pointer space-y-2">
+                  <div className="relative border border-dashed border-border hover:border-primary/50 transition-colors rounded-lg p-6 text-center cursor-pointer space-y-2">
+                    <input
+                      type="file"
+                      accept=".pdf,.xlsx,.xls,image/*"
+                      onChange={handleFileChange}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
                     <FileUp className="mx-auto h-8 w-8 text-muted-foreground opacity-60" />
-                    <p className="text-xs font-semibold text-foreground">{t("uploadPlaceholder")}</p>
+                    <p className="text-xs font-semibold text-foreground">
+                      {isUploading
+                        ? "Mengunggah..."
+                        : attachmentUrl
+                        ? `File terunggah: ${uploadedFileName || "spesifikasi.pdf"}`
+                        : t("uploadPlaceholder")}
+                    </p>
                     <p className="text-[10px] text-muted-foreground">{t("uploadLimit")}</p>
                   </div>
                 </Field>
@@ -169,8 +233,8 @@ export function BuyerRfqCreatePage() {
                 <Button asChild variant="outline" className="cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-xs">
                   <Link href="/rfq">{t("btnCancel")}</Link>
                 </Button>
-                <Button type="submit" className="bg-primary text-primary-foreground hover:bg-primary/95 cursor-pointer px-6 transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/20">
-                  {t("btnSubmit")}
+                <Button type="submit" disabled={isCreating || isUploading} className="bg-primary text-primary-foreground hover:bg-primary/95 cursor-pointer px-6 transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/20">
+                  {isCreating ? "Mengirim..." : t("btnSubmit")}
                 </Button>
               </div>
             </form>

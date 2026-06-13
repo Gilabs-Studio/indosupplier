@@ -53,16 +53,8 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const { data: profile } = useSupplierProfile();
-  const [isVerified, setIsVerified] = useState(true);
-
-  useEffect(() => {
-    const isLocalVerified = typeof window !== "undefined" && localStorage.getItem("supplier_verified") === "true";
-    if (profile) {
-      setIsVerified(profile.status === "active" || isLocalVerified);
-    } else {
-      setIsVerified(isLocalVerified);
-    }
-  }, [profile, pathname]);
+  const isLocalVerified = typeof window !== "undefined" && localStorage.getItem("supplier_verified") === "true";
+  const isVerified = profile ? (profile.status === "active" || isLocalVerified) : isLocalVerified;
 
   const hasSupplierAccess =
     user?.capabilities.supplier === true || !!user?.supplier_profile;

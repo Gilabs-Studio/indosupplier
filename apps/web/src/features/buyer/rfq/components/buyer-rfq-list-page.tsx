@@ -15,53 +15,18 @@ import {
   Calendar,
   MessageSquare,
 } from "lucide-react";
+import { useBuyerRfqs } from "../hooks/useBuyerRfqs";
 
 export function BuyerRfqListPage() {
   const t = useTranslations("buyer.rfqList");
   const [activeTab, setActiveTab] = useState("all");
-  
-  const [rfqs] = useState([
-    {
-      id: "RFQ-2026-004",
-      product: "Garnet Sand Mesh 80",
-      category: "Industrial Minerals",
-      quantity: "50 Ton",
-      targetPort: "Tanjung Priok, Jakarta",
-      date: "2026-06-01",
-      status: "Waiting for Quotes",
-      replies: 3,
-    },
-    {
-      id: "RFQ-2026-003",
-      product: "Bentonite Clay Powder",
-      category: "Chemicals",
-      quantity: "20 Ton",
-      targetPort: "Tanjung Perak, Surabaya",
-      date: "2026-05-28",
-      status: "Offers Received",
-      replies: 8,
-    },
-    {
-      id: "RFQ-2026-002",
-      product: "Quartz Powder 325 Mesh",
-      category: "Industrial Minerals",
-      quantity: "100 Ton",
-      targetPort: "Tanjung Priok, Jakarta",
-      date: "2026-05-15",
-      status: "Completed",
-      replies: 5,
-    },
-    {
-      id: "RFQ-2026-001",
-      product: "Organic Coconut Sugar Organic Grade",
-      category: "Agriculture & Food",
-      quantity: "5 Ton",
-      targetPort: "Port of Rotterdam (CIF)",
-      date: "2026-05-01",
-      status: "Completed",
-      replies: 12,
-    },
-  ]);
+  const [page, setPage] = useState(1);
+
+  const { data: rfqData, isLoading } = useBuyerRfqs({
+    page,
+    per_page: 20,
+    status: activeTab,
+  });
 
   const tabs = [
     { id: "all", name: t("tabAll") },
@@ -70,12 +35,17 @@ export function BuyerRfqListPage() {
     { id: "completed", name: t("tabCompleted") },
   ];
 
-  const getFilteredRfqs = () => {
-    if (activeTab === "waiting") return rfqs.filter((r) => r.status === "Waiting for Quotes");
-    if (activeTab === "received") return rfqs.filter((r) => r.status === "Offers Received");
-    if (activeTab === "completed") return rfqs.filter((r) => r.status === "Completed");
-    return rfqs;
-  };
+  if (isLoading) {
+    return (
+      <BuyerLayout>
+        <div className="flex items-center justify-center py-20">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+        </div>
+      </BuyerLayout>
+    );
+  }
+
+  const rfqs = rfqData?.items || [];
 
   return (
     <BuyerLayout>
@@ -100,7 +70,10 @@ export function BuyerRfqListPage() {
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  setPage(1);
+                }}
                 className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-all cursor-pointer ${
                   activeTab === tab.id
                     ? "border-b-2 border-primary text-primary font-bold bg-muted/20"
@@ -125,7 +98,7 @@ export function BuyerRfqListPage() {
         {/* RFQ List Table */}
         <Card className="border border-border rounded-xl shadow-xs overflow-hidden bg-card">
           <CardContent className="p-0">
-            {getFilteredRfqs().length === 0 ? (
+            {rfqs.length === 0 ? (
               <div className="text-center py-16">
                 <FileText className="mx-auto h-12 w-12 text-muted-foreground opacity-40" />
                 <h3 className="mt-4 text-sm font-semibold text-foreground">{t("emptyRfqs")}</h3>
@@ -147,7 +120,7 @@ export function BuyerRfqListPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
-                    {getFilteredRfqs().map((rfq) => (
+                    {rfqs.map((rfq) => (
                       <tr key={rfq.id} className="hover:bg-muted/10 transition-colors">
                         <td className="p-4 px-6 space-y-0.5">
                           <span className="text-xs font-bold text-muted-foreground">{rfq.id}</span>

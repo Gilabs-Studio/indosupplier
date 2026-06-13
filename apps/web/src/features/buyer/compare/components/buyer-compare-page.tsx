@@ -1,58 +1,31 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useTranslations } from "next-intl";
 import { BuyerLayout } from "../../components/buyer-layout";
-
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
-import {
-  ShieldCheck,
-  Star,
-  MapPin,
-  MessageSquare,
-  X,
-  Plus,
-} from "lucide-react";
+import { ShieldCheck, Star, MapPin, MessageSquare, X, Plus } from "lucide-react";
+import { useBuyerCompare } from "../hooks/useBuyerCompare";
 
 export function BuyerComparePage() {
   const t = useTranslations("buyer.compare");
-
-  const [suppliers, setSuppliers] = useState([
-    {
-      id: "1",
-      companyName: "PT Rempah Nusantara",
-      location: "Surabaya, Jawa Timur",
-      businessType: "Manufacturer",
-      establishedYear: 2012,
-      rating: 4.8,
-      reviewCount: 128,
-      verified: true,
-      moq: "500 Kg",
-      responseTime: "2 Jam",
-      capacity: "20 Ton / Bulan",
-      certifications: ["BPOM", "Halal", "HACCP"],
-    },
-    {
-      id: "2",
-      companyName: "CV Nusantara Garment",
-      location: "Bandung, Jawa Barat",
-      businessType: "Manufacturer",
-      establishedYear: 2015,
-      rating: 4.6,
-      reviewCount: 94,
-      verified: true,
-      moq: "100 Pcs",
-      responseTime: "4 Jam",
-      capacity: "10,000 Pcs / Bulan",
-      certifications: ["SNI", "OEKO-TEX"],
-    },
-  ]);
+  const { suppliers, isLoading, removeSupplier } = useBuyerCompare();
 
   const handleRemove = (id: string) => {
-    setSuppliers(suppliers.filter((s) => s.id !== id));
+    removeSupplier(id);
   };
+
+  if (isLoading) {
+    return (
+      <BuyerLayout>
+        <div className="flex items-center justify-center py-20">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+        </div>
+      </BuyerLayout>
+    );
+  }
 
   return (
     <BuyerLayout>
@@ -138,7 +111,10 @@ export function BuyerComparePage() {
                   {suppliers.map((s) => (
                     <td key={s.id} className="p-4">
                       {s.verified ? (
-                        <Badge className="bg-success text-white border-0 text-[10px] px-2 py-0.5 rounded-full flex items-center gap-1 w-fit">
+                        <Badge
+                          variant="outline"
+                          className="bg-success/10 text-success border-success/20 rounded-full text-[10px]"
+                        >
                           <ShieldCheck className="h-3 w-3" /> Terverifikasi
                         </Badge>
                       ) : (
@@ -199,12 +175,12 @@ export function BuyerComparePage() {
                   {suppliers.map((s) => (
                     <td key={s.id} className="p-4">
                       <div className="flex gap-2">
-                        <Button asChild size="sm" className="bg-primary text-primary-foreground hover:bg-primary/95 text-xs font-semibold cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0">
+                        <Button asChild size="sm" className="bg-primary text-primary-foreground hover:bg-primary/95 text-xs font-semibold cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/20">
                           <Link href="/rfq/create">
                             <MessageSquare className="mr-1 h-3.5 w-3.5" /> {t("sendRfq")}
                           </Link>
                         </Button>
-                        <Button asChild size="sm" variant="outline" className="text-xs font-semibold border-border hover:border-muted-foreground cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0">
+                        <Button asChild size="sm" variant="outline" className="text-xs font-semibold border-border hover:border-muted-foreground cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-xs">
                           <Link href="/search">Detail</Link>
                         </Button>
                       </div>

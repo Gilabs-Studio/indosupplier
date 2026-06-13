@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
+import { DeleteDialog } from "@/components/ui/delete-dialog";
 import {
   MapPin,
   Star,
@@ -16,54 +17,14 @@ import {
   Columns3,
   Heart,
 } from "lucide-react";
+import { useBuyerBookmarks } from "../hooks/useBuyerBookmarks";
 
 export function BuyerBookmarksPage() {
   const t = useTranslations("buyer.bookmarks");
-
-  const [bookmarks, setBookmarks] = useState([
-    {
-      id: "1",
-      companyName: "PT Rempah Nusantara",
-      category: "Agriculture",
-      location: "Surabaya, Jawa Timur",
-      businessType: "Manufacturer",
-      establishedYear: 2012,
-      rating: 4.8,
-      reviewCount: 128,
-      isVerified: true,
-      keyProducts: ["Coffee Beans", "Coconut Sugar", "Spice Mixes"],
-    },
-    {
-      id: "2",
-      companyName: "CV Nusantara Garment",
-      category: "Textile & Apparel",
-      location: "Bandung, Jawa Barat",
-      businessType: "Manufacturer & Exporter",
-      establishedYear: 2015,
-      rating: 4.6,
-      reviewCount: 94,
-      isVerified: true,
-      keyProducts: ["Cotton Shirts", "Denim Jackets", "Uniforms"],
-    },
-    {
-      id: "3",
-      companyName: "PT Logam Steel Jaya",
-      category: "Manufacturing",
-      location: "Bekasi, Jawa Barat",
-      businessType: "Manufacturer",
-      establishedYear: 2008,
-      rating: 4.7,
-      reviewCount: 56,
-      isVerified: false,
-      keyProducts: ["Steel Pipes", "Wire Mesh", "Metal Sheets"],
-    },
-  ]);
+  const { bookmarks, isLoading, deleteBookmark } = useBuyerBookmarks();
 
   const [compareList, setCompareList] = useState<string[]>([]);
-
-  const handleDelete = (id: string) => {
-    setBookmarks(bookmarks.filter((b) => b.id !== id));
-  };
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const handleToggleCompare = (id: string) => {
     if (compareList.includes(id)) {
@@ -77,6 +38,16 @@ export function BuyerBookmarksPage() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <BuyerLayout>
+        <div className="flex items-center justify-center py-20">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+        </div>
+      </BuyerLayout>
+    );
+  }
+
   return (
     <BuyerLayout>
       <div className="space-y-6">
@@ -87,7 +58,7 @@ export function BuyerBookmarksPage() {
             <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
           </div>
           {compareList.length > 0 && (
-            <Button asChild className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/95 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-lg hover:shadow-primary/20">
+            <Button asChild className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/95 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-lg hover:shadow-primary/30">
               <Link href="/compare">
                 <Columns3 className="mr-2 h-4 w-4" />
                 {t("compareCount", { count: compareList.length })}
@@ -133,7 +104,7 @@ export function BuyerBookmarksPage() {
                   </div>
 
                   <Button
-                    onClick={() => handleDelete(supplier.id)}
+                    onClick={() => setDeleteId(supplier.id)}
                     variant="ghost"
                     size="icon"
                     className="h-8 w-8 text-white/70 hover:text-destructive hover:bg-white/10 rounded-full cursor-pointer absolute right-4 top-4 transition-colors"
@@ -190,7 +161,7 @@ export function BuyerBookmarksPage() {
                       <Button
                         asChild
                         size="sm"
-                        className="bg-primary text-primary-foreground hover:bg-primary/95 text-xs font-semibold cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0"
+                        className="bg-primary text-primary-foreground hover:bg-primary/95 text-xs font-semibold cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/20"
                       >
                         <Link href="/rfq/create">
                           <MessageSquare className="mr-1 h-3.5 w-3.5" /> {t("btnRfq")}
@@ -203,6 +174,18 @@ export function BuyerBookmarksPage() {
             ))}
           </div>
         )}
+
+        <DeleteDialog
+          open={!!deleteId}
+          onOpenChange={(open) => !open && setDeleteId(null)}
+          onConfirm={async () => {
+            if (deleteId) {
+              await deleteBookmark(deleteId);
+              setDeleteId(null);
+            }
+          }}
+          itemName="bookmark"
+        />
       </div>
     </BuyerLayout>
   );

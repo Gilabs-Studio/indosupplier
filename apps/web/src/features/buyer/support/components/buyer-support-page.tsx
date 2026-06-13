@@ -7,15 +7,42 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
-import { Headset, Plus, ChevronRight, Calendar } from "lucide-react";
+import { Field, FieldLabel, FieldGroup } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Headset, Plus, ChevronRight, Calendar, X } from "lucide-react";
+import { useBuyerSupportTickets } from "../hooks/useBuyerSupport";
 
 export function BuyerSupportPage() {
   const t = useTranslations("buyer.support");
+  const { tickets, isLoading, createTicket } = useBuyerSupportTickets();
 
-  const [tickets] = useState([
-    { id: "TK-2026-001", subject: "Pertanyaan Pengajuan Limit Kredit Sourcing", date: "2026-06-02", status: "Open" },
-    { id: "TK-2026-002", subject: "Verifikasi Berkas SIUP Lambat", date: "2026-05-20", status: "Closed" },
-  ]);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!subject.trim() || !message.trim()) return;
+
+    createTicket({
+      subject: subject.trim(),
+      message: message.trim(),
+    });
+
+    setSubject("");
+    setMessage("");
+    setShowCreateForm(false);
+  };
+
+  if (isLoading) {
+    return (
+      <BuyerLayout>
+        <div className="flex items-center justify-center py-20">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+        </div>
+      </BuyerLayout>
+    );
+  }
 
   return (
     <BuyerLayout>
@@ -26,14 +53,81 @@ export function BuyerSupportPage() {
             <h1 className="text-2xl font-bold tracking-tight text-foreground font-heading">{t("title")}</h1>
             <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
           </div>
-          <Button
-            onClick={() => alert("Fitur tiket baru akan segera hadir!")}
-            className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/95 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-lg hover:shadow-primary/20"
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            {t("btnCreate")}
-          </Button>
+          {!showCreateForm && (
+            <Button
+              onClick={() => setShowCreateForm(true)}
+              className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/95 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-lg hover:shadow-primary/25"
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              {t("btnCreate")}
+            </Button>
+          )}
         </div>
+
+        {/* Inline Create Ticket Form */}
+        {showCreateForm && (
+          <Card className="border border-border rounded-xl bg-card shadow-md overflow-hidden">
+            <CardContent className="p-6 space-y-4">
+              <div className="flex items-center justify-between border-b border-border pb-3">
+                <h3 className="text-sm font-bold text-foreground">Buat Tiket Dukungan Baru</h3>
+                <Button
+                  onClick={() => setShowCreateForm(false)}
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 text-muted-foreground hover:text-foreground rounded-full cursor-pointer"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <FieldGroup className="space-y-4">
+                  <Field className="space-y-1">
+                    <FieldLabel htmlFor="subject">Subjek Masalah</FieldLabel>
+                    <Input
+                      id="subject"
+                      value={subject}
+                      onChange={(e) => setSubject(e.target.value)}
+                      placeholder="Contoh: Pertanyaan Limit Kredit"
+                      required
+                      className="cursor-pointer"
+                    />
+                  </Field>
+
+                  <Field className="space-y-1">
+                    <FieldLabel htmlFor="message">Detail Laporan</FieldLabel>
+                    <textarea
+                      id="message"
+                      rows={4}
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      placeholder="Tuliskan secara lengkap detail masalah atau pertanyaan Anda..."
+                      required
+                      className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-hidden"
+                    />
+                  </Field>
+                </FieldGroup>
+
+                <div className="flex justify-end gap-2 border-t border-border pt-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setShowCreateForm(false)}
+                    className="cursor-pointer shadow-xs"
+                  >
+                    Batal
+                  </Button>
+                  <Button
+                    type="submit"
+                    className="bg-primary text-primary-foreground hover:bg-primary/95 cursor-pointer px-5 shadow-lg hover:shadow-primary/20"
+                  >
+                    Kirim Tiket
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Tickets Card */}
         <Card className="border border-border rounded-xl bg-card shadow-xs overflow-hidden">

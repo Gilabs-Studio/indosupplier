@@ -1,57 +1,56 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useTranslations } from "next-intl";
 import { BuyerLayout } from "../../components/buyer-layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Bell, Mail, RefreshCw, AlertCircle } from "lucide-react";
+import { useBuyerNotifications } from "../hooks/useBuyerNotifications";
 
 export function BuyerNotificationsPage() {
   const t = useTranslations("buyer.notifications");
-
-  const [notifications, setNotifications] = useState([
-    {
-      id: "1",
-      title: "Penawaran Masuk Baru",
-      desc: "PT Rempah Nusantara mengirimkan penawaran harga sebesar Rp 12.500 / Kg untuk RFQ Bentonite Clay Powder.",
-      date: "2 Jam yang lalu",
-      icon: RefreshCw,
-      color: "bg-primary/10 text-primary",
-      unread: true,
-    },
-    {
-      id: "2",
-      title: "Pesan Baru dari Supplier",
-      desc: "CV Nusantara Garment membalas chat Anda tentang ukuran sampel uniform.",
-      date: "5 Jam yang lalu",
-      icon: Mail,
-      color: "bg-success/10 text-success",
-      unread: true,
-    },
-    {
-      id: "3",
-      title: "RFQ Berhasil Disiarkan",
-      desc: "RFQ-2026-004 (Garnet Sand) Anda telah disetujui oleh admin dan disiarkan ke 12 supplier terdaftar.",
-      date: "1 Hari yang lalu",
-      icon: Bell,
-      color: "bg-cyan/10 text-cyan",
-      unread: false,
-    },
-    {
-      id: "4",
-      title: "Peringatan Dokumen Kedaluwarsa",
-      desc: "Masa berlaku dokumen SIUP Anda akan berakhir dalam 30 hari. Segera perbarui untuk menghindari pemblokiran akun.",
-      date: "3 Hari yang lalu",
-      icon: AlertCircle,
-      color: "bg-warning/10 text-warning",
-      unread: false,
-    },
-  ]);
+  const { notifications, isLoading, markAllRead } = useBuyerNotifications();
 
   const handleMarkAllRead = () => {
-    setNotifications(notifications.map((n) => ({ ...n, unread: false })));
+    markAllRead();
   };
+
+  const getIcon = (type: string) => {
+    switch (type) {
+      case "quote":
+        return RefreshCw;
+      case "message":
+        return Mail;
+      case "alert":
+        return AlertCircle;
+      default:
+        return Bell;
+    }
+  };
+
+  const getColorClass = (type: string) => {
+    switch (type) {
+      case "quote":
+        return "bg-primary/10 text-primary";
+      case "message":
+        return "bg-success/10 text-success";
+      case "alert":
+        return "bg-destructive/10 text-destructive";
+      default:
+        return "bg-cyan/10 text-cyan";
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <BuyerLayout>
+        <div className="flex items-center justify-center py-20">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+        </div>
+      </BuyerLayout>
+    );
+  }
 
   return (
     <BuyerLayout>
@@ -88,7 +87,7 @@ export function BuyerNotificationsPage() {
             ) : (
               <div className="divide-y divide-border">
                 {notifications.map((notif) => {
-                  const IconComponent = notif.icon;
+                  const IconComponent = getIcon(notif.type);
                   return (
                     <div
                       key={notif.id}
@@ -96,7 +95,7 @@ export function BuyerNotificationsPage() {
                         notif.unread ? "bg-muted/10 font-medium" : "bg-card"
                       }`}
                     >
-                      <div className={`p-2.5 rounded-lg h-fit ${notif.color} shrink-0`}>
+                      <div className={`p-2.5 rounded-lg h-fit ${getColorClass(notif.type)} shrink-0`}>
                         <IconComponent className="h-5 w-5" />
                       </div>
                       <div className="flex-1 space-y-1">
