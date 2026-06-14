@@ -33,6 +33,7 @@ func AutoMigrate() error {
 		&buyer.Bookmark{},
 		&buyer.ComparisonSession{},
 		&buyer.ComparisonSessionItem{},
+		&buyer.PurchaseOrder{},
 		&supplier.Category{},
 		&supplier.SupplierProfile{},
 		&supplier.SupplierCategory{},

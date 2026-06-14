@@ -122,3 +122,41 @@ func (c *ComparisonSessionItem) BeforeCreate(tx *gorm.DB) error {
 	}
 	return nil
 }
+
+type PurchaseOrder struct {
+	ID                string         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
+	PONumber          string         `gorm:"type:varchar(120);not null;uniqueIndex" json:"po_number"`
+	BuyerProfileID    string         `gorm:"type:uuid;not null;index" json:"buyer_profile_id"`
+	SupplierProfileID string         `gorm:"type:uuid;not null;index" json:"supplier_profile_id"`
+	RFQID             *string        `gorm:"type:uuid;index" json:"rfq_id"`
+	ProductName       string         `gorm:"type:varchar(255);not null" json:"product_name"`
+	QuantityValue     float64        `gorm:"not null;default:0" json:"quantity_value"`
+	QuantityUnit      string         `gorm:"type:varchar(60)" json:"quantity_unit"`
+	PricePerUnit      float64        `gorm:"not null;default:0" json:"price_per_unit"`
+	TotalAmount       float64        `gorm:"not null;default:0" json:"total_amount"`
+	Status            string         `gorm:"type:varchar(40);not null;default:'pending';index" json:"status"`
+	PaymentStatus     string         `gorm:"type:varchar(40);not null;default:'unpaid';index" json:"payment_status"`
+	DeliveryAddress   string         `gorm:"type:text" json:"delivery_address"`
+	Notes             string         `gorm:"type:text" json:"notes"`
+	CreatedAt         time.Time      `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt         time.Time      `gorm:"autoUpdateTime;index" json:"updated_at"`
+	DeletedAt         gorm.DeletedAt `gorm:"index" json:"-"`
+}
+
+func (PurchaseOrder) TableName() string {
+	return "purchase_orders"
+}
+
+func (p *PurchaseOrder) BeforeCreate(tx *gorm.DB) error {
+	if p.ID == "" {
+		p.ID = uuid.New().String()
+	}
+	if p.Status == "" {
+		p.Status = "pending"
+	}
+	if p.PaymentStatus == "" {
+		p.PaymentStatus = "unpaid"
+	}
+	return nil
+}
+

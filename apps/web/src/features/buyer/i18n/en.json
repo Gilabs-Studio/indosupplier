@@ -1,7 +1,9 @@
 {
   "buyer": {
     "layout": {
-      "dashboard": "Dashboard",
+      "transactions": "Transactions",
+      "chat": "Chat",
+      "reviews": "Reviews",
       "rfqList": "My RFQs",
       "wishlist": "Bookmarks",
       "compare": "Compare",
@@ -125,6 +127,46 @@
       "title": "Helpdesk & Customer Support",
       "subtitle": "Ask questions, resolve billing disputes, or report issues.",
       "btnCreate": "New Ticket"
+    },
+    "transactions": {
+      "title": "Purchase Orders List",
+      "subtitle": "Monitor delivery status, billing invoices, and B2B transaction details.",
+      "searchPlaceholder": "Search transactions...",
+      "tabAll": "All",
+      "tabUnpaid": "Unpaid",
+      "tabProcessing": "Processing",
+      "tabShipped": "Shipped",
+      "tabCompleted": "Completed",
+      "tabCancelled": "Cancelled",
+      "empty": "No transactions in this tab",
+      "detailBtn": "View Detail",
+      "poNumber": "PO Number",
+      "product": "Product",
+      "qty": "Quantity",
+      "total": "Total Amount",
+      "paymentStatus": "Payment Status",
+      "deliveryAddress": "Delivery Address",
+      "notes": "Notes",
+      "supplier": "Supplier",
+      "chatBtn": "Chat Supplier",
+      "reviewBtn": "Write Review",
+      "detailTitle": "Transaction Details",
+      "statusHistory": "Status History"
+    },
+    "chat": {
+      "title": "Negotiation Inbox",
+      "subtitle": "Direct message history with suppliers regarding prices and MOQs.",
+      "empty": "Select a conversation from the left to start negotiating.",
+      "placeholder": "Type a message..."
+    },
+    "reviews": {
+      "title": "Product & Supplier Reviews",
+      "subtitle": "Write reviews to build trust within the IndoSupplier community.",
+      "rating": "Rating",
+      "reviewText": "Write Your Feedback",
+      "submitBtn": "Submit Review",
+      "empty": "All transactions have been reviewed. Thank you!",
+      "success": "Review submitted successfully!"
     }
   }
 }

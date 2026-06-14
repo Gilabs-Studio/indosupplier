@@ -49,6 +49,11 @@ import (
 	supplierUsecase "github.com/gilabs/indosupplier/api/internal/supplier/domain/usecase"
 	supplierHandler "github.com/gilabs/indosupplier/api/internal/supplier/presentation/handler"
 	supplierRouter "github.com/gilabs/indosupplier/api/internal/supplier/presentation/router"
+
+	buyerRepo "github.com/gilabs/indosupplier/api/internal/buyer/data/repositories"
+	buyerUsecase "github.com/gilabs/indosupplier/api/internal/buyer/domain/usecase"
+	buyerHandler "github.com/gilabs/indosupplier/api/internal/buyer/presentation/handler"
+	buyerRouter "github.com/gilabs/indosupplier/api/internal/buyer/presentation/router"
 )
 
 func initInfrastructure() {
@@ -161,6 +166,10 @@ func main() {
 	portalUC := supplierUsecase.NewPortalUsecase(portalRepository)
 	portalH := supplierHandler.NewSupplierPortalHandler(portalUC)
 
+	txRepository := buyerRepo.NewTransactionRepository(database.DB)
+	txUC := buyerUsecase.NewTransactionUsecase(database.DB, txRepository)
+	txH := buyerHandler.NewTransactionHandler(txUC)
+
 
 	r := coreRouter.NewEngine(jwtManager)
 
@@ -191,6 +200,7 @@ func main() {
 		coreRouter.RegisterUploadRoutes(v1, jwtManager)
 		supplierRouter.RegisterProductRoutes(v1, productH, jwtManager)
 		supplierRouter.RegisterSupplierPortalRoutes(v1, portalH, jwtManager)
+		buyerRouter.RegisterTransactionRoutes(v1, txH, jwtManager)
 	}
 
 	port := config.AppConfig.Server.Port

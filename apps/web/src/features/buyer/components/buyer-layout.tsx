@@ -7,13 +7,14 @@ import { useAuthStore } from "@/features/auth/stores/use-auth-store";
 import { PublicNavbar } from "@/features/public/components/public-navbar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  LayoutDashboard,
   RefreshCw,
   Heart,
   Columns3,
   User,
   Headset,
   Wallet,
+  MessageSquare,
+  Star,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -29,9 +30,19 @@ export function BuyerLayout({ children }: BuyerLayoutProps) {
 
   const menuItems = [
     {
-      name: t("dashboard"),
-      href: "/dashboard",
-      icon: LayoutDashboard,
+      name: t("transactions"),
+      href: "/transactions",
+      icon: Wallet,
+    },
+    {
+      name: t("chat"),
+      href: "/chat",
+      icon: MessageSquare,
+    },
+    {
+      name: t("reviews"),
+      href: "/reviews",
+      icon: Star,
     },
     {
       name: t("rfqList"),
@@ -81,7 +92,7 @@ export function BuyerLayout({ children }: BuyerLayoutProps) {
               <div className="min-w-0 flex-1">
                 <h2 className="text-sm font-semibold text-foreground truncate">{user?.name ?? "Guest User"}</h2>
                 <div className="flex items-center gap-1.5 mt-0.5 text-xs text-muted-foreground">
-                  <span className="inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  <span className="inline-flex h-1.5 w-1.5 rounded-full bg-success" />
                   <span>{t("buyerAccount")}</span>
                 </div>
               </div>
@@ -98,7 +109,7 @@ export function BuyerLayout({ children }: BuyerLayoutProps) {
               </div>
               <div className="space-y-0.5">
                 <p className="text-lg font-bold tracking-tight">Rp 50.000.000</p>
-                <p className="text-[10px] text-emerald-400 font-medium">{t("active")}</p>
+                <p className="text-[10px] text-success font-medium">{t("active")}</p>
               </div>
             </div>
 
@@ -106,7 +117,7 @@ export function BuyerLayout({ children }: BuyerLayoutProps) {
             <nav className="bg-card rounded-xl border border-border p-2.5 shadow-xs space-y-1">
               {menuItems.map((item) => {
                 const IconComponent = item.icon;
-                const isActive = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
+                const isActive = pathname === item.href || (item.href !== "/transactions" && pathname.startsWith(item.href));
 
                 return (
                   <Link

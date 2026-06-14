@@ -119,7 +119,7 @@ export function BuyerBookmarksPage() {
                     <span>{supplier.businessType}</span>
                     <span>Est. {supplier.establishedYear}</span>
                     <div className="flex items-center gap-1 text-foreground font-semibold">
-                      <Star className="h-3.5 w-3.5 fill-amber-400 stroke-amber-400" />
+                      <Star className="h-3.5 w-3.5 fill-warning text-warning" />
                       <span>{supplier.rating} ({supplier.reviewCount})</span>
                     </div>
                   </div>

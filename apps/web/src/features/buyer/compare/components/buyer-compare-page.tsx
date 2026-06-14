@@ -96,7 +96,7 @@ export function BuyerComparePage() {
                   {suppliers.map((s) => (
                     <td key={s.id} className="p-4">
                       <div className="flex items-center gap-1 text-sm font-semibold text-foreground">
-                        <Star className="h-4 w-4 fill-amber-400 stroke-amber-400" />
+                        <Star className="h-4 w-4 fill-warning text-warning" />
                         <span>{s.rating}</span>
                         <span className="text-muted-foreground font-normal text-xs">({s.reviewCount} ulasan)</span>
                       </div>

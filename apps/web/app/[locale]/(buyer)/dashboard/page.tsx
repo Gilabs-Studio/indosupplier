@@ -1,5 +1,10 @@
-import { BuyerDashboardPage } from "@/features/buyer/dashboard/components/buyer-dashboard-page";
+import { redirect } from "@/i18n/routing";
 
-export default function DashboardPage() {
-  return <BuyerDashboardPage />;
+export default async function DashboardPage({
+  params,
+}: {
+  readonly params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  redirect({ href: "/transactions", locale });
 }

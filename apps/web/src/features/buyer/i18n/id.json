@@ -1,7 +1,9 @@
 {
   "buyer": {
     "layout": {
-      "dashboard": "Dashboard",
+      "transactions": "Daftar Transaksi",
+      "chat": "Chat",
+      "reviews": "Ulasan",
       "rfqList": "RFQ Saya",
       "wishlist": "Bookmark",
       "compare": "Bandingkan",
@@ -125,6 +127,46 @@
       "title": "Pusat Bantuan & Layanan Pelanggan",
       "subtitle": "Ajukan tiket pertanyaan teknis, kendala pembayaran, atau laporkan penyalahgunaan.",
       "btnCreate": "Buat Tiket Baru"
+    },
+    "transactions": {
+      "title": "Daftar Transaksi",
+      "subtitle": "Pantau status pengiriman, tagihan, dan detail transaksi B2B Anda.",
+      "searchPlaceholder": "Cari transaksi...",
+      "tabAll": "Semua",
+      "tabUnpaid": "Menunggu Pembayaran",
+      "tabProcessing": "Diproses",
+      "tabShipped": "Dikirim",
+      "tabCompleted": "Selesai",
+      "tabCancelled": "Dibatalkan",
+      "empty": "Belum ada transaksi di tab ini",
+      "detailBtn": "Tampilkan Detail",
+      "poNumber": "No. Transaksi",
+      "product": "Produk",
+      "qty": "Jumlah",
+      "total": "Total Belanja",
+      "paymentStatus": "Status Pembayaran",
+      "deliveryAddress": "Alamat Pengiriman",
+      "notes": "Catatan",
+      "supplier": "Supplier",
+      "chatBtn": "Chat Supplier",
+      "reviewBtn": "Beri Ulasan",
+      "detailTitle": "Detail Transaksi",
+      "statusHistory": "Riwayat Status"
+    },
+    "chat": {
+      "title": "Negosiasi Chat",
+      "subtitle": "Kirim pesan langsung ke supplier untuk negosiasi harga dan MOQ.",
+      "empty": "Pilih salah satu percakapan di sebelah kiri untuk mulai mengobrol.",
+      "placeholder": "Tulis pesan..."
+    },
+    "reviews": {
+      "title": "Ulasan Produk & Supplier",
+      "subtitle": "Berikan penilaian Anda untuk membantu meningkatkan kepercayaan komunitas IndoSupplier.",
+      "rating": "Penilaian",
+      "reviewText": "Tulis Ulasan Anda",
+      "submitBtn": "Kirim Ulasan",
+      "empty": "Semua produk transaksi Anda telah diulas. Terima kasih!",
+      "success": "Ulasan berhasil dikirim!"
     }
   }
 }

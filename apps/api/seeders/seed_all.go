@@ -5,5 +5,8 @@ func SeedAll() error {
 	if err := SeedUsers(); err != nil {
 		return err
 	}
-	return SeedSystemAdmins()
+	if err := SeedSystemAdmins(); err != nil {
+		return err
+	}
+	return SeedTransactions()
 }
