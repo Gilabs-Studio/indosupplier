@@ -29,10 +29,9 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
-  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-heading: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-jost: var(--font-jost), sans-serif;
-  --font-macondo: var(--font-macondo), sans-serif;
+  --font-serif: var(--font-tinos), Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-heading: var(--font-tinos), Georgia, Cambria, "Times New Roman", Times, serif;
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
   --animate-collapsible-down: collapsible-down 0.2s ease-out;
@@ -195,7 +194,7 @@
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading tracking-tight;
-    font-weight: 700; /* Strong bold headers for distinct hierarchy */
+    font-weight: 700;
   }
 }
 
@@ -251,13 +250,10 @@
 
   /* Font family utilities */
   .font-heading {
-    font-family: var(--font-heading), sans-serif;
+    font-family: var(--font-heading), serif;
   }
   .font-accent {
-    font-family: var(--font-accent), serif;
-  }
-  .font-macondo {
-    font-family: var(--font-macondo), sans-serif;
+    font-family: var(--font-serif), serif;
   }
   
   /* Sidebar dark color utilities */

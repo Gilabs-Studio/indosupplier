@@ -1,47 +1,23 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Sora, Newsreader, Jost, Macondo } from "next/font/google";
+import { Tinos, Inter } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { getLanguageAlternates } from "@/lib/seo";
 import type { Locale } from "@/types/locale";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const tinos = Tinos({
+  variable: "--font-tinos",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const headingFont = Sora({
-  variable: "--font-heading",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
-const accentFont = Newsreader({
-  variable: "--font-accent",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["italic", "normal"],
-  display: "swap",
-});
-
-const jostFont = Jost({
-  variable: "--font-jost",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  display: "swap",
-});
-
-const macondoFont = Macondo({
-  variable: "--font-macondo",
-  subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -263,7 +239,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning className={`${tinos.variable} ${inter.variable}`}>
       <head>
         <script
           type="application/ld+json"
@@ -279,7 +255,7 @@ export default async function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${headingFont.variable} ${accentFont.variable} ${jostFont.variable} ${macondoFont.variable} antialiased`}
+        className="antialiased"
       >
         {children}
       </body>

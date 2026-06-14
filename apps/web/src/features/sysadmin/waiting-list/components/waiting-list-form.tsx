@@ -13,7 +13,6 @@ import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { RainbowButton } from "@/components/ui/rainbow-button";
 
 const getWaitlistSchema = (t: (key: string) => string) =>
   z.object({
@@ -161,7 +160,7 @@ export default function WaitingListForm() {
 
       {/* The card container */}
       <div className="relative z-10 bg-[#1f1f1f] p-4 md:p-6 border border-[#333333] rounded-lg shadow-xs w-full">
-        <div className="w-full font-jost">
+        <div className="w-full font-sans">
           <AnimatePresence mode="wait">
             {!isSuccess ? (
               <motion.div
@@ -262,18 +261,14 @@ export default function WaitingListForm() {
                   </Field>
 
                   {/* Submit button */}
-                  <RainbowButton
+                  <Button
                     type="submit"
                     disabled={isSubmitting}
                     size="lg"
-                    className="w-full text-sm font-semibold tracking-widest transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-                    style={{
-                      background: "linear-gradient(hsl(0 0% 100%),hsl(0 0% 100%)),linear-gradient(hsl(0 0% 100%) 50%,color-mix(in srgb,hsl(0 0% 100%) 60%,transparent) 80%,transparent),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))",
-                      color: "#1a1a1a"
-                    }}
+                    className="w-full bg-foreground hover:bg-foreground/90 text-background border border-border/10 rounded-none text-sm font-semibold tracking-widest transition-all duration-300 cursor-pointer"
                   >
                     {isSubmitting ? t("form.submitting") : t("form.submit")}
-                  </RainbowButton>
+                  </Button>
                 </form>
               </motion.div>
             ) : (

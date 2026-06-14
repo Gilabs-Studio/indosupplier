@@ -424,7 +424,7 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
 
                             <div className="flex items-center justify-between text-xs py-0.5">
                               <div className="flex items-center gap-2">
-                                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                                <span className="h-2 w-2 rounded-full bg-success" />
                                 <span className="text-muted-foreground font-light">Supplier Saved</span>
                               </div>
                               <span className="font-semibold text-foreground">24 Toko</span>
@@ -502,7 +502,7 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
               
               <Link
                 href="/register"
-                className="bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-neutral-900 shadow-sm border border-neutral-800/10 dark:border-neutral-200/10 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all text-xs font-semibold px-4.5 py-1.5 rounded-lg cursor-pointer"
+                className="bg-foreground hover:bg-foreground/90 text-background shadow-xs border border-border/10 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all text-xs font-semibold px-4.5 py-1.5 rounded-lg cursor-pointer"
               >
                 {t("register")}
               </Link>

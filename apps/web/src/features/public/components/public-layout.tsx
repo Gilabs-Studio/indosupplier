@@ -18,7 +18,7 @@ export function PublicLayout({
   overlapNavbar = false,
 }: Readonly<PublicLayoutProps>) {
   return (
-    <div className="min-h-screen bg-background text-foreground font-jost antialiased flex flex-col justify-between relative">
+    <div className="min-h-screen bg-background text-foreground font-sans antialiased flex flex-col justify-between relative">
       <div className="w-full flex-1 flex flex-col">
         <div className={overlapNavbar ? "absolute top-0 left-0 right-0 z-50" : "w-full"}>
           <PublicNavbar locale={locale} />

@@ -409,7 +409,7 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
 
   return (
     <PublicLayout locale={locale}>
-      <div className="bg-neutral-50 min-h-screen pb-16 font-sans">
+      <div className="bg-background min-h-screen pb-16 font-sans">
       {/* ── 1. HERO SECTION BACKGROUND (Full-Width Image Poster Ad Placeholder with Sourcing Search) ── */}
       <section
         className="relative w-full overflow-visible bg-cover bg-center bg-no-repeat flex flex-col items-center pt-14 pb-20 text-center px-4"
@@ -418,14 +418,14 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
         }}
       >
         {/* Transparent white overlay matching design reference */}
-        <div className="absolute inset-0 bg-white/90 backdrop-blur-[0.5px]" />
+        <div className="absolute inset-0 bg-background/90 backdrop-blur-[0.5px]" />
 
         {/* Content Container */}
         <div className="relative z-10 max-w-4xl mx-auto space-y-5 flex flex-col items-center">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-neutral-900 leading-tight tracking-tight font-heading">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-foreground leading-tight tracking-tight font-heading">
             {locale === "en" ? "Discover Verified Indonesian Suppliers" : "Temukan Supplier Terverifikasi Indonesia"}
           </h1>
-          <p className="text-xs sm:text-sm text-neutral-500 font-light max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-muted-foreground font-light max-w-2xl leading-relaxed">
             {locale === "en"
               ? "Access a curated directory of Indonesia's top-tier manufacturers, exporters, and raw material providers. Verified, Reliable, and Direct."
               : "Akses direktori terkurasi dari produsen utama, eksportir, dan penyedia bahan baku terbaik di Indonesia. Terverifikasi, Terpercaya, dan Langsung."}
@@ -437,7 +437,7 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
           </div>
 
           {/* Trust Badges */}
-          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 pt-2 text-[11px] text-neutral-500 font-medium">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 pt-2 text-[11px] text-muted-foreground font-medium">
             <span className="flex items-center gap-1.5">
               <CheckCircle className="h-3.5 w-3.5 text-primary shrink-0" />
               {locale === "en" ? "Verified Suppliers" : "Supplier Terverifikasi"}
@@ -710,7 +710,7 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
                       {comp.s1.initial}
                     </div>
                     <p className="text-[11px] font-bold text-foreground truncate">{comp.s1.name}</p>
-                    <div className="flex items-center justify-center gap-0.5 text-[10px] text-amber-500 font-semibold">
+                    <div className="flex items-center justify-center gap-0.5 text-[10px] text-warning font-semibold">
                       <Star className="h-3 w-3 fill-current" />
                       <span>{comp.s1.rate}</span>
                     </div>
@@ -727,7 +727,7 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
                       {comp.s2.initial}
                     </div>
                     <p className="text-[11px] font-bold text-foreground truncate">{comp.s2.name}</p>
-                    <div className="flex items-center justify-center gap-0.5 text-[10px] text-amber-500 font-semibold">
+                    <div className="flex items-center justify-center gap-0.5 text-[10px] text-warning font-semibold">
                       <Star className="h-3 w-3 fill-current" />
                       <span>{comp.s2.rate}</span>
                     </div>
@@ -739,7 +739,7 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
                   {comp.specs.map((spec, i) => (
                     <div key={i} className="flex justify-between items-center py-1 border-b border-dotted border-border last:border-0">
                       <span className="text-left font-light text-muted-foreground w-[32%] truncate">{spec.v1}</span>
-                      <span className="text-center font-bold text-neutral-400 text-[9px] uppercase tracking-wider w-[36%]">{spec.label}</span>
+                      <span className="text-center font-bold text-muted-foreground text-[9px] uppercase tracking-wider w-[36%]">{spec.label}</span>
                       <span className="text-right font-light text-muted-foreground w-[32%] truncate">{spec.v2}</span>
                     </div>
                   ))}
@@ -787,7 +787,7 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
                 className="group relative flex flex-col gap-2.5 cursor-pointer"
               >
                 {/* Thumbnail play overlay */}
-                <div className="h-[145px] relative overflow-hidden rounded-lg bg-neutral-900 border border-border shadow-xs">
+                <div className="h-[145px] relative overflow-hidden rounded-lg bg-muted border border-border shadow-xs">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={video.imageUrl}
@@ -796,12 +796,12 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
                   />
                   {/* Floating Play Button */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="h-10 w-10 bg-white/95 rounded-full flex items-center justify-center shadow-lg group-hover:bg-primary group-hover:text-primary-foreground group-hover:scale-105 transition-all duration-300 text-foreground">
+                    <div className="h-10 w-10 bg-card/95 rounded-full flex items-center justify-center shadow-lg group-hover:bg-primary group-hover:text-primary-foreground group-hover:scale-105 transition-all duration-300 text-foreground">
                       <Play className="h-4.5 w-4.5 fill-current ml-0.5" />
                     </div>
                   </div>
                   {/* Duration tag */}
-                  <span className="absolute bottom-2 right-2 px-1 py-0.5 text-[9px] font-bold bg-black/70 text-white rounded-xs">
+                  <span className="absolute bottom-2 right-2 px-1 py-0.5 text-[9px] font-bold bg-neutral-950/70 text-neutral-50 rounded-xs">
                     {video.duration}
                   </span>
                 </div>
@@ -827,23 +827,23 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
       </section>
 
       {/* ── 7. TRUST & SAFETY BANNER ── */}
-      <section className="bg-neutral-900 text-neutral-300 py-12 border-t border-neutral-800 mt-16">
+      <section className="bg-muted text-muted-foreground py-12 border-t border-border mt-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <h2 className="text-[11px] font-bold uppercase tracking-widest text-primary">
             {t("trustTitle")}
           </h2>
-          <div className="flex flex-wrap justify-center gap-6 sm:gap-12 text-white font-semibold text-xs sm:text-sm">
+          <div className="flex flex-wrap justify-center gap-6 sm:gap-12 text-foreground font-semibold text-xs sm:text-sm">
             <span className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-emerald-500 shrink-0" /> {t("nibVerified")}
+              <CheckCircle className="h-4 w-4 text-success shrink-0" /> {t("nibVerified")}
             </span>
             <span className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-emerald-500 shrink-0" /> {t("factoryInspection")}
+              <CheckCircle className="h-4 w-4 text-success shrink-0" /> {t("factoryInspection")}
             </span>
             <span className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-emerald-500 shrink-0" /> {t("exportCompliant")}
+              <CheckCircle className="h-4 w-4 text-success shrink-0" /> {t("exportCompliant")}
             </span>
             <span className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-emerald-500 shrink-0" /> {t("secureChat")}
+              <CheckCircle className="h-4 w-4 text-success shrink-0" /> {t("secureChat")}
             </span>
           </div>
         </div>

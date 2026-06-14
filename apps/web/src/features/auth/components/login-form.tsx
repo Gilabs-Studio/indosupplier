@@ -154,39 +154,34 @@ export default function LoginForm({
   }
 
   return (
-    <div className="bg-muted/30 relative overflow-hidden flex flex-col justify-center min-h-screen pt-14 w-full">
-      {/* Ambient background glows */}
-      <div className="absolute top-0 left-1/4 -translate-x-1/2 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-12 right-1/4 translate-x-1/2 w-96 h-96 bg-cyan/5 rounded-full blur-3xl pointer-events-none" />
-
+    <div className="bg-muted/10 relative overflow-hidden flex flex-col justify-center min-h-screen pt-14 w-full">
       <div className="mx-auto grid w-full max-w-7xl gap-8 lg:grid-cols-[1fr_440px] lg:items-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12 relative z-10">
         {/* Left marketing column */}
-        <section className="space-y-6 pt-4 lg:pt-10">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/5 px-3.5 py-1 text-xs font-semibold text-primary">
-            <ShieldCheck className="h-3.5 w-3.5" />
+        <section className="space-y-8 pt-4 lg:pt-10">
+          <div className="inline-flex items-center gap-1.5 border border-border px-3 py-1 text-xs font-semibold text-muted-foreground uppercase tracking-widest">
             {t("badge") || "Platform Sourcing B2B"}
           </div>
-          <div className="max-w-xl space-y-3">
-            <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl font-heading leading-tight">
+          <div className="max-w-xl space-y-4">
+            <h1 className="text-4xl font-normal font-serif leading-tight tracking-tight text-foreground">
               {t("marketingTitle") || "Sourcing Produk & Supplier Tanpa Hambatan"}
             </h1>
-            <p className="text-sm leading-6 text-muted-foreground font-light">
+            <p className="text-[15px] leading-relaxed text-muted-foreground font-normal">
               {t("marketingSubtitle") || "Masuk untuk mengelola permintaan penawaran (RFQ), berdiskusi dengan supplier terverifikasi, dan memantau pesanan ekspor Anda."}
             </p>
           </div>
-          <div className="space-y-6 pt-4">
+          <div className="space-y-6 max-w-lg">
             {[
               { title: t("benefit1Title") || "Akses Cepat ke RFQ", desc: t("benefit1Desc") || "Buat dan negosiasikan permintaan penawaran harga secara langsung." },
               { title: t("benefit2Title") || "Keamanan Dokumen Ekspor", desc: t("benefit2Desc") || "Unggah dan validasi perizinan kepabeanan dengan aman." },
               { title: t("benefit3Title") || "Notifikasi Real-time", desc: t("benefit3Desc") || "Dapatkan info terbaru tentang penawaran baru dari supplier." }
             ].map((b, i) => (
-              <div key={i} className="flex gap-4 items-start group">
-                <div className="h-10 w-10 rounded-lg bg-card border border-border flex items-center justify-center text-primary shrink-0 group-hover:scale-110 transition-transform">
-                  <CheckCircle className="h-5 w-5" />
-                </div>
+              <div key={i} className="flex gap-4 items-start pt-6 border-t border-border/60">
+                <span className="font-serif text-[20px] font-normal text-[#E27D18] leading-none">
+                  0{i + 1}
+                </span>
                 <div>
-                  <h4 className="text-sm font-bold text-foreground leading-snug">{b.title}</h4>
-                  <p className="text-xs text-muted-foreground font-light leading-relaxed mt-0.5">{b.desc}</p>
+                  <h4 className="text-sm font-semibold text-foreground leading-none">{b.title}</h4>
+                  <p className="text-xs text-muted-foreground font-normal leading-relaxed mt-2.5">{b.desc}</p>
                 </div>
               </div>
             ))}
@@ -303,7 +298,7 @@ export default function LoginForm({
                   <Button
                     type="submit"
                     disabled={isFormLoading || isRateLimited}
-                    className="h-10 w-full text-sm font-semibold tracking-wide bg-primary hover:bg-primary/90 text-primary-foreground hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all shadow-xs cursor-pointer"
+                    className="h-10 w-full text-[14px] font-semibold tracking-wider bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-white dark:hover:bg-neutral-200 dark:text-neutral-900 border border-neutral-800/10 rounded-none hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all cursor-pointer"
                   >
                     <ButtonLoading loading={isFormLoading} loadingText={t("submitting")}>
                       {t("submit")}
