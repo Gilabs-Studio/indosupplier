@@ -64,8 +64,9 @@ func (b *BuyerDocument) BeforeCreate(tx *gorm.DB) error {
 
 type Bookmark struct {
 	ID                string         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
-	BuyerProfileID    string         `gorm:"type:uuid;not null;index:idx_bookmark_buyer_supplier,unique" json:"buyer_profile_id"`
-	SupplierProfileID string         `gorm:"type:uuid;not null;index:idx_bookmark_buyer_supplier,unique" json:"supplier_profile_id"`
+	BuyerProfileID    string         `gorm:"type:uuid;not null;index:idx_bookmark_buyer_item" json:"buyer_profile_id"`
+	SupplierProfileID string         `gorm:"type:uuid;not null;index:idx_bookmark_buyer_item" json:"supplier_profile_id"`
+	SupplierProductID *string        `gorm:"type:uuid;index:idx_bookmark_buyer_item;nullable" json:"supplier_product_id"`
 	Notes             string         `gorm:"type:text" json:"notes"`
 	CreatedAt         time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt         time.Time      `gorm:"autoUpdateTime;index" json:"updated_at"`

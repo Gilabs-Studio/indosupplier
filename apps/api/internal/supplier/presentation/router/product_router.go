@@ -24,3 +24,8 @@ func RegisterProductRoutes(rg *gin.RouterGroup, h *handler.ProductHandler, jwtMa
 		cats.GET("", h.ListCategories)
 	}
 }
+
+func RegisterDiscoveryRoutes(rg *gin.RouterGroup, h *handler.DiscoveryHandler) {
+	rg.GET("/suppliers", h.List)
+	rg.GET("/suppliers/:slug", h.GetBySlug)
+}

@@ -20,6 +20,9 @@ import (
 
 // AutoMigrate runs minimal migrations for the cleaned baseline project.
 func AutoMigrate() error {
+	// Drop legacy unique index if exists to allow bookmarking both supplier and products under idx_bookmark_buyer_item
+	DB.Exec("DROP INDEX IF EXISTS idx_bookmark_buyer_supplier")
+
 	if err := DB.AutoMigrate(
 		&user.User{},
 		&refreshToken.RefreshToken{},

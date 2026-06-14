@@ -3,6 +3,8 @@ export interface SupplierProductDto {
   name: string;
   description?: string;
   price?: number;
+  minOrder?: string;
+  photos?: string[];
 }
 
 export interface SupplierCertificationDto {

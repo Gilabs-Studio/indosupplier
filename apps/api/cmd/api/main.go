@@ -162,6 +162,9 @@ func main() {
 	productUC := supplierUsecase.NewProductUsecase(userRepository, productRepository)
 	productH := supplierHandler.NewProductHandler(productUC)
 
+	discoveryUC := supplierUsecase.NewDiscoveryUsecase(database.DB)
+	discoveryH := supplierHandler.NewDiscoveryHandler(discoveryUC)
+
 	portalRepository := supplierRepo.NewPortalRepository(database.DB)
 	portalUC := supplierUsecase.NewPortalUsecase(portalRepository)
 	portalH := supplierHandler.NewSupplierPortalHandler(portalUC)
@@ -169,6 +172,10 @@ func main() {
 	txRepository := buyerRepo.NewTransactionRepository(database.DB)
 	txUC := buyerUsecase.NewTransactionUsecase(database.DB, txRepository)
 	txH := buyerHandler.NewTransactionHandler(txUC)
+
+	bookmarkRepository := buyerRepo.NewBookmarkRepository(database.DB)
+	bookmarkUC := buyerUsecase.NewBookmarkUsecase(database.DB, bookmarkRepository)
+	bookmarkH := buyerHandler.NewBookmarkHandler(bookmarkUC)
 
 
 	r := coreRouter.NewEngine(jwtManager)
@@ -199,8 +206,10 @@ func main() {
 		platformRouter.RegisterPlatformRoutes(v1, platformH, jwtManager)
 		coreRouter.RegisterUploadRoutes(v1, jwtManager)
 		supplierRouter.RegisterProductRoutes(v1, productH, jwtManager)
+		supplierRouter.RegisterDiscoveryRoutes(v1, discoveryH)
 		supplierRouter.RegisterSupplierPortalRoutes(v1, portalH, jwtManager)
 		buyerRouter.RegisterTransactionRoutes(v1, txH, jwtManager)
+		buyerRouter.RegisterBookmarkRoutes(v1, bookmarkH, jwtManager)
 	}
 
 	port := config.AppConfig.Server.Port

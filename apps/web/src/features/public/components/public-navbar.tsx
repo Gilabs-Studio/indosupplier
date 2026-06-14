@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
 import React, { useState } from "react";
 import Image from "next/image";
@@ -29,7 +30,9 @@ import {
   Scale,
   Settings2,
   Wallet,
+  Package,
 } from "lucide-react";
+import { useBuyerBookmarks } from "@/features/buyer/bookmarks/hooks/useBuyerBookmarks";
 
 interface PublicNavbarProps {
   locale: string;
@@ -41,6 +44,7 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
   const buyerProfileT = useTranslations("buyer.profile");
   const router = useRouter();
   const { user, isAuthenticated, logout } = useAuthStore();
+  const { bookmarks } = useBuyerBookmarks();
   const [searchQuery, setSearchQuery] = useState("");
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -155,11 +159,13 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
                     className="text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer h-9 w-9 rounded-full relative"
                     asChild
                   >
-                    <Link href="/cart">
+                    <Link href="/bookmarks">
                       <ShoppingCart className="h-5 w-5" />
-                      <span className="absolute top-1 right-1 h-4 w-4 flex items-center justify-center rounded-full bg-primary text-[9px] font-bold text-white">
-                        1
-                      </span>
+                      {isAuthenticated && bookmarks.length > 0 && (
+                        <span className="absolute top-1 right-1 h-4 w-4 flex items-center justify-center rounded-full bg-primary text-[9px] font-bold text-white">
+                          {bookmarks.length}
+                        </span>
+                      )}
                     </Link>
                   </Button>
 
@@ -168,25 +174,55 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
                       <div className="w-80 p-4 bg-background border border-border rounded-xl shadow-lg">
                         <div className="flex items-center justify-between border-b border-border/60 pb-2 mb-3">
                           <span className="text-xs font-bold text-foreground">
-                            {t("cart")} (1)
+                            {t("cart")} ({isAuthenticated ? bookmarks.length : 0})
                           </span>
-                          <Link href="/cart" className="text-xs font-semibold text-primary hover:underline">
+                          <Link href="/bookmarks" className="text-xs font-semibold text-primary hover:underline">
                             {t("view")}
                           </Link>
                         </div>
-                        <div className="flex gap-3 items-start">
-                          <div className="h-12 w-12 rounded-lg border border-border bg-card overflow-hidden shrink-0 flex items-center justify-center text-muted-foreground">
-                            <ShoppingCart className="h-5 w-5" />
+                        {!isAuthenticated || bookmarks.length === 0 ? (
+                          <div className="text-center py-4 text-xs text-muted-foreground">
+                            {locale === "id" ? "Belum ada supplier disimpan" : "No saved suppliers yet"}
                           </div>
-                          <div className="min-w-0 flex-1">
-                            <p className="truncate text-xs font-bold text-foreground">
-                              MSI PRO DESKTOP PC XII I7
-                            </p>
-                            <p className="text-[10px] text-muted-foreground mt-0.5">
-                              1 x Rp14.920.000
-                            </p>
+                        ) : (
+                          <div className="space-y-3 max-h-60 overflow-y-auto">
+                            {bookmarks.slice(0, 5).map((item) => {
+                              const isProduct = item.type === "product";
+                              const detailUrl = isProduct 
+                                ? `/demo/suppliers/${item.supplierSlug}#product-${item.supplierProductId}`
+                                : `/demo/suppliers/${item.supplierSlug}`;
+                              return (
+                                <Link 
+                                  key={item.id} 
+                                  href={detailUrl}
+                                  className="flex gap-3 items-center border-b border-border/40 pb-2 last:border-0 last:pb-0 hover:bg-secondary/50 p-1.5 rounded-lg transition-all duration-300 cursor-pointer block"
+                                >
+                                  {isProduct ? (
+                                    <div className="h-8 w-8 rounded bg-muted border border-border flex items-center justify-center shrink-0 overflow-hidden">
+                                      {item.productImage ? (
+                                        <img src={item.productImage} alt={item.productName} className="object-cover w-full h-full" />
+                                      ) : (
+                                        <Package className="h-4 w-4 text-muted-foreground" />
+                                      )}
+                                    </div>
+                                  ) : (
+                                    <div className="h-8 w-8 rounded bg-primary/10 text-primary font-bold text-xs flex items-center justify-center shrink-0 border border-primary/20">
+                                      {item.companyName.substring(0, 2).toUpperCase()}
+                                    </div>
+                                  )}
+                                  <div className="min-w-0 flex-1">
+                                    <p className="truncate text-xs font-bold text-foreground leading-tight">
+                                      {isProduct ? item.productName : item.companyName}
+                                    </p>
+                                    <p className="text-[10px] text-muted-foreground truncate mt-0.5">
+                                      {isProduct ? item.companyName : (item.location || "Indonesia")}
+                                    </p>
+                                  </div>
+                                </Link>
+                              );
+                            })}
                           </div>
-                        </div>
+                        )}
                       </div>
                     </div>
                   )}

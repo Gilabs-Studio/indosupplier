@@ -20,7 +20,11 @@ import {
   Layers,
   Users,
   Calendar,
+  Heart,
 } from "lucide-react";
+import { useBuyerBookmarks } from "@/features/buyer/bookmarks/hooks/useBuyerBookmarks";
+import { useAuthStore } from "@/features/auth/stores/use-auth-store";
+import { toast } from "sonner";
 
 interface PublicSearchPageProps {
   locale: string;
@@ -43,6 +47,26 @@ export function PublicSearchPage({ locale }: PublicSearchPageProps) {
   } = useSupplierSearch();
 
   const [searchInput, setSearchInput] = useState(params.query || "");
+  const { bookmarks, addBookmark, deleteBookmark } = useBuyerBookmarks();
+  const { isAuthenticated } = useAuthStore();
+
+  const handleToggleBookmark = (supplierProfileId: string) => {
+    if (!isAuthenticated) {
+      toast.error("Silakan masuk terlebih dahulu untuk menyimpan supplier.");
+      return;
+    }
+
+    const bookmark = bookmarks.find((b) => b.type === "supplier" && b.supplierProfileId === supplierProfileId);
+    if (bookmark) {
+      deleteBookmark(bookmark.id);
+    } else {
+      addBookmark({ supplierProfileId });
+    }
+  };
+
+  const isBookmarked = (supplierProfileId: string) => {
+    return bookmarks.some((b) => b.type === "supplier" && b.supplierProfileId === supplierProfileId);
+  };
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   const regions = [
@@ -293,6 +317,20 @@ export function PublicSearchPage({ locale }: PublicSearchPageProps) {
                             {t("cardVerified")}
                           </Badge>
                         )}
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleToggleBookmark(supplier.id);
+                          }}
+                          className={`absolute right-4 bottom-4 h-8 w-8 rounded-full border border-white/20 text-white bg-white/10 backdrop-blur-md cursor-pointer transition-all hover:bg-white/20 active:scale-95 ${
+                            isBookmarked(supplier.id) ? "text-destructive fill-destructive" : ""
+                          }`}
+                        >
+                          <Heart className="h-4.5 w-4.5" />
+                        </Button>
                       </div>
 
                       <CardContent className="p-5 space-y-4">
