@@ -74,6 +74,7 @@
       "subtitle": "Kelola data personal, info perusahaan B2B, dan dokumen legalitas.",
       "tabPersonal": "Data Pribadi",
       "tabCompany": "Data Perusahaan",
+      "tabDocuments": "Dokumen Perusahaan",
       "saveBtn": "Simpan Perubahan",
       "saveSuccess": "Profil berhasil diperbarui!"
     },

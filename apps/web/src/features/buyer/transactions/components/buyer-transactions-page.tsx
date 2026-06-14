@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { useBuyerTransactions } from "@/features/buyer/transactions/hooks/useBuyerTransactions";
+import { BuyerLayout } from "../../components/buyer-layout";
 import { TransactionItem } from "@/features/buyer/transactions/types/transaction.types";
 import { formatCurrency } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -190,82 +191,84 @@ export function BuyerTransactionsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Title Header */}
-      <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-extrabold text-foreground tracking-tight">{t("title")}</h1>
-        <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
-      </div>
-
-      {/* Filter Tabs & Search */}
-      <div className="bg-card rounded-xl border border-border p-4 shadow-xs space-y-4">
-        {/* Navigation Tabs (Tokopedia-style horizontal tabs) */}
-        <div className="flex items-center gap-1.5 border-b border-border overflow-x-auto pb-1 scrollbar-none">
-          {statusTabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => handleTabChange(tab.id)}
-              className={cn(
-                "px-4 py-2 border-b-2 text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer hover:text-primary hover:-translate-y-0.5 active:translate-y-0",
-                activeTab === tab.id
-                  ? "border-primary text-primary font-semibold"
-                  : "border-transparent text-muted-foreground"
-              )}
-            >
-              {tab.label}
-            </button>
-          ))}
+    <BuyerLayout>
+      <div className="space-y-6">
+        {/* Title Header */}
+        <div className="flex flex-col gap-1">
+          <h1 className="text-2xl font-extrabold text-foreground tracking-tight">{t("title")}</h1>
+          <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
         </div>
 
-        {/* Search Input */}
-        <div className="relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-muted-foreground" />
-          <Input
-            type="text"
-            placeholder={t("searchPlaceholder")}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 h-10.5 rounded-lg border-border focus-visible:ring-primary focus-visible:border-primary text-sm font-medium"
-          />
-        </div>
-      </div>
+        {/* Filter Tabs & Search */}
+        <div className="bg-card rounded-xl border border-border p-4 shadow-xs space-y-4">
+          {/* Navigation Tabs (Tokopedia-style horizontal tabs) */}
+          <div className="flex items-center gap-1.5 border-b border-border overflow-x-auto pb-1 scrollbar-none">
+            {statusTabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => handleTabChange(tab.id)}
+                className={cn(
+                  "px-4 py-2 border-b-2 text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer hover:text-primary hover:-translate-y-0.5 active:translate-y-0",
+                  activeTab === tab.id
+                    ? "border-primary text-primary font-semibold"
+                    : "border-transparent text-muted-foreground"
+                )}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
 
-      {/* Transactions List Content */}
-      {renderContent()}
-
-      {/* Pagination Controls */}
-      {data && data.total > itemsPerPage && (
-        <div className="flex items-center justify-between border-t border-border pt-4">
-          <p className="text-xs text-muted-foreground font-semibold">
-            Showing <span className="font-bold">{(currentPage - 1) * itemsPerPage + 1}</span> to{" "}
-            <span className="font-bold">
-              {Math.min(currentPage * itemsPerPage, data.total)}
-            </span>{" "}
-            of <span className="font-bold">{data.total}</span> entries
-          </p>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              className="h-8 text-xs font-semibold cursor-pointer"
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={currentPage * itemsPerPage >= data.total}
-              onClick={() => setCurrentPage((p) => p + 1)}
-              className="h-8 text-xs font-semibold cursor-pointer"
-            >
-              Next
-            </Button>
+          {/* Search Input */}
+          <div className="relative">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4.5 w-4.5 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder={t("searchPlaceholder")}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 h-10.5 rounded-lg border-border focus-visible:ring-primary focus-visible:border-primary text-sm font-medium"
+            />
           </div>
         </div>
-      )}
-    </div>
+
+        {/* Transactions List Content */}
+        {renderContent()}
+
+        {/* Pagination Controls */}
+        {data && data.total > itemsPerPage && (
+          <div className="flex items-center justify-between border-t border-border pt-4">
+            <p className="text-xs text-muted-foreground font-semibold">
+              Showing <span className="font-bold">{(currentPage - 1) * itemsPerPage + 1}</span> to{" "}
+              <span className="font-bold">
+                {Math.min(currentPage * itemsPerPage, data.total)}
+              </span>{" "}
+              of <span className="font-bold">{data.total}</span> entries
+            </p>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                className="h-8 text-xs font-semibold cursor-pointer"
+              >
+                Previous
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={currentPage * itemsPerPage >= data.total}
+                onClick={() => setCurrentPage((p) => p + 1)}
+                className="h-8 text-xs font-semibold cursor-pointer"
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+    </BuyerLayout>
   );
 }
 

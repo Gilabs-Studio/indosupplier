@@ -19,7 +19,6 @@ import {
   Store,
   LogOut,
   Bell,
-  LayoutDashboard,
   Search,
   ShoppingCart,
   Settings,
@@ -29,6 +28,7 @@ import {
   RefreshCw,
   Scale,
   Settings2,
+  Wallet,
 } from "lucide-react";
 
 interface PublicNavbarProps {
@@ -436,7 +436,7 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
                         <div className="p-3 flex flex-col justify-between min-h-[260px]">
                           <div className="space-y-0.5">
                             {[
-                              { href: "/dashboard", label: buyerLayoutT("dashboard"), icon: LayoutDashboard },
+                              { href: "/transactions", label: buyerLayoutT("transactions"), icon: Wallet },
                               { href: "/rfq", label: buyerLayoutT("rfqList"), icon: RefreshCw },
                               { href: "/bookmarks", label: buyerLayoutT("wishlist"), icon: Heart },
                               { href: "/compare", label: buyerLayoutT("compare"), icon: Scale },

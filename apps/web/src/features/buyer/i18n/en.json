@@ -74,6 +74,7 @@
       "subtitle": "Manage your company profile details and compliance settings.",
       "tabPersonal": "Personal Details",
       "tabCompany": "Company Details",
+      "tabDocuments": "Company Documents",
       "saveBtn": "Save Settings",
       "saveSuccess": "Profile updated successfully!"
     },
