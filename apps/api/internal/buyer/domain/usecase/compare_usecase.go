@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -15,8 +16,8 @@ import (
 )
 
 var (
-	ErrMaxComparisonReached        = errors.New("maximum comparison limit of 3 suppliers reached")
-	ErrMaxProductComparisonReached = errors.New("maximum comparison limit of 3 products reached")
+	ErrMaxComparisonReached        = errors.New("maximum comparison limit of 5 suppliers reached")
+	ErrMaxProductComparisonReached = errors.New("maximum comparison limit of 5 products reached")
 )
 
 type CompareUsecase interface {
@@ -189,6 +190,37 @@ func (u *compareUsecase) List(ctx context.Context, userID string) ([]dto.Compare
 			certifications = []string{}
 		}
 
+		type reviewWithBuyer struct {
+			ID         string    `json:"id"`
+			Rating     int       `json:"rating"`
+			ReviewText string    `json:"review_text"`
+			BuyerName  string    `json:"buyer_name"`
+			CreatedAt  time.Time `json:"created_at"`
+		}
+		var dbReviews []reviewWithBuyer
+		u.db.WithContext(ctx).
+			Table("supplier_reviews").
+			Select("supplier_reviews.id, supplier_reviews.rating, supplier_reviews.review_text, buyer_profiles.company_name as buyer_name, supplier_reviews.created_at").
+			Joins("join buyer_profiles on buyer_profiles.id = supplier_reviews.buyer_profile_id").
+			Where("supplier_reviews.supplier_profile_id = ? AND supplier_reviews.status = ?", s.ID, "approved").
+			Order("supplier_reviews.created_at DESC").
+			Scan(&dbReviews)
+
+		var comparedReviews []dto.ComparedReviewResponse
+		for _, r := range dbReviews {
+			comparedReviews = append(comparedReviews, dto.ComparedReviewResponse{
+				ID:         r.ID,
+				BuyerName:  r.BuyerName,
+				Rating:     r.Rating,
+				ReviewText: r.ReviewText,
+				CreatedAt:  r.CreatedAt.Format("2006-01-02T15:04:05Z"),
+			})
+		}
+
+		if comparedReviews == nil {
+			comparedReviews = []dto.ComparedReviewResponse{}
+		}
+
 		responses = append(responses, dto.ComparedSupplierResponse{
 			ID:              s.ID,
 			CompanyName:     s.CompanyName,
@@ -203,6 +235,7 @@ func (u *compareUsecase) List(ctx context.Context, userID string) ([]dto.Compare
 			ResponseTime:    responseTime,
 			Capacity:        capText,
 			Certifications:  certifications,
+			Reviews:         comparedReviews,
 		})
 	}
 
@@ -225,7 +258,7 @@ func (u *compareUsecase) Add(ctx context.Context, userID string, supplierProfile
 	if err := u.db.WithContext(ctx).Model(&buyerModels.ComparisonSessionItem{}).Where("comparison_session_id = ?", session.ID).Count(&count).Error; err != nil {
 		return nil, err
 	}
-	if count >= 3 {
+	if count >= 5 {
 		return nil, ErrMaxComparisonReached
 	}
 
@@ -345,6 +378,37 @@ func (u *compareUsecase) ListProducts(ctx context.Context, userID string) ([]dto
 		}
 		responseTime := fmt.Sprintf("%d Jam", respHrs)
 
+		type reviewWithBuyer struct {
+			ID         string    `json:"id"`
+			Rating     int       `json:"rating"`
+			ReviewText string    `json:"review_text"`
+			BuyerName  string    `json:"buyer_name"`
+			CreatedAt  time.Time `json:"created_at"`
+		}
+		var dbReviews []reviewWithBuyer
+		u.db.WithContext(ctx).
+			Table("supplier_reviews").
+			Select("supplier_reviews.id, supplier_reviews.rating, supplier_reviews.review_text, buyer_profiles.company_name as buyer_name, supplier_reviews.created_at").
+			Joins("join buyer_profiles on buyer_profiles.id = supplier_reviews.buyer_profile_id").
+			Where("supplier_reviews.supplier_profile_id = ? AND supplier_reviews.status = ?", s.ID, "approved").
+			Order("supplier_reviews.created_at DESC").
+			Scan(&dbReviews)
+
+		var comparedReviews []dto.ComparedReviewResponse
+		for _, r := range dbReviews {
+			comparedReviews = append(comparedReviews, dto.ComparedReviewResponse{
+				ID:         r.ID,
+				BuyerName:  r.BuyerName,
+				Rating:     r.Rating,
+				ReviewText: r.ReviewText,
+				CreatedAt:  r.CreatedAt.Format("2006-01-02T15:04:05Z"),
+			})
+		}
+
+		if comparedReviews == nil {
+			comparedReviews = []dto.ComparedReviewResponse{}
+		}
+
 		responses = append(responses, dto.ComparedProductResponse{
 			ID:                   p.ID,
 			Name:                 p.Name,
@@ -362,6 +426,7 @@ func (u *compareUsecase) ListProducts(ctx context.Context, userID string) ([]dto
 			SupplierVerified:     s.VerificationLevel >= 2,
 			SupplierLocation:     s.CityID,
 			SupplierResponseTime: responseTime,
+			Reviews:              comparedReviews,
 		})
 	}
 
@@ -383,7 +448,7 @@ func (u *compareUsecase) AddProduct(ctx context.Context, userID string, supplier
 	if err := u.db.WithContext(ctx).Model(&buyerModels.ComparisonProductSessionItem{}).Where("comparison_session_id = ?", session.ID).Count(&count).Error; err != nil {
 		return nil, err
 	}
-	if count >= 3 {
+	if count >= 5 {
 		return nil, ErrMaxProductComparisonReached
 	}
 

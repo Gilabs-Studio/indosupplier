@@ -47,8 +47,8 @@ export function BuyerBookmarksPage() {
     if (compareList.includes(supplierProfileId)) {
       removeSupplier(supplierProfileId);
     } else {
-      if (compareList.length >= 3) {
-        toast.error("Maksimal bandingkan 3 supplier sekaligus!");
+      if (compareList.length >= 5) {
+        toast.error("Maksimal bandingkan 5 supplier sekaligus!");
         return;
       }
       addSupplier(supplierProfileId);
@@ -59,8 +59,8 @@ export function BuyerBookmarksPage() {
     if (compareProductsList.includes(supplierProductId)) {
       removeProduct(supplierProductId);
     } else {
-      if (compareProductsList.length >= 3) {
-        toast.error("Maksimal bandingkan 3 produk sekaligus!");
+      if (compareProductsList.length >= 5) {
+        toast.error("Maksimal bandingkan 5 produk sekaligus!");
         return;
       }
       addProduct(supplierProductId);

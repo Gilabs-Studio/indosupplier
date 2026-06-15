@@ -18,6 +18,8 @@ type DiscoveryUsecase interface {
 	List(ctx context.Context, q string, categoryID string, region string, verifiedOnly bool) ([]dto.PublicSupplierDto, error)
 	GetBySlug(ctx context.Context, slug string) (*dto.PublicSupplierDto, error)
 	ListProducts(ctx context.Context, q string) ([]dto.PublicProductDto, error)
+	LookupSuppliers(ctx context.Context, q string, page int, limit int) ([]dto.PublicSupplierDto, error)
+	LookupProducts(ctx context.Context, q string, page int, limit int) ([]dto.PublicProductDto, error)
 }
 
 type discoveryUsecase struct {
@@ -282,4 +284,145 @@ func (u *discoveryUsecase) ListProducts(ctx context.Context, q string) ([]dto.Pu
 
 	return responses, nil
 }
+
+func (u *discoveryUsecase) LookupSuppliers(ctx context.Context, q string, page int, limit int) ([]dto.PublicSupplierDto, error) {
+	if page <= 0 {
+		page = 1
+	}
+	if limit <= 0 {
+		limit = 5
+	}
+	offset := (page - 1) * limit
+
+	db := u.db.WithContext(ctx).Model(&models.SupplierProfile{}).Where("status = ?", "active")
+	if q != "" {
+		db = db.Where("company_name ILIKE ? OR description ILIKE ?", "%"+q+"%", "%"+q+"%")
+	}
+
+	var profiles []models.SupplierProfile
+	if err := db.Order("company_name ASC").Offset(offset).Limit(limit).Find(&profiles).Error; err != nil {
+		return nil, err
+	}
+
+	var responses []dto.PublicSupplierDto
+	for _, p := range profiles {
+		// Fetch category names
+		var catNames []string
+		u.db.WithContext(ctx).
+			Table("supplier_categories").
+			Select("categories.name").
+			Joins("join categories on categories.id = supplier_categories.category_id").
+			Where("supplier_categories.supplier_profile_id = ?", p.ID).
+			Pluck("name", &catNames)
+
+		// Fetch key products
+		var keyProds []string
+		u.db.WithContext(ctx).
+			Model(&models.SupplierProduct{}).
+			Where("supplier_profile_id = ?", p.ID).
+			Order("sort_order ASC").
+			Limit(3).
+			Pluck("name", &keyProds)
+
+		// Fetch certifications
+		var certNames []string
+		u.db.WithContext(ctx).
+			Table("supplier_certifications").
+			Select("certifications.name").
+			Joins("join certifications on certifications.id = supplier_certifications.certification_id").
+			Where("supplier_certifications.supplier_profile_id = ? AND supplier_certifications.status = ?", p.ID, "approved").
+			Pluck("name", &certNames)
+
+		establishedYear, _ := strconv.Atoi(p.EstablishedYear)
+		if establishedYear == 0 {
+			establishedYear = 2015
+		}
+
+		responses = append(responses, dto.PublicSupplierDto{
+			ID:              p.ID,
+			Slug:            slugify(p.CompanyName),
+			CompanyName:     p.CompanyName,
+			BusinessType:    p.CompanyType,
+			EstablishedYear: establishedYear,
+			EmployeeCount:   p.EmployeesCount,
+			Location:        p.CityID,
+			Address:         p.Address,
+			Description:     p.Description,
+			IsVerified:      p.VerificationLevel >= 2,
+			Rating:          p.StarRating,
+			ReviewCount:     p.ReviewCount,
+			KeyProducts:     keyProds,
+			Certifications:  certNames,
+		})
+	}
+
+	return responses, nil
+}
+
+func (u *discoveryUsecase) LookupProducts(ctx context.Context, q string, page int, limit int) ([]dto.PublicProductDto, error) {
+	if page <= 0 {
+		page = 1
+	}
+	if limit <= 0 {
+		limit = 5
+	}
+	offset := (page - 1) * limit
+
+	db := u.db.WithContext(ctx).Model(&models.SupplierProduct{}).Preload("Photos")
+	if q != "" {
+		db = db.Where("name ILIKE ? OR description ILIKE ?", "%"+q+"%", "%"+q+"%")
+	}
+
+	var products []models.SupplierProduct
+	if err := db.Order("name ASC").Offset(offset).Limit(limit).Find(&products).Error; err != nil {
+		return nil, err
+	}
+
+	if len(products) == 0 {
+		return []dto.PublicProductDto{}, nil
+	}
+
+	var supplierIDs []string
+	for _, p := range products {
+		supplierIDs = append(supplierIDs, p.SupplierProfileID)
+	}
+
+	var suppliers []models.SupplierProfile
+	if err := u.db.WithContext(ctx).Where("id IN ?", supplierIDs).Find(&suppliers).Error; err != nil {
+		return nil, err
+	}
+
+	supplierMap := make(map[string]models.SupplierProfile)
+	for _, s := range suppliers {
+		supplierMap[s.ID] = s
+	}
+
+	var responses []dto.PublicProductDto
+	for _, p := range products {
+		s, exists := supplierMap[p.SupplierProfileID]
+		if !exists {
+			continue
+		}
+
+		var photos []string
+		for _, ph := range p.Photos {
+			photos = append(photos, ph.FileURL)
+		}
+
+		responses = append(responses, dto.PublicProductDto{
+			ID:                  p.ID,
+			Name:                p.Name,
+			Description:         p.Description,
+			Price:               p.StartingPrice,
+			MinOrder:            p.MOQ,
+			Photos:              photos,
+			SupplierID:          s.ID,
+			SupplierCompanyName: s.CompanyName,
+			SupplierSlug:        slugify(s.CompanyName),
+		})
+	}
+
+	return responses, nil
+}
+
 

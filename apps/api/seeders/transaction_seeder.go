@@ -6,6 +6,7 @@ import (
 	buyerModels "github.com/gilabs/indosupplier/api/internal/buyer/data/models"
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/database"
 	supplierModels "github.com/gilabs/indosupplier/api/internal/supplier/data/models"
+	trustModels "github.com/gilabs/indosupplier/api/internal/trust/data/models"
 	userModels "github.com/gilabs/indosupplier/api/internal/user/data/models"
 )
 
@@ -153,7 +154,31 @@ func SeedTransactions() error {
 		}
 	}
 
-	fmt.Println("seeded mock purchase orders")
+	// Seed reviews if table exists and has no reviews
+	if database.DB.Migrator().HasTable(&trustModels.SupplierReview{}) {
+		var revCount int64
+		if err := database.DB.Model(&trustModels.SupplierReview{}).Count(&revCount).Error; err == nil && revCount == 0 {
+			for _, s := range suppliers {
+				r1 := trustModels.SupplierReview{
+					BuyerProfileID:    buyer.ID,
+					SupplierProfileID: s.ID,
+					Rating:            5,
+					ReviewText:        fmt.Sprintf("Sangat puas dengan kualitas produk dari %s. Pengiriman tepat waktu dan sesuai spesifikasi.", s.CompanyName),
+					Status:            "approved",
+				}
+				r2 := trustModels.SupplierReview{
+					BuyerProfileID:    buyer.ID,
+					SupplierProfileID: s.ID,
+					Rating:            4,
+					ReviewText:        fmt.Sprintf("Pelayanan customer service dari %s sangat baik. MOQ bisa dinegosiasikan dengan bersahabat.", s.CompanyName),
+					Status:            "approved",
+				}
+				database.DB.Create(&r1)
+				database.DB.Create(&r2)
+			}
+			fmt.Println("seeded mock supplier reviews")
+		}
+	}
 
 	return nil
 }

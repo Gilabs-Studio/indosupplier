@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/gilabs/indosupplier/api/internal/core/errors"
@@ -45,6 +47,34 @@ func (h *DiscoveryHandler) GetBySlug(c *gin.Context) {
 func (h *DiscoveryHandler) ListProducts(c *gin.Context) {
 	q := c.Query("q")
 	products, err := h.discoveryUC.ListProducts(c.Request.Context(), q)
+	if err != nil {
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, products, nil)
+}
+
+func (h *DiscoveryHandler) LookupSuppliers(c *gin.Context) {
+	q := c.Query("q")
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "5"))
+
+	suppliers, err := h.discoveryUC.LookupSuppliers(c.Request.Context(), q, page, limit)
+	if err != nil {
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, suppliers, nil)
+}
+
+func (h *DiscoveryHandler) LookupProducts(c *gin.Context) {
+	q := c.Query("q")
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "5"))
+
+	products, err := h.discoveryUC.LookupProducts(c.Request.Context(), q, page, limit)
 	if err != nil {
 		errors.InternalServerErrorResponse(c, err.Error())
 		return

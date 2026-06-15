@@ -1,3 +1,11 @@
+export interface ComparedReview {
+  id: string;
+  buyerName: string;
+  rating: number;
+  reviewText: string;
+  createdAt: string;
+}
+
 export interface ComparedSupplier {
   id: string;
   companyName: string;
@@ -12,6 +20,7 @@ export interface ComparedSupplier {
   responseTime: string;
   capacity: string;
   certifications: string[];
+  reviews: ComparedReview[];
 }
 
 export interface ComparedProduct {
@@ -31,5 +40,6 @@ export interface ComparedProduct {
   supplierVerified: boolean;
   supplierLocation: string;
   supplierResponseTime: string;
+  reviews: ComparedReview[];
 }
 

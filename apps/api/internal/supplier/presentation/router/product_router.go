@@ -29,4 +29,6 @@ func RegisterDiscoveryRoutes(rg *gin.RouterGroup, h *handler.DiscoveryHandler) {
 	rg.GET("/suppliers", h.List)
 	rg.GET("/suppliers/:slug", h.GetBySlug)
 	rg.GET("/products", h.ListProducts)
+	rg.GET("/suppliers/lookup", h.LookupSuppliers)
+	rg.GET("/products/lookup", h.LookupProducts)
 }

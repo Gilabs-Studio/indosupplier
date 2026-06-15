@@ -51,4 +51,28 @@ export const searchService = {
       return [];
     }
   },
+
+  async lookupSuppliers(q: string, page: number): Promise<PublicSupplierDto[]> {
+    try {
+      const response = await apiClient.get<{ data: PublicSupplierDto[] }>("/suppliers/lookup", {
+        params: { q, page, limit: 5 },
+      });
+      return response.data?.data || [];
+    } catch (error) {
+      console.warn("API error in lookupSuppliers, returning empty:", error);
+      return [];
+    }
+  },
+
+  async lookupProducts(q: string, page: number): Promise<PublicProductDto[]> {
+    try {
+      const response = await apiClient.get<{ data: PublicProductDto[] }>("/products/lookup", {
+        params: { q, page, limit: 5 },
+      });
+      return response.data?.data || [];
+    } catch (error) {
+      console.warn("API error in lookupProducts, returning empty:", error);
+      return [];
+    }
+  },
 };
