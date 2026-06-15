@@ -124,6 +124,27 @@ func (c *ComparisonSessionItem) BeforeCreate(tx *gorm.DB) error {
 	return nil
 }
 
+type ComparisonProductSessionItem struct {
+	ID                  string    `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
+	ComparisonSessionID string    `gorm:"type:uuid;not null;index:idx_comparison_session_product,unique" json:"comparison_session_id"`
+	SupplierProductID   string    `gorm:"type:uuid;not null;index:idx_comparison_session_product,unique" json:"supplier_product_id"`
+	SortOrder           int       `gorm:"not null;default:0" json:"sort_order"`
+	CreatedAt           time.Time `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt           time.Time `gorm:"autoUpdateTime;index" json:"updated_at"`
+}
+
+func (ComparisonProductSessionItem) TableName() string {
+	return "comparison_product_session_items"
+}
+
+func (c *ComparisonProductSessionItem) BeforeCreate(tx *gorm.DB) error {
+	if c.ID == "" {
+		c.ID = uuid.New().String()
+	}
+	return nil
+}
+
+
 type PurchaseOrder struct {
 	ID                string         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
 	PONumber          string         `gorm:"type:varchar(120);not null;uniqueIndex" json:"po_number"`

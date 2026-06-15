@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api-client";
-import type { PublicSupplierDto, PublicCategoryDto, SupplierSearchParams } from "../types";
+import type { PublicSupplierDto, PublicCategoryDto, SupplierSearchParams, PublicProductDto } from "../types";
 
 export const searchService = {
   async search(params: SupplierSearchParams): Promise<PublicSupplierDto[]> {
@@ -37,6 +37,18 @@ export const searchService = {
     } catch (error) {
       console.warn(`API error fetching supplier ${slug}, returning null:`, error);
       return null;
+    }
+  },
+
+  async searchProducts(q: string): Promise<PublicProductDto[]> {
+    try {
+      const response = await apiClient.get<{ data: PublicProductDto[] }>("/products", {
+        params: { q },
+      });
+      return response.data?.data || [];
+    } catch (error) {
+      console.warn("API error fetching products, returning empty state:", error);
+      return [];
     }
   },
 };

@@ -177,6 +177,8 @@ func main() {
 	bookmarkUC := buyerUsecase.NewBookmarkUsecase(database.DB, bookmarkRepository)
 	bookmarkH := buyerHandler.NewBookmarkHandler(bookmarkUC)
 
+	compareUC := buyerUsecase.NewCompareUsecase(database.DB)
+	compareH := buyerHandler.NewCompareHandler(compareUC)
 
 	r := coreRouter.NewEngine(jwtManager)
 
@@ -210,6 +212,7 @@ func main() {
 		supplierRouter.RegisterSupplierPortalRoutes(v1, portalH, jwtManager)
 		buyerRouter.RegisterTransactionRoutes(v1, txH, jwtManager)
 		buyerRouter.RegisterBookmarkRoutes(v1, bookmarkH, jwtManager)
+		buyerRouter.RegisterCompareRoutes(v1, compareH, jwtManager)
 	}
 
 	port := config.AppConfig.Server.Port

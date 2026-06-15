@@ -1,6 +1,7 @@
 export interface ComparedSupplier {
   id: string;
   companyName: string;
+  slug: string;
   location: string;
   businessType: string;
   establishedYear: number;
@@ -12,3 +13,23 @@ export interface ComparedSupplier {
   capacity: string;
   certifications: string[];
 }
+
+export interface ComparedProduct {
+  id: string;
+  name: string;
+  imageUrl: string;
+  price: number;
+  moq: string;
+  capacity: string;
+  categoryName: string;
+  description: string;
+  supplierId: string;
+  supplierCompanyName: string;
+  supplierSlug: string;
+  supplierRating: number;
+  supplierReviewCount: number;
+  supplierVerified: boolean;
+  supplierLocation: string;
+  supplierResponseTime: string;
+}
+

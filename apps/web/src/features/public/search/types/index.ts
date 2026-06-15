@@ -51,3 +51,16 @@ export interface SupplierSearchParams {
   region?: string;
   verifiedOnly?: boolean;
 }
+
+export interface PublicProductDto {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  minOrder: string;
+  photos: string[];
+  supplierId: string;
+  supplierCompanyName: string;
+  supplierSlug: string;
+}
+

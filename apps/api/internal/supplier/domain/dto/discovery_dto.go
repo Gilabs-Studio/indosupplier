@@ -37,3 +37,16 @@ type PublicSupplierDto struct {
 	Email             string                     `json:"email,omitempty"`
 	Website           string                     `json:"website,omitempty"`
 }
+
+type PublicProductDto struct {
+	ID                  string   `json:"id"`
+	Name                string   `json:"name"`
+	Description         string   `json:"description"`
+	Price               float64  `json:"price"`
+	MinOrder            string   `json:"minOrder"`
+	Photos              []string `json:"photos"`
+	SupplierID          string   `json:"supplierId"`
+	SupplierCompanyName string   `json:"supplierCompanyName"`
+	SupplierSlug        string   `json:"supplierSlug"`
+}
+

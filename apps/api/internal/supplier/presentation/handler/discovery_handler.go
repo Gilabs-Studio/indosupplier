@@ -41,3 +41,14 @@ func (h *DiscoveryHandler) GetBySlug(c *gin.Context) {
 
 	response.SuccessResponse(c, supplier, nil)
 }
+
+func (h *DiscoveryHandler) ListProducts(c *gin.Context) {
+	q := c.Query("q")
+	products, err := h.discoveryUC.ListProducts(c.Request.Context(), q)
+	if err != nil {
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, products, nil)
+}

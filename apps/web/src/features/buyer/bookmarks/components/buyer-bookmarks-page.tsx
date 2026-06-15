@@ -3,6 +3,7 @@
 
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { BuyerLayout } from "../../components/buyer-layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,25 +23,51 @@ import {
   Package,
 } from "lucide-react";
 import { useBuyerBookmarks } from "../hooks/useBuyerBookmarks";
+import { useBuyerCompare } from "@/features/buyer/compare/hooks/useBuyerCompare";
 
 export function BuyerBookmarksPage() {
   const t = useTranslations("buyer.bookmarks");
-  const { bookmarks, isLoading, deleteBookmark } = useBuyerBookmarks();
+  const { bookmarks, isLoading: isBookmarksLoading, deleteBookmark } = useBuyerBookmarks();
+  const {
+    suppliers: comparedSuppliers,
+    addSupplier,
+    removeSupplier,
+    products: comparedProducts,
+    addProduct,
+    removeProduct,
+    isLoading: isCompareLoading,
+  } = useBuyerCompare();
 
-  const [compareList, setCompareList] = useState<string[]>([]);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const handleToggleCompare = (id: string) => {
-    if (compareList.includes(id)) {
-      setCompareList(compareList.filter((item) => item !== id));
+  const compareList = comparedSuppliers.map((s) => s.id); // array of supplierProfileIds
+  const compareProductsList = comparedProducts.map((p) => p.id); // array of supplierProductIds
+
+  const handleToggleCompare = (supplierProfileId: string) => {
+    if (compareList.includes(supplierProfileId)) {
+      removeSupplier(supplierProfileId);
     } else {
       if (compareList.length >= 3) {
-        alert("Maksimal bandingkan 3 supplier sekaligus!");
+        toast.error("Maksimal bandingkan 3 supplier sekaligus!");
         return;
       }
-      setCompareList([...compareList, id]);
+      addSupplier(supplierProfileId);
     }
   };
+
+  const handleToggleProductCompare = (supplierProductId: string) => {
+    if (compareProductsList.includes(supplierProductId)) {
+      removeProduct(supplierProductId);
+    } else {
+      if (compareProductsList.length >= 3) {
+        toast.error("Maksimal bandingkan 3 produk sekaligus!");
+        return;
+      }
+      addProduct(supplierProductId);
+    }
+  };
+
+  const isLoading = isBookmarksLoading || isCompareLoading;
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("id-ID", {
@@ -74,14 +101,14 @@ export function BuyerBookmarksPage() {
             </h1>
             <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
           </div>
-          {compareList.length > 0 && (
+          {(compareList.length > 0 || compareProductsList.length > 0) && (
             <Button
               asChild
               className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/95 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-lg hover:shadow-primary/30 rounded-lg px-4 py-2"
             >
               <Link href="/compare">
                 <Columns3 className="mr-2 h-4 w-4" />
-                {t("compareCount", { count: compareList.length })}
+                {t("compareCount", { count: compareList.length + compareProductsList.length })}
               </Link>
             </Button>
           )}
@@ -208,8 +235,8 @@ export function BuyerBookmarksPage() {
                         <label className="flex items-center gap-2.5 text-xs font-medium text-foreground cursor-pointer select-none">
                           <input
                             type="checkbox"
-                            checked={compareList.includes(supplier.id)}
-                            onChange={() => handleToggleCompare(supplier.id)}
+                            checked={compareList.includes(supplier.supplierProfileId)}
+                            onChange={() => handleToggleCompare(supplier.supplierProfileId)}
                             className="h-4 w-4 rounded border-border text-primary focus:ring-primary cursor-pointer transition-all"
                           />
                           <span>{t("compareCheckbox")}</span>
@@ -324,12 +351,23 @@ export function BuyerBookmarksPage() {
                     </div>
 
                     <div className="px-5 pb-5 pt-0">
-                      <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground border-t border-border pt-3">
-                        <span>Min. Order: {bookmark.productMinOrder || "1 Pcs"}</span>
+                      <div className="flex flex-col gap-3 border-t border-border pt-3">
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
+                          <span>Min. Order: {bookmark.productMinOrder || "1 Pcs"}</span>
+                          <label className="flex items-center gap-1.5 font-medium text-foreground cursor-pointer select-none">
+                            <input
+                              type="checkbox"
+                              checked={compareProductsList.includes(bookmark.supplierProductId || "")}
+                              onChange={() => handleToggleProductCompare(bookmark.supplierProductId || "")}
+                              className="h-3.5 w-3.5 rounded border-border text-primary focus:ring-primary cursor-pointer transition-all"
+                            />
+                            <span>Bandingkan</span>
+                          </label>
+                        </div>
                         <Button
                           asChild
                           size="sm"
-                          className="bg-primary text-primary-foreground hover:bg-primary/95 text-xs font-semibold cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/20 rounded-lg"
+                          className="w-full bg-primary text-primary-foreground hover:bg-primary/95 text-xs font-semibold cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/20 rounded-lg"
                         >
                           <Link href="/rfq/create">
                             <MessageSquare className="mr-1.5 h-3.5 w-3.5" />

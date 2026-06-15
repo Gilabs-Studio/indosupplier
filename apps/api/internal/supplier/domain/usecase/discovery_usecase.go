@@ -17,6 +17,7 @@ import (
 type DiscoveryUsecase interface {
 	List(ctx context.Context, q string, categoryID string, region string, verifiedOnly bool) ([]dto.PublicSupplierDto, error)
 	GetBySlug(ctx context.Context, slug string) (*dto.PublicSupplierDto, error)
+	ListProducts(ctx context.Context, q string) ([]dto.PublicProductDto, error)
 }
 
 type discoveryUsecase struct {
@@ -222,3 +223,63 @@ func slugify(s string) string {
 	s = strings.Trim(s, "-")
 	return s
 }
+
+func (u *discoveryUsecase) ListProducts(ctx context.Context, q string) ([]dto.PublicProductDto, error) {
+	db := u.db.WithContext(ctx).Model(&models.SupplierProduct{}).Preload("Photos")
+
+	if q != "" {
+		db = db.Where("name ILIKE ? OR description ILIKE ?", "%"+q+"%", "%"+q+"%")
+	}
+
+	var products []models.SupplierProduct
+	if err := db.Order("name ASC").Find(&products).Error; err != nil {
+		return nil, err
+	}
+
+	if len(products) == 0 {
+		return []dto.PublicProductDto{}, nil
+	}
+
+	var supplierIDs []string
+	for _, p := range products {
+		supplierIDs = append(supplierIDs, p.SupplierProfileID)
+	}
+
+	var suppliers []models.SupplierProfile
+	if err := u.db.WithContext(ctx).Where("id IN ?", supplierIDs).Find(&suppliers).Error; err != nil {
+		return nil, err
+	}
+
+	supplierMap := make(map[string]models.SupplierProfile)
+	for _, s := range suppliers {
+		supplierMap[s.ID] = s
+	}
+
+	var responses []dto.PublicProductDto
+	for _, p := range products {
+		s, exists := supplierMap[p.SupplierProfileID]
+		if !exists {
+			continue
+		}
+
+		var photos []string
+		for _, ph := range p.Photos {
+			photos = append(photos, ph.FileURL)
+		}
+
+		responses = append(responses, dto.PublicProductDto{
+			ID:                  p.ID,
+			Name:                p.Name,
+			Description:         p.Description,
+			Price:               p.StartingPrice,
+			MinOrder:            p.MOQ,
+			Photos:              photos,
+			SupplierID:          s.ID,
+			SupplierCompanyName: s.CompanyName,
+			SupplierSlug:        slugify(s.CompanyName),
+		})
+	}
+
+	return responses, nil
+}
+
