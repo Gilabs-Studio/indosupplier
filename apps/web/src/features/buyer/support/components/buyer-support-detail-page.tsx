@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
+import { CenteredLoading } from "@/components/loading";
 import { ArrowLeft, Send } from "lucide-react";
 import { useBuyerSupportTicketDetail } from "../hooks/useBuyerSupport";
 
@@ -28,9 +29,7 @@ export function BuyerSupportDetailPage({ id }: BuyerSupportDetailPageProps) {
   if (isLoading) {
     return (
       <BuyerLayout>
-        <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-        </div>
+        <CenteredLoading />
       </BuyerLayout>
     );
   }

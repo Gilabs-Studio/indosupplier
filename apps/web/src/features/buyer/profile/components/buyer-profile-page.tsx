@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel, FieldGroup, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { CenteredLoading } from "@/components/loading";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -77,9 +78,7 @@ export function BuyerProfilePage() {
   if (isLoading) {
     return (
       <BuyerLayout>
-        <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-        </div>
+        <CenteredLoading />
       </BuyerLayout>
     );
   }

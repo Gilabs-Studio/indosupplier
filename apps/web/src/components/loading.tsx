@@ -1,6 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface LoadingSpinnerProps {
   readonly className?: string;
@@ -12,6 +13,24 @@ export function LoadingSpinner({
   strokeWidth = 2,
 }: LoadingSpinnerProps) {
   return <Loader2 className={className} strokeWidth={strokeWidth} />;
+}
+
+interface CenteredLoadingProps {
+  readonly className?: string;
+  readonly spinnerClassName?: string;
+  readonly strokeWidth?: number;
+}
+
+export function CenteredLoading({
+  className,
+  spinnerClassName = "h-8 w-8 text-primary",
+  strokeWidth,
+}: CenteredLoadingProps) {
+  return (
+    <div className={cn("flex items-center justify-center py-20", className)}>
+      <LoadingSpinner className={cn("animate-spin", spinnerClassName)} strokeWidth={strokeWidth} />
+    </div>
+  );
 }
 
 export function LoginFormSkeleton() {
@@ -80,4 +99,3 @@ export function ButtonLoading({ children, loading, loadingText }: ButtonLoadingP
   }
   return <>{children}</>;
 }
-

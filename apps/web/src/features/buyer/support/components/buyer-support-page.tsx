@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
 import { Field, FieldLabel, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { CenteredLoading } from "@/components/loading";
 import { Headset, Plus, ChevronRight, Calendar, X } from "lucide-react";
 import { useBuyerSupportTickets } from "../hooks/useBuyerSupport";
 
@@ -37,9 +38,7 @@ export function BuyerSupportPage() {
   if (isLoading) {
     return (
       <BuyerLayout>
-        <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-        </div>
+        <CenteredLoading />
       </BuyerLayout>
     );
   }

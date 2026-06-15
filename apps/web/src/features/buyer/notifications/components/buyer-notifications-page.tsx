@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { BuyerLayout } from "../../components/buyer-layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { CenteredLoading } from "@/components/loading";
 import { Bell, Mail, RefreshCw, AlertCircle } from "lucide-react";
 import { useBuyerNotifications } from "../hooks/useBuyerNotifications";
 
@@ -45,9 +46,7 @@ export function BuyerNotificationsPage() {
   if (isLoading) {
     return (
       <BuyerLayout>
-        <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-        </div>
+        <CenteredLoading />
       </BuyerLayout>
     );
   }

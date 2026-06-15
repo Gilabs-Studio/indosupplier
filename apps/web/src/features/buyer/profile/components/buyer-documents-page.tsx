@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { CenteredLoading } from "@/components/loading";
 import { FileText, ShieldCheck, FileUp, AlertCircle } from "lucide-react";
 import { useBuyerDocuments } from "../hooks/useBuyerProfile";
 import { toast } from "sonner";
@@ -59,9 +60,7 @@ export function BuyerDocumentsPage() {
   if (isLoading) {
     return (
       <BuyerLayout>
-        <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-        </div>
+        <CenteredLoading />
       </BuyerLayout>
     );
   }

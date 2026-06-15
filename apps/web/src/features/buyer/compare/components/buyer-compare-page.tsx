@@ -8,6 +8,7 @@ import { BuyerLayout } from "../../components/buyer-layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
+import { CenteredLoading, LoadingSpinner } from "@/components/loading";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   Dialog,
@@ -240,9 +241,7 @@ export function BuyerComparePage() {
   const renderSupplierSearchResults = () => {
     if (isSupplierLoading && supplierResults.length === 0) {
       return (
-        <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
-        </div>
+        <CenteredLoading className="py-12" spinnerClassName="h-6 w-6 text-primary" />
       );
     }
     if (supplierResults.length > 0) {
@@ -282,7 +281,7 @@ export function BuyerComparePage() {
           ))}
           {isSupplierLoadingMore && (
             <div className="flex items-center justify-center py-2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary" />
+              <LoadingSpinner className="h-4 w-4 animate-spin text-primary" />
             </div>
           )}
         </>
@@ -306,9 +305,7 @@ export function BuyerComparePage() {
   const renderProductSearchResults = () => {
     if (isProductLoading && productResults.length === 0) {
       return (
-        <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
-        </div>
+        <CenteredLoading className="py-12" spinnerClassName="h-6 w-6 text-primary" />
       );
     }
     if (productResults.length > 0) {
@@ -348,7 +345,7 @@ export function BuyerComparePage() {
           ))}
           {isProductLoadingMore && (
             <div className="flex items-center justify-center py-2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary" />
+              <LoadingSpinner className="h-4 w-4 animate-spin text-primary" />
             </div>
           )}
         </>
@@ -431,9 +428,7 @@ export function BuyerComparePage() {
   if (isLoading) {
     return (
       <BuyerLayout>
-        <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
-        </div>
+        <CenteredLoading />
       </BuyerLayout>
     );
   }
