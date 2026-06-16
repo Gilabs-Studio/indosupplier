@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
 import { CenteredLoading } from "@/components/loading";
+import { cn } from "@/lib/utils";
 import {
   ArrowLeft,
   Calendar,
@@ -24,7 +25,7 @@ interface BuyerRfqDetailPageProps {
 }
 
 export function BuyerRfqDetailPage({ id }: BuyerRfqDetailPageProps) {
-  const t = useTranslations("buyer.rfqDetail");
+  const t = useTranslations("buyerRfq.rfqDetail");
   const [activeTab, setActiveTab] = useState("quotes");
 
   const {
@@ -48,7 +49,7 @@ export function BuyerRfqDetailPage({ id }: BuyerRfqDetailPageProps) {
     return (
       <BuyerLayout>
         <div className="text-center py-20 bg-card rounded-xl border border-border">
-          <p className="text-destructive font-semibold">RFQ tidak ditemukan.</p>
+          <p className="text-destructive font-semibold">{t("notFound")}</p>
         </div>
       </BuyerLayout>
     );
@@ -60,7 +61,7 @@ export function BuyerRfqDetailPage({ id }: BuyerRfqDetailPageProps) {
         {/* Header */}
         <div className="space-y-2">
           <Link href="/rfq" className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline cursor-pointer">
-            <ArrowLeft className="h-3.5 w-3.5" /> Kembali ke Daftar RFQ
+            <ArrowLeft className="h-3.5 w-3.5" /> {t("backLink")}
           </Link>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
@@ -85,24 +86,26 @@ export function BuyerRfqDetailPage({ id }: BuyerRfqDetailPageProps) {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 border-b border-border">
+        <div className="flex gap-1.5 border-b border-border pb-1">
           <button
             onClick={() => setActiveTab("quotes")}
-            className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-all cursor-pointer ${
+            className={cn(
+              "px-4 py-2 text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer hover:text-primary hover:-translate-y-0.5 active:translate-y-0",
               activeTab === "quotes"
-                ? "border-b-2 border-primary text-primary font-bold bg-muted/20"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
+                ? "text-primary font-semibold border-b-2 border-primary -mb-[5px]"
+                : "text-muted-foreground"
+            )}
           >
             {t("tabQuotes", { count: bids.length })}
           </button>
           <button
             onClick={() => setActiveTab("details")}
-            className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-all cursor-pointer ${
+            className={cn(
+              "px-4 py-2 text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer hover:text-primary hover:-translate-y-0.5 active:translate-y-0",
               activeTab === "details"
-                ? "border-b-2 border-primary text-primary font-bold bg-muted/20"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
+                ? "text-primary font-semibold border-b-2 border-primary -mb-[5px]"
+                : "text-muted-foreground"
+            )}
           >
             {t("tabDetails")}
           </button>
@@ -112,7 +115,7 @@ export function BuyerRfqDetailPage({ id }: BuyerRfqDetailPageProps) {
           <div className="space-y-4">
             {bids.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-10 bg-card rounded-xl border border-border">
-                Belum ada penawaran masuk dari supplier.
+                {t("emptyBids")}
               </p>
             ) : (
               bids.map((bid) => (
@@ -123,7 +126,7 @@ export function BuyerRfqDetailPage({ id }: BuyerRfqDetailPageProps) {
                         <h4 className="text-sm font-bold text-foreground">{bid.supplierName}</h4>
                         {bid.verified && (
                           <Badge className="bg-success text-white border-0 text-[9px] px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
-                            <ShieldCheck className="h-2.5 w-2.5" /> Verified
+                            <ShieldCheck className="h-2.5 w-2.5" /> {t("verified")}
                           </Badge>
                         )}
                       </div>
@@ -138,7 +141,7 @@ export function BuyerRfqDetailPage({ id }: BuyerRfqDetailPageProps) {
                           <strong className="text-foreground text-sm font-bold block mt-0.5">{bid.moq}</strong>
                         </div>
                         <div>
-                          <span>Respon Rate: </span>
+                          <span>{t("responseRate")}: </span>
                           <strong className="text-foreground text-sm font-bold block mt-0.5">{bid.responseTime}</strong>
                         </div>
                       </div>
@@ -171,22 +174,22 @@ export function BuyerRfqDetailPage({ id }: BuyerRfqDetailPageProps) {
             <CardContent className="p-6 space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pb-6 border-b border-border">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Kategori</span>
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{t("labelCategory")}</span>
                   <p className="text-sm font-semibold text-foreground">{rfq.category}</p>
                 </div>
                 <div className="space-y-1">
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Volume Kebutuhan</span>
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{t("labelVolume")}</span>
                   <p className="text-sm font-semibold text-foreground">{rfq.quantity}</p>
                 </div>
                 <div className="space-y-1">
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Tujuan Pengiriman</span>
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{t("labelDestination")}</span>
                   <p className="text-sm font-semibold text-foreground flex items-center gap-1">
                     <MapPin className="h-4 w-4 text-muted-foreground" />
                     {rfq.targetPort}
                   </p>
                 </div>
                 <div className="space-y-1">
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Tanggal Dibuat</span>
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{t("labelCreatedAt")}</span>
                   <p className="text-sm font-semibold text-foreground flex items-center gap-1">
                     <Calendar className="h-4 w-4 text-muted-foreground" />
                     {rfq.date}
@@ -195,13 +198,13 @@ export function BuyerRfqDetailPage({ id }: BuyerRfqDetailPageProps) {
               </div>
 
               <div className="space-y-2">
-                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Deskripsi Kebutuhan</span>
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{t("labelDescription")}</span>
                 <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">{rfq.description || "-"}</p>
               </div>
 
               {rfq.attachmentUrl && (
                 <div className="space-y-2">
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Lampiran Dokumen</span>
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{t("labelAttachment")}</span>
                   <a href={rfq.attachmentUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-3 border border-border rounded-lg bg-muted/20 w-fit hover:bg-muted/30 transition-colors">
                     <FileText className="h-5 w-5 text-primary" />
                     <div className="text-xs">

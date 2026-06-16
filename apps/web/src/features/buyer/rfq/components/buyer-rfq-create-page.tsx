@@ -16,7 +16,7 @@ import { FileUp, ArrowLeft, Info } from "lucide-react";
 import { toast } from "sonner";
 
 export function BuyerRfqCreatePage() {
-  const t = useTranslations("buyer.rfqCreate");
+  const t = useTranslations("buyerRfq.rfqCreate");
   const { mutate: createRfq, isPending: isCreating } = useCreateRfq();
 
   const [isUploading, setIsUploading] = useState(false);
@@ -47,7 +47,7 @@ export function BuyerRfqCreatePage() {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       if (file.size > 10 * 1024 * 1024) {
-        toast.error("Ukuran file maksimal 10MB!");
+        toast.error(t("toastSizeLimit"));
         return;
       }
 
@@ -58,10 +58,10 @@ export function BuyerRfqCreatePage() {
         
         setValue("attachment_url", res.url);
         setUploadedFileName(file.name);
-        toast.success("Dokumen spesifikasi berhasil diunggah!");
+        toast.success(t("toastUploadSuccess"));
       } catch (err) {
         console.error(err);
-        toast.error("Gagal mengunggah berkas spesifikasi.");
+        toast.error(t("toastUploadError"));
       } finally {
         setIsUploading(false);
       }
@@ -130,10 +130,10 @@ export function BuyerRfqCreatePage() {
                       {...register("category")}
                       className="w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-hidden cursor-pointer"
                     >
-                      <option value="manufacturing">Manufaktur & Material</option>
-                      <option value="agriculture">Pertanian & Pangan</option>
-                      <option value="textile">Tekstil & Konveksi</option>
-                      <option value="furniture">Furnitur & Kayu</option>
+                      <option value="manufacturing">{t("catManufacturing")}</option>
+                      <option value="agriculture">{t("catAgriculture")}</option>
+                      <option value="textile">{t("catTextile")}</option>
+                      <option value="furniture">{t("catFurniture")}</option>
                     </select>
                     {errors.category && (
                       <FieldError>{errors.category.message}</FieldError>
@@ -218,9 +218,9 @@ export function BuyerRfqCreatePage() {
                     <FileUp className="mx-auto h-8 w-8 text-muted-foreground opacity-60" />
                     <p className="text-xs font-semibold text-foreground">
                       {isUploading
-                        ? "Mengunggah..."
+                        ? t("toastUploading")
                         : attachmentUrl
-                        ? `File terunggah: ${uploadedFileName || "spesifikasi.pdf"}`
+                        ? t("toastUploadedFile", { name: uploadedFileName || "spesifikasi.pdf" })
                         : t("uploadPlaceholder")}
                     </p>
                     <p className="text-[10px] text-muted-foreground">{t("uploadLimit")}</p>
@@ -234,7 +234,7 @@ export function BuyerRfqCreatePage() {
                   <Link href="/rfq">{t("btnCancel")}</Link>
                 </Button>
                 <Button type="submit" disabled={isCreating || isUploading} className="bg-primary text-primary-foreground hover:bg-primary/95 cursor-pointer px-6 transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/20">
-                  {isCreating ? "Mengirim..." : t("btnSubmit")}
+                  {isCreating ? t("toastSubmitting") : t("btnSubmit")}
                 </Button>
               </div>
             </form>

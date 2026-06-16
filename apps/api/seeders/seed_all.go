@@ -8,5 +8,8 @@ func SeedAll() error {
 	if err := SeedSystemAdmins(); err != nil {
 		return err
 	}
-	return SeedTransactions()
+	if err := SeedTransactions(); err != nil {
+		return err
+	}
+	return SeedRFQs()
 }

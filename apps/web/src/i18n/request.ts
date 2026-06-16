@@ -31,6 +31,7 @@ import supplierOnboardingEn from "@/features/supplier/onboarding/i18n/en.json";
 import { productsEn } from "@/features/supplier/products/i18n/en";
 import { buyerReviewsEn } from "@/features/buyer/reviews/i18n/en";
 import { buyerChatEn } from "@/features/buyer/chat/i18n/en";
+import { buyerRfqEn } from "@/features/buyer/rfq/i18n/en";
 
 
 // Sysadmin English translations
@@ -75,6 +76,7 @@ import supplierOnboardingId from "@/features/supplier/onboarding/i18n/id.json";
 import { productsId } from "@/features/supplier/products/i18n/id";
 import { buyerReviewsId } from "@/features/buyer/reviews/i18n/id";
 import { buyerChatId } from "@/features/buyer/chat/i18n/id";
+import { buyerRfqId } from "@/features/buyer/rfq/i18n/id";
 
 
 // Sysadmin Indonesian translations
@@ -99,6 +101,7 @@ const messages = {
     ...buyerEn,
     buyerReviews: buyerReviewsEn,
     buyerChat: buyerChatEn,
+    buyerRfq: buyerRfqEn,
     sysadminFaq: faqEn,
     sysadminReviews: reviewsEn,
     sysadminSubscriptionPlans: subscriptionPlansEn,
@@ -144,6 +147,7 @@ const messages = {
     ...buyerId,
     buyerReviews: buyerReviewsId,
     buyerChat: buyerChatId,
+    buyerRfq: buyerRfqId,
     sysadminFaq: faqId,
     sysadminReviews: reviewsId,
     sysadminSubscriptionPlans: subscriptionPlansId,

@@ -160,52 +160,7 @@
       "saveBtn": "Save Settings",
       "saveSuccess": "Profile updated successfully!"
     },
-    "rfqList": {
-      "title": "My RFQs",
-      "subtitle": "Manage your Request for Quotations and negotiate bids.",
-      "btnCreate": "Create RFQ",
-      "tabAll": "All RFQs",
-      "tabWaiting": "Waiting for Quotes",
-      "tabReceived": "Offers Received",
-      "tabCompleted": "Completed",
-      "searchPlaceholder": "Search RFQs...",
-      "emptyRfqs": "No RFQs found",
-      "colId": "RFQ ID",
-      "colProduct": "Product",
-      "colQty": "Volume",
-      "colDestination": "Destination Port",
-      "colStatus": "Status",
-      "colAction": "Action"
-    },
-    "rfqCreate": {
-      "backLink": "Back to List",
-      "title": "Create new RFQ",
-      "subtitle": "Send your custom sourcing requirements to target suppliers.",
-      "tipsTitle": "Sourcing Pro Tip",
-      "tipsDesc": "Providing clear technical specifications (like mesh size, purity, packaging) gets you faster, more accurate quotes.",
-      "labelProduct": "Product Name",
-      "placeholderProduct": "e.g., Bentonite Clay Powder Mesh 200",
-      "labelCategory": "Industry Category",
-      "labelVolume": "Quantity Required",
-      "labelUnit": "Unit",
-      "labelDestination": "Destination Port",
-      "placeholderDestination": "e.g., Tanjung Priok Port, CIF",
-      "labelDescription": "Detailed Requirements",
-      "placeholderDescription": "Provide detailed specifications, packaging request, test reports required, etc.",
-      "labelAttachment": "Technical Specification File",
-      "uploadPlaceholder": "Upload spec sheet or sample test reports (PDF/Excel)",
-      "uploadLimit": "Maximum file size: 10MB",
-      "btnCancel": "Cancel",
-      "btnSubmit": "Send RFQ"
-    },
-    "rfqDetail": {
-      "tabQuotes": "Supplier Quotes ({count})",
-      "tabDetails": "RFQ Details",
-      "offerPrice": "Offered Price",
-      "moq": "MOQ",
-      "btnChat": "Negotiate Chat",
-      "btnAccept": "Accept Bid"
-    },
+
     "support": {
       "title": "Helpdesk & Customer Support",
       "subtitle": "Ask questions, resolve billing disputes, or report issues.",

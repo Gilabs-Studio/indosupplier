@@ -58,6 +58,11 @@ import (
 	chatUsecase "github.com/gilabs/indosupplier/api/internal/chat/domain/usecase"
 	chatHandler "github.com/gilabs/indosupplier/api/internal/chat/presentation/handler"
 	chatRouter "github.com/gilabs/indosupplier/api/internal/chat/presentation/router"
+
+	rfqRepo "github.com/gilabs/indosupplier/api/internal/rfq/data/repositories"
+	rfqUsecase "github.com/gilabs/indosupplier/api/internal/rfq/domain/usecase"
+	rfqHandler "github.com/gilabs/indosupplier/api/internal/rfq/presentation/handler"
+	rfqRouter "github.com/gilabs/indosupplier/api/internal/rfq/presentation/router"
 )
 
 func initInfrastructure() {
@@ -191,6 +196,10 @@ func main() {
 	chatUC := chatUsecase.NewChatUsecase(database.DB)
 	chatH := chatHandler.NewChatHandler(chatUC, jwtManager)
 
+	rfqRepository := rfqRepo.NewRFQRepository(database.DB)
+	rfqUC := rfqUsecase.NewRFQUsecase(database.DB, rfqRepository)
+	rfqH := rfqHandler.NewRFQHandler(rfqUC)
+
 	r := coreRouter.NewEngine(jwtManager)
 
 	r.Use(middleware.MetricsMiddleware())
@@ -226,6 +235,7 @@ func main() {
 		buyerRouter.RegisterCompareRoutes(v1, compareH, jwtManager)
 		buyerRouter.RegisterReviewRoutes(v1, reviewH, jwtManager)
 		chatRouter.RegisterChatRoutes(v1, chatH, jwtManager)
+		rfqRouter.RegisterRFQRoutes(v1, rfqH, jwtManager)
 	}
 
 	port := config.AppConfig.Server.Port

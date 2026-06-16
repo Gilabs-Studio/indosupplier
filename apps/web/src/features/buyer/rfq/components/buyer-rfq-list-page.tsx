@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
 import { CenteredLoading } from "@/components/loading";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import {
   Plus,
   Search,
@@ -19,9 +21,10 @@ import {
 import { useBuyerRfqs } from "../hooks/useBuyerRfqs";
 
 export function BuyerRfqListPage() {
-  const t = useTranslations("buyer.rfqList");
+  const t = useTranslations("buyerRfq.rfqList");
   const [activeTab, setActiveTab] = useState("all");
   const [page, setPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { data: rfqData, isLoading } = useBuyerRfqs({
     page,
@@ -45,6 +48,11 @@ export function BuyerRfqListPage() {
   }
 
   const rfqs = rfqData?.items || [];
+  const filteredRfqs = rfqs.filter((rfq) =>
+    rfq.product.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    rfq.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    rfq.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <BuyerLayout>
@@ -65,7 +73,7 @@ export function BuyerRfqListPage() {
 
         {/* Tabs & Search */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-border pb-1">
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-1.5 overflow-x-auto scrollbar-none">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -73,11 +81,12 @@ export function BuyerRfqListPage() {
                   setActiveTab(tab.id);
                   setPage(1);
                 }}
-                className={`px-4 py-2 text-sm font-semibold rounded-t-lg transition-all cursor-pointer ${
+                className={cn(
+                  "px-4 py-2 text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer hover:text-primary hover:-translate-y-0.5 active:translate-y-0",
                   activeTab === tab.id
-                    ? "border-b-2 border-primary text-primary font-bold bg-muted/20"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
+                    ? "text-primary font-semibold border-b-2 border-primary -mb-[5px]"
+                    : "text-muted-foreground"
+                )}
               >
                 {tab.name}
               </button>
@@ -85,11 +94,13 @@ export function BuyerRfqListPage() {
           </div>
 
           <div className="relative max-w-xs w-full">
-            <Search className="absolute left-3 top-2.5 h-4.5 w-4.5 text-muted-foreground" />
-            <input
+            <Search className="absolute left-3 top-3 h-4.5 w-4.5 text-muted-foreground" />
+            <Input
               type="text"
               placeholder={t("searchPlaceholder")}
-              className="w-full pl-9 pr-4 py-1.5 bg-card border border-border text-sm rounded-lg outline-hidden focus:border-primary transition-all cursor-pointer"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 pr-4 py-1.5 bg-card border border-border text-sm rounded-lg outline-hidden focus-visible:ring-primary focus-visible:border-primary transition-all cursor-pointer h-9"
             />
           </div>
         </div>
@@ -97,12 +108,12 @@ export function BuyerRfqListPage() {
         {/* RFQ List Table */}
         <Card className="border border-border rounded-xl shadow-xs overflow-hidden bg-card">
           <CardContent className="p-0">
-            {rfqs.length === 0 ? (
+            {filteredRfqs.length === 0 ? (
               <div className="text-center py-16">
                 <FileText className="mx-auto h-12 w-12 text-muted-foreground opacity-40" />
                 <h3 className="mt-4 text-sm font-semibold text-foreground">{t("emptyRfqs")}</h3>
                 <p className="mt-2 text-xs text-muted-foreground max-w-xs mx-auto">
-                  Belum ada RFQ yang sesuai dengan filter tab ini.
+                  {t("emptyDesc")}
                 </p>
               </div>
             ) : (
@@ -119,7 +130,7 @@ export function BuyerRfqListPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
-                    {rfqs.map((rfq) => (
+                    {filteredRfqs.map((rfq) => (
                       <tr key={rfq.id} className="hover:bg-muted/10 transition-colors">
                         <td className="p-4 px-6 space-y-0.5">
                           <span className="text-xs font-bold text-muted-foreground">{rfq.id}</span>
@@ -155,10 +166,10 @@ export function BuyerRfqListPage() {
                             <Link href={`/rfq/${rfq.id}`}>
                               {rfq.status === "Offers Received" ? (
                                 <span className="flex items-center gap-1">
-                                  <MessageSquare className="h-3.5 w-3.5" /> Lihat ({rfq.replies})
+                                  <MessageSquare className="h-3.5 w-3.5" /> {t("viewReplies", { count: rfq.replies })}
                                 </span>
                               ) : (
-                                "Detail"
+                                t("viewDetail")
                               )}
                               <ChevronRight className="h-4 w-4" />
                             </Link>
