@@ -23,7 +23,7 @@ type marketplaceUserSeed struct {
 }
 
 func SeedUsers() error {
-	const seedPassword = "password123"
+	const seedPassword = "admin123"
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(seedPassword), bcrypt.DefaultCost)
 	if err != nil {

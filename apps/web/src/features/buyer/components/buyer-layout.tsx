@@ -5,7 +5,6 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/routing";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
 import { PublicNavbar } from "@/features/public/components/public-navbar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   RefreshCw,
   Heart,

@@ -95,88 +95,107 @@ func SeedTransactions() error {
 		}
 	}
 
-	var count int64
-	if err := database.DB.Model(&buyerModels.PurchaseOrder{}).Count(&count).Error; err != nil {
-		return err
-	}
-	if count > 0 {
-		return nil // already seeded
-	}
+	// Seed purchase orders and reviews for both buyer2 and admin
+	for _, email := range emailsToSeed {
+		var u userModels.User
+		if err := database.DB.Where("email = ?", email).First(&u).Error; err == nil {
+			var bp buyerModels.BuyerProfile
+			if err := database.DB.Where("user_id = ?", u.ID).First(&bp).Error; err == nil {
+				var poCount int64
+				if err := database.DB.Model(&buyerModels.PurchaseOrder{}).Where("buyer_profile_id = ?", bp.ID).Count(&poCount).Error; err == nil && poCount == 0 {
+					// Seed supplier profiles count check
+					var sCount int64
+					database.DB.Model(&supplierModels.SupplierProfile{}).Count(&sCount)
+					if sCount == 0 {
+						continue
+					}
 
-	txs := []buyerModels.PurchaseOrder{
-		{
-			PONumber:          "PO-20260613-A01B2C",
-			BuyerProfileID:    buyer.ID,
-			SupplierProfileID: suppliers[0].ID,
-			ProductName:       "Garnet Sand Mesh 80 Almandine",
-			QuantityValue:     20,
-			QuantityUnit:      "Ton",
-			PricePerUnit:      3800000,
-			TotalAmount:       76000000,
-			Status:            "processing",
-			PaymentStatus:     "paid",
-			DeliveryAddress:   "Pelabuhan Tanjung Priok, CIF Jakarta",
-			Notes:             "Mohon pastikan kemasan karung goni ganda agar tidak bocor.",
-		},
-		{
-			PONumber:          "PO-20260612-C02D3E",
-			BuyerProfileID:    buyer.ID,
-			SupplierProfileID: suppliers[0].ID,
-			ProductName:       "Sodium Bentonite Clay Powder",
-			QuantityValue:     10,
-			QuantityUnit:      "Ton",
-			PricePerUnit:      4500000,
-			TotalAmount:       45000000,
-			Status:            "completed",
-			PaymentStatus:     "paid",
-			DeliveryAddress:   "Pelabuhan Tanjung Perak, Surabaya",
-			Notes:             "Kirimkan COA (Certificate of Analysis) bersama dengan dokumen pengapalan.",
-		},
-		{
-			PONumber:          "PO-20260611-F03G4H",
-			BuyerProfileID:    buyer.ID,
-			SupplierProfileID: suppliers[0].ID,
-			ProductName:       "Activated Carbon Powder Mesh 325",
-			QuantityValue:     2,
-			QuantityUnit:      "Ton",
-			PricePerUnit:      16500000,
-			TotalAmount:       33000000,
-			Status:            "pending",
-			PaymentStatus:     "unpaid",
-			DeliveryAddress:   "Pelabuhan Tanjung Priok, CIF Jakarta",
-			Notes:             "Kirim secepatnya.",
-		},
-	}
+					txs := []buyerModels.PurchaseOrder{
+						{
+							PONumber:          fmt.Sprintf("PO-20260613-%s", bp.ID[:6]),
+							BuyerProfileID:    bp.ID,
+							SupplierProfileID: suppliers[0].ID,
+							ProductName:       "Garnet Sand Mesh 80 Almandine",
+							QuantityValue:     20,
+							QuantityUnit:      "Ton",
+							PricePerUnit:      3800000,
+							TotalAmount:       76000000,
+							Status:            "processing",
+							PaymentStatus:     "paid",
+							DeliveryAddress:   "Pelabuhan Tanjung Priok, CIF Jakarta",
+							Notes:             "Mohon pastikan kemasan karung goni ganda agar tidak bocor.",
+						},
+						{
+							PONumber:          fmt.Sprintf("PO-20260612-%s", bp.ID[len(bp.ID)-6:]),
+							BuyerProfileID:    bp.ID,
+							SupplierProfileID: suppliers[0].ID,
+							ProductName:       "Sodium Bentonite Clay Powder",
+							QuantityValue:     10,
+							QuantityUnit:      "Ton",
+							PricePerUnit:      4500000,
+							TotalAmount:       45000000,
+							Status:            "completed",
+							PaymentStatus:     "paid",
+							DeliveryAddress:   "Pelabuhan Tanjung Perak, Surabaya",
+							Notes:             "Kirimkan COA (Certificate of Analysis) bersama dengan dokumen pengapalan.",
+						},
+						{
+							PONumber:          fmt.Sprintf("PO-20260611-%s", bp.ID[9:15]),
+							BuyerProfileID:    bp.ID,
+							SupplierProfileID: suppliers[0].ID,
+							ProductName:       "Activated Carbon Powder Mesh 325",
+							QuantityValue:     2,
+							QuantityUnit:      "Ton",
+							PricePerUnit:      16500000,
+							TotalAmount:       33000000,
+							Status:            "pending",
+							PaymentStatus:     "unpaid",
+							DeliveryAddress:   "Pelabuhan Tanjung Priok, CIF Jakarta",
+							Notes:             "Kirim secepatnya.",
+						},
+					}
 
-	for _, tx := range txs {
-		if err := database.DB.Create(&tx).Error; err != nil {
-			return err
-		}
-	}
+					// Completed and reviewed transaction
+					po4 := buyerModels.PurchaseOrder{
+						PONumber:          fmt.Sprintf("PO-20260610-%s", bp.ID[2:8]),
+						BuyerProfileID:    bp.ID,
+						SupplierProfileID: suppliers[0].ID,
+						ProductName:       "Raw Indigo Denim Fabric 12oz",
+						QuantityValue:     15,
+						QuantityUnit:      "Roll",
+						PricePerUnit:      1200000,
+						TotalAmount:       18000000,
+						Status:            "completed",
+						PaymentStatus:     "paid",
+						DeliveryAddress:   "Gudang Utama GIMS, Jakarta",
+						Notes:             "Denim kualitas ekspor.",
+					}
+					txs = append(txs, po4)
 
-	// Seed reviews if table exists and has no reviews
-	if database.DB.Migrator().HasTable(&trustModels.SupplierReview{}) {
-		var revCount int64
-		if err := database.DB.Model(&trustModels.SupplierReview{}).Count(&revCount).Error; err == nil && revCount == 0 {
-			for _, s := range suppliers {
-				r1 := trustModels.SupplierReview{
-					BuyerProfileID:    buyer.ID,
-					SupplierProfileID: s.ID,
-					Rating:            5,
-					ReviewText:        fmt.Sprintf("Sangat puas dengan kualitas produk dari %s. Pengiriman tepat waktu dan sesuai spesifikasi.", s.CompanyName),
-					Status:            "approved",
+					for i := range txs {
+						if err := database.DB.Create(&txs[i]).Error; err != nil {
+							fmt.Printf("warning: failed to seed PO for %s: %v\n", email, err)
+						}
+					}
+
+					// Seed review for po4
+					if database.DB.Migrator().HasTable(&trustModels.SupplierReview{}) {
+						r1 := trustModels.SupplierReview{
+							BuyerProfileID:    bp.ID,
+							SupplierProfileID: suppliers[0].ID,
+							PurchaseOrderID:   &txs[3].ID,
+							Rating:            5,
+							ReviewText:        fmt.Sprintf("Sangat puas dengan denim dari %s. Bahan tebal, warna solid, pengiriman cepat.", suppliers[0].CompanyName),
+							Status:            "approved",
+						}
+						if err := database.DB.Create(&r1).Error; err != nil {
+							fmt.Printf("warning: failed to seed review for %s: %v\n", email, err)
+						}
+					}
+
+					fmt.Printf("seeded mock purchase orders and reviews for %s\n", email)
 				}
-				r2 := trustModels.SupplierReview{
-					BuyerProfileID:    buyer.ID,
-					SupplierProfileID: s.ID,
-					Rating:            4,
-					ReviewText:        fmt.Sprintf("Pelayanan customer service dari %s sangat baik. MOQ bisa dinegosiasikan dengan bersahabat.", s.CompanyName),
-					Status:            "approved",
-				}
-				database.DB.Create(&r1)
-				database.DB.Create(&r2)
 			}
-			fmt.Println("seeded mock supplier reviews")
 		}
 	}
 

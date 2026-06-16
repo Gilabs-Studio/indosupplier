@@ -180,6 +180,10 @@ func main() {
 	compareUC := buyerUsecase.NewCompareUsecase(database.DB)
 	compareH := buyerHandler.NewCompareHandler(compareUC)
 
+	reviewRepository := buyerRepo.NewReviewRepository(database.DB)
+	reviewUC := buyerUsecase.NewReviewUsecase(database.DB, reviewRepository)
+	reviewH := buyerHandler.NewReviewHandler(reviewUC)
+
 	r := coreRouter.NewEngine(jwtManager)
 
 	r.Use(middleware.MetricsMiddleware())
@@ -213,6 +217,7 @@ func main() {
 		buyerRouter.RegisterTransactionRoutes(v1, txH, jwtManager)
 		buyerRouter.RegisterBookmarkRoutes(v1, bookmarkH, jwtManager)
 		buyerRouter.RegisterCompareRoutes(v1, compareH, jwtManager)
+		buyerRouter.RegisterReviewRoutes(v1, reviewH, jwtManager)
 	}
 
 	port := config.AppConfig.Server.Port
