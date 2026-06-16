@@ -68,7 +68,7 @@ export function BuyerReviewsPage() {
     <div className="space-y-6">
       {/* Title */}
       <div className="flex flex-col gap-1">
-        <h1 className="text-2xl font-extrabold text-foreground tracking-tight">{t("title")}</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground font-heading">{t("title")}</h1>
         <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
       </div>
 

@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
 import { CenteredLoading, LoadingSpinner } from "@/components/loading";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -29,6 +30,7 @@ import {
   Flame,
   Award,
   Package,
+  Store,
 } from "lucide-react";
 import { useBuyerCompare } from "../hooks/useBuyerCompare";
 import { searchService } from "@/features/public/search/services/search-service";
@@ -682,9 +684,9 @@ export function BuyerComparePage() {
     <BuyerLayout>
       <div className="space-y-8">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 pb-6 border-b border-border">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold tracking-tight text-foreground font-heading">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground font-heading">
               {t("title")}
             </h1>
             <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
@@ -699,36 +701,47 @@ export function BuyerComparePage() {
         </div>
 
         {/* Supplier / Product Tabs Selector */}
-        <Tabs
-          value={activeTab}
-          onValueChange={(val) => setActiveTab(val as "suppliers" | "products")}
-          className="w-full"
-        >
-          <TabsList className="mb-6 w-full sm:w-auto border-b border-border pb-0 bg-transparent gap-6">
-            <TabsTrigger
-              value="suppliers"
-              className="cursor-pointer pb-3 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-2 text-sm font-medium"
-            >
-              {t("compareCountSuppliers", { count: suppliers.length })}
-            </TabsTrigger>
-            <TabsTrigger
-              value="products"
-              className="cursor-pointer pb-3 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-2 text-sm font-medium"
-            >
-              {t("compareCountProducts", { count: products.length })}
-            </TabsTrigger>
-          </TabsList>
+        <div className="flex items-center gap-6 border-b border-border overflow-x-auto pb-1 scrollbar-none mb-6">
+          <button
+            onClick={() => setActiveTab("suppliers")}
+            className={cn(
+              "px-2 py-2 text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer hover:text-primary hover:-translate-y-0.5 active:translate-y-0 flex items-center",
+              activeTab === "suppliers"
+                ? "text-primary font-semibold"
+                : "text-muted-foreground"
+            )}
+          >
+            <Store className="h-4 w-4 mr-2" />
+            {t("compareCountSuppliers", { count: suppliers.length })}
+          </button>
+          <button
+            onClick={() => setActiveTab("products")}
+            className={cn(
+              "px-2 py-2 text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer hover:text-primary hover:-translate-y-0.5 active:translate-y-0 flex items-center",
+              activeTab === "products"
+                ? "text-primary font-semibold"
+                : "text-muted-foreground"
+            )}
+          >
+            <Package className="h-4 w-4 mr-2" />
+            {t("compareCountProducts", { count: products.length })}
+          </button>
+        </div>
 
-          {/* SUPPLIERS TAB */}
-          <TabsContent value="suppliers" className="space-y-8 outline-none">
-            {suppliers.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-16 text-center border border-dashed border-border rounded-lg bg-muted/5 max-w-xl mx-auto p-8 space-y-4">
-                <Flame className="h-12 w-12 text-muted-foreground opacity-30" />
-                <h3 className="text-lg font-bold text-foreground">{t("emptyTitle")}</h3>
-                <p className="text-sm text-muted-foreground">{t("emptyDesc")}</p>
+        {/* SUPPLIERS TAB */}
+        {activeTab === "suppliers" && (
+          suppliers.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-12 text-center border border-dashed border-border rounded-lg bg-muted/5 max-w-xl mx-auto p-8 gap-4">
+                <div className="bg-muted p-4 rounded-full text-muted-foreground">
+                  <Flame className="h-8 w-8" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="font-bold text-base text-foreground">{t("emptyTitle")}</h3>
+                  <p className="text-xs text-muted-foreground">{t("emptyDesc")}</p>
+                </div>
                 <Button
                   onClick={openSupplierSearch}
-                  className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/95 transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/20 rounded-lg px-6"
+                  className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/95 transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/30 rounded-lg px-6"
                 >
                   <Plus className="h-4 w-4 mr-1.5" /> {t("btnAddSupplier")}
                 </Button>
@@ -1072,19 +1085,23 @@ export function BuyerComparePage() {
               </div>
             )}
           </>
-        )}
-      </TabsContent>
+        )
+      )}
 
-          {/* PRODUCTS TAB */}
-          <TabsContent value="products" className="space-y-8 outline-none">
-            {products.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-16 text-center border border-dashed border-border rounded-lg bg-muted/5 max-w-xl mx-auto p-8 space-y-4">
-                <Package className="h-12 w-12 text-muted-foreground opacity-30" />
-                <h3 className="text-lg font-bold text-foreground">{t("emptyTitleProducts")}</h3>
-                <p className="text-sm text-muted-foreground">{t("emptyDescProducts")}</p>
+        {/* PRODUCTS TAB */}
+        {activeTab === "products" && (
+          products.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-12 text-center border border-dashed border-border rounded-lg bg-muted/5 max-w-xl mx-auto p-8 gap-4">
+                <div className="bg-muted p-4 rounded-full text-muted-foreground">
+                  <Package className="h-8 w-8" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="font-bold text-base text-foreground">{t("emptyTitleProducts")}</h3>
+                  <p className="text-xs text-muted-foreground">{t("emptyDescProducts")}</p>
+                </div>
                 <Button
                   onClick={openProductSearch}
-                  className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/95 transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/20 rounded-lg px-6"
+                  className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/95 transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/30 rounded-lg px-6"
                 >
                   <Plus className="h-4 w-4 mr-1.5" /> {t("btnAddProduct")}
                 </Button>
@@ -1402,9 +1419,8 @@ export function BuyerComparePage() {
               </div>
             )}
           </>
-        )}
-      </TabsContent>
-        </Tabs>
+        )
+      )}
       </div>
 
       {/* LOOKUP SUPPLIER MODAL */}

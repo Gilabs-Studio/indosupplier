@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
 import { CenteredLoading } from "@/components/loading";
 import { DeleteDialog } from "@/components/ui/delete-dialog";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 import {
   MapPin,
   Star,
@@ -28,6 +28,7 @@ import { useBuyerCompare } from "@/features/buyer/compare/hooks/useBuyerCompare"
 
 export function BuyerBookmarksPage() {
   const t = useTranslations("buyer.bookmarks");
+  const [activeTab, setActiveTab] = useState<"suppliers" | "products">("suppliers");
   const { bookmarks, isLoading: isBookmarksLoading, deleteBookmark } = useBuyerBookmarks();
   const {
     suppliers: comparedSuppliers,
@@ -93,9 +94,9 @@ export function BuyerBookmarksPage() {
     <BuyerLayout>
       <div className="space-y-8">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 pb-6 border-b border-border">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
           <div className="space-y-1">
-            <h1 className="text-3xl font-bold tracking-tight text-foreground font-heading">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground font-heading">
               {t("title")}
             </h1>
             <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
@@ -114,40 +115,53 @@ export function BuyerBookmarksPage() {
         </div>
 
         {/* Tabs for Suppliers vs Products */}
-        <Tabs defaultValue="suppliers" className="w-full">
-          <TabsList className="mb-6 w-full sm:w-auto border-b border-border pb-0 bg-transparent gap-6">
-            <TabsTrigger
-              value="suppliers"
-              className="cursor-pointer pb-3 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-2 text-sm font-medium"
-            >
-              <Store className="h-4 w-4 mr-2" />
-              Supplier ({supplierBookmarks.length})
-            </TabsTrigger>
-            <TabsTrigger
-              value="products"
-              className="cursor-pointer pb-3 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-2 text-sm font-medium"
-            >
-              <Package className="h-4 w-4 mr-2" />
-              Produk ({productBookmarks.length})
-            </TabsTrigger>
-          </TabsList>
+        <div className="flex items-center gap-6 border-b border-border overflow-x-auto pb-1 scrollbar-none mb-6">
+          <button
+            onClick={() => setActiveTab("suppliers")}
+            className={cn(
+              "px-2 py-2 text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer hover:text-primary hover:-translate-y-0.5 active:translate-y-0 flex items-center",
+              activeTab === "suppliers"
+                ? "text-primary font-semibold"
+                : "text-muted-foreground"
+            )}
+          >
+            <Store className="h-4 w-4 mr-2" />
+            Supplier ({supplierBookmarks.length})
+          </button>
+          <button
+            onClick={() => setActiveTab("products")}
+            className={cn(
+              "px-2 py-2 text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer hover:text-primary hover:-translate-y-0.5 active:translate-y-0 flex items-center",
+              activeTab === "products"
+                ? "text-primary font-semibold"
+                : "text-muted-foreground"
+            )}
+          >
+            <Package className="h-4 w-4 mr-2" />
+            Produk ({productBookmarks.length})
+          </button>
+        </div>
 
-          {/* Suppliers Tab */}
-          <TabsContent value="suppliers" className="outline-none">
-            {supplierBookmarks.length === 0 ? (
-              <div className="text-center py-20 bg-card rounded-lg border border-border">
-                <Heart className="mx-auto h-12 w-12 text-muted-foreground opacity-40" />
-                <h3 className="mt-4 text-base font-semibold text-foreground">
-                  Belum ada supplier disimpan
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground max-w-xs mx-auto">
-                  Cari supplier dan simpan untuk membandingkan mereka di sini.
-                </p>
+        {/* Suppliers Tab */}
+        {activeTab === "suppliers" && (
+          supplierBookmarks.length === 0 ? (
+              <div className="bg-card rounded-lg border border-border p-12 text-center shadow-xs flex flex-col items-center justify-center gap-4">
+                <div className="bg-muted p-4 rounded-full text-muted-foreground">
+                  <Heart className="h-8 w-8" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="font-bold text-base text-foreground">
+                    {t("emptyTitle")}
+                  </h3>
+                  <p className="text-xs text-muted-foreground max-w-xs mx-auto">
+                    {t("emptyDesc")}
+                  </p>
+                </div>
                 <Button
                   asChild
-                  className="mt-6 cursor-pointer hover:-translate-y-0.5 active:translate-y-0 transition-transform bg-primary text-primary-foreground rounded-lg"
+                  className="cursor-pointer hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 bg-primary text-primary-foreground rounded-lg hover:shadow-lg hover:shadow-primary/30"
                 >
-                  <Link href="/search">Cari Supplier</Link>
+                  <Link href="/search">{t("btnSearchSuppliers")}</Link>
                 </Button>
               </div>
             ) : (
@@ -269,25 +283,29 @@ export function BuyerBookmarksPage() {
                   </Card>
                 ))}
               </div>
-            )}
-          </TabsContent>
+            )
+        )}
 
-          {/* Products Tab */}
-          <TabsContent value="products" className="outline-none">
-            {productBookmarks.length === 0 ? (
-              <div className="text-center py-20 bg-card rounded-lg border border-border">
-                <Heart className="mx-auto h-12 w-12 text-muted-foreground opacity-40" />
-                <h3 className="mt-4 text-base font-semibold text-foreground">
-                  Belum ada produk disimpan
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground max-w-xs mx-auto">
-                  Jelajahi produk dari supplier terpilih dan simpan di sini.
-                </p>
+        {/* Products Tab */}
+        {activeTab === "products" && (
+          productBookmarks.length === 0 ? (
+              <div className="bg-card rounded-lg border border-border p-12 text-center shadow-xs flex flex-col items-center justify-center gap-4">
+                <div className="bg-muted p-4 rounded-full text-muted-foreground">
+                  <Heart className="h-8 w-8" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="font-bold text-base text-foreground">
+                    {t("emptyTitleProducts")}
+                  </h3>
+                  <p className="text-xs text-muted-foreground max-w-xs mx-auto">
+                    {t("emptyDescProducts")}
+                  </p>
+                </div>
                 <Button
                   asChild
-                  className="mt-6 cursor-pointer hover:-translate-y-0.5 active:translate-y-0 transition-transform bg-primary text-primary-foreground rounded-lg"
+                  className="cursor-pointer hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 bg-primary text-primary-foreground rounded-lg hover:shadow-lg hover:shadow-primary/30"
                 >
-                  <Link href="/search">Cari Produk</Link>
+                  <Link href="/search">{t("btnSearchProducts")}</Link>
                 </Button>
               </div>
             ) : (
@@ -378,9 +396,8 @@ export function BuyerBookmarksPage() {
                   </Card>
                 ))}
               </div>
-            )}
-          </TabsContent>
-        </Tabs>
+            )
+        )}
 
         <DeleteDialog
           open={!!deleteId}

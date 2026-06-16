@@ -21,7 +21,6 @@ import {
   LogOut,
   Bell,
   Search,
-  ShoppingCart,
   Settings,
   FileText,
   Heart,
@@ -155,12 +154,12 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
                   <Button
                     variant="ghost"
                     size="icon"
-                    title={t("cart")}
+                    title={buyerLayoutT("wishlist")}
                     className="text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer h-9 w-9 rounded-full relative"
                     asChild
                   >
                     <Link href="/bookmarks">
-                      <ShoppingCart className="h-5 w-5" />
+                      <Heart className="h-5 w-5" />
                       {isAuthenticated && bookmarks.length > 0 && (
                         <span className="absolute top-1 right-1 h-4 w-4 flex items-center justify-center rounded-full bg-primary text-[9px] font-bold text-white">
                           {bookmarks.length}
@@ -174,7 +173,7 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
                       <div className="w-80 p-4 bg-background border border-border rounded-xl shadow-lg">
                         <div className="flex items-center justify-between border-b border-border/60 pb-2 mb-3">
                           <span className="text-xs font-bold text-foreground">
-                            {t("cart")} ({isAuthenticated ? bookmarks.length : 0})
+                            {buyerLayoutT("wishlist")} ({isAuthenticated ? bookmarks.length : 0})
                           </span>
                           <Link href="/bookmarks" className="text-xs font-semibold text-primary hover:underline">
                             {t("view")}

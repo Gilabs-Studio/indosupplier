@@ -195,12 +195,12 @@ export function BuyerTransactionsPage() {
       <div className="space-y-6">
         {/* Title Header */}
         <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-extrabold text-foreground tracking-tight">{t("title")}</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground font-heading">{t("title")}</h1>
           <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
         </div>
 
         {/* Filter Tabs & Search */}
-        <div className="bg-card rounded-xl border border-border p-4 shadow-xs space-y-4">
+        <div className="space-y-4">
           {/* Navigation Tabs (Tokopedia-style horizontal tabs) */}
           <div className="flex items-center gap-1.5 border-b border-border overflow-x-auto pb-1 scrollbar-none">
             {statusTabs.map((tab) => (
@@ -208,10 +208,10 @@ export function BuyerTransactionsPage() {
                 key={tab.id}
                 onClick={() => handleTabChange(tab.id)}
                 className={cn(
-                  "px-4 py-2 border-b-2 text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer hover:text-primary hover:-translate-y-0.5 active:translate-y-0",
+                  "px-4 py-2 text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer hover:text-primary hover:-translate-y-0.5 active:translate-y-0",
                   activeTab === tab.id
-                    ? "border-primary text-primary font-semibold"
-                    : "border-transparent text-muted-foreground"
+                    ? "text-primary font-semibold"
+                    : "text-muted-foreground"
                 )}
               >
                 {tab.label}
@@ -227,7 +227,7 @@ export function BuyerTransactionsPage() {
               placeholder={t("searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 h-10.5 rounded-lg border-border focus-visible:ring-primary focus-visible:border-primary text-sm font-medium"
+              className="pl-10 h-10.5 rounded-lg border-border focus-visible:ring-primary focus-visible:border-primary text-sm font-medium bg-card"
             />
           </div>
         </div>

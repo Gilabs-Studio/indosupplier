@@ -17,6 +17,7 @@ import {
   Star,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useBuyerBookmarks } from "@/features/buyer/bookmarks/hooks/useBuyerBookmarks";
 
 interface BuyerLayoutProps {
   readonly children: React.ReactNode;
@@ -27,6 +28,7 @@ export function BuyerLayout({ children }: BuyerLayoutProps) {
   const pathname = usePathname();
   const { user } = useAuthStore();
   const t = useTranslations("buyer.layout");
+  const { bookmarks } = useBuyerBookmarks();
 
   const menuItems = [
     {
@@ -81,35 +83,62 @@ export function BuyerLayout({ children }: BuyerLayoutProps) {
         <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8 items-start">
           {/* Sidebar */}
           <aside className="space-y-6 lg:sticky lg:top-24">
-            {/* Profile Brief Card */}
-            <div className="bg-card rounded-xl border border-border p-4 shadow-xs flex items-center gap-3">
-              <Avatar className="h-12 w-12 border border-border">
-                <AvatarImage src={`https://api.dicebear.com/7.x/lorelei/svg?seed=${user?.email}`} alt={user?.name} />
-                <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
-                  {user?.name?.slice(0, 2).toUpperCase() ?? "US"}
-                </AvatarFallback>
-              </Avatar>
-              <div className="min-w-0 flex-1">
-                <h2 className="text-sm font-semibold text-foreground truncate">{user?.name ?? "Guest User"}</h2>
-                <div className="flex items-center gap-1.5 mt-0.5 text-xs text-muted-foreground">
-                  <span className="inline-flex h-1.5 w-1.5 rounded-full bg-success" />
-                  <span>{t("buyerAccount")}</span>
+            {/* Sourcing Access & Balances Card */}
+            <div className="bg-card rounded-xl border border-border p-4 shadow-xs space-y-4">
+              {/* Premium Sourcing Info */}
+              <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[9px] font-bold tracking-wider uppercase bg-primary/15 text-primary px-2 py-0.5 rounded-md">
+                    {t("buyerAccount")}
+                  </span>
+                  <span className="text-[10px] text-muted-foreground font-light font-sans">
+                    {user?.buyer_profile?.status === "active" ? t("active") : (user?.buyer_profile?.status || "Aktif")}
+                  </span>
                 </div>
+                <h3 className="text-xs font-semibold text-foreground font-sans">
+                  {t("premiumSourcingTitle")}
+                </h3>
+                <p className="text-[10px] text-muted-foreground font-light leading-normal font-sans">
+                  {t("premiumSourcingDesc")}
+                </p>
               </div>
-            </div>
 
-            {/* B2B Balance/Credit Card */}
-            <div className="bg-linear-to-br from-neutral-800 to-neutral-950 text-white rounded-xl p-4 shadow-xs space-y-3 relative overflow-hidden">
-              <div className="absolute right-0 bottom-0 opacity-10 pointer-events-none">
-                <Wallet className="h-24 w-24 translate-x-4 translate-y-4" />
-              </div>
-              <div className="flex items-center gap-2 text-white/85 text-xs">
-                <Wallet className="h-4 w-4" />
-                <span>{t("creditLimit")}</span>
-              </div>
-              <div className="space-y-0.5">
-                <p className="text-lg font-bold tracking-tight">Rp 50.000.000</p>
-                <p className="text-[10px] text-success font-medium">{t("active")}</p>
+              {/* Balances / Stats List */}
+              <div className="space-y-2.5">
+                <Link
+                  href="/transactions"
+                  className="flex items-center justify-between text-xs py-1 border-b border-border/30 pb-2 hover:bg-secondary/40 px-1.5 rounded-lg transition-all duration-300 cursor-pointer group hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-primary" />
+                    <span className="text-muted-foreground font-light font-sans group-hover:text-foreground transition-colors">{t("gimsPay")}</span>
+                  </div>
+                  <span className="font-semibold text-foreground font-sans">Rp 0</span>
+                </Link>
+
+                <Link
+                  href="/rfq"
+                  className="flex items-center justify-between text-xs py-1 border-b border-border/30 pb-2 hover:bg-secondary/40 px-1.5 rounded-lg transition-all duration-300 cursor-pointer group hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-cyan" />
+                    <span className="text-muted-foreground font-light font-sans group-hover:text-foreground transition-colors">{t("rfqSent")}</span>
+                  </div>
+                  <span className="font-semibold text-foreground font-sans">6 RFQ</span>
+                </Link>
+
+                <Link
+                  href="/bookmarks"
+                  className="flex items-center justify-between text-xs py-1 hover:bg-secondary/40 px-1.5 rounded-lg transition-all duration-300 cursor-pointer group hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-success" />
+                    <span className="text-muted-foreground font-light font-sans group-hover:text-foreground transition-colors">{t("supplierSaved")}</span>
+                  </div>
+                  <span className="font-semibold text-foreground font-sans">
+                    {locale === "id" ? `${bookmarks.length} Toko` : `${bookmarks.length} Saved`}
+                  </span>
+                </Link>
               </div>
             </div>
 

@@ -11,7 +11,12 @@
       "support": "Support",
       "buyerAccount": "Buyer Account",
       "creditLimit": "Credit Limit Balance",
-      "active": "Active"
+      "active": "Active",
+      "premiumSourcingTitle": "Premium Sourcing Access",
+      "premiumSourcingDesc": "Enjoy unlimited RFQs & negotiations with verified suppliers.",
+      "gimsPay": "GIMS Pay",
+      "rfqSent": "RFQ Sent",
+      "supplierSaved": "Supplier Saved"
     },
     "dashboard": {
       "title": "Welcome back",
@@ -39,6 +44,10 @@
       "compareCount": "Compare Suppliers ({count})",
       "emptyTitle": "No bookmarks yet",
       "emptyDesc": "Bookmark suppliers during search to save them to this shortlist.",
+      "emptyTitleProducts": "No products bookmarked yet",
+      "emptyDescProducts": "Browse products from selected suppliers and save them here.",
+      "btnSearchSuppliers": "Search Suppliers",
+      "btnSearchProducts": "Search Products",
       "cardProducts": "Key Products",
       "compareCheckbox": "Add to compare",
       "btnProfile": "Profile",
