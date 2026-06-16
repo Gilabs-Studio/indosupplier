@@ -157,49 +157,18 @@ func ensureSupplierProfile(userID string, seed marketplaceUserSeed, sequence int
 	return nil
 }
 
-func seedSupplierProducts(db *gorm.DB, supplierProfileID string, industry string) error {
-	categoryName := "Industrial Minerals"
-	categorySlug := "industrial-minerals"
-	if industry == "Textile" {
-		categoryName = "Textiles & Fabrics"
-		categorySlug = "textiles-fabrics"
-	} else if industry == "Agriculture" {
-		categoryName = "Agricultural Products"
-		categorySlug = "agricultural-products"
-	} else if industry == "Steel Manufacturing" {
-		categoryName = "Steel & Metal"
-		categorySlug = "steel-metal"
-	}
+type seedProd struct {
+	Name          string
+	Description   string
+	MOQ           string
+	StartingPrice float64
+	Capacity      string
+	Photos        []string
+}
 
-	var cat supplierModels.Category
-	if err := db.Where("slug = ?", categorySlug).First(&cat).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			cat = supplierModels.Category{
-				Slug:        categorySlug,
-				Name:        categoryName,
-				Description: "Products related to " + categoryName,
-				IsActive:    true,
-			}
-			if err := db.Create(&cat).Error; err != nil {
-				return err
-			}
-		} else {
-			return err
-		}
-	}
-
-	type seedProd struct {
-		Name          string
-		Description   string
-		MOQ           string
-		StartingPrice float64
-		Capacity      string
-		Photos        []string
-	}
-
-	var prods []seedProd
+func getSeedProductsForCategory(categorySlug string) []seedProd {
 	if categorySlug == "steel-metal" {
-		prods = []seedProd{
+		return []seedProd{
 			{
 				Name:          "Reinforced Steel Bar (Rebar) D10",
 				Description:   "High quality deformed steel rebar D10 for heavy construction, building frameworks, and civil engineering projects. SNI standard certified.",
@@ -235,7 +204,7 @@ func seedSupplierProducts(db *gorm.DB, supplierProfileID string, industry string
 			},
 		}
 	} else if categorySlug == "textiles-fabrics" {
-		prods = []seedProd{
+		return []seedProd{
 			{
 				Name:          "100% Organic Ring-Spun Cotton Yarn",
 				Description:   "Premium combed ring-spun organic cotton yarn, count Ne 30/1, suitable for weaving high-quality soft fabrics, t-shirts, and baby garments.",
@@ -269,7 +238,7 @@ func seedSupplierProducts(db *gorm.DB, supplierProfileID string, industry string
 			},
 		}
 	} else if categorySlug == "agricultural-products" {
-		prods = []seedProd{
+		return []seedProd{
 			{
 				Name:          "Fresh Indonesian Organic Ginger",
 				Description:   "Export quality fresh big ginger (Gajah) and red ginger, organically grown in Central Java. Hand-washed, sorted, and packed in mesh bags.",
@@ -303,41 +272,75 @@ func seedSupplierProducts(db *gorm.DB, supplierProfileID string, industry string
 				},
 			},
 		}
-	} else {
-		prods = []seedProd{
-			{
-				Name:          "Garnet Sand Mesh 80 Almandine",
-				Description:   "High grade almandine garnet sand mesh 80, highly abrasive and clean, optimized for waterjet cutting machines and steel surface sandblasting.",
-				MOQ:           "20 Ton",
-				StartingPrice: 3800000,
-				Capacity:      "500 Ton / Month",
-				Photos: []string{
-					"https://images.unsplash.com/photo-1605281317010-fe5fed93a4c2?auto=format&fit=crop&w=800&q=80",
-					"https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80",
-				},
+	}
+
+	return []seedProd{
+		{
+			Name:          "Garnet Sand Mesh 80 Almandine",
+			Description:   "High grade almandine garnet sand mesh 80, highly abrasive and clean, optimized for waterjet cutting machines and steel surface sandblasting.",
+			MOQ:           "20 Ton",
+			StartingPrice: 3800000,
+			Capacity:      "500 Ton / Month",
+			Photos: []string{
+				"https://images.unsplash.com/photo-1605281317010-fe5fed93a4c2?auto=format&fit=crop&w=800&q=80",
+				"https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80",
 			},
-			{
-				Name:          "Sodium Bentonite Clay Powder",
-				Description:   "Premium expandable sodium bentonite powder for civil engineering, drilling mud stabilizer, and bonding agent in foundry sands.",
-				MOQ:           "10 Ton",
-				StartingPrice: 4500000,
-				Capacity:      "300 Ton / Month",
-				Photos: []string{
-					"https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=800&q=80",
-				},
+		},
+		{
+			Name:          "Sodium Bentonite Clay Powder",
+			Description:   "Premium expandable sodium bentonite powder for civil engineering, drilling mud stabilizer, and bonding agent in foundry sands.",
+			MOQ:           "10 Ton",
+			StartingPrice: 4500000,
+			Capacity:      "300 Ton / Month",
+			Photos: []string{
+				"https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=800&q=80",
 			},
-			{
-				Name:          "Activated Carbon Powder Mesh 325",
-				Description:   "Coal-based activated carbon powder 325 mesh, high iodine value (900 mg/g), suitable for municipal water purification and gas adsorption.",
-				MOQ:           "2 Ton",
-				StartingPrice: 16500,
-				Capacity:      "50 Ton / Month",
-				Photos: []string{
-					"https://images.unsplash.com/photo-1607619056574-7b8f30413b46?auto=format&fit=crop&w=800&q=80",
-				},
+		},
+		{
+			Name:          "Activated Carbon Powder Mesh 325",
+			Description:   "Coal-based activated carbon powder 325 mesh, high iodine value (900 mg/g), suitable for municipal water purification and gas adsorption.",
+			MOQ:           "2 Ton",
+			StartingPrice: 16500,
+			Capacity:      "50 Ton / Month",
+			Photos: []string{
+				"https://images.unsplash.com/photo-1607619056574-7b8f30413b46?auto=format&fit=crop&w=800&q=80",
 			},
+		},
+	}
+}
+
+func seedSupplierProducts(db *gorm.DB, supplierProfileID string, industry string) error {
+	categoryName := "Industrial Minerals"
+	categorySlug := "industrial-minerals"
+	if industry == "Textile" {
+		categoryName = "Textiles & Fabrics"
+		categorySlug = "textiles-fabrics"
+	} else if industry == "Agriculture" {
+		categoryName = "Agricultural Products"
+		categorySlug = "agricultural-products"
+	} else if industry == "Steel Manufacturing" {
+		categoryName = "Steel & Metal"
+		categorySlug = "steel-metal"
+	}
+
+	var cat supplierModels.Category
+	if err := db.Where("slug = ?", categorySlug).First(&cat).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			cat = supplierModels.Category{
+				Slug:        categorySlug,
+				Name:        categoryName,
+				Description: "Products related to " + categoryName,
+				IsActive:    true,
+			}
+			if err := db.Create(&cat).Error; err != nil {
+				return err
+			}
+		} else {
+			return err
 		}
 	}
+
+	prods := getSeedProductsForCategory(categorySlug)
 
 	for i, p := range prods {
 		prod := supplierModels.SupplierProduct{

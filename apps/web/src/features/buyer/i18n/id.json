@@ -236,12 +236,6 @@
       "detailTitle": "Detail Transaksi",
       "statusHistory": "Riwayat Status"
     },
-    "chat": {
-      "title": "Negosiasi Chat",
-      "subtitle": "Kirim pesan langsung ke supplier untuk negosiasi harga dan MOQ.",
-      "empty": "Pilih salah satu percakapan di sebelah kiri untuk mulai mengobrol.",
-      "placeholder": "Tulis pesan..."
-    },
     "reviews": {
       "title": "Ulasan Produk & Supplier",
       "subtitle": "Berikan penilaian Anda untuk membantu meningkatkan kepercayaan komunitas IndoSupplier.",

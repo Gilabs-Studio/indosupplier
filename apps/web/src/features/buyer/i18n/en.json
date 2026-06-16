@@ -236,12 +236,6 @@
       "detailTitle": "Transaction Details",
       "statusHistory": "Status History"
     },
-    "chat": {
-      "title": "Negotiation Inbox",
-      "subtitle": "Direct message history with suppliers regarding prices and MOQs.",
-      "empty": "Select a conversation from the left to start negotiating.",
-      "placeholder": "Type a message..."
-    },
     "reviews": {
       "title": "Product & Supplier Reviews",
       "subtitle": "Write reviews to build trust within the IndoSupplier community.",

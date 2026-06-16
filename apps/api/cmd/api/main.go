@@ -54,6 +54,10 @@ import (
 	buyerUsecase "github.com/gilabs/indosupplier/api/internal/buyer/domain/usecase"
 	buyerHandler "github.com/gilabs/indosupplier/api/internal/buyer/presentation/handler"
 	buyerRouter "github.com/gilabs/indosupplier/api/internal/buyer/presentation/router"
+
+	chatUsecase "github.com/gilabs/indosupplier/api/internal/chat/domain/usecase"
+	chatHandler "github.com/gilabs/indosupplier/api/internal/chat/presentation/handler"
+	chatRouter "github.com/gilabs/indosupplier/api/internal/chat/presentation/router"
 )
 
 func initInfrastructure() {
@@ -184,6 +188,9 @@ func main() {
 	reviewUC := buyerUsecase.NewReviewUsecase(database.DB, reviewRepository)
 	reviewH := buyerHandler.NewReviewHandler(reviewUC)
 
+	chatUC := chatUsecase.NewChatUsecase(database.DB)
+	chatH := chatHandler.NewChatHandler(chatUC, jwtManager)
+
 	r := coreRouter.NewEngine(jwtManager)
 
 	r.Use(middleware.MetricsMiddleware())
@@ -218,6 +225,7 @@ func main() {
 		buyerRouter.RegisterBookmarkRoutes(v1, bookmarkH, jwtManager)
 		buyerRouter.RegisterCompareRoutes(v1, compareH, jwtManager)
 		buyerRouter.RegisterReviewRoutes(v1, reviewH, jwtManager)
+		chatRouter.RegisterChatRoutes(v1, chatH, jwtManager)
 	}
 
 	port := config.AppConfig.Server.Port
