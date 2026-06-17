@@ -11,7 +11,10 @@ export function useBuyerChat() {
   const [wsConnected, setWsConnected] = useState(false);
 
   const selectedRoomIdRef = useRef<string | null>(null);
-  selectedRoomIdRef.current = selectedRoomId;
+
+  useEffect(() => {
+    selectedRoomIdRef.current = selectedRoomId;
+  }, [selectedRoomId]);
 
   // 1. Fetch Chat Rooms
   const roomsQuery = useQuery({

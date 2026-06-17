@@ -6,5 +6,5 @@ export default async function DemoSearchPage({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
-  return <PublicSearchPage locale={locale} />;
+  return <PublicSearchPage locale={locale} detailBasePath="/demo" />;
 }

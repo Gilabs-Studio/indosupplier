@@ -12,13 +12,13 @@ type SupplierReview struct {
 	BuyerProfileID    string         `gorm:"type:uuid;not null;index" json:"buyer_profile_id"`
 	SupplierProfileID string         `gorm:"type:uuid;not null;index" json:"supplier_profile_id"`
 	PurchaseOrderID   *string        `gorm:"type:uuid;index" json:"purchase_order_id"`
-	RFQID             string         `gorm:"type:uuid;index" json:"rfq_id"`
+	RFQID             *string        `gorm:"type:uuid;index" json:"rfq_id"`
 	Rating            int            `gorm:"not null;default:0;index" json:"rating"`
 	ReviewText        string         `gorm:"type:text" json:"review_text"`
 	SupplierReply     string         `gorm:"type:text" json:"supplier_reply"`
 	SupplierRepliedAt *time.Time     `json:"supplier_replied_at"`
 	Status            string         `gorm:"type:varchar(40);not null;default:'pending';index" json:"status"`
-	ModeratedBy       string         `gorm:"type:uuid;index" json:"moderated_by"`
+	ModeratedBy       *string        `gorm:"type:uuid;index" json:"moderated_by"`
 	ModeratedAt       *time.Time     `json:"moderated_at"`
 	ModerationReason  string         `gorm:"type:text" json:"moderation_reason"`
 	CreatedAt         time.Time      `gorm:"autoCreateTime" json:"created_at"`

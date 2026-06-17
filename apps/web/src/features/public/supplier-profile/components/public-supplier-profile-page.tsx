@@ -34,9 +34,10 @@ import {
 interface PublicSupplierProfilePageProps {
   locale: string;
   slug: string;
+  detailBasePath?: "" | "/demo";
 }
 
-export function PublicSupplierProfilePage({ locale, slug }: PublicSupplierProfilePageProps) {
+export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/demo" }: PublicSupplierProfilePageProps) {
   const tSup = useTranslations("public.supplier");
   const { isAuthenticated } = useAuthStore();
   const { bookmarks, addBookmark, deleteBookmark } = useBuyerBookmarks();
@@ -151,7 +152,7 @@ export function PublicSupplierProfilePage({ locale, slug }: PublicSupplierProfil
             Profil supplier yang Anda cari tidak aktif atau tidak terdaftar di sistem kami.
           </p>
           <Button asChild className="mt-6 cursor-pointer rounded-lg">
-            <Link href="/search">Kembali ke Pencarian</Link>
+            <Link href={`${detailBasePath}/search`}>Kembali ke Pencarian</Link>
           </Button>
         </div>
       </PublicLayout>
@@ -164,7 +165,7 @@ export function PublicSupplierProfilePage({ locale, slug }: PublicSupplierProfil
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Back button */}
           <Link
-            href="/search"
+            href={`${detailBasePath}/search`}
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors mb-6 cursor-pointer"
           >
             <ChevronLeft className="h-4 w-4" />
@@ -307,7 +308,7 @@ export function PublicSupplierProfilePage({ locale, slug }: PublicSupplierProfil
                                 size="sm"
                                 className="text-xs bg-primary text-primary-foreground hover:bg-primary/95 font-semibold cursor-pointer rounded-lg transition-transform hover:-translate-y-0.5"
                               >
-                                <Link href="#contact">Minta Harga</Link>
+                            <Link href={`${detailBasePath}/products/${product.id}`}>Detail</Link>
                               </Button>
                             </div>
                           </div>

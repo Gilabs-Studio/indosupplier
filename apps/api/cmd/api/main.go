@@ -14,6 +14,10 @@ import (
 	authUsecase "github.com/gilabs/indosupplier/api/internal/auth/domain/usecase"
 	authHandler "github.com/gilabs/indosupplier/api/internal/auth/presentation/handler"
 	authRouter "github.com/gilabs/indosupplier/api/internal/auth/presentation/router"
+	contentRepo "github.com/gilabs/indosupplier/api/internal/content/data/repositories"
+	contentUsecase "github.com/gilabs/indosupplier/api/internal/content/domain/usecase"
+	contentHandler "github.com/gilabs/indosupplier/api/internal/content/presentation/handler"
+	contentRouter "github.com/gilabs/indosupplier/api/internal/content/presentation/router"
 	"github.com/gilabs/indosupplier/api/internal/core/apptime"
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/audit"
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/config"
@@ -200,6 +204,10 @@ func main() {
 	rfqUC := rfqUsecase.NewRFQUsecase(database.DB, rfqRepository)
 	rfqH := rfqHandler.NewRFQHandler(rfqUC)
 
+	contentRepository := contentRepo.NewContentArticleRepository(database.DB)
+	contentUC := contentUsecase.NewContentUsecase(contentRepository)
+	contentH := contentHandler.NewContentHandler(contentUC)
+
 	r := coreRouter.NewEngine(jwtManager)
 
 	r.Use(middleware.MetricsMiddleware())
@@ -227,6 +235,7 @@ func main() {
 		waitingListRouter.RegisterWaitingListRoutes(v1, waitingListH, jwtManager, sysadminRepository)
 		platformRouter.RegisterPlatformRoutes(v1, platformH, jwtManager)
 		coreRouter.RegisterUploadRoutes(v1, jwtManager)
+		contentRouter.RegisterContentRoutes(v1, contentH, jwtManager, sysadminRepository)
 		supplierRouter.RegisterProductRoutes(v1, productH, jwtManager)
 		supplierRouter.RegisterDiscoveryRoutes(v1, discoveryH)
 		supplierRouter.RegisterSupplierPortalRoutes(v1, portalH, jwtManager)

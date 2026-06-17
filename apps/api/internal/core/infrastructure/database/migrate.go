@@ -5,6 +5,7 @@ import (
 
 	buyer "github.com/gilabs/indosupplier/api/internal/buyer/data/models"
 	chat "github.com/gilabs/indosupplier/api/internal/chat/data/models"
+	content "github.com/gilabs/indosupplier/api/internal/content/data/models"
 	core "github.com/gilabs/indosupplier/api/internal/core/data/models"
 	discovery "github.com/gilabs/indosupplier/api/internal/discovery/data/models"
 	monetization "github.com/gilabs/indosupplier/api/internal/monetization/data/models"
@@ -75,6 +76,7 @@ func AutoMigrate() error {
 		&chat.ChatMessage{},
 		&support.FAQArticle{},
 		&support.AbuseReport{},
+		&content.ContentArticle{},
 	); err != nil {
 		return fmt.Errorf("failed to run migrations: %w", err)
 	}

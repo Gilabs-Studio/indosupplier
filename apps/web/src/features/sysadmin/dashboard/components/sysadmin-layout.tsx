@@ -23,9 +23,10 @@ import {
   CreditCard,
   Headset,
   BookOpen,
+  Newspaper,
   Star,
   Flag,
-  ScrollText
+  ScrollText,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -140,6 +141,11 @@ export default function SysadminLayoutComponent({ children }: SysadminLayoutProp
       name: t("layout.menu.faqManagement"),
       icon: BookOpen,
       url: "/sysadmin/faq",
+    },
+    {
+      name: t("layout.menu.contentManagement"),
+      icon: Newspaper,
+      url: "/sysadmin/content",
     },
     {
       name: t("layout.menu.reviewsModeration"),

@@ -199,5 +199,94 @@ func SeedTransactions() error {
 		}
 	}
 
+	if err := seedDiscoveryDemoReviews(); err != nil {
+		fmt.Printf("warning: failed to seed discovery demo reviews: %v\n", err)
+	}
+
+	return nil
+}
+
+func seedDiscoveryDemoReviews() error {
+	if !database.DB.Migrator().HasTable(&trustModels.SupplierReview{}) {
+		return nil
+	}
+
+	var supplier supplierModels.SupplierProfile
+	if err := database.DB.Where("company_name = ?", "PT Agro Indo Sejahtera").First(&supplier).Error; err != nil {
+		return nil
+	}
+
+	reviews := []struct {
+		Email string
+		Rate  int
+		Text  string
+	}{
+		{
+			Email: "buyer2@indosupplier.local",
+			Rate:  5,
+			Text:  "Biji kopi Gayo konsisten, kadar air sesuai spesifikasi, dan dokumen traceability lengkap untuk audit internal kami.",
+		},
+		{
+			Email: "buyer4@indosupplier.local",
+			Rate:  5,
+			Text:  "Respons cepat untuk negosiasi MOQ. Sampel green bean datang rapi dan profil roasting sesuai catatan cupping.",
+		},
+	}
+
+	for _, seed := range reviews {
+		var user userModels.User
+		if err := database.DB.Where("email = ?", seed.Email).First(&user).Error; err != nil {
+			continue
+		}
+
+		var buyer buyerModels.BuyerProfile
+		if err := database.DB.Where("user_id = ?", user.ID).First(&buyer).Error; err != nil {
+			continue
+		}
+
+		var count int64
+		if err := database.DB.Model(&trustModels.SupplierReview{}).
+			Where("buyer_profile_id = ? AND supplier_profile_id = ? AND review_text = ?", buyer.ID, supplier.ID, seed.Text).
+			Count(&count).Error; err != nil {
+			return err
+		}
+		if count > 0 {
+			continue
+		}
+
+		review := trustModels.SupplierReview{
+			BuyerProfileID:    buyer.ID,
+			SupplierProfileID: supplier.ID,
+			Rating:            seed.Rate,
+			ReviewText:        seed.Text,
+			Status:            "approved",
+		}
+		if err := database.DB.Create(&review).Error; err != nil {
+			return err
+		}
+	}
+
+	type reviewStats struct {
+		AverageRating float64 `gorm:"column:average_rating"`
+		TotalCount    int64   `gorm:"column:total_count"`
+	}
+
+	var stats reviewStats
+	if err := database.DB.Table("supplier_reviews").
+		Select("COALESCE(AVG(rating), 0) AS average_rating, COUNT(*) AS total_count").
+		Where("supplier_profile_id = ? AND status = ?", supplier.ID, "approved").
+		Scan(&stats).Error; err != nil {
+		return err
+	}
+
+	if stats.TotalCount > 0 {
+		return database.DB.Model(&supplierModels.SupplierProfile{}).
+			Where("id = ?", supplier.ID).
+			Updates(map[string]interface{}{
+				"star_rating":  stats.AverageRating,
+				"review_count": int(stats.TotalCount),
+			}).Error
+	}
+
 	return nil
 }

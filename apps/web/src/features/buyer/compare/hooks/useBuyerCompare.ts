@@ -1,18 +1,22 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { compareService } from "../services/compare.service";
 import { toast } from "sonner";
+import { useAuthStore } from "@/features/auth/stores/use-auth-store";
 
 export function useBuyerCompare() {
   const queryClient = useQueryClient();
+  const { isAuthenticated } = useAuthStore();
 
   const compareQuery = useQuery({
     queryKey: ["buyer-compare"],
     queryFn: () => compareService.getComparedSuppliers(),
+    enabled: isAuthenticated,
   });
 
   const compareProductsQuery = useQuery({
     queryKey: ["buyer-compare-products"],
     queryFn: () => compareService.getComparedProducts(),
+    enabled: isAuthenticated,
   });
 
   const addMutation = useMutation({

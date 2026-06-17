@@ -1,506 +1,606 @@
 "use client";
+/* eslint-disable @next/next/no-img-element */
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
-import { useSupplierSearch } from "../hooks/use-supplier-search";
 import { PublicLayout } from "@/features/public/components/public-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  Search,
-  MapPin,
-  ShieldCheck,
-  Star,
-  SlidersHorizontal,
-  X,
-  Building,
-  Factory,
-  Layers,
-  Users,
-  Calendar,
-  Heart,
-} from "lucide-react";
+import { useSupplierSearch } from "../hooks/use-supplier-search";
+import { searchService } from "../services/search-service";
+import type { PublicProductDto, PublicSupplierDto } from "../types";
 import { useBuyerBookmarks } from "@/features/buyer/bookmarks/hooks/useBuyerBookmarks";
+import { useBuyerCompare } from "@/features/buyer/compare/hooks/useBuyerCompare";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
 import { toast } from "sonner";
+import {
+  ArrowUpDown,
+  Building2,
+  Check,
+  GitCompareArrows,
+  Heart,
+  MapPin,
+  Package,
+  Search,
+  ShieldCheck,
+  SlidersHorizontal,
+  Star,
+  Store,
+  X,
+} from "lucide-react";
 
 interface PublicSearchPageProps {
   locale: string;
+  detailBasePath?: "" | "/demo";
 }
 
-export function PublicSearchPage({ locale }: PublicSearchPageProps) {
+type SearchTab = "products" | "suppliers";
+
+const regions = ["DKI Jakarta", "Jabodetabek", "Bandung", "Semarang", "Medan", "Surabaya"];
+
+function formatPrice(price: number, currency = "IDR") {
+  if (!price) return "Hubungi Supplier";
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency,
+    minimumFractionDigits: 0,
+  }).format(price);
+}
+
+function ProductCard({
+  product,
+  detailBasePath,
+  isAuthenticated,
+  isBookmarked,
+  isCompared,
+  onBookmark,
+  onCompare,
+}: {
+  product: PublicProductDto;
+  detailBasePath: "" | "/demo";
+  isAuthenticated: boolean;
+  isBookmarked: boolean;
+  isCompared: boolean;
+  onBookmark: () => void;
+  onCompare: () => void;
+}) {
+  const image = product.photos?.[0];
+
+  return (
+    <Card className="group overflow-hidden border border-border bg-card shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+      <div className="relative aspect-square bg-muted">
+        <Link href={`${detailBasePath}/products/${product.id}`} className="block h-full cursor-pointer">
+          {image ? (
+            <img src={image} alt={product.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          ) : (
+            <div className="flex h-full items-center justify-center text-muted-foreground">
+              <Package className="h-10 w-10" />
+            </div>
+          )}
+        </Link>
+        {product.supplierVerified && (
+          <Badge className="absolute left-2 top-2 border-0 bg-success text-success-foreground text-[10px] font-bold">
+            Verified
+          </Badge>
+        )}
+        <div className="absolute right-2 top-2 flex gap-1">
+          <Button
+            type="button"
+            variant="secondary"
+            size="icon"
+            onClick={onBookmark}
+            className="h-8 w-8 bg-card/90 text-foreground shadow-xs backdrop-blur cursor-pointer"
+            title={isAuthenticated ? "Simpan produk" : "Masuk untuk menyimpan"}
+          >
+            <Heart className={`h-4 w-4 ${isBookmarked ? "fill-rose-600 text-rose-600" : ""}`} />
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            size="icon"
+            onClick={onCompare}
+            className="h-8 w-8 bg-card/90 text-foreground shadow-xs backdrop-blur cursor-pointer"
+            title={isAuthenticated ? "Bandingkan produk" : "Masuk untuk membandingkan"}
+          >
+            {isCompared ? <Check className="h-4 w-4 text-success" /> : <GitCompareArrows className="h-4 w-4" />}
+          </Button>
+        </div>
+      </div>
+
+      <CardContent className="space-y-2 p-3">
+        <Link href={`${detailBasePath}/products/${product.id}`} className="block cursor-pointer">
+          <h3 className="line-clamp-2 min-h-10 text-sm font-semibold leading-5 text-foreground group-hover:text-primary">
+            {product.name}
+          </h3>
+        </Link>
+        <p className="text-base font-extrabold text-foreground">{formatPrice(product.price, product.currency)}</p>
+        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+          <Star className="h-3.5 w-3.5 fill-warning text-warning" />
+          <span>{product.supplierRating?.toFixed(1) || "0.0"}</span>
+          <span>•</span>
+          <span>{product.supplierReviewCount || 0} ulasan</span>
+        </div>
+        <Link
+          href={`${detailBasePath}/suppliers/${product.supplierSlug}`}
+          className="flex cursor-pointer items-center gap-1.5 text-xs text-muted-foreground hover:text-primary"
+        >
+          <Store className="h-3.5 w-3.5" />
+          <span className="truncate font-medium">{product.supplierCompanyName}</span>
+        </Link>
+        <div className="flex flex-wrap gap-1 text-[11px] text-muted-foreground">
+          {product.categoryName && <span className="rounded border border-border px-1.5 py-0.5">{product.categoryName}</span>}
+          {product.minOrder && <span className="rounded border border-border px-1.5 py-0.5">MOQ {product.minOrder}</span>}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function SupplierCard({
+  supplier,
+  detailBasePath,
+  isAuthenticated,
+  isBookmarked,
+  isCompared,
+  onBookmark,
+  onCompare,
+}: {
+  supplier: PublicSupplierDto;
+  detailBasePath: "" | "/demo";
+  isAuthenticated: boolean;
+  isBookmarked: boolean;
+  isCompared: boolean;
+  onBookmark: () => void;
+  onCompare: () => void;
+}) {
+  return (
+    <Card className="overflow-hidden border border-border bg-card shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+      <CardContent className="space-y-4 p-5">
+        <div className="flex items-start justify-between gap-4">
+          <Link href={`${detailBasePath}/suppliers/${supplier.slug}`} className="flex min-w-0 cursor-pointer items-center gap-3">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-base font-extrabold text-primary">
+              {supplier.companyName.slice(0, 2).toUpperCase()}
+            </div>
+            <div className="min-w-0">
+              <h3 className="truncate text-sm font-extrabold text-foreground hover:text-primary">{supplier.companyName}</h3>
+              <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                <MapPin className="h-3.5 w-3.5" />
+                {supplier.location || supplier.province || "Indonesia"}
+              </p>
+            </div>
+          </Link>
+          {supplier.isVerified && (
+            <Badge className="border-0 bg-success text-success-foreground text-[10px] font-bold">
+              <ShieldCheck className="mr-1 h-3 w-3" />
+              Verified
+            </Badge>
+          )}
+        </div>
+
+        <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">{supplier.description}</p>
+
+        <div className="grid grid-cols-3 gap-2 text-center text-xs">
+          <div className="rounded border border-border p-2">
+            <p className="font-extrabold text-foreground">{supplier.rating?.toFixed(1) || "0.0"}</p>
+            <p className="text-[10px] text-muted-foreground">Rating</p>
+          </div>
+          <div className="rounded border border-border p-2">
+            <p className="font-extrabold text-foreground">{Math.round(supplier.responseRate || 0)}%</p>
+            <p className="text-[10px] text-muted-foreground">Respons</p>
+          </div>
+          <div className="rounded border border-border p-2">
+            <p className="truncate font-extrabold text-foreground">{supplier.businessType || "B2B"}</p>
+            <p className="text-[10px] text-muted-foreground">Tipe</p>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap gap-1.5">
+          {supplier.keyProducts?.slice(0, 3).map((item) => (
+            <Badge key={item} variant="secondary" className="text-[10px] font-semibold">
+              {item}
+            </Badge>
+          ))}
+        </div>
+
+        <div className="flex gap-2">
+          <Button asChild variant="outline" className="flex-1 cursor-pointer text-xs font-semibold">
+            <Link href={`${detailBasePath}/suppliers/${supplier.slug}`}>Detail Supplier</Link>
+          </Button>
+          <Button type="button" variant="outline" size="icon" onClick={onBookmark} className="cursor-pointer" title={isAuthenticated ? "Simpan supplier" : "Masuk untuk menyimpan"}>
+            <Heart className={`h-4 w-4 ${isBookmarked ? "fill-rose-600 text-rose-600" : ""}`} />
+          </Button>
+          <Button type="button" variant="outline" size="icon" onClick={onCompare} className="cursor-pointer" title={isAuthenticated ? "Bandingkan supplier" : "Masuk untuk membandingkan"}>
+            {isCompared ? <Check className="h-4 w-4 text-success" /> : <GitCompareArrows className="h-4 w-4" />}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+export function PublicSearchPage({ locale, detailBasePath = "" }: PublicSearchPageProps) {
   const t = useTranslations("public.search");
-  const tNav = useTranslations("public.navbar");
-  const tCat = useTranslations("public.categories");
-  
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get("query") || searchParams.get("q") || "";
+  const initialCategory = searchParams.get("category") || "";
+  const initialRegion = searchParams.get("region") || "";
+  const initialVerifiedOnly = searchParams.get("verified") === "true";
+
   const {
     params,
     suppliers,
+    categories,
     isLoading,
     setQuery,
     setCategory,
     setRegion,
     setVerifiedOnly,
     resetFilters,
-  } = useSupplierSearch();
+  } = useSupplierSearch({
+    query: initialQuery,
+    category: initialCategory,
+    region: initialRegion,
+    verifiedOnly: initialVerifiedOnly,
+  });
 
-  const [searchInput, setSearchInput] = useState(params.query || "");
-  const { bookmarks, addBookmark, deleteBookmark } = useBuyerBookmarks();
+  const [activeTab, setActiveTab] = useState<SearchTab>("products");
+  const [searchInput, setSearchInput] = useState(initialQuery);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
   const { isAuthenticated } = useAuthStore();
+  const { bookmarks, addBookmark, deleteBookmark } = useBuyerBookmarks();
+  const {
+    suppliers: comparedSuppliers,
+    products: comparedProducts,
+    addSupplier,
+    removeSupplier,
+    addProduct,
+    removeProduct,
+  } = useBuyerCompare();
 
-  const handleToggleBookmark = (supplierProfileId: string) => {
+  const { data: products = [], isLoading: isProductsLoading } = useQuery({
+    queryKey: ["public", "products", params.query],
+    queryFn: () => searchService.searchProducts(params.query || ""),
+    placeholderData: (previousData) => previousData,
+  });
+
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      if (params.category && product.categoryName) {
+        const selected = categories.find((category) => category.id === params.category);
+        if (selected && selected.name !== product.categoryName) return false;
+      }
+      if (params.region && !product.supplierLocation?.toLowerCase().includes(params.region.toLowerCase())) return false;
+      if (params.verifiedOnly && !product.supplierVerified) return false;
+      return true;
+    });
+  }, [categories, params.category, params.region, params.verifiedOnly, products]);
+
+  const handleSearchSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    setQuery(searchInput.trim());
+  };
+
+  const requireAuth = (message: string) => {
     if (!isAuthenticated) {
-      toast.error("Silakan masuk terlebih dahulu untuk menyimpan supplier.");
-      return;
+      toast.error(message);
+      return false;
     }
+    return true;
+  };
 
-    const bookmark = bookmarks.find((b) => b.type === "supplier" && b.supplierProfileId === supplierProfileId);
+  const toggleSupplierBookmark = (supplier: PublicSupplierDto) => {
+    if (!requireAuth("Silakan masuk terlebih dahulu untuk menyimpan supplier.")) return;
+    const bookmark = bookmarks.find((item) => item.type === "supplier" && item.supplierProfileId === supplier.id);
     if (bookmark) {
       deleteBookmark(bookmark.id);
     } else {
-      addBookmark({ supplierProfileId });
+      addBookmark({ supplierProfileId: supplier.id });
     }
   };
 
-  const isBookmarked = (supplierProfileId: string) => {
-    return bookmarks.some((b) => b.type === "supplier" && b.supplierProfileId === supplierProfileId);
+  const toggleProductBookmark = (product: PublicProductDto) => {
+    if (!requireAuth("Silakan masuk terlebih dahulu untuk menyimpan produk.")) return;
+    const bookmark = bookmarks.find((item) => item.type === "product" && item.supplierProductId === product.id);
+    if (bookmark) {
+      deleteBookmark(bookmark.id);
+    } else {
+      addBookmark({ supplierProfileId: product.supplierId, supplierProductId: product.id });
+    }
   };
-  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  const regions = [
-    { value: "", label: tNav("allRegions") },
-    { value: "jakarta", label: tNav("jakarta") },
-    { value: "surabaya", label: tNav("surabaya") },
-    { value: "bandung", label: tNav("bandung") },
-    { value: "semarang", label: tNav("semarang") },
-    { value: "medan", label: tNav("medan") },
-    { value: "makassar", label: tNav("makassar") },
-  ];
-
-  const categories = [
-    { id: "manufacturing", name: tCat("manufacturing"), icon: Factory },
-    { id: "agriculture", name: tCat("agriculture"), icon: Layers },
-    { id: "textile", name: tCat("textile"), icon: Layers },
-    { id: "chemical", name: tCat("chemical"), icon: Layers },
-    { id: "furniture", name: tCat("furniture"), icon: Building },
-    { id: "construction", name: tCat("construction"), icon: Building },
-    { id: "electronics", name: tCat("electronics"), icon: Layers },
-    { id: "automotive", name: tCat("automotive"), icon: Layers },
-  ];
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setQuery(searchInput);
+  const toggleSupplierCompare = (supplier: PublicSupplierDto) => {
+    if (!requireAuth("Silakan masuk terlebih dahulu untuk membandingkan supplier.")) return;
+    if (comparedSuppliers.some((item) => item.id === supplier.id)) {
+      removeSupplier(supplier.id);
+    } else {
+      addSupplier(supplier.id);
+    }
   };
+
+  const toggleProductCompare = (product: PublicProductDto) => {
+    if (!requireAuth("Silakan masuk terlebih dahulu untuk membandingkan produk.")) return;
+    if (comparedProducts.some((item) => item.id === product.id)) {
+      removeProduct(product.id);
+    } else {
+      addProduct(product.id);
+    }
+  };
+
+  const isProductBookmarked = (productId: string) => bookmarks.some((item) => item.type === "product" && item.supplierProductId === productId);
+  const isSupplierBookmarked = (supplierId: string) => bookmarks.some((item) => item.type === "supplier" && item.supplierProfileId === supplierId);
+
+  const resultCount = activeTab === "products" ? filteredProducts.length : suppliers.length;
 
   return (
     <PublicLayout locale={locale}>
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-muted/50 to-background py-16 md:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl font-heading">
-            {t("heroTitle")}
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-base text-muted-foreground sm:text-lg">
-            {t("heroSubtitle")}
-          </p>
-
-          {/* Search Bar Container */}
-          <div className="mx-auto mt-8 max-w-3xl">
-            <form
-              onSubmit={handleSearchSubmit}
-              className="flex flex-col sm:flex-row items-center bg-card p-2 border border-border shadow-md rounded-xl w-full gap-2"
-            >
-              <div className="flex items-center flex-1 w-full pl-3 pr-2 border-b sm:border-b-0 sm:border-r border-border">
-                <Search className="h-5 w-5 text-muted-foreground shrink-0" />
+      <main className="min-h-screen bg-background">
+        <section className="border-b border-border bg-card">
+          <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 sm:px-6 lg:px-8">
+            <form onSubmit={handleSearchSubmit} className="flex flex-col gap-3 md:flex-row md:items-center">
+              <div className="flex h-11 flex-1 items-center rounded-lg border border-input bg-background px-3">
+                <Search className="h-5 w-5 shrink-0 text-muted-foreground" />
                 <input
-                  type="text"
                   value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
+                  onChange={(event) => setSearchInput(event.target.value)}
                   placeholder={t("placeholder")}
-                  className="w-full px-3 py-3 bg-transparent text-foreground placeholder:text-muted-foreground border-0 outline-hidden focus:outline-hidden focus:ring-0 text-[14px] md:text-[15px]"
+                  className="h-full w-full bg-transparent px-3 text-sm outline-none"
                 />
               </div>
-
-              {/* Location Select */}
-              <div className="flex items-center w-full sm:w-auto px-3 py-2 shrink-0">
-                <MapPin className="h-4.5 w-4.5 text-muted-foreground shrink-0 mr-2" />
-                <select
-                  value={params.region || ""}
-                  onChange={(e) => setRegion(e.target.value)}
-                  className="bg-transparent text-sm text-foreground font-medium outline-hidden border-0 cursor-pointer pr-8 appearance-none py-1.5"
-                >
-                  {regions.map((reg) => (
-                    <option key={reg.value} value={reg.value}>
-                      {reg.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/95 px-8 py-6 rounded-lg text-sm font-semibold tracking-wider transition-all duration-300 cursor-pointer"
-              >
+              <Button type="submit" className="h-11 cursor-pointer px-6 font-semibold">
                 {t("btnSearch")}
               </Button>
             </form>
-          </div>
 
-          {/* Category Discovery Grid */}
-          <div className="mt-12">
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {t("categoryDiscovery")}
-            </h2>
-            <div className="mt-4 flex flex-wrap justify-center gap-3">
-              {categories.map((cat) => {
-                const isSelected = params.category === cat.id;
-                const IconComponent = cat.icon;
-                return (
-                  <button
-                    key={cat.id}
-                    onClick={() => setCategory(isSelected ? "" : cat.id)}
-                    className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold border transition-all duration-300 cursor-pointer ${
-                      isSelected
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "bg-card text-foreground border-border hover:border-muted-foreground"
-                    }`}
-                  >
-                    <IconComponent className="h-3.5 w-3.5" />
-                    {cat.name}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Main Catalog & Filter Section */}
-      <section className="bg-background pb-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between border-b border-border pb-5">
-            <h2 className="text-lg font-semibold text-foreground">
-              {t("resultsCount", { count: suppliers.length })}
-            </h2>
-
-            {/* Mobile filter toggle */}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowMobileFilters(true)}
-              className="md:hidden flex items-center gap-2 cursor-pointer"
-            >
-              <SlidersHorizontal className="h-4 w-4" />
-              {t("filterTitle")}
-            </Button>
-          </div>
-
-          <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-            {/* Desktop Filter Panel */}
-            <aside className="hidden lg:block space-y-6">
-              <div className="flex items-center justify-between pb-4 border-b border-border">
-                <h3 className="font-semibold text-foreground">{t("filterTitle")}</h3>
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex gap-6">
                 <button
-                  onClick={resetFilters}
-                  className="text-xs text-primary font-medium hover:underline cursor-pointer"
+                  type="button"
+                  onClick={() => setActiveTab("products")}
+                  className={`flex cursor-pointer items-center gap-2 border-b-2 pb-3 text-sm font-extrabold ${
+                    activeTab === "products" ? "border-primary text-primary" : "border-transparent text-muted-foreground"
+                  }`}
                 >
-                  {t("btnReset")}
+                  <Package className="h-4 w-4" />
+                  Produk
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("suppliers")}
+                  className={`flex cursor-pointer items-center gap-2 border-b-2 pb-3 text-sm font-extrabold ${
+                    activeTab === "suppliers" ? "border-primary text-primary" : "border-transparent text-muted-foreground"
+                  }`}
+                >
+                  <Store className="h-4 w-4" />
+                  Toko
                 </button>
               </div>
 
-              {/* Category Filter */}
-              <div className="space-y-3">
-                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  {t("filterCategory")}
-                </label>
-                <div className="grid gap-2">
-                  {categories.map((cat) => (
-                    <button
-                      key={cat.id}
-                      onClick={() => setCategory(params.category === cat.id ? "" : cat.id)}
-                      className={`text-left text-sm py-1.5 px-3 rounded-md transition-colors w-full cursor-pointer ${
-                        params.category === cat.id
-                          ? "bg-muted font-semibold text-foreground"
-                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                      }`}
-                    >
-                      {cat.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Region Filter */}
-              <div className="space-y-3">
-                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  {t("filterRegion")}
-                </label>
-                <select
-                  value={params.region || ""}
-                  onChange={(e) => setRegion(e.target.value)}
-                  className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground focus:border-muted-foreground focus:outline-hidden cursor-pointer"
-                >
-                  {regions.map((reg) => (
-                    <option key={reg.value} value={reg.value}>
-                      {reg.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Verification Filter */}
-              <div className="space-y-3 pt-4 border-t border-border">
-                <label className="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={params.verifiedOnly || false}
-                    onChange={(e) => setVerifiedOnly(e.target.checked)}
-                    className="h-4 w-4 rounded-sm border-border text-primary focus:ring-primary cursor-pointer"
-                  />
-                  <span className="text-sm font-medium text-foreground">{t("verifiedOnly")}</span>
-                </label>
-              </div>
-            </aside>
-
-            {/* Product/Supplier Grid */}
-            <div className="lg:col-span-3">
-              {isLoading ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {[1, 2, 3, 4].map((i) => (
-                    <Card key={i} className="animate-pulse bg-muted h-80 rounded-xl" />
-                  ))}
-                </div>
-              ) : suppliers.length === 0 ? (
-                // Clean Empty State
-                <div className="text-center py-20 bg-muted rounded-2xl border border-border">
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-card text-muted-foreground">
-                    <Search className="h-6 w-6" />
-                  </div>
-                  <h3 className="mt-4 text-base font-semibold text-foreground">{t("noResults")}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground max-w-xs mx-auto">
-                    {t("noResultsDesc")}
-                  </p>
-                  <Button onClick={resetFilters} variant="outline" className="mt-6 cursor-pointer">
-                    {t("btnReset")}
-                  </Button>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {suppliers.map((supplier) => (
-                    <Card
-                      key={supplier.id}
-                      className="overflow-hidden border border-border shadow-xs hover:shadow-md transition-all duration-300 rounded-xl"
-                    >
-                      {/* Image/Logo Placeholder with elegant OTO-inspired style */}
-                      <div className="h-32 bg-gradient-to-br from-neutral-800 to-neutral-950 flex items-center justify-between p-5 relative">
-                        <div className="flex items-center gap-3">
-                          <div className="h-12 w-12 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white font-heading font-bold text-lg">
-                            {supplier.companyName.substring(0, 2).toUpperCase()}
-                          </div>
-                          <div>
-                            <h3 className="font-semibold text-white text-base tracking-tight leading-snug">
-                              {supplier.companyName}
-                            </h3>
-                            <div className="flex items-center gap-1 mt-0.5 text-white/80 text-xs">
-                              <MapPin className="h-3 w-3 shrink-0" />
-                              <span className="capitalize">{supplier.location}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {supplier.isVerified && (
-                          <Badge className="bg-emerald-500 hover:bg-emerald-600 text-white font-medium flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full border-0 absolute right-4 top-4">
-                            <ShieldCheck className="h-3.5 w-3.5" />
-                            {t("cardVerified")}
-                          </Badge>
-                        )}
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleToggleBookmark(supplier.id);
-                          }}
-                          className={`absolute right-4 bottom-4 h-8 w-8 rounded-full border border-white/20 text-white bg-white/10 backdrop-blur-md cursor-pointer transition-all hover:bg-white/20 active:scale-95 ${
-                            isBookmarked(supplier.id) ? "text-destructive fill-destructive" : ""
-                          }`}
-                        >
-                          <Heart className="h-4.5 w-4.5" />
-                        </Button>
-                      </div>
-
-                      <CardContent className="p-5 space-y-4">
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
-                          <span className="flex items-center gap-1.5">
-                            <Building className="h-3.5 w-3.5" />
-                            {supplier.businessType}
-                          </span>
-                          <span className="flex items-center gap-1.5">
-                            <Calendar className="h-3.5 w-3.5" />
-                            {t("establishedShort", { year: supplier.establishedYear })}
-                          </span>
-                          <span className="flex items-center gap-1.5">
-                            <Users className="h-3.5 w-3.5" />
-                            {t("employeeCountShort", { count: supplier.employeeCount })}
-                          </span>
-                        </div>
-
-                        {/* Description snippet */}
-                        <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-                          {supplier.description}
-                        </p>
-
-                        {/* Key Products tags */}
-                        {supplier.keyProducts && supplier.keyProducts.length > 0 && (
-                          <div className="space-y-1">
-                            <h4 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                              {t("cardProducts")}
-                            </h4>
-                            <div className="flex flex-wrap gap-1.5">
-                              {supplier.keyProducts.map((p, idx) => (
-                                <Badge
-                                  key={idx}
-                                  variant="secondary"
-                                  className="text-[10px] font-semibold text-foreground bg-muted border-0 hover:bg-muted/80"
-                                >
-                                  {p}
-                                </Badge>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Rating & Review */}
-                        <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
-                          <Star className="h-4 w-4 fill-amber-400 stroke-amber-400" />
-                          <span>{supplier.rating}</span>
-                          <span className="text-muted-foreground font-normal">
-                            ({supplier.reviewCount} reviews)
-                          </span>
-                        </div>
-
-                        {/* Card Actions */}
-                        <div className="pt-2 flex gap-3">
-                          <Button
-                            asChild
-                            variant="outline"
-                            className="flex-1 text-xs font-semibold border-border hover:border-muted-foreground cursor-pointer"
-                          >
-                            <Link href={`/demo/suppliers/${supplier.slug}`}>
-                              {t("btnViewProfile")}
-                            </Link>
-                          </Button>
-                          <Button
-                            asChild
-                            className="flex-1 bg-primary text-primary-foreground hover:bg-primary/95 text-xs font-semibold cursor-pointer"
-                          >
-                            <Link href={`/demo/suppliers/${supplier.slug}#contact`}>
-                              {t("btnContact")}
-                            </Link>
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Mobile filters drawer */}
-      {showMobileFilters && (
-        <div className="fixed inset-0 z-50 flex lg:hidden bg-black/50 backdrop-blur-xs">
-          <div className="ml-auto relative flex h-full w-full max-w-xs flex-col overflow-y-auto bg-card py-4 pb-12 px-6 shadow-xl">
-            <div className="flex items-center justify-between pb-4 border-b border-border">
-              <h3 className="font-semibold text-foreground">{t("filterTitle")}</h3>
-              <button
-                onClick={() => setShowMobileFilters(false)}
-                className="rounded-md p-2 text-muted-foreground hover:bg-muted cursor-pointer"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            <div className="mt-4 space-y-6">
-              {/* Category Filter */}
-              <div className="space-y-3">
-                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  {t("filterCategory")}
-                </label>
-                <div className="grid gap-2">
-                  {categories.map((cat) => (
-                    <button
-                      key={cat.id}
-                      onClick={() => {
-                        setCategory(params.category === cat.id ? "" : cat.id);
-                        setShowMobileFilters(false);
-                      }}
-                      className={`text-left text-sm py-1.5 px-3 rounded-md w-full cursor-pointer ${
-                        params.category === cat.id
-                          ? "bg-muted font-semibold text-foreground"
-                          : "text-muted-foreground hover:bg-muted"
-                      }`}
-                    >
-                      {cat.name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Region Filter */}
-              <div className="space-y-3">
-                <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                  {t("filterRegion")}
-                </label>
-                <select
-                  value={params.region || ""}
-                  onChange={(e) => {
-                    setRegion(e.target.value);
-                    setShowMobileFilters(false);
-                  }}
-                  className="w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground focus:border-muted-foreground cursor-pointer"
-                >
-                  {regions.map((reg) => (
-                    <option key={reg.value} value={reg.value}>
-                      {reg.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Verification Filter */}
-              <div className="space-y-3 pt-4 border-t border-border">
-                <label className="flex items-center gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={params.verifiedOnly || false}
-                    onChange={(e) => {
-                      setVerifiedOnly(e.target.checked);
-                      setShowMobileFilters(false);
-                    }}
-                    className="h-4 w-4 rounded-sm border-border text-primary focus:ring-primary cursor-pointer"
-                  />
-                  <span className="text-sm font-medium text-foreground">{t("verifiedOnly")}</span>
-                </label>
-              </div>
-
-              <Button
-                onClick={resetFilters}
-                variant="outline"
-                className="w-full cursor-pointer"
-              >
-                {t("btnReset")}
+              <Button variant="outline" size="sm" onClick={() => setShowMobileFilters(true)} className="cursor-pointer lg:hidden">
+                <SlidersHorizontal className="mr-2 h-4 w-4" />
+                Filter
               </Button>
             </div>
           </div>
-        </div>
-      )}
+        </section>
+
+        <section className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[240px_1fr] lg:px-8">
+          <aside className="hidden lg:block">
+            <FilterPanel
+              categories={categories}
+              selectedCategory={params.category || ""}
+              selectedRegion={params.region || ""}
+              verifiedOnly={params.verifiedOnly || false}
+              onCategory={setCategory}
+              onRegion={setRegion}
+              onVerified={setVerifiedOnly}
+              onReset={resetFilters}
+            />
+          </aside>
+
+          <div className="space-y-5">
+            <div className="flex flex-col gap-3 border-b border-border pb-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-foreground">
+                Menampilkan <span className="font-extrabold">{resultCount}</span> hasil untuk{" "}
+                <span className="font-extrabold">&quot;{params.query || "semua produk"}&quot;</span>
+              </p>
+              <Button variant="outline" className="w-full justify-between text-sm sm:w-48">
+                <span className="flex items-center gap-2">
+                  <ArrowUpDown className="h-4 w-4" />
+                  Paling Sesuai
+                </span>
+              </Button>
+            </div>
+
+            {activeTab === "products" ? (
+              isProductsLoading ? (
+                <CatalogSkeleton />
+              ) : filteredProducts.length === 0 ? (
+                <EmptyState onReset={resetFilters} />
+              ) : (
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+                  {filteredProducts.map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      detailBasePath={detailBasePath}
+                      isAuthenticated={isAuthenticated}
+                      isBookmarked={isProductBookmarked(product.id)}
+                      isCompared={comparedProducts.some((item) => item.id === product.id)}
+                      onBookmark={() => toggleProductBookmark(product)}
+                      onCompare={() => toggleProductCompare(product)}
+                    />
+                  ))}
+                </div>
+              )
+            ) : isLoading ? (
+              <CatalogSkeleton />
+            ) : suppliers.length === 0 ? (
+              <EmptyState onReset={resetFilters} />
+            ) : (
+              <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+                {suppliers.map((supplier) => (
+                  <SupplierCard
+                    key={supplier.id}
+                    supplier={supplier}
+                    detailBasePath={detailBasePath}
+                    isAuthenticated={isAuthenticated}
+                    isBookmarked={isSupplierBookmarked(supplier.id)}
+                    isCompared={comparedSuppliers.some((item) => item.id === supplier.id)}
+                    onBookmark={() => toggleSupplierBookmark(supplier)}
+                    onCompare={() => toggleSupplierCompare(supplier)}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {showMobileFilters && (
+          <div className="fixed inset-0 z-50 bg-black/50 lg:hidden">
+            <div className="ml-auto h-full w-full max-w-xs overflow-y-auto bg-card p-5 shadow-xl">
+              <div className="mb-5 flex items-center justify-between">
+                <h2 className="text-base font-extrabold text-foreground">Filter</h2>
+                <Button variant="ghost" size="icon" onClick={() => setShowMobileFilters(false)} className="cursor-pointer">
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+              <FilterPanel
+                categories={categories}
+                selectedCategory={params.category || ""}
+                selectedRegion={params.region || ""}
+                verifiedOnly={params.verifiedOnly || false}
+                onCategory={(value) => {
+                  setCategory(value);
+                  setShowMobileFilters(false);
+                }}
+                onRegion={(value) => {
+                  setRegion(value);
+                  setShowMobileFilters(false);
+                }}
+                onVerified={(value) => {
+                  setVerifiedOnly(value);
+                  setShowMobileFilters(false);
+                }}
+                onReset={() => {
+                  resetFilters();
+                  setShowMobileFilters(false);
+                }}
+              />
+            </div>
+          </div>
+        )}
+      </main>
     </PublicLayout>
+  );
+}
+
+function FilterPanel({
+  categories,
+  selectedCategory,
+  selectedRegion,
+  verifiedOnly,
+  onCategory,
+  onRegion,
+  onVerified,
+  onReset,
+}: {
+  categories: Array<{ id: string; name: string }>;
+  selectedCategory: string;
+  selectedRegion: string;
+  verifiedOnly: boolean;
+  onCategory: (value: string) => void;
+  onRegion: (value: string) => void;
+  onVerified: (value: boolean) => void;
+  onReset: () => void;
+}) {
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-base font-extrabold text-foreground">Filter</h2>
+        <button type="button" onClick={onReset} className="cursor-pointer text-xs font-semibold text-primary hover:underline">
+          Reset
+        </button>
+      </div>
+
+      <div className="space-y-3 border-t border-border pt-4">
+        <h3 className="text-sm font-extrabold text-foreground">Kategori</h3>
+        <div className="space-y-2">
+          <button
+            type="button"
+            onClick={() => onCategory("")}
+            className={`w-full cursor-pointer rounded border px-3 py-2 text-left text-sm ${selectedCategory === "" ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:bg-muted"}`}
+          >
+            Semua Kategori
+          </button>
+          {categories.map((category) => (
+            <button
+              type="button"
+              key={category.id}
+              onClick={() => onCategory(selectedCategory === category.id ? "" : category.id)}
+              className={`w-full cursor-pointer rounded border px-3 py-2 text-left text-sm ${selectedCategory === category.id ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:bg-muted"}`}
+            >
+              {category.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="space-y-3 border-t border-border pt-4">
+        <h3 className="text-sm font-extrabold text-foreground">Lokasi</h3>
+        <div className="space-y-2">
+          {regions.map((region) => (
+            <label key={region} className="flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
+              <input
+                type="checkbox"
+                checked={selectedRegion === region}
+                onChange={() => onRegion(selectedRegion === region ? "" : region)}
+                className="h-4 w-4 cursor-pointer rounded border-border"
+              />
+              {region}
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div className="space-y-3 border-t border-border pt-4">
+        <h3 className="text-sm font-extrabold text-foreground">Trust</h3>
+        <label className="flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
+          <input
+            type="checkbox"
+            checked={verifiedOnly}
+            onChange={(event) => onVerified(event.target.checked)}
+            className="h-4 w-4 cursor-pointer rounded border-border"
+          />
+          Supplier terverifikasi
+        </label>
+      </div>
+    </div>
+  );
+}
+
+function CatalogSkeleton() {
+  return (
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+      {Array.from({ length: 8 }).map((_, index) => (
+        <div key={index} className="h-72 animate-pulse rounded-lg border border-border bg-muted" />
+      ))}
+    </div>
+  );
+}
+
+function EmptyState({ onReset }: { onReset: () => void }) {
+  return (
+    <div className="rounded-lg border border-dashed border-border bg-card py-16 text-center">
+      <Building2 className="mx-auto h-10 w-10 text-muted-foreground" />
+      <h3 className="mt-4 text-base font-extrabold text-foreground">Belum ada hasil</h3>
+      <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">Coba ubah kata kunci, kategori, atau filter lokasi.</p>
+      <Button onClick={onReset} variant="outline" className="mt-5 cursor-pointer">
+        Reset Filter
+      </Button>
+    </div>
   );
 }

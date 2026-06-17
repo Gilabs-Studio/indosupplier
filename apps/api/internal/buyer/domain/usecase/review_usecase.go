@@ -101,7 +101,7 @@ func (u *reviewUsecase) Create(ctx context.Context, userID string, req *dto.Crea
 		Status:            "approved", // Immediately approve for real-time visibility in GIMS platform
 	}
 	if po.RFQID != nil {
-		review.RFQID = *po.RFQID
+		review.RFQID = po.RFQID
 	}
 
 	if err := u.reviewRepo.Create(ctx, review); err != nil {
@@ -113,14 +113,14 @@ func (u *reviewUsecase) Create(ctx context.Context, userID string, req *dto.Crea
 		AverageRating float64
 		TotalCount    int64
 	}
-	
+
 	// Query average rating and count of approved reviews for this supplier
 	err = u.db.WithContext(ctx).
 		Table("supplier_reviews").
 		Select("COALESCE(AVG(rating), 0) as average_rating, COUNT(*) as total_count").
 		Where("supplier_profile_id = ? AND status = ?", po.SupplierProfileID, "approved").
 		Row().Scan(&stats.AverageRating, &stats.TotalCount)
-		
+
 	if err == nil {
 		u.db.WithContext(ctx).
 			Table("supplier_profiles").

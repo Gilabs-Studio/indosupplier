@@ -48,6 +48,7 @@ import categoriesEn from "@/features/sysadmin/categories/i18n/en.json";
 import abuseReportsEn from "@/features/sysadmin/abuse-reports/i18n/en.json";
 import auditLogsEn from "@/features/sysadmin/audit-logs/i18n/en.json";
 import auctionsEn from "@/features/sysadmin/auctions/i18n/en.json";
+import contentEn from "@/features/sysadmin/content/i18n/en.json";
 
 // Feature-level Indonesian translations
 import authId from "@/features/auth/i18n/id.json";
@@ -93,6 +94,7 @@ import categoriesId from "@/features/sysadmin/categories/i18n/id.json";
 import abuseReportsId from "@/features/sysadmin/abuse-reports/i18n/id.json";
 import auditLogsId from "@/features/sysadmin/audit-logs/i18n/id.json";
 import auctionsId from "@/features/sysadmin/auctions/i18n/id.json";
+import contentId from "@/features/sysadmin/content/i18n/id.json";
 
 const messages = {
   en: {
@@ -115,6 +117,7 @@ const messages = {
     sysadminAbuseReports: abuseReportsEn,
     sysadminAuditLogs: auditLogsEn,
     sysadminAuctions: auctionsEn,
+    sysadminContent: contentEn,
     supplier: {
       ...supplierLayoutEn,
       ...supplierDashboardEn,
@@ -161,6 +164,7 @@ const messages = {
     sysadminAbuseReports: abuseReportsId,
     sysadminAuditLogs: auditLogsId,
     sysadminAuctions: auctionsId,
+    sysadminContent: contentId,
     supplier: {
       ...supplierLayoutId,
       ...supplierDashboardId,

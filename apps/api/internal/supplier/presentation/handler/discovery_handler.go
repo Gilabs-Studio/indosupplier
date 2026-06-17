@@ -55,6 +55,16 @@ func (h *DiscoveryHandler) ListProducts(c *gin.Context) {
 	response.SuccessResponse(c, products, nil)
 }
 
+func (h *DiscoveryHandler) GetProductByID(c *gin.Context) {
+	product, err := h.discoveryUC.GetProductByID(c.Request.Context(), c.Param("id"))
+	if err != nil {
+		errors.NotFoundResponse(c, "product", c.Param("id"))
+		return
+	}
+
+	response.SuccessResponse(c, product, nil)
+}
+
 func (h *DiscoveryHandler) LookupSuppliers(c *gin.Context) {
 	q := c.Query("q")
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))

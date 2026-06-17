@@ -27,8 +27,9 @@ func RegisterProductRoutes(rg *gin.RouterGroup, h *handler.ProductHandler, jwtMa
 
 func RegisterDiscoveryRoutes(rg *gin.RouterGroup, h *handler.DiscoveryHandler) {
 	rg.GET("/suppliers", h.List)
+	rg.GET("/suppliers/lookup", h.LookupSuppliers)
 	rg.GET("/suppliers/:slug", h.GetBySlug)
 	rg.GET("/products", h.ListProducts)
-	rg.GET("/suppliers/lookup", h.LookupSuppliers)
 	rg.GET("/products/lookup", h.LookupProducts)
+	rg.GET("/products/:id", h.GetProductByID)
 }

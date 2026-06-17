@@ -11,5 +11,8 @@ func SeedAll() error {
 	if err := SeedTransactions(); err != nil {
 		return err
 	}
-	return SeedRFQs()
+	if err := SeedRFQs(); err != nil {
+		return err
+	}
+	return SeedContent()
 }
