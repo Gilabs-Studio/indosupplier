@@ -55,6 +55,28 @@ export function proxy(request: NextRequest) {
   // This keeps links like /register/success?token=... working in Next.js proxy mode
   // without requiring middleware.ts locale rewriting.
   const hasLocalePrefix = pathSegments[0] === "en" || pathSegments[0] === "id";
+  if (
+    hasLocalePrefix &&
+    pathSegments[1] === "demo" &&
+    pathSegments[2] === "products" &&
+    pathSegments[3]
+  ) {
+    const targetURL = new URL(`/${pathSegments[0]}/products/${pathSegments[3]}`, request.url);
+    targetURL.search = request.nextUrl.search;
+    targetURL.searchParams.set("demo", "1");
+    const rewriteResponse = NextResponse.rewrite(targetURL);
+    if (cookieLocale !== detectedLocale) {
+      rewriteResponse.cookies.set({
+        name: LOCALE_PREFERENCE_COOKIE,
+        value: detectedLocale,
+        path: "/",
+        sameSite: "lax",
+        maxAge: 60 * 60 * 24 * 365,
+      });
+    }
+    return rewriteResponse;
+  }
+
   const isLegacySettingsPath = pathname === "/settings";
   const isLocaleAgnosticAuthPath =
     pathname === "/login" ||
