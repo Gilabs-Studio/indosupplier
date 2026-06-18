@@ -4,10 +4,10 @@ import { chatService } from "../services/chat.service";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
 import type { ChatMessage } from "../types/chat.types";
 
-export function useBuyerChat() {
+export function useBuyerChat(initialRoomId?: string | null) {
   const queryClient = useQueryClient();
   const { isAuthenticated } = useAuthStore();
-  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
+  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(initialRoomId ?? null);
   const [wsConnected, setWsConnected] = useState(false);
 
   const selectedRoomIdRef = useRef<string | null>(null);
@@ -60,6 +60,11 @@ export function useBuyerChat() {
     setSelectedRoomId(roomId);
     markReadMutation.mutate(roomId);
   };
+
+  useEffect(() => {
+    if (!selectedRoomId || !roomsQuery.data?.some((room) => room.id === selectedRoomId)) return;
+    markReadMutation.mutate(selectedRoomId);
+  }, [markReadMutation, roomsQuery.data, selectedRoomId]);
 
   // 5. Setup WebSocket connection
   useEffect(() => {

@@ -5,16 +5,16 @@ import React, { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useRouter } from "@/i18n/routing";
 import { PublicLayout } from "@/features/public/components/public-layout";
+import { PublicProductCard } from "@/features/public/components/public-product-card";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { searchService } from "@/features/public/search/services/search-service";
-import type { PublicReviewDto } from "@/features/public/search/types";
+import type { PublicProductDto, PublicReviewDto } from "@/features/public/search/types";
 import { Button } from "@/components/ui/button";
 import { useBuyerBookmarks } from "@/features/buyer/bookmarks/hooks/useBuyerBookmarks";
 import { useBuyerCompare } from "@/features/buyer/compare/hooks/useBuyerCompare";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
 import { toast } from "sonner";
 import {
-  ChevronDown,
-  ChevronLeft,
   GitCompareArrows,
   Heart,
   MapPin,
@@ -80,7 +80,6 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
   const router = useRouter();
   const [activePhoto, setActivePhoto] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState<"detail" | "spec" | "shipping">("detail");
   const [reviewFilter, setReviewFilter] = useState<"all" | "media" | "high">("all");
   const { isAuthenticated } = useAuthStore();
   const { bookmarks, addBookmark, deleteBookmark, isAdding, isDeleting } = useBuyerBookmarks();
@@ -146,6 +145,25 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
       removeProduct(product.id);
     } else {
       addProduct(product.id);
+    }
+  };
+
+  const toggleProductBookmark = (prod: PublicProductDto) => {
+    if (!requireAuth("Masuk dulu untuk menyimpan produk ke wishlist.")) return;
+    const bookmark = bookmarks.find((item) => item.type === "product" && item.supplierProductId === prod.id);
+    if (bookmark) {
+      deleteBookmark(bookmark.id);
+    } else {
+      addBookmark({ supplierProfileId: prod.supplierId, supplierProductId: prod.id });
+    }
+  };
+
+  const toggleProductCompare = (prod: PublicProductDto) => {
+    if (!requireAuth("Masuk dulu untuk membandingkan produk.")) return;
+    if (comparedProducts.some((item) => item.id === prod.id)) {
+      removeProduct(prod.id);
+    } else {
+      addProduct(prod.id);
     }
   };
 
@@ -297,32 +315,14 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
               </div>
 
               {/* Product Tabs */}
-              <div className="space-y-4">
-                <div className="border-b border-border/80">
-                  <div className="flex gap-6">
-                    {[
-                      ["detail", "Detail Produk"],
-                      ["spec", "Spesifikasi"],
-                      ["shipping", "Info Penting"],
-                    ].map(([key, label]) => (
-                      <button
-                        key={key}
-                        type="button"
-                        onClick={() => setActiveTab(key as "detail" | "spec" | "shipping")}
-                        className={`relative border-b-2 px-1 py-2.5 text-xs font-bold transition-all duration-300 cursor-pointer ${
-                          activeTab === key
-                            ? "border-primary text-primary"
-                            : "border-transparent text-muted-foreground hover:text-foreground"
-                        }`}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="min-h-[160px] text-xs leading-relaxed text-foreground/90">
-                  {activeTab === "detail" && (
+              <Tabs defaultValue="detail" className="w-full">
+                <TabsList className="w-full justify-start">
+                  <TabsTrigger value="detail" className="cursor-pointer font-bold text-xs">Detail Produk</TabsTrigger>
+                  <TabsTrigger value="spec" className="cursor-pointer font-bold text-xs">Spesifikasi</TabsTrigger>
+                  <TabsTrigger value="shipping" className="cursor-pointer font-bold text-xs">Info Penting</TabsTrigger>
+                </TabsList>
+                <div className="min-h-[160px] text-xs leading-relaxed text-foreground/90 pt-4">
+                  <TabsContent value="detail" className="outline-none">
                     <div className="space-y-4">
                       <div className="grid grid-cols-2 gap-y-2 max-w-sm rounded-lg bg-muted/30 p-3.5 border border-border/40 text-xs">
                         <span className="text-muted-foreground">Kondisi:</span>
@@ -341,16 +341,16 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
                         {product.description || "Supplier belum menambahkan deskripsi detail untuk produk ini."}
                       </p>
                     </div>
-                  )}
-                  {activeTab === "spec" && (
+                  </TabsContent>
+                  <TabsContent value="spec" className="outline-none">
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                       <InfoRow label="Nama Supplier" value={supplier.companyName} />
                       <InfoRow label="Lokasi" value={product.supplierLocation || supplier.location || "-"} />
                       <InfoRow label="Response Rate" value={`${Math.round(supplier.responseRate || 0)}%`} />
                       <InfoRow label="Response Time" value={supplier.responseTime || "-"} />
                     </div>
-                  )}
-                  {activeTab === "shipping" && (
+                  </TabsContent>
+                  <TabsContent value="shipping" className="outline-none">
                     <div className="space-y-3.5">
                       <div className="flex gap-3 rounded-lg border border-border/50 bg-card p-3">
                         <Truck className="h-4 w-4 text-primary shrink-0 mt-0.5" />
@@ -367,9 +367,9 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
                         </div>
                       </div>
                     </div>
-                  )}
+                  </TabsContent>
                 </div>
-              </div>
+              </Tabs>
             </section>
 
             {/* Sticky Actions & Supplier Card Column */}
@@ -641,32 +641,16 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
               </div>
               <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                 {data.relatedProducts.map((item) => (
-                  <Link
+                  <PublicProductCard
                     key={item.id}
-                    href={`${detailBasePath}/products/${item.id}`}
-                    className="group cursor-pointer overflow-hidden rounded-lg border border-border bg-card p-3 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-primary/20"
-                  >
-                    <div className="aspect-square overflow-hidden rounded-md bg-muted/30 border border-border/40">
-                      {item.photos?.[0] ? (
-                        <img
-                          src={item.photos[0]}
-                          alt={item.name}
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-103"
-                        />
-                      ) : (
-                        <div className="flex h-full items-center justify-center">
-                          <Package className="h-8 w-8 text-muted-foreground/40" />
-                        </div>
-                      )}
-                    </div>
-                    <div className="mt-3 space-y-1">
-                      <p className="line-clamp-2 text-xs font-bold text-foreground leading-tight group-hover:text-primary transition-colors">
-                        {item.name}
-                      </p>
-                      <p className="text-xs font-black text-primary">{formatPrice(item.price, item.currency)}</p>
-                      <p className="text-[10px] text-muted-foreground truncate">{item.supplierCompanyName}</p>
-                    </div>
-                  </Link>
+                    product={item}
+                    detailBasePath={detailBasePath}
+                    isAuthenticated={isAuthenticated}
+                    isBookmarked={bookmarks.some((b) => b.type === "product" && b.supplierProductId === item.id)}
+                    isCompared={comparedProducts.some((p) => p.id === item.id)}
+                    onBookmark={() => toggleProductBookmark(item)}
+                    onCompare={() => toggleProductCompare(item)}
+                  />
                 ))}
               </div>
             </section>

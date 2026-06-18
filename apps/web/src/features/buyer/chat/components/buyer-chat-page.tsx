@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Send, Check, CheckCheck, MessageSquare, ShieldCheck, Loader2 } from "lucide-react";
@@ -33,8 +34,10 @@ function formatTime(dateStr?: string, yesterdayLabel: string = "Kemarin"): strin
 
 export function BuyerChatPage() {
   const t = useTranslations("buyerChat");
+  const searchParams = useSearchParams();
   const [inputText, setInputText] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const roomIdFromQuery = searchParams.get("roomId");
 
   const {
     rooms,
@@ -45,7 +48,7 @@ export function BuyerChatPage() {
     setSelectedRoom,
     sendMessage,
     isSending,
-  } = useBuyerChat();
+  } = useBuyerChat(roomIdFromQuery);
 
   const selectedRoom = rooms.find((r) => r.id === selectedRoomId);
 
