@@ -5,6 +5,8 @@ import (
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
+
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 )
 
 type Category struct {
@@ -106,24 +108,23 @@ func (s *SupplierCategory) BeforeCreate(tx *gorm.DB) error {
 }
 
 type SupplierProduct struct {
-	ID                string         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
-	SupplierProfileID string         `gorm:"type:uuid;not null;index" json:"supplier_profile_id"`
-	CategoryID        string         `gorm:"type:uuid;index" json:"category_id"`
-	Name              string         `gorm:"type:varchar(255);not null;index" json:"name"`
-	Description       string         `gorm:"type:text" json:"description"`
-	MOQ               string         `gorm:"type:varchar(120)" json:"moq"`
-	StartingPrice     float64        `gorm:"not null;default:0" json:"starting_price"`
-	Currency          string         `gorm:"type:varchar(10);not null;default:'IDR'" json:"currency"`
-	CapacityText      string         `gorm:"type:varchar(255)" json:"capacity_text"`
-	IsFeatured        bool           `gorm:"not null;default:false;index" json:"is_featured"`
-	SortOrder         int            `gorm:"not null;default:0;index" json:"sort_order"`
+	ID                string                 `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
+	SupplierProfileID string                 `gorm:"type:uuid;not null;index" json:"supplier_profile_id"`
+	CategoryID        string                 `gorm:"type:uuid;index" json:"category_id"`
+	Name              string                 `gorm:"type:varchar(255);not null;index" json:"name"`
+	Description       string                 `gorm:"type:text" json:"description"`
+	MOQ               string                 `gorm:"type:varchar(120)" json:"moq"`
+	StartingPrice     float64                `gorm:"not null;default:0" json:"starting_price"`
+	Currency          string                 `gorm:"type:varchar(10);not null;default:'IDR'" json:"currency"`
+	CapacityText      string                 `gorm:"type:varchar(255)" json:"capacity_text"`
+	IsFeatured        bool                   `gorm:"not null;default:false;index" json:"is_featured"`
+	SortOrder         int                    `gorm:"not null;default:0;index" json:"sort_order"`
 	Photos            []SupplierProductPhoto `gorm:"foreignKey:SupplierProductID;constraint:OnDelete:CASCADE" json:"photos"`
 	Category          *Category              `gorm:"foreignKey:CategoryID" json:"category,omitempty"`
 	CreatedAt         time.Time              `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt         time.Time              `gorm:"autoUpdateTime;index" json:"updated_at"`
 	DeletedAt         gorm.DeletedAt         `gorm:"index" json:"-"`
 }
-
 
 func (SupplierProduct) TableName() string {
 	return "supplier_products"
@@ -134,7 +135,7 @@ func (s *SupplierProduct) BeforeCreate(tx *gorm.DB) error {
 		s.ID = uuid.New().String()
 	}
 	if s.Currency == "" {
-		s.Currency = "IDR"
+		s.Currency = utils.DefaultCurrency()
 	}
 	return nil
 }

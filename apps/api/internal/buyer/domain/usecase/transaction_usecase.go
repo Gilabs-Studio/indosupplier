@@ -13,6 +13,7 @@ import (
 	"github.com/gilabs/indosupplier/api/internal/buyer/data/repositories"
 	"github.com/gilabs/indosupplier/api/internal/buyer/domain/dto"
 	"github.com/gilabs/indosupplier/api/internal/core/apptime"
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	supplierModels "github.com/gilabs/indosupplier/api/internal/supplier/data/models"
 )
 
@@ -144,7 +145,7 @@ func (u *transactionUsecase) GetByID(ctx context.Context, userID string, id stri
 
 	supplierName, err := u.getSupplierName(ctx, po.SupplierProfileID)
 	if err != nil {
-		supplierName = "Unknown Supplier"
+		supplierName = utils.DefaultSupplierName
 	}
 
 	return &dto.TransactionResponse{
@@ -174,31 +175,21 @@ func (u *transactionUsecase) List(ctx context.Context, userID string, req *dto.L
 		return nil, nil, err
 	}
 
-	page := req.Page
-	if page < 1 {
-		page = 1
-	}
-	perPage := req.PerPage
-	if perPage < 1 {
-		perPage = 10
-	}
+	page, perPage := utils.NormalizePagination(req.Page, req.PerPage, 10)
 
 	poList, total, err := u.transactionRepo.List(ctx, buyerID, req.Status, page, perPage)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	totalPages := int((total + int64(perPage) - 1) / int64(perPage))
-	if totalPages < 1 {
-		totalPages = 1
-	}
+	totalPages := utils.TotalPages(total, perPage)
 
 	var responseList []dto.TransactionResponse
 	for i := range poList {
 		po := &poList[i]
 		supplierName, _ := u.getSupplierName(ctx, po.SupplierProfileID)
 		if supplierName == "" {
-			supplierName = "Unknown Supplier"
+			supplierName = utils.DefaultSupplierName
 		}
 
 		responseList = append(responseList, dto.TransactionResponse{

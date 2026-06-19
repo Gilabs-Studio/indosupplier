@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/gilabs/indosupplier/api/internal/core/apptime"
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	"github.com/gilabs/indosupplier/api/internal/rfq/data/models"
 )
 
@@ -89,7 +90,8 @@ func (r *rfqRepository) List(ctx context.Context, buyerProfileID string, status 
 		return nil, nil, 0, err
 	}
 
-	offset := (page - 1) * perPage
+	page, perPage = utils.NormalizePagination(page, perPage, 0)
+	offset := utils.PaginationOffset(page, perPage)
 	if err := q.Order("created_at DESC").Offset(offset).Limit(perPage).Find(&rfqList).Error; err != nil {
 		return nil, nil, 0, err
 	}

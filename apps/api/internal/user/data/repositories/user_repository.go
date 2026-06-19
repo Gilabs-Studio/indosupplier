@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/database"
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	"github.com/gilabs/indosupplier/api/internal/user/data/models"
 	"github.com/gilabs/indosupplier/api/internal/user/domain/dto"
 )
@@ -70,19 +71,9 @@ func (r *userRepository) List(ctx context.Context, req *dto.ListUsersRequest) ([
 		return nil, 0, err
 	}
 
-	page := req.Page
-	if page < 1 {
-		page = 1
-	}
-	perPage := req.PerPage
-	if perPage < 1 {
-		perPage = 20
-	}
-	if perPage > 100 {
-		perPage = 100
-	}
+	page, perPage := utils.NormalizePagination(req.Page, req.PerPage, 0)
 
-	offset := (page - 1) * perPage
+	offset := utils.PaginationOffset(page, perPage)
 	if err := query.Order("users.updated_at DESC").Offset(offset).Limit(perPage).Find(&users).Error; err != nil {
 		return nil, 0, err
 	}
@@ -141,7 +132,7 @@ func (r *userRepository) FindAvailable(ctx context.Context, search string, exclu
 		query = query.Where("users.name ILIKE ? OR users.email ILIKE ?", like, like)
 	}
 
-	err := query.Order("users.name ASC").Limit(50).Find(&users).Error
+	err := query.Order("users.name ASC").Limit(utils.MaxPerPage()).Find(&users).Error
 	return users, err
 }
 

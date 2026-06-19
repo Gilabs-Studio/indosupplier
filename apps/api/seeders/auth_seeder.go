@@ -10,6 +10,7 @@ import (
 
 	buyerModels "github.com/gilabs/indosupplier/api/internal/buyer/data/models"
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/database"
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	supplierModels "github.com/gilabs/indosupplier/api/internal/supplier/data/models"
 	userModels "github.com/gilabs/indosupplier/api/internal/user/data/models"
 )
@@ -310,7 +311,7 @@ func getSeedProductsForCategory(categorySlug string) []seedProd {
 }
 
 func seedSupplierProducts(db *gorm.DB, supplierProfileID string, industry string) error {
-	categoryName := "Industrial Minerals"
+	categoryName := utils.DefaultCategoryName
 	categorySlug := "industrial-minerals"
 	if industry == "Textile" {
 		categoryName = "Textiles & Fabrics"
@@ -350,7 +351,7 @@ func seedSupplierProducts(db *gorm.DB, supplierProfileID string, industry string
 			Description:       p.Description,
 			MOQ:               p.MOQ,
 			StartingPrice:     p.StartingPrice,
-			Currency:          "IDR",
+			Currency:          utils.DefaultCurrency(),
 			CapacityText:      p.Capacity,
 			IsFeatured:        i == 0,
 			SortOrder:         i + 1,

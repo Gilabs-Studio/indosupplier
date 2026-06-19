@@ -8,6 +8,7 @@ import (
 	buyerModels "github.com/gilabs/indosupplier/api/internal/buyer/data/models"
 	"github.com/gilabs/indosupplier/api/internal/core/apptime"
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/database"
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	"github.com/gilabs/indosupplier/api/internal/rfq/data/models"
 	"github.com/gilabs/indosupplier/api/internal/rfq/domain/mapper"
 	supplierModels "github.com/gilabs/indosupplier/api/internal/supplier/data/models"
@@ -151,12 +152,12 @@ func SeedRFQs() error {
 		if d.Status == "received" || d.Status == "completed" {
 			bidsData := []struct {
 				SupplierIndex int
-				Price         string
+				Price         float64
 				MOQ           string
 			}{
-				{SupplierIndex: 0, Price: "Rp 12.500 / Kg", MOQ: "5 Ton"},
-				{SupplierIndex: 1, Price: "Rp 11.800 / Kg", MOQ: "10 Ton"},
-				{SupplierIndex: 2, Price: "Rp 13.000 / Kg", MOQ: "1 Ton"},
+				{SupplierIndex: 0, Price: 12500, MOQ: "5 Ton"},
+				{SupplierIndex: 1, Price: 11800, MOQ: "10 Ton"},
+				{SupplierIndex: 2, Price: 13000, MOQ: "1 Ton"},
 			}
 
 			for idx, bd := range bidsData {
@@ -184,7 +185,7 @@ func SeedRFQs() error {
 				}
 
 				metadataMap := map[string]string{
-					"price": bd.Price,
+					"price": fmt.Sprintf("%s / Kg", utils.FormatMoney(bd.Price, utils.DefaultCurrency())),
 					"moq":   bd.MOQ,
 				}
 				metadataBytes, _ := json.Marshal(metadataMap)

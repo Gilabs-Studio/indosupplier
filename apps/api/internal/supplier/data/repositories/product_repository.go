@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/database"
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	"github.com/gilabs/indosupplier/api/internal/supplier/data/models"
 )
 
@@ -64,13 +65,8 @@ func (r *productRepository) List(ctx context.Context, supplierProfileID string, 
 		return nil, 0, err
 	}
 
-	if page < 1 {
-		page = 1
-	}
-	if perPage < 1 {
-		perPage = 20
-	}
-	offset := (page - 1) * perPage
+	page, perPage = utils.NormalizePagination(page, perPage, 0)
+	offset := utils.PaginationOffset(page, perPage)
 
 	// Preload Category and Photos (GORM will fetch them efficiently in a single bulk query per table to prevent N+1)
 	err := query.

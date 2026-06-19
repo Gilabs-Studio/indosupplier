@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/gilabs/indosupplier/api/internal/content/data/models"
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 )
 
 type ContentArticleFilters struct {
@@ -37,17 +38,7 @@ func NewContentArticleRepository(db *gorm.DB) ContentArticleRepository {
 }
 
 func (r *contentArticleRepository) List(ctx context.Context, filters ContentArticleFilters) ([]models.ContentArticle, int64, error) {
-	page := filters.Page
-	if page <= 0 {
-		page = 1
-	}
-	perPage := filters.PerPage
-	if perPage <= 0 {
-		perPage = 12
-	}
-	if perPage > 100 {
-		perPage = 100
-	}
+	page, perPage := utils.NormalizePagination(filters.Page, filters.PerPage, 12)
 
 	query := r.db.WithContext(ctx).Model(&models.ContentArticle{})
 	if filters.PublicOnly {
@@ -77,7 +68,7 @@ func (r *contentArticleRepository) List(ctx context.Context, filters ContentArti
 		Order("sort_order ASC").
 		Order("published_at DESC NULLS LAST").
 		Order("created_at DESC").
-		Offset((page - 1) * perPage).
+		Offset(utils.PaginationOffset(page, perPage)).
 		Limit(perPage).
 		Find(&articles).Error
 	if err != nil {

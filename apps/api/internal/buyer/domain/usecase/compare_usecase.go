@@ -12,6 +12,7 @@ import (
 
 	buyerModels "github.com/gilabs/indosupplier/api/internal/buyer/data/models"
 	"github.com/gilabs/indosupplier/api/internal/buyer/domain/dto"
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	supplierModels "github.com/gilabs/indosupplier/api/internal/supplier/data/models"
 )
 
@@ -171,12 +172,12 @@ func (u *compareUsecase) List(ctx context.Context, userID string) ([]dto.Compare
 
 		moq := moqMap[s.ID]
 		if moq == "" {
-			moq = "100 Pcs"
+			moq = utils.DefaultMOQ
 		}
 
 		capText := capacityMap[s.ID]
 		if capText == "" {
-			capText = "5 Ton / Bulan"
+			capText = utils.DefaultCapacityText
 		}
 
 		respHrs := s.AvgResponseTimeMinutes / 60

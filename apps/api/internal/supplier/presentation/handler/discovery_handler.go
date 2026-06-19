@@ -48,9 +48,9 @@ func (h *DiscoveryHandler) ListProducts(c *gin.Context) {
 	q := c.Query("q")
 	supplierID := c.Query("supplier_id")
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
-	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "12"))
+	perPage, _ := strconv.Atoi(c.DefaultQuery("per_page", "12"))
 
-	products, err := h.discoveryUC.ListProducts(c.Request.Context(), q, supplierID, page, limit)
+	products, err := h.discoveryUC.ListProducts(c.Request.Context(), q, supplierID, page, perPage)
 	if err != nil {
 		errors.InternalServerErrorResponse(c, err.Error())
 		return
@@ -72,9 +72,9 @@ func (h *DiscoveryHandler) GetProductByID(c *gin.Context) {
 func (h *DiscoveryHandler) LookupSuppliers(c *gin.Context) {
 	q := c.Query("q")
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
-	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "5"))
+	perPage, _ := strconv.Atoi(c.DefaultQuery("per_page", "5"))
 
-	suppliers, err := h.discoveryUC.LookupSuppliers(c.Request.Context(), q, page, limit)
+	suppliers, err := h.discoveryUC.LookupSuppliers(c.Request.Context(), q, page, perPage)
 	if err != nil {
 		errors.InternalServerErrorResponse(c, err.Error())
 		return
@@ -86,9 +86,9 @@ func (h *DiscoveryHandler) LookupSuppliers(c *gin.Context) {
 func (h *DiscoveryHandler) LookupProducts(c *gin.Context) {
 	q := c.Query("q")
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
-	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "5"))
+	perPage, _ := strconv.Atoi(c.DefaultQuery("per_page", "5"))
 
-	products, err := h.discoveryUC.LookupProducts(c.Request.Context(), q, page, limit)
+	products, err := h.discoveryUC.LookupProducts(c.Request.Context(), q, page, perPage)
 	if err != nil {
 		errors.InternalServerErrorResponse(c, err.Error())
 		return

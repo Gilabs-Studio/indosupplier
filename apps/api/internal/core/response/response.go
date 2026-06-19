@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/gilabs/indosupplier/api/internal/core/apptime"
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 )
 
 // APIResponse represents the standard API response structure
@@ -233,7 +234,8 @@ func generateRequestID() string {
 
 // NewPaginationMeta creates pagination metadata
 func NewPaginationMeta(page, perPage, total int) *PaginationMeta {
-	totalPages := (total + perPage - 1) / perPage
+	page, perPage = utils.NormalizePagination(page, perPage, 0)
+	totalPages := utils.TotalPages(int64(total), perPage)
 	hasNext := page < totalPages
 	hasPrev := page > 1
 

@@ -8,6 +8,8 @@ import (
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 )
 
 const (
@@ -92,7 +94,7 @@ type WebhookPayload struct {
 // CreateInvoice sends a create-invoice request to Xendit and returns the invoice.
 func (c *Client) CreateInvoice(ctx context.Context, req CreateInvoiceRequest) (*CreateInvoiceResponse, error) {
 	if req.Currency == "" {
-		req.Currency = "IDR"
+		req.Currency = utils.DefaultCurrency()
 	}
 	if req.InvoiceDuration == 0 {
 		req.InvoiceDuration = 86400 // 24 hours

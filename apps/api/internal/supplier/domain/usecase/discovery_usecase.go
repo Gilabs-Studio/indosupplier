@@ -11,6 +11,7 @@ import (
 
 	"gorm.io/gorm"
 
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	"github.com/gilabs/indosupplier/api/internal/supplier/data/models"
 	"github.com/gilabs/indosupplier/api/internal/supplier/domain/dto"
 )
@@ -125,10 +126,8 @@ func (u *discoveryUsecase) ListProducts(ctx context.Context, q string, supplierI
 		db = db.Where("supplier_products.supplier_profile_id = ?", supplierID)
 	}
 
-	if page > 0 && limit > 0 {
-		offset := (page - 1) * limit
-		db = db.Offset(offset).Limit(limit)
-	}
+	page, limit = utils.NormalizePagination(page, limit, 12)
+	db = db.Offset(utils.PaginationOffset(page, limit)).Limit(limit)
 
 	var products []models.SupplierProduct
 	if err := db.Order("supplier_products.is_featured DESC, supplier_products.sort_order ASC, supplier_products.name ASC").Find(&products).Error; err != nil {
@@ -195,16 +194,8 @@ func (u *discoveryUsecase) GetProductByID(ctx context.Context, id string) (*dto.
 }
 
 func (u *discoveryUsecase) LookupSuppliers(ctx context.Context, q string, page int, limit int) ([]dto.PublicSupplierDto, error) {
-	if page <= 0 {
-		page = 1
-	}
-	if limit <= 0 {
-		limit = 5
-	}
-	if limit > 20 {
-		limit = 20
-	}
-	offset := (page - 1) * limit
+	page, limit = utils.NormalizePagination(page, limit, 5)
+	offset := utils.PaginationOffset(page, limit)
 
 	db := u.db.WithContext(ctx).Model(&models.SupplierProfile{}).Where("status = ?", "active")
 	if q != "" {
@@ -236,16 +227,8 @@ func (u *discoveryUsecase) LookupSuppliers(ctx context.Context, q string, page i
 }
 
 func (u *discoveryUsecase) LookupProducts(ctx context.Context, q string, page int, limit int) ([]dto.PublicProductDto, error) {
-	if page <= 0 {
-		page = 1
-	}
-	if limit <= 0 {
-		limit = 5
-	}
-	if limit > 20 {
-		limit = 20
-	}
-	offset := (page - 1) * limit
+	page, limit = utils.NormalizePagination(page, limit, 5)
+	offset := utils.PaginationOffset(page, limit)
 
 	db := u.db.WithContext(ctx).
 		Model(&models.SupplierProduct{}).

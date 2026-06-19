@@ -4,11 +4,12 @@ import (
 	"errors"
 	"strconv"
 
-	"github.com/gin-gonic/gin"
 	coreErrors "github.com/gilabs/indosupplier/api/internal/core/errors"
 	"github.com/gilabs/indosupplier/api/internal/core/response"
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	"github.com/gilabs/indosupplier/api/internal/waiting_list/domain/dto"
 	"github.com/gilabs/indosupplier/api/internal/waiting_list/domain/usecase"
+	"github.com/gin-gonic/gin"
 )
 
 type WaitingListHandler struct {
@@ -44,27 +45,28 @@ func (h *WaitingListHandler) Join(c *gin.Context) {
 
 // List retrieves all waiting list entries (admin only)
 func (h *WaitingListHandler) List(c *gin.Context) {
-	limitStr := c.DefaultQuery("limit", "10")
+	perPageStr := c.DefaultQuery("per_page", "10")
 	pageStr := c.DefaultQuery("page", "1")
 	status := c.Query("status")
 
-	limit, err := strconv.Atoi(limitStr)
-	if err != nil || limit <= 0 {
-		limit = 10
+	perPage, err := strconv.Atoi(perPageStr)
+	if err != nil {
+		perPage = 0
 	}
 	page, err := strconv.Atoi(pageStr)
-	if err != nil || page <= 0 {
-		page = 1
+	if err != nil {
+		page = 0
 	}
-	offset := (page - 1) * limit
+	page, perPage = utils.NormalizePagination(page, perPage, 10)
+	offset := utils.PaginationOffset(page, perPage)
 
-	items, total, err := h.uc.List(c.Request.Context(), limit, offset, status)
+	items, total, err := h.uc.List(c.Request.Context(), perPage, offset, status)
 	if err != nil {
 		coreErrors.ErrorResponse(c, "INTERNAL_SERVER_ERROR", nil, nil)
 		return
 	}
 
-	pagination := response.NewPaginationMeta(page, limit, int(total))
+	pagination := response.NewPaginationMeta(page, perPage, int(total))
 	meta := &response.Meta{Pagination: pagination}
 
 	response.SuccessResponse(c, items, meta)

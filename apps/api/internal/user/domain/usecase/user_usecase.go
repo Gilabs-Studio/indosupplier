@@ -103,24 +103,9 @@ func (u *userUsecase) List(ctx context.Context, req *dto.ListUsersRequest) ([]dt
 		responses[i] = *u.toUserResponse(ctx, &usr)
 	}
 
-	page := req.Page
-	if page < 1 {
-		page = 1
-	}
-	perPage := req.PerPage
-	if perPage < 1 {
-		perPage = 20
-	}
-	if perPage > 100 {
-		perPage = 100
-	}
+	page, perPage := utils.NormalizePagination(req.Page, req.PerPage, 0)
 
-	pagination := &utils.PaginationResult{
-		Page:       page,
-		PerPage:    perPage,
-		Total:      int(total),
-		TotalPages: int((total + int64(perPage) - 1) / int64(perPage)),
-	}
+	pagination := utils.NewPaginationResult(page, perPage, total)
 
 	if u.redis != nil {
 		payload, _ := json.Marshal(struct {

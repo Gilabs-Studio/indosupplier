@@ -5,6 +5,8 @@ import (
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
+
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 )
 
 type AdProduct struct {
@@ -208,7 +210,7 @@ func (p *Payment) BeforeCreate(tx *gorm.DB) error {
 		p.ID = uuid.New().String()
 	}
 	if p.Currency == "" {
-		p.Currency = "IDR"
+		p.Currency = utils.DefaultCurrency()
 	}
 	if p.Status == "" {
 		p.Status = "pending"

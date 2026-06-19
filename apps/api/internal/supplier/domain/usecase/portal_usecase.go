@@ -4,11 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strconv"
 	"time"
 
 	"gorm.io/gorm"
 
+	"github.com/gilabs/indosupplier/api/internal/core/apptime"
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	monetizationModels "github.com/gilabs/indosupplier/api/internal/monetization/data/models"
 	"github.com/gilabs/indosupplier/api/internal/supplier/data/models"
 	"github.com/gilabs/indosupplier/api/internal/supplier/data/repositories"
@@ -16,8 +17,8 @@ import (
 )
 
 var (
-	ErrProfileNotFound    = errors.New("supplier profile not found")
-	ErrPlanNotFound       = errors.New("subscription plan not found")
+	ErrProfileNotFound = errors.New("supplier profile not found")
+	ErrPlanNotFound    = errors.New("subscription plan not found")
 )
 
 type PortalUsecase interface {
@@ -106,19 +107,7 @@ func (u *portalUsecase) UpdateProfile(ctx context.Context, userID string, req *d
 
 func (u *portalUsecase) seedPlansAndBillingIfEmpty(ctx context.Context, profile *models.SupplierProfile) error {
 	// Seed plans
-	plansToSeed := []struct {
-		code  string
-		name  string
-		price float64
-		cycle string
-	}{
-		{"free", "Free Basic", 0, "month"},
-		{"bronze", "Bronze Seller", 2000000, "year"},
-		{"silver", "Silver Pro", 5000000, "year"},
-		{"gold", "Gold Enterprise", 12000000, "year"},
-	}
-
-	for _, p := range plansToSeed {
+	for _, p := range billingPlanCatalog {
 		_, err := u.portalRepo.GetSubscriptionPlanByCode(ctx, p.code)
 		if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 			newPlan := &monetizationModels.SubscriptionPlan{
@@ -142,7 +131,7 @@ func (u *portalUsecase) seedPlansAndBillingIfEmpty(ctx context.Context, profile 
 			return err
 		}
 
-		now := time.Now()
+		now := apptime.Now()
 		renewalDate := now.AddDate(1, 0, 0)
 		sub := &monetizationModels.SupplierSubscription{
 			SupplierProfileID:  profile.ID,
@@ -162,7 +151,7 @@ func (u *portalUsecase) seedPlansAndBillingIfEmpty(ctx context.Context, profile 
 			RelatedType:       "subscription",
 			RelatedID:         sub.ID,
 			Amount:            goldPlan.Price,
-			Currency:          "IDR",
+			Currency:          utils.DefaultCurrency(),
 			Method:            "bank_transfer",
 			Status:            "paid",
 			PaidAt:            &now,
@@ -227,21 +216,8 @@ func (u *portalUsecase) GetBillingOverview(ctx context.Context, userID string) (
 	dbInvoices, _ := u.portalRepo.GetInvoices(ctx, profile.ID)
 	invoiceDTOs := make([]dto.BillingInvoiceDTO, 0)
 	for _, inv := range dbInvoices {
-		// Try to query associated payment amount
-		var amount float64
-		// Since we don't have GetPaymentByID in repo, GORM joins payments. The JOIN query in GetInvoices loaded invoices, but we can query GORM or parse DB invoice description
-		// But wait! We can compute or check:
-		desc := "GIMS Gold Enterprise - Annual plan"
-		amount = 12000000
-		if detail.planID == "silver" {
-			desc = "GIMS Silver Pro - Subscription Upgrade"
-			amount = 5000000
-		} else if detail.planID == "bronze" {
-			desc = "GIMS Bronze Seller - Subscription Upgrade"
-			amount = 2000000
-		}
-
-		invDateStr := "June 30, 2026"
+		planInfo := billingPlanByCode(detail.planID)
+		invDateStr := defaultBillingInvoiceDate()
 		if inv.IssuedAt != nil {
 			invDateStr = inv.IssuedAt.Format("January 2, 2006")
 		}
@@ -249,8 +225,8 @@ func (u *portalUsecase) GetBillingOverview(ctx context.Context, userID string) (
 		invoiceDTOs = append(invoiceDTOs, dto.BillingInvoiceDTO{
 			ID:          inv.InvoiceNumber,
 			Date:        invDateStr,
-			Description: desc,
-			Amount:      fmt.Sprintf("Rp %s", formatPrice(amount)),
+			Description: planInfo.invoiceDescription,
+			Amount:      utils.FormatMoney(planInfo.price, utils.DefaultCurrency()),
 			Status:      "paid",
 			ReceiptURL:  "#",
 		})
@@ -261,9 +237,9 @@ func (u *portalUsecase) GetBillingOverview(ctx context.Context, userID string) (
 		invoiceDTOs = []dto.BillingInvoiceDTO{
 			{
 				ID:          "INV-2026-001",
-				Date:        "June 30, 2026",
-				Description: "GIMS Gold Enterprise - Annual plan",
-				Amount:      "Rp 12.000.000",
+				Date:        defaultBillingInvoiceDate(),
+				Description: billingPlanByCode(detail.planID).invoiceDescription,
+				Amount:      utils.FormatMoney(billingPlanByCode(detail.planID).price, utils.DefaultCurrency()),
 				Status:      "paid",
 				ReceiptURL:  "#",
 			},
@@ -274,7 +250,7 @@ func (u *portalUsecase) GetBillingOverview(ctx context.Context, userID string) (
 		{
 			PlanID:      detail.planID,
 			PlanName:    detail.planName,
-			Price:       fmt.Sprintf("Rp %s", formatPrice(detail.price)),
+			Price:       utils.FormatMoney(detail.price, utils.DefaultCurrency()),
 			Period:      detail.billingCycle,
 			Active:      true,
 			RenewalDate: formatRenewalDate(detail.renewalDate),
@@ -284,22 +260,22 @@ func (u *portalUsecase) GetBillingOverview(ctx context.Context, userID string) (
 	// Metered limits stats
 	stats := dto.MeteredUsageStatsDTO{
 		ProductUploadsUsed:  142,
-		ProductUploadsLimit: "Unlimited",
+		ProductUploadsLimit: utils.DefaultQuotaLimitLabel,
 		RfqBidsUsed:         85,
-		RfqBidsLimit:        "Unlimited",
+		RfqBidsLimit:        utils.DefaultQuotaLimitLabel,
 		AuctionSlotsUsed:    1,
-		AuctionSlotsLimit:   "Unlimited",
+		AuctionSlotsLimit:   utils.DefaultQuotaLimitLabel,
 	}
 
-	nextPaymentDate := "June 30, 2027"
+	nextPaymentDate := defaultBillingRenewalDate()
 	if detail.renewalDate != nil {
-		nextPaymentDate = detail.renewalDate.Format("MMMM d, YYYY")
+		nextPaymentDate = detail.renewalDate.Format("January 2, 2006")
 	}
 
 	return &dto.BillingOverviewResponse{
-		CurrentMeteredUsage:  "Rp 0",
+		CurrentMeteredUsage:  utils.FormatMoney(0, utils.DefaultCurrency()),
 		CurrentIncludedUsage: fmt.Sprintf("%s Tier Limits Included", detail.planName),
-		NextPaymentDue:       fmt.Sprintf("Rp %s", formatPrice(detail.price)),
+		NextPaymentDue:       utils.FormatMoney(detail.price, utils.DefaultCurrency()),
 		NextPaymentDate:      nextPaymentDate,
 		Subscriptions:        subDetails,
 		MeteredUsage:         stats,
@@ -331,7 +307,7 @@ func (u *portalUsecase) UpgradePlan(ctx context.Context, userID string, req *dto
 		_ = u.portalRepo.UpdateSubscription(ctx, activeSub)
 	}
 
-	now := time.Now()
+	now := apptime.Now()
 	renewalDate := now.AddDate(1, 0, 0)
 	sub := &monetizationModels.SupplierSubscription{
 		SupplierProfileID:  profile.ID,
@@ -351,14 +327,14 @@ func (u *portalUsecase) UpgradePlan(ctx context.Context, userID string, req *dto
 		RelatedType:       "subscription",
 		RelatedID:         sub.ID,
 		Amount:            newPlan.Price,
-		Currency:          "IDR",
+		Currency:          utils.DefaultCurrency(),
 		Method:            "bank_transfer",
 		Status:            "paid",
 		PaidAt:            &now,
 	}
 	_ = u.portalRepo.CreatePayment(ctx, pay)
 
-	invNumber := fmt.Sprintf("INV-%d-00%d", now.Year(), time.Now().UnixNano()%100)
+	invNumber := fmt.Sprintf("INV-%d-00%d", now.Year(), now.UnixNano()%100)
 	inv := &monetizationModels.Invoice{
 		PaymentID:     pay.ID,
 		InvoiceNumber: invNumber,
@@ -380,26 +356,41 @@ type DTOPlanDetail struct {
 	renewalDate  *time.Time
 }
 
-func formatPrice(price float64) string {
-	if price == 0 {
-		return "0"
-	}
-	str := strconv.FormatFloat(price, 'f', 0, 64)
-	var res string
-	count := 0
-	for i := len(str) - 1; i >= 0; i-- {
-		res = string(str[i]) + res
-		count++
-		if count%3 == 0 && i > 0 {
-			res = "." + res
+type billingPlanSeed struct {
+	code               string
+	name               string
+	price              float64
+	cycle              string
+	invoiceDescription string
+}
+
+var billingPlanCatalog = []billingPlanSeed{
+	{code: "free", name: "Free Basic", price: 0, cycle: "month", invoiceDescription: "GIMS Free Basic - Monthly plan"},
+	{code: "bronze", name: "Bronze Seller", price: 2000000, cycle: "year", invoiceDescription: "GIMS Bronze Seller - Subscription Upgrade"},
+	{code: "silver", name: "Silver Pro", price: 5000000, cycle: "year", invoiceDescription: "GIMS Silver Pro - Subscription Upgrade"},
+	{code: "gold", name: "Gold Enterprise", price: 12000000, cycle: "year", invoiceDescription: "GIMS Gold Enterprise - Annual plan"},
+}
+
+func billingPlanByCode(code string) billingPlanSeed {
+	for _, plan := range billingPlanCatalog {
+		if plan.code == code {
+			return plan
 		}
 	}
-	return res
+	return billingPlanCatalog[0]
+}
+
+func defaultBillingInvoiceDate() string {
+	return apptime.Now().AddDate(0, -1, 0).Format("January 2, 2006")
+}
+
+func defaultBillingRenewalDate() string {
+	return apptime.Now().AddDate(1, 0, 0).Format("January 2, 2006")
 }
 
 func formatRenewalDate(t *time.Time) string {
 	if t == nil {
-		return "June 30, 2027"
+		return defaultBillingRenewalDate()
 	}
-	return t.Format("MMMM d, YYYY")
+	return t.Format("January 2, 2006")
 }

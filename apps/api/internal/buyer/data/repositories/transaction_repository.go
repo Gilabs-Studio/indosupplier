@@ -7,6 +7,7 @@ import (
 
 	"github.com/gilabs/indosupplier/api/internal/buyer/data/models"
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/database"
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 )
 
 type TransactionRepository interface {
@@ -63,13 +64,8 @@ func (r *transactionRepository) List(ctx context.Context, buyerProfileID string,
 		return nil, 0, err
 	}
 
-	if page < 1 {
-		page = 1
-	}
-	if perPage < 1 {
-		perPage = 20
-	}
-	offset := (page - 1) * perPage
+	page, perPage = utils.NormalizePagination(page, perPage, 0)
+	offset := utils.PaginationOffset(page, perPage)
 
 	err := query.
 		Order("created_at DESC").

@@ -15,6 +15,7 @@ import (
 	"github.com/gilabs/indosupplier/api/internal/core/apptime"
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/events"
 	jwtManager "github.com/gilabs/indosupplier/api/internal/core/infrastructure/jwt"
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	refreshTokenModels "github.com/gilabs/indosupplier/api/internal/refresh_token/data/models"
 	refreshTokenRepo "github.com/gilabs/indosupplier/api/internal/refresh_token/data/repositories"
 	supplierModels "github.com/gilabs/indosupplier/api/internal/supplier/data/models"
@@ -381,7 +382,7 @@ func (u *authUsecase) BecomeSupplier(ctx context.Context, userID string, req *dt
 			CategoryID:        primaryCategoryID,
 			Name:              productName,
 			Description:       strings.TrimSpace(req.FirstProductPrice),
-			Currency:          "IDR",
+			Currency:          utils.DefaultCurrency(),
 			SortOrder:         1,
 		}).Error
 	}); err != nil {

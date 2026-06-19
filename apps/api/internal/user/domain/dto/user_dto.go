@@ -57,7 +57,7 @@ type AvailableUserResponse struct {
 
 type ListUsersRequest struct {
 	Page    int    `form:"page" binding:"omitempty,min=1"`
-	PerPage int    `form:"per_page" binding:"omitempty,min=1,max=100"`
+	PerPage int    `form:"per_page" binding:"omitempty,min=1,max=20"`
 	Search  string `form:"search" binding:"omitempty"`
 	Status  string `form:"status" binding:"omitempty,oneof=active inactive"`
 }

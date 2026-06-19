@@ -72,5 +72,5 @@ type ListProductsRequest struct {
 	Search     string `form:"search"`
 	CategoryID string `form:"category_id"`
 	Page       int    `form:"page,default=1"`
-	PerPage    int    `form:"per_page,default=20"`
+	PerPage    int    `form:"per_page,default=20" binding:"omitempty,min=1,max=20"`
 }

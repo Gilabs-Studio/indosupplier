@@ -19,7 +19,7 @@ type metricsStore struct {
 }
 
 var metrics = &metricsStore{}
-var metricsStartedAt = time.Now()
+var metricsStartedAt = apptime.Now()
 
 type MetricsSnapshotData struct {
 	TotalRequests    uint64         `json:"total_requests"`

@@ -9,6 +9,7 @@ import (
 
 	"github.com/gilabs/indosupplier/api/internal/core/errors"
 	"github.com/gilabs/indosupplier/api/internal/core/response"
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	"github.com/gilabs/indosupplier/api/internal/rfq/domain/dto"
 	"github.com/gilabs/indosupplier/api/internal/rfq/domain/usecase"
 )
@@ -90,7 +91,7 @@ func (h *RFQHandler) GetByID(c *gin.Context) {
 
 type ListRFQRequest struct {
 	Page    int    `form:"page" binding:"omitempty,min=1"`
-	PerPage int    `form:"per_page" binding:"omitempty,min=1,max=100"`
+	PerPage int    `form:"per_page" binding:"omitempty,min=1,max=20"`
 	Status  string `form:"status"`
 }
 
@@ -106,14 +107,7 @@ func (h *RFQHandler) List(c *gin.Context) {
 		return
 	}
 
-	page := query.Page
-	if page < 1 {
-		page = 1
-	}
-	perPage := query.PerPage
-	if perPage < 1 {
-		perPage = 10
-	}
+	page, perPage := utils.NormalizePagination(query.Page, query.PerPage, 10)
 
 	items, total, err := h.usecase.List(c.Request.Context(), userID, query.Status, page, perPage)
 	if err != nil {
@@ -125,10 +119,7 @@ func (h *RFQHandler) List(c *gin.Context) {
 		return
 	}
 
-	totalPages := int((total + int64(perPage) - 1) / int64(perPage))
-	if totalPages < 1 {
-		totalPages = 1
-	}
+	totalPages := utils.TotalPages(total, perPage)
 
 	meta := &response.Meta{
 		Pagination: &response.PaginationMeta{

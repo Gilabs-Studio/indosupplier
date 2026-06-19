@@ -21,6 +21,8 @@ type Config struct {
 	Xendit        XenditConfig
 	Storage       StorageConfig
 	RateLimit     RateLimitConfig
+	Pagination    PaginationConfig
+	Localization  LocalizationConfig
 	HSTS          HSTSConfig
 	Redis         RedisConfig
 }
@@ -128,6 +130,19 @@ type StorageConfig struct {
 	R2SecretAccessKey string // R2 API token secret access key
 	R2BucketName      string // R2 bucket name
 	R2PublicURL       string // Public URL prefix for serving R2 objects
+}
+
+type PaginationConfig struct {
+	DefaultPerPage int
+	MaxPerPage     int
+}
+
+type LocalizationConfig struct {
+	DefaultCurrency   string
+	DefaultLocale     string
+	CurrencySymbol    string
+	ThousandSeparator string
+	DecimalSeparator  string
 }
 
 // RateLimitRule defines rate limit configuration for a specific endpoint type
@@ -251,6 +266,17 @@ func Load() error {
 			R2BucketName:      getEnv("R2_BUCKET_NAME", ""),
 			R2PublicURL:       getEnv("R2_PUBLIC_URL", ""),
 		},
+		Pagination: PaginationConfig{
+			DefaultPerPage: getEnvAsInt("PAGINATION_DEFAULT_PER_PAGE", 20),
+			MaxPerPage:     getEnvAsInt("PAGINATION_MAX_PER_PAGE", 20),
+		},
+		Localization: LocalizationConfig{
+			DefaultCurrency:   getEnv("APP_DEFAULT_CURRENCY", "IDR"),
+			DefaultLocale:     getEnv("APP_DEFAULT_LOCALE", "id-ID"),
+			CurrencySymbol:    getEnv("APP_CURRENCY_SYMBOL", "Rp"),
+			ThousandSeparator: getEnv("APP_THOUSAND_SEPARATOR", "."),
+			DecimalSeparator:  getEnv("APP_DECIMAL_SEPARATOR", ","),
+		},
 		RateLimit: RateLimitConfig{
 			Login: RateLimitRule{
 				Requests: getEnvAsInt("RATE_LIMIT_LOGIN_REQUESTS", 3), //3 requests per 15 minutes (Level 1 - IP)
@@ -304,6 +330,27 @@ func Load() error {
 
 	if AppConfig.Subscription.GracePeriodDays < 1 {
 		AppConfig.Subscription.GracePeriodDays = 7
+	}
+	if AppConfig.Pagination.DefaultPerPage < 1 {
+		AppConfig.Pagination.DefaultPerPage = 20
+	}
+	if AppConfig.Pagination.MaxPerPage < 1 {
+		AppConfig.Pagination.MaxPerPage = 20
+	}
+	if AppConfig.Pagination.DefaultPerPage > AppConfig.Pagination.MaxPerPage {
+		AppConfig.Pagination.DefaultPerPage = AppConfig.Pagination.MaxPerPage
+	}
+	if strings.TrimSpace(AppConfig.Localization.DefaultCurrency) == "" {
+		AppConfig.Localization.DefaultCurrency = "IDR"
+	}
+	if strings.TrimSpace(AppConfig.Localization.CurrencySymbol) == "" {
+		AppConfig.Localization.CurrencySymbol = AppConfig.Localization.DefaultCurrency
+	}
+	if AppConfig.Localization.ThousandSeparator == "" {
+		AppConfig.Localization.ThousandSeparator = "."
+	}
+	if AppConfig.Localization.DecimalSeparator == "" {
+		AppConfig.Localization.DecimalSeparator = ","
 	}
 
 	// SECURITY: Enforce JWT_SECRET in production

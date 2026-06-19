@@ -3,8 +3,8 @@ package repositories
 import (
 	"context"
 	"fmt"
-	"time"
 
+	"github.com/gilabs/indosupplier/api/internal/core/apptime"
 	"github.com/gilabs/indosupplier/api/internal/core/data/models"
 	"gorm.io/gorm"
 )
@@ -35,7 +35,7 @@ func NewTimeZoneRepository(db *gorm.DB) TimeZoneRepository {
 }
 
 func (r *timeZoneRepository) GetCurrentTimezone(ctx context.Context, zoneName string) (*models.TimezoneInfo, error) {
-	now := time.Now().Unix()
+	now := apptime.Now().Unix()
 
 	var tz models.TimeZone
 	err := r.db.WithContext(ctx).
@@ -67,7 +67,7 @@ func (r *timeZoneRepository) GetCurrentTimezone(ctx context.Context, zoneName st
 }
 
 func (r *timeZoneRepository) GetTimezoneByCountry(ctx context.Context, countryCode string) ([]*models.TimezoneInfo, error) {
-	now := time.Now().Unix()
+	now := apptime.Now().Unix()
 
 	var timezones []models.TimeZone
 	err := r.db.WithContext(ctx).

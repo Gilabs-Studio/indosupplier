@@ -5,11 +5,11 @@ import (
 	"errors"
 
 	"github.com/gilabs/indosupplier/api/internal/core/utils"
-	userRepo "github.com/gilabs/indosupplier/api/internal/user/data/repositories"
 	"github.com/gilabs/indosupplier/api/internal/supplier/data/models"
 	"github.com/gilabs/indosupplier/api/internal/supplier/data/repositories"
 	"github.com/gilabs/indosupplier/api/internal/supplier/domain/dto"
 	"github.com/gilabs/indosupplier/api/internal/supplier/domain/mapper"
+	userRepo "github.com/gilabs/indosupplier/api/internal/user/data/repositories"
 )
 
 var (
@@ -56,17 +56,13 @@ func (u *productUsecase) List(ctx context.Context, userID string, req *dto.ListP
 		return nil, nil, err
 	}
 
-	products, total, err := u.productRepo.List(ctx, supplierProfileID, req.Search, req.CategoryID, req.Page, req.PerPage)
+	page, perPage := utils.NormalizePagination(req.Page, req.PerPage, 0)
+	products, total, err := u.productRepo.List(ctx, supplierProfileID, req.Search, req.CategoryID, page, perPage)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	pagination := &utils.PaginationResult{
-		Page:       req.Page,
-		PerPage:    req.PerPage,
-		Total:      int(total),
-		TotalPages: int((total + int64(req.PerPage) - 1) / int64(req.PerPage)),
-	}
+	pagination := utils.NewPaginationResult(page, perPage, total)
 
 	return mapper.ToProductListResponse(products), pagination, nil
 }
@@ -112,7 +108,7 @@ func (u *productUsecase) Create(ctx context.Context, userID string, req *dto.Cre
 		Description:       req.Description,
 		MOQ:               req.MOQ,
 		StartingPrice:     req.StartingPrice,
-		Currency:          req.Currency,
+		Currency:          normalizeCurrency(req.Currency),
 		CapacityText:      req.CapacityText,
 		IsFeatured:        req.IsFeatured,
 		SortOrder:         req.SortOrder,
@@ -163,7 +159,7 @@ func (u *productUsecase) Update(ctx context.Context, userID string, id string, r
 	p.Description = req.Description
 	p.MOQ = req.MOQ
 	p.StartingPrice = req.StartingPrice
-	p.Currency = req.Currency
+	p.Currency = normalizeCurrency(req.Currency)
 	p.CapacityText = req.CapacityText
 	p.IsFeatured = req.IsFeatured
 	p.SortOrder = req.SortOrder
@@ -213,4 +209,11 @@ func (u *productUsecase) ListCategories(ctx context.Context) ([]dto.CategoryResp
 	}
 
 	return resp, nil
+}
+
+func normalizeCurrency(currency string) string {
+	if currency == "" {
+		return utils.DefaultCurrency()
+	}
+	return currency
 }

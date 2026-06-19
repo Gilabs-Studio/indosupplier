@@ -11,6 +11,7 @@ import (
 	"github.com/gilabs/indosupplier/api/internal/content/domain/usecase"
 	"github.com/gilabs/indosupplier/api/internal/core/errors"
 	"github.com/gilabs/indosupplier/api/internal/core/response"
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 )
 
 type ContentHandler struct {
@@ -146,15 +147,7 @@ func (h *ContentHandler) Delete(c *gin.Context) {
 func listRequestFromQuery(c *gin.Context) dto.ListContentArticlesRequest {
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
 	perPage, _ := strconv.Atoi(c.DefaultQuery("per_page", "12"))
-	if page <= 0 {
-		page = 1
-	}
-	if perPage <= 0 {
-		perPage = 12
-	}
-	if perPage > 100 {
-		perPage = 100
-	}
+	page, perPage = utils.NormalizePagination(page, perPage, 12)
 
 	return dto.ListContentArticlesRequest{
 		Type:    c.Query("type"),

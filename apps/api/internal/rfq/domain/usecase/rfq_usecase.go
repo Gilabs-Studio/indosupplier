@@ -12,6 +12,7 @@ import (
 
 	buyerModels "github.com/gilabs/indosupplier/api/internal/buyer/data/models"
 	"github.com/gilabs/indosupplier/api/internal/core/apptime"
+	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	"github.com/gilabs/indosupplier/api/internal/rfq/data/models"
 	"github.com/gilabs/indosupplier/api/internal/rfq/data/repositories"
 	"github.com/gilabs/indosupplier/api/internal/rfq/domain/dto"
@@ -196,7 +197,7 @@ func (u *rfqUsecase) List(ctx context.Context, userID string, status string, pag
 	for i, rfq := range rfqs {
 		catName := catMap[rfq.CategoryID]
 		if catName == "" {
-			catName = "Industrial Minerals"
+			catName = utils.DefaultCategoryName
 		}
 		attach := attachMap[rfq.ID]
 		response = append(response, mapper.ToRFQResponse(&rfq, catName, replies[i], attach))
@@ -236,8 +237,8 @@ func (u *rfqUsecase) GetBids(ctx context.Context, userID string, rfqID string) (
 
 		// Look up message of type "offer" to parse price & moq from metadata
 		var msg models.RFQMessage
-		price := "Rp 12.500 / Kg"
-		moq := "5 Ton"
+		price := fmt.Sprintf("%s / Kg", utils.FormatMoney(12500, utils.DefaultCurrency()))
+		moq := utils.DefaultMOQ
 
 		if err := u.db.WithContext(ctx).
 			Where("rfq_id = ? AND sender_id = ? AND message_type = ?", resolvedRFQID, supplier.ID, "offer").

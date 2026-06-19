@@ -11,6 +11,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/gilabs/indosupplier/api/internal/core/apptime"
 )
 
 // Client represents Cerebras API client
@@ -97,7 +99,7 @@ func (c *Client) setCachedModels(models []ModelInfo) {
 	defer c.modelsMu.Unlock()
 
 	c.modelsCache = cloneModelList(models)
-	c.modelsCachedAt = time.Now()
+	c.modelsCachedAt = apptime.Now()
 }
 
 func (c *Client) fetchModelsFromAPI() ([]ModelInfo, error) {
