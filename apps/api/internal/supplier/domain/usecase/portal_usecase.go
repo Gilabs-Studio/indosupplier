@@ -9,9 +9,9 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/gilabs/indosupplier/api/internal/core/apptime"
+	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/config"
 	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	monetizationModels "github.com/gilabs/indosupplier/api/internal/monetization/data/models"
-	"github.com/gilabs/indosupplier/api/internal/supplier/data/models"
 	"github.com/gilabs/indosupplier/api/internal/supplier/data/repositories"
 	"github.com/gilabs/indosupplier/api/internal/supplier/domain/dto"
 )
@@ -105,77 +105,6 @@ func (u *portalUsecase) UpdateProfile(ctx context.Context, userID string, req *d
 	}, nil
 }
 
-func (u *portalUsecase) seedPlansAndBillingIfEmpty(ctx context.Context, profile *models.SupplierProfile) error {
-	// Seed plans
-	for _, p := range billingPlanCatalog {
-		_, err := u.portalRepo.GetSubscriptionPlanByCode(ctx, p.code)
-		if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
-			newPlan := &monetizationModels.SubscriptionPlan{
-				Code:         p.code,
-				Name:         p.name,
-				BillingCycle: p.cycle,
-				Price:        p.price,
-				Description:  p.name + " plan description.",
-				BenefitsJSON: "[]",
-				IsActive:     true,
-			}
-			_ = u.portalRepo.CreateSubscriptionPlan(ctx, newPlan)
-		}
-	}
-
-	// Fetch active subscription. If not found, create Gold subscription for the profile by default
-	_, err := u.portalRepo.GetActiveSubscription(ctx, profile.ID)
-	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
-		goldPlan, err := u.portalRepo.GetSubscriptionPlanByCode(ctx, "gold")
-		if err != nil {
-			return err
-		}
-
-		now := apptime.Now()
-		renewalDate := now.AddDate(1, 0, 0)
-		sub := &monetizationModels.SupplierSubscription{
-			SupplierProfileID:  profile.ID,
-			SubscriptionPlanID: goldPlan.ID,
-			StartAt:            &now,
-			EndAt:              &renewalDate,
-			Status:             "active",
-			AutoRenew:          true,
-		}
-		if err := u.portalRepo.CreateSubscription(ctx, sub); err != nil {
-			return err
-		}
-
-		// Create mock payment & invoice logs
-		pay := &monetizationModels.Payment{
-			SupplierProfileID: profile.ID,
-			RelatedType:       "subscription",
-			RelatedID:         sub.ID,
-			Amount:            goldPlan.Price,
-			Currency:          utils.DefaultCurrency(),
-			Method:            "bank_transfer",
-			Status:            "paid",
-			PaidAt:            &now,
-		}
-		if err := u.portalRepo.CreatePayment(ctx, pay); err != nil {
-			return err
-		}
-
-		inv := &monetizationModels.Invoice{
-			PaymentID:     pay.ID,
-			InvoiceNumber: fmt.Sprintf("INV-%d-001", now.Year()),
-			FileURL:       "#",
-			IssuedAt:      &now,
-			DueAt:         &now,
-			PaidAt:        &now,
-		}
-		if err := u.portalRepo.CreateInvoice(ctx, inv); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
 func (u *portalUsecase) GetBillingOverview(ctx context.Context, userID string) (*dto.BillingOverviewResponse, error) {
 	profile, err := u.portalRepo.GetProfileByUserID(ctx, userID)
 	if err != nil {
@@ -185,65 +114,52 @@ func (u *portalUsecase) GetBillingOverview(ctx context.Context, userID string) (
 		return nil, err
 	}
 
-	// Populate plans/subscription if empty
-	_ = u.seedPlansAndBillingIfEmpty(ctx, profile)
-
 	sub, err := u.portalRepo.GetActiveSubscription(ctx, profile.ID)
 	var detail DTOPlanDetail
 	if err == nil {
 		plan, errPlan := u.portalRepo.GetSubscriptionPlanByID(ctx, sub.SubscriptionPlanID)
 		if errPlan == nil {
-			detail = DTOPlanDetail{
-				planID:       plan.Code,
-				planName:     plan.Name,
-				price:        plan.Price,
-				billingCycle: plan.BillingCycle,
-				renewalDate:  sub.EndAt,
-			}
+			detail = planDetailFromPlan(plan, sub.EndAt)
 		}
 	}
 
 	if detail.planID == "" {
-		detail = DTOPlanDetail{
-			planID:       "free",
-			planName:     "Free Basic",
-			price:        0,
-			billingCycle: "month",
+		defaultPlan, errPlan := u.portalRepo.GetSubscriptionPlanByCode(ctx, config.DefaultSubscriptionPlanCode())
+		if errPlan != nil {
+			if errors.Is(errPlan, gorm.ErrRecordNotFound) {
+				return nil, ErrPlanNotFound
+			}
+			return nil, errPlan
 		}
+		detail = planDetailFromPlan(defaultPlan, nil)
 	}
 
 	// Fetch invoices
 	dbInvoices, _ := u.portalRepo.GetInvoices(ctx, profile.ID)
 	invoiceDTOs := make([]dto.BillingInvoiceDTO, 0)
 	for _, inv := range dbInvoices {
-		planInfo := billingPlanByCode(detail.planID)
 		invDateStr := defaultBillingInvoiceDate()
 		if inv.IssuedAt != nil {
-			invDateStr = inv.IssuedAt.Format("January 2, 2006")
+			invDateStr = utils.FormatDisplayDate(*inv.IssuedAt)
+		}
+
+		amount := detail.price
+		currency := utils.DefaultCurrency()
+		status := ""
+		if payment, errPayment := u.portalRepo.GetPaymentByID(ctx, inv.PaymentID); errPayment == nil {
+			amount = payment.Amount
+			currency = payment.Currency
+			status = payment.Status
 		}
 
 		invoiceDTOs = append(invoiceDTOs, dto.BillingInvoiceDTO{
 			ID:          inv.InvoiceNumber,
 			Date:        invDateStr,
-			Description: planInfo.invoiceDescription,
-			Amount:      utils.FormatMoney(planInfo.price, utils.DefaultCurrency()),
-			Status:      "paid",
-			ReceiptURL:  "#",
+			Description: billingDescription(detail),
+			Amount:      utils.FormatMoney(amount, currency),
+			Status:      invoiceStatus(status, inv.PaidAt),
+			ReceiptURL:  inv.FileURL,
 		})
-	}
-
-	// If no invoices exist in database, return a default list
-	if len(invoiceDTOs) == 0 {
-		invoiceDTOs = []dto.BillingInvoiceDTO{
-			{
-				ID:          "INV-2026-001",
-				Date:        defaultBillingInvoiceDate(),
-				Description: billingPlanByCode(detail.planID).invoiceDescription,
-				Amount:      utils.FormatMoney(billingPlanByCode(detail.planID).price, utils.DefaultCurrency()),
-				Status:      "paid",
-				ReceiptURL:  "#",
-			},
-		}
 	}
 
 	subDetails := []dto.SubscriptionDetailDTO{
@@ -259,22 +175,22 @@ func (u *portalUsecase) GetBillingOverview(ctx context.Context, userID string) (
 
 	// Metered limits stats
 	stats := dto.MeteredUsageStatsDTO{
-		ProductUploadsUsed:  142,
+		ProductUploadsUsed:  0,
 		ProductUploadsLimit: utils.DefaultQuotaLimitLabel,
-		RfqBidsUsed:         85,
+		RfqBidsUsed:         0,
 		RfqBidsLimit:        utils.DefaultQuotaLimitLabel,
-		AuctionSlotsUsed:    1,
+		AuctionSlotsUsed:    0,
 		AuctionSlotsLimit:   utils.DefaultQuotaLimitLabel,
 	}
 
 	nextPaymentDate := defaultBillingRenewalDate()
 	if detail.renewalDate != nil {
-		nextPaymentDate = detail.renewalDate.Format("January 2, 2006")
+		nextPaymentDate = utils.FormatDisplayDate(*detail.renewalDate)
 	}
 
 	return &dto.BillingOverviewResponse{
 		CurrentMeteredUsage:  utils.FormatMoney(0, utils.DefaultCurrency()),
-		CurrentIncludedUsage: fmt.Sprintf("%s Tier Limits Included", detail.planName),
+		CurrentIncludedUsage: includedUsageDescription(detail),
 		NextPaymentDue:       utils.FormatMoney(detail.price, utils.DefaultCurrency()),
 		NextPaymentDate:      nextPaymentDate,
 		Subscriptions:        subDetails,
@@ -353,44 +269,56 @@ type DTOPlanDetail struct {
 	planName     string
 	price        float64
 	billingCycle string
+	description  string
 	renewalDate  *time.Time
 }
 
-type billingPlanSeed struct {
-	code               string
-	name               string
-	price              float64
-	cycle              string
-	invoiceDescription string
-}
-
-var billingPlanCatalog = []billingPlanSeed{
-	{code: "free", name: "Free Basic", price: 0, cycle: "month", invoiceDescription: "GIMS Free Basic - Monthly plan"},
-	{code: "bronze", name: "Bronze Seller", price: 2000000, cycle: "year", invoiceDescription: "GIMS Bronze Seller - Subscription Upgrade"},
-	{code: "silver", name: "Silver Pro", price: 5000000, cycle: "year", invoiceDescription: "GIMS Silver Pro - Subscription Upgrade"},
-	{code: "gold", name: "Gold Enterprise", price: 12000000, cycle: "year", invoiceDescription: "GIMS Gold Enterprise - Annual plan"},
-}
-
-func billingPlanByCode(code string) billingPlanSeed {
-	for _, plan := range billingPlanCatalog {
-		if plan.code == code {
-			return plan
-		}
+func planDetailFromPlan(plan *monetizationModels.SubscriptionPlan, renewalDate *time.Time) DTOPlanDetail {
+	return DTOPlanDetail{
+		planID:       plan.Code,
+		planName:     plan.Name,
+		price:        plan.Price,
+		billingCycle: plan.BillingCycle,
+		description:  plan.Description,
+		renewalDate:  renewalDate,
 	}
-	return billingPlanCatalog[0]
+}
+
+func billingDescription(detail DTOPlanDetail) string {
+	if detail.description != "" {
+		return detail.description
+	}
+	return fmt.Sprintf("%s - %s plan", detail.planName, detail.billingCycle)
+}
+
+func includedUsageDescription(detail DTOPlanDetail) string {
+	if detail.description != "" {
+		return detail.description
+	}
+	return fmt.Sprintf("%s included usage", detail.planName)
+}
+
+func invoiceStatus(paymentStatus string, paidAt *time.Time) string {
+	if paymentStatus != "" {
+		return paymentStatus
+	}
+	if paidAt != nil {
+		return "paid"
+	}
+	return "pending"
 }
 
 func defaultBillingInvoiceDate() string {
-	return apptime.Now().AddDate(0, -1, 0).Format("January 2, 2006")
+	return utils.FormatDisplayDate(apptime.Now().AddDate(0, -1, 0))
 }
 
 func defaultBillingRenewalDate() string {
-	return apptime.Now().AddDate(1, 0, 0).Format("January 2, 2006")
+	return utils.FormatDisplayDate(apptime.Now().AddDate(1, 0, 0))
 }
 
 func formatRenewalDate(t *time.Time) string {
 	if t == nil {
 		return defaultBillingRenewalDate()
 	}
-	return t.Format("January 2, 2006")
+	return utils.FormatDisplayDate(*t)
 }

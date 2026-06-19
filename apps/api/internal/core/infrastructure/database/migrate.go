@@ -82,5 +82,8 @@ func AutoMigrate() error {
 		return fmt.Errorf("failed to run migrations: %w", err)
 	}
 
+	DB.Exec("ALTER TABLE supplier_products ALTER COLUMN currency DROP DEFAULT")
+	DB.Exec("ALTER TABLE payments ALTER COLUMN currency DROP DEFAULT")
+
 	return nil
 }

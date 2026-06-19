@@ -20,6 +20,7 @@ type PortalRepository interface {
 	CreateSubscription(ctx context.Context, sub *monetizationModels.SupplierSubscription) error
 	UpdateSubscription(ctx context.Context, sub *monetizationModels.SupplierSubscription) error
 	GetInvoices(ctx context.Context, supplierProfileID string) ([]monetizationModels.Invoice, error)
+	GetPaymentByID(ctx context.Context, paymentID string) (*monetizationModels.Payment, error)
 	CreateInvoice(ctx context.Context, inv *monetizationModels.Invoice) error
 	CreatePayment(ctx context.Context, pay *monetizationModels.Payment) error
 }
@@ -100,6 +101,14 @@ func (r *portalRepository) GetInvoices(ctx context.Context, supplierProfileID st
 		return nil, err
 	}
 	return invoices, nil
+}
+
+func (r *portalRepository) GetPaymentByID(ctx context.Context, paymentID string) (*monetizationModels.Payment, error) {
+	var payment monetizationModels.Payment
+	if err := r.getDB(ctx).Where("id = ?", paymentID).First(&payment).Error; err != nil {
+		return nil, err
+	}
+	return &payment, nil
 }
 
 func (r *portalRepository) CreateInvoice(ctx context.Context, inv *monetizationModels.Invoice) error {

@@ -191,7 +191,7 @@ type Payment struct {
 	RelatedType       string         `gorm:"type:varchar(80);not null;index:idx_payment_related" json:"related_type"`
 	RelatedID         string         `gorm:"type:uuid;not null;index:idx_payment_related" json:"related_id"`
 	Amount            float64        `gorm:"not null;default:0" json:"amount"`
-	Currency          string         `gorm:"type:varchar(10);not null;default:'IDR'" json:"currency"`
+	Currency          string         `gorm:"type:varchar(10);not null" json:"currency"`
 	Method            string         `gorm:"type:varchar(80);index" json:"method"`
 	Status            string         `gorm:"type:varchar(40);not null;default:'pending';index" json:"status"`
 	PaidAt            *time.Time     `json:"paid_at"`

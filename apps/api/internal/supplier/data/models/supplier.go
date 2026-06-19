@@ -115,7 +115,7 @@ type SupplierProduct struct {
 	Description       string                 `gorm:"type:text" json:"description"`
 	MOQ               string                 `gorm:"type:varchar(120)" json:"moq"`
 	StartingPrice     float64                `gorm:"not null;default:0" json:"starting_price"`
-	Currency          string                 `gorm:"type:varchar(10);not null;default:'IDR'" json:"currency"`
+	Currency          string                 `gorm:"type:varchar(10);not null" json:"currency"`
 	CapacityText      string                 `gorm:"type:varchar(255)" json:"capacity_text"`
 	IsFeatured        bool                   `gorm:"not null;default:false;index" json:"is_featured"`
 	SortOrder         int                    `gorm:"not null;default:0;index" json:"sort_order"`

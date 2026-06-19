@@ -73,6 +73,7 @@ type ServerConfig struct {
 
 type SubscriptionLifecycleConfig struct {
 	GracePeriodDays int
+	DefaultPlanCode string
 }
 
 type DatabaseConfig struct {
@@ -173,6 +174,13 @@ type HSTSConfig struct {
 
 var AppConfig *Config
 
+func DefaultSubscriptionPlanCode() string {
+	if AppConfig != nil && strings.TrimSpace(AppConfig.Subscription.DefaultPlanCode) != "" {
+		return strings.TrimSpace(AppConfig.Subscription.DefaultPlanCode)
+	}
+	return "free"
+}
+
 func Load() error {
 	// Load .env file if exists (for local development only)
 	// Skip .env loading in production to use Docker environment variables.
@@ -205,6 +213,7 @@ func Load() error {
 		},
 		Subscription: SubscriptionLifecycleConfig{
 			GracePeriodDays: getEnvAsInt("SUBSCRIPTION_GRACE_PERIOD_DAYS", 7),
+			DefaultPlanCode: getEnv("SUBSCRIPTION_DEFAULT_PLAN_CODE", "free"),
 		},
 		Startup: StartupConfig{
 			RunMigrations: getEnvAsBool("RUN_MIGRATIONS", envValue != "production"),
@@ -330,6 +339,9 @@ func Load() error {
 
 	if AppConfig.Subscription.GracePeriodDays < 1 {
 		AppConfig.Subscription.GracePeriodDays = 7
+	}
+	if strings.TrimSpace(AppConfig.Subscription.DefaultPlanCode) == "" {
+		AppConfig.Subscription.DefaultPlanCode = "free"
 	}
 	if AppConfig.Pagination.DefaultPerPage < 1 {
 		AppConfig.Pagination.DefaultPerPage = 20

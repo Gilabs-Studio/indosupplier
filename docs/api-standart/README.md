@@ -36,9 +36,14 @@ This directory contains comprehensive standards and guidelines for backend API d
    - Secure storage and naming
    - Scalability guidelines
 
+5. **[API Configuration & Seed Data Standards](./api-configuration-standards.md)**
+   - Runtime config vs seed data ownership
+   - Pagination, currency, date/time standards
+   - Hardcode prevention rules
+
 ### Enterprise Standards
 
-5. **[API Performance Standards](./api-performance-standards.md)**
+6. **[API Performance Standards](./api-performance-standards.md)**
    - Database query optimization
    - Caching strategies
    - Response time optimization
@@ -47,7 +52,7 @@ This directory contains comprehensive standards and guidelines for backend API d
    - Monitoring and observability
    - Load testing requirements
 
-6. **[API Enterprise Scenarios](./api-enterprise-scenarios.md)**
+7. **[API Enterprise Scenarios](./api-enterprise-scenarios.md)**
    - Multi-tenancy
    - Concurrency and race conditions
    - Bulk operations
@@ -59,7 +64,7 @@ This directory contains comprehensive standards and guidelines for backend API d
    - Security scenarios
    - Monitoring and alerting
 
-7. **[API Event-Driven Architecture](./api-event-driven.md)**
+8. **[API Event-Driven Architecture](./api-event-driven.md)**
    - Event structure and naming
    - EventPublisher interface
    - Domain events (User, Role, Auth)
@@ -76,6 +81,7 @@ This directory contains comprehensive standards and guidelines for backend API d
 - [Response Standards](api-response-standards.md)
 - [Error Codes](api-error-codes.md)
 - [Performance Standards](api-performance-standards.md)
+- [Configuration & Seed Data Standards](api-configuration-standards.md)
 - [Security Standards](api-security-standards.md)
 - [Event Driven Architecture](api-event-driven.md)
 - [Enterprise Scenarios](api-enterprise-scenarios.md) for common use cases
@@ -129,6 +135,8 @@ This directory contains comprehensive standards and guidelines for backend API d
 - Comprehensive error handling
 - Proper logging and monitoring
 - Documentation and comments
+- No business seed data or display defaults inside request-path usecases/handlers
+- Runtime defaults are centralized in config/core helpers
 
 ---
 
@@ -138,6 +146,10 @@ This directory contains comprehensive standards and guidelines for backend API d
 - [ ] Follows folder structure standards
 - [ ] Uses standard response format
 - [ ] Uses standard error codes
+- [ ] No business hardcode in request path
+- [ ] Seed/reference/demo data lives in `apps/api/seeders`
+- [ ] Pagination uses `page` and `per_page` with max 20
+- [ ] Currency/date/time uses core helpers/config
 - [ ] Input validation implemented
 - [ ] Error handling comprehensive
 

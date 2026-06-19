@@ -11,7 +11,8 @@ Ringkasan:
 - Bahasa: Go (100%)
 - Eksekutables: API server (HTTP), worker background, seeder, generator.
 - Infrastruktur inti: konfigurasi, koneksi DB, migrasi & seeding, router, middleware.
-- Domain vertical slice: data (models, repositories, seeders), domain (dto, mapper, usecase), presentation (handler, router).
+- Domain vertical slice: data (models, repositories), domain (dto, mapper, usecase), presentation (handler, router).
+- Seed/demo/reference data: `apps/api/seeders`.
 - Orkestrasi: Dockerfile, docker-compose per lingkungan.
 - Migrasi: Atlas (berbasis SQL dengan timestamp).
 - Testing: unit dan e2e.
@@ -27,6 +28,7 @@ Komponen:
 - cmd/gen: Generator scaffolding (opsional).
 - internal/core: Concern lintas domain (config, database, router, middleware, utils, constants).
 - internal/<domain>: Vertical slice per domain (data → domain → presentation).
+- apps/api/seeders: Satu-satunya tempat untuk demo/reference seed data.
 
 Alur request (sederhana):
 ```
@@ -57,6 +59,8 @@ Prinsip:
 - Domain-first (entity dan usecase mandiri dari framework).
 - Dependency mengalir dari luar ke dalam (presentation → domain → data).
 - Cross-cutting (auth, config, logging) tersentral di core.
+- Runtime API path tidak boleh membuat seed/demo/reference data.
+- Business defaults harus berasal dari config, helper core, atau data yang sudah tersimpan.
 
 ---
 
@@ -85,8 +89,7 @@ Struktur direktori utama:
 │  └─ <domain>/
 │     ├─ data/
 │     │  ├─ models/
-│     │  ├─ repositories/
-│     │  └─ seeders/
+│     │  └─ repositories/
 │     ├─ domain/
 │     │  ├─ dto/
 │     │  ├─ mapper/
@@ -99,6 +102,7 @@ Struktur direktori utama:
 ├─ templates/               # scaffolding templates (dto/handler/repository/routers/usecase)
 ├─ test/
 │  └─ e2e/
+├─ apps/api/seeders/       # Demo/reference seed data
 ├─ .env.example
 ├─ Dockerfile(.dev/.test/.worker)
 ├─ docker-compose(.dev/.staging/.prod/.test).yml
@@ -117,10 +121,8 @@ internal/master-data/
 ├─ data/
 │  ├─ models/
 │  │  └─ product.go
-│  ├─ repositories/
-│  │  └─ product_repository.go
-│  └─ seeders/
-│     └─ product_seeder.go
+│  └─ repositories/
+│     └─ product_repository.go
 ├─ domain/
 │  ├─ dto/
 │  │  └─ product_dto.go
@@ -217,7 +219,7 @@ import (
 type ProductRepository interface {
     Create(ctx context.Context, p *models.Product) error
     FindByID(ctx context.Context, id string) (*models.Product, error)
-    List(ctx context.Context, limit, offset int, q string) ([]models.Product, int64, error)
+    List(ctx context.Context, page, perPage int, q string) ([]models.Product, int64, error)
     Update(ctx context.Context, p *models.Product) error
     Delete(ctx context.Context, id string) error
 }
@@ -241,9 +243,9 @@ package usecase
 import (
     "context"
     "errors"
-    "time"
 
     "github.com/google/uuid"
+    "github.com/gilabs/indosupplier/api/internal/core/apptime"
     "internal/master-data/data/models"
     "internal/master-data/data/repositories"
     "internal/master-data/domain/dto"
@@ -274,8 +276,8 @@ func (u *productUsecase) Create(ctx context.Context, req dto.CreateProductReques
         CategoryID:  req.CategoryID,
         Price:       req.Price,
         Description: req.Description,
-        CreatedAt:   time.Now(),
-        UpdatedAt:   time.Now(),
+        CreatedAt:   apptime.Now(),
+        UpdatedAt:   apptime.Now(),
     }
     if err := u.repo.Create(ctx, m); err != nil {
         return dto.ProductResponse{}, err
@@ -492,9 +494,10 @@ migrations/
 
 ## 9. Seeding
 
-- `seed.go`: data dasar (mis. role, permission).
-- `production_seed.go`: seeding aman untuk production (idempotent).
-- Domain-specific seeders di `internal/<domain>/data/seeders/`.
+- Semua seed/demo/reference data berada di `apps/api/seeders`.
+- Seeder harus idempotent.
+- Request-path API code tidak boleh membuat seed/demo/reference data.
+- Production seed harus eksplisit, aman, dan tidak dijalankan diam-diam dari usecase.
 
 ---
 

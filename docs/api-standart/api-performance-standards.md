@@ -121,15 +121,16 @@ perPage := req.PerPage
 if perPage < 1 {
     perPage = 20
 }
-if perPage > 100 {
-    perPage = 100  // CRITICAL: Maximum limit
+if perPage > 20 {
+    perPage = 20  // CRITICAL: Maximum limit
 }
-// NEVER allow per_page > 100
+// NEVER allow per_page > 20
 ```
 
 **Pagination Best Practices**:
 - Default: 20 items per page
-- Maximum: 100 items per page
+- Maximum: 20 items per page
+- Query params: `page` and `per_page` only
 - Use cursor-based pagination for large datasets
 - Always include pagination metadata in response
 
@@ -449,7 +450,7 @@ logger.Info("Request processed",
 ### Database
 - [ ] All queries use indexes
 - [ ] No N+1 queries
-- [ ] Pagination limits enforced (max 100)
+- [ ] Pagination limits enforced (max 20)
 - [ ] Query timeouts implemented (30s max)
 - [ ] Connection pool configured
 - [ ] Database aggregation used for summaries

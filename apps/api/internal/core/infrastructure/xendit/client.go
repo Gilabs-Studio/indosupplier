@@ -53,14 +53,14 @@ func (c *Client) IsConfigured() bool {
 type CreateInvoiceRequest struct {
 	// ExternalID must be unique per invoice; use the pending registration token.
 	ExternalID  string `json:"external_id"`
-	Amount      int64  `json:"amount"` // In smallest IDR unit (IDR has no subunits, so 1 IDR = 1)
+	Amount      int64  `json:"amount"` // Amount in the payment currency's smallest unit.
 	PayerEmail  string `json:"payer_email"`
 	Description string `json:"description"`
 	// SuccessRedirectURL is where Xendit redirects the browser after payment.
 	SuccessRedirectURL string `json:"success_redirect_url"`
 	// FailureRedirectURL is where Xendit redirects the browser if the user cancels.
 	FailureRedirectURL string `json:"failure_redirect_url"`
-	// Currency defaults to IDR.
+	// Currency defaults to the configured application currency.
 	Currency string `json:"currency"`
 	// InvoiceDuration is the number of seconds the invoice stays payable (default 86400 = 24h).
 	InvoiceDuration int `json:"invoice_duration"`
@@ -143,7 +143,7 @@ type CreateRecurringPlanRequest struct {
 	ReferenceID      string                   `json:"reference_id"`     // Unique plan reference (e.g
 	CustomerID       string                   `json:"customer_id"`      // Xendit customer ID
 	RecurringAction  string                   `json:"recurring_action"` // "PAYMENT"
-	Currency         string                   `json:"currency"`         // "IDR"
+	Currency         string                   `json:"currency"`
 	Amount           int64                    `json:"amount"`
 	PaymentMethods   []RecurringPaymentMethod `json:"payment_methods"`
 	Schedule         RecurringSchedule        `json:"schedule"`
