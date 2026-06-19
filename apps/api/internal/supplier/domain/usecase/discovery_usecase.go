@@ -18,7 +18,7 @@ import (
 type DiscoveryUsecase interface {
 	List(ctx context.Context, q string, categoryID string, region string, verifiedOnly bool) ([]dto.PublicSupplierDto, error)
 	GetBySlug(ctx context.Context, slug string) (*dto.PublicSupplierDto, error)
-	ListProducts(ctx context.Context, q string) ([]dto.PublicProductDto, error)
+	ListProducts(ctx context.Context, q string, supplierID string, page int, limit int) ([]dto.PublicProductDto, error)
 	GetProductByID(ctx context.Context, id string) (*dto.PublicProductDetailDto, error)
 	LookupSuppliers(ctx context.Context, q string, page int, limit int) ([]dto.PublicSupplierDto, error)
 	LookupProducts(ctx context.Context, q string, page int, limit int) ([]dto.PublicProductDto, error)
@@ -105,7 +105,7 @@ func (u *discoveryUsecase) GetBySlug(ctx context.Context, slug string) (*dto.Pub
 	return &response, nil
 }
 
-func (u *discoveryUsecase) ListProducts(ctx context.Context, q string) ([]dto.PublicProductDto, error) {
+func (u *discoveryUsecase) ListProducts(ctx context.Context, q string, supplierID string, page int, limit int) ([]dto.PublicProductDto, error) {
 	db := u.db.WithContext(ctx).
 		Model(&models.SupplierProduct{}).
 		Preload("Photos").
@@ -116,6 +116,18 @@ func (u *discoveryUsecase) ListProducts(ctx context.Context, q string) ([]dto.Pu
 	if q != "" {
 		clauses, args := productSearchClauses(q)
 		db = db.Where(strings.Join(clauses, " OR "), args...)
+	}
+
+	if supplierID != "" {
+		if !regexp.MustCompile(`^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$`).MatchString(supplierID) {
+			return []dto.PublicProductDto{}, nil
+		}
+		db = db.Where("supplier_products.supplier_profile_id = ?", supplierID)
+	}
+
+	if page > 0 && limit > 0 {
+		offset := (page - 1) * limit
+		db = db.Offset(offset).Limit(limit)
 	}
 
 	var products []models.SupplierProduct

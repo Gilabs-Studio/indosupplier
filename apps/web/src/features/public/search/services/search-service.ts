@@ -46,10 +46,10 @@ export const searchService = {
     }
   },
 
-  async searchProducts(q: string): Promise<PublicProductDto[]> {
+  async searchProducts(q: string, supplierId?: string, page?: number, limit?: number): Promise<PublicProductDto[]> {
     try {
       const response = await apiClient.get<{ data: PublicProductDto[] }>("/products", {
-        params: { q },
+        params: { q, supplier_id: supplierId, page, limit },
       });
       return response.data?.data || [];
     } catch (error) {

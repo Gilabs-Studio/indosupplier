@@ -46,7 +46,11 @@ func (h *DiscoveryHandler) GetBySlug(c *gin.Context) {
 
 func (h *DiscoveryHandler) ListProducts(c *gin.Context) {
 	q := c.Query("q")
-	products, err := h.discoveryUC.ListProducts(c.Request.Context(), q)
+	supplierID := c.Query("supplier_id")
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "12"))
+
+	products, err := h.discoveryUC.ListProducts(c.Request.Context(), q, supplierID, page, limit)
 	if err != nil {
 		errors.InternalServerErrorResponse(c, err.Error())
 		return
