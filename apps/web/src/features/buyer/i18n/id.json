@@ -5,6 +5,7 @@
       "chat": "Chat",
       "reviews": "Ulasan",
       "rfqList": "RFQ Saya",
+      "following": "Toko Diikuti",
       "wishlist": "Disimpan",
       "compare": "Bandingkan",
       "profile": "Profil",
@@ -16,7 +17,8 @@
       "premiumSourcingDesc": "Nikmati akses tanpa batas untuk mengirim RFQ & berdiskusi dengan supplier terverifikasi.",
       "gimsPay": "GIMS Pay",
       "rfqSent": "RFQ Terkirim",
-      "supplierSaved": "Supplier Disimpan"
+      "supplierSaved": "Supplier Diikuti",
+      "productsSaved": "Produk Disimpan"
     },
     "dashboard": {
       "title": "Selamat datang kembali",
@@ -39,19 +41,29 @@
       "guideStep3Desc": "Lengkapi profil B2B Anda untuk menaikkan limit kredit transaksi."
     },
     "bookmarks": {
-      "title": "Supplier Disimpan",
-      "subtitle": "Daftar pendek supplier terpilih untuk dibandingkan atau disiarkan RFQ.",
-      "compareCount": "Bandingkan Supplier ({count})",
-      "emptyTitle": "Belum ada disimpan",
-      "emptyDesc": "Simpan supplier yang Anda temukan selama pencarian untuk dimasukkan ke daftar ini.",
+      "title": "Produk Disimpan",
+      "subtitle": "Kumpulan produk yang ingin Anda pantau, bandingkan, atau lanjutkan ke supplier terkait.",
+      "compareCount": "Bandingkan Produk ({count})",
+      "emptyTitle": "Belum ada produk disimpan",
+      "emptyDesc": "Simpan produk dari hasil pencarian atau halaman detail untuk muncul di sini.",
       "emptyTitleProducts": "Belum ada produk disimpan",
       "emptyDescProducts": "Jelajahi produk dari supplier terpilih dan simpan di sini.",
-      "btnSearchSuppliers": "Cari Supplier",
       "btnSearchProducts": "Cari Produk",
-      "cardProducts": "Produk Utama",
+      "compareCheckbox": "Pilih untuk bandingkan"
+    },
+    "following": {
+      "title": "Toko Diikuti",
+      "subtitle": "Daftar toko yang Anda ikuti untuk dipantau, dihubungi, atau dibandingkan.",
+      "emptyTitle": "Belum mengikuti supplier",
+      "emptyDesc": "Ikuti supplier dari hasil pencarian atau halaman profil agar muncul di sini.",
+      "btnSearchSuppliers": "Cari Supplier",
+      "btnViewSupplier": "Lihat Supplier",
+      "btnChat": "Chat",
+      "btnUnfollow": "Berhenti Ikuti",
+      "btnFollowing": "Mengikuti",
       "compareCheckbox": "Pilih untuk bandingkan",
-      "btnProfile": "Profil",
-      "btnRfq": "Kirim RFQ"
+      "cardProducts": "Produk Utama",
+      "badgeVerified": "Terverifikasi"
     },
     "compare": {
       "title": "Bandingkan Supplier",

@@ -5,6 +5,7 @@
       "chat": "Chat",
       "reviews": "Reviews",
       "rfqList": "My RFQs",
+      "following": "Followed Shops",
       "wishlist": "Bookmarks",
       "compare": "Compare",
       "profile": "Profile",
@@ -16,7 +17,8 @@
       "premiumSourcingDesc": "Enjoy unlimited RFQs & negotiations with verified suppliers.",
       "gimsPay": "GIMS Pay",
       "rfqSent": "RFQ Sent",
-      "supplierSaved": "Supplier Saved"
+      "supplierSaved": "Followed Suppliers",
+      "productsSaved": "Saved Products"
     },
     "dashboard": {
       "title": "Welcome back",
@@ -39,19 +41,29 @@
       "guideStep3Desc": "Complete your company details to increase limits and complete secure trade."
     },
     "bookmarks": {
-      "title": "Bookmarked Suppliers",
-      "subtitle": "Shortlisted suppliers for comparison or RFQ broadcasting.",
-      "compareCount": "Compare Suppliers ({count})",
-      "emptyTitle": "No bookmarks yet",
-      "emptyDesc": "Bookmark suppliers during search to save them to this shortlist.",
+      "title": "Saved Products",
+      "subtitle": "Products you want to watch, compare, or revisit with the supplier.",
+      "compareCount": "Compare Products ({count})",
+      "emptyTitle": "No saved products yet",
+      "emptyDesc": "Save products from search or detail pages to keep them here.",
       "emptyTitleProducts": "No products bookmarked yet",
       "emptyDescProducts": "Browse products from selected suppliers and save them here.",
-      "btnSearchSuppliers": "Search Suppliers",
       "btnSearchProducts": "Search Products",
-      "cardProducts": "Key Products",
+      "compareCheckbox": "Add to compare"
+    },
+    "following": {
+      "title": "Followed Shops",
+      "subtitle": "Shops you follow to monitor, contact, or compare.",
+      "emptyTitle": "No followed suppliers yet",
+      "emptyDesc": "Follow suppliers from search or profile pages to keep them here.",
+      "btnSearchSuppliers": "Search Suppliers",
+      "btnViewSupplier": "View Supplier",
+      "btnChat": "Chat",
+      "btnUnfollow": "Unfollow",
+      "btnFollowing": "Following",
       "compareCheckbox": "Add to compare",
-      "btnProfile": "Profile",
-      "btnRfq": "Send RFQ"
+      "cardProducts": "Key Products",
+      "badgeVerified": "Verified"
     },
     "compare": {
       "title": "Compare Suppliers",

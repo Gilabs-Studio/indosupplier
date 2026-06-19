@@ -84,6 +84,26 @@ func (b *Bookmark) BeforeCreate(tx *gorm.DB) error {
 	return nil
 }
 
+type SupplierFollowing struct {
+	ID                string         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
+	BuyerProfileID    string         `gorm:"type:uuid;not null;index:idx_buyer_supplier_following,unique" json:"buyer_profile_id"`
+	SupplierProfileID string         `gorm:"type:uuid;not null;index:idx_buyer_supplier_following,unique" json:"supplier_profile_id"`
+	CreatedAt         time.Time      `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt         time.Time      `gorm:"autoUpdateTime;index" json:"updated_at"`
+	DeletedAt         gorm.DeletedAt `gorm:"index" json:"-"`
+}
+
+func (SupplierFollowing) TableName() string {
+	return "buyer_supplier_followings"
+}
+
+func (f *SupplierFollowing) BeforeCreate(tx *gorm.DB) error {
+	if f.ID == "" {
+		f.ID = uuid.New().String()
+	}
+	return nil
+}
+
 type ComparisonSession struct {
 	ID             string     `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
 	BuyerProfileID string     `gorm:"type:uuid;not null;index" json:"buyer_profile_id"`
@@ -144,7 +164,6 @@ func (c *ComparisonProductSessionItem) BeforeCreate(tx *gorm.DB) error {
 	return nil
 }
 
-
 type PurchaseOrder struct {
 	ID                string         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
 	PONumber          string         `gorm:"type:varchar(120);not null;uniqueIndex" json:"po_number"`
@@ -181,4 +200,3 @@ func (p *PurchaseOrder) BeforeCreate(tx *gorm.DB) error {
 	}
 	return nil
 }
-

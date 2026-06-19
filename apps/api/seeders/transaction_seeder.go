@@ -37,26 +37,45 @@ func SeedTransactions() error {
 	if !database.DB.Migrator().HasTable(&buyerModels.Bookmark{}) {
 		return nil
 	}
+	hasFollowingTable := database.DB.Migrator().HasTable(&buyerModels.SupplierFollowing{})
 
-	// Seed bookmarks for both buyer2 and admin
+	// Seed product bookmarks and followed suppliers for both buyer2 and admin
 	emailsToSeed := []string{"buyer2@indosupplier.local", "admin@example.com"}
 	for _, email := range emailsToSeed {
 		var u userModels.User
 		if err := database.DB.Where("email = ?", email).First(&u).Error; err == nil {
 			var bp buyerModels.BuyerProfile
 			if err := database.DB.Where("user_id = ?", u.ID).First(&bp).Error; err == nil {
+				if hasFollowingTable {
+					var followingCount int64
+					if err := database.DB.Model(&buyerModels.SupplierFollowing{}).Where("buyer_profile_id = ?", bp.ID).Count(&followingCount).Error; err == nil && followingCount == 0 {
+						followings := []buyerModels.SupplierFollowing{
+							{
+								BuyerProfileID:    bp.ID,
+								SupplierProfileID: suppliers[0].ID,
+							},
+						}
+						if len(suppliers) > 1 {
+							followings = append(followings, buyerModels.SupplierFollowing{
+								BuyerProfileID:    bp.ID,
+								SupplierProfileID: suppliers[1].ID,
+							})
+						}
+						for _, following := range followings {
+							if err := database.DB.Create(&following).Error; err != nil {
+								fmt.Printf("warning: failed to seed following supplier for %s: %v\n", email, err)
+							}
+						}
+						fmt.Printf("seeded mock following suppliers for %s\n", email)
+					}
+				}
+
 				var bCount int64
 				if err := database.DB.Model(&buyerModels.Bookmark{}).Where("buyer_profile_id = ?", bp.ID).Count(&bCount).Error; err == nil && bCount == 0 {
 					var prod supplierModels.SupplierProduct
 					hasProduct := database.DB.Where("supplier_profile_id = ?", suppliers[0].ID).First(&prod).Error == nil
 
-					bookmarks := []buyerModels.Bookmark{
-						{
-							BuyerProfileID:    bp.ID,
-							SupplierProfileID: suppliers[0].ID,
-							Notes:             "Supplier utama untuk bahan baku mineral.",
-						},
-					}
+					bookmarks := []buyerModels.Bookmark{}
 					if hasProduct {
 						bookmarks = append(bookmarks, buyerModels.Bookmark{
 							BuyerProfileID:    bp.ID,
@@ -68,12 +87,6 @@ func SeedTransactions() error {
 					if len(suppliers) > 1 {
 						var prod2 supplierModels.SupplierProduct
 						hasProduct2 := database.DB.Where("supplier_profile_id = ?", suppliers[1].ID).First(&prod2).Error == nil
-
-						bookmarks = append(bookmarks, buyerModels.Bookmark{
-							BuyerProfileID:    bp.ID,
-							SupplierProfileID: suppliers[1].ID,
-							Notes:             "Supplier alternatif untuk tekstil.",
-						})
 
 						if hasProduct2 {
 							bookmarks = append(bookmarks, buyerModels.Bookmark{

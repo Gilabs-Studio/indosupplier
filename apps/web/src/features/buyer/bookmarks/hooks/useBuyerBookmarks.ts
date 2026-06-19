@@ -16,13 +16,9 @@ export function useBuyerBookmarks() {
   const addBookmarkMutation = useMutation({
     mutationFn: ({ supplierProfileId, supplierProductId }: { supplierProfileId: string; supplierProductId?: string }) =>
       bookmarksService.addBookmark(supplierProfileId, supplierProductId),
-    onSuccess: (_, variables) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["buyer-bookmarks"] });
-      if (variables.supplierProductId) {
-        toast.success("Produk berhasil disimpan!");
-      } else {
-        toast.success("Supplier berhasil disimpan!");
-      }
+      toast.success("Produk berhasil disimpan!");
     },
     onError: (error) => {
       console.error(error);

@@ -30,8 +30,10 @@ import {
   Settings2,
   Wallet,
   Package,
+  UserPlus,
 } from "lucide-react";
 import { useBuyerBookmarks } from "@/features/buyer/bookmarks/hooks/useBuyerBookmarks";
+import { useBuyerFollowing } from "@/features/buyer/following/hooks/useBuyerFollowing";
 
 interface PublicNavbarProps {
   locale: string;
@@ -44,6 +46,8 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
   const router = useRouter();
   const { user, isAuthenticated, logout } = useAuthStore();
   const { bookmarks } = useBuyerBookmarks();
+  const { following } = useBuyerFollowing();
+  const productBookmarks = bookmarks.filter((item) => item.type === "product");
   const [searchQuery, setSearchQuery] = useState("");
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -160,9 +164,9 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
                   >
                     <Link href="/bookmarks">
                       <Heart className="h-5 w-5" />
-                      {isAuthenticated && bookmarks.length > 0 && (
+                      {isAuthenticated && productBookmarks.length > 0 && (
                         <span className="absolute top-1 right-1 h-4 w-4 flex items-center justify-center rounded-full bg-primary text-[9px] font-bold text-white">
-                          {bookmarks.length}
+                          {productBookmarks.length}
                         </span>
                       )}
                     </Link>
@@ -173,19 +177,19 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
                       <div className="w-80 p-4 bg-background border border-border rounded-xl shadow-lg">
                         <div className="flex items-center justify-between border-b border-border/60 pb-2 mb-3">
                           <span className="text-xs font-bold text-foreground">
-                            {buyerLayoutT("wishlist")} ({isAuthenticated ? bookmarks.length : 0})
+                            {buyerLayoutT("wishlist")} ({isAuthenticated ? productBookmarks.length : 0})
                           </span>
                           <Link href="/bookmarks" className="text-xs font-semibold text-primary hover:underline">
                             {t("view")}
                           </Link>
                         </div>
-                        {!isAuthenticated || bookmarks.length === 0 ? (
+                        {!isAuthenticated || productBookmarks.length === 0 ? (
                           <div className="text-center py-4 text-xs text-muted-foreground">
-                            {locale === "id" ? "Belum ada supplier disimpan" : "No saved suppliers yet"}
+                            {locale === "id" ? "Belum ada produk disimpan" : "No saved products yet"}
                           </div>
                         ) : (
                           <div className="space-y-3 max-h-60 overflow-y-auto">
-                            {bookmarks.slice(0, 5).map((item) => {
+                            {productBookmarks.slice(0, 5).map((item) => {
                               const isProduct = item.type === "product";
                               const detailUrl = isProduct 
                                 ? `/demo/suppliers/${item.supplierSlug}#product-${item.supplierProductId}`
@@ -460,9 +464,11 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
                             <div className="flex items-center justify-between text-xs py-0.5">
                               <div className="flex items-center gap-2">
                                 <span className="h-2 w-2 rounded-full bg-success" />
-                                <span className="text-muted-foreground font-light">Supplier Saved</span>
+                                <span className="text-muted-foreground font-light">{buyerLayoutT("following")}</span>
                               </div>
-                              <span className="font-semibold text-foreground">24 Toko</span>
+                              <span className="font-semibold text-foreground">
+                                {locale === "id" ? `${following.length} Toko` : `${following.length} Shops`}
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -473,6 +479,7 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
                             {[
                               { href: "/transactions", label: buyerLayoutT("transactions"), icon: Wallet },
                               { href: "/rfq", label: buyerLayoutT("rfqList"), icon: RefreshCw },
+                              { href: "/following", label: buyerLayoutT("following"), icon: UserPlus },
                               { href: "/bookmarks", label: buyerLayoutT("wishlist"), icon: Heart },
                               { href: "/compare", label: buyerLayoutT("compare"), icon: Scale },
                               { href: "/profile/documents", label: buyerProfileT("tabDocuments"), icon: FileText },

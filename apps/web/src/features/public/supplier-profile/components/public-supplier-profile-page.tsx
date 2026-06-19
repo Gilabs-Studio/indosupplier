@@ -14,6 +14,7 @@ import { Field, FieldLabel, FieldGroup } from "@/components/ui/field";
 import { toast } from "sonner";
 import { searchService } from "@/features/public/search/services/search-service";
 import { useBuyerBookmarks } from "@/features/buyer/bookmarks/hooks/useBuyerBookmarks";
+import { useBuyerFollowing } from "@/features/buyer/following/hooks/useBuyerFollowing";
 import { useBuyerCompare } from "@/features/buyer/compare/hooks/useBuyerCompare";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
 import { chatService } from "@/features/buyer/chat/services/chat.service";
@@ -32,7 +33,6 @@ import {
   Award,
   Package,
   ChevronLeft,
-  Heart,
   MessageSquare,
   Share2,
   Star,
@@ -48,10 +48,10 @@ interface PublicSupplierProfilePageProps {
 export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/demo" }: PublicSupplierProfilePageProps) {
   const tSup = useTranslations("public.supplier");
   const router = useRouter();
-  const { isAuthenticated, user } = useAuthStore();
-  const { bookmarks, addBookmark, deleteBookmark, isAdding, isDeleting } = useBuyerBookmarks();
+  const { isAuthenticated } = useAuthStore();
+  const { bookmarks, addBookmark, deleteBookmark } = useBuyerBookmarks();
+  const { isFollowingSupplier, followSupplier, unfollowSupplier, isMutating: isMutatingFollowing } = useBuyerFollowing();
   const { products: comparedProducts, addProduct, removeProduct } = useBuyerCompare();
-  const [followOverrides, setFollowOverrides] = useState<Record<string, boolean>>({});
   const [isOpeningChat, setIsOpeningChat] = useState(false);
 
   // Fetch Supplier profile by slug
@@ -94,12 +94,7 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
   const currentPath = `${detailBasePath}/suppliers/${slug}`;
   const sectionCardClass = "overflow-hidden rounded-lg border border-border/80 bg-card shadow-xs";
   const sectionHeaderClass = "border-b border-border/60 px-5 py-4 [grid-template-rows:auto] gap-0";
-  const followStorageKey = supplier && user?.id ? `indosupplier:follow:${user.id}:${supplier.id}` : null;
-  const storedFollowState =
-    followStorageKey && typeof window !== "undefined"
-      ? globalThis.localStorage?.getItem(followStorageKey) === "1"
-      : false;
-  const isFollowed = supplier ? (followOverrides[supplier.id] ?? storedFollowState) : false;
+  const isFollowed = supplier ? isFollowingSupplier(supplier.id) : false;
 
   const requireAuth = (message: string) => {
     if (isAuthenticated) return true;
@@ -108,30 +103,11 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
     return false;
   };
 
-  // Check if supplier is bookmarked
-  const isSupplierBookmarked = bookmarks.some(
-    (b) => b.type === "supplier" && b.supplierProfileId === supplier?.id
-  );
-
   const getProductBookmarkId = (prodId: string) => {
     const found = bookmarks.find(
       (b) => b.type === "product" && b.supplierProductId === prodId
     );
     return found?.id || null;
-  };
-
-  const handleToggleSupplierBookmark = () => {
-    if (!requireAuth("Silakan masuk terlebih dahulu untuk menyimpan supplier.")) return;
-    if (isSupplierBookmarked) {
-      const found = bookmarks.find(
-        (b) => b.type === "supplier" && b.supplierProfileId === supplier?.id
-      );
-      if (found) deleteBookmark(found.id);
-    } else {
-      if (supplier) {
-        addBookmark({ supplierProfileId: supplier.id });
-      }
-    }
   };
 
   const handleToggleProductBookmark = (prodId: string) => {
@@ -156,15 +132,16 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
   };
 
   const handleToggleFollow = () => {
-    if (!supplier || !user?.id || !followStorageKey) {
+    if (!supplier) {
       requireAuth("Silakan masuk terlebih dahulu untuk mengikuti supplier.");
       return;
     }
-
-    const nextValue = !isFollowed;
-    globalThis.localStorage?.setItem(followStorageKey, nextValue ? "1" : "0");
-    setFollowOverrides((current) => ({ ...current, [supplier.id]: nextValue }));
-    toast.success(nextValue ? "Supplier berhasil diikuti." : "Anda berhenti mengikuti supplier.");
+    if (!requireAuth("Silakan masuk terlebih dahulu untuk mengikuti supplier.")) return;
+    if (isFollowed) {
+      unfollowSupplier(supplier.id);
+      return;
+    }
+    followSupplier(supplier.id);
   };
 
   const handleOpenChat = async () => {
@@ -297,6 +274,7 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                     variant={isFollowed ? "outline" : "default"}
                     size="sm"
                     className={isFollowed ? "border-primary/25 bg-primary/5 text-primary" : ""}
+                    disabled={isMutatingFollowing}
                   >
                     <UserPlus className="h-3.5 w-3.5" />
                     {isFollowed ? "Mengikuti" : "Follow"}
@@ -309,20 +287,6 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                   >
                     <MessageSquare className="h-3.5 w-3.5" />
                     Chat Penjual
-                  </Button>
-                  <Button
-                    onClick={handleToggleSupplierBookmark}
-                    variant="outline"
-                    size="sm"
-                    disabled={isAdding || isDeleting}
-                    className={`${
-                      isSupplierBookmarked
-                        ? "bg-rose-50 text-rose-600 border-rose-200 hover:bg-rose-100"
-                        : ""
-                    }`}
-                  >
-                    <Heart className={`mr-1.5 h-3.5 w-3.5 ${isSupplierBookmarked ? "fill-rose-600 text-rose-600" : ""}`} />
-                    {isSupplierBookmarked ? "Tersimpan" : "Simpan Supplier"}
                   </Button>
                   <Button
                     onClick={() => toast.success("Link profil supplier disalin ke clipboard!")}
@@ -369,7 +333,7 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
               {activeTab === "home" && (
                 <>
                   {/* Promotional Ad Campaign Banner Slot */}
-                  <div className="relative overflow-hidden rounded-lg border border-primary/10 bg-gradient-to-r from-primary/15 via-primary/[0.03] to-cyan-500/10 p-6 shadow-xs flex flex-col md:flex-row items-center justify-between gap-6">
+                  <div className="relative overflow-hidden rounded-lg border border-primary/10 bg-linear-to-r from-primary/15 via-primary/[0.03] to-cyan-500/10 p-6 shadow-xs flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="absolute top-2.5 right-2.5 flex items-center gap-1 rounded bg-primary/20 px-2 py-0.5 text-[9px] font-bold text-primary uppercase tracking-wider">
                       Promo
                     </div>

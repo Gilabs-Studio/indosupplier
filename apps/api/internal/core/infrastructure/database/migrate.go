@@ -36,6 +36,7 @@ func AutoMigrate() error {
 		&buyer.BuyerProfile{},
 		&buyer.BuyerDocument{},
 		&buyer.Bookmark{},
+		&buyer.SupplierFollowing{},
 		&buyer.ComparisonSession{},
 		&buyer.ComparisonSessionItem{},
 		&buyer.ComparisonProductSessionItem{},

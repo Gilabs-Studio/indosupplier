@@ -4,7 +4,7 @@ import React, { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/routing";
 import { PublicLayout } from "@/features/public/components/public-layout";
 import { PublicProductCard } from "@/features/public/components/public-product-card";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import { searchService } from "../services/search-service";
 import type { PublicProductDto, PublicSupplierDto } from "../types";
 import { useBuyerBookmarks } from "@/features/buyer/bookmarks/hooks/useBuyerBookmarks";
 import { useBuyerCompare } from "@/features/buyer/compare/hooks/useBuyerCompare";
+import { useBuyerFollowing } from "@/features/buyer/following/hooks/useBuyerFollowing";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
 import { toast } from "sonner";
 import {
@@ -22,13 +23,13 @@ import {
   Building2,
   Check,
   GitCompareArrows,
-  Heart,
   MapPin,
   Package,
   Search,
   ShieldCheck,
   SlidersHorizontal,
   Store,
+  UserPlus,
   X,
 } from "lucide-react";
 
@@ -47,17 +48,17 @@ function SupplierCard({
   supplier,
   detailBasePath,
   isAuthenticated,
-  isBookmarked,
+  isFollowing,
   isCompared,
-  onBookmark,
+  onFollow,
   onCompare,
 }: {
   supplier: PublicSupplierDto;
   detailBasePath: "" | "/demo";
   isAuthenticated: boolean;
-  isBookmarked: boolean;
+  isFollowing: boolean;
   isCompared: boolean;
-  onBookmark: () => void;
+  onFollow: () => void;
   onCompare: () => void;
 }) {
   return (
@@ -113,8 +114,15 @@ function SupplierCard({
           <Button asChild variant="outline" className="flex-1 cursor-pointer text-xs font-semibold">
             <Link href={`${detailBasePath}/suppliers/${supplier.slug}`}>Detail Supplier</Link>
           </Button>
-          <Button type="button" variant="outline" size="icon" onClick={onBookmark} className="cursor-pointer" title={isAuthenticated ? "Simpan supplier" : "Masuk untuk menyimpan"}>
-            <Heart className={`h-4 w-4 ${isBookmarked ? "fill-rose-600 text-rose-600" : ""}`} />
+          <Button
+            type="button"
+            variant={isFollowing ? "secondary" : "outline"}
+            onClick={onFollow}
+            className="cursor-pointer text-xs font-medium"
+            title={isAuthenticated ? "Ikuti supplier" : "Masuk untuk mengikuti"}
+          >
+            <UserPlus className="mr-1.5 h-3.5 w-3.5" />
+            {isFollowing ? "Mengikuti" : "Follow"}
           </Button>
           <Button type="button" variant="outline" size="icon" onClick={onCompare} className="cursor-pointer" title={isAuthenticated ? "Bandingkan supplier" : "Masuk untuk membandingkan"}>
             {isCompared ? <Check className="h-4 w-4 text-success" /> : <GitCompareArrows className="h-4 w-4" />}
@@ -127,6 +135,7 @@ function SupplierCard({
 
 export function PublicSearchPage({ locale, detailBasePath = "" }: PublicSearchPageProps) {
   const t = useTranslations("public.search");
+  const router = useRouter();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("query") || searchParams.get("q") || "";
   const initialCategory = searchParams.get("category") || "";
@@ -155,6 +164,7 @@ export function PublicSearchPage({ locale, detailBasePath = "" }: PublicSearchPa
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const { isAuthenticated } = useAuthStore();
   const { bookmarks, addBookmark, deleteBookmark } = useBuyerBookmarks();
+  const { isFollowingSupplier, followSupplier, unfollowSupplier } = useBuyerFollowing();
   const {
     suppliers: comparedSuppliers,
     products: comparedProducts,
@@ -190,19 +200,20 @@ export function PublicSearchPage({ locale, detailBasePath = "" }: PublicSearchPa
   const requireAuth = (message: string) => {
     if (!isAuthenticated) {
       toast.error(message);
+      const redirectTarget = `${detailBasePath || ""}/search${searchParams.toString() ? `?${searchParams.toString()}` : ""}`;
+      router.push(`/login?redirectTo=${encodeURIComponent(redirectTarget)}`);
       return false;
     }
     return true;
   };
 
-  const toggleSupplierBookmark = (supplier: PublicSupplierDto) => {
-    if (!requireAuth("Silakan masuk terlebih dahulu untuk menyimpan supplier.")) return;
-    const bookmark = bookmarks.find((item) => item.type === "supplier" && item.supplierProfileId === supplier.id);
-    if (bookmark) {
-      deleteBookmark(bookmark.id);
-    } else {
-      addBookmark({ supplierProfileId: supplier.id });
+  const toggleSupplierFollowing = (supplier: PublicSupplierDto) => {
+    if (!requireAuth("Silakan masuk terlebih dahulu untuk mengikuti supplier.")) return;
+    if (isFollowingSupplier(supplier.id)) {
+      unfollowSupplier(supplier.id);
+      return;
     }
+    followSupplier(supplier.id);
   };
 
   const toggleProductBookmark = (product: PublicProductDto) => {
@@ -234,7 +245,6 @@ export function PublicSearchPage({ locale, detailBasePath = "" }: PublicSearchPa
   };
 
   const isProductBookmarked = (productId: string) => bookmarks.some((item) => item.type === "product" && item.supplierProductId === productId);
-  const isSupplierBookmarked = (supplierId: string) => bookmarks.some((item) => item.type === "supplier" && item.supplierProfileId === supplierId);
 
   const resultCount = activeTab === "products" ? filteredProducts.length : suppliers.length;
 
@@ -351,9 +361,9 @@ export function PublicSearchPage({ locale, detailBasePath = "" }: PublicSearchPa
                     supplier={supplier}
                     detailBasePath={detailBasePath}
                     isAuthenticated={isAuthenticated}
-                    isBookmarked={isSupplierBookmarked(supplier.id)}
+                    isFollowing={isFollowingSupplier(supplier.id)}
                     isCompared={comparedSuppliers.some((item) => item.id === supplier.id)}
-                    onBookmark={() => toggleSupplierBookmark(supplier)}
+                    onFollow={() => toggleSupplierFollowing(supplier)}
                     onCompare={() => toggleSupplierCompare(supplier)}
                   />
                 ))}

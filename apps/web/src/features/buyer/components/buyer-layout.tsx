@@ -14,9 +14,11 @@ import {
   Wallet,
   MessageSquare,
   Star,
+  Store,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useBuyerBookmarks } from "@/features/buyer/bookmarks/hooks/useBuyerBookmarks";
+import { useBuyerFollowing } from "@/features/buyer/following/hooks/useBuyerFollowing";
 
 interface BuyerLayoutProps {
   readonly children: React.ReactNode;
@@ -28,6 +30,8 @@ export function BuyerLayout({ children }: BuyerLayoutProps) {
   const { user } = useAuthStore();
   const t = useTranslations("buyer.layout");
   const { bookmarks } = useBuyerBookmarks();
+  const { following } = useBuyerFollowing();
+  const productBookmarks = bookmarks.filter((item) => item.type === "product");
 
   const menuItems = [
     {
@@ -49,6 +53,11 @@ export function BuyerLayout({ children }: BuyerLayoutProps) {
       name: t("rfqList"),
       href: "/rfq",
       icon: RefreshCw,
+    },
+    {
+      name: t("following"),
+      href: "/following",
+      icon: Store,
     },
     {
       name: t("wishlist"),
@@ -127,7 +136,7 @@ export function BuyerLayout({ children }: BuyerLayoutProps) {
                 </Link>
 
                 <Link
-                  href="/bookmarks"
+                  href="/following"
                   className="flex items-center justify-between text-xs py-1 hover:bg-secondary/40 px-1.5 rounded-lg transition-all duration-300 cursor-pointer group hover:-translate-y-0.5 active:translate-y-0"
                 >
                   <div className="flex items-center gap-2">
@@ -135,7 +144,20 @@ export function BuyerLayout({ children }: BuyerLayoutProps) {
                     <span className="text-muted-foreground font-light font-sans group-hover:text-foreground transition-colors">{t("supplierSaved")}</span>
                   </div>
                   <span className="font-semibold text-foreground font-sans">
-                    {locale === "id" ? `${bookmarks.length} Toko` : `${bookmarks.length} Saved`}
+                    {locale === "id" ? `${following.length} Toko` : `${following.length} Following`}
+                  </span>
+                </Link>
+
+                <Link
+                  href="/bookmarks"
+                  className="flex items-center justify-between text-xs py-1 hover:bg-secondary/40 px-1.5 rounded-lg transition-all duration-300 cursor-pointer group hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-warning" />
+                    <span className="text-muted-foreground font-light font-sans group-hover:text-foreground transition-colors">{t("productsSaved")}</span>
+                  </div>
+                  <span className="font-semibold text-foreground font-sans">
+                    {locale === "id" ? `${productBookmarks.length} Produk` : `${productBookmarks.length} Saved`}
                   </span>
                 </Link>
               </div>
