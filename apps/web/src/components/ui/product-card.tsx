@@ -88,22 +88,27 @@ export function ProductCard({
   ulasanLabel = "ulasan",
   customFooter,
   className = "",
-}: ProductCardProps) {
+}: Readonly<ProductCardProps>) {
   const formattedPrice = price ? formatPrice(price, currency) : "";
   const displayPrice = formattedPrice || priceLabel || "Hubungi Supplier";
   const displayOriginalPrice = originalPrice ? formatPrice(originalPrice, currency) : "";
   const hasDiscount = discountPercentage > 0;
+  const hasOverlayActions =
+    Boolean(customOverlayButton) || (showBookmarkOverlayButton && onBookmark) || (showCompareOverlayButton && onCompare);
 
   return (
-    <Card id={id} className={`group overflow-hidden border border-border bg-card shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-primary/10 ${className}`}>
-      {/* Image & Badges overlay */}
-      <div className="relative aspect-square w-full bg-muted/30 overflow-hidden">
+    <Card
+      id={id}
+      className={`group flex flex-col overflow-hidden border-0 bg-transparent shadow-none ${className}`}
+    >
+      {/* Image Container with light background and rounded corners */}
+      <div className="relative aspect-square w-full bg-muted/40 rounded-lg overflow-hidden transition-colors duration-200 group-hover:bg-muted/50">
         <Link href={href} className="block h-full w-full cursor-pointer">
           {image ? (
             <img
               src={image}
               alt={name}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="h-full w-full object-cover"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center text-muted-foreground/50">
@@ -112,22 +117,28 @@ export function ProductCard({
           )}
         </Link>
 
-        {/* Verification badge */}
+        {/* Verification badge on the bottom-left corner */}
         {isVerified && (
-          <Badge className="absolute left-2 top-2 border-0 bg-success text-success-foreground text-[10px] font-bold rounded-sm px-1.5 py-0.5 shadow-xs">
+          <div className="absolute bottom-2 left-2 bg-success text-success-foreground font-extrabold text-[9px] md:text-[10px] rounded-xs px-1.5 py-0.5 shadow-xs z-10 uppercase tracking-wider">
             Verified
-          </Badge>
+          </div>
         )}
 
-        {/* Discount badge */}
+        {/* Discount tag on the top-left corner */}
         {hasDiscount && (
-          <Badge className="absolute left-2 top-2 border-0 bg-destructive text-destructive-foreground font-extrabold text-[10px] rounded-sm px-1.5 py-0.5 shadow-xs">
+          <div className="absolute left-0 top-0 bg-destructive text-destructive-foreground font-extrabold text-[10px] md:text-[11px] rounded-br-lg px-2.5 py-1 shadow-xs z-10">
             {discountPercentage}%
-          </Badge>
+          </div>
         )}
 
         {/* Actions Overlay */}
-        <div className="absolute right-2 top-2 flex flex-col gap-1.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        <div
+          className={`absolute right-2 top-2 flex flex-col gap-1.5 transition-opacity duration-200 ${
+            hasOverlayActions
+              ? "opacity-100 md:opacity-0 md:group-hover:opacity-100"
+              : "opacity-0 pointer-events-none"
+          }`}
+        >
           {customOverlayButton}
           {showBookmarkOverlayButton && onBookmark && (
             <Button
@@ -139,10 +150,12 @@ export function ProductCard({
                 e.stopPropagation();
                 onBookmark();
               }}
-              className="h-8 w-8 rounded-lg bg-card/90 text-foreground shadow-xs backdrop-blur-xs cursor-pointer hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-200"
+              className="h-8 w-8 rounded-lg border border-border/60 bg-background/95 text-foreground shadow-xs backdrop-blur-xs transition-colors duration-200 hover:bg-background cursor-pointer"
             >
               <Heart
-                className={`h-4 w-4 transition-colors ${isBookmarked ? "text-destructive fill-destructive" : "text-foreground"}`}
+                className={`h-4 w-4 transition-colors ${
+                  isBookmarked ? "text-destructive fill-destructive" : "text-foreground"
+                }`}
               />
             </Button>
           )}
@@ -157,7 +170,7 @@ export function ProductCard({
                 e.stopPropagation();
                 onCompare();
               }}
-              className="h-8 w-8 rounded-lg bg-card/90 text-foreground shadow-xs backdrop-blur-xs cursor-pointer hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-200"
+              className="h-8 w-8 rounded-lg border border-border/60 bg-background/95 text-foreground shadow-xs backdrop-blur-xs transition-colors duration-200 hover:bg-background cursor-pointer"
             >
               {isCompared ? (
                 <Check className="h-4 w-4 text-success" />
@@ -170,65 +183,75 @@ export function ProductCard({
       </div>
 
       {/* Info Content Area */}
-      <CardContent className="flex flex-col flex-1 p-3">
+      <CardContent className="flex flex-col flex-1 px-0 pt-2.5 pb-1">
         {/* Title */}
-        <Link href={href} className="block cursor-pointer flex-1">
-          <h3 className="line-clamp-2 min-h-8 text-xs font-semibold leading-relaxed text-foreground group-hover:text-primary transition-colors duration-200">
+        <Link href={href} className="block cursor-pointer flex-1 mb-1">
+          <h3 className="line-clamp-2 min-h-8 text-xs md:text-sm font-medium leading-relaxed text-foreground group-hover:text-primary transition-colors duration-200">
             {name}
           </h3>
         </Link>
 
         {/* Price & Discount block */}
-        <div className="mt-1.5 space-y-0.5">
-          <p className="text-sm font-extrabold text-foreground">
+        <div className="flex items-baseline flex-wrap gap-1.5 mt-1">
+          <span className="text-sm md:text-base font-extrabold text-foreground leading-none">
             {displayPrice}
-          </p>
+          </span>
           {hasDiscount && originalPrice && (
-            <div className="flex items-center gap-1.5">
-              <span className="text-[10px] font-bold text-destructive bg-destructive/5 px-1 py-0.2 rounded-xs">
-                Hemat {discountPercentage}%
-              </span>
-              <span className="text-[10px] text-muted-foreground/70 line-through">
+            <>
+              <span className="text-[10px] md:text-xs text-muted-foreground/60 line-through leading-none">
                 {displayOriginalPrice}
               </span>
-            </div>
+              <span className="text-[10px] md:text-xs font-bold text-destructive leading-none">
+                {discountPercentage}%
+              </span>
+            </>
           )}
         </div>
 
+        {/* Promo / Discount Label */}
+        {hasDiscount && (
+          <p className="mt-1 text-[10px] md:text-xs font-semibold text-primary">
+            Hemat s.d {discountPercentage}%
+          </p>
+        )}
+
         {/* Rating and Reviews / Sold Count */}
         {(rating !== undefined || soldCountText) && (
-          <div className="mt-2 flex items-center gap-1 text-[10px] text-muted-foreground">
+          <div className="mt-1.5 flex items-center flex-wrap gap-1 text-[10px] md:text-xs text-muted-foreground">
             {rating !== undefined && (
               <div className="flex items-center gap-0.5 text-warning font-semibold">
-                <Star className="h-3 w-3 fill-warning text-warning" />
+                <Star className="h-3.5 w-3.5 fill-warning text-warning" />
                 <span>{rating.toFixed(1)}</span>
               </div>
             )}
             {rating !== undefined && (reviewCount !== undefined || soldCountText) && (
-              <span>•</span>
+              <span className="text-muted-foreground/40">•</span>
             )}
             {reviewCount !== undefined && (
-              <span>{reviewCount} {ulasanLabel}</span>
+              <span>
+                {reviewCount} {ulasanLabel}
+              </span>
             )}
-            {soldCountText && (
-              <span className="font-medium">{soldCountText}</span>
+            {((rating !== undefined || reviewCount !== undefined) && soldCountText) && (
+              <span className="text-muted-foreground/40">•</span>
             )}
+            {soldCountText && <span className="font-medium">{soldCountText}</span>}
           </div>
         )}
 
         {/* Supplier Info */}
         {supplierName && (
-          <div className="mt-2">
+          <div className="mt-1.5">
             {supplierHref ? (
               <Link
                 href={supplierHref}
-                className="flex cursor-pointer items-center gap-1.5 text-[10px] text-muted-foreground hover:text-primary transition-colors"
+                className="flex cursor-pointer items-center gap-1 text-[10px] md:text-xs text-muted-foreground hover:text-primary transition-colors"
               >
                 <Store className="h-3 w-3 shrink-0 text-primary/70" />
                 <span className="truncate font-semibold">{supplierName}</span>
               </Link>
             ) : (
-              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+              <div className="flex items-center gap-1 text-[10px] md:text-xs text-muted-foreground">
                 <Store className="h-3 w-3 shrink-0 text-primary/70" />
                 <span className="truncate font-semibold">{supplierName}</span>
               </div>
@@ -238,14 +261,20 @@ export function ProductCard({
 
         {/* Tags (Category & MOQ) */}
         {(categoryName || minOrder) && (
-          <div className="mt-2.5 flex flex-wrap gap-1">
+          <div className="mt-2 flex flex-wrap gap-1">
             {categoryName && (
-              <Badge variant="outline" className="border-border text-muted-foreground text-[9px] font-medium rounded-xs px-1.5 py-0">
+              <Badge
+                variant="outline"
+                className="border-border/60 text-muted-foreground text-[9px] font-medium rounded-xs px-1.5 py-0 bg-muted/10"
+              >
                 {categoryName}
               </Badge>
             )}
             {minOrder && (
-              <Badge variant="outline" className="border-border text-muted-foreground text-[9px] font-medium rounded-xs px-1.5 py-0">
+              <Badge
+                variant="outline"
+                className="border-border/60 text-muted-foreground text-[9px] font-medium rounded-xs px-1.5 py-0 bg-muted/10"
+              >
                 {moqLabel} {minOrder}
               </Badge>
             )}
@@ -254,7 +283,7 @@ export function ProductCard({
 
         {/* Custom Actions Slot (Footer / bottom button) */}
         {customFooter && (
-          <div className="mt-3.5 pt-3 border-t border-border/40">
+          <div className="mt-2.5 pt-2.5 border-t border-border/40">
             {customFooter}
           </div>
         )}
