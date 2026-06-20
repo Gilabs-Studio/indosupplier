@@ -14,6 +14,7 @@ import publicRegisterEn from "@/features/public/registration/i18n/en.json";
 import publicHelpEn from "@/features/public/help/i18n/en.json";
 import publicFaqEn from "@/features/public/faq/i18n/en.json";
 import publicDemoEn from "@/features/public/demo/i18n/en.json";
+import publicProductDetailEn from "@/features/public/product-detail/i18n/en.json";
 import buyerEn from "@/features/buyer/i18n/en.json";
 import supplierLayoutEn from "@/features/supplier/layout/i18n/en.json";
 import supplierDashboardEn from "@/features/supplier/dashboard/i18n/en.json";
@@ -60,6 +61,7 @@ import publicRegisterId from "@/features/public/registration/i18n/id.json";
 import publicHelpId from "@/features/public/help/i18n/id.json";
 import publicFaqId from "@/features/public/faq/i18n/id.json";
 import publicDemoId from "@/features/public/demo/i18n/id.json";
+import publicProductDetailId from "@/features/public/product-detail/i18n/id.json";
 import buyerId from "@/features/buyer/i18n/id.json";
 import supplierLayoutId from "@/features/supplier/layout/i18n/id.json";
 import supplierDashboardId from "@/features/supplier/dashboard/i18n/id.json";
@@ -142,6 +144,7 @@ const messages = {
       ...publicHelpEn.public,
       ...publicFaqEn.public,
       ...publicDemoEn.public,
+      ...publicProductDetailEn.public,
     },
   },
   id: {
@@ -189,6 +192,7 @@ const messages = {
       ...publicHelpId.public,
       ...publicFaqId.public,
       ...publicDemoId.public,
+      ...publicProductDetailId.public,
     },
   },
 } as const;

@@ -1,11 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { bookmarksService } from "../services/bookmarks.service";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 export function useBuyerBookmarks() {
   const queryClient = useQueryClient();
   const { isAuthenticated } = useAuthStore();
+  const t = useTranslations("buyer.bookmarks");
 
   const bookmarksQuery = useQuery({
     queryKey: ["buyer-bookmarks"],
@@ -18,11 +20,11 @@ export function useBuyerBookmarks() {
       bookmarksService.addBookmark(supplierProfileId, supplierProductId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["buyer-bookmarks"] });
-      toast.success("Produk berhasil disimpan!");
+      toast.success(t("toastSaveSuccess"));
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Gagal menyimpan ke bookmark.");
+      toast.error(t("toastSaveError"));
     },
   });
 
@@ -30,11 +32,11 @@ export function useBuyerBookmarks() {
     mutationFn: (id: string) => bookmarksService.removeBookmark(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["buyer-bookmarks"] });
-      toast.success("Bookmark berhasil dihapus!");
+      toast.success(t("toastDeleteSuccess"));
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Gagal menghapus bookmark.");
+      toast.error(t("toastDeleteError"));
     },
   });
 

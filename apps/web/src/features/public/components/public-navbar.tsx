@@ -34,6 +34,7 @@ import {
 } from "lucide-react";
 import { useBuyerBookmarks } from "@/features/buyer/bookmarks/hooks/useBuyerBookmarks";
 import { useBuyerFollowing } from "@/features/buyer/following/hooks/useBuyerFollowing";
+import { getDicebearUrl } from "@/lib/utils";
 
 interface PublicNavbarProps {
   locale: string;
@@ -401,7 +402,7 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
               >
                 <button className="flex items-center gap-1.5 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 p-1 cursor-pointer transition-all hover:bg-secondary">
                   <Avatar className="h-8 w-8 border border-border">
-                    <AvatarImage src={`https://api.dicebear.com/7.x/lorelei/svg?seed=${user?.email}`} alt={user?.name} />
+                    <AvatarImage src={getDicebearUrl(user?.email || "", "lorelei")} alt={user?.name} />
                     <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xs">
                       {user?.name?.slice(0, 2).toUpperCase() ?? "US"}
                     </AvatarFallback>
@@ -417,7 +418,7 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
                     <div className="w-[calc(100vw-2rem)] sm:w-[440px] p-0 bg-background border border-border rounded-xl shadow-xl overflow-hidden text-left font-sans">
                       <div className="flex items-center gap-3 p-4 border-b border-border/60 bg-muted/10">
                         <Avatar className="h-10 w-10 border border-border">
-                          <AvatarImage src={`https://api.dicebear.com/7.x/lorelei/svg?seed=${user?.email}`} alt={user?.name} />
+                          <AvatarImage src={getDicebearUrl(user?.email || "", "lorelei")} alt={user?.name} />
                           <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
                             {user?.name?.slice(0, 2).toUpperCase() ?? "US"}
                           </AvatarFallback>

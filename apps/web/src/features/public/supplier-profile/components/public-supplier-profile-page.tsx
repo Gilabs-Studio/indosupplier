@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useTranslations } from "next-intl";
-import { useQuery } from "@tanstack/react-query";
-import { Link, useRouter } from "@/i18n/routing";
+import { Link } from "@/i18n/routing";
 import { PublicLayout } from "@/features/public/components/public-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,17 +11,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldLabel, FieldGroup } from "@/components/ui/field";
 import { toast } from "sonner";
-import { searchService } from "@/features/public/search/services/search-service";
-import { useBuyerBookmarks } from "@/features/buyer/bookmarks/hooks/useBuyerBookmarks";
-import { useBuyerFollowing } from "@/features/buyer/following/hooks/useBuyerFollowing";
-import { useBuyerCompare } from "@/features/buyer/compare/hooks/useBuyerCompare";
-import { useAuthStore } from "@/features/auth/stores/use-auth-store";
-import { chatService } from "@/features/buyer/chat/services/chat.service";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { PublicSupplierProductCard } from "./public-supplier-product-card";
+import { ProductCard } from "@/components/ui/product-card";
 import { StageScrollLoader } from "@/components/ui/stage-scroll-loader";
-import type { SupplierProductDto, PublicProductDto } from "@/features/public/search/types";
+import { usePublicSupplierProfile } from "../hooks/use-public-supplier-profile";
+import type { PublicProductDto } from "@/features/public/search/types";
 import {
   Building,
   Calendar,
@@ -38,6 +32,8 @@ import {
   Share2,
   Star,
   UserPlus,
+  Check,
+  GitCompareArrows,
 } from "lucide-react";
 
 interface PublicSupplierProfilePageProps {
@@ -48,188 +44,41 @@ interface PublicSupplierProfilePageProps {
 
 export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/demo" }: PublicSupplierProfilePageProps) {
   const tSup = useTranslations("public.supplier");
-  const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
-  const { bookmarks, addBookmark, deleteBookmark } = useBuyerBookmarks();
-  const { isFollowingSupplier, followSupplier, unfollowSupplier, isMutating: isMutatingFollowing } = useBuyerFollowing();
-  const { products: comparedProducts, addProduct, removeProduct } = useBuyerCompare();
-  const [isOpeningChat, setIsOpeningChat] = useState(false);
+  const {
+    supplier,
+    isLoading,
+    isError,
+    activeTab,
+    productsList,
+    isProductsLoading,
+    isProductsLoadingMore,
+    hasMoreProducts,
+    isMutatingFollowing,
+    isOpeningChat,
+    isFollowed,
+    comparedProducts,
+    subject,
+    setSubject,
+    message,
+    setMessage,
+    quantity,
+    setQuantity,
+    isSubmitting,
+    isRfqOpen,
+    setIsRfqOpen,
+    handleTabChange,
+    handleLoadMoreProducts,
+    handleToggleProductBookmark,
+    handleToggleProductCompare,
+    handleToggleFollow,
+    handleOpenChat,
+    handleOpenRfq,
+    handleSendRFQ,
+    getProductBookmarkId,
+    mapSupplierProductToPublicProduct,
+  } = usePublicSupplierProfile({ slug, detailBasePath });
 
-  // Fetch Supplier profile by slug
-  const { data: supplier, isLoading, isError } = useQuery({
-    queryKey: ["public-supplier-profile", slug],
-    queryFn: () => searchService.getSupplierBySlug(slug),
-  });
-
-  // State for products infinite loading
-  const [productsList, setProductsList] = useState<PublicProductDto[]>([]);
-  const [productsPage, setProductsPage] = useState(1);
-  const [hasMoreProducts, setHasMoreProducts] = useState(true);
-  const [isProductsLoading, setIsProductsLoading] = useState(false);
-  const [isProductsLoadingMore, setIsProductsLoadingMore] = useState(false);
-
-  // Mock RFQ form state
-  const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
-  const [quantity, setQuantity] = useState("1");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isRfqOpen, setIsRfqOpen] = useState(false);
-
-  const [activeTab, setActiveTab] = useState<"home" | "products" | "certifications" | "reviews">("home");
-
-  const fetchProductsList = async (pageNumber: number, isLoadMore = false) => {
-    if (!supplier) return;
-    if (isLoadMore) {
-      setIsProductsLoadingMore(true);
-    } else {
-      setIsProductsLoading(true);
-    }
-
-    try {
-      const res = await searchService.searchProducts("", supplier.id, pageNumber, 12);
-      if (isLoadMore) {
-        setProductsList((prev) => [...prev, ...res]);
-      } else {
-        setProductsList(res);
-      }
-      setProductsPage(pageNumber);
-      setHasMoreProducts(res.length === 12);
-    } catch (error) {
-      console.error("Error loading products:", error);
-      toast.error("Gagal memuat produk supplier.");
-    } finally {
-      setIsProductsLoading(false);
-      setIsProductsLoadingMore(false);
-    }
-  };
-
-  const handleTabChange = (val: string) => {
-    const tab = val as "home" | "products" | "certifications" | "reviews";
-    setActiveTab(tab);
-    if (tab === "products" && productsList.length === 0) {
-      fetchProductsList(1, false);
-    }
-  };
-
-  const handleLoadMoreProducts = () => {
-    if (isProductsLoading || isProductsLoadingMore || !hasMoreProducts) return;
-    fetchProductsList(productsPage + 1, true);
-  };
-
-  const mapSupplierProductToPublicProduct = (prod: SupplierProductDto) => {
-    if (!supplier) {
-      throw new Error("Supplier data is required to map products.");
-    }
-    return {
-      id: prod.id,
-      name: prod.name,
-      description: prod.description || "",
-      price: prod.price || 0,
-      currency: prod.currency || "IDR",
-      minOrder: prod.minOrder || "",
-      capacityText: prod.capacityText || "",
-      categoryName: prod.categoryName || "",
-      photos: prod.photos || [],
-      supplierId: supplier.id,
-      supplierCompanyName: supplier.companyName,
-      supplierSlug: supplier.slug,
-      supplierLocation: supplier.location,
-      supplierVerified: supplier.isVerified,
-      supplierRating: supplier.rating,
-      supplierReviewCount: supplier.reviewCount,
-    };
-  };
-
-  const currentPath = `${detailBasePath}/suppliers/${slug}`;
-  const sectionCardClass = "overflow-hidden rounded-lg border border-border/40 bg-card shadow-xs";
-  const isFollowed = supplier ? isFollowingSupplier(supplier.id) : false;
-
-  const requireAuth = (msg: string) => {
-    if (isAuthenticated) return true;
-    toast.error(msg);
-    router.push(`/login?redirectTo=${encodeURIComponent(currentPath)}`);
-    return false;
-  };
-
-  const getProductBookmarkId = (prodId: string) => {
-    const found = bookmarks.find(
-      (b) => b.type === "product" && b.supplierProductId === prodId
-    );
-    return found?.id || null;
-  };
-
-  const handleToggleProductBookmark = (prodId: string) => {
-    if (!requireAuth("Silakan masuk terlebih dahulu untuk menyimpan produk.")) return;
-    const bookmarkId = getProductBookmarkId(prodId);
-    if (bookmarkId) {
-      deleteBookmark(bookmarkId);
-    } else {
-      if (supplier) {
-        addBookmark({ supplierProfileId: supplier.id, supplierProductId: prodId });
-      }
-    }
-  };
-
-  const handleToggleProductCompare = (prodId: string) => {
-    if (!requireAuth("Silakan masuk terlebih dahulu untuk membandingkan produk.")) return;
-    if (comparedProducts.some((p) => p.id === prodId)) {
-      removeProduct(prodId);
-    } else {
-      addProduct(prodId);
-    }
-  };
-
-  const handleToggleFollow = () => {
-    if (!supplier) {
-      requireAuth("Silakan masuk terlebih dahulu untuk mengikuti supplier.");
-      return;
-    }
-    if (!requireAuth("Silakan masuk terlebih dahulu untuk mengikuti supplier.")) return;
-    if (isFollowed) {
-      unfollowSupplier(supplier.id);
-      return;
-    }
-    followSupplier(supplier.id);
-  };
-
-  const handleOpenChat = async () => {
-    if (!supplier) return;
-    if (!requireAuth("Silakan masuk terlebih dahulu untuk chat dengan supplier.")) return;
-
-    try {
-      setIsOpeningChat(true);
-      const room = await chatService.getOrCreateRoom(supplier.id);
-      router.push(`/chat?roomId=${encodeURIComponent(room.id)}`);
-    } catch (error) {
-      console.error(error);
-      toast.error("Gagal membuka chat supplier.");
-    } finally {
-      setIsOpeningChat(false);
-    }
-  };
-
-  const handleOpenRfq = () => {
-    if (!requireAuth("Silakan masuk terlebih dahulu untuk mengirim RFQ.")) return;
-    setIsRfqOpen(true);
-  };
-
-  const handleSendRFQ = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!subject.trim() || !message.trim()) {
-      toast.error("Please fill in all required fields.");
-      return;
-    }
-
-    setIsSubmitting(true);
-    setTimeout(() => {
-      toast.success(tSup("quoteSuccess"));
-      setSubject("");
-      setMessage("");
-      setQuantity("1");
-      setIsSubmitting(false);
-      setIsRfqOpen(false);
-    }, 1000);
-  };
+  const sectionCardClass = "overflow-hidden rounded-lg border border-border bg-card shadow-xs";
 
   if (isLoading) {
     return (
@@ -237,13 +86,13 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
         <div className="bg-muted/10 py-8">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6">
             <div className="h-6 w-32 bg-muted-foreground/10 animate-pulse rounded-lg" />
-            <div className="h-32 bg-card border border-border/50 rounded-lg animate-pulse" />
+            <div className="h-32 bg-card border border-border rounded-lg animate-pulse" />
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2 space-y-8">
-                <div className="h-48 bg-card border border-border/50 rounded-lg animate-pulse" />
-                <div className="h-64 bg-card border border-border/50 rounded-lg animate-pulse" />
+                <div className="h-48 bg-card border border-border rounded-lg animate-pulse" />
+                <div className="h-64 bg-card border border-border rounded-lg animate-pulse" />
               </div>
-              <div className="h-64 bg-card border border-border/50 rounded-lg animate-pulse" />
+              <div className="h-64 bg-card border border-border rounded-lg animate-pulse" />
             </div>
           </div>
         </div>
@@ -255,17 +104,80 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
     return (
       <PublicLayout locale={locale}>
         <div className="bg-muted/10 py-20 text-center">
-          <h2 className="text-xl font-bold text-foreground">Supplier Tidak Ditemukan</h2>
+          <h2 className="text-xl font-bold text-foreground">{tSup("supplierNotFound")}</h2>
           <p className="text-sm text-muted-foreground mt-2">
-            Profil supplier yang Anda cari tidak aktif atau tidak terdaftar di sistem kami.
+            {tSup("supplierNotFoundDesc")}
           </p>
           <Button asChild className="mt-6 cursor-pointer rounded-lg">
-            <Link href={`${detailBasePath}/search`}>Kembali ke Pencarian</Link>
+            <Link href={`${detailBasePath}/search`}>{tSup("backToSearch")}</Link>
           </Button>
         </div>
       </PublicLayout>
     );
   }
+
+  // Render wrapper for modular ProductCard configuration
+  const renderProfileProductCard = (product: PublicProductDto) => {
+    const hasDiscount = (product.price || 0) > 0 && (product.id.charCodeAt(0) % 2 === 0);
+    const discountPercentage = hasDiscount ? (product.id.charCodeAt(1) % 3 === 0 ? 30 : 50) : 0;
+    const originalPrice = hasDiscount ? Math.round((product.price || 0) * (100 / (100 - discountPercentage))) : 0;
+    const mockSoldCount = product.id.charCodeAt(2) % 2 === 0 
+      ? `${(product.id.charCodeAt(3) % 9) + 1}rb+ terjual`
+      : `${(product.id.charCodeAt(3) % 80) + 10}+ terjual`;
+
+    const isCompared = comparedProducts.some((p) => p.id === product.id);
+
+    return (
+      <ProductCard
+        key={product.id}
+        id={product.id}
+        name={product.name}
+        price={product.price}
+        currency={product.currency}
+        image={product.photos?.[0]}
+        href={`${detailBasePath}/products/${product.id}`}
+        discountPercentage={discountPercentage || undefined}
+        originalPrice={originalPrice || undefined}
+        rating={product.supplierRating}
+        soldCountText={mockSoldCount}
+        categoryName={product.categoryName || undefined}
+        minOrder={product.minOrder || undefined}
+        moqLabel={tSup("moqLabel")}
+        priceLabel={tSup("na")}
+        showBookmarkOverlayButton={true}
+        isBookmarked={!!getProductBookmarkId(product.id)}
+        onBookmark={() => handleToggleProductBookmark(product.id)}
+        customFooter={
+          <Button
+            type="button"
+            variant="outline"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleToggleProductCompare(product.id);
+            }}
+            className={`w-full py-1.5 text-[11px] font-bold border rounded-lg cursor-pointer transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-md ${
+              isCompared
+                ? "bg-success/5 border-success text-success hover:bg-success/10 hover:shadow-success/10"
+                : "border-primary/45 text-primary bg-primary/0 hover:bg-primary hover:text-primary-foreground hover:shadow-primary/10"
+            }`}
+          >
+            {isCompared ? (
+              <>
+                <Check className="h-3 w-3 mr-1 shrink-0" />
+                {tSup("addedLabel")}
+              </>
+            ) : (
+              <>
+                <GitCompareArrows className="h-3 w-3 mr-1 shrink-0" />
+                {tSup("compareBtn")}
+              </>
+            )}
+          </Button>
+        }
+      />
+    );
+  };
 
   return (
     <PublicLayout locale={locale}>
@@ -281,7 +193,7 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
           </Link>
 
           {/* Profile Header (Clean Tokopedia Shop Detail Inspired) */}
-          <div className="bg-card border border-border/45 shadow-xs rounded-lg p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-all duration-300 hover:shadow-md">
+          <div className="bg-card border border-border shadow-xs rounded-lg p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-all duration-300 hover:shadow-md">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-5 w-full md:w-auto">
               {/* Shop Logo Avatar */}
               <div className="h-18 w-18 rounded-full bg-primary text-primary-foreground font-heading font-bold text-2xl flex items-center justify-center shadow-xs shrink-0 border border-primary/10">
@@ -294,7 +206,7 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                   </h1>
                   {supplier.isVerified ? (
                     <Badge variant="outline" className="border-success text-success bg-success/5 font-semibold rounded-lg px-2.5 py-0.5 text-[10px]">
-                      Terverifikasi
+                      {tSup("verifiedSupplier")}
                     </Badge>
                   ) : (
                     <Badge variant="outline" className="border-border text-muted-foreground font-semibold rounded-lg px-2.5 py-0.5 text-[10px]">
@@ -312,10 +224,10 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                     <MapPin className="h-3.5 w-3.5 text-primary/70" />
                     <span>{supplier.location}</span>
                   </div>
-                  <span className="w-1.5 h-1.5 rounded-full bg-border/80" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-border" />
                   <div className="flex items-center gap-1 font-semibold text-foreground">
                     <Star className="h-3.5 w-3.5 fill-warning text-warning" />
-                    <span>{supplier.rating} ({supplier.reviewCount} ulasan)</span>
+                    <span>{supplier.rating} ({supplier.reviewCount} {tSup("tabReviews")})</span>
                   </div>
                 </div>
 
@@ -333,7 +245,7 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                     disabled={isMutatingFollowing}
                   >
                     <UserPlus className="h-3.5 w-3.5 mr-1" />
-                    {isFollowed ? "Mengikuti" : "Follow"}
+                    {isFollowed ? tSup("following") : tSup("follow")}
                   </Button>
                   <Button
                     onClick={handleOpenChat}
@@ -348,7 +260,7 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                   <Button
                     onClick={() => {
                       navigator.clipboard.writeText(window.location.href);
-                      toast.success("Link profil supplier disalin ke clipboard!");
+                      toast.success(tSup("linkCopied"));
                     }}
                     variant="outline"
                     size="sm"
@@ -362,18 +274,18 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
             </div>
 
             {/* Shop Metrics Block */}
-            <div className="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center border-t md:border-t-0 md:border-l border-border/50 pt-4 md:pt-0 md:pl-8 w-full md:w-auto gap-4">
+            <div className="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center border-t md:border-t-0 md:border-l border-border pt-4 md:pt-0 md:pl-8 w-full md:w-auto gap-4">
               <div className="text-left md:text-right">
                 <div className="flex items-center md:justify-end gap-1">
                   <Star className="h-4.5 w-4.5 fill-warning text-warning" />
                   <span className="text-lg font-black text-foreground">{supplier.rating?.toFixed(1) || "0.0"}</span>
                   <span className="text-[10px] text-muted-foreground">/ 5.0</span>
                 </div>
-                <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider mt-0.5">Rating & Ulasan</p>
+                <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider mt-0.5">{tSup("ratingReviews")}</p>
               </div>
               <div className="text-right">
                 <p className="text-base font-black text-primary">50+ Terjual</p>
-                <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider mt-0.5">Transaksi Sukses</p>
+                <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-wider mt-0.5">{tSup("successfulTransactions")}</p>
               </div>
             </div>
           </div>
@@ -386,16 +298,16 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
           >
             <TabsList className="w-full justify-start">
               <TabsTrigger value="home" className="cursor-pointer font-bold">
-                Beranda
+                {tSup("tabHome")}
               </TabsTrigger>
               <TabsTrigger value="products" className="cursor-pointer font-bold">
-                Produk
+                {tSup("tabProducts")}
               </TabsTrigger>
               <TabsTrigger value="certifications" className="cursor-pointer font-bold">
-                Sertifikasi
+                {tSup("tabCertifications")}
               </TabsTrigger>
               <TabsTrigger value="reviews" className="cursor-pointer font-bold">
-                Ulasan
+                {tSup("tabReviews")}
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -415,7 +327,7 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                     <div className="space-y-2 max-w-md">
                       <h2 className="text-base font-black text-foreground uppercase tracking-tight">Kemitraan Industri & Kontrak Kustom</h2>
                       <p className="text-xs text-muted-foreground leading-relaxed">
-                        Kami melayani kontrak kustom jangka panjang, negosiasi MOQ khusus, serta opsi logistik terintegrasi untuk kebutuhan industri Anda.
+                        Kami melayani kontrak kustom jangka panjang, negosiasi MOQ khusus, serta opsi logistik terintegrated untuk kebutuhan industri Anda.
                       </p>
                     </div>
                     <Button
@@ -440,25 +352,15 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                       </button>
                     </div>
                     {!supplier.products || supplier.products.length === 0 ? (
-                      <div className="text-center py-8 bg-muted/20 border border-dashed border-border/40 rounded-lg">
+                      <div className="text-center py-8 bg-muted/20 border border-dashed border-border rounded-lg">
                         <Package className="mx-auto h-8 w-8 text-muted-foreground/35" />
-                        <h3 className="mt-3 text-xs font-bold text-foreground">Tidak ada produk</h3>
+                        <h3 className="mt-3 text-xs font-bold text-foreground">{tSup("emptyProductsTitle")}</h3>
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                         {supplier.products.slice(0, 3).map((product) => {
                           const publicProd = mapSupplierProductToPublicProduct(product);
-                          return (
-                            <PublicSupplierProductCard
-                              key={product.id}
-                              product={publicProd}
-                              detailBasePath={detailBasePath}
-                              isBookmarked={!!getProductBookmarkId(product.id)}
-                              isCompared={comparedProducts.some((p) => p.id === product.id)}
-                              onBookmark={() => handleToggleProductBookmark(product.id)}
-                              onCompare={() => handleToggleProductCompare(product.id)}
-                            />
-                          );
+                          return renderProfileProductCard(publicProd);
                         })}
                       </div>
                     )}
@@ -469,11 +371,11 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                 <div className="space-y-6">
                   {/* Business Specs */}
                   <Card className={sectionCardClass}>
-                    <div className="border-b border-border/30 px-4 py-3 bg-transparent">
+                    <div className="border-b border-border px-4 py-3 bg-transparent">
                       <h3 className="text-xs font-bold font-heading uppercase tracking-wider text-muted-foreground/90">{tSup("businessInfo")}</h3>
                     </div>
                     <CardContent className="p-0">
-                      <div className="divide-y divide-border/40 text-xs">
+                      <div className="divide-y divide-border text-xs">
                         <div className="flex justify-between px-4 py-3">
                           <span className="text-muted-foreground font-medium flex items-center gap-2">
                             <Building className="h-3.5 w-3.5 text-primary/70 shrink-0" />
@@ -507,7 +409,7 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
 
                   {/* Contact Info */}
                   <Card className={sectionCardClass}>
-                    <div className="border-b border-border/30 px-4 py-3 bg-transparent">
+                    <div className="border-b border-border px-4 py-3 bg-transparent">
                       <h3 className="text-xs font-bold font-heading uppercase tracking-wider text-muted-foreground/90">{tSup("contactInfo")}</h3>
                     </div>
                     <CardContent className="space-y-3.5 p-4 text-xs text-muted-foreground">
@@ -523,11 +425,11 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                         <Globe className="h-3.5 w-3.5 text-primary/70 shrink-0" />
                         {supplier.website ? (
                           <a
-                            href={supplier.website}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-primary hover:underline font-bold transition-all"
-                          >
+                              href={supplier.website}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-primary hover:underline font-bold transition-all"
+                            >
                             {supplier.website}
                           </a>
                         ) : (
@@ -539,7 +441,7 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
 
                   {/* Ask for Quotation card */}
                   <Card className={sectionCardClass}>
-                    <div className="border-b border-border/30 px-4 py-3 bg-transparent">
+                    <div className="border-b border-border px-4 py-3 bg-transparent">
                       <h3 className="text-xs font-bold font-heading uppercase tracking-wider text-muted-foreground/90">{tSup("requestQuote")}</h3>
                     </div>
                     <CardContent className="p-4 space-y-4">
@@ -550,7 +452,7 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                         onClick={handleOpenRfq}
                         className="w-full text-xs font-bold cursor-pointer rounded-lg bg-primary hover:bg-primary/95 text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 shadow-xs"
                       >
-                        Minta Penawaran
+                        {tSup("quoteTitle")}
                       </Button>
                     </CardContent>
                   </Card>
@@ -562,14 +464,14 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
             {activeTab === "products" && (
               <div className="space-y-6">
                 <div className="flex flex-col gap-1.5">
-                  <h2 className="text-lg font-bold text-foreground">Semua Produk</h2>
+                  <h2 className="text-lg font-bold text-foreground">{tSup("products")}</h2>
                   <p className="text-xs text-muted-foreground">Katalog lengkap produk manufaktur dan suplai.</p>
                 </div>
 
                 {isProductsLoading && productsList.length === 0 ? (
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 animate-pulse">
                     {Array.from({ length: 12 }).map((_, i) => (
-                      <div key={i} className="flex flex-col justify-between overflow-hidden rounded-lg border border-border/40 bg-card p-4 h-[320px]">
+                      <div key={i} className="flex flex-col justify-between overflow-hidden rounded-lg border border-border bg-card p-4 h-[320px]">
                         <div className="aspect-square w-full bg-muted-foreground/10 rounded-md" />
                         <div className="h-4 w-3/4 bg-muted-foreground/10 rounded-md mt-3" />
                         <div className="h-4 w-1/2 bg-muted-foreground/10 rounded-md mt-1.5" />
@@ -578,25 +480,15 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                     ))}
                   </div>
                 ) : productsList.length === 0 ? (
-                  <div className="text-center py-16 bg-card border border-border/40 rounded-lg shadow-xs">
+                  <div className="text-center py-16 bg-card border border-border rounded-lg shadow-xs">
                     <Package className="mx-auto h-12 w-12 text-muted-foreground/35 stroke-[1.5]" />
-                    <h3 className="mt-4 text-sm font-bold text-foreground">Tidak ada produk</h3>
-                    <p className="text-xs text-muted-foreground mt-1">Supplier belum mengunggah produk untuk saat ini.</p>
+                    <h3 className="mt-4 text-sm font-bold text-foreground">{tSup("emptyProductsTitle")}</h3>
+                    <p className="text-xs text-muted-foreground mt-1">{tSup("emptyProductsDesc")}</p>
                   </div>
                 ) : (
                   <>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 animate-fade-in">
-                      {productsList.map((product) => (
-                        <PublicSupplierProductCard
-                          key={product.id}
-                          product={product}
-                          detailBasePath={detailBasePath}
-                          isBookmarked={!!getProductBookmarkId(product.id)}
-                          isCompared={comparedProducts.some((p) => p.id === product.id)}
-                          onBookmark={() => handleToggleProductBookmark(product.id)}
-                          onCompare={() => handleToggleProductCompare(product.id)}
-                        />
-                      ))}
+                      {productsList.map((product) => renderProfileProductCard(product))}
                     </div>
                     <StageScrollLoader
                       onLoadMore={handleLoadMoreProducts}
@@ -612,12 +504,12 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
             {activeTab === "certifications" && (
               <div className="space-y-6">
                 <div className="flex flex-col gap-1.5">
-                  <h2 className="text-lg font-bold text-foreground">Sertifikasi & Lisensi Perusahaan</h2>
-                  <p className="text-xs text-muted-foreground">Daftar sertifikat resmi terverifikasi tim penilai Indosupplier.</p>
+                  <h2 className="text-lg font-bold text-foreground">{tSup("certifications")}</h2>
+                  <p className="text-xs text-muted-foreground">Daftar sertifikat resmi terverifikasi tim penilai IndoSupplier.</p>
                 </div>
 
                 {!supplier.certificationList || supplier.certificationList.length === 0 ? (
-                  <div className="text-center py-16 bg-card border border-dashed border-border/40 rounded-lg shadow-xs">
+                  <div className="text-center py-16 bg-card border border-dashed border-border rounded-lg shadow-xs">
                     <Award className="mx-auto h-12 w-12 text-muted-foreground/35 stroke-[1.5]" />
                     <h3 className="mt-4 text-sm font-bold text-foreground">{tSup("emptyCertsTitle")}</h3>
                     <p className="mt-1 text-xs text-muted-foreground">{tSup("emptyCertsDesc")}</p>
@@ -627,7 +519,7 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                     {supplier.certificationList.map((cert) => (
                       <div
                         key={cert.id}
-                        className="flex items-center justify-between p-4.5 border border-border/40 rounded-lg bg-card transition-all duration-300 hover:border-primary/20 hover:shadow-xs"
+                        className="flex items-center justify-between p-4.5 border border-border rounded-lg bg-card transition-all duration-300 hover:border-primary/20 hover:shadow-xs"
                       >
                         <div className="flex items-center gap-3">
                           <div className="h-10 w-10 bg-primary/5 text-primary flex items-center justify-center rounded-lg border border-primary/10 shrink-0">
@@ -641,7 +533,7 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                           </div>
                         </div>
                         <Badge variant="outline" className="border-success text-success bg-success/5 font-semibold rounded-lg px-2.5 py-0.5 text-[10px]">
-                          Terverifikasi
+                          {tSup("verifiedSupplier")}
                         </Badge>
                       </div>
                     ))}
@@ -662,7 +554,7 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                 <div className="space-y-4">
                   {!supplier.reviews || supplier.reviews.length === 0 ? (
                     <div className="rounded-lg border border-dashed border-border py-12 text-center text-xs text-muted-foreground bg-card">
-                      Belum ada ulasan pembeli untuk supplier ini.
+                      {tSup("emptyReviews")}
                     </div>
                   ) : (
                     supplier.reviews.map((review) => (
@@ -686,7 +578,7 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                               </p>
                             </div>
                           </div>
-                          <div className="flex items-center gap-1 rounded-lg bg-muted/40 px-2 py-1 border border-border/30 text-xs font-bold">
+                          <div className="flex items-center gap-1 rounded-lg bg-muted/40 px-2 py-1 border border-border text-xs font-bold">
                             <Star className="h-3.5 w-3.5 fill-warning text-warning" />
                             <span>{review.rating}</span>
                           </div>
@@ -699,7 +591,7 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                         {review.supplierReply && (
                           <div className="relative mt-3 rounded-lg border border-primary/10 bg-primary/1 p-3.5 pl-8 text-xs text-muted-foreground">
                             <span className="absolute left-3 top-4 h-1.5 w-1.5 rounded-full bg-primary/40" />
-                            <p className="font-bold text-primary">Balasan dari Supplier:</p>
+                            <p className="font-bold text-primary">{tSup("supplierReply")}</p>
                             <p className="mt-1 text-foreground/80 leading-relaxed font-medium">{review.supplierReply}</p>
                           </div>
                         )}
@@ -715,7 +607,7 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
           <Dialog open={isRfqOpen} onOpenChange={setIsRfqOpen}>
             <DialogContent size="lg" className="sm:max-w-lg rounded-lg border-border bg-card">
               <DialogHeader>
-                <DialogTitle>{tSup("requestQuote")}</DialogTitle>
+                <DialogTitle>{tSup("quoteTitle")}</DialogTitle>
                 <DialogDescription>
                   Lengkapi detail di bawah ini untuk mengirim permintaan penawaran kepada {supplier.companyName}.
                 </DialogDescription>
@@ -765,14 +657,14 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
                     onClick={() => setIsRfqOpen(false)}
                     className="rounded-lg text-xs font-bold px-4 h-9 cursor-pointer"
                   >
-                    Batal
+                    {tSup("quoteCancel")}
                   </Button>
                   <Button
                     type="submit"
                     disabled={isSubmitting}
                     className="bg-primary text-primary-foreground hover:bg-primary/95 font-bold cursor-pointer rounded-lg text-xs h-9 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 hover:shadow-md hover:shadow-primary/20"
                   >
-                    {isSubmitting ? "Sending..." : tSup("btnSendQuote")}
+                    {isSubmitting ? tSup("quoteSending") : tSup("btnSendQuote")}
                   </Button>
                 </div>
               </form>

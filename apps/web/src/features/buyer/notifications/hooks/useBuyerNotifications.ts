@@ -1,9 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { notificationsService } from "../services/notifications.service";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 export function useBuyerNotifications() {
   const queryClient = useQueryClient();
+  const t = useTranslations("buyer.notifications");
 
   const notificationsQuery = useQuery({
     queryKey: ["buyer-notifications"],
@@ -14,11 +16,11 @@ export function useBuyerNotifications() {
     mutationFn: () => notificationsService.markAllRead(),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["buyer-notifications"] });
-      toast.success("Semua notifikasi ditandai dibaca!");
+      toast.success(t("toastMarkAllReadSuccess"));
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Gagal menandai notifikasi.");
+      toast.error(t("toastMarkAllReadError"));
     },
   });
 

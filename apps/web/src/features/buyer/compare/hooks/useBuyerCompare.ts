@@ -1,11 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { compareService } from "../services/compare.service";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
 
 export function useBuyerCompare() {
   const queryClient = useQueryClient();
   const { isAuthenticated } = useAuthStore();
+  const t = useTranslations("buyer.compare");
 
   const compareQuery = useQuery({
     queryKey: ["buyer-compare"],
@@ -27,7 +29,7 @@ export function useBuyerCompare() {
     onError: (error: unknown) => {
       console.error(error);
       const err = error as { response?: { data?: { error?: string } } };
-      const errMsg = err.response?.data?.error || "Gagal menambahkan supplier ke perbandingan.";
+      const errMsg = err.response?.data?.error || t("supplierAddError");
       toast.error(errMsg);
     },
   });
@@ -36,11 +38,11 @@ export function useBuyerCompare() {
     mutationFn: (id: string) => compareService.removeComparedSupplier(id),
     onSuccess: (updatedList) => {
       queryClient.setQueryData(["buyer-compare"], updatedList);
-      toast.success("Supplier dihapus dari perbandingan!");
+      toast.success(t("supplierRemovedSuccess"));
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Gagal menghapus supplier dari perbandingan.");
+      toast.error(t("supplierRemoveError"));
     },
   });
 
@@ -52,7 +54,7 @@ export function useBuyerCompare() {
     onError: (error: unknown) => {
       console.error(error);
       const err = error as { response?: { data?: { error?: string } } };
-      const errMsg = err.response?.data?.error || "Gagal menambahkan produk ke perbandingan.";
+      const errMsg = err.response?.data?.error || t("productAddError");
       toast.error(errMsg);
     },
   });
@@ -61,11 +63,11 @@ export function useBuyerCompare() {
     mutationFn: (id: string) => compareService.removeComparedProduct(id),
     onSuccess: (updatedList) => {
       queryClient.setQueryData(["buyer-compare-products"], updatedList);
-      toast.success("Produk dihapus dari perbandingan!");
+      toast.success(t("productRemovedSuccess"));
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Gagal menghapus produk dari perbandingan.");
+      toast.error(t("productRemoveError"));
     },
   });
 

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
+import { cn, getDicebearUrl } from "@/lib/utils";
 
 const AvatarContext = React.createContext<{
   imageLoaded: boolean;
@@ -156,10 +156,7 @@ function AvatarFallback({
   };
 
   const seedText = getSeedText() || "user";
-  // encodeURIComponent prevents any special characters in seedText from
-  // escaping the query-string context in the DiceBear URL.
-  const seed = encodeURIComponent(seedText);
-  const dicebearUrl = `https://api.dicebear.com/7.x/lorelei/svg?seed=${seed}`;
+  const dicebearUrl = getDicebearUrl(seedText, "lorelei");
 
   return (
     <div

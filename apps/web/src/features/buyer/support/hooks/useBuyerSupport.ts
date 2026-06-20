@@ -1,10 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supportService } from "../services/support.service";
 import type { CreateTicketPayload } from "../types/support.types";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 export function useBuyerSupportTickets() {
   const queryClient = useQueryClient();
+  const t = useTranslations("buyer.support");
 
   const ticketsQuery = useQuery({
     queryKey: ["buyer-support-tickets"],
@@ -15,11 +17,11 @@ export function useBuyerSupportTickets() {
     mutationFn: (data: CreateTicketPayload) => supportService.createTicket(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["buyer-support-tickets"] });
-      toast.success("Tiket bantuan berhasil dibuat!");
+      toast.success(t("toastCreateSuccess"));
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Gagal membuat tiket bantuan.");
+      toast.error(t("toastCreateError"));
     },
   });
 
@@ -34,6 +36,7 @@ export function useBuyerSupportTickets() {
 
 export function useBuyerSupportTicketDetail(id: string) {
   const queryClient = useQueryClient();
+  const t = useTranslations("buyer.support");
 
   const detailQuery = useQuery({
     queryKey: ["buyer-support-ticket-detail", id],
@@ -45,11 +48,11 @@ export function useBuyerSupportTicketDetail(id: string) {
     mutationFn: (text: string) => supportService.replyTicket(id, text),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["buyer-support-ticket-detail", id] });
-      toast.success("Balasan pesan berhasil terkirim!");
+      toast.success(t("toastReplySuccess"));
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Gagal mengirim balasan.");
+      toast.error(t("toastReplyError"));
     },
   });
 

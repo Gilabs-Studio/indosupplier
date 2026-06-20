@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { PublicLayout } from "@/features/public/components/public-layout";
 import { Link } from "@/i18n/routing";
+import { formatPrice } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { AiSearchInput } from "@/features/public/components/ai-search-input";
@@ -27,14 +28,7 @@ interface DemoHomePageProps {
   locale: string;
 }
 
-function formatPrice(price: number, currency = "IDR") {
-  if (!price) return "Hubungi Supplier";
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency,
-    minimumFractionDigits: 0,
-  }).format(price);
-}
+
 
 export function DemoHomePage({ locale }: DemoHomePageProps) {
   const t = useTranslations("public.demoHome");
@@ -212,7 +206,9 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
                     </CardContent>
                   </div>
                   <CardFooter className="flex items-center justify-between border-t border-border p-4 pt-0 text-xs">
-                    <span className="font-bold text-primary">{formatPrice(product.price, product.currency)}</span>
+                    <span className="font-bold text-primary">
+                      {formatPrice(product.price, product.currency) || (locale === "en" ? "Contact Supplier" : "Hubungi Supplier")}
+                    </span>
                     <span className="rounded-sm border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground">RFQ</span>
                   </CardFooter>
                 </Link>

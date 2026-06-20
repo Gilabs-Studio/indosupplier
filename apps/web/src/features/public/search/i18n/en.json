@@ -26,7 +26,28 @@
       "recentSearch": "Recent Searches",
       "featuredSuppliers": "Featured Suppliers",
       "establishedShort": "Est. {year}",
-      "employeeCountShort": "{count} employees"
+      "employeeCountShort": "{count} employees",
+      "authRequireFollow": "Please login to follow this supplier.",
+      "authRequireBookmark": "Please login to save this product.",
+      "authRequireCompareSupplier": "Please login to compare suppliers.",
+      "authRequireCompareProduct": "Please login to compare products.",
+      "showingResultsFor": "Showing {count} results for \"{query}\"",
+      "allProducts": "all products",
+      "mostRelevant": "Most Relevant",
+      "allCategories": "All Categories",
+      "trust": "Trust",
+      "productsTab": "Products",
+      "shopsTab": "Shops",
+      "ratingLabel": "Rating",
+      "responseLabel": "Response",
+      "typeLabel": "Type",
+      "detailSupplier": "Supplier Detail",
+      "following": "Following",
+      "follow": "Follow",
+      "verified": "Verified",
+      "contactSupplier": "Contact Supplier",
+      "moq": "MOQ",
+      "ulasan": "reviews"
     }
   }
 }

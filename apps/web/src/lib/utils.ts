@@ -6,6 +6,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function getDicebearUrl(
+  seed: string,
+  style: "lorelei" | "initials" = "lorelei",
+): string {
+  const safeSeed = encodeURIComponent((seed || "").trim() || "user");
+  return `https://api.dicebear.com/7.x/${style}/svg?seed=${safeSeed}`;
+}
+
+
 export function formatCurrency(
   value: number | string | null | undefined,
   locale: string = "id-ID",
@@ -24,6 +33,28 @@ export function formatCurrency(
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(numValue);
+}
+
+export function formatPrice(
+  price: number | string | null | undefined,
+  currency: string = "IDR",
+  locale: string = "id-ID",
+): string {
+  if (price === null || price === undefined || price === "" || Number(price) === 0) {
+    return "";
+  }
+  const value = typeof price === "string" ? parseFloat(price) : price;
+  if (isNaN(value)) return "";
+
+  const cleanCurrency = currency.trim().toUpperCase() || "IDR";
+  const isIDR = cleanCurrency === "IDR";
+  
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: cleanCurrency,
+    minimumFractionDigits: isIDR ? 0 : 2,
+    maximumFractionDigits: isIDR ? 0 : 2,
+  }).format(value);
 }
 
 export function formatDate(

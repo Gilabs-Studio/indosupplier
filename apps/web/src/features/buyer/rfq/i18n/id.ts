@@ -48,7 +48,9 @@ export const buyerRfqId = {
     toastUploadError: "Gagal mengunggah berkas spesifikasi.",
     toastUploading: "Mengunggah...",
     toastUploadedFile: "File terunggah: {name}",
-    toastSubmitting: "Mengirim..."
+    toastSubmitting: "Mengirim...",
+    toastCreateSuccess: "RFQ berhasil dibuat dan disebarkan ke supplier terverifikasi!",
+    toastCreateError: "Gagal mengirim RFQ. Silakan coba lagi."
   },
   rfqDetail: {
     backLink: "Kembali ke Daftar RFQ",
@@ -67,6 +69,9 @@ export const buyerRfqId = {
     labelDestination: "Tujuan Pengiriman",
     labelCreatedAt: "Tanggal Dibuat",
     labelDescription: "Deskripsi Kebutuhan",
-    labelAttachment: "Lampiran Dokumen"
+    labelAttachment: "Lampiran Dokumen",
+    toastAcceptSuccess: "Penawaran berhasil disetujui! Tim sales kami akan menghubungi Anda.",
+    toastAcceptError: "Gagal menyetujui penawaran.",
+    toastSpecUploadError: "Gagal mengunggah dokumen spesifikasi."
   }
 };

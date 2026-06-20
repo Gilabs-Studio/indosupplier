@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
@@ -8,6 +9,7 @@ import { followingService } from "../services/following.service";
 export function useBuyerFollowing() {
   const queryClient = useQueryClient();
   const { isAuthenticated } = useAuthStore();
+  const t = useTranslations("buyer.following");
 
   const followingQuery = useQuery({
     queryKey: ["buyer-following"],
@@ -19,11 +21,11 @@ export function useBuyerFollowing() {
     mutationFn: (supplierProfileId: string) => followingService.followSupplier(supplierProfileId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["buyer-following"] });
-      toast.success("Supplier berhasil diikuti.");
+      toast.success(t("toastFollowSuccess"));
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Gagal mengikuti supplier.");
+      toast.error(t("toastFollowError"));
     },
   });
 
@@ -31,11 +33,11 @@ export function useBuyerFollowing() {
     mutationFn: (supplierProfileId: string) => followingService.unfollowSupplier(supplierProfileId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["buyer-following"] });
-      toast.success("Supplier tidak lagi diikuti.");
+      toast.success(t("toastUnfollowSuccess"));
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Gagal memperbarui following supplier.");
+      toast.error(t("toastUnfollowError"));
     },
   });
 

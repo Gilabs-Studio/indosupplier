@@ -49,7 +49,16 @@
       "emptyTitleProducts": "No products bookmarked yet",
       "emptyDescProducts": "Browse products from selected suppliers and save them here.",
       "btnSearchProducts": "Search Products",
-      "compareCheckbox": "Add to compare"
+      "compareCheckbox": "Add to compare",
+      "priceStartingFrom": "Price starting from",
+      "contactSupplier": "Contact Supplier",
+      "moqDefault": "MOQ",
+      "itemTypeBookmark": "bookmark",
+      "minOrderDefault": "1 Pcs",
+      "toastSaveSuccess": "Product successfully bookmarked!",
+      "toastSaveError": "Failed to save bookmark.",
+      "toastDeleteSuccess": "Bookmark successfully deleted!",
+      "toastDeleteError": "Failed to delete bookmark."
     },
     "following": {
       "title": "Followed Shops",
@@ -63,7 +72,11 @@
       "btnFollowing": "Following",
       "compareCheckbox": "Add to compare",
       "cardProducts": "Key Products",
-      "badgeVerified": "Verified"
+      "badgeVerified": "Verified",
+      "toastFollowSuccess": "Successfully followed supplier.",
+      "toastFollowError": "Failed to follow supplier.",
+      "toastUnfollowSuccess": "Supplier unfollowed.",
+      "toastUnfollowError": "Failed to update following status."
     },
     "compare": {
       "title": "Compare Suppliers",
@@ -133,6 +146,12 @@
       "productAlreadyAdded": "Product already added to comparison!",
       "productLimitReached": "Maximum of 5 products compared!",
       "productAddedSuccess": "Product added to comparison!",
+      "supplierRemovedSuccess": "Supplier removed from comparison!",
+      "supplierRemoveError": "Failed to remove supplier from comparison.",
+      "productRemovedSuccess": "Product removed from comparison!",
+      "productRemoveError": "Failed to remove product from comparison.",
+      "supplierAddError": "Failed to add supplier to comparison.",
+      "productAddError": "Failed to add product to comparison.",
       "compareCountSuppliers": "Compare Suppliers ({count})",
       "compareCountProducts": "Compare Products ({count})",
       "profileDetail": "Profile Detail",
@@ -156,12 +175,16 @@
     },
     "notifications": {
       "title": "Notifications",
-      "subtitle": "Stay updated with incoming quotes, messages, and document verifications."
+      "subtitle": "Stay updated with incoming quotes, messages, and document verifications.",
+      "toastMarkAllReadSuccess": "All notifications marked as read!",
+      "toastMarkAllReadError": "Failed to mark notifications as read."
     },
     "onboarding": {
       "title": "Complete Buyer Profile",
       "subtitle": "Just a few details to unlock verified RFQs and credit limits.",
-      "btnSubmit": "Complete Profile"
+      "btnSubmit": "Complete Profile",
+      "toastOnboardingSuccess": "B2B profile updated successfully! Happy sourcing.",
+      "toastOnboardingError": "Failed to complete B2B profile. Please try again."
     },
     "profile": {
       "title": "Profile & Settings",
@@ -170,13 +193,24 @@
       "tabCompany": "Company Details",
       "tabDocuments": "Company Documents",
       "saveBtn": "Save Settings",
-      "saveSuccess": "Profile updated successfully!"
+      "saveSuccess": "Profile updated successfully!",
+      "toastUpdatePersonalSuccess": "Personal data updated successfully!",
+      "toastUpdatePersonalError": "Failed to update personal data.",
+      "toastUpdateCompanySuccess": "Company data updated successfully!",
+      "toastUpdateCompanyError": "Failed to update company data.",
+      "toastUploadFileError": "Failed to upload attachment file.",
+      "toastUploadDocSuccess": "Legal documents uploaded successfully for verification!",
+      "toastUploadDocError": "Failed to submit document verification."
     },
 
     "support": {
       "title": "Helpdesk & Customer Support",
       "subtitle": "Ask questions, resolve billing disputes, or report issues.",
-      "btnCreate": "New Ticket"
+      "btnCreate": "New Ticket",
+      "toastCreateSuccess": "Help ticket successfully created!",
+      "toastCreateError": "Failed to create help ticket.",
+      "toastReplySuccess": "Message reply sent successfully!",
+      "toastReplyError": "Failed to send message reply."
     },
     "transactions": {
       "title": "Purchase Orders List",

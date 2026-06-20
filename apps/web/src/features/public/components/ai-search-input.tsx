@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Search, ChevronDown, MapPin } from "lucide-react";
 import { useRouter } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,36 +16,27 @@ interface AiSearchInputProps {
 }
 
 export function AiSearchInput({ locale }: AiSearchInputProps) {
+  const t = useTranslations("public.demoHome");
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedRegion, setSelectedRegion] = useState(locale === "en" ? "All Regions" : "Semua Wilayah");
+  const [selectedRegionVal, setSelectedRegionVal] = useState("");
   const [placeholder, setPlaceholder] = useState("");
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const phrasesId = [
-    "pabrik batik tulis Solo MOQ rendah...",
-    "produsen baja SNI di Cilegon...",
-    "supplier mebel jati ekspor Jepara...",
-    "pabrik plastik kemasan ramah lingkungan...",
-    "kelompok tani kopi Arabika Gayo...",
+  const phrases = [
+    t("phrase0"),
+    t("phrase1"),
+    t("phrase2"),
+    t("phrase3"),
+    t("phrase4"),
   ];
-
-  const phrasesEn = [
-    "Solo batik fabric factories with low MOQ...",
-    "SNI steel manufacturers in Cilegon...",
-    "Jepara teak export furniture suppliers...",
-    "eco-friendly packaging plastic factory...",
-    "Gayo Arabica coffee farmer groups...",
-  ];
-
-  const phrases = locale === "en" ? phrasesEn : phrasesId;
 
   // Typewriter effect logic
   useEffect(() => {
     let timer: NodeJS.Timeout;
-    const currentFullText = phrases[phraseIndex];
+    const currentFullText = phrases[phraseIndex] || "";
 
     if (isDeleting) {
       timer = setTimeout(() => {
@@ -75,7 +67,7 @@ export function AiSearchInput({ locale }: AiSearchInputProps) {
   }, [charIndex, isDeleting, phraseIndex, phrases]);
 
   const regions = [
-    { name: locale === "en" ? "All Regions" : "Semua Wilayah", value: "" },
+    { name: t("allRegions"), value: "" },
     { name: "Jakarta", value: "jakarta" },
     { name: "Surabaya", value: "surabaya" },
     { name: "Bandung", value: "bandung" },
@@ -90,13 +82,14 @@ export function AiSearchInput({ locale }: AiSearchInputProps) {
     if (searchQuery.trim()) {
       params.append("query", searchQuery.trim());
     }
-    const matchingRegion = regions.find((r) => r.name === selectedRegion);
-    if (matchingRegion && matchingRegion.value) {
-      params.append("region", matchingRegion.value);
+    if (selectedRegionVal) {
+      params.append("region", selectedRegionVal);
     }
     const queryStr = params.toString();
     router.push(queryStr ? `/demo/search?${queryStr}` : "/demo/search");
   };
+
+  const selectedRegionName = regions.find((r) => r.value === selectedRegionVal)?.name || t("allRegions");
 
   return (
     <form
@@ -113,7 +106,7 @@ export function AiSearchInput({ locale }: AiSearchInputProps) {
         type="text"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        placeholder={placeholder ? `${locale === "en" ? "Search " : "Cari "}${placeholder}` : ""}
+        placeholder={placeholder ? t("aiSearchPlaceholder", { placeholder }) : ""}
         className="flex-1 min-w-0 bg-transparent border-0 pl-2 pr-3 py-2 text-sm text-foreground placeholder:text-muted-foreground/50 outline-hidden font-light cursor-pointer"
       />
 
@@ -127,15 +120,15 @@ export function AiSearchInput({ locale }: AiSearchInputProps) {
               className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-muted-foreground hover:text-primary transition-colors cursor-pointer outline-hidden"
             >
               <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
-              <span className="max-w-[100px] truncate">{selectedRegion}</span>
+              <span className="max-w-[100px] truncate">{selectedRegionName}</span>
               <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-44 p-1 bg-background border border-border rounded-lg shadow-lg">
             {regions.map((reg) => (
               <DropdownMenuItem
-                key={reg.name}
-                onClick={() => setSelectedRegion(reg.name)}
+                key={reg.value}
+                onClick={() => setSelectedRegionVal(reg.value)}
                 className="focus:bg-secondary cursor-pointer rounded-sm px-3 py-1.5 text-xs text-foreground"
               >
                 {reg.name}
@@ -150,7 +143,7 @@ export function AiSearchInput({ locale }: AiSearchInputProps) {
         type="submit"
         className="bg-foreground hover:bg-foreground/90 text-background font-bold text-xs uppercase tracking-wider px-6 py-2.5 rounded-md transition-all duration-300 hover:shadow-md cursor-pointer shrink-0"
       >
-        {locale === "en" ? "SEARCH" : "CARI"}
+        {t("aiSearchBtn")}
       </button>
     </form>
   );

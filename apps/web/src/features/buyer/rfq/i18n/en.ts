@@ -48,7 +48,9 @@ export const buyerRfqEn = {
     toastUploadError: "Failed to upload specification file.",
     toastUploading: "Uploading...",
     toastUploadedFile: "Uploaded file: {name}",
-    toastSubmitting: "Sending..."
+    toastSubmitting: "Sending...",
+    toastCreateSuccess: "RFQ created and broadcasted to verified suppliers!",
+    toastCreateError: "Failed to send RFQ. Please try again."
   },
   rfqDetail: {
     backLink: "Back to RFQ List",
@@ -67,6 +69,9 @@ export const buyerRfqEn = {
     labelDestination: "Shipping Destination",
     labelCreatedAt: "Created Date",
     labelDescription: "Detailed Requirements",
-    labelAttachment: "Attachment Document"
+    labelAttachment: "Attachment Document",
+    toastAcceptSuccess: "Bid accepted! Our sales team will contact you shortly.",
+    toastAcceptError: "Failed to accept bid.",
+    toastSpecUploadError: "Failed to upload specification document."
   }
 };

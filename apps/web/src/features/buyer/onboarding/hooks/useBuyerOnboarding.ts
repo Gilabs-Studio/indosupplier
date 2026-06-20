@@ -3,11 +3,13 @@ import { onboardingService } from "../services/onboarding.service";
 import type { OnboardingPayload } from "../types/onboarding.types";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
 import { useRouter } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 export function useBuyerOnboarding() {
   const { user, setUser } = useAuthStore();
   const router = useRouter();
+  const t = useTranslations("buyer.onboarding");
 
   return useMutation({
     mutationFn: (data: OnboardingPayload) => onboardingService.submit(data),
@@ -25,12 +27,12 @@ export function useBuyerOnboarding() {
           },
         });
       }
-      toast.success("Profil B2B Anda berhasil diperbarui! Selamat berbelanja.");
+      toast.success(t("toastOnboardingSuccess"));
       router.push("/dashboard");
     },
     onError: (error) => {
       console.error("Onboarding failed:", error);
-      toast.error("Gagal melengkapi profil B2B. Harap coba lagi.");
+      toast.error(t("toastOnboardingError"));
     },
   });
 }

@@ -70,7 +70,15 @@
       "waktuBalas": "Chat Response",
       "alignment": "Alignment",
       "lamaOperasional": "Operational",
-      "kembaliKeAtas": "Back to Top"
+      "kembaliKeAtas": "Back to Top",
+      "aiSearchPlaceholder": "Search {placeholder}",
+      "aiSearchBtn": "SEARCH",
+      "allRegions": "All Regions",
+      "phrase0": "Solo batik fabric factories with low MOQ...",
+      "phrase1": "SNI steel manufacturers in Cilegon...",
+      "phrase2": "Jepara teak export furniture suppliers...",
+      "phrase3": "eco-friendly packaging plastic factory...",
+      "phrase4": "Gayo Arabica coffee farmer groups..."
     }
   }
 }

@@ -26,7 +26,28 @@
       "recentSearch": "Pencarian Terakhir",
       "featuredSuppliers": "Supplier Unggulan",
       "establishedShort": "Berdiri {year}",
-      "employeeCountShort": "{count} karyawan"
+      "employeeCountShort": "{count} karyawan",
+      "authRequireFollow": "Silakan masuk terlebih dahulu untuk mengikuti supplier.",
+      "authRequireBookmark": "Silakan masuk terlebih dahulu untuk menyimpan produk.",
+      "authRequireCompareSupplier": "Silakan masuk terlebih dahulu untuk membandingkan supplier.",
+      "authRequireCompareProduct": "Silakan masuk terlebih dahulu untuk membandingkan produk.",
+      "showingResultsFor": "Menampilkan {count} hasil untuk \"{query}\"",
+      "allProducts": "semua produk",
+      "mostRelevant": "Paling Sesuai",
+      "allCategories": "Semua Kategori",
+      "trust": "Trust",
+      "productsTab": "Produk",
+      "shopsTab": "Toko",
+      "ratingLabel": "Rating",
+      "responseLabel": "Respons",
+      "typeLabel": "Tipe",
+      "detailSupplier": "Detail Supplier",
+      "following": "Mengikuti",
+      "follow": "Follow",
+      "verified": "Verified",
+      "contactSupplier": "Hubungi Supplier",
+      "moq": "MOQ",
+      "ulasan": "ulasan"
     }
   }
 }

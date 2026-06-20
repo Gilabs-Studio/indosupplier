@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Send, Check, CheckCheck, MessageSquare, ShieldCheck, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, getDicebearUrl } from "@/lib/utils";
 import { BuyerLayout } from "@/features/buyer/components/buyer-layout";
 import { useBuyerChat } from "../hooks/useBuyerChat";
 
@@ -94,9 +94,7 @@ export function BuyerChatPage() {
 
     return rooms.map((room) => {
       const isSelected = room.id === selectedRoomId;
-      const avatarUrl = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
-        room.company_name
-      )}`;
+      const avatarUrl = getDicebearUrl(room.company_name, "initials");
 
       return (
         <div
@@ -236,9 +234,7 @@ export function BuyerChatPage() {
                   <div className="flex items-center gap-3">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
-                        selectedRoom.company_name
-                      )}`}
+                      src={getDicebearUrl(selectedRoom.company_name, "initials")}
                       alt={selectedRoom.company_name}
                       className="h-10 w-10 rounded-lg shrink-0 border border-border"
                     />

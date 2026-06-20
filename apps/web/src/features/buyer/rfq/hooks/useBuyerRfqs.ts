@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { rfqService } from "../services/rfq.service";
 import type { CreateRfqPayload } from "../types/rfq.types";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/routing";
 
@@ -18,23 +19,25 @@ export function useBuyerRfqs(params?: {
 export function useCreateRfq() {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const t = useTranslations("buyerRfq");
 
   return useMutation({
     mutationFn: (data: CreateRfqPayload) => rfqService.createRfq(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["buyer-rfqs"] });
-      toast.success("RFQ berhasil dibuat dan disebarkan ke supplier terverifikasi!");
+      toast.success(t("rfqCreate.toastCreateSuccess"));
       router.push("/rfq");
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Gagal mengirim RFQ. Silakan coba lagi.");
+      toast.error(t("rfqCreate.toastCreateError"));
     },
   });
 }
 
 export function useBuyerRfqDetail(id: string) {
   const queryClient = useQueryClient();
+  const t = useTranslations("buyerRfq");
 
   const detailQuery = useQuery({
     queryKey: ["buyer-rfq-detail", id],
@@ -53,11 +56,11 @@ export function useBuyerRfqDetail(id: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["buyer-rfq-detail", id] });
       queryClient.invalidateQueries({ queryKey: ["buyer-rfq-bids", id] });
-      toast.success("Penawaran berhasil disetujui! Tim sales kami akan menghubungi Anda.");
+      toast.success(t("rfqDetail.toastAcceptSuccess"));
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Gagal menyetujui penawaran.");
+      toast.error(t("rfqDetail.toastAcceptError"));
     },
   });
 
@@ -65,7 +68,7 @@ export function useBuyerRfqDetail(id: string) {
     mutationFn: (file: File) => rfqService.uploadSpecFile(file),
     onError: (error) => {
       console.error(error);
-      toast.error("Gagal mengunggah dokumen spesifikasi.");
+      toast.error(t("rfqDetail.toastSpecUploadError"));
     },
   });
 

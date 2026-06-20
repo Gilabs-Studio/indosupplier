@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
 import { CenteredLoading, LoadingSpinner } from "@/components/loading";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -232,13 +232,7 @@ export function BuyerComparePage() {
     toast.success(t("productAddedSuccess"));
   };
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      minimumFractionDigits: 0,
-    }).format(price);
-  };
+
 
   const renderSupplierSearchResults = () => {
     if (isSupplierLoading && supplierResults.length === 0) {

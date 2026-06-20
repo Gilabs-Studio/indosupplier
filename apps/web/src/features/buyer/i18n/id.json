@@ -49,7 +49,16 @@
       "emptyTitleProducts": "Belum ada produk disimpan",
       "emptyDescProducts": "Jelajahi produk dari supplier terpilih dan simpan di sini.",
       "btnSearchProducts": "Cari Produk",
-      "compareCheckbox": "Pilih untuk bandingkan"
+      "compareCheckbox": "Pilih untuk bandingkan",
+      "priceStartingFrom": "Harga mulai",
+      "contactSupplier": "Hubungi Supplier",
+      "moqDefault": "MOQ",
+      "itemTypeBookmark": "bookmark",
+      "minOrderDefault": "1 Pcs",
+      "toastSaveSuccess": "Produk berhasil disimpan!",
+      "toastSaveError": "Gagal menyimpan ke bookmark.",
+      "toastDeleteSuccess": "Bookmark berhasil dihapus!",
+      "toastDeleteError": "Gagal menghapus bookmark."
     },
     "following": {
       "title": "Toko Diikuti",
@@ -63,7 +72,11 @@
       "btnFollowing": "Mengikuti",
       "compareCheckbox": "Pilih untuk bandingkan",
       "cardProducts": "Produk Utama",
-      "badgeVerified": "Terverifikasi"
+      "badgeVerified": "Terverifikasi",
+      "toastFollowSuccess": "Supplier berhasil diikuti.",
+      "toastFollowError": "Gagal mengikuti supplier.",
+      "toastUnfollowSuccess": "Supplier tidak lagi diikuti.",
+      "toastUnfollowError": "Gagal memperbarui following supplier."
     },
     "compare": {
       "title": "Bandingkan Supplier",
@@ -133,6 +146,12 @@
       "productAlreadyAdded": "Produk sudah ditambahkan ke perbandingan!",
       "productLimitReached": "Maksimal bandingkan 5 produk!",
       "productAddedSuccess": "Produk ditambahkan ke perbandingan!",
+      "supplierRemovedSuccess": "Supplier dihapus dari perbandingan!",
+      "supplierRemoveError": "Gagal menghapus supplier dari perbandingan.",
+      "productRemovedSuccess": "Produk dihapus dari perbandingan!",
+      "productRemoveError": "Gagal menghapus produk dari perbandingan.",
+      "supplierAddError": "Gagal menambahkan supplier ke perbandingan.",
+      "productAddError": "Gagal menambahkan produk ke perbandingan.",
       "compareCountSuppliers": "Bandingkan Supplier ({count})",
       "compareCountProducts": "Bandingkan Produk ({count})",
       "profileDetail": "Profil Detail",
@@ -156,12 +175,16 @@
     },
     "notifications": {
       "title": "Notifikasi",
-      "subtitle": "Dapatkan update masuknya penawaran, pesan baru, dan status verifikasi berkas."
+      "subtitle": "Dapatkan update masuknya penawaran, pesan baru, dan status verifikasi berkas.",
+      "toastMarkAllReadSuccess": "Semua notifikasi ditandai dibaca!",
+      "toastMarkAllReadError": "Gagal menandai notifikasi."
     },
     "onboarding": {
       "title": "Lengkapi Profil Buyer",
       "subtitle": "Isi beberapa informasi perusahaan B2B Anda untuk mengaktifkan kuota RFQ.",
-      "btnSubmit": "Lengkapi Profil"
+      "btnSubmit": "Lengkapi Profil",
+      "toastOnboardingSuccess": "Profil B2B Anda berhasil diperbarui! Selamat berbelanja.",
+      "toastOnboardingError": "Gagal melengkapi profil B2B. Harap coba lagi."
     },
     "profile": {
       "title": "Profil & Pengaturan",
@@ -170,13 +193,24 @@
       "tabCompany": "Data Perusahaan",
       "tabDocuments": "Dokumen Perusahaan",
       "saveBtn": "Simpan Perubahan",
-      "saveSuccess": "Profil berhasil diperbarui!"
+      "saveSuccess": "Profil berhasil diperbarui!",
+      "toastUpdatePersonalSuccess": "Data pribadi berhasil diperbarui!",
+      "toastUpdatePersonalError": "Gagal memperbarui data pribadi.",
+      "toastUpdateCompanySuccess": "Data perusahaan berhasil diperbarui!",
+      "toastUpdateCompanyError": "Gagal memperbarui data perusahaan.",
+      "toastUploadFileError": "Gagal mengunggah berkas lampiran.",
+      "toastUploadDocSuccess": "Dokumen legalitas berhasil diunggah untuk verifikasi!",
+      "toastUploadDocError": "Gagal mengajukan verifikasi dokumen."
     },
 
     "support": {
       "title": "Pusat Bantuan & Layanan Pelanggan",
       "subtitle": "Ajukan tiket pertanyaan teknis, kendala pembayaran, atau laporkan penyalahgunaan.",
-      "btnCreate": "Buat Tiket Baru"
+      "btnCreate": "Buat Tiket Baru",
+      "toastCreateSuccess": "Tiket bantuan berhasil dibuat!",
+      "toastCreateError": "Gagal membuat tiket bantuan.",
+      "toastReplySuccess": "Balasan pesan berhasil terkirim!",
+      "toastReplyError": "Gagal mengirim balasan."
     },
     "transactions": {
       "title": "Daftar Transaksi",

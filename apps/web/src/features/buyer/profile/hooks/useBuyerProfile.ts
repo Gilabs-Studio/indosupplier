@@ -1,10 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { profileService } from "../services/profile.service";
 import type { ProfilePersonalPayload, ProfileCompanyPayload, UploadDocumentPayload } from "../types/profile.types";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 export function useBuyerProfile() {
   const queryClient = useQueryClient();
+  const t = useTranslations("buyer.profile");
 
   const profileQuery = useQuery({
     queryKey: ["buyer-profile"],
@@ -15,11 +17,11 @@ export function useBuyerProfile() {
     mutationFn: (data: ProfilePersonalPayload) => profileService.updatePersonal(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["buyer-profile"] });
-      toast.success("Data pribadi berhasil diperbarui!");
+      toast.success(t("toastUpdatePersonalSuccess"));
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Gagal memperbarui data pribadi.");
+      toast.error(t("toastUpdatePersonalError"));
     },
   });
 
@@ -27,11 +29,11 @@ export function useBuyerProfile() {
     mutationFn: (data: ProfileCompanyPayload) => profileService.updateCompany(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["buyer-profile"] });
-      toast.success("Data perusahaan berhasil diperbarui!");
+      toast.success(t("toastUpdateCompanySuccess"));
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Gagal memperbarui data perusahaan.");
+      toast.error(t("toastUpdateCompanyError"));
     },
   });
 
@@ -48,6 +50,7 @@ export function useBuyerProfile() {
 
 export function useBuyerDocuments() {
   const queryClient = useQueryClient();
+  const t = useTranslations("buyer.profile");
 
   const documentsQuery = useQuery({
     queryKey: ["buyer-documents"],
@@ -58,7 +61,7 @@ export function useBuyerDocuments() {
     mutationFn: (file: File) => profileService.uploadRawFile(file),
     onError: (error) => {
       console.error(error);
-      toast.error("Gagal mengunggah berkas lampiran.");
+      toast.error(t("toastUploadFileError"));
     },
   });
 
@@ -66,11 +69,11 @@ export function useBuyerDocuments() {
     mutationFn: (data: UploadDocumentPayload) => profileService.uploadDocument(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["buyer-documents"] });
-      toast.success("Dokumen legalitas berhasil diunggah untuk verifikasi!");
+      toast.success(t("toastUploadDocSuccess"));
     },
     onError: (error) => {
       console.error(error);
-      toast.error("Gagal mengajukan verifikasi dokumen.");
+      toast.error(t("toastUploadDocError"));
     },
   });
 

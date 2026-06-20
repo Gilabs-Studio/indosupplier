@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getDicebearUrl } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -382,7 +383,7 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
             <div className="flex items-center gap-2.5">
               {/* Avatar circle */}
               <Avatar className="h-9 w-9 border border-border">
-                <AvatarImage src={`https://api.dicebear.com/7.x/lorelei/svg?seed=${user?.email || "supplier"}`} alt={user?.name} />
+                <AvatarImage src={getDicebearUrl(user?.email || "supplier", "lorelei")} alt={user?.name} />
                 <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xs">
                   {user?.name?.slice(0, 2).toUpperCase() || "SP"}
                 </AvatarFallback>
