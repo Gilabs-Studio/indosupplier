@@ -38,6 +38,14 @@ import {
   DialogTitle,
   DialogClose,
 } from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface SupplierLayoutProps {
   children: React.ReactNode;
@@ -243,27 +251,23 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
 
   return (
     <div className="min-h-screen flex bg-background text-foreground transition-colors duration-300">
-      {/* ── Left Sidebar (Tokopedia Seller style) ── */}
+      {/* ── Left Sidebar (Floating style) ── */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-40 bg-card border-r border-border/80 flex flex-col justify-between transition-all duration-300 ease-in-out ${
+        className={`fixed top-4 bottom-4 left-4 z-40 bg-card border border-border/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] flex flex-col justify-between transition-all duration-300 ease-in-out rounded-lg ${
           isSidebarExpanded ? "w-64" : "w-[72px]"
         }`}
       >
         <div className="flex flex-col flex-1 overflow-y-auto">
           {/* Logo Section */}
-          <div className="h-16 flex items-center px-5 border-b border-border/80 gap-3 overflow-hidden">
-            <div className="flex items-center justify-center h-9 w-9 rounded-lg bg-primary/10 text-primary shrink-0">
-              <ShieldCheck className="h-5 w-5" />
-            </div>
-            {isSidebarExpanded && (
-              <div className="flex flex-col select-none leading-none">
-                <span className="font-extrabold text-foreground tracking-tight text-base">
-                  indosupplier
-                </span>
-                <span className="text-[10px] text-primary font-bold mt-0.5 tracking-wider uppercase">
-                  seller
-                </span>
-              </div>
+          <div className="h-16 flex items-center px-6 border-b border-border/50 overflow-hidden shrink-0">
+            {isSidebarExpanded ? (
+              <span className="font-extrabold text-foreground tracking-tight text-lg select-none leading-none">
+                indosupplier
+              </span>
+            ) : (
+              <span className="font-extrabold text-primary tracking-tight text-lg select-none leading-none mx-auto">
+                is
+              </span>
             )}
           </div>
 
@@ -284,21 +288,16 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
                     <Link
                       key={item.name}
                       href={item.url}
-                      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg relative overflow-hidden transition-all duration-200 group cursor-pointer ${
+                      className={`flex items-center gap-3 px-3.5 py-2.5 rounded-lg relative overflow-hidden transition-all duration-300 group cursor-pointer hover:-translate-y-0.5 active:translate-y-0 ${
                         isActive
-                          ? "text-primary bg-primary/10 font-semibold"
+                          ? "text-primary bg-primary/8 font-semibold shadow-xs shadow-primary/10"
                           : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
                       }`}
                     >
-                      {/* Left indicator line for active page */}
-                      {isActive && (
-                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-r-md" />
-                      )}
-                      
-                      <Icon className={`h-4.5 w-4.5 transition-transform duration-200 group-hover:scale-105 ${isActive ? "text-primary" : ""}`} />
+                      <Icon className={`h-4.5 w-4.5 transition-transform duration-300 group-hover:scale-105 ${isActive ? "text-primary" : ""}`} />
                       
                       {isSidebarExpanded && (
-                        <span className="text-sm select-none truncate transition-opacity duration-200">
+                        <span className="text-sm select-none truncate transition-opacity duration-300">
                           {item.name}
                         </span>
                       )}
@@ -309,44 +308,12 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
             ))}
           </div>
         </div>
-
-        {/* Footer Actions inside Sidebar */}
-        <div className="p-3 border-t border-border/80 space-y-1">
-          {/* Sign Out Button */}
-          <button
-            onClick={() => setShowLogoutConfirm(true)}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-200 group cursor-pointer ${
-              isSidebarExpanded ? "justify-start" : "justify-center"
-            }`}
-          >
-            <LogOut className="h-4.5 w-4.5 shrink-0 group-hover:translate-x-0.5 transition-transform" />
-            {isSidebarExpanded && (
-              <span className="text-sm font-medium select-none truncate">
-                {t("signOut")}
-              </span>
-            )}
-          </button>
-
-          {/* Collapse Toggle Button */}
-          <button
-            onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
-            className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all duration-200 cursor-pointer ${
-              isSidebarExpanded ? "justify-end" : "justify-center"
-            }`}
-          >
-            {isSidebarExpanded ? (
-              <ChevronLeft className="h-4 w-4" />
-            ) : (
-              <ChevronRight className="h-4 w-4" />
-            )}
-          </button>
-        </div>
       </aside>
 
       {/* ── Main Content Area ── */}
       <div
         className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${
-          isSidebarExpanded ? "pl-64" : "pl-[72px]"
+          isSidebarExpanded ? "pl-[288px]" : "pl-[104px]"
         }`}
       >
         {/* Header (Top navigation) */}
@@ -380,22 +347,52 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
             <div className="h-6 w-px bg-border/80" />
 
             {/* Supplier Info Profile */}
-            <div className="flex items-center gap-2.5">
-              {/* Avatar circle */}
-              <Avatar className="h-9 w-9 border border-border">
-                <AvatarImage src={getDicebearUrl(user?.email || "supplier", "lorelei")} alt={user?.name} />
-                <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xs">
-                  {user?.name?.slice(0, 2).toUpperCase() || "SP"}
-                </AvatarFallback>
-              </Avatar>
-              <div className="hidden sm:flex flex-col text-left">
-                <span className="text-xs font-semibold text-foreground leading-none">{user?.name || "PT Nusantara Supplier"}</span>
-                <span className="text-[10px] text-success font-semibold flex items-center gap-1 mt-1 leading-none">
-                  <span className="h-1.5 w-1.5 rounded-full bg-success inline-block" />
-                  {t("online")}
-                </span>
-              </div>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <div className="flex items-center gap-2.5 cursor-pointer hover:bg-muted/40 p-1.5 rounded-lg transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 select-none">
+                  {/* Avatar circle */}
+                  <Avatar className="h-9 w-9 border border-border">
+                    <AvatarImage src={getDicebearUrl(user?.email || "supplier", "lorelei")} alt={user?.name} />
+                    <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xs">
+                      {user?.name?.slice(0, 2).toUpperCase() || "SP"}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="hidden sm:flex flex-col text-left">
+                    <span className="text-xs font-semibold text-foreground leading-none">{user?.name || "PT Nusantara Supplier"}</span>
+                    <span className="text-[10px] text-success font-semibold flex items-center gap-1 mt-1 leading-none">
+                      <span className="h-1.5 w-1.5 rounded-full bg-success inline-block" />
+                      {t("online")}
+                    </span>
+                  </div>
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 mt-1 rounded-lg">
+                <DropdownMenuLabel className="font-semibold text-xs text-muted-foreground uppercase tracking-wider px-3 py-2">
+                  {locale === "id" ? "Portal Supplier" : "Supplier Portal"}
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/supplier/profile" className="flex items-center gap-2 px-3 py-2 cursor-pointer w-full text-sm">
+                    <User className="h-4 w-4" />
+                    <span>{t("menu.profile")}</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/supplier/subscription" className="flex items-center gap-2 px-3 py-2 cursor-pointer w-full text-sm">
+                    <Receipt className="h-4 w-4" />
+                    <span>{t("menu.subscription")}</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => setShowLogoutConfirm(true)}
+                  className="flex items-center gap-2 px-3 py-2 text-destructive focus:text-destructive cursor-pointer"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>{t("signOut")}</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </header>
 
