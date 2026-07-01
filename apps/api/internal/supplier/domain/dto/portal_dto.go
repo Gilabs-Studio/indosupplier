@@ -14,6 +14,7 @@ type SupplierProfileDTO struct {
 	Overview     string `json:"overview"`
 	Location     string `json:"location"`
 	Status       string `json:"status"`
+	Logo         string `json:"logo,omitempty"`
 }
 
 type UpdateProfileRequest struct {
@@ -28,6 +29,7 @@ type UpdateProfileRequest struct {
 	NIB          string `json:"nib"`
 	Overview     string `json:"overview"`
 	Location     string `json:"location" binding:"required"`
+	Logo         string `json:"logo"`
 }
 
 type BillingInvoiceDTO struct {

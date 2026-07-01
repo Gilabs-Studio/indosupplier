@@ -12,6 +12,7 @@ export interface SupplierProfileData {
   overview: string;
   location: string;
   status: string;
+  logo?: string;
 }
 
 export type UpdateProfilePayload = Omit<SupplierProfileData, "id" | "status">;

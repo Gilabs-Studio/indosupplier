@@ -47,6 +47,7 @@ type PublicSupplierDto struct {
 	WhatsApp          string                     `json:"whatsApp,omitempty"`
 	Email             string                     `json:"email,omitempty"`
 	Website           string                     `json:"website,omitempty"`
+	Logo              string                     `json:"logo,omitempty"`
 }
 
 type PublicProductDto struct {

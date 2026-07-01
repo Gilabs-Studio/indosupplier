@@ -43,6 +43,8 @@
     "fieldEmail": "Official Email",
     "fieldPhone": "Office Phone",
     "fieldWebsite": "Website URL",
+    "sectionLogoTitle": "Company Logo",
+    "sectionLogoDesc": "Upload your official company logo (JPG/PNG/WebP, max. 10MB)",
     "btnSaving": "Saving...",
     "btnSave": "Save Profile Details",
     "loading": "Loading profile...",

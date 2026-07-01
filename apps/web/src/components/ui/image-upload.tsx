@@ -127,6 +127,8 @@ export function ImageUpload({
   const [searchQuery, setSearchQuery] = React.useState(initialSearchQuery ?? "");
   const [isSearching, setIsSearching] = React.useState(false);
   const [searchResults, setSearchResults] = React.useState<ImageSearchResponse["data"]>([]);
+  const [loadErrorSrc, setLoadErrorSrc] = React.useState<string | null>(null);
+
   const inferredFolder = React.useMemo(() => {
     if (typeof window === "undefined") {
       return "general";
@@ -208,6 +210,7 @@ export function ImageUpload({
 
       // Create preview immediately
       const objectUrl = URL.createObjectURL(file);
+      setLoadErrorSrc(null);
       setLocalPreviewObjectUrl(objectUrl);
       setLoading(true);
 
@@ -268,6 +271,7 @@ export function ImageUpload({
     e.stopPropagation();
     onChange("");
     setLocalPreviewObjectUrl(null);
+    setLoadErrorSrc(null);
   };
 
   const handleApplyUrl = React.useCallback(() => {
@@ -298,6 +302,7 @@ export function ImageUpload({
       return;
     }
 
+    setLoadErrorSrc(null);
     onChange(safeValue);
     setUrlInput("");
   }, [labels.invalidFile, onChange, urlInput]);
@@ -351,6 +356,7 @@ export function ImageUpload({
 
   const handleSelectFromResults = React.useCallback(
     (item: ImageSearchResponse["data"][number]) => {
+      setLoadErrorSrc(null);
       onChange(item.url);
 
       if (item.source === "unsplash" && item.download_location) {
@@ -360,7 +366,12 @@ export function ImageUpload({
     [onChange, triggerUnsplashDownload]
   );
 
-  const safePreviewSrc = React.useMemo(() => sanitizeImageSrc(preview), [preview, sanitizeImageSrc]);
+  const safePreviewSrc = React.useMemo(() => {
+    const currentPreviewSrc = sanitizeImageSrc(preview);
+    if (!currentPreviewSrc) return undefined;
+    if (currentPreviewSrc === loadErrorSrc) return undefined;
+    return currentPreviewSrc;
+  }, [preview, sanitizeImageSrc, loadErrorSrc]);
 
   return (
     <div className={cn("space-y-2", className)}>
@@ -370,7 +381,7 @@ export function ImageUpload({
           "relative flex flex-col items-center justify-center w-full border-2 border-dashed rounded-lg cursor-pointer transition-colors bg-muted/5 xs:bg-background hover:bg-muted/10",
           isDragActive ? "border-primary bg-primary/5" : "border-muted-foreground/25",
           disabled && "opacity-50 cursor-not-allowed hover:bg-background",
-          preview ? "p-0 aspect-square w-32 md:w-40 border-0 overflow-hidden" : "p-6 py-8"
+          safePreviewSrc ? "p-0 aspect-square w-32 md:w-40 border-0 overflow-hidden" : "p-6 py-8"
         )}
       >
         <input {...getInputProps()} />
@@ -384,12 +395,12 @@ export function ImageUpload({
         {safePreviewSrc ? (
           <div className="relative w-full h-full group">
             <div className="relative w-full h-full">
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={safePreviewSrc}
                 alt="Product preview"
-                fill
-                sizes="(max-width: 768px) 128px, 160px"
-                className="rounded-lg object-cover"
+                className="rounded-lg object-cover w-full h-full"
+                onError={() => setLoadErrorSrc(safePreviewSrc ?? null)}
               />
             </div>
             {!disabled && !loading && (

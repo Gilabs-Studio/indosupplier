@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
+import { resolveImageUrl } from "@/lib/utils";
 import { PublicLayout } from "@/features/public/components/public-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -43,7 +44,9 @@ interface PublicSupplierProfilePageProps {
 }
 
 export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/demo" }: PublicSupplierProfilePageProps) {
+  const [logoError, setLogoError] = useState(false);
   const tSup = useTranslations("public.supplier");
+
   const {
     supplier,
     isLoading,
@@ -196,8 +199,28 @@ export function PublicSupplierProfilePage({ locale, slug, detailBasePath = "/dem
           <div className="bg-card border border-border shadow-xs rounded-lg p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 transition-all duration-300 hover:shadow-md">
             <div className="flex flex-col md:flex-row items-start md:items-center gap-5 w-full md:w-auto">
               {/* Shop Logo Avatar */}
-              <div className="h-18 w-18 rounded-full bg-primary text-primary-foreground font-heading font-bold text-2xl flex items-center justify-center shadow-xs shrink-0 border border-primary/10">
-                {supplier.companyName.substring(0, 2).toUpperCase()}
+              <div 
+                className="h-18 w-18 border border-border bg-muted flex items-center justify-center shadow-xs shrink-0 overflow-hidden relative"
+                style={{ borderRadius: "9999px" }}
+              >
+                {supplier.logo && !logoError ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={resolveImageUrl(supplier.logo)}
+                    alt={supplier.companyName}
+                    className="h-full w-full object-cover"
+                    style={{ borderRadius: "9999px" }}
+                    onLoad={() => setLogoError(false)}
+                    onError={() => setLogoError(true)}
+                  />
+                ) : (
+                  <div 
+                    className="flex h-full w-full items-center justify-center bg-primary text-primary-foreground font-heading font-bold text-2xl"
+                    style={{ borderRadius: "9999px" }}
+                  >
+                    {supplier.companyName.substring(0, 2).toUpperCase()}
+                  </div>
+                )}
               </div>
               <div className="space-y-2.5">
                 <div className="flex flex-wrap items-center gap-2">

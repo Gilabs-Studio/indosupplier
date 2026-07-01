@@ -59,6 +59,11 @@ const remoteImagePatterns: RemotePattern[] = [
     hostname: "images.unsplash.com",
     pathname: "/**",
   },
+  {
+    protocol: "https",
+    hostname: "api.dicebear.com",
+    pathname: "/**",
+  },
   ...(apiBaseUrl
     ? (() => {
         try {

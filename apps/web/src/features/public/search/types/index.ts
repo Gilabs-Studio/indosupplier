@@ -45,6 +45,7 @@ export interface PublicSupplierDto {
   whatsApp?: string;
   email?: string;
   website?: string;
+  logo?: string;
 }
 
 export interface PublicCategoryDto {

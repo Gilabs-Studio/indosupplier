@@ -43,6 +43,8 @@
     "fieldEmail": "Email Resmi",
     "fieldPhone": "Telepon Kantor",
     "fieldWebsite": "URL Situs Web",
+    "sectionLogoTitle": "Logo Perusahaan",
+    "sectionLogoDesc": "Unggah logo resmi perusahaan Anda (format JPG/PNG/WebP, maks. 10MB)",
     "btnSaving": "Menyimpan...",
     "btnSave": "Simpan Detail Profil",
     "loading": "Memuat profil...",

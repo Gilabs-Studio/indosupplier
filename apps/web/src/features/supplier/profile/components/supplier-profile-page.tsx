@@ -10,6 +10,7 @@ import { Field, FieldLabel, FieldGroup } from "@/components/ui/field";
 import { Save, Loader2, Eye } from "lucide-react";
 import { useSupplierProfile, useUpdateSupplierProfile } from "../hooks/useProfile";
 import { SupplierProfilePreview } from "./supplier-profile-preview";
+import { ImageUpload } from "@/components/ui/image-upload";
 
 export function SupplierProfilePage() {
   const t = useTranslations("supplier.profile");
@@ -29,6 +30,7 @@ export function SupplierProfilePage() {
     nib: "",
     overview: "",
     location: "",
+    logo: "",
   });
 
   useEffect(() => {
@@ -46,6 +48,7 @@ export function SupplierProfilePage() {
           nib: profile.nib || "",
           overview: profile.overview || "",
           location: profile.location || "",
+          logo: profile.logo || "",
         });
       }, 0);
       return () => clearTimeout(timer);
@@ -192,6 +195,20 @@ export function SupplierProfilePage() {
 
             {/* Contact Details & Save Bar */}
             <div className="space-y-6">
+              <Card className="border border-border shadow-xs rounded-xl overflow-hidden bg-card text-left">
+                <CardHeader>
+                  <CardTitle className="text-base font-bold font-heading">{t("sectionLogoTitle")}</CardTitle>
+                  <CardDescription className="text-xs">{t("sectionLogoDesc")}</CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-col items-center gap-4">
+                  <ImageUpload
+                    value={form.logo}
+                    onChange={(url) => setForm({ ...form, logo: url })}
+                    uploadFolder="logos"
+                  />
+                </CardContent>
+              </Card>
+
               <Card className="border border-border shadow-xs rounded-xl overflow-hidden bg-card text-left">
                 <CardHeader>
                   <CardTitle className="text-base font-bold font-heading">{t("sectionContactTitle")}</CardTitle>

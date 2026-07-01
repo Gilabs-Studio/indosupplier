@@ -4,7 +4,7 @@
 import React from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, resolveImageUrl } from "@/lib/utils";
 import { PublicLayout } from "@/features/public/components/public-layout";
 import { ProductCard } from "@/components/ui/product-card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -44,7 +44,9 @@ function formatDate(value: string) {
 }
 
 export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: PublicProductDetailPageProps) {
+  const [logoError, setLogoError] = React.useState(false);
   const t = useTranslations("public.productDetail");
+
   const {
     product,
     supplier,
@@ -376,8 +378,27 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
               {/* Supplier Detail Sidebar Card */}
               <div className="rounded-lg border border-border bg-card p-4 transition-all duration-300 hover:shadow-md">
                 <Link href={`${detailBasePath}/suppliers/${supplier.slug}`} className="flex cursor-pointer items-center gap-3 group">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-xs font-bold text-primary transition-colors group-hover:bg-primary/15">
-                    {supplier.companyName.slice(0, 2).toUpperCase()}
+                  <div 
+                    className="flex h-10 w-10 shrink-0 items-center justify-center border border-border bg-muted transition-colors group-hover:bg-muted/90 overflow-hidden relative"
+                    style={{ borderRadius: "9999px" }}
+                  >
+                    {supplier.logo && !logoError ? (
+                      <img
+                        src={resolveImageUrl(supplier.logo)}
+                        alt={supplier.companyName}
+                        className="h-full w-full object-cover"
+                        style={{ borderRadius: "9999px" }}
+                        onLoad={() => setLogoError(false)}
+                        onError={() => setLogoError(true)}
+                      />
+                    ) : (
+                      <div 
+                        className="flex h-full w-full items-center justify-center bg-primary text-primary-foreground font-heading font-bold text-xs"
+                        style={{ borderRadius: "9999px" }}
+                      >
+                        {supplier.companyName.slice(0, 2).toUpperCase()}
+                      </div>
+                    )}
                   </div>
                   <div className="min-w-0">
                     <p className="truncate text-xs font-bold text-foreground transition-colors group-hover:text-primary">

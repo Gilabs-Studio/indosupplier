@@ -8,6 +8,7 @@ import (
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/database"
 	monetizationModels "github.com/gilabs/indosupplier/api/internal/monetization/data/models"
 	"github.com/gilabs/indosupplier/api/internal/supplier/data/models"
+	userModels "github.com/gilabs/indosupplier/api/internal/user/data/models"
 )
 
 type PortalRepository interface {
@@ -23,6 +24,8 @@ type PortalRepository interface {
 	GetPaymentByID(ctx context.Context, paymentID string) (*monetizationModels.Payment, error)
 	CreateInvoice(ctx context.Context, inv *monetizationModels.Invoice) error
 	CreatePayment(ctx context.Context, pay *monetizationModels.Payment) error
+	GetUserAvatarURL(ctx context.Context, userID string) (string, error)
+	UpdateUserAvatar(ctx context.Context, userID string, avatarURL string) error
 }
 
 type portalRepository struct {
@@ -35,6 +38,27 @@ func NewPortalRepository(db *gorm.DB) PortalRepository {
 
 func (r *portalRepository) getDB(ctx context.Context) *gorm.DB {
 	return database.GetDB(ctx, r.db)
+}
+
+func (r *portalRepository) UpdateUserAvatar(ctx context.Context, userID string, avatarURL string) error {
+	return r.getDB(ctx).
+		Model(&userModels.User{}).
+		Where("id = ?", userID).
+		Update("avatar_url", avatarURL).
+		Error
+}
+
+func (r *portalRepository) GetUserAvatarURL(ctx context.Context, userID string) (string, error) {
+	var avatarURL string
+	// Ignore errors, return empty string if scan fails
+	_ = r.getDB(ctx).
+		Table("users").
+		Select("avatar_url").
+		Where("id = ?", userID).
+		Limit(1).
+		Row().
+		Scan(&avatarURL)
+	return avatarURL, nil
 }
 
 func (r *portalRepository) GetProfileByUserID(ctx context.Context, userID string) (*models.SupplierProfile, error) {

@@ -45,6 +45,8 @@ func (u *portalUsecase) GetProfile(ctx context.Context, userID string) (*dto.Sup
 		return nil, err
 	}
 
+	logo, _ := u.portalRepo.GetUserAvatarURL(ctx, userID)
+
 	return &dto.SupplierProfileDTO{
 		ID:           profile.ID,
 		CompanyName:  profile.CompanyName,
@@ -59,6 +61,7 @@ func (u *portalUsecase) GetProfile(ctx context.Context, userID string) (*dto.Sup
 		Overview:     profile.Description,
 		Location:     profile.Address,
 		Status:       profile.Status,
+		Logo:         logo,
 	}, nil
 }
 
@@ -88,6 +91,13 @@ func (u *portalUsecase) UpdateProfile(ctx context.Context, userID string, req *d
 		return nil, err
 	}
 
+	err = u.portalRepo.UpdateUserAvatar(ctx, userID, req.Logo)
+	if err != nil {
+		return nil, err
+	}
+
+	logo, _ := u.portalRepo.GetUserAvatarURL(ctx, userID)
+
 	return &dto.SupplierProfileDTO{
 		ID:           profile.ID,
 		CompanyName:  profile.CompanyName,
@@ -102,6 +112,7 @@ func (u *portalUsecase) UpdateProfile(ctx context.Context, userID string, req *d
 		Overview:     profile.Description,
 		Location:     profile.Address,
 		Status:       profile.Status,
+		Logo:         logo,
 	}, nil
 }
 

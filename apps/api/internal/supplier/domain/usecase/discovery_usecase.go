@@ -268,6 +268,15 @@ func (u *discoveryUsecase) buildSupplierResponse(ctx context.Context, p models.S
 		establishedYear = 2015
 	}
 
+	var avatarURL string
+	_ = u.db.WithContext(ctx).
+		Table("users").
+		Select("avatar_url").
+		Where("id = ?", p.UserID).
+		Limit(1).
+		Row().
+		Scan(&avatarURL)
+
 	response := dto.PublicSupplierDto{
 		ID:                p.ID,
 		Slug:              slugify(p.CompanyName),
@@ -290,6 +299,7 @@ func (u *discoveryUsecase) buildSupplierResponse(ctx context.Context, p models.S
 		KeyProducts:       keyProducts,
 		Certifications:    certNames,
 		CertificationList: certDtos,
+		Logo:              avatarURL,
 	}
 
 	if len(response.KeyProducts) == 0 {

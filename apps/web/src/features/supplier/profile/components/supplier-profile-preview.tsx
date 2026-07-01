@@ -6,8 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Building2, MapPin, Mail, Phone, Globe, Calendar, Users, ShieldCheck, Loader2 } from "lucide-react";
 import { useSupplierProfile } from "../hooks/useProfile";
+import { resolveImageUrl } from "@/lib/utils";
 
 export function SupplierProfilePreview() {
+  const [logoError, setLogoError] = React.useState(false);
   const tDash = useTranslations("supplier.dashboard");
   const t = useTranslations("supplier.profile");
 
@@ -47,8 +49,28 @@ export function SupplierProfilePreview() {
         <div className="h-32 bg-gradient-to-r from-primary/30 to-purple/30" />
         <CardContent className="p-6 relative">
           <div className="flex flex-col md:flex-row gap-5 items-start md:items-end -mt-16 mb-4">
-            <div className="h-20 w-20 bg-primary border-4 border-card rounded-2xl flex items-center justify-center text-primary-foreground font-heading font-extrabold text-3xl shadow-lg">
-              {company.name.slice(0, 2).toUpperCase()}
+            <div 
+              className="h-20 w-20 bg-primary border-4 border-card flex items-center justify-center text-primary-foreground font-heading font-extrabold text-3xl shadow-lg overflow-hidden relative"
+              style={{ borderRadius: "9999px" }}
+            >
+              {profile?.logo && !logoError ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={resolveImageUrl(profile.logo)}
+                  alt={company.name}
+                  className="h-full w-full object-cover"
+                  style={{ borderRadius: "9999px" }}
+                  onLoad={() => setLogoError(false)}
+                  onError={() => setLogoError(true)}
+                />
+              ) : (
+                <div 
+                  className="flex h-full w-full items-center justify-center bg-primary text-primary-foreground font-heading font-extrabold text-3xl"
+                  style={{ borderRadius: "9999px" }}
+                >
+                  {company.name.slice(0, 2).toUpperCase()}
+                </div>
+              )}
             </div>
             <div className="space-y-1">
               <div className="flex flex-wrap items-center gap-2">
