@@ -15,6 +15,9 @@ type BuyerProfile struct {
 	CountryCode         string         `gorm:"type:varchar(10);index" json:"country_code"`
 	Industry            string         `gorm:"type:varchar(150);index" json:"industry"`
 	PurchaseFrequency   string         `gorm:"type:varchar(80)" json:"purchase_frequency"`
+	Phone               string         `gorm:"type:varchar(50)" json:"phone"`
+	Website             string         `gorm:"type:text" json:"website"`
+	Address             string         `gorm:"type:text" json:"address"`
 	CompanyVerifiedAt   *time.Time     `json:"company_verified_at"`
 	ProfileCompleteness int            `gorm:"not null;default:0" json:"profile_completeness"`
 	CreatedAt           time.Time      `gorm:"autoCreateTime" json:"created_at"`
@@ -40,7 +43,7 @@ type BuyerDocument struct {
 	DocumentNumber string         `gorm:"type:varchar(120)" json:"document_number"`
 	FileURL        string         `gorm:"type:text;not null" json:"file_url"`
 	Status         string         `gorm:"type:varchar(40);not null;default:'pending';index" json:"status"`
-	ReviewedBy     string         `gorm:"type:uuid;index" json:"reviewed_by"`
+	ReviewedBy     *string        `gorm:"type:uuid;index" json:"reviewed_by"`
 	ReviewedAt     *time.Time     `json:"reviewed_at"`
 	ReviewReason   string         `gorm:"type:text" json:"review_reason"`
 	CreatedAt      time.Time      `gorm:"autoCreateTime" json:"created_at"`

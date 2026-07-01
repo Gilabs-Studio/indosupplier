@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldLabel, FieldGroup } from "@/components/ui/field";
-import { toast } from "sonner";
 import { ArrowLeft, Send, ShieldCheck, Calendar, MapPin, DollarSign, Scale } from "lucide-react";
+import { CenteredLoading } from "@/components/loading";
+import { useSubmitSupplierRfqProposal, useSupplierRfqDetail } from "../hooks/useSupplierRfqs";
 
 interface SupplierRfqDetailProps {
   id: string;
@@ -18,26 +19,8 @@ interface SupplierRfqDetailProps {
 export function SupplierRfqDetail({ id }: SupplierRfqDetailProps) {
   const router = useRouter();
   const t = useTranslations("supplier.rfq");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [rfq, setRfq] = useState({
-    id: "RFQ-2026-102",
-    product: "Bentonite Clay Powder",
-    category: "Industrial Minerals",
-    quantity: "20 Ton",
-    port: "Tanjung Perak, Surabaya",
-    date: "2026-06-03",
-    budget: "Rp 4.000.000 / Ton",
-    description: "Looking for high expansion grade sodium bentonite clay powder for drilling mud applications. Moisture content must be less than 12%. Mesh size 200 min 98% passing.",
-    shippingTerm: "FOB (Free On Board)",
-    targetDelivery: "2026-07-15",
-    buyer: {
-      name: "PT Nusantara Drilling Service",
-      established: "2015",
-      location: "Surabaya, Jawa Timur",
-      rating: "4.7 / 5.0",
-    }
-  });
+  const { data: rfq, isLoading } = useSupplierRfqDetail(id);
+  const { mutate: submitProposal, isPending: isSubmitting } = useSubmitSupplierRfqProposal(id);
 
   const [form, setForm] = useState({
     price: "",
@@ -46,41 +29,14 @@ export function SupplierRfqDetail({ id }: SupplierRfqDetailProps) {
     notes: "",
   });
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (id === "RFQ-2026-101") {
-        setRfq({
-          id: "RFQ-2026-101",
-          product: "Garnet Sand Mesh 80",
-          category: "Industrial Minerals",
-          quantity: "50 Ton",
-          port: "Tanjung Priok, Jakarta",
-          date: "2026-05-30",
-          budget: "Rp 3.300.000 / Ton",
-          description: "Need garnet sand mesh 80 for waterjet cutting machine. Low dust, washed grade, chloride content under 15ppm. Packing in 1.5-ton big bags.",
-          shippingTerm: "CIF (Cost, Insurance & Freight)",
-          targetDelivery: "2026-06-30",
-          buyer: {
-            name: "PT Metal Fabrication Indonesia",
-            established: "2010",
-            location: "Bekasi, Jawa Barat",
-            rating: "4.9 / 5.0",
-          }
-        });
-      }
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [id]);
-
   const handleSubmitProposal = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      toast.success(t("submitSuccess"));
-      router.push("/supplier/rfq");
-    }, 1000);
+    submitProposal(form);
   };
+
+  if (isLoading || !rfq) {
+    return <CenteredLoading />;
+  }
 
   return (
     <div className="space-y-6 text-left">
@@ -126,13 +82,13 @@ export function SupplierRfqDetail({ id }: SupplierRfqDetailProps) {
                   <span className="text-[10px] font-bold text-muted-foreground uppercase">{t("targetBudget")}</span>
                   <span className="text-base font-extrabold text-foreground mt-1 flex items-center gap-1.5">
                     <DollarSign className="h-4 w-4 text-success" />
-                    {rfq.budget}
+                    {rfq.budget || "-"}
                   </span>
                 </div>
                 <div className="p-3 border border-border bg-muted/20 rounded-xl flex flex-col">
                   <span className="text-[10px] font-bold text-muted-foreground uppercase">{t("shippingTerm")}</span>
                   <span className="text-base font-extrabold text-foreground mt-1">
-                    {rfq.shippingTerm}
+                    {rfq.shippingTerm || "-"}
                   </span>
                 </div>
               </div>
@@ -141,7 +97,7 @@ export function SupplierRfqDetail({ id }: SupplierRfqDetailProps) {
               <div className="space-y-2">
                 <h4 className="text-xs font-bold text-muted-foreground uppercase">{t("specs")}</h4>
                 <p className="text-sm text-foreground leading-relaxed bg-muted/10 p-4 rounded-xl border border-border">
-                  {rfq.description}
+                  {rfq.description || "-"}
                 </p>
               </div>
 
@@ -158,7 +114,7 @@ export function SupplierRfqDetail({ id }: SupplierRfqDetailProps) {
                   <Calendar className="h-4 w-4 text-muted-foreground shrink-0" />
                   <div>
                     <p className="text-[10px] font-bold text-muted-foreground uppercase">{t("targetDate")}</p>
-                    <p className="text-foreground text-sm font-bold mt-0.5">{rfq.targetDelivery}</p>
+                    <p className="text-foreground text-sm font-bold mt-0.5">{rfq.targetDelivery || "-"}</p>
                   </div>
                 </div>
               </div>
@@ -242,7 +198,7 @@ export function SupplierRfqDetail({ id }: SupplierRfqDetailProps) {
             <CardContent className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 bg-primary/10 text-primary border border-border rounded-lg font-heading font-bold text-lg flex items-center justify-center">
-                  {rfq.buyer.name.substring(3, 5).toUpperCase()}
+                  {(rfq.buyer.name || "BY").slice(0, 2).toUpperCase()}
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-foreground truncate max-w-[150px]">{rfq.buyer.name}</h4>
@@ -259,13 +215,13 @@ export function SupplierRfqDetail({ id }: SupplierRfqDetailProps) {
                 </div>
                 <div className="flex items-center justify-between font-semibold">
                   <span className="text-muted-foreground">Established</span>
-                  <span className="text-foreground">{rfq.buyer.established}</span>
+                  <span className="text-foreground">{rfq.buyer.established || "-"}</span>
                 </div>
                 <div className="flex items-center justify-between font-semibold">
                   <span className="text-muted-foreground">Reputation</span>
                   <span className="text-foreground flex items-center gap-1">
                     <ShieldCheck className="h-3.5 w-3.5 text-success" />
-                    {rfq.buyer.rating}
+                    {rfq.buyer.rating || "-"}
                   </span>
                 </div>
               </div>

@@ -1,11 +1,15 @@
 export interface BuyerProfile {
   id: string;
   user_id: string;
+  email: string;
   full_name: string;
   company_name: string;
   country_code: string;
   industry: string;
   purchase_frequency?: string;
+  phone?: string;
+  website?: string;
+  address?: string;
   profile_completeness: number;
   company_verified_at?: string | null;
 }

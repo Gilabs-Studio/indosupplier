@@ -33,4 +33,6 @@ export interface CreateRfqPayload {
   target_port: string;
   description?: string;
   attachment_url?: string;
+  attachment_name?: string;
+  attachment_size?: number;
 }

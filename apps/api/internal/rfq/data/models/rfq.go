@@ -107,7 +107,7 @@ func (r *RFQMessage) BeforeCreate(tx *gorm.DB) error {
 type RFQAttachment struct {
 	ID        string         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
 	RFQID     string         `gorm:"type:uuid;not null;index" json:"rfq_id"`
-	MessageID string         `gorm:"type:uuid;index" json:"message_id"`
+	MessageID *string        `gorm:"type:uuid;index" json:"message_id"`
 	FileURL   string         `gorm:"type:text;not null" json:"file_url"`
 	FileName  string         `gorm:"type:varchar(255);not null" json:"file_name"`
 	MimeType  string         `gorm:"type:varchar(120)" json:"mime_type"`

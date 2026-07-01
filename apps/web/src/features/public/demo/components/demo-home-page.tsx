@@ -68,7 +68,7 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
                 : "Akses direktori terkurasi dari produsen, eksportir, dan penyedia bahan baku terbaik Indonesia."}
             </p>
             <div className="w-full max-w-2xl pt-2">
-              <AiSearchInput locale={locale} />
+              <AiSearchInput />
             </div>
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 pt-2 text-[11px] font-medium text-muted-foreground">
               {[

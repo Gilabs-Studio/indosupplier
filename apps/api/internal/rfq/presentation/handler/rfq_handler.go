@@ -182,3 +182,102 @@ func (h *RFQHandler) AcceptBid(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"success": true})
 }
+
+type ListSupplierRFQRequest struct {
+	Page    int `form:"page" binding:"omitempty,min=1"`
+	PerPage int `form:"per_page" binding:"omitempty,min=1,max=20"`
+}
+
+func (h *RFQHandler) ListForSupplier(c *gin.Context) {
+	userID, ok := h.getAuthenticatedUserID(c)
+	if !ok {
+		return
+	}
+
+	var query ListSupplierRFQRequest
+	if err := c.ShouldBindQuery(&query); err != nil {
+		errors.InvalidQueryParamResponse(c)
+		return
+	}
+
+	page, perPage := utils.NormalizePagination(query.Page, query.PerPage, 10)
+	items, total, err := h.usecase.ListForSupplier(c.Request.Context(), userID, page, perPage)
+	if err != nil {
+		if stderrors.Is(err, usecase.ErrSupplierProfileNotFound) {
+			errors.ErrorResponse(c, "SUPPLIER_PROFILE_NOT_FOUND", nil, nil)
+			return
+		}
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	totalPages := utils.TotalPages(total, perPage)
+	meta := &response.Meta{
+		Pagination: &response.PaginationMeta{
+			Page:       page,
+			PerPage:    perPage,
+			Total:      int(total),
+			TotalPages: totalPages,
+			HasNext:    page < totalPages,
+			HasPrev:    page > 1,
+		},
+	}
+	response.SuccessResponse(c, items, meta)
+}
+
+func (h *RFQHandler) GetSupplierRFQByID(c *gin.Context) {
+	userID, ok := h.getAuthenticatedUserID(c)
+	if !ok {
+		return
+	}
+
+	id := c.Param("id")
+	res, err := h.usecase.GetSupplierRFQByID(c.Request.Context(), userID, id)
+	if err != nil {
+		if stderrors.Is(err, usecase.ErrSupplierProfileNotFound) {
+			errors.ErrorResponse(c, "SUPPLIER_PROFILE_NOT_FOUND", nil, nil)
+			return
+		}
+		if stderrors.Is(err, usecase.ErrRFQNotFound) {
+			errors.ErrorResponse(c, "RFQ_NOT_FOUND", map[string]interface{}{"id": id}, nil)
+			return
+		}
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, res, nil)
+}
+
+func (h *RFQHandler) SubmitProposal(c *gin.Context) {
+	userID, ok := h.getAuthenticatedUserID(c)
+	if !ok {
+		return
+	}
+
+	var req dto.SubmitRFQProposalRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		if validationErrors, ok := err.(validator.ValidationErrors); ok {
+			errors.HandleValidationError(c, validationErrors)
+			return
+		}
+		errors.InvalidRequestBodyResponse(c)
+		return
+	}
+
+	id := c.Param("id")
+	if err := h.usecase.SubmitProposal(c.Request.Context(), userID, id, &req); err != nil {
+		if stderrors.Is(err, usecase.ErrSupplierProfileNotFound) {
+			errors.ErrorResponse(c, "SUPPLIER_PROFILE_NOT_FOUND", nil, nil)
+			return
+		}
+		if stderrors.Is(err, usecase.ErrRFQNotFound) {
+			errors.ErrorResponse(c, "RFQ_NOT_FOUND", map[string]interface{}{"id": id}, nil)
+			return
+		}
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, gin.H{"submitted": true}, &response.Meta{UpdatedBy: userID})
+}

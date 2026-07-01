@@ -9,13 +9,21 @@ import (
 )
 
 func RegisterRFQRoutes(rg *gin.RouterGroup, h *handler.RFQHandler, jwtManager *jwt.JWTManager) {
-	g := rg.Group("/buyer/rfqs")
-	g.Use(middleware.AuthMiddleware(jwtManager))
+	buyerGroup := rg.Group("/buyer/rfqs")
+	buyerGroup.Use(middleware.AuthMiddleware(jwtManager))
 	{
-		g.GET("", h.List)
-		g.POST("", h.Create)
-		g.GET("/:id", h.GetByID)
-		g.GET("/:id/bids", h.GetBids)
-		g.POST("/:id/bids/:bidId/accept", h.AcceptBid)
+		buyerGroup.GET("", h.List)
+		buyerGroup.POST("", h.Create)
+		buyerGroup.GET("/:id", h.GetByID)
+		buyerGroup.GET("/:id/bids", h.GetBids)
+		buyerGroup.POST("/:id/bids/:bidId/accept", h.AcceptBid)
+	}
+
+	supplierGroup := rg.Group("/supplier/rfqs")
+	supplierGroup.Use(middleware.AuthMiddleware(jwtManager))
+	{
+		supplierGroup.GET("", h.ListForSupplier)
+		supplierGroup.GET("/:id", h.GetSupplierRFQByID)
+		supplierGroup.POST("/:id/proposals", h.SubmitProposal)
 	}
 }

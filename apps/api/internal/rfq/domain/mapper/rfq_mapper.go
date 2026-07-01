@@ -4,34 +4,16 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/google/uuid"
 	"github.com/gilabs/indosupplier/api/internal/rfq/data/models"
 	"github.com/gilabs/indosupplier/api/internal/rfq/domain/dto"
 )
 
-// ResolveRFQID converts potential mock IDs like "RFQ-2026-004" to their deterministic UUIDs
 func ResolveRFQID(id string) string {
-	if _, err := uuid.Parse(id); err == nil {
-		return id
-	}
-	return uuid.NewSHA1(uuid.NameSpaceDNS, []byte(id)).String()
-}
-
-// GetDisplayID converts deterministic mock UUIDs back to their alphanumeric display forms
-func GetDisplayID(id string) string {
-	for _, num := range []string{"001", "002", "003", "004"} {
-		mockStr := fmt.Sprintf("RFQ-2026-%s", num)
-		if id == uuid.NewSHA1(uuid.NameSpaceDNS, []byte(mockStr)).String() {
-			return mockStr
-		}
-	}
 	return id
 }
 
 // ToRFQResponse converts an RFQ model to its DTO response
 func ToRFQResponse(rfq *models.RFQ, categoryName string, replies int, attachment *models.RFQAttachment) dto.RFQResponse {
-	displayID := GetDisplayID(rfq.ID)
-	
 	// Format quantity
 	var qtyStr string
 	if rfq.QuantityValue == float64(int(rfq.QuantityValue)) {
@@ -50,7 +32,7 @@ func ToRFQResponse(rfq *models.RFQ, categoryName string, replies int, attachment
 	}
 
 	res := dto.RFQResponse{
-		ID:          displayID,
+		ID:          rfq.ID,
 		Product:     rfq.Title,
 		Category:    categoryName,
 		Quantity:    qtyStr,
@@ -67,7 +49,7 @@ func ToRFQResponse(rfq *models.RFQ, categoryName string, replies int, attachment
 		if attachment.FileName == "" {
 			res.AttachmentName = filepath.Base(attachment.FileURL)
 		}
-		
+
 		// Human readable file size
 		size := attachment.FileSize
 		if size > 1024*1024 {
@@ -76,8 +58,6 @@ func ToRFQResponse(rfq *models.RFQ, categoryName string, replies int, attachment
 			res.AttachmentSize = fmt.Sprintf("%.1f KB", float64(size)/1024)
 		} else if size > 0 {
 			res.AttachmentSize = fmt.Sprintf("%d Bytes", size)
-		} else {
-			res.AttachmentSize = "1.4 MB" // default fallback
 		}
 	}
 

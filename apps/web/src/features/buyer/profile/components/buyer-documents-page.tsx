@@ -47,7 +47,7 @@ export function BuyerDocumentsPage() {
       uploadDocument({
         document_type: docType,
         document_number: docNumber,
-        file_url: fileRes?.url || "http://localhost:8088/uploads/mock-doc.pdf",
+        file_url: fileRes.url,
       });
 
       setDocNumber("");

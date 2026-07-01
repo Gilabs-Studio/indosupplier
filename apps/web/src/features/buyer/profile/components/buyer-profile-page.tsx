@@ -138,7 +138,7 @@ export function BuyerProfilePage() {
                     <Input
                       id="email"
                       type="email"
-                      value={profile?.user_id ? "yohanes@example.com" : ""}
+                      value={profile?.email || ""}
                       disabled
                       className="bg-muted text-muted-foreground cursor-not-allowed opacity-80"
                     />

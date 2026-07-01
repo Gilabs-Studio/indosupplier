@@ -9,6 +9,7 @@ import (
 	"gorm.io/gorm"
 
 	buyerModels "github.com/gilabs/indosupplier/api/internal/buyer/data/models"
+	"github.com/gilabs/indosupplier/api/internal/core/apptime"
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/database"
 	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	supplierModels "github.com/gilabs/indosupplier/api/internal/supplier/data/models"
@@ -20,6 +21,9 @@ type marketplaceUserSeed struct {
 	Name        string
 	CompanyName string
 	Industry    string
+	Phone       string
+	Website     string
+	Address     string
 	IsSupplier  bool
 }
 
@@ -37,7 +41,16 @@ func SeedUsers() error {
 		{Email: "buyer3@indosupplier.local", Name: "Arif Santoso", CompanyName: "PT Global Konstruksi", Industry: "Construction"},
 		{Email: "buyer4@indosupplier.local", Name: "Maya Lestari", CompanyName: "PT Agro Makmur", Industry: "Agriculture"},
 		{Email: "buyer5@indosupplier.local", Name: "Bima Hartono", CompanyName: "CV Logistik Prima", Industry: "Logistics"},
-		{Email: "admin@example.com", Name: "Raka Wijaya", CompanyName: "PT Baja Sentosa", Industry: "Steel Manufacturing", IsSupplier: true},
+		{
+			Email:       "admin@example.com",
+			Name:        "Raka Wijaya",
+			CompanyName: "PT Baja Sentosa",
+			Industry:    "Steel Manufacturing",
+			Phone:       "+6281234567890",
+			Website:     "https://bajasentosa.indosupplier.local",
+			Address:     "Jl. Industri Baja No. 88, Cakung, Jakarta Timur",
+			IsSupplier:  true,
+		},
 		{Email: "supplier2@indosupplier.local", Name: "Sinta Maharani", CompanyName: "CV Tekstil Nusantara", Industry: "Textile", IsSupplier: true},
 		{Email: "supplier3@indosupplier.local", Name: "Dimas Saputra", CompanyName: "PT Agro Indo Sejahtera", Industry: "Agriculture", IsSupplier: true},
 		{Email: "supplier4@indosupplier.local", Name: "Laras Permata", CompanyName: "PT Kimia Cemerlang", Industry: "Chemical", IsSupplier: true},
@@ -85,17 +98,45 @@ func seedMarketplaceUser(seed marketplaceUserSeed, hashedPassword string, sequen
 }
 
 func ensureBuyerProfile(userID string, seed marketplaceUserSeed) error {
-	var count int64
-	if err := database.DB.Model(&buyerModels.BuyerProfile{}).
-		Where("user_id = ?", userID).
-		Count(&count).Error; err != nil {
-		return err
-	}
-	if count > 0 {
-		return nil
+	var profile buyerModels.BuyerProfile
+	err := database.DB.Where("user_id = ?", userID).First(&profile).Error
+	if err != nil {
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
+			return err
+		}
+
+		profile = buyerProfileFromSeed(userID, seed)
+		if err := database.DB.Create(&profile).Error; err != nil {
+			return err
+		}
 	}
 
-	return database.DB.Create(&buyerModels.BuyerProfile{
+	if seed.Email == "admin@example.com" {
+		now := apptime.Now()
+		updates := map[string]interface{}{
+			"full_name":            seed.Name,
+			"company_name":         seed.CompanyName,
+			"country_code":         "ID",
+			"industry":             seed.Industry,
+			"purchase_frequency":   "monthly",
+			"phone":                seed.Phone,
+			"website":              seed.Website,
+			"address":              seed.Address,
+			"profile_completeness": 100,
+			"company_verified_at":  &now,
+			"updated_at":           now,
+		}
+		if err := database.DB.Model(&profile).Updates(updates).Error; err != nil {
+			return err
+		}
+		return ensureAdminBuyerDocuments(profile.ID)
+	}
+
+	return nil
+}
+
+func buyerProfileFromSeed(userID string, seed marketplaceUserSeed) buyerModels.BuyerProfile {
+	profile := buyerModels.BuyerProfile{
 		UserID:              userID,
 		FullName:            seed.Name,
 		CompanyName:         seed.CompanyName,
@@ -103,7 +144,61 @@ func ensureBuyerProfile(userID string, seed marketplaceUserSeed) error {
 		Industry:            seed.Industry,
 		PurchaseFrequency:   "monthly",
 		ProfileCompleteness: 70,
-	}).Error
+	}
+	if seed.Phone != "" {
+		profile.Phone = seed.Phone
+	}
+	if seed.Website != "" {
+		profile.Website = seed.Website
+	}
+	if seed.Address != "" {
+		profile.Address = seed.Address
+	}
+	if seed.Email == "admin@example.com" {
+		now := apptime.Now()
+		profile.CompanyVerifiedAt = &now
+		profile.ProfileCompleteness = 100
+	}
+	return profile
+}
+
+func ensureAdminBuyerDocuments(buyerProfileID string) error {
+	var count int64
+	if err := database.DB.Model(&buyerModels.BuyerDocument{}).
+		Where("buyer_profile_id = ?", buyerProfileID).
+		Count(&count).Error; err != nil {
+		return err
+	}
+	if count > 0 {
+		return nil
+	}
+
+	reviewedAt := apptime.Now().AddDate(0, 0, -2)
+	documents := []buyerModels.BuyerDocument{
+		{
+			BuyerProfileID: buyerProfileID,
+			DocumentType:   "npwp",
+			DocumentNumber: "01.234.567.8-999.000",
+			FileURL:        "https://indosupplier.local/uploads/documents/admin-buyer-npwp.pdf",
+			Status:         "verified",
+			ReviewedAt:     &reviewedAt,
+		},
+		{
+			BuyerProfileID: buyerProfileID,
+			DocumentType:   "nib",
+			DocumentNumber: "9120400000001",
+			FileURL:        "https://indosupplier.local/uploads/documents/admin-buyer-nib.pdf",
+			Status:         "verified",
+			ReviewedAt:     &reviewedAt,
+		},
+	}
+
+	for i := range documents {
+		if err := database.DB.Create(&documents[i]).Error; err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func ensureSupplierProfile(userID string, seed marketplaceUserSeed, sequence int) error {

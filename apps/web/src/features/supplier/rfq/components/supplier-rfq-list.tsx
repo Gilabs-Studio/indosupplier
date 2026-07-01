@@ -8,22 +8,23 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { FileText, Search, ArrowUpRight, Calendar, MapPin } from "lucide-react";
+import { CenteredLoading } from "@/components/loading";
+import { useSupplierRfqs } from "../hooks/useSupplierRfqs";
 
 export function SupplierRfqList() {
   const t = useTranslations("supplier.rfq");
   const [search, setSearch] = useState("");
-
-  const [rfqs] = useState([
-    { id: "RFQ-2026-102", product: "Bentonite Clay Powder", category: "Industrial Minerals", quantity: "20 Ton", port: "Tanjung Perak, Surabaya", date: "2026-06-03", budget: "Rp 4.000.000 / Ton", status: "open" },
-    { id: "RFQ-2026-101", product: "Garnet Sand Mesh 80", category: "Industrial Minerals", quantity: "50 Ton", port: "Tanjung Priok, Jakarta", date: "2026-05-30", budget: "Rp 3.300.000 / Ton", status: "open" },
-    { id: "RFQ-2026-099", product: "Industrial Quartz Sand", category: "Industrial Minerals", quantity: "15 Ton", port: "Tanjung Priok, Jakarta", date: "2026-05-27", budget: "Rp 2.700.000 / Ton", status: "open" },
-    { id: "RFQ-2026-095", product: "Organic Coconut Sugar", category: "Agriculture", quantity: "5 Ton", port: "Port of Rotterdam (CIF)", date: "2026-05-18", budget: "Rp 22.000.000 / Ton", status: "closed" },
-  ]);
+  const { data, isLoading } = useSupplierRfqs({ page: 1, per_page: 20 });
+  const rfqs = data?.items || [];
 
   const filtered = rfqs.filter(r =>
     r.product.toLowerCase().includes(search.toLowerCase()) ||
     r.id.toLowerCase().includes(search.toLowerCase())
   );
+
+  if (isLoading) {
+    return <CenteredLoading />;
+  }
 
   return (
     <div className="space-y-6 text-left">
@@ -96,14 +97,14 @@ export function SupplierRfqList() {
                       </span>
                     </TableCell>
                     <TableCell className="py-4">
-                      {r.status === "open" ? (
+                      {r.status === "open" || r.status === "new" ? (
                         <Badge className="bg-success/15 text-success border border-success/30 font-bold">Open</Badge>
                       ) : (
-                        <Badge variant="secondary" className="font-bold">Closed</Badge>
+                        <Badge variant="secondary" className="font-bold">{r.status}</Badge>
                       )}
                     </TableCell>
                     <TableCell className="py-4 px-6 text-right space-x-2">
-                      <Button asChild size="sm" variant={r.status === "open" ? "default" : "outline"} disabled={r.status !== "open"} className="text-xs font-semibold h-8 cursor-pointer border-border">
+                      <Button asChild size="sm" variant={r.status === "open" || r.status === "new" ? "default" : "outline"} disabled={r.status !== "open" && r.status !== "new"} className="text-xs font-semibold h-8 cursor-pointer border-border">
                         <Link href={`/supplier/rfq/${r.id}`}>
                           {t("actionSubmit")}
                           <ArrowUpRight className="ml-1 h-3.5 w-3.5" />

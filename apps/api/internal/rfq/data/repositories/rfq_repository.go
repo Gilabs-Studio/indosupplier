@@ -11,11 +11,14 @@ import (
 )
 
 type RFQRepository interface {
-	Create(ctx context.Context, rfq *models.RFQ, attachment *models.RFQAttachment) error
+	Create(ctx context.Context, rfq *models.RFQ, attachment *models.RFQAttachment, recipients []models.RFQRecipient) error
 	FindByID(ctx context.Context, id string) (*models.RFQ, *models.RFQAttachment, int, error)
 	List(ctx context.Context, buyerProfileID string, status string, page, perPage int) ([]models.RFQ, []int, int64, error)
 	GetBids(ctx context.Context, rfqID string) ([]models.RFQRecipient, error)
 	AcceptBid(ctx context.Context, rfqID string, bidID string) error
+	ListForSupplier(ctx context.Context, supplierProfileID string, page, perPage int) ([]models.RFQRecipient, int64, error)
+	FindForSupplier(ctx context.Context, supplierProfileID string, rfqID string) (*models.RFQRecipient, error)
+	SubmitProposal(ctx context.Context, recipient *models.RFQRecipient, message *models.RFQMessage) error
 }
 
 type rfqRepository struct {
@@ -26,7 +29,7 @@ func NewRFQRepository(db *gorm.DB) RFQRepository {
 	return &rfqRepository{db: db}
 }
 
-func (r *rfqRepository) Create(ctx context.Context, rfq *models.RFQ, attachment *models.RFQAttachment) error {
+func (r *rfqRepository) Create(ctx context.Context, rfq *models.RFQ, attachment *models.RFQAttachment, recipients []models.RFQRecipient) error {
 	return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(rfq).Error; err != nil {
 			return err
@@ -34,6 +37,12 @@ func (r *rfqRepository) Create(ctx context.Context, rfq *models.RFQ, attachment 
 		if attachment != nil {
 			attachment.RFQID = rfq.ID
 			if err := tx.Create(attachment).Error; err != nil {
+				return err
+			}
+		}
+		for i := range recipients {
+			recipients[i].RFQID = rfq.ID
+			if err := tx.Create(&recipients[i]).Error; err != nil {
 				return err
 			}
 		}
@@ -140,5 +149,56 @@ func (r *rfqRepository) AcceptBid(ctx context.Context, rfqID string, bidID strin
 		}
 
 		return nil
+	})
+}
+
+func (r *rfqRepository) ListForSupplier(ctx context.Context, supplierProfileID string, page, perPage int) ([]models.RFQRecipient, int64, error) {
+	var recipients []models.RFQRecipient
+	var total int64
+
+	query := r.db.WithContext(ctx).
+		Model(&models.RFQRecipient{}).
+		Where("supplier_profile_id = ?", supplierProfileID)
+
+	if err := query.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	page, perPage = utils.NormalizePagination(page, perPage, 10)
+	offset := utils.PaginationOffset(page, perPage)
+
+	err := query.
+		Joins("JOIN rfqs ON rfqs.id = rfq_recipients.rfq_id").
+		Order("rfqs.created_at DESC").
+		Offset(offset).
+		Limit(perPage).
+		Find(&recipients).Error
+	return recipients, total, err
+}
+
+func (r *rfqRepository) FindForSupplier(ctx context.Context, supplierProfileID string, rfqID string) (*models.RFQRecipient, error) {
+	var recipient models.RFQRecipient
+	err := r.db.WithContext(ctx).
+		Where("supplier_profile_id = ? AND rfq_id = ?", supplierProfileID, rfqID).
+		First(&recipient).Error
+	if err != nil {
+		return nil, err
+	}
+	return &recipient, nil
+}
+
+func (r *rfqRepository) SubmitProposal(ctx context.Context, recipient *models.RFQRecipient, message *models.RFQMessage) error {
+	return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		now := apptime.Now()
+		updates := map[string]interface{}{
+			"status":       "responded",
+			"responded_at": &now,
+		}
+		if err := tx.Model(&models.RFQRecipient{}).
+			Where("id = ?", recipient.ID).
+			Updates(updates).Error; err != nil {
+			return err
+		}
+		return tx.Create(message).Error
 	})
 }

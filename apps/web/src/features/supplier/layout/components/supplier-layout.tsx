@@ -9,13 +9,10 @@ import {
   LayoutDashboard,
   Inbox,
   LogOut,
-  ChevronLeft,
-  ChevronRight,
   Loader2,
   Search,
   Bell,
   User,
-  ShieldCheck,
   Building2,
   Megaphone,
   Gavel,
@@ -59,7 +56,7 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
   const { user, isAuthenticated, isSessionVerified, setUser, setSessionVerified, logout } = useAuthStore();
   const [mounted, setMounted] = useState(false);
   const [isAuthorizing, setIsAuthorizing] = useState(true);
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
+  const [isSidebarExpanded] = useState(true);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const { data: profile } = useSupplierProfile();
   const isLocalVerified = typeof window !== "undefined" && localStorage.getItem("supplier_verified") === "true";

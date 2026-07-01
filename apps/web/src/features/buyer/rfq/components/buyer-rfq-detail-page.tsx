@@ -208,8 +208,12 @@ export function BuyerRfqDetailPage({ id }: BuyerRfqDetailPageProps) {
                   <a href={rfq.attachmentUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-3 border border-border rounded-lg bg-muted/20 w-fit hover:bg-muted/30 transition-colors">
                     <FileText className="h-5 w-5 text-primary" />
                     <div className="text-xs">
-                      <p className="font-semibold text-foreground">{rfq.attachmentName || "Spesifikasi_Teknis.pdf"}</p>
-                      <p className="text-[10px] text-muted-foreground">{rfq.attachmentSize || "1.4 MB"}</p>
+                      <p className="font-semibold text-foreground">
+                        {rfq.attachmentName || rfq.attachmentUrl.split("/").pop() || rfq.attachmentUrl}
+                      </p>
+                      {rfq.attachmentSize && (
+                        <p className="text-[10px] text-muted-foreground">{rfq.attachmentSize}</p>
+                      )}
                     </div>
                   </a>
                 </div>

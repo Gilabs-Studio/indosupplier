@@ -21,6 +21,7 @@ export function BuyerRfqCreatePage() {
 
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedFileName, setUploadedFileName] = useState("");
+  const [uploadedFileSize, setUploadedFileSize] = useState(0);
 
   const {
     register,
@@ -58,6 +59,7 @@ export function BuyerRfqCreatePage() {
         
         setValue("attachment_url", res.url);
         setUploadedFileName(file.name);
+        setUploadedFileSize(file.size);
         toast.success(t("toastUploadSuccess"));
       } catch (err) {
         console.error(err);
@@ -77,6 +79,8 @@ export function BuyerRfqCreatePage() {
       target_port: data.target_port,
       description: data.description,
       attachment_url: data.attachment_url,
+      attachment_name: uploadedFileName || undefined,
+      attachment_size: uploadedFileSize || undefined,
     });
   };
 

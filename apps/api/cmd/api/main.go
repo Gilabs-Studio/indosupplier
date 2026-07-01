@@ -186,6 +186,10 @@ func main() {
 	txUC := buyerUsecase.NewTransactionUsecase(database.DB, txRepository)
 	txH := buyerHandler.NewTransactionHandler(txUC)
 
+	profileRepository := buyerRepo.NewProfileRepository(database.DB)
+	profileUC := buyerUsecase.NewProfileUsecase(profileRepository)
+	profileH := buyerHandler.NewProfileHandler(profileUC)
+
 	bookmarkRepository := buyerRepo.NewBookmarkRepository(database.DB)
 	bookmarkUC := buyerUsecase.NewBookmarkUsecase(database.DB, bookmarkRepository)
 	bookmarkH := buyerHandler.NewBookmarkHandler(bookmarkUC)
@@ -243,6 +247,7 @@ func main() {
 		supplierRouter.RegisterProductRoutes(v1, productH, jwtManager)
 		supplierRouter.RegisterDiscoveryRoutes(v1, discoveryH)
 		supplierRouter.RegisterSupplierPortalRoutes(v1, portalH, jwtManager)
+		buyerRouter.RegisterProfileRoutes(v1, profileH, jwtManager)
 		buyerRouter.RegisterTransactionRoutes(v1, txH, jwtManager)
 		buyerRouter.RegisterBookmarkRoutes(v1, bookmarkH, jwtManager)
 		buyerRouter.RegisterFollowingRoutes(v1, followingH, jwtManager)

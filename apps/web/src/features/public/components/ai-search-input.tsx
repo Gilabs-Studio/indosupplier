@@ -11,11 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-interface AiSearchInputProps {
-  locale: string;
-}
-
-export function AiSearchInput({ locale }: AiSearchInputProps) {
+export function AiSearchInput() {
   const t = useTranslations("public.demoHome");
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,17 +21,16 @@ export function AiSearchInput({ locale }: AiSearchInputProps) {
   const [charIndex, setCharIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const phrases = [
-    t("phrase0"),
-    t("phrase1"),
-    t("phrase2"),
-    t("phrase3"),
-    t("phrase4"),
-  ];
-
   // Typewriter effect logic
   useEffect(() => {
     let timer: NodeJS.Timeout;
+    const phrases = [
+      t("phrase0"),
+      t("phrase1"),
+      t("phrase2"),
+      t("phrase3"),
+      t("phrase4"),
+    ];
     const currentFullText = phrases[phraseIndex] || "";
 
     if (isDeleting) {
@@ -64,7 +59,7 @@ export function AiSearchInput({ locale }: AiSearchInputProps) {
     }
 
     return () => clearTimeout(timer);
-  }, [charIndex, isDeleting, phraseIndex, phrases]);
+  }, [charIndex, isDeleting, phraseIndex, t]);
 
   const regions = [
     { name: t("allRegions"), value: "" },
