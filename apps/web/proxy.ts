@@ -34,11 +34,31 @@ export function proxy(request: NextRequest) {
   const pathLocale = pathSegments[0] === "en" || pathSegments[0] === "id" 
     ? pathSegments[0] 
     : null;
+  const hasLocalePrefix = pathSegments[0] === "en" || pathSegments[0] === "id";
   const requestCountryCode =
     request.headers.get("x-vercel-ip-country") ??
     request.headers.get("cf-ipcountry") ??
     request.headers.get("x-country-code");
   const detectedLocale = pathLocale ?? cookieLocale ?? getLocaleFromCountryCode(requestCountryCode);
+  const isLegacySettingsPath = pathname === "/settings";
+  const isLocaleAgnosticAuthPath =
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/register/success" ||
+    pathname === "/profile" ||
+    isLegacySettingsPath;
+  const isFrameworkAsset =
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/api") ||
+    pathname.startsWith("/internal") ||
+    pathname.startsWith("/uploads");
+  const isPublicAsset = /\.[a-z0-9]+$/i.test(pathname);
+  const shouldNormalizeLocalePrefix =
+    !hasLocalePrefix &&
+    pathname !== "/" &&
+    !isFrameworkAsset &&
+    !isPublicAsset &&
+    !isLocaleAgnosticAuthPath;
 
   const response = NextResponse.next();
   if (cookieLocale !== detectedLocale) {
@@ -54,7 +74,6 @@ export function proxy(request: NextRequest) {
   // Normalize public auth routes to locale-prefixed paths.
   // This keeps links like /register/success?token=... working in Next.js proxy mode
   // without requiring middleware.ts locale rewriting.
-  const hasLocalePrefix = pathSegments[0] === "en" || pathSegments[0] === "id";
   if (
     hasLocalePrefix &&
     pathSegments[1] === "demo" &&
@@ -98,13 +117,25 @@ export function proxy(request: NextRequest) {
     return rewriteResponse;
   }
 
-  const isLegacySettingsPath = pathname === "/settings";
-  const isLocaleAgnosticAuthPath =
-    pathname === "/login" ||
-    pathname === "/register" ||
-    pathname === "/register/success" ||
-    pathname === "/profile" ||
-    isLegacySettingsPath;
+  if (shouldNormalizeLocalePrefix) {
+    const targetURL = new URL(`/${detectedLocale}${pathname}`, request.url);
+    targetURL.search = request.nextUrl.search;
+
+    if (isLegacySettingsPath && !targetURL.searchParams.has("tab")) {
+      targetURL.searchParams.set("tab", "billing");
+    }
+
+    const redirectResponse = NextResponse.redirect(targetURL);
+    redirectResponse.cookies.set({
+      name: LOCALE_PREFERENCE_COOKIE,
+      value: detectedLocale,
+      path: "/",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 365,
+    });
+    return redirectResponse;
+  }
+
   if (!hasLocalePrefix && isLocaleAgnosticAuthPath) {
     const normalizedPath = isLegacySettingsPath ? "/profile" : pathname;
     const targetURL = new URL(`/${detectedLocale}${normalizedPath}`, request.url);
