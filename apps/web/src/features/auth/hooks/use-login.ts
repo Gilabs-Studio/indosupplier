@@ -26,7 +26,7 @@ function getSafeLoginErrorMessage(error: AuthError): string {
 export function useLogin(options: UseLoginOptions = {}) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const redirectTo = options.redirectTo ?? "/dashboard";
+  const redirectTo = options.redirectTo;
   const {
     setUser,
     setSessionVerified,
@@ -73,8 +73,13 @@ export function useLogin(options: UseLoginOptions = {}) {
         useAuthStore.setState({
           error: null,
         });
-        router.replace(redirectTo);
-        return; // Exit early, keep loading state until redirect
+        if (redirectTo) {
+          router.replace(redirectTo);
+          return; // Exit early, keep loading state until redirect
+        }
+
+        setIsLoading(false);
+        return;
       }
     } catch (err) {
       const authError = err as AuthError;

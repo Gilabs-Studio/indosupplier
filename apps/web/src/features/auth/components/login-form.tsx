@@ -32,7 +32,7 @@ interface LoginFormProps {
 }
 
 export default function LoginForm({
-  redirectTo = "/dashboard",
+  redirectTo,
   registerHref = "/register",
 }: LoginFormProps) {
   const t = useTranslations("auth.login");
