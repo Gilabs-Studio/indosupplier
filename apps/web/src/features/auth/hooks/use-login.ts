@@ -5,6 +5,7 @@ import type { LoginFormData } from "../schemas/login.schema";
 import type { AuthError } from "../types/errors";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { resolvePostLoginRedirectTarget } from "../utils/post-login-redirect";
 
 interface UseLoginOptions {
   redirectTo?: string;
@@ -26,7 +27,7 @@ function getSafeLoginErrorMessage(error: AuthError): string {
 export function useLogin(options: UseLoginOptions = {}) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const redirectTo = options.redirectTo;
+  const redirectTo = resolvePostLoginRedirectTarget(options.redirectTo);
   const {
     setUser,
     setSessionVerified,
@@ -73,13 +74,8 @@ export function useLogin(options: UseLoginOptions = {}) {
         useAuthStore.setState({
           error: null,
         });
-        if (redirectTo) {
-          router.replace(redirectTo);
-          return; // Exit early, keep loading state until redirect
-        }
-
-        setIsLoading(false);
-        return;
+        router.replace(redirectTo);
+        return; // Exit early, keep loading state until redirect
       }
     } catch (err) {
       const authError = err as AuthError;

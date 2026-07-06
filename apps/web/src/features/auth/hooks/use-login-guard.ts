@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useRef, useSyncExternalStore } from "react";
 import { useRouter } from "@/i18n/routing";
 import { useAuthStore } from "../stores/use-auth-store";
+import { resolvePostLoginRedirectTarget } from "../utils/post-login-redirect";
 
 interface UseLoginGuardOptions {
   redirectTo?: string;
@@ -27,7 +28,7 @@ const getHydrationServerSnapshot = () => false;
  */
 export function useLoginGuard(options: UseLoginGuardOptions = {}) {
   const router = useRouter();
-  const redirectTo = options.redirectTo;
+  const redirectTo = resolvePostLoginRedirectTarget(options.redirectTo);
   const {
     isAuthenticated: localStorageAuth,
     isSessionVerified,
@@ -53,7 +54,7 @@ export function useLoginGuard(options: UseLoginGuardOptions = {}) {
     hasAttemptedVerification.current = true;
 
     // Fast path: already verified this page load, skip round-trip
-    if (redirectTo && isSessionVerified && localStorageAuth) {
+    if (isSessionVerified && localStorageAuth) {
       setIsRedirecting(true);
       router.push(redirectTo);
       return;
@@ -75,11 +76,8 @@ export function useLoginGuard(options: UseLoginGuardOptions = {}) {
       if (response?.data?.user) {
         setUser(response.data.user);
         setSessionVerified(true);
-        if (redirectTo) {
-          setIsRedirecting(true);
-          router.push(redirectTo);
-        }
-
+        setIsRedirecting(true);
+        router.push(redirectTo);
         return;
       }
 

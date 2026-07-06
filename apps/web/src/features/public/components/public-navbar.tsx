@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/routing";
@@ -57,9 +57,21 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
   const hasSupplierAccess =
     user?.capabilities.supplier === true || !!user?.supplier_profile;
 
+  const closeAllDropdowns = () => {
+    setIsCartOpen(false);
+    setIsNotifOpen(false);
+    setIsProfileOpen(false);
+  };
 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      closeAllDropdowns();
+    }
+  }, [isAuthenticated]);
 
   const handleLogout = async () => {
+    closeAllDropdowns();
+
     try {
       const { authService } = await import("@/features/auth/services/auth-service");
       const { fullAuthCleanup } = await import("@/features/auth/utils/clear-auth-cookies");
@@ -68,6 +80,8 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
       logout();
     } catch {
       logout();
+    } finally {
+      closeAllDropdowns();
     }
   };
 

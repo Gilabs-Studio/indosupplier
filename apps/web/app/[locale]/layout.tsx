@@ -8,6 +8,7 @@ import { ReactQueryProvider } from "@/lib/react-query";
 import ErrorBoundary from "@/components/error-boundary";
 import { Toaster } from "sonner";
 import { AuthSessionBootstrap } from "@/features/auth/components/auth-session-bootstrap";
+import { AuthNavigationTracker } from "@/features/auth/components/auth-navigation-tracker";
 
 export default async function LocaleLayout({
   children,
@@ -29,6 +30,7 @@ export default async function LocaleLayout({
       <ErrorBoundary>
         <ReactQueryProvider>
           <AuthSessionBootstrap />
+          <AuthNavigationTracker />
           {children}
           <Toaster position="top-right" offset={80} />
         </ReactQueryProvider>
