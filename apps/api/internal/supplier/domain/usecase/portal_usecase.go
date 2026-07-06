@@ -248,7 +248,10 @@ func (u *portalUsecase) UpgradePlan(ctx context.Context, userID string, req *dto
 		return nil, err
 	}
 
-	// Create payment and invoice logs for the upgrade
+	// TODO(dev-payment): replace this immediate paid simulation with the real
+	// payment gateway flow once subscription checkout is wired end-to-end.
+	// For now we keep the mutation observable in dev by generating a paid
+	// payment+invoice record after the selected plan is activated.
 	pay := &monetizationModels.Payment{
 		SupplierProfileID: profile.ID,
 		RelatedType:       "subscription",

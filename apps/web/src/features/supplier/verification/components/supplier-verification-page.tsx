@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldLabel, FieldGroup } from "@/components/ui/field";
 import { Check, X, Edit2, AlertCircle, Loader2 } from "lucide-react";
 import { useVerificationData, useUpdateVerificationData, useSubmitVerification } from "../hooks/useVerification";
+import { FileUpload } from "@/components/ui/file-upload";
 
 export function SupplierVerificationPage() {
   const t = useTranslations("supplier.verification");
@@ -27,6 +28,10 @@ export function SupplierVerificationPage() {
     phone: "",
     description: "",
     address: "",
+    nibFileUrl: "",
+    npwpNumber: "",
+    npwpFileUrl: "",
+    aktaFileUrl: "",
   });
 
   const [stakeholderForm, setStakeholderForm] = useState({
@@ -52,6 +57,10 @@ export function SupplierVerificationPage() {
           phone: verificationData.businessInfo.phone || "",
           description: verificationData.businessInfo.description || "",
           address: verificationData.businessInfo.address || "",
+          nibFileUrl: verificationData.businessInfo.nibFileUrl || "",
+          npwpNumber: verificationData.businessInfo.npwpNumber || "",
+          npwpFileUrl: verificationData.businessInfo.npwpFileUrl || "",
+          aktaFileUrl: verificationData.businessInfo.aktaFileUrl || "",
         });
         setStakeholderForm({
           directorName: verificationData.stakeholderInfo.directorName || "",
@@ -107,7 +116,11 @@ export function SupplierVerificationPage() {
     !!businessForm.establishedDate &&
     !!businessForm.industry &&
     !!businessForm.phone &&
-    !!businessForm.address;
+    !!businessForm.address &&
+    !!businessForm.nibFileUrl &&
+    !!businessForm.npwpNumber &&
+    !!businessForm.npwpFileUrl &&
+    !!businessForm.aktaFileUrl;
 
   const isStakeholderValid = !!stakeholderForm.directorName && !!stakeholderForm.directorNik;
 
@@ -248,6 +261,50 @@ export function SupplierVerificationPage() {
                     }
                     placeholder={t("placeholderDesc")}
                     rows={3}
+                  />
+                </Field>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <Field className="space-y-2">
+                    <FieldLabel>{t("fieldNibFile")}</FieldLabel>
+                    <FileUpload
+                      value={businessForm.nibFileUrl}
+                      onChange={(url) => setBusinessForm({ ...businessForm, nibFileUrl: url || "" })}
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      maxSize={10}
+                      uploadFolder="verification"
+                    />
+                  </Field>
+
+                  <Field className="space-y-2">
+                    <FieldLabel>{t("fieldNpwpFile")}</FieldLabel>
+                    <FileUpload
+                      value={businessForm.npwpFileUrl}
+                      onChange={(url) => setBusinessForm({ ...businessForm, npwpFileUrl: url || "" })}
+                      accept=".pdf,.jpg,.jpeg,.png"
+                      maxSize={10}
+                      uploadFolder="verification"
+                    />
+                  </Field>
+                </div>
+
+                <Field className="space-y-1">
+                  <FieldLabel>{t("fieldNpwpNumber")}</FieldLabel>
+                  <Input
+                    value={businessForm.npwpNumber}
+                    onChange={(e) => setBusinessForm({ ...businessForm, npwpNumber: e.target.value })}
+                    placeholder={t("placeholderNpwpNumber")}
+                  />
+                </Field>
+
+                <Field className="space-y-2">
+                  <FieldLabel>{t("fieldAktaFile")}</FieldLabel>
+                  <FileUpload
+                    value={businessForm.aktaFileUrl}
+                    onChange={(url) => setBusinessForm({ ...businessForm, aktaFileUrl: url || "" })}
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    maxSize={10}
+                    uploadFolder="verification"
                   />
                 </Field>
               </FieldGroup>
@@ -487,7 +544,7 @@ export function SupplierVerificationPage() {
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 py-1">
                       <span className="text-muted-foreground font-semibold">{t("reviewDocNib")}</span>
                       <span className={businessForm.nibNumber ? "text-success font-bold flex items-center gap-1" : "text-destructive font-bold flex items-center gap-1"}>
-                        {businessForm.nibNumber ? (
+                        {businessForm.nibFileUrl ? (
                           <>
                             <Check className="h-3.5 w-3.5" /> {t("reviewStatusSuccess")}
                           </>
@@ -501,8 +558,23 @@ export function SupplierVerificationPage() {
 
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 py-1">
                       <span className="text-muted-foreground font-semibold">{t("reviewDocNpwp")}</span>
-                      <span className={businessForm.nibNumber ? "text-success font-bold flex items-center gap-1" : "text-destructive font-bold flex items-center gap-1"}>
-                        {businessForm.nibNumber ? (
+                      <span className={businessForm.npwpNumber && businessForm.npwpFileUrl ? "text-success font-bold flex items-center gap-1" : "text-destructive font-bold flex items-center gap-1"}>
+                        {businessForm.npwpNumber && businessForm.npwpFileUrl ? (
+                          <>
+                            <Check className="h-3.5 w-3.5" /> {t("reviewStatusSuccess")}
+                          </>
+                        ) : (
+                          <>
+                            <AlertCircle className="h-3.5 w-3.5" /> {t("reviewStatusError")}
+                          </>
+                        )}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 py-1">
+                      <span className="text-muted-foreground font-semibold">{t("reviewDocAkta")}</span>
+                      <span className={businessForm.aktaFileUrl ? "text-success font-bold flex items-center gap-1" : "text-destructive font-bold flex items-center gap-1"}>
+                        {businessForm.aktaFileUrl ? (
                           <>
                             <Check className="h-3.5 w-3.5" /> {t("reviewStatusSuccess")}
                           </>

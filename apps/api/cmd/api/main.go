@@ -67,6 +67,14 @@ import (
 	rfqUsecase "github.com/gilabs/indosupplier/api/internal/rfq/domain/usecase"
 	rfqHandler "github.com/gilabs/indosupplier/api/internal/rfq/presentation/handler"
 	rfqRouter "github.com/gilabs/indosupplier/api/internal/rfq/presentation/router"
+	supportRepo "github.com/gilabs/indosupplier/api/internal/support/data/repositories"
+	supportUsecase "github.com/gilabs/indosupplier/api/internal/support/domain/usecase"
+	supportHandler "github.com/gilabs/indosupplier/api/internal/support/presentation/handler"
+	supportRouter "github.com/gilabs/indosupplier/api/internal/support/presentation/router"
+	verificationRepo "github.com/gilabs/indosupplier/api/internal/verification/data/repositories"
+	verificationUsecase "github.com/gilabs/indosupplier/api/internal/verification/domain/usecase"
+	verificationHandler "github.com/gilabs/indosupplier/api/internal/verification/presentation/handler"
+	verificationRouter "github.com/gilabs/indosupplier/api/internal/verification/presentation/router"
 )
 
 func initInfrastructure() {
@@ -182,6 +190,10 @@ func main() {
 	portalUC := supplierUsecase.NewPortalUsecase(portalRepository)
 	portalH := supplierHandler.NewSupplierPortalHandler(portalUC)
 
+	verificationRepository := verificationRepo.NewVerificationRepository(database.DB)
+	verificationUC := verificationUsecase.NewVerificationUsecase(verificationRepository)
+	verificationH := verificationHandler.NewVerificationHandler(verificationUC)
+
 	txRepository := buyerRepo.NewTransactionRepository(database.DB)
 	txUC := buyerUsecase.NewTransactionUsecase(database.DB, txRepository)
 	txH := buyerHandler.NewTransactionHandler(txUC)
@@ -204,6 +216,10 @@ func main() {
 	reviewRepository := buyerRepo.NewReviewRepository(database.DB)
 	reviewUC := buyerUsecase.NewReviewUsecase(database.DB, reviewRepository)
 	reviewH := buyerHandler.NewReviewHandler(reviewUC)
+
+	supportRepository := supportRepo.NewSupportRepository(database.DB)
+	supportUC := supportUsecase.NewSupportUsecase(supportRepository)
+	supportH := supportHandler.NewBuyerSupportHandler(supportUC)
 
 	chatUC := chatUsecase.NewChatUsecase(database.DB)
 	chatH := chatHandler.NewChatHandler(chatUC, jwtManager)
@@ -247,12 +263,14 @@ func main() {
 		supplierRouter.RegisterProductRoutes(v1, productH, jwtManager)
 		supplierRouter.RegisterDiscoveryRoutes(v1, discoveryH)
 		supplierRouter.RegisterSupplierPortalRoutes(v1, portalH, jwtManager)
+		verificationRouter.RegisterVerificationRoutes(v1, verificationH, jwtManager)
 		buyerRouter.RegisterProfileRoutes(v1, profileH, jwtManager)
 		buyerRouter.RegisterTransactionRoutes(v1, txH, jwtManager)
 		buyerRouter.RegisterBookmarkRoutes(v1, bookmarkH, jwtManager)
 		buyerRouter.RegisterFollowingRoutes(v1, followingH, jwtManager)
 		buyerRouter.RegisterCompareRoutes(v1, compareH, jwtManager)
 		buyerRouter.RegisterReviewRoutes(v1, reviewH, jwtManager)
+		supportRouter.RegisterBuyerSupportRoutes(v1, supportH, jwtManager)
 		chatRouter.RegisterChatRoutes(v1, chatH, jwtManager)
 		rfqRouter.RegisterRFQRoutes(v1, rfqH, jwtManager)
 	}
