@@ -14,10 +14,39 @@ export interface DemoComparisonCard {
   second: PublicSupplierDto;
 }
 
+export interface DemoCategoryPill {
+  id: string;
+  labelId: string;
+  labelEn: string;
+  badge?: string;
+  isPopular?: boolean;
+}
+
+export interface EnhancedDemoProduct extends PublicProductDto {
+  discountPercentage?: number;
+  originalPrice?: number;
+  promoBadge?: string;
+  salesCountText?: string;
+  locationTag?: string;
+  badgeOverlay?: string;
+}
+
 const newsTypes: ContentType[] = ["news", "feature", "tips", "editorial_review"];
+
+export const categoryPills: DemoCategoryPill[] = [
+  { id: "all", labelId: "Untuk Anda", labelEn: "For You", isPopular: true },
+  { id: "promo", labelId: "Promo Guncang B2B", labelEn: "B2B Mega Promo", badge: "8.8" },
+  { id: "verified", labelId: "Supplier Terverifikasi", labelEn: "Verified Suppliers" },
+  { id: "tani", labelId: "Komoditas Tani", labelEn: "Agriculture" },
+  { id: "bahan_baku", labelId: "Bahan Baku Industri", labelEn: "Raw Materials" },
+  { id: "elektronik", labelId: "Elektronik & Mesin", labelEn: "Electronics & Machinery" },
+  { id: "fashion", labelId: "Tekstil & Fashion", labelEn: "Textiles & Fashion" },
+  { id: "otomotif", labelId: "Otomotif & Sparepart", labelEn: "Automotive" },
+];
 
 export function useDemoHome(locale: string) {
   const contentLocale = locale === "en" ? "en" : "id";
+  const [activeCategoryTab, setActiveCategoryTab] = useState<string>("all");
   const [activeNewsType, setActiveNewsType] = useState<ContentType>("news");
   const [showBackToTop, setShowBackToTop] = useState<boolean>(false);
 
@@ -56,11 +85,39 @@ export function useDemoHome(locale: string) {
     staleTime: 5 * 60 * 1000,
   });
 
-  const popularProducts = useMemo<PublicProductDto[]>(() => {
-    return [...(productsQuery.data || [])]
-      .sort((a, b) => (b.supplierRating || 0) - (a.supplierRating || 0))
-      .slice(0, 4);
+  const popularProducts = useMemo<EnhancedDemoProduct[]>(() => {
+    const raw = [...(productsQuery.data || [])];
+    const sorted = raw.sort((a, b) => (b.supplierRating || 0) - (a.supplierRating || 0));
+
+    // Map each product to add Tokopedia-style marketplace metadata matching screenshot
+    return sorted.map((prod, idx) => {
+      const discounts = [36, 50, 41, 30, 24, 65, 88];
+      const salesTexts = ["100+ terjual", "50rb+ terjual", "10rb+ terjual", "4rb+ terjual", "3rb+ terjual"];
+      const locations = ["Kab. Tangerang", "Kota Bandung", "Kota Bekasi", "Jakarta Barat", "Kab. Bogor"];
+      const badgeOverlays = ["Promo 8.8", "Bonus Cashback", "Bebas Ongkir", "Terlaris"];
+
+      const disc = discounts[idx % discounts.length];
+      const origPrice = prod.price ? Math.round(prod.price * (1 + disc / 100)) : undefined;
+
+      return {
+        ...prod,
+        discountPercentage: disc,
+        originalPrice: origPrice,
+        promoBadge: `Hemat s.d ${disc}% Pakai Bonus`,
+        salesCountText: salesTexts[idx % salesTexts.length],
+        locationTag: prod.supplierLocation || locations[idx % locations.length],
+        badgeOverlay: badgeOverlays[idx % badgeOverlays.length],
+      };
+    }).slice(0, 12); // show up to 12 products for 6-column grid symmetry
   }, [productsQuery.data]);
+
+  const filteredProducts = useMemo<EnhancedDemoProduct[]>(() => {
+    if (activeCategoryTab === "all") return popularProducts;
+    if (activeCategoryTab === "verified") return popularProducts.filter((p) => p.supplierVerified);
+    if (activeCategoryTab === "tani") return popularProducts.filter((p) => (p.categoryName || "").toLowerCase().includes("tani") || (p.name || "").toLowerCase().includes("kopi"));
+    if (activeCategoryTab === "bahan_baku") return popularProducts.filter((p) => (p.categoryName || "").toLowerCase().includes("bahan") || (p.description || "").toLowerCase().includes("baku"));
+    return popularProducts;
+  }, [activeCategoryTab, popularProducts]);
 
   const comparisonCards = useMemo<DemoComparisonCard[]>(() => {
     const suppliers = suppliersQuery.data || [];
@@ -86,12 +143,16 @@ export function useDemoHome(locale: string) {
   };
 
   return {
+    categoryPills,
+    activeCategoryTab,
+    setActiveCategoryTab,
     newsTypes,
     activeNewsType,
     setActiveNewsType,
     newsArticles: newsQuery.data?.items || ([] as ContentArticle[]),
     videos: videosQuery.data?.items || ([] as ContentArticle[]),
-    popularProducts,
+    popularProducts: filteredProducts,
+    allPopularProductsCount: popularProducts.length,
     comparisonCards,
     isNewsLoading: newsQuery.isLoading,
     isVideosLoading: videosQuery.isLoading,
@@ -101,3 +162,4 @@ export function useDemoHome(locale: string) {
     scrollToTop,
   };
 }
+

@@ -1,64 +1,68 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import React from "react";
-import Image from "next/image";
+import React, { useRef } from "react";
 import { useTranslations } from "next-intl";
 import { PublicLayout } from "@/features/public/components/public-layout";
 import { Link } from "@/i18n/routing";
 import { formatPrice } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { AiSearchInput } from "@/features/public/components/ai-search-input";
-import { useDemoHome } from "../hooks/use-demo-home";
-import { contentTypeLabels, formatContentDate, formatViewCount } from "@/features/content/utils/content-format";
+import { useDemoHome, type EnhancedDemoProduct } from "../hooks/use-demo-home";
+import { contentTypeLabels, formatContentDate } from "@/features/content/utils/content-format";
 import {
   ArrowUp,
   CheckCircle,
+  ChevronLeft,
   ChevronRight,
-  GitCompareArrows,
+  MoreHorizontal,
   Package,
-  Play,
   ShieldCheck,
   Star,
-  Store,
+  Tag,
 } from "lucide-react";
 
 interface DemoHomePageProps {
   locale: string;
 }
 
-
-
 export function DemoHomePage({ locale }: DemoHomePageProps) {
   const t = useTranslations("public.demoHome");
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
   const {
+    categoryPills,
+    activeCategoryTab,
+    setActiveCategoryTab,
     newsTypes,
     activeNewsType,
     setActiveNewsType,
     newsArticles,
-    videos,
     popularProducts,
-    comparisonCards,
     isNewsLoading,
-    isVideosLoading,
     isProductsLoading,
-    isSuppliersLoading,
     showBackToTop,
     scrollToTop,
   } = useDemoHome(locale);
 
+  const scrollPillBar = (direction: "left" | "right") => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = direction === "left" ? -240 : 240;
+      scrollContainerRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
+  };
+
   return (
     <PublicLayout locale={locale}>
       <div className="min-h-screen bg-background pb-16 font-sans">
+        {/* Hero Section */}
         <section
-          className="relative flex w-full flex-col items-center overflow-visible bg-cover bg-center bg-no-repeat px-4 pb-20 pt-14 text-center"
+          className="relative flex w-full flex-col items-center overflow-visible bg-cover bg-center bg-no-repeat px-4 pb-12 pt-10 text-center"
           style={{
             backgroundImage: "url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1600&q=80')",
           }}
         >
           <div className="absolute inset-0 bg-background/90 backdrop-blur-[0.5px]" />
-          <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center space-y-5">
+          <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center space-y-4">
             <h1 className="font-heading text-2xl font-extrabold leading-tight tracking-tight text-foreground sm:text-3xl md:text-4xl">
               {locale === "en" ? "Discover Verified Indonesian Suppliers" : "Temukan Supplier Terverifikasi Indonesia"}
             </h1>
@@ -67,10 +71,10 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
                 ? "Access a curated directory of Indonesian manufacturers, exporters, and raw material providers."
                 : "Akses direktori terkurasi dari produsen, eksportir, dan penyedia bahan baku terbaik Indonesia."}
             </p>
-            <div className="w-full max-w-2xl pt-2">
+            <div className="w-full max-w-2xl pt-1">
               <AiSearchInput />
             </div>
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 pt-2 text-[11px] font-medium text-muted-foreground">
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 pt-1 text-[11px] font-medium text-muted-foreground">
               {[
                 locale === "en" ? "Verified Suppliers" : "Supplier Terverifikasi",
                 locale === "en" ? "Secure Trading" : "Perdagangan Aman",
@@ -86,53 +90,88 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
           </div>
         </section>
 
-        <div className="relative z-20 mx-auto -mt-12 max-w-7xl px-4 sm:px-6 lg:px-8">
-          <Card className="border border-border bg-card text-card-foreground shadow-md">
-            <CardContent className="space-y-6 p-6 sm:p-8">
-              <h2 className="font-heading text-xl font-bold tracking-tight text-foreground sm:text-2xl">
-                {t("cariYangTerbaik")}
-              </h2>
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-                {[
-                  { label: t("supplierBaru"), sub: t("subSupplierBaru"), image: "/images/categories/cat-new-supplier.png", link: "/demo/search" },
-                  { label: t("supplierPremium"), sub: t("subSupplierPremium"), image: "/images/categories/cat-premium-supplier.png", link: "/demo/search?verified=true" },
-                  { label: t("komoditasTani"), sub: t("subKomoditasTani"), image: "/images/categories/cat-agriculture.png", link: "/demo/search?query=kopi" },
-                  { label: t("bahanBaku"), sub: t("subBahanBaku"), image: "/images/categories/cat-raw-material.png", link: "/demo/search?query=bahan%20baku" },
-                  { label: t("beritaB2B"), sub: t("subBeritaB2B"), image: "/images/categories/cat-news.png", link: "#berita" },
-                  { label: t("bandingkan"), sub: t("subBandingkan"), image: "/images/categories/cat-compare.png", link: "/compare" },
-                ].map((item) => (
-                  <Link
-                    key={item.label}
-                    href={item.link}
-                    className="group flex cursor-pointer flex-col items-center justify-between rounded-lg border border-border bg-card p-4 text-center transition-all duration-300 hover:-translate-y-0.5 hover:border-primary hover:shadow-lg hover:shadow-primary/5 active:translate-y-0"
+        {/* Sticky Filter Bar (Scrollbar-Free) */}
+        <div className="sticky top-0 z-40 border-b border-border/40 bg-background/95 backdrop-blur-md py-2 shadow-2xs">
+          <div className="mx-auto flex max-w-7xl items-center px-4 sm:px-6 lg:px-8">
+            <button
+              onClick={() => scrollPillBar("left")}
+              className="mr-1.5 hidden h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground md:flex"
+              aria-label="Scroll left"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+
+            {/* Scrollable Container with Hidden Scrollbars */}
+            <div
+              ref={scrollContainerRef}
+              className="flex flex-1 items-center gap-2 overflow-x-auto py-1 scroll-smooth whitespace-nowrap scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            >
+              {categoryPills.map((pill) => {
+                const isActive = activeCategoryTab === pill.id;
+                const label = locale === "en" ? pill.labelEn : pill.labelId;
+                return (
+                  <button
+                    key={pill.id}
+                    onClick={() => setActiveCategoryTab(pill.id)}
+                    className={`flex cursor-pointer items-center gap-1.5 rounded-full px-3.5 py-1 text-xs transition-colors ${
+                      isActive
+                        ? "bg-primary text-primary-foreground font-semibold shadow-xs"
+                        : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground border border-border/30"
+                    }`}
                   >
-                    <div className="relative mb-2 flex h-16 w-16 items-center justify-center transition-transform duration-300 group-hover:scale-105">
-                      <Image src={item.image} alt={item.label} width={56} height={56} className="object-contain" />
-                    </div>
-                    <div className="space-y-1">
-                      <span className="block text-xs font-bold leading-tight text-foreground transition-colors group-hover:text-primary sm:text-sm">
-                        {item.label}
+                    {pill.badge && (
+                      <span
+                        className={`rounded-xs px-1 text-[9px] font-black uppercase tracking-wider ${
+                          isActive ? "bg-primary-foreground text-primary" : "bg-destructive text-destructive-foreground"
+                        }`}
+                      >
+                        {pill.badge}
                       </span>
-                      <span className="block text-[10px] leading-none text-muted-foreground">{item.sub}</span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                    )}
+                    <span>{label}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              onClick={() => scrollPillBar("right")}
+              className="ml-1.5 hidden h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground md:flex"
+              aria-label="Scroll right"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
         </div>
 
-        <section id="berita" className="mx-auto mt-16 max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
+        {/* Compact Popular Products Grid (Tokopedia Style 6-Column Marketplace Grid) */}
+        <section className="mx-auto mt-6 max-w-7xl space-y-3.5 px-4 sm:px-6 lg:px-8">
+          <SectionHeader title={t("produkTitle")} href="/demo/search" action={t("lihatSemuaProduk")} />
+
+          {isProductsLoading ? (
+            <CardGridSkeleton />
+          ) : (
+            <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+              {popularProducts.map((product) => (
+                <CompactProductCard key={product.id} product={product} locale={locale} />
+              ))}
+              {popularProducts.length === 0 && <EmptySection label="Belum ada produk aktif pada kategori ini." />}
+            </div>
+          )}
+        </section>
+
+        {/* News & Articles Section - Standardized 16:9 Image Ratios */}
+        <section id="berita" className="mx-auto mt-10 max-w-7xl space-y-3.5 px-4 sm:px-6 lg:px-8">
           <SectionHeader title={t("beritaTitle")} href="/demo/help" action={t("bacaSemuaBerita")} />
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {newsTypes.map((type) => (
               <button
                 key={type}
                 onClick={() => setActiveNewsType(type)}
-                className={`cursor-pointer rounded border px-4 py-1.5 text-xs font-semibold transition-all ${
+                className={`cursor-pointer rounded-full px-3 py-1 text-xs font-medium transition-colors ${
                   activeNewsType === type
-                    ? "border-primary/20 bg-primary/10 text-primary shadow-xs"
-                    : "border-border bg-card text-muted-foreground hover:bg-muted"
+                    ? "bg-primary text-primary-foreground font-semibold"
+                    : "bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
               >
                 {contentTypeLabels[type][locale === "en" ? "en" : "id"]}
@@ -141,196 +180,53 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
           </div>
 
           {isNewsLoading ? (
-            <CardGridSkeleton />
+            <CardGridSkeleton columns="md:grid-cols-4" />
           ) : (
-            <div className="relative">
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                {newsArticles.map((article) => (
-                  <Card key={article.id} className="group flex cursor-pointer flex-col justify-between overflow-hidden rounded-lg border border-border bg-card shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
-                    <div>
-                      <div className="relative h-[145px] overflow-hidden bg-muted">
-                        {article.imageUrl ? (
-                          <img src={article.imageUrl} alt={article.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                        ) : (
-                          <div className="flex h-full items-center justify-center">
-                            <Package className="h-8 w-8 text-muted-foreground" />
-                          </div>
-                        )}
-                      </div>
-                      <CardContent className="space-y-2 p-4">
-                        <h3 className="line-clamp-2 text-xs font-bold leading-snug text-foreground transition-colors group-hover:text-primary sm:text-sm">
-                          {article.title}
-                        </h3>
-                        <p className="line-clamp-2 text-[11px] leading-relaxed text-muted-foreground">{article.excerpt}</p>
-                      </CardContent>
-                    </div>
-                    <CardFooter className="flex items-center border-t border-border p-4 pt-0 text-[10px] text-muted-foreground">
-                      <span className="mr-1.5 font-medium text-primary">{article.authorName || "IndoSupplier"}</span>
-                      <span>• {formatContentDate(article, locale)}</span>
-                    </CardFooter>
-                  </Card>
-                ))}
-                {newsArticles.length === 0 && <EmptySection label="Belum ada konten pada kategori ini." />}
-              </div>
-              {newsArticles.length > 0 && <CarouselArrow />}
-            </div>
-          )}
-        </section>
-
-        <section className="mx-auto mt-16 max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
-          <SectionHeader title={t("produkTitle")} href="/demo/search" action={t("lihatSemuaProduk")} />
-          {isProductsLoading ? (
-            <CardGridSkeleton />
-          ) : (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {popularProducts.map((product) => (
-                <Link key={product.id} href={`/demo/products/${product.id}`} className="group flex cursor-pointer flex-col justify-between overflow-hidden rounded-lg border border-border bg-card shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+            <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
+              {newsArticles.map((article) => (
+                <Link
+                  key={article.id}
+                  href={`/demo/help`}
+                  className="group flex cursor-pointer flex-col justify-between rounded-lg bg-card p-0 transition-colors duration-150 hover:bg-card/80"
+                >
                   <div>
-                    <div className="h-[155px] overflow-hidden bg-muted">
-                      {product.photos?.[0] ? (
-                        <img src={product.photos[0]} alt={product.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    {/* Fixed 16:9 Aspect Ratio for News Thumbnails */}
+                    <div className="relative aspect-[16/9] w-full overflow-hidden rounded-t-lg bg-muted/40">
+                      {article.imageUrl ? (
+                        <img src={article.imageUrl} alt={article.title} className="h-full w-full object-cover transition-opacity duration-200 group-hover:opacity-90" />
                       ) : (
                         <div className="flex h-full items-center justify-center">
-                          <Package className="h-8 w-8 text-muted-foreground" />
+                          <Package className="h-7 w-7 text-muted-foreground/40" />
                         </div>
                       )}
                     </div>
-                    <CardContent className="space-y-2 p-4">
-                      <h3 className="line-clamp-2 text-xs font-bold leading-snug text-foreground transition-colors group-hover:text-primary sm:text-sm">
-                        {product.name}
+                    <div className="space-y-1 p-3">
+                      <h3 className="line-clamp-2 text-xs font-bold leading-snug text-foreground transition-colors group-hover:text-primary">
+                        {article.title}
                       </h3>
-                      <div className="space-y-1 text-[11px] text-muted-foreground">
-                        <p className="truncate font-semibold text-foreground/80">{product.supplierCompanyName}</p>
-                        <p>MOQ: <span className="font-bold text-foreground">{product.minOrder || "Nego"}</span></p>
-                      </div>
-                    </CardContent>
+                      <p className="line-clamp-2 text-[11px] leading-relaxed text-muted-foreground">{article.excerpt}</p>
+                    </div>
                   </div>
-                  <CardFooter className="flex items-center justify-between border-t border-border p-4 pt-0 text-xs">
-                    <span className="font-bold text-primary">
-                      {formatPrice(product.price, product.currency) || (locale === "en" ? "Contact Supplier" : "Hubungi Supplier")}
-                    </span>
-                    <span className="rounded-sm border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground">RFQ</span>
-                  </CardFooter>
+                  <div className="flex items-center px-3 pb-3 pt-0 text-[10px] text-muted-foreground">
+                    <span className="mr-1 font-medium text-primary">{article.authorName || "IndoSupplier"}</span>
+                    <span>• {formatContentDate(article, locale)}</span>
+                  </div>
                 </Link>
               ))}
-              {popularProducts.length === 0 && <EmptySection label="Belum ada produk aktif." />}
+              {newsArticles.length === 0 && <EmptySection label="Belum ada konten pada kategori ini." />}
             </div>
           )}
         </section>
 
-        <section className="mx-auto mt-16 max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
-          <SectionHeader title={t("komparasiTitle")} href="/compare" action={t("bandingkanLebihBanyak")} />
-          {isSuppliersLoading ? (
-            <CardGridSkeleton columns="md:grid-cols-3" />
-          ) : (
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-              {comparisonCards.map((card) => (
-                <Card key={card.id} className="flex flex-col justify-between overflow-hidden rounded-lg border border-border bg-card shadow-xs transition-all duration-300 hover:shadow-lg">
-                  <CardContent className="space-y-4 p-5">
-                    <h3 className="border-b border-border pb-2 text-center text-xs font-bold text-foreground sm:text-sm">
-                      {card.title}
-                    </h3>
-                    <div className="relative flex items-center justify-between pt-2 text-center">
-                      <SupplierMini supplier={card.first} />
-                      <div className="absolute left-1/2 top-1/2 z-10 flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded border border-border bg-muted text-[9px] font-black text-muted-foreground shadow-xs">
-                        VS
-                      </div>
-                      <SupplierMini supplier={card.second} />
-                    </div>
-                    <div className="space-y-2 border-t border-border pt-2 text-[11px]">
-                      {[
-                        ["Kategori", card.first.keyProducts?.[0] || "-", card.second.keyProducts?.[0] || "-"],
-                        ["Respons", `${Math.round(card.first.responseRate || 0)}%`, `${Math.round(card.second.responseRate || 0)}%`],
-                        ["Rating", card.first.rating?.toFixed(1) || "0.0", card.second.rating?.toFixed(1) || "0.0"],
-                      ].map(([label, left, right]) => (
-                        <div key={label} className="flex items-center justify-between border-b border-dotted border-border py-1 last:border-0">
-                          <span className="w-[32%] truncate text-left text-muted-foreground">{left}</span>
-                          <span className="w-[36%] text-center text-[9px] font-bold uppercase tracking-wider text-muted-foreground">{label}</span>
-                          <span className="w-[32%] truncate text-right text-muted-foreground">{right}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                  <div className="p-5 pt-0">
-                    <Button asChild variant="outline" className="w-full cursor-pointer text-xs font-semibold">
-                      <Link href="/compare">
-                        <GitCompareArrows className="mr-2 h-4 w-4" />
-                        {t("bandingkan")}
-                      </Link>
-                    </Button>
-                  </div>
-                </Card>
-              ))}
-              {comparisonCards.length === 0 && <EmptySection label="Butuh minimal dua supplier aktif untuk komparasi." />}
-            </div>
-          )}
-        </section>
-
-        <section className="mx-auto mt-16 max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
-          <SectionHeader title={t("videoTitle")} href="/demo/help" action={t("lihatSemuaVideo")} />
-          {isVideosLoading ? (
-            <CardGridSkeleton />
-          ) : (
-            <div className="relative">
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                {videos.map((video) => (
-                  <a key={video.id} href={video.videoUrl || "#"} className="group relative flex cursor-pointer flex-col gap-2.5">
-                    <div className="relative h-[145px] overflow-hidden rounded-lg border border-border bg-muted shadow-xs">
-                      {video.imageUrl ? (
-                        <img src={video.imageUrl} alt={video.title} className="h-full w-full object-cover opacity-90 transition-all duration-500 group-hover:scale-105 group-hover:opacity-80" />
-                      ) : (
-                        <div className="flex h-full items-center justify-center">
-                          <Play className="h-8 w-8 text-muted-foreground" />
-                        </div>
-                      )}
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="flex h-10 w-10 items-center justify-center rounded bg-card/95 text-foreground shadow-lg transition-all duration-300 group-hover:scale-105 group-hover:bg-primary group-hover:text-primary-foreground">
-                          <Play className="ml-0.5 h-4.5 w-4.5 fill-current" />
-                        </div>
-                      </div>
-                      {video.duration && (
-                        <span className="absolute bottom-2 right-2 rounded bg-neutral-950/70 px-1 py-0.5 text-[9px] font-bold text-neutral-50">
-                          {video.duration}
-                        </span>
-                      )}
-                    </div>
-                    <div className="space-y-1">
-                      <h3 className="line-clamp-2 text-xs font-bold leading-snug text-foreground transition-colors group-hover:text-primary">
-                        {video.title}
-                      </h3>
-                      <p className="text-[10px] text-muted-foreground">{formatViewCount(video.viewCount, locale)}</p>
-                    </div>
-                  </a>
-                ))}
-                {videos.length === 0 && <EmptySection label="Belum ada video aktif." />}
-              </div>
-              {videos.length > 0 && <CarouselArrow topClass="top-1/3" />}
-            </div>
-          )}
-        </section>
-
-        <section className="mt-16 border-t border-border bg-muted py-12 text-center text-muted-foreground">
-          <div className="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
-            <h2 className="text-[11px] font-bold uppercase tracking-widest text-primary">{t("trustTitle")}</h2>
-            <div className="flex flex-wrap justify-center gap-6 text-xs font-semibold text-foreground sm:gap-12 sm:text-sm">
-              {[t("nibVerified"), t("factoryInspection"), t("exportCompliant"), t("secureChat")].map((item) => (
-                <span key={item} className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 shrink-0 text-success" />
-                  {item}
-                </span>
-              ))}
-            </div>
-          </div>
-        </section>
-
+        {/* Minimal Floating Back to Top Button */}
         <button
           onClick={scrollToTop}
-          className={`fixed bottom-6 right-6 z-50 flex h-11 w-11 cursor-pointer items-center justify-center rounded bg-cyan text-cyan-foreground shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:scale-105 hover:shadow-xl active:scale-95 ${
-            showBackToTop ? "pointer-events-auto scale-100 opacity-100" : "pointer-events-none scale-75 opacity-0"
+          className={`fixed bottom-6 right-6 z-50 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md transition-all duration-200 hover:bg-primary/90 ${
+            showBackToTop ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
           }`}
           aria-label={t("kembaliKeAtas")}
         >
-          <ArrowUp className="h-5 w-5 stroke-[2.5]" />
+          <ArrowUp className="h-4 w-4 stroke-[2.5]" />
         </button>
       </div>
     </PublicLayout>
@@ -339,36 +235,127 @@ export function DemoHomePage({ locale }: DemoHomePageProps) {
 
 function SectionHeader({ title, href, action }: { title: string; href: string; action: string }) {
   return (
-    <div className="flex items-end justify-between border-b border-border pb-3">
-      <h2 className="font-heading text-lg font-bold text-foreground">{title}</h2>
-      <Link href={href} className="cursor-pointer text-xs font-bold uppercase tracking-wider text-primary transition-colors hover:text-primary/80">
+    <div className="flex items-center justify-between pb-1">
+      <h2 className="font-heading text-sm font-bold text-foreground sm:text-base">{title}</h2>
+      <Link href={href} className="cursor-pointer text-xs font-semibold text-primary transition-colors hover:text-primary/80">
         {action}
       </Link>
     </div>
   );
 }
 
-function SupplierMini({ supplier }: { supplier: { companyName: string; slug: string; rating: number; isVerified: boolean } }) {
+{/* Compact Marketplace Borderless Product Card (Tokopedia 6-Column Style) */}
+function CompactProductCard({ product, locale }: { product: EnhancedDemoProduct; locale: string }) {
+  const formattedPrice = product.price ? formatPrice(product.price, product.currency) : undefined;
+  const displayPrice = formattedPrice || (locale === "en" ? "Contact Supplier" : "Hubungi Supplier");
+  const displayOriginalPrice = product.originalPrice ? formatPrice(product.originalPrice, product.currency) : undefined;
+
   return (
-    <Link href={`/demo/suppliers/${supplier.slug}`} className="w-[42%] cursor-pointer space-y-1">
-      <div className="mx-auto flex h-10 w-10 items-center justify-center rounded bg-primary/10 text-xs font-bold text-primary shadow-xs">
-        {supplier.companyName.slice(0, 2).toUpperCase()}
-      </div>
-      <p className="truncate text-[11px] font-bold text-foreground">{supplier.companyName}</p>
-      <div className="flex items-center justify-center gap-1 text-[10px] font-semibold text-warning">
-        {supplier.isVerified ? <ShieldCheck className="h-3 w-3 text-success" /> : <Store className="h-3 w-3" />}
-        <Star className="h-3 w-3 fill-current" />
-        <span>{supplier.rating?.toFixed(1) || "0.0"}</span>
+    <Link
+      href={`/demo/products/${product.id}`}
+      className="group relative flex cursor-pointer flex-col justify-between rounded-lg bg-card p-0 transition-colors duration-150"
+    >
+      <div>
+        {/* Square Aspect Image Container */}
+        <div className="relative aspect-square w-full overflow-hidden rounded-t-lg bg-muted/30">
+          {product.photos?.[0] ? (
+            <img
+              src={product.photos[0]}
+              alt={product.name}
+              className="h-full w-full object-cover transition-opacity duration-200 group-hover:opacity-95"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center">
+              <Package className="h-7 w-7 text-muted-foreground/30" />
+            </div>
+          )}
+
+          {/* Top Left Discount Badge */}
+          {product.discountPercentage && product.discountPercentage > 0 && (
+            <div className="absolute left-1.5 top-1.5 z-10 rounded-xs bg-destructive px-1.5 py-0.5 text-[9px] font-black text-destructive-foreground">
+              {product.discountPercentage}%
+            </div>
+          )}
+
+          {/* Bottom Left Promo Badge Banner */}
+          {product.badgeOverlay && (
+            <div className="absolute bottom-1.5 left-1.5 z-10 flex items-center gap-1 rounded-xs bg-primary/95 px-1 py-0.5 text-[8px] font-bold text-primary-foreground shadow-xs">
+              <Tag className="h-2 w-2" />
+              <span>{product.badgeOverlay}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Card Body Information - Compact Spacing */}
+        <div className="space-y-1 p-2 pt-1.5 pb-1.5">
+          {/* Title - Line clamp 2 */}
+          <h3 className="line-clamp-2 min-h-[2rem] text-[11px] font-normal leading-snug text-foreground transition-colors duration-150 group-hover:text-primary sm:text-xs">
+            {product.name}
+          </h3>
+
+          {/* Price & Original Price */}
+          <div className="flex items-baseline gap-1 pt-0.5">
+            <span className="text-xs font-black tracking-tight text-destructive sm:text-sm">
+              {displayPrice}
+            </span>
+            {product.originalPrice && (
+              <span className="text-[9px] text-muted-foreground/60 line-through">
+                {displayOriginalPrice}
+              </span>
+            )}
+          </div>
+
+          {/* Hemat Bonus Tag */}
+          {product.promoBadge && (
+            <div>
+              <span className="inline-block rounded-xs bg-destructive/10 px-1 py-0.5 text-[9px] font-semibold text-destructive">
+                {product.promoBadge}
+              </span>
+            </div>
+          )}
+
+          {/* Rating & Sales Count */}
+          <div className="flex items-center gap-1 pt-0.5 text-[9px] text-muted-foreground sm:text-[10px]">
+            <div className="flex items-center gap-0.5 font-semibold text-warning">
+              <Star className="h-2.5 w-2.5 fill-warning text-warning shrink-0" />
+              <span>{(product.supplierRating || 5.0).toFixed(1)}</span>
+            </div>
+            <span>•</span>
+            <span className="truncate">{product.salesCountText || "100+ terjual"}</span>
+          </div>
+
+          {/* Verified Seller Tag & Location */}
+          <div className="flex items-center justify-between pt-0.5 text-[9px] text-muted-foreground sm:text-[10px]">
+            <div className="flex items-center gap-1 truncate font-medium">
+              {product.supplierVerified && (
+                <ShieldCheck className="h-2.5 w-2.5 shrink-0 text-success" />
+              )}
+              <span className="truncate">{product.locationTag || product.supplierCompanyName}</span>
+            </div>
+
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+              aria-label="More options"
+              className="cursor-pointer p-0.5 text-muted-foreground/40 transition-colors hover:text-foreground"
+            >
+              <MoreHorizontal className="h-3 w-3" />
+            </button>
+          </div>
+        </div>
       </div>
     </Link>
   );
 }
 
-function CardGridSkeleton({ columns = "lg:grid-cols-4" }: { columns?: string }) {
+function CardGridSkeleton({ columns = "lg:grid-cols-6" }: { columns?: string }) {
   return (
-    <div className={`grid grid-cols-1 gap-6 sm:grid-cols-2 ${columns}`}>
-      {Array.from({ length: 4 }).map((_, index) => (
-        <div key={index} className="h-64 animate-pulse rounded-lg border border-border bg-muted" />
+    <div className={`grid grid-cols-2 gap-2.5 sm:grid-cols-3 ${columns}`}>
+      {Array.from({ length: 6 }).map((_, index) => (
+        <div key={index} className="h-52 animate-pulse rounded-lg bg-muted/40" />
       ))}
     </div>
   );
@@ -376,16 +363,8 @@ function CardGridSkeleton({ columns = "lg:grid-cols-4" }: { columns?: string }) 
 
 function EmptySection({ label }: { label: string }) {
   return (
-    <div className="col-span-full rounded-lg border border-dashed border-border bg-card py-10 text-center text-xs text-muted-foreground">
+    <div className="col-span-full rounded-lg bg-card py-6 text-center text-xs text-muted-foreground">
       {label}
     </div>
-  );
-}
-
-function CarouselArrow({ topClass = "top-1/2" }: { topClass?: string }) {
-  return (
-    <button className={`absolute -right-3 ${topClass} z-10 hidden h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded border border-border bg-card text-foreground shadow-md transition-all hover:bg-muted hover:shadow-lg lg:flex`}>
-      <ChevronRight className="h-4.5 w-4.5" />
-    </button>
   );
 }
