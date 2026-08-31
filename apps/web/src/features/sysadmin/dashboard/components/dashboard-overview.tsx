@@ -1,10 +1,8 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React from "react";
 import { useSysadminStore } from "@/features/sysadmin/auth/stores/use-sysadmin-store";
-import { waitingListService } from "@/features/sysadmin/waiting-list/services/waiting-list-service";
-import type { WaitingListEntry } from "@/features/sysadmin/waiting-list/types";
-import { toast } from "sonner";
+import { useSysadminDashboard } from "../hooks/use-sysadmin-dashboard";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import {
@@ -16,7 +14,7 @@ import {
   ShieldCheck,
   Calendar,
   Loader2,
-  RefreshCw
+  RefreshCw,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -24,47 +22,15 @@ import { Badge } from "@/components/ui/badge";
 export default function DashboardOverview() {
   const t = useTranslations("sysadminDashboard");
   const { admin } = useSysadminStore();
-  const [isLoading, setIsLoading] = useState(true);
-  const [recentEntries, setRecentEntries] = useState<WaitingListEntry[]>([]);
-  const [stats, setStats] = useState({
+  const { data, isLoading, refetch } = useSysadminDashboard();
+
+  const recentEntries = data?.recentEntries || [];
+  const stats = data?.stats || {
     total: 0,
     suppliers: 0,
     buyers: 0,
     pending: 0,
-  });
-
-  const loadDashboardData = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      // Load recent 5 entries
-      const recent = await waitingListService.list({ page: 1, limit: 5 });
-      setRecentEntries(recent.items);
-
-      // Load stats by calculating over a large batch (up to 1000 items)
-      const allData = await waitingListService.list({ page: 1, limit: 1000 });
-      const supplierCount = allData.items.filter(i => i.company_type === "supplier").length;
-      const buyerCount = allData.items.filter(i => i.company_type === "buyer").length;
-      const pendingCount = allData.items.filter(i => i.status === "pending").length;
-
-      setStats({
-        total: allData.total,
-        suppliers: supplierCount,
-        buyers: buyerCount,
-        pending: pendingCount,
-      });
-    } catch {
-      toast.error(t("errorLoad"));
-    } finally {
-      setIsLoading(false);
-    }
-  }, [t]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      loadDashboardData();
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [loadDashboardData]);
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -118,7 +84,7 @@ export default function DashboardOverview() {
           </p>
         </div>
         <button
-          onClick={loadDashboardData}
+          onClick={() => refetch()}
           className="flex items-center gap-1.5 px-3 py-1.5 bg-primary-foreground/15 hover:bg-primary-foreground/25 active:scale-[0.98] text-primary-foreground rounded-lg text-xs font-semibold backdrop-blur-sm transition-all cursor-pointer"
         >
           <RefreshCw className="h-3.5 w-3.5" />

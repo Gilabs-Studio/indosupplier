@@ -1,7 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/routing";
@@ -62,12 +62,6 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
     setIsNotifOpen(false);
     setIsProfileOpen(false);
   };
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      closeAllDropdowns();
-    }
-  }, [isAuthenticated]);
 
   const handleLogout = async () => {
     closeAllDropdowns();

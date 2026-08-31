@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "clean:cache": "node -e \"const fs=require('fs');['.next','.turbo'].forEach((p)=>{try{fs.rmSync(p,{recursive:true,force:true});console.log('removed',p)}catch{}})\"",
-    "dev": "cross-env WATCHPACK_POLLING=false CHOKIDAR_USEPOLLING=false NODE_OPTIONS=--max-old-space-size=4096 next dev --turbo",
+    "dev": "cross-env WATCHPACK_POLLING=false CHOKIDAR_USEPOLLING=false NODE_OPTIONS=--max-old-space-size=6144 next dev --turbo",
+    "dev:clean": "pnpm clean:cache && pnpm dev",
     "build": "next build --turbo",
     "start": "next start",
     "lint": "eslint . --max-warnings 0",
