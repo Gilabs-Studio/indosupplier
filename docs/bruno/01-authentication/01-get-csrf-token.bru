@@ -1,0 +1,47 @@
+meta {
+  name: Get CSRF Token
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/v1/auth/csrf
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  base_url: http://localhost:8090
+}
+
+script:post-response {
+  const csrfHeader = res.getHeader('X-CSRF-Token');
+  if (csrfHeader) {
+    bru.setEnvVar('csrf_token', csrfHeader);
+  }
+  
+  try {
+    const rawBody = res.getBody();
+    const body = typeof rawBody === 'string' ? JSON.parse(rawBody) : rawBody;
+  
+    if (body?.data?.csrf_token) {
+      bru.setEnvVar('csrf_token', body.data.csrf_token);
+    }
+  } catch (error) {
+    // Ignore non-JSON responses.
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+}
+
+docs {
+  Bootstrap and retrieve the CSRF token before performing any unsafe state operations (POST, PUT, DELETE).
+  
+  This request updates the `csrf_token` environment variable from either the `X-CSRF-Token`
+  response header or `data.csrf_token` in the response body.
+}

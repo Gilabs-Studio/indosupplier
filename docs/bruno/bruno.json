@@ -1,0 +1,10 @@
+{
+  "version": "1",
+  "name": "GKE Platform API",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git",
+    ".env*"
+  ]
+}
