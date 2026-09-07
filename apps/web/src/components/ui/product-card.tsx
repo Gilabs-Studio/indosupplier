@@ -61,7 +61,7 @@ export function ProductCard({
   currency = "IDR",
   unit,
   image,
-  fallbackImage = "/images/products/prod-hvs.png",
+  fallbackImage = "/images/products/prod-hvs.webp",
   href,
   isReadyStock = true,
   isVerified = false,

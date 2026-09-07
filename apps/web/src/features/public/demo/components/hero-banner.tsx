@@ -8,7 +8,7 @@ export function HeroBanner() {
     <section className="relative w-full overflow-hidden rounded-xl shadow-xs transition-all duration-300">
       <div className="relative aspect-[894/192] w-full overflow-hidden rounded-xl">
         <Image
-          src="/images/hero-banner-b2b.png"
+          src="/images/hero-banner-b2b.webp"
           alt="Beli Langsung dari Supplier - Harga Grosir, Lebih Kompetitif"
           fill
           priority

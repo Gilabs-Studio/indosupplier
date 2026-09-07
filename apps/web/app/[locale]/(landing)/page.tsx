@@ -38,7 +38,7 @@ export default async function LandingPage({
           <div
             className="absolute inset-0 bg-position-[35%_center] md:bg-right-center bg-cover bg-no-repeat opacity-95 transition-opacity duration-500"
             style={{
-              backgroundImage: "url('/hero.png')",
+              backgroundImage: "url('/hero.webp')",
               maskImage: "linear-gradient(to bottom, transparent 0%, black 12%, black 90%, transparent 100%)",
               WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 12%, black 90%, transparent 100%)"
             }}
@@ -171,7 +171,7 @@ export default async function LandingPage({
           <div
             className="absolute inset-0 bg-cover bg-no-repeat opacity-25 transition-opacity duration-500 bg-position-[65%_center] md:bg-right-center"
             style={{
-              backgroundImage: "url('/waitlist_bg.png')",
+              backgroundImage: "url('/waitlist_bg.webp')",
               maskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)",
               WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)"
             }}

@@ -11,7 +11,7 @@ import type {
   DemoProductFilterState,
 } from "../types/demo.types";
 
-const initialFilterState: DemoProductFilterState = {
+export const initialFilterState: DemoProductFilterState = {
   searchQuery: "",
   location: "all",
   minPrice: undefined,
@@ -24,19 +24,30 @@ const initialFilterState: DemoProductFilterState = {
   page: 1,
 };
 
-export function useDemoHome(locale: string) {
+/**
+ * Hook for Section 1: Hero B2B Banner data
+ */
+export function useDemoHeroBanner(locale: string) {
   const isEn = locale === "en";
 
-  const [filters, setFilters] = useState<DemoProductFilterState>(initialFilterState);
-  const [bookmarkedProductIds, setBookmarkedProductIds] = useState<Set<string>>(new Set());
-  const [cartFeedback, setCartFeedback] = useState<{ id: string; name: string } | null>(null);
-
-  // Queries
   const bannerQuery = useQuery<DemoHeroBanner>({
     queryKey: ["demo-hero-banner", locale],
     queryFn: () => demoService.getHeroBanner(),
     staleTime: 10 * 60 * 1000,
   });
+
+  return {
+    isEn,
+    banner: bannerQuery.data,
+    isLoading: bannerQuery.isLoading,
+  };
+}
+
+/**
+ * Hook for Section 2: Quick Actions Bar data
+ */
+export function useDemoQuickActions(locale: string) {
+  const isEn = locale === "en";
 
   const quickActionsQuery = useQuery<DemoQuickAction[]>({
     queryKey: ["demo-quick-actions", locale],
@@ -44,11 +55,47 @@ export function useDemoHome(locale: string) {
     staleTime: 10 * 60 * 1000,
   });
 
+  return {
+    isEn,
+    quickActions: quickActionsQuery.data || [],
+    isLoading: quickActionsQuery.isLoading,
+  };
+}
+
+/**
+ * Hook for Section 3: Popular Categories data
+ */
+export function useDemoPopularCategories(locale: string) {
+  const isEn = locale === "en";
+
   const categoriesQuery = useQuery<DemoCategoryItem[]>({
     queryKey: ["demo-popular-categories", locale],
     queryFn: () => demoService.getPopularCategories(),
     staleTime: 10 * 60 * 1000,
   });
+
+  return {
+    isEn,
+    popularCategories: categoriesQuery.data || [],
+    isLoading: categoriesQuery.isLoading,
+  };
+}
+
+/**
+ * Hook for Section 4: Popular / Featured Products data and filtering
+ */
+export function useDemoFeaturedProducts(
+  locale: string,
+  initialFilters?: Partial<DemoProductFilterState>
+) {
+  const isEn = locale === "en";
+
+  const [filters, setFilters] = useState<DemoProductFilterState>({
+    ...initialFilterState,
+    ...initialFilters,
+  });
+  const [bookmarkedProductIds, setBookmarkedProductIds] = useState<Set<string>>(new Set());
+  const [cartFeedback, setCartFeedback] = useState<{ id: string; name: string } | null>(null);
 
   const productsQuery = useQuery<DemoProductItem[]>({
     queryKey: ["demo-featured-products", filters],
@@ -148,14 +195,8 @@ export function useDemoHome(locale: string) {
   return {
     isEn,
     filters,
-    banner: bannerQuery.data,
-    isBannerLoading: bannerQuery.isLoading,
-    quickActions: quickActionsQuery.data || [],
-    isQuickActionsLoading: quickActionsQuery.isLoading,
-    popularCategories: categoriesQuery.data || [],
-    isCategoriesLoading: categoriesQuery.isLoading,
     products: displayedProducts,
-    isProductsLoading: productsQuery.isLoading,
+    isLoading: productsQuery.isLoading,
     bookmarkedProductIds,
     cartFeedback,
     setLocation,
@@ -168,5 +209,40 @@ export function useDemoHome(locale: string) {
     resetFilters,
     toggleBookmark,
     handleAddToCart,
+  };
+}
+
+/**
+ * Aggregator hook for backward compatibility
+ */
+export function useDemoHome(locale: string) {
+  const hero = useDemoHeroBanner(locale);
+  const actions = useDemoQuickActions(locale);
+  const categories = useDemoPopularCategories(locale);
+  const productsHook = useDemoFeaturedProducts(locale);
+
+  return {
+    isEn: hero.isEn,
+    filters: productsHook.filters,
+    banner: hero.banner,
+    isBannerLoading: hero.isLoading,
+    quickActions: actions.quickActions,
+    isQuickActionsLoading: actions.isLoading,
+    popularCategories: categories.popularCategories,
+    isCategoriesLoading: categories.isLoading,
+    products: productsHook.products,
+    isProductsLoading: productsHook.isLoading,
+    bookmarkedProductIds: productsHook.bookmarkedProductIds,
+    cartFeedback: productsHook.cartFeedback,
+    setLocation: productsHook.setLocation,
+    setPriceRange: productsHook.setPriceRange,
+    setMinOrder: productsHook.setMinOrder,
+    togglePowerSupplier: productsHook.togglePowerSupplier,
+    toggleVerifiedSupplier: productsHook.toggleVerifiedSupplier,
+    toggleReadyStock: productsHook.toggleReadyStock,
+    setSort: productsHook.setSort,
+    resetFilters: productsHook.resetFilters,
+    toggleBookmark: productsHook.toggleBookmark,
+    handleAddToCart: productsHook.handleAddToCart,
   };
 }

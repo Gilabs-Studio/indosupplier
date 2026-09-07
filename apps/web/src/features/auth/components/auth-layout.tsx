@@ -15,9 +15,9 @@ export function AuthLayout({ children, compact = false }: AuthLayoutProps) {
 
   const bgImageSrc = useMemo(() => {
     if (resolvedTheme === "dark") {
-      return "/login2.png";
+      return "/login2.webp";
     }
-    return "/login.png";
+    return "/login.webp";
   }, [resolvedTheme]);
 
   if (compact) {
