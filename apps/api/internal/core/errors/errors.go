@@ -89,6 +89,26 @@ var ErrorCodeMap = map[string]ErrorInfo{
 		HTTPStatus: http.StatusNotFound,
 		Message:    "User not found",
 	},
+	"BUYER_PROFILE_NOT_FOUND": {
+		HTTPStatus: http.StatusNotFound,
+		Message:    "Buyer profile not found",
+	},
+	"SUPPLIER_PROFILE_NOT_FOUND": {
+		HTTPStatus: http.StatusNotFound,
+		Message:    "Supplier profile not found",
+	},
+	"SUPPLIER_PRODUCT_NOT_FOUND": {
+		HTTPStatus: http.StatusNotFound,
+		Message:    "Supplier product not found",
+	},
+	"BOOKMARK_NOT_FOUND": {
+		HTTPStatus: http.StatusNotFound,
+		Message:    "Bookmark not found",
+	},
+	"BOOKMARK_ALREADY_EXISTS": {
+		HTTPStatus: http.StatusConflict,
+		Message:    "Item already bookmarked",
+	},
 	"RESOURCE_ALREADY_EXISTS": {
 		HTTPStatus: http.StatusConflict,
 		Message:    "Resource already exists",

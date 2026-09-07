@@ -3,9 +3,34 @@ package dto
 import "time"
 
 type CreateBookmarkRequest struct {
-	SupplierProfileID string  `json:"supplierProfileId" binding:"required,uuid"`
-	SupplierProductID *string `json:"supplierProductId" binding:"omitempty,uuid"`
-	Notes             string  `json:"notes"`
+	SupplierProfileID      string  `json:"supplierProfileId"`
+	SupplierProductID      *string `json:"supplierProductId"`
+	SupplierProfileIDSnake string  `json:"supplier_profile_id"`
+	SupplierProductIDSnake *string `json:"supplier_product_id"`
+	Notes                  string  `json:"notes"`
+}
+
+func (r *CreateBookmarkRequest) GetSupplierProfileID() string {
+	if r.SupplierProfileID != "" {
+		return r.SupplierProfileID
+	}
+	return r.SupplierProfileIDSnake
+}
+
+func (r *CreateBookmarkRequest) GetSupplierProductID() *string {
+	if r.SupplierProductID != nil && *r.SupplierProductID != "" {
+		return r.SupplierProductID
+	}
+	if r.SupplierProductIDSnake != nil && *r.SupplierProductIDSnake != "" {
+		return r.SupplierProductIDSnake
+	}
+	return nil
+}
+
+type ToggleBookmarkResponse struct {
+	Bookmarked bool              `json:"bookmarked"`
+	Action     string            `json:"action"` // "added" or "removed"
+	Bookmark   *BookmarkResponse `json:"bookmark,omitempty"`
 }
 
 type BookmarkResponse struct {

@@ -1,0 +1,35 @@
+meta {
+  name: Create Bookmark
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/v1/buyer/bookmarks
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "supplierProfileId": "00000000-0000-0000-0000-000000000001",
+    "supplierProductId": "00000000-0000-0000-0000-000000000002",
+    "notes": "Bookmarked from product card"
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Saves a supplier or product bookmark for the authenticated buyer.
+  - `supplierProfileId`: (UUID, required) The ID of the supplier profile.
+  - `supplierProductId`: (UUID, optional) The ID of the supplier product. If omitted, bookmarks the supplier.
+  - `notes`: (string, optional) Any optional notes from the buyer.
+}

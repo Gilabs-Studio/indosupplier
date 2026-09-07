@@ -10,6 +10,7 @@ import type {
   DemoProductItem,
   DemoProductFilterState,
 } from "../types/demo.types";
+import { useBuyerBookmarks } from "@/features/buyer/bookmarks/hooks/useBuyerBookmarks";
 
 export const initialFilterState: DemoProductFilterState = {
   searchQuery: "",
@@ -94,7 +95,7 @@ export function useDemoFeaturedProducts(
     ...initialFilterState,
     ...initialFilters,
   });
-  const [bookmarkedProductIds, setBookmarkedProductIds] = useState<Set<string>>(new Set());
+  const { bookmarks, toggleBookmarkOptimistic } = useBuyerBookmarks();
   const [cartFeedback, setCartFeedback] = useState<{ id: string; name: string } | null>(null);
 
   const productsQuery = useQuery<DemoProductItem[]>({
@@ -102,6 +103,15 @@ export function useDemoFeaturedProducts(
     queryFn: () => demoService.getProducts(filters),
     staleTime: 2 * 60 * 1000,
   });
+
+  const bookmarkedProductIds = useMemo(() => {
+    const ids = new Set<string>();
+    for (const b of bookmarks) {
+      if (b.supplierProductId) ids.add(b.supplierProductId);
+      if (b.id) ids.add(b.id);
+    }
+    return ids;
+  }, [bookmarks]);
 
   // Filter setters
   const setLocation = useCallback((location: string) => {
@@ -134,26 +144,6 @@ export function useDemoFeaturedProducts(
 
   const resetFilters = useCallback(() => {
     setFilters(initialFilterState);
-  }, []);
-
-  // Actions
-  const toggleBookmark = useCallback((productId: string) => {
-    setBookmarkedProductIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(productId)) {
-        next.delete(productId);
-      } else {
-        next.add(productId);
-      }
-      return next;
-    });
-  }, []);
-
-  const handleAddToCart = useCallback((product: DemoProductItem) => {
-    setCartFeedback({ id: product.id, name: product.name });
-    setTimeout(() => {
-      setCartFeedback((current) => (current?.id === product.id ? null : current));
-    }, 2500);
   }, []);
 
   // Filtered/Sorted list fallback client-side if API is static
@@ -191,6 +181,40 @@ export function useDemoFeaturedProducts(
 
     return list;
   }, [productsQuery.data, filters]);
+
+  // Actions
+  const toggleBookmark = useCallback((productId: string) => {
+    const product = displayedProducts.find((p) => p.id === productId);
+    if (product) {
+      toggleBookmarkOptimistic({
+        supplierProfileId: product.supplierId,
+        supplierProductId: product.id,
+        supplierSlug: product.supplierSlug,
+        companyName: product.supplierCompanyName,
+        productName: product.name,
+        productPrice: product.price,
+        productMinOrder: product.minOrder,
+        productImage: product.photos?.[0] || "",
+        category: product.categoryName || "General",
+        location: product.supplierLocation || "Indonesia",
+        rating: product.supplierRating,
+        reviewCount: product.supplierReviewCount,
+        isVerified: product.supplierVerified,
+      });
+    } else {
+      toggleBookmarkOptimistic({
+        supplierProfileId: productId,
+        supplierProductId: productId,
+      });
+    }
+  }, [displayedProducts, toggleBookmarkOptimistic]);
+
+  const handleAddToCart = useCallback((product: DemoProductItem) => {
+    setCartFeedback({ id: product.id, name: product.name });
+    setTimeout(() => {
+      setCartFeedback((current) => (current?.id === product.id ? null : current));
+    }, 2500);
+  }, []);
 
   return {
     isEn,

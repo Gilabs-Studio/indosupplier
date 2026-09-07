@@ -1,0 +1,30 @@
+meta {
+  name: Delete Bookmark
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{base_url}}/api/v1/buyer/bookmarks/{{id}}
+  body: none
+  auth: none
+}
+
+params:path {
+  id: {{id}}
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+  id: 91c0a486-31fb-476b-9acd-526aab42e52a
+}
+
+docs {
+  Removes a bookmark by its bookmark ID, supplier product ID, or supplier profile ID.
+  Returns standard deleted response conforming to `docs/api-standart`.
+}

@@ -95,7 +95,12 @@ export function ProductCard({
         : `${reviewCount}`
       : undefined;
 
-  const finalImgSrc = hasError || !image || image.includes("unsplash.com") ? fallbackImage : image;
+  const sanitizedImage =
+    image && image.startsWith("/images/") && image.endsWith(".png")
+      ? image.replace(/\.png$/, ".webp")
+      : image;
+
+  const finalImgSrc = hasError || !sanitizedImage || sanitizedImage.includes("unsplash.com") ? fallbackImage : sanitizedImage;
 
   return (
     <div

@@ -1,0 +1,33 @@
+meta {
+  name: Toggle Bookmark
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/api/v1/buyer/bookmarks/toggle
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "supplierProfileId": "00000000-0000-0000-0000-000000000001",
+    "supplierProductId": "00000000-0000-0000-0000-000000000002"
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Convenience toggle endpoint:
+  If the bookmark already exists, removes it and returns `{"bookmarked": false, "action": "removed"}`.
+  If it does not exist, saves it and returns `{"bookmarked": true, "action": "added", "bookmark": {...}}`.
+}

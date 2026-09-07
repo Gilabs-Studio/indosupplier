@@ -92,7 +92,40 @@ func (h *BookmarkHandler) Delete(c *gin.Context) {
 		return
 	}
 
-	response.SuccessResponse(c, gin.H{"deleted": true, "id": id}, nil)
+	response.SuccessResponseDeleted(c, "bookmark", id, nil)
+}
+
+func (h *BookmarkHandler) Toggle(c *gin.Context) {
+	userID, ok := h.getAuthenticatedUserID(c)
+	if !ok {
+		return
+	}
+
+	var req dto.CreateBookmarkRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		if validationErrors, ok := err.(validator.ValidationErrors); ok {
+			errors.HandleValidationError(c, validationErrors)
+			return
+		}
+		errors.InvalidRequestBodyResponse(c)
+		return
+	}
+
+	res, err := h.usecase.Toggle(c.Request.Context(), userID, &req)
+	if err != nil {
+		if stderrors.Is(err, usecase.ErrBuyerProfileNotFound) {
+			errors.ErrorResponse(c, "BUYER_PROFILE_NOT_FOUND", nil, nil)
+			return
+		}
+		if stderrors.Is(err, usecase.ErrSupplierProfileNotFound) {
+			errors.ErrorResponse(c, "SUPPLIER_PROFILE_NOT_FOUND", nil, nil)
+			return
+		}
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, res, nil)
 }
 
 func (h *BookmarkHandler) List(c *gin.Context) {

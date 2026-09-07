@@ -14,6 +14,7 @@ func RegisterBookmarkRoutes(rg *gin.RouterGroup, h *handler.BookmarkHandler, jwt
 	{
 		g.GET("", h.List)
 		g.POST("", h.Create)
+		g.POST("/toggle", h.Toggle)
 		g.DELETE("/:id", h.Delete)
 	}
 }

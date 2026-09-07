@@ -272,7 +272,7 @@ func getSeedProductsForCategory(categorySlug string) []seedProd {
 				StartingPrice: 215000,
 				Capacity:      "2000 Karton / Bulan",
 				Photos: []string{
-					"/images/products/prod-hvs.png",
+					"/images/products/prod-hvs.webp",
 				},
 			},
 			{
@@ -282,7 +282,7 @@ func getSeedProductsForCategory(categorySlug string) []seedProd {
 				StartingPrice: 45000,
 				Capacity:      "5000 Box / Bulan",
 				Photos: []string{
-					"/images/categories/cat-kantor-atk.png",
+					"/images/categories/cat-kantor-atk.webp",
 				},
 			},
 		}
@@ -295,7 +295,7 @@ func getSeedProductsForCategory(categorySlug string) []seedProd {
 				StartingPrice: 28500,
 				Capacity:      "10000 Box / Bulan",
 				Photos: []string{
-					"/images/products/prod-masker.png",
+					"/images/products/prod-masker.webp",
 				},
 			},
 			{
@@ -305,7 +305,7 @@ func getSeedProductsForCategory(categorySlug string) []seedProd {
 				StartingPrice: 42000,
 				Capacity:      "3000 Unit / Bulan",
 				Photos: []string{
-					"/images/products/prod-helmet.png",
+					"/images/products/prod-helmet.webp",
 				},
 			},
 		}
@@ -318,7 +318,7 @@ func getSeedProductsForCategory(categorySlug string) []seedProd {
 				StartingPrice: 8950000,
 				Capacity:      "200 Unit / Bulan",
 				Photos: []string{
-					"/images/products/prod-laptop.png",
+					"/images/products/prod-laptop.webp",
 				},
 			},
 		}
@@ -331,7 +331,7 @@ func getSeedProductsForCategory(categorySlug string) []seedProd {
 				StartingPrice: 4850000,
 				Capacity:      "100 Unit / Bulan",
 				Photos: []string{
-					"/images/products/prod-water-pump.png",
+					"/images/products/prod-water-pump.webp",
 				},
 			},
 		}
@@ -344,7 +344,7 @@ func getSeedProductsForCategory(categorySlug string) []seedProd {
 				StartingPrice: 1250000,
 				Capacity:      "500 Unit / Bulan",
 				Photos: []string{
-					"/images/products/prod-office-chair.png",
+					"/images/products/prod-office-chair.webp",
 				},
 			},
 		}
@@ -357,7 +357,7 @@ func getSeedProductsForCategory(categorySlug string) []seedProd {
 				StartingPrice: 350000,
 				Capacity:      "5000 Bundle / Bulan",
 				Photos: []string{
-					"/images/products/prod-carton-boxes.png",
+					"/images/products/prod-carton-boxes.webp",
 				},
 			},
 		}
@@ -370,7 +370,7 @@ func getSeedProductsForCategory(categorySlug string) []seedProd {
 				StartingPrice: 12500000,
 				Capacity:      "500 Ton / Month",
 				Photos: []string{
-					"/images/categories/cat-bahan-baku.png",
+					"/images/categories/cat-bahan-baku.webp",
 				},
 			},
 		}
@@ -383,7 +383,7 @@ func getSeedProductsForCategory(categorySlug string) []seedProd {
 				StartingPrice: 92000,
 				Capacity:      "10 Ton / Month",
 				Photos: []string{
-					"/images/categories/cat-makanan-minuman.png",
+					"/images/categories/cat-makanan-minuman.webp",
 				},
 			},
 		}
@@ -397,7 +397,7 @@ func getSeedProductsForCategory(categorySlug string) []seedProd {
 			StartingPrice: 4500000,
 			Capacity:      "300 Ton / Month",
 			Photos: []string{
-				"/images/products/prod-mineral-powder.png",
+				"/images/products/prod-mineral-powder.webp",
 			},
 		},
 	}

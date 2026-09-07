@@ -48,9 +48,10 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
   const { user, isAuthenticated, logout } = useAuthStore();
   const { bookmarks } = useBuyerBookmarks();
   const { following } = useBuyerFollowing();
-  const productBookmarks = bookmarks.filter((item) => item.type === "product");
+  const productBookmarks = bookmarks.filter((item) => item.type === "product" || Boolean(item.supplierProductId));
   const [searchQuery, setSearchQuery] = useState("");
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isSavedOpen, setIsSavedOpen] = useState(false);
+  const [isHeartHovered, setIsHeartHovered] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [activeNotifTab, setActiveNotifTab] = useState<"transaksi" | "update">("transaksi");
@@ -58,7 +59,7 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
     user?.capabilities.supplier === true || !!user?.supplier_profile;
 
   const closeAllDropdowns = () => {
-    setIsCartOpen(false);
+    setIsSavedOpen(false);
     setIsNotifOpen(false);
     setIsProfileOpen(false);
   };
@@ -86,7 +87,186 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
     }
   };
 
-  const isAnyDropdownOpen = isCartOpen || isNotifOpen || isProfileOpen;
+  const isAnyDropdownOpen = isSavedOpen || isNotifOpen || isProfileOpen;
+
+function resolveBookmarkThumbnail(item: {
+  productImage?: string;
+  productName?: string;
+  companyName?: string;
+  category?: string;
+}): string {
+  let img = item.productImage?.trim() || "";
+  if (img) {
+    if (img.startsWith("/images/") && img.endsWith(".png")) {
+      img = img.replace(/\.png$/, ".webp");
+    }
+    return img;
+  }
+
+  const combined = `${item.productName || ""} ${item.companyName || ""} ${item.category || ""}`.toLowerCase();
+  if (
+    combined.includes("steel") ||
+    combined.includes("baja") ||
+    combined.includes("rebar") ||
+    combined.includes("plate") ||
+    combined.includes("denim") ||
+    combined.includes("yarn") ||
+    combined.includes("fiber")
+  ) {
+    return "/images/categories/cat-bahan-baku.webp";
+  }
+  if (
+    combined.includes("coffee") ||
+    combined.includes("kopi") ||
+    combined.includes("sugar") ||
+    combined.includes("gula") ||
+    combined.includes("makanan") ||
+    combined.includes("ginger")
+  ) {
+    return "/images/categories/cat-makanan-minuman.webp";
+  }
+  if (
+    combined.includes("sand") ||
+    combined.includes("powder") ||
+    combined.includes("bentonite") ||
+    combined.includes("garnet")
+  ) {
+    return "/images/products/prod-mineral-powder.webp";
+  }
+  if (combined.includes("masker") || combined.includes("medis")) {
+    return "/images/products/prod-masker.webp";
+  }
+  if (combined.includes("helm") || combined.includes("safety") || combined.includes("k3")) {
+    return "/images/products/prod-helmet.webp";
+  }
+  if (combined.includes("laptop") || combined.includes("elektronik") || combined.includes("computer")) {
+    return "/images/products/prod-laptop.webp";
+  }
+  if (combined.includes("pompa") || combined.includes("pump") || combined.includes("mesin")) {
+    return "/images/products/prod-water-pump.webp";
+  }
+  if (combined.includes("kursi") || combined.includes("chair") || combined.includes("furniture")) {
+    return "/images/products/prod-office-chair.webp";
+  }
+  if (combined.includes("karton") || combined.includes("box") || combined.includes("packaging")) {
+    return "/images/products/prod-carton-boxes.webp";
+  }
+  return "/images/categories/cat-bahan-baku.webp";
+}
+
+  const renderSavedDropdown = () => (
+    <div
+      onMouseEnter={() => {
+        setIsSavedOpen(true);
+        setIsNotifOpen(false);
+        setIsProfileOpen(false);
+      }}
+      onMouseLeave={() => {
+        setIsSavedOpen(false);
+        setIsHeartHovered(false);
+      }}
+      className="relative"
+    >
+      <div
+        onMouseEnter={() => setIsHeartHovered(true)}
+        onMouseLeave={() => setIsHeartHovered(false)}
+        className="relative inline-flex items-center justify-center"
+      >
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={buyerLayoutT("wishlist") || "Disimpan"}
+          className="text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer h-9 w-9 rounded-full relative overflow-visible"
+          asChild
+        >
+          <Link href="/bookmarks" className="overflow-visible flex items-center justify-center">
+            <Heart className="h-5 w-5" />
+          </Link>
+        </Button>
+
+        {productBookmarks.length > 0 && (
+          <span className="absolute -top-1 -right-1 h-4.5 min-w-4.5 px-1 flex items-center justify-center rounded-full bg-amber-500 text-[10px] font-bold text-white shadow-xs leading-none pointer-events-none z-10 select-none">
+            {productBookmarks.length}
+          </span>
+        )}
+
+        {/* Dark Tooltip "Disimpan" matching user screenshot */}
+        {isHeartHovered && !isSavedOpen && (
+          <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1.5 px-2.5 py-1 bg-neutral-900 text-white text-[11px] font-medium rounded-md shadow-lg pointer-events-none whitespace-nowrap z-50 animate-in fade-in duration-150">
+            Disimpan
+            <div className="absolute -top-1 left-1/2 -translate-x-1/2 border-4 border-transparent border-b-neutral-900" />
+          </div>
+        )}
+      </div>
+
+      {isSavedOpen && (
+        <div className="absolute right-0 top-full pt-2 z-50">
+          <div className="w-84 p-4 bg-background border border-border rounded-xl shadow-xl animate-in fade-in slide-in-from-top-1 duration-150 text-left font-sans">
+            <div className="flex items-center justify-between border-b border-border/60 pb-2.5 mb-3">
+              <span className="text-xs font-bold text-foreground">
+                {buyerLayoutT("wishlist")} ({productBookmarks.length})
+              </span>
+              <Link
+                href="/bookmarks"
+                onClick={() => setIsSavedOpen(false)}
+                className="text-xs font-semibold text-amber-600 dark:text-amber-400 hover:text-amber-700 hover:underline cursor-pointer"
+              >
+                {t("view")}
+              </Link>
+            </div>
+            {productBookmarks.length === 0 ? (
+              <div className="text-center py-5 text-xs text-muted-foreground">
+                {locale === "id" ? "Belum ada produk disimpan" : "No saved products yet"}
+              </div>
+            ) : (
+              <div className="space-y-2.5 max-h-72 overflow-y-auto pr-0.5">
+                {productBookmarks.slice(0, 6).map((item) => {
+                  const detailUrl = item.supplierProductId
+                    ? `/demo/products/${item.supplierProductId}`
+                    : item.supplierSlug
+                    ? `/demo/suppliers/${item.supplierSlug}`
+                    : "/bookmarks";
+
+                  const thumbUrl = resolveBookmarkThumbnail(item);
+
+                  return (
+                    <Link
+                      key={item.id}
+                      href={detailUrl}
+                      onClick={() => setIsSavedOpen(false)}
+                      className="flex gap-3 items-center border-b border-border/30 pb-2.5 last:border-0 last:pb-0 hover:bg-secondary/60 p-1.5 rounded-lg transition-all duration-200 cursor-pointer block group"
+                    >
+                      <div className="h-10 w-10 rounded-lg bg-muted border border-border/80 flex items-center justify-center shrink-0 overflow-hidden relative">
+                        <img
+                          src={thumbUrl}
+                          alt=""
+                          className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200"
+                          onError={(e) => {
+                            const target = e.currentTarget;
+                            if (target.src !== "/images/categories/cat-bahan-baku.webp") {
+                              target.src = "/images/categories/cat-bahan-baku.webp";
+                            }
+                          }}
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-xs font-bold text-foreground leading-tight group-hover:text-primary transition-colors">
+                          {item.productName || item.companyName}
+                        </p>
+                        <p className="text-[11px] text-muted-foreground truncate mt-0.5">
+                          {item.companyName || (item.location || "Indonesia")}
+                        </p>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <>
@@ -154,97 +334,13 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
             <div className="flex items-center gap-3">
               {/* Message & Notification Icons */}
               <div className="flex items-center gap-1">
-                {/* Cart/Keranjang */}
-                <div
-                  onMouseEnter={() => {
-                    setIsCartOpen(true);
-                    setIsNotifOpen(false);
-                    setIsProfileOpen(false);
-                  }}
-                  onMouseLeave={() => setIsCartOpen(false)}
-                  className="relative"
-                >
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    title={buyerLayoutT("wishlist")}
-                    className="text-muted-foreground hover:text-foreground hover:bg-secondary cursor-pointer h-9 w-9 rounded-full relative"
-                    asChild
-                  >
-                    <Link href="/bookmarks">
-                      <Heart className="h-5 w-5" />
-                      {isAuthenticated && productBookmarks.length > 0 && (
-                        <span className="absolute top-1 right-1 h-4 w-4 flex items-center justify-center rounded-full bg-primary text-[9px] font-bold text-white">
-                          {productBookmarks.length}
-                        </span>
-                      )}
-                    </Link>
-                  </Button>
-
-                  {isCartOpen && (
-                    <div className="absolute right-0 top-full pt-2 z-50">
-                      <div className="w-80 p-4 bg-background border border-border rounded-xl shadow-lg">
-                        <div className="flex items-center justify-between border-b border-border/60 pb-2 mb-3">
-                          <span className="text-xs font-bold text-foreground">
-                            {buyerLayoutT("wishlist")} ({isAuthenticated ? productBookmarks.length : 0})
-                          </span>
-                          <Link href="/bookmarks" className="text-xs font-semibold text-primary hover:underline">
-                            {t("view")}
-                          </Link>
-                        </div>
-                        {!isAuthenticated || productBookmarks.length === 0 ? (
-                          <div className="text-center py-4 text-xs text-muted-foreground">
-                            {locale === "id" ? "Belum ada produk disimpan" : "No saved products yet"}
-                          </div>
-                        ) : (
-                          <div className="space-y-3 max-h-60 overflow-y-auto">
-                            {productBookmarks.slice(0, 5).map((item) => {
-                              const isProduct = item.type === "product";
-                              const detailUrl = isProduct 
-                                ? `/demo/suppliers/${item.supplierSlug}#product-${item.supplierProductId}`
-                                : `/demo/suppliers/${item.supplierSlug}`;
-                              return (
-                                <Link 
-                                  key={item.id} 
-                                  href={detailUrl}
-                                  className="flex gap-3 items-center border-b border-border/40 pb-2 last:border-0 last:pb-0 hover:bg-secondary/50 p-1.5 rounded-lg transition-all duration-300 cursor-pointer block"
-                                >
-                                  {isProduct ? (
-                                    <div className="h-8 w-8 rounded bg-muted border border-border flex items-center justify-center shrink-0 overflow-hidden">
-                                      {item.productImage ? (
-                                        <img src={item.productImage} alt={item.productName} className="object-cover w-full h-full" />
-                                      ) : (
-                                        <Package className="h-4 w-4 text-muted-foreground" />
-                                      )}
-                                    </div>
-                                  ) : (
-                                    <div className="h-8 w-8 rounded bg-primary/10 text-primary font-bold text-xs flex items-center justify-center shrink-0 border border-primary/20">
-                                      {item.companyName.substring(0, 2).toUpperCase()}
-                                    </div>
-                                  )}
-                                  <div className="min-w-0 flex-1">
-                                    <p className="truncate text-xs font-bold text-foreground leading-tight">
-                                      {isProduct ? item.productName : item.companyName}
-                                    </p>
-                                    <p className="text-[10px] text-muted-foreground truncate mt-0.5">
-                                      {isProduct ? item.companyName : (item.location || "Indonesia")}
-                                    </p>
-                                  </div>
-                                </Link>
-                              );
-                            })}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
+                {renderSavedDropdown()}
 
                 {/* Notifications */}
                 <div
                   onMouseEnter={() => {
                     setIsNotifOpen(true);
-                    setIsCartOpen(false);
+                    setIsSavedOpen(false);
                     setIsProfileOpen(false);
                   }}
                   onMouseLeave={() => setIsNotifOpen(false)}
@@ -402,7 +498,7 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
               <div
                 onMouseEnter={() => {
                   setIsProfileOpen(true);
-                  setIsCartOpen(false);
+                  setIsSavedOpen(false);
                   setIsNotifOpen(false);
                 }}
                 onMouseLeave={() => setIsProfileOpen(false)}
@@ -544,6 +640,7 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
             </div>
           ) : (
             <div className="flex items-center gap-3">
+              {renderSavedDropdown()}
               <Link
                 href="/login"
                 className="text-xs font-semibold text-muted-foreground hover:text-foreground transition-all cursor-pointer px-2.5 py-1.5 rounded-lg hover:bg-secondary"

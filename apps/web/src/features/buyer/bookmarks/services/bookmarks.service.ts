@@ -6,6 +6,12 @@ interface ApiResponse<T> {
   data: T;
 }
 
+export interface ToggleBookmarkResult {
+  bookmarked: boolean;
+  action: "added" | "removed";
+  bookmark?: BookmarkItem;
+}
+
 export const bookmarksService = {
   async getBookmarks(): Promise<BookmarkItem[]> {
     const response = await apiClient.get<ApiResponse<BookmarkItem[]>>("/buyer/bookmarks");
@@ -22,5 +28,13 @@ export const bookmarksService = {
 
   async removeBookmark(id: string): Promise<void> {
     await apiClient.delete(`/buyer/bookmarks/${id}`);
+  },
+
+  async toggleBookmark(supplierProfileId: string, supplierProductId?: string): Promise<ToggleBookmarkResult> {
+    const response = await apiClient.post<ApiResponse<ToggleBookmarkResult>>("/buyer/bookmarks/toggle", {
+      supplierProfileId,
+      supplierProductId,
+    });
+    return response.data.data;
   },
 };

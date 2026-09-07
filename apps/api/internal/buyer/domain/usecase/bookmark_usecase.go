@@ -12,7 +12,9 @@ import (
 	buyerModels "github.com/gilabs/indosupplier/api/internal/buyer/data/models"
 	"github.com/gilabs/indosupplier/api/internal/buyer/data/repositories"
 	"github.com/gilabs/indosupplier/api/internal/buyer/domain/dto"
+	"github.com/gilabs/indosupplier/api/internal/buyer/domain/mapper"
 	supplierModels "github.com/gilabs/indosupplier/api/internal/supplier/data/models"
+	userModels "github.com/gilabs/indosupplier/api/internal/user/data/models"
 )
 
 var (
@@ -32,6 +34,7 @@ type BookmarkUsecase interface {
 	Create(ctx context.Context, userID string, req *dto.CreateBookmarkRequest) (*dto.BookmarkResponse, error)
 	Delete(ctx context.Context, userID string, id string) error
 	List(ctx context.Context, userID string) ([]dto.BookmarkResponse, error)
+	Toggle(ctx context.Context, userID string, req *dto.CreateBookmarkRequest) (*dto.ToggleBookmarkResponse, error)
 }
 
 type bookmarkUsecase struct {
@@ -50,6 +53,21 @@ func (u *bookmarkUsecase) getBuyerProfileID(ctx context.Context, userID string) 
 	var buyer buyerModels.BuyerProfile
 	if err := u.db.WithContext(ctx).Where("user_id = ?", userID).First(&buyer).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// Auto-provision default BuyerProfile so user is never blocked
+			var user userModels.User
+			name := "Buyer User"
+			if errUser := u.db.WithContext(ctx).Where("id = ?", userID).First(&user).Error; errUser == nil && user.Name != "" {
+				name = user.Name
+			}
+			newBuyer := buyerModels.BuyerProfile{
+				UserID:              userID,
+				FullName:            name,
+				CompanyName:         name + " Company",
+				ProfileCompleteness: 50,
+			}
+			if errCreate := u.db.WithContext(ctx).Create(&newBuyer).Error; errCreate == nil {
+				return newBuyer.ID, nil
+			}
 			return "", ErrBuyerProfileNotFound
 		}
 		return "", err
@@ -63,9 +81,16 @@ func (u *bookmarkUsecase) Create(ctx context.Context, userID string, req *dto.Cr
 		return nil, err
 	}
 
+	supplierProfileID := req.GetSupplierProfileID()
+	supplierProductID := req.GetSupplierProductID()
+
+	if supplierProfileID == "" {
+		return nil, errors.New("supplierProfileId is required")
+	}
+
 	// Verify supplier exists
 	var supplier supplierModels.SupplierProfile
-	if err := u.db.WithContext(ctx).Where("id = ?", req.SupplierProfileID).First(&supplier).Error; err != nil {
+	if err := u.db.WithContext(ctx).Where("id = ?", supplierProfileID).First(&supplier).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrSupplierProfileNotFound
 		}
@@ -74,9 +99,9 @@ func (u *bookmarkUsecase) Create(ctx context.Context, userID string, req *dto.Cr
 
 	var isProductBookmark bool
 	var product supplierModels.SupplierProduct
-	if req.SupplierProductID != nil && *req.SupplierProductID != "" {
+	if supplierProductID != nil && *supplierProductID != "" {
 		isProductBookmark = true
-		if err := u.db.WithContext(ctx).Where("id = ? AND supplier_profile_id = ?", *req.SupplierProductID, req.SupplierProfileID).First(&product).Error; err != nil {
+		if err := u.db.WithContext(ctx).Where("id = ? AND supplier_profile_id = ?", *supplierProductID, supplierProfileID).First(&product).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return nil, errors.New("supplier product not found")
 			}
@@ -88,9 +113,9 @@ func (u *bookmarkUsecase) Create(ctx context.Context, userID string, req *dto.Cr
 	var existing buyerModels.Bookmark
 	var queryErr error
 	if isProductBookmark {
-		queryErr = u.db.WithContext(ctx).Where("buyer_profile_id = ? AND supplier_profile_id = ? AND supplier_product_id = ?", buyerID, req.SupplierProfileID, *req.SupplierProductID).First(&existing).Error
+		queryErr = u.db.WithContext(ctx).Where("buyer_profile_id = ? AND supplier_profile_id = ? AND supplier_product_id = ?", buyerID, supplierProfileID, *supplierProductID).First(&existing).Error
 	} else {
-		queryErr = u.db.WithContext(ctx).Where("buyer_profile_id = ? AND supplier_profile_id = ? AND (supplier_product_id IS NULL OR supplier_product_id = '')", buyerID, req.SupplierProfileID).First(&existing).Error
+		queryErr = u.db.WithContext(ctx).Where("buyer_profile_id = ? AND supplier_profile_id = ? AND (supplier_product_id IS NULL OR supplier_product_id = '')", buyerID, supplierProfileID).First(&existing).Error
 	}
 
 	if queryErr == nil {
@@ -99,11 +124,11 @@ func (u *bookmarkUsecase) Create(ctx context.Context, userID string, req *dto.Cr
 
 	bookmark := &buyerModels.Bookmark{
 		BuyerProfileID:    buyerID,
-		SupplierProfileID: req.SupplierProfileID,
+		SupplierProfileID: supplierProfileID,
 		Notes:             req.Notes,
 	}
 	if isProductBookmark {
-		bookmark.SupplierProductID = req.SupplierProductID
+		bookmark.SupplierProductID = supplierProductID
 	}
 
 	if err := u.bookmarkRepo.Create(ctx, bookmark); err != nil {
@@ -132,24 +157,6 @@ func (u *bookmarkUsecase) Create(ctx context.Context, userID string, req *dto.Cr
 		establishedYear = 2015 // Default fallback
 	}
 
-	var bookmarkType string
-	var prodName, prodMinOrder, prodImage string
-	var prodPrice float64
-
-	if isProductBookmark {
-		bookmarkType = "product"
-		prodName = product.Name
-		prodPrice = product.StartingPrice
-		prodMinOrder = product.MOQ
-		
-		var firstPhoto supplierModels.SupplierProductPhoto
-		if err := u.db.WithContext(ctx).Where("supplier_product_id = ?", product.ID).Order("sort_order ASC").First(&firstPhoto).Error; err == nil {
-			prodImage = firstPhoto.FileURL
-		}
-	} else {
-		bookmarkType = "supplier"
-	}
-
 	// Fetch key products (only relevant for supplier list/cards)
 	var productNames []string
 	if !isProductBookmark {
@@ -161,27 +168,16 @@ func (u *bookmarkUsecase) Create(ctx context.Context, userID string, req *dto.Cr
 			Pluck("name", &productNames)
 	}
 
-	return &dto.BookmarkResponse{
-		ID:                bookmark.ID,
-		SupplierProfileID: supplier.ID,
-		SupplierProductID: bookmark.SupplierProductID,
-		Type:              bookmarkType,
-		SupplierSlug:      slugify(supplier.CompanyName),
-		CompanyName:       supplier.CompanyName,
-		Category:          categoryName,
-		Location:          supplier.CityID,
-		BusinessType:      supplier.CompanyType,
-		EstablishedYear:   establishedYear,
-		Rating:            supplier.StarRating,
-		ReviewCount:       supplier.ReviewCount,
-		IsVerified:        supplier.VerificationLevel >= 2,
-		KeyProducts:       productNames,
-		ProductName:       prodName,
-		ProductPrice:      prodPrice,
-		ProductMinOrder:   prodMinOrder,
-		ProductImage:      prodImage,
-		CreatedAt:         bookmark.CreatedAt,
-	}, nil
+	resp := mapper.ToBookmarkResponse(
+		bookmark,
+		&supplier,
+		categoryName,
+		productNames,
+		&product,
+		establishedYear,
+		slugify(supplier.CompanyName),
+	)
+	return &resp, nil
 }
 
 func (u *bookmarkUsecase) Delete(ctx context.Context, userID string, id string) error {
@@ -190,16 +186,59 @@ func (u *bookmarkUsecase) Delete(ctx context.Context, userID string, id string) 
 		return err
 	}
 
-	// Check if bookmark exists and belongs to this buyer
-	_, err = u.bookmarkRepo.FindByIDAndBuyer(ctx, id, buyerID)
+	// Try finding by primary key ID first
+	var bookmark buyerModels.Bookmark
+	err = u.db.WithContext(ctx).Where("id = ? AND buyer_profile_id = ?", id, buyerID).First(&bookmark).Error
 	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return ErrBookmarkNotFound
+		// Also try finding by supplier_product_id or supplier_profile_id
+		err = u.db.WithContext(ctx).Where("(supplier_product_id = ? OR supplier_profile_id = ?) AND buyer_profile_id = ?", id, id, buyerID).First(&bookmark).Error
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return ErrBookmarkNotFound
+			}
+			return err
 		}
-		return err
 	}
 
-	return u.bookmarkRepo.Delete(ctx, id, buyerID)
+	return u.bookmarkRepo.Delete(ctx, bookmark.ID, buyerID)
+}
+
+func (u *bookmarkUsecase) Toggle(ctx context.Context, userID string, req *dto.CreateBookmarkRequest) (*dto.ToggleBookmarkResponse, error) {
+	buyerID, err := u.getBuyerProfileID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	supplierProfileID := req.GetSupplierProfileID()
+	supplierProductID := req.GetSupplierProductID()
+
+	if supplierProfileID == "" {
+		return nil, errors.New("supplierProfileId is required")
+	}
+
+	// Check if already exists
+	var existing buyerModels.Bookmark
+	var queryErr error
+	if supplierProductID != nil && *supplierProductID != "" {
+		queryErr = u.db.WithContext(ctx).Where("buyer_profile_id = ? AND supplier_profile_id = ? AND supplier_product_id = ?", buyerID, supplierProfileID, *supplierProductID).First(&existing).Error
+	} else {
+		queryErr = u.db.WithContext(ctx).Where("buyer_profile_id = ? AND supplier_profile_id = ? AND (supplier_product_id IS NULL OR supplier_product_id = '')", buyerID, supplierProfileID).First(&existing).Error
+	}
+
+	if queryErr == nil {
+		// Already exists -> Remove it
+		if err := u.bookmarkRepo.Delete(ctx, existing.ID, buyerID); err != nil {
+			return nil, err
+		}
+		return mapper.ToToggleBookmarkResponse(false, "removed", nil), nil
+	}
+
+	// Does not exist -> Create it
+	created, err := u.Create(ctx, userID, req)
+	if err != nil {
+		return nil, err
+	}
+	return mapper.ToToggleBookmarkResponse(true, "added", created), nil
 }
 
 func (u *bookmarkUsecase) List(ctx context.Context, userID string) ([]dto.BookmarkResponse, error) {
@@ -312,45 +351,23 @@ func (u *bookmarkUsecase) List(ctx context.Context, userID string) ([]dto.Bookma
 			establishedYear = 2015
 		}
 
-		var bookmarkType string
-		var prodName, prodMinOrder, prodImage string
-		var prodPrice float64
-
+		var productPtr *supplierModels.SupplierProduct
 		if b.SupplierProductID != nil && *b.SupplierProductID != "" {
-			bookmarkType = "product"
 			if p, ok := productMap[*b.SupplierProductID]; ok {
-				prodName = p.Name
-				prodPrice = p.StartingPrice
-				prodMinOrder = p.MOQ
-				if len(p.Photos) > 0 {
-					prodImage = p.Photos[0].FileURL
-				}
+				productPtr = &p
 			}
-		} else {
-			bookmarkType = "supplier"
 		}
 
-		responses = append(responses, dto.BookmarkResponse{
-			ID:                b.ID,
-			SupplierProfileID: s.ID,
-			SupplierProductID: b.SupplierProductID,
-			Type:              bookmarkType,
-			SupplierSlug:      slugify(s.CompanyName),
-			CompanyName:       s.CompanyName,
-			Category:          catName,
-			Location:          s.CityID,
-			BusinessType:      s.CompanyType,
-			EstablishedYear:   establishedYear,
-			Rating:            s.StarRating,
-			ReviewCount:       s.ReviewCount,
-			IsVerified:        s.VerificationLevel >= 2,
-			KeyProducts:       prods,
-			ProductName:       prodName,
-			ProductPrice:      prodPrice,
-			ProductMinOrder:   prodMinOrder,
-			ProductImage:      prodImage,
-			CreatedAt:         b.CreatedAt,
-		})
+		resp := mapper.ToBookmarkResponse(
+			&b,
+			&s,
+			catName,
+			prods,
+			productPtr,
+			establishedYear,
+			slugify(s.CompanyName),
+		)
+		responses = append(responses, resp)
 	}
 
 	return responses, nil
