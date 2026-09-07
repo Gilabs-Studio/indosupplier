@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56" width="56" height="56" fill="none">
+  <defs>
+    <linearGradient id="shieldGrad" x1="14" y1="6" x2="42" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="crestHighlight" x1="28" y1="6" x2="28" y2="46" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shieldShadow" x="6" y="4" width="44" height="48" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="4" stdDeviation="3.5" flood-color="#047857" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Shield Shape with Shadow -->
+  <g filter="url(#shieldShadow)">
+    <path d="M28 7L42 12V25C42 35 35 43.5 28 47C21 43.5 14 35 14 25V12L28 7Z" fill="url(#shieldGrad)"/>
+    <!-- Glossy Highlight (Right/Top) -->
+    <path d="M28 7L42 12V25C42 35 35 43.5 28 47V7Z" fill="url(#crestHighlight)"/>
+    <!-- Outer Rim -->
+    <path d="M28 8.2L40.8 12.8V25C40.8 34.2 34.4 42.1 28 45.4C21.6 42.1 15.2 34.2 15.2 25V12.8L28 8.2Z" stroke="#A7F3D0" stroke-width="1" stroke-opacity="0.6"/>
+  </g>
+
+  <!-- Verified Checkmark -->
+  <path d="M22 26.5L26.5 31L35 21" stroke="#FFFFFF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Mini Star Accent at Bottom -->
+  <circle cx="28" cy="38" r="1.5" fill="#FEF08A"/>
+</svg>

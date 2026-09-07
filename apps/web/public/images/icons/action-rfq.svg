@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56" width="56" height="56" fill="none">
+  <defs>
+    <linearGradient id="rfqDocBg" x1="12" y1="6" x2="44" y2="50" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F1F5F9"/>
+    </linearGradient>
+    <linearGradient id="rfqBadge" x1="26" y1="10" x2="48" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FF9800"/>
+      <stop offset="100%" stop-color="#E27D18"/>
+    </linearGradient>
+    <linearGradient id="rfqPen" x1="34" y1="28" x2="48" y2="44" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#3B82F6"/>
+      <stop offset="100%" stop-color="#1D4ED8"/>
+    </linearGradient>
+    <filter id="rfqShadow" x="4" y="4" width="48" height="50" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Document Card Background -->
+  <g filter="url(#rfqShadow)">
+    <path d="M14 10C14 7.79086 15.7909 6 18 6H34L44 16V46C44 48.2091 42.2091 50 40 50H18C15.7909 50 14 48.2091 14 46V10Z" fill="url(#rfqDocBg)" stroke="#CBD5E1" stroke-width="1.2"/>
+    <!-- Folded Corner -->
+    <path d="M34 6V14C34 15.1046 34.8954 16 36 16H44" fill="#E2E8F0" stroke="#CBD5E1" stroke-width="1.2" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Document content lines -->
+  <line x1="20" y1="22" x2="30" y2="22" stroke="#94A3B8" stroke-width="2" stroke-linecap="round"/>
+  <line x1="20" y1="28" x2="36" y2="28" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round"/>
+  <line x1="20" y1="34" x2="32" y2="34" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round"/>
+  <line x1="20" y1="40" x2="28" y2="40" stroke="#CBD5E1" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- RFQ Badge -->
+  <g>
+    <rect x="24" y="9" width="19" height="11" rx="4" fill="url(#rfqBadge)" stroke="#FFFFFF" stroke-width="1"/>
+    <text x="33.5" y="17" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="6.5" font-weight="900" text-anchor="middle" letter-spacing="0.5">RFQ</text>
+  </g>
+
+  <!-- Minimalist Ballpoint Pen -->
+  <g transform="rotate(42 41 38)">
+    <rect x="39" y="24" width="4" height="20" rx="1.5" fill="url(#rfqPen)"/>
+    <path d="M39 44L41 49L43 44H39Z" fill="#F59E0B"/>
+    <circle cx="41" cy="49" r="0.75" fill="#0F172A"/>
+    <rect x="38.5" y="27" width="5" height="1.5" rx="0.5" fill="#E2E8F0"/>
+  </g>
+</svg>

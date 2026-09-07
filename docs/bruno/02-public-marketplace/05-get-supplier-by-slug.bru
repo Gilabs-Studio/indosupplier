@@ -1,0 +1,23 @@
+meta {
+  name: Get Supplier By Slug
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{base_url}}/api/v1/suppliers/:slug
+  body: none
+  auth: none
+}
+
+params:path {
+  slug: pt-baja-sentosa
+}
+
+vars:pre-request {
+  base_url: http://localhost:8080
+}
+
+docs {
+  Retrieves public supplier profile details, company overview, certifications, products, and buyer reviews by company slug.
+}

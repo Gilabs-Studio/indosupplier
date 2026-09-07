@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56" width="56" height="56" fill="none">
+  <defs>
+    <linearGradient id="calBg" x1="12" y1="8" x2="44" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F8FAFC"/>
+    </linearGradient>
+    <linearGradient id="calHeader" x1="12" y1="8" x2="44" y2="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0D9488"/>
+      <stop offset="100%" stop-color="#0F766E"/>
+    </linearGradient>
+    <linearGradient id="termBadge" x1="26" y1="28" x2="46" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <filter id="calShadow" x="4" y="6" width="48" height="46" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.09"/>
+    </filter>
+  </defs>
+
+  <!-- Calendar Base -->
+  <g filter="url(#calShadow)">
+    <rect x="12" y="10" width="32" height="36" rx="6" fill="url(#calBg)" stroke="#CBD5E1" stroke-width="1.2"/>
+    
+    <!-- Top Header -->
+    <path d="M12 16C12 12.6863 14.6863 10 18 10H38C41.3137 10 44 12.6863 44 16V19H12V16Z" fill="url(#calHeader)"/>
+    
+    <!-- Binder Rings -->
+    <rect x="18" y="7" width="3" height="6" rx="1.5" fill="#334155"/>
+    <rect x="35" y="7" width="3" height="6" rx="1.5" fill="#334155"/>
+  </g>
+
+  <!-- Calendar Day Dots / Grid -->
+  <circle cx="19" cy="25" r="1.8" fill="#CBD5E1"/>
+  <circle cx="26" cy="25" r="1.8" fill="#CBD5E1"/>
+  <circle cx="33" cy="25" r="1.8" fill="#CBD5E1"/>
+  <circle cx="19" cy="31" r="1.8" fill="#CBD5E1"/>
+  <circle cx="26" cy="31" r="1.8" fill="#0D9488"/>
+  <circle cx="19" cy="37" r="1.8" fill="#CBD5E1"/>
+
+  <!-- TOP 30 / Termin Badge -->
+  <g>
+    <rect x="26" y="29" width="19" height="15" rx="3.5" fill="url(#termBadge)" stroke="#FFFFFF" stroke-width="1"/>
+    <text x="35.5" y="36" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="5" font-weight="900" text-anchor="middle">TERMIN</text>
+    <text x="35.5" y="41.5" fill="#FEF08A" font-family="system-ui, -apple-system, sans-serif" font-size="5.5" font-weight="900" text-anchor="middle">30-90D</text>
+  </g>
+</svg>

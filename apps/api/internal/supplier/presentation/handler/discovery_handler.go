@@ -7,6 +7,7 @@ import (
 
 	"github.com/gilabs/indosupplier/api/internal/core/errors"
 	"github.com/gilabs/indosupplier/api/internal/core/response"
+	"github.com/gilabs/indosupplier/api/internal/supplier/domain/dto"
 	"github.com/gilabs/indosupplier/api/internal/supplier/domain/usecase"
 )
 
@@ -47,10 +48,48 @@ func (h *DiscoveryHandler) GetBySlug(c *gin.Context) {
 func (h *DiscoveryHandler) ListProducts(c *gin.Context) {
 	q := c.Query("q")
 	supplierID := c.Query("supplier_id")
-	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
-	perPage, _ := strconv.Atoi(c.DefaultQuery("per_page", "12"))
+	category := c.Query("category")
+	location := c.Query("location")
+	if location == "" {
+		location = c.Query("region")
+	}
+	sort := c.Query("sort")
+	verifiedOnly := c.Query("verified") == "true"
+	powerSupplierOnly := c.Query("power_supplier") == "true"
+	readyStockOnly := c.Query("ready_stock") == "true"
 
-	products, err := h.discoveryUC.ListProducts(c.Request.Context(), q, supplierID, page, perPage)
+	var minPricePtr, maxPricePtr *float64
+	if minPriceStr := c.Query("min_price"); minPriceStr != "" {
+		if val, err := strconv.ParseFloat(minPriceStr, 64); err == nil {
+			minPricePtr = &val
+		}
+	}
+	if maxPriceStr := c.Query("max_price"); maxPriceStr != "" {
+		if val, err := strconv.ParseFloat(maxPriceStr, 64); err == nil {
+			maxPricePtr = &val
+		}
+	}
+
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	perPage, _ := strconv.Atoi(c.DefaultQuery("per_page", c.DefaultQuery("limit", "12")))
+
+	params := dto.ListPublicProductsParams{
+		Query:             q,
+		Category:          category,
+		SupplierID:        supplierID,
+		Location:          location,
+		MinPrice:          minPricePtr,
+		MaxPrice:          maxPricePtr,
+		MinOrder:          c.Query("min_order"),
+		VerifiedOnly:      verifiedOnly,
+		PowerSupplierOnly: powerSupplierOnly,
+		ReadyStockOnly:    readyStockOnly,
+		Sort:              sort,
+		Page:              page,
+		Limit:             perPage,
+	}
+
+	products, err := h.discoveryUC.ListProducts(c.Request.Context(), params)
 	if err != nil {
 		errors.InternalServerErrorResponse(c, err.Error())
 		return

@@ -1,0 +1,19 @@
+meta {
+  name: List Categories
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/v1/categories
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  base_url: http://localhost:8080
+}
+
+docs {
+  Retrieves list of all active product and supplier categories.
+}

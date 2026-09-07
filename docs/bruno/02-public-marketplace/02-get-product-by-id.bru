@@ -1,0 +1,23 @@
+meta {
+  name: Get Product By ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/v1/products/:id
+  body: none
+  auth: none
+}
+
+params:path {
+  id: 00000000-0000-0000-0000-000000000000
+}
+
+vars:pre-request {
+  base_url: http://localhost:8080
+}
+
+docs {
+  Retrieves comprehensive public details of a specific product by ID, including supplier profile, supplier customer reviews, and related products.
+}

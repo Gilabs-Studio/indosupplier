@@ -30,6 +30,16 @@ const badgeVariants = cva(
         inactive: "border-transparent bg-muted text-muted-foreground",
         soft: "border-transparent bg-secondary/50 text-secondary-foreground [a&]:hover:bg-secondary/80",
         dot: "border-transparent bg-transparent text-foreground px-1 gap-1.5 shadow-none [a&]:hover:bg-transparent",
+        power:
+          "border-warning/30 bg-warning/15 text-warning font-bold [a&]:hover:scale-105 [a&]:hover:shadow-xs",
+        verified:
+          "border-success/30 bg-success/15 text-success font-semibold [a&]:hover:scale-105 [a&]:hover:shadow-xs",
+        tag:
+          "border-border bg-secondary text-secondary-foreground font-medium text-[10px] px-1.5 py-0.5",
+        "tag-success":
+          "border-success/30 bg-success/10 text-success font-medium text-[10px] px-1.5 py-0.5",
+        "tag-primary":
+          "border-primary/30 bg-primary/10 text-primary font-medium text-[10px] px-1.5 py-0.5",
       },
     },
     defaultVariants: {

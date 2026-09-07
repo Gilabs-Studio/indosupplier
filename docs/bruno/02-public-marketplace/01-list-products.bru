@@ -1,0 +1,46 @@
+meta {
+  name: List Products
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/v1/products?q=&category=&location=&min_price=&max_price=&min_order=&verified=false&power_supplier=false&ready_stock=false&sort=terlaris&page=1&per_page=12
+  body: none
+  auth: none
+}
+
+params:query {
+  q: 
+  category: 
+  location: 
+  min_price: 
+  max_price: 
+  min_order: 
+  verified: false
+  power_supplier: false
+  ready_stock: false
+  sort: terlaris
+  page: 1
+  per_page: 12
+}
+
+vars:pre-request {
+  base_url: http://localhost:8080
+}
+
+docs {
+  Lists public marketplace products with rich filtering options:
+  - `q`: Free-text search matching product name, description, or supplier company name.
+  - `category`: Category ID, category slug (e.g. `kantor-atk`, `safety-k3`), or category name.
+  - `location`: Supplier city or province (e.g. `Jakarta`, `Surabaya`, `Bandung`).
+  - `min_price`: Minimum product price in IDR.
+  - `max_price`: Maximum product price in IDR.
+  - `min_order`: Minimum purchase requirement filter.
+  - `verified`: Boolean (`true` or `false`) to filter verified suppliers only.
+  - `power_supplier`: Boolean (`true` or `false`) to filter premium/Power Suppliers only.
+  - `ready_stock`: Boolean (`true` or `false`).
+  - `sort`: Sorting order (`terlaris`, `price_asc`, `price_desc`, `rating`, `newest`).
+  - `page`: Pagination page index (1-based, default: 1).
+  - `per_page`: Number of products per page (default: 12).
+}

@@ -1,0 +1,26 @@
+meta {
+  name: List Suppliers
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{base_url}}/api/v1/suppliers?q=&category=&region=&verified=false
+  body: none
+  auth: none
+}
+
+params:query {
+  q: 
+  category: 
+  region: 
+  verified: false
+}
+
+vars:pre-request {
+  base_url: http://localhost:8080
+}
+
+docs {
+  Search and filter verified Indonesian suppliers directory.
+}

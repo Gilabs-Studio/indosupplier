@@ -56,17 +56,37 @@ type PublicProductDto struct {
 	Description         string   `json:"description"`
 	Price               float64  `json:"price"`
 	Currency            string   `json:"currency"`
+	Unit                string   `json:"unit,omitempty"`
 	MinOrder            string   `json:"minOrder"`
 	CapacityText        string   `json:"capacityText"`
 	CategoryName        string   `json:"categoryName"`
+	CategorySlug        string   `json:"categorySlug,omitempty"`
 	Photos              []string `json:"photos"`
 	SupplierID          string   `json:"supplierId"`
 	SupplierCompanyName string   `json:"supplierCompanyName"`
 	SupplierSlug        string   `json:"supplierSlug"`
 	SupplierLocation    string   `json:"supplierLocation"`
 	SupplierVerified    bool     `json:"supplierVerified"`
+	IsPowerSupplier     bool     `json:"isPowerSupplier"`
 	SupplierRating      float64  `json:"supplierRating"`
 	SupplierReviewCount int      `json:"supplierReviewCount"`
+	Tags                []string `json:"tags,omitempty"`
+}
+
+type ListPublicProductsParams struct {
+	Query             string
+	Category          string
+	SupplierID        string
+	Location          string
+	MinPrice          *float64
+	MaxPrice          *float64
+	MinOrder          string
+	VerifiedOnly      bool
+	PowerSupplierOnly bool
+	ReadyStockOnly    bool
+	Sort              string
+	Page              int
+	Limit             int
 }
 
 type PublicReviewDto struct {

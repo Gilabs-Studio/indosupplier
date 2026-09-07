@@ -263,108 +263,127 @@ type seedProd struct {
 }
 
 func getSeedProductsForCategory(categorySlug string) []seedProd {
-	if categorySlug == "steel-metal" {
+	if categorySlug == "office-stationery" || categorySlug == "kantor-atk" {
 		return []seedProd{
 			{
-				Name:          "Reinforced Steel Bar (Rebar) D10",
+				Name:          "Kertas HVS A4 80gsm (1 Karton / 5 Rim)",
+				Description:   "Kertas HVS A4 80gsm kualitas premium, ultra white 98%, cocok untuk fotokopi berkecepatan tinggi, printer laser & inkjet kantor.",
+				MOQ:           "10 Karton",
+				StartingPrice: 215000,
+				Capacity:      "2000 Karton / Bulan",
+				Photos: []string{
+					"/images/products/prod-hvs.png",
+				},
+			},
+			{
+				Name:          "Ballpoint Pen Gel 0.5mm Hitam (1 Box / 12 pcs)",
+				Description:   "Pena gel tinta hitam pekat cepat kering 0.5mm, pegangan karet ergonomis untuk kenyamanan menulis dokumen bisnis kantor.",
+				MOQ:           "20 Box",
+				StartingPrice: 45000,
+				Capacity:      "5000 Box / Bulan",
+				Photos: []string{
+					"/images/categories/cat-kantor-atk.png",
+				},
+			},
+		}
+	} else if categorySlug == "safety-k3" || categorySlug == "kebersihan-k3" {
+		return []seedProd{
+			{
+				Name:          "Masker Medis 3 Ply (1 Box / 50 pcs)",
+				Description:   "Masker bedah medis 3 ply dengan meltblown filter BFE 99%, izin edar Kemenkes RI, tali elastis nyaman dipakai sepanjang hari.",
+				MOQ:           "20 Box",
+				StartingPrice: 28500,
+				Capacity:      "10000 Box / Bulan",
+				Photos: []string{
+					"/images/products/prod-masker.png",
+				},
+			},
+			{
+				Name:          "Safety Helmet SNI Pro Guard",
+				Description:   "Helm keselamatan proyek standar SNI & CE EN397, material ABS high impact dengan inner suspension tali putar 6 titik dan chin strap.",
+				MOQ:           "50 Unit",
+				StartingPrice: 42000,
+				Capacity:      "3000 Unit / Bulan",
+				Photos: []string{
+					"/images/products/prod-helmet.png",
+				},
+			},
+		}
+	} else if categorySlug == "electronics-it" || categorySlug == "elektronik" {
+		return []seedProd{
+			{
+				Name:          "Laptop Business i5 8GB / 512GB SSD",
+				Description:   "Laptop bisnis handal prosesor Intel Core i5 Gen-12, RAM 8GB DDR4 upgradeable, SSD NVMe 512GB, layar 14 inci FHD anti-glare, garansi resmi 2 tahun.",
+				MOQ:           "5 Unit",
+				StartingPrice: 8950000,
+				Capacity:      "200 Unit / Bulan",
+				Photos: []string{
+					"/images/products/prod-laptop.png",
+				},
+			},
+		}
+	} else if categorySlug == "machinery-industrial" || categorySlug == "mesin" {
+		return []seedProd{
+			{
+				Name:          "Pompa Air Sentrifugal Industri 3HP 3-Phase",
+				Description:   "Pompa sentrifugal heavy-duty motor tembaga 3HP 2.2kW 380V, debit air 600 L/menit, head max 32m untuk sirkulasi air pabrik dan pendingin.",
+				MOQ:           "2 Unit",
+				StartingPrice: 4850000,
+				Capacity:      "100 Unit / Bulan",
+				Photos: []string{
+					"/images/products/prod-water-pump.png",
+				},
+			},
+		}
+	} else if categorySlug == "furniture" {
+		return []seedProd{
+			{
+				Name:          "Kursi Kantor Ergonomis Mesh Headrest",
+				Description:   "Kursi kerja manajer ergonomis jaring breathable, lumbar support adjustable, mekanisme recline hidrolik kelas 4 garansi 2 tahun.",
+				MOQ:           "5 Unit",
+				StartingPrice: 1250000,
+				Capacity:      "500 Unit / Bulan",
+				Photos: []string{
+					"/images/products/prod-office-chair.png",
+				},
+			},
+		}
+	} else if categorySlug == "packaging" {
+		return []seedProd{
+			{
+				Name:          "Karton Box Double Wall 40x30x30cm (Pack 25 pcs)",
+				Description:   "Kardus packing corrugated double wall tebal K200/M150/K200 CB Flute, kuat menahan beban hingga 30kg pengiriman ekspedisi dan logistik.",
+				MOQ:           "10 Bundle",
+				StartingPrice: 350000,
+				Capacity:      "5000 Bundle / Bulan",
+				Photos: []string{
+					"/images/products/prod-carton-boxes.png",
+				},
+			},
+		}
+	} else if categorySlug == "steel-metal" {
+		return []seedProd{
+			{
+				Name:          "Reinforced Steel Bar (Rebar) D10 SNI",
 				Description:   "High quality deformed steel rebar D10 for heavy construction, building frameworks, and civil engineering projects. SNI standard certified.",
 				MOQ:           "10 Ton",
 				StartingPrice: 12500000,
 				Capacity:      "500 Ton / Month",
 				Photos: []string{
-					"https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=800&q=80",
-					"https://images.unsplash.com/photo-1516216628859-9bccecad13de?auto=format&fit=crop&w=800&q=80",
-					"https://images.unsplash.com/photo-1581094288338-2314dddb7ecc?auto=format&fit=crop&w=800&q=80",
-				},
-			},
-			{
-				Name:          "Hot Rolled Carbon Steel Plate 6mm",
-				Description:   "ASTM A36 certified hot rolled carbon steel plate, 6mm thickness, ideal for structural fabrications, ship building, and general manufacturing.",
-				MOQ:           "5 Ton",
-				StartingPrice: 14200000,
-				Capacity:      "300 Ton / Month",
-				Photos: []string{
-					"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80",
-					"https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=800&q=80",
-				},
-			},
-			{
-				Name:          "Galvanized Steel Sheet Coil",
-				Description:   "Anti-corrosive hot-dipped galvanized steel coil, zinc coating thickness 120g/m2, suitable for roofing sheets and outdoor structural applications.",
-				MOQ:           "8 Ton",
-				StartingPrice: 16800000,
-				Capacity:      "200 Ton / Month",
-				Photos: []string{
-					"https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80",
-				},
-			},
-		}
-	} else if categorySlug == "textiles-fabrics" {
-		return []seedProd{
-			{
-				Name:          "100% Organic Ring-Spun Cotton Yarn",
-				Description:   "Premium combed ring-spun organic cotton yarn, count Ne 30/1, suitable for weaving high-quality soft fabrics, t-shirts, and baby garments.",
-				MOQ:           "500 Kg",
-				StartingPrice: 48000,
-				Capacity:      "10000 Kg / Month",
-				Photos: []string{
-					"https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?auto=format&fit=crop&w=800&q=80",
-					"https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?auto=format&fit=crop&w=800&q=80",
-				},
-			},
-			{
-				Name:          "Raw Indigo Denim Fabric 12oz",
-				Description:   "Heavy-duty raw indigo selvedge denim fabric 12oz, 100% cotton, standard width 150cm, perfect for authentic jeans and heavy outerwear creation.",
-				MOQ:           "1000 Meters",
-				StartingPrice: 35000,
-				Capacity:      "15000 Meters / Month",
-				Photos: []string{
-					"https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=800&q=80",
-				},
-			},
-			{
-				Name:          "Polyester Staple Fiber Grade A",
-				Description:   "Recycled semi-dull polyester staple fiber, 1.4D x 38mm, ideal for spinning high strength threads and non-woven fabric linings.",
-				MOQ:           "2 Ton",
-				StartingPrice: 26000,
-				Capacity:      "50 Ton / Month",
-				Photos: []string{
-					"https://images.unsplash.com/photo-1558085324-2f298b28c714?auto=format&fit=crop&w=800&q=80",
+					"/images/categories/cat-bahan-baku.png",
 				},
 			},
 		}
 	} else if categorySlug == "agricultural-products" {
 		return []seedProd{
 			{
-				Name:          "Fresh Indonesian Organic Ginger",
-				Description:   "Export quality fresh big ginger (Gajah) and red ginger, organically grown in Central Java. Hand-washed, sorted, and packed in mesh bags.",
-				MOQ:           "1 Ton",
-				StartingPrice: 22000,
-				Capacity:      "30 Ton / Month",
-				Photos: []string{
-					"https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=800&q=80",
-					"https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&w=800&q=80",
-				},
-			},
-			{
-				Name:          "Premium Sumatra Gayo Arabica Coffee Beans",
+				Name:          "Premium Sumatra Gayo Arabica Green Coffee Beans",
 				Description:   "Single-origin Sumatra Gayo Arabica green coffee beans, semi-washed process, Grade 1 double picked. Moisture content 12-13%. Deep herbal notes.",
 				MOQ:           "250 Kg",
 				StartingPrice: 92000,
 				Capacity:      "10 Ton / Month",
 				Photos: []string{
-					"https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80",
-					"https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=800&q=80",
-				},
-			},
-			{
-				Name:          "Natural Coconut Sugar Blocks",
-				Description:   "100% pure organic coconut sap sugar blocks, traditionally processed with no chemicals or additives. Perfect healthy sweetener alternative.",
-				MOQ:           "1 Ton",
-				StartingPrice: 19500,
-				Capacity:      "15 Ton / Month",
-				Photos: []string{
-					"https://images.unsplash.com/photo-1596450514735-2d88a7051187?auto=format&fit=crop&w=800&q=80",
+					"/images/categories/cat-makanan-minuman.png",
 				},
 			},
 		}
@@ -372,51 +391,67 @@ func getSeedProductsForCategory(categorySlug string) []seedProd {
 
 	return []seedProd{
 		{
-			Name:          "Garnet Sand Mesh 80 Almandine",
-			Description:   "High grade almandine garnet sand mesh 80, highly abrasive and clean, optimized for waterjet cutting machines and steel surface sandblasting.",
-			MOQ:           "20 Ton",
-			StartingPrice: 3800000,
-			Capacity:      "500 Ton / Month",
-			Photos: []string{
-				"https://images.unsplash.com/photo-1605281317010-fe5fed93a4c2?auto=format&fit=crop&w=800&q=80",
-				"https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80",
-			},
-		},
-		{
-			Name:          "Sodium Bentonite Clay Powder",
+			Name:          "Sodium Bentonite Clay Powder 25kg",
 			Description:   "Premium expandable sodium bentonite powder for civil engineering, drilling mud stabilizer, and bonding agent in foundry sands.",
 			MOQ:           "10 Ton",
 			StartingPrice: 4500000,
 			Capacity:      "300 Ton / Month",
 			Photos: []string{
-				"https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=800&q=80",
-			},
-		},
-		{
-			Name:          "Activated Carbon Powder Mesh 325",
-			Description:   "Coal-based activated carbon powder 325 mesh, high iodine value (900 mg/g), suitable for municipal water purification and gas adsorption.",
-			MOQ:           "2 Ton",
-			StartingPrice: 16500,
-			Capacity:      "50 Ton / Month",
-			Photos: []string{
-				"https://images.unsplash.com/photo-1607619056574-7b8f30413b46?auto=format&fit=crop&w=800&q=80",
+				"/images/products/prod-mineral-powder.png",
 			},
 		},
 	}
 }
 
 func seedSupplierProducts(db *gorm.DB, supplierProfileID string, industry string) error {
-	categoryName := utils.DefaultCategoryName
-	categorySlug := "industrial-minerals"
-	if industry == "Textile" {
-		categoryName = "Textiles & Fabrics"
-		categorySlug = "textiles-fabrics"
-	} else if industry == "Agriculture" {
-		categoryName = "Agricultural Products"
-		categorySlug = "agricultural-products"
+	categories := []struct {
+		Slug string
+		Name string
+	}{
+		{Slug: "kantor-atk", Name: "Kantor & ATK"},
+		{Slug: "safety-k3", Name: "Kebersihan & K3"},
+		{Slug: "electronics-it", Name: "Elektronik & IT"},
+		{Slug: "machinery-industrial", Name: "Mesin & Industrial"},
+		{Slug: "furniture", Name: "Furniture"},
+		{Slug: "packaging", Name: "Packaging"},
+		{Slug: "steel-metal", Name: "Bahan Baku"},
+		{Slug: "agricultural-products", Name: "Komoditas Tani"},
+	}
+
+	categorySlug := "kantor-atk"
+	categoryName := "Kantor & ATK"
+
+	if industry == "Chemical" || industry == "Manufacturing" {
+		categorySlug = "safety-k3"
+		categoryName = "Kebersihan & K3"
+	} else if industry == "Machinery" {
+		categorySlug = "machinery-industrial"
+		categoryName = "Mesin & Industrial"
 	} else if industry == "Steel Manufacturing" {
-		categoryName = "Steel & Metal"
 		categorySlug = "steel-metal"
+		categoryName = "Bahan Baku"
+	} else if industry == "Agriculture" {
+		categorySlug = "agricultural-products"
+		categoryName = "Komoditas Tani"
+	} else if industry == "Textile" {
+		categorySlug = "packaging"
+		categoryName = "Packaging"
+	}
+
+	// Ensure all standard categories exist
+	for _, c := range categories {
+		var existingCat supplierModels.Category
+		if err := db.Where("slug = ?", c.Slug).First(&existingCat).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				newCat := supplierModels.Category{
+					Slug:        c.Slug,
+					Name:        c.Name,
+					Description: "Kategori produk " + c.Name,
+					IsActive:    true,
+				}
+				_ = db.Create(&newCat)
+			}
+		}
 	}
 
 	var cat supplierModels.Category
