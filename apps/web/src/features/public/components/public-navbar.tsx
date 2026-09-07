@@ -90,19 +90,19 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 gap-4">
+      <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/95 backdrop-blur-md shadow-xs">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 gap-3 sm:gap-6">
         {/* Brand Logo & Kategori */}
-        <div className="flex items-center gap-6 shrink-0">
-          <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-90">
+        <div className="flex items-center gap-4 sm:gap-6 shrink-0">
+          <Link href="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-90">
             <Image
               src="/logo.png"
               alt="IndoSupplier Logo"
               width={110}
               height={22}
-              className="h-5.5 w-auto object-contain brightness-0"
+              className="h-6 w-auto object-contain brightness-0"
             />
-            <span className="font-sans text-[15px] font-semibold tracking-wider uppercase text-foreground hidden sm:inline">
+            <span className="font-sans text-[15px] font-black tracking-wider uppercase text-foreground hidden sm:inline">
               IndoSupplier
             </span>
           </Link>
@@ -110,7 +110,7 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
           {/* Categories Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="hidden md:flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
+              <button className="hidden md:flex items-center gap-1 text-xs font-semibold text-muted-foreground hover:text-foreground cursor-pointer transition-colors">
                 Kategori
                 <ChevronDown className="h-3.5 w-3.5" />
               </button>
@@ -132,16 +132,16 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
           </DropdownMenu>
         </div>
 
-        {/* Search Bar (Modern Integrated Style) */}
-        <div className="flex-1 max-w-sm hidden md:block">
+        {/* Search Bar (Prominent Wide Tokopedia/Shopee Style) */}
+        <div className="flex-1 max-w-3xl mx-2 sm:mx-4">
           <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full">
-            <Search className="absolute left-3 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+            <Search className="absolute left-3.5 h-4 w-4 text-muted-foreground pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari di IndoSupplier..."
-              className="w-full pl-8.5 pr-4 py-1.5 bg-secondary/80 text-foreground placeholder:text-muted-foreground border border-border/70 rounded-full text-xs outline-hidden focus:ring-1 focus:ring-primary/50 focus:border-primary/50 transition-all cursor-pointer font-normal"
+              className="w-full h-10 pl-10 pr-4 bg-secondary/80 text-foreground placeholder:text-muted-foreground/70 border border-border/80 rounded-lg text-xs sm:text-sm outline-hidden focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-normal"
             />
           </form>
         </div>
