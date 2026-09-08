@@ -1,15 +1,23 @@
 import { Suspense } from "react";
 import { BuyerComparePage } from "@/features/buyer/compare/components/buyer-compare-page";
-import { BuyerLayout } from "@/features/buyer/components/buyer-layout";
+import { PublicLayout } from "@/features/public/components/public-layout";
 import { CenteredLoading } from "@/components/loading";
 
-export default function ComparePage() {
+interface ComparePageProps {
+  params: Promise<{ locale: string }>;
+}
+
+export default async function ComparePage({ params }: ComparePageProps) {
+  const { locale } = await params;
+
   return (
     <Suspense
       fallback={
-        <BuyerLayout>
-          <CenteredLoading />
-        </BuyerLayout>
+        <PublicLayout locale={locale}>
+          <div className="w-full min-h-[60vh] flex items-center justify-center">
+            <CenteredLoading />
+          </div>
+        </PublicLayout>
       }
     >
       <BuyerComparePage />

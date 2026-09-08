@@ -8,7 +8,6 @@ import { PublicNavbar } from "@/features/public/components/public-navbar";
 import {
   RefreshCw,
   Heart,
-  Columns3,
   User,
   Headset,
   Wallet,
@@ -63,11 +62,6 @@ export function BuyerLayout({ children }: BuyerLayoutProps) {
       name: t("wishlist"),
       href: "/bookmarks",
       icon: Heart,
-    },
-    {
-      name: t("compare"),
-      href: "/compare",
-      icon: Columns3,
     },
     {
       name: t("profile"),

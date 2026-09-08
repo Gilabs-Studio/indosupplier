@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { toast } from "sonner";
-import { BuyerLayout } from "../../components/buyer-layout";
+import { PublicLayout } from "@/features/public/components/public-layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
@@ -23,20 +23,44 @@ import {
   ShieldCheck,
   Star,
   MapPin,
-  MessageSquare,
-  X,
   Plus,
   Search,
-  Flame,
-  Award,
   Package,
   Store,
+  ArrowLeft,
+  CheckCircle2,
+  Trash2,
+  Tag,
+  Layers,
+  Clock,
+  ThumbsUp,
+  MoreHorizontal,
+  Trophy,
+  ChevronRight,
+  Zap,
+  Building2,
 } from "lucide-react";
 import { useBuyerCompare } from "../hooks/useBuyerCompare";
 import { searchService } from "@/features/public/search/services/search-service";
 import type { PublicSupplierDto, PublicProductDto } from "@/features/public/search/types";
 
 const STAR_KEYS = ["star-1", "star-2", "star-3", "star-4", "star-5"];
+
+const RADAR_POLYGON_COLORS = [
+  { stroke: "var(--color-primary)", fill: "color-mix(in srgb, var(--color-primary) 15%, transparent)" },
+  { stroke: "#06b6d4", fill: "rgba(6, 182, 212, 0.12)" },
+  { stroke: "#f59e0b", fill: "rgba(245, 158, 11, 0.12)" },
+  { stroke: "#10b981", fill: "rgba(16, 185, 129, 0.12)" },
+  { stroke: "#8b5cf6", fill: "rgba(139, 92, 246, 0.12)" },
+];
+
+const ITEM_COLORS = [
+  { bar: "bg-primary", dot: "bg-primary", text: "text-primary" },
+  { bar: "bg-sky-500", dot: "bg-sky-500", text: "text-sky-500" },
+  { bar: "bg-slate-400", dot: "bg-slate-400", text: "text-slate-400" },
+  { bar: "bg-emerald-500", dot: "bg-emerald-500", text: "text-emerald-500" },
+  { bar: "bg-amber-500", dot: "bg-amber-500", text: "text-amber-500" },
+];
 
 export function BuyerComparePage() {
   const t = useTranslations("buyer.compare");
@@ -58,7 +82,7 @@ export function BuyerComparePage() {
   // User tab override state (null = derive from url or data)
   const [userSelectedTab, setUserSelectedTab] = useState<"suppliers" | "products" | null>(null);
 
-  // Computed activeTab during render to avoid cascading renders
+  // Computed activeTab during render
   const activeTab: "suppliers" | "products" =
     userSelectedTab ??
     (tabParam === "products" || tabParam === "suppliers"
@@ -75,6 +99,7 @@ export function BuyerComparePage() {
       window.history.replaceState({}, "", url.toString());
     }
   };
+
   const [isSupplierSearchOpen, setIsSupplierSearchOpen] = useState(false);
   const [isProductSearchOpen, setIsProductSearchOpen] = useState(false);
   const [supplierQuery, setSupplierQuery] = useState("");
@@ -97,7 +122,22 @@ export function BuyerComparePage() {
   const [selectedSupplierReviewTab, setSelectedSupplierReviewTab] = useState<string>("");
   const [selectedProductReviewTab, setSelectedProductReviewTab] = useState<string>("");
 
-  // Determine active tab IDs during render to avoid synchronous state updates in useEffect
+  // Interactive Radar toggle state
+  const [disabledSupplierIds, setDisabledSupplierIds] = useState<string[]>([]);
+  const [disabledProductIds, setDisabledProductIds] = useState<string[]>([]);
+
+  const toggleSupplierRadarItem = (id: string) => {
+    setDisabledSupplierIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const toggleProductRadarItem = (id: string) => {
+    setDisabledProductIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
   const activeSupplierId = suppliers.some((s) => s.id === selectedSupplierReviewTab)
     ? selectedSupplierReviewTab
     : (suppliers[0]?.id || "");
@@ -136,7 +176,7 @@ export function BuyerComparePage() {
     setIsProductSearchOpen(true);
   };
 
-  // Debounce search active database suppliers (Infinite Scroll Page 1)
+  // Debounce search active database suppliers
   useEffect(() => {
     if (!isSupplierSearchOpen) return;
     const delay = setTimeout(async () => {
@@ -155,7 +195,7 @@ export function BuyerComparePage() {
     return () => clearTimeout(delay);
   }, [supplierQuery, isSupplierSearchOpen]);
 
-  // Debounce search active database products (Infinite Scroll Page 1)
+  // Debounce search active database products
   useEffect(() => {
     if (!isProductSearchOpen) return;
     const delay = setTimeout(async () => {
@@ -174,8 +214,7 @@ export function BuyerComparePage() {
     return () => clearTimeout(delay);
   }, [productQuery, isProductSearchOpen]);
 
-  // Fetch next page of suppliers
-  const fetchMoreSuppliers = async () => {
+  const handleLoadMoreSuppliers = async () => {
     if (isSupplierLoadingMore || !hasMoreSuppliers) return;
     setIsSupplierLoadingMore(true);
     const nextPage = supplierPage + 1;
@@ -184,15 +223,14 @@ export function BuyerComparePage() {
       setSupplierResults((prev) => [...prev, ...res]);
       setSupplierPage(nextPage);
       setHasMoreSuppliers(res.length === 5);
-    } catch (error) {
-      console.error("Error loading more suppliers:", error);
+    } catch (err) {
+      console.error(err);
     } finally {
       setIsSupplierLoadingMore(false);
     }
   };
 
-  // Fetch next page of products
-  const fetchMoreProducts = async () => {
+  const handleLoadMoreProducts = async () => {
     if (isProductLoadingMore || !hasMoreProducts) return;
     setIsProductLoadingMore(true);
     const nextPage = productPage + 1;
@@ -201,274 +239,145 @@ export function BuyerComparePage() {
       setProductResults((prev) => [...prev, ...res]);
       setProductPage(nextPage);
       setHasMoreProducts(res.length === 5);
-    } catch (error) {
-      console.error("Error loading more products:", error);
+    } catch (err) {
+      console.error(err);
     } finally {
       setIsProductLoadingMore(false);
     }
   };
 
-  // Scroll event handlers
-  const handleSupplierScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const target = e.currentTarget;
-    if (target.scrollHeight - target.scrollTop <= target.clientHeight + 15) {
-      fetchMoreSuppliers();
-    }
-  };
-
-  const handleProductScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const target = e.currentTarget;
-    if (target.scrollHeight - target.scrollTop <= target.clientHeight + 15) {
-      fetchMoreProducts();
-    }
-  };
-
-  const handleAddSupplier = (id: string) => {
-    if (suppliers.some((s) => s.id === id)) {
-      toast.error(t("supplierAlreadyAdded"));
+  const handleAddSupplier = (supplierProfileId: string) => {
+    if (suppliers.some((s) => s.id === supplierProfileId)) {
+      toast.info(t("supplierAlreadyAdded"));
       return;
     }
     if (suppliers.length >= 5) {
       toast.error(t("supplierLimitReached"));
       return;
     }
-    addSupplier(id);
-    setIsSupplierSearchOpen(false);
-    setSupplierQuery("");
-    toast.success(t("supplierAddedSuccess"));
+    addSupplier(supplierProfileId, {
+      onSuccess: () => {
+        toast.success(t("supplierAddedSuccess"));
+        setIsSupplierSearchOpen(false);
+      },
+    });
   };
 
-  const handleAddProduct = (id: string) => {
-    if (products.some((p) => p.id === id)) {
-      toast.error(t("productAlreadyAdded"));
+  const handleAddProduct = (productId: string) => {
+    if (products.some((p) => p.id === productId)) {
+      toast.info(t("productAlreadyAdded"));
       return;
     }
     if (products.length >= 5) {
       toast.error(t("productLimitReached"));
       return;
     }
-    addProduct(id);
-    setIsProductSearchOpen(false);
-    setProductQuery("");
-    toast.success(t("productAddedSuccess"));
+    addProduct(productId, {
+      onSuccess: () => {
+        toast.success(t("productAddedSuccess"));
+        setIsProductSearchOpen(false);
+      },
+    });
   };
 
-
-
-  const renderSupplierSearchResults = () => {
-    if (isSupplierLoading && supplierResults.length === 0) {
-      return (
-        <CenteredLoading className="py-12" spinnerClassName="h-6 w-6 text-primary" />
-      );
-    }
-    if (supplierResults.length > 0) {
-      return (
-        <>
-          {supplierResults.map((supplier) => (
-            <div
-              key={supplier.id}
-              className="flex items-center justify-between p-3 border border-border rounded-lg bg-card hover:bg-muted/30 transition-colors"
-            >
-              <div className="space-y-0.5">
-                <h4 className="font-semibold text-sm text-foreground">{supplier.companyName}</h4>
-                <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                  <span>{supplier.location}</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-border" />
-                  <span>Est. {supplier.establishedYear}</span>
-                </div>
-              </div>
-              {suppliers.some((s) => s.id === supplier.id) ? (
-                <Button
-                  disabled
-                  size="sm"
-                  className="bg-muted text-muted-foreground border border-border rounded-lg text-xs font-semibold shadow-none cursor-not-allowed"
-                >
-                  {t("itemSelectedText")}
-                </Button>
-              ) : (
-                <Button
-                  onClick={() => handleAddSupplier(supplier.id)}
-                  size="sm"
-                  className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg text-xs font-semibold shadow-xs"
-                >
-                  <Plus className="h-3.5 w-3.5 mr-1" /> {t("btnCompare")}
-                </Button>
-              )}
-            </div>
-          ))}
-          {isSupplierLoadingMore && (
-            <div className="flex items-center justify-center py-2">
-              <LoadingSpinner className="h-4 w-4 animate-spin text-primary" />
-            </div>
-          )}
-        </>
-      );
-    }
-    return (
-      <div className="flex flex-col items-center justify-center py-12 text-center space-y-3">
-        <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-muted/45 text-muted-foreground border border-border">
-          <Search className="h-5 w-5 opacity-40" />
-        </div>
-        <div className="space-y-1">
-          <p className="text-sm font-bold text-foreground">{t("noSuppliersFound")}</p>
-          <p className="text-xs text-muted-foreground max-w-[240px] mx-auto">
-            {t("startTyping")}
-          </p>
-        </div>
-      </div>
-    );
-  };
-
-  const renderProductSearchResults = () => {
-    if (isProductLoading && productResults.length === 0) {
-      return (
-        <CenteredLoading className="py-12" spinnerClassName="h-6 w-6 text-primary" />
-      );
-    }
-    if (productResults.length > 0) {
-      return (
-        <>
-          {productResults.map((product) => (
-            <div
-              key={product.id}
-              className="flex items-center justify-between p-3 border border-border rounded-lg bg-card hover:bg-muted/30 transition-colors"
-            >
-              <div className="space-y-0.5 flex-1 pr-4">
-                <h4 className="font-semibold text-sm text-foreground line-clamp-1">{product.name}</h4>
-                <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                  <span className="text-primary font-bold">{formatPrice(product.price)}</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-border" />
-                  <span className="truncate max-w-[120px]">{product.supplierCompanyName}</span>
-                </div>
-              </div>
-              {products.some((p) => p.id === product.id) ? (
-                <Button
-                  disabled
-                  size="sm"
-                  className="bg-muted text-muted-foreground border border-border rounded-lg text-xs font-semibold shadow-none cursor-not-allowed"
-                >
-                  {t("itemSelectedText")}
-                </Button>
-              ) : (
-                <Button
-                  onClick={() => handleAddProduct(product.id)}
-                  size="sm"
-                  className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg text-xs font-semibold shadow-xs"
-                >
-                  <Plus className="h-3.5 w-3.5 mr-1" /> {t("btnCompare")}
-                </Button>
-              )}
-            </div>
-          ))}
-          {isProductLoadingMore && (
-            <div className="flex items-center justify-center py-2">
-              <LoadingSpinner className="h-4 w-4 animate-spin text-primary" />
-            </div>
-          )}
-        </>
-      );
-    }
-    return (
-      <div className="flex flex-col items-center justify-center py-12 text-center space-y-3">
-        <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-muted/45 text-muted-foreground border border-border">
-          <Search className="h-5 w-5 opacity-40" />
-        </div>
-        <div className="space-y-1">
-          <p className="text-sm font-bold text-foreground">{t("noProductsFound")}</p>
-          <p className="text-xs text-muted-foreground max-w-[240px] mx-auto">
-            {t("startTyping")}
-          </p>
-        </div>
-      </div>
-    );
-  };
-
-  // Normalized scoring helpers for Supplier Radar Chart
+  // Helper metric score calculations (0 to 1 scale)
   const getMoqScore = (moqText: string) => {
     const num = Number.parseInt(moqText.replace(/\D/g, ""), 10) || 100;
-    if (num <= 100) return 1;
+    if (num <= 50) return 1;
+    if (num <= 100) return 0.9;
     if (num <= 200) return 0.85;
     if (num <= 500) return 0.7;
     if (num <= 1000) return 0.5;
-    return 0.3;
+    return 0.35;
   };
 
   const getResponseScore = (respText: string) => {
-    const num = Number.parseInt(respText.replace(/\D/g, ""), 10) || 4;
+    const num = Number.parseInt(respText.replace(/\D/g, ""), 10) || 2;
     if (num <= 1) return 1;
-    if (num <= 2) return 0.85;
-    if (num <= 4) return 0.7;
-    if (num <= 8) return 0.5;
-    return 0.3;
+    if (num <= 2) return 0.9;
+    if (num <= 4) return 0.75;
+    if (num <= 8) return 0.55;
+    return 0.35;
   };
 
   const getCapacityScore = (capText: string) => {
     const lower = capText.toLowerCase();
-    if (lower.includes("50 ton") || lower.includes("100 ton") || lower.includes("10.000")) return 1;
-    if (lower.includes("20 ton") || lower.includes("5.000")) return 0.85;
-    if (lower.includes("10 ton") || lower.includes("2.000")) return 0.7;
-    if (lower.includes("5 ton") || lower.includes("1.000")) return 0.5;
-    return 0.3;
+    if (lower.includes("500 ton") || lower.includes("100 ton") || lower.includes("50 ton") || lower.includes("10.000")) return 0.95;
+    if (lower.includes("25 ton") || lower.includes("20 ton") || lower.includes("5.000")) return 0.85;
+    if (lower.includes("10 ton") || lower.includes("2.000")) return 0.75;
+    if (lower.includes("5 ton") || lower.includes("1.000")) return 0.6;
+    return 0.45;
   };
 
   const getAgeScore = (year: number) => {
     const age = new Date().getFullYear() - year;
-    if (age >= 15) return 1;
-    if (age >= 10) return 0.85;
-    if (age >= 5) return 0.7;
-    if (age >= 2) return 0.55;
-    return 0.4;
+    if (age >= 15) return 0.95;
+    if (age >= 10) return 0.88;
+    if (age >= 5) return 0.78;
+    if (age >= 2) return 0.6;
+    return 0.45;
   };
 
-  // Normalized scoring helpers for Product Radar Chart
   const getProductPriceScore = (price: number) => {
     const allPrices = products.map((p) => p.price).filter(Boolean);
-    if (allPrices.length <= 1) return 0.8;
+    if (allPrices.length <= 1) return 0.85;
     const min = Math.min(...allPrices);
     const max = Math.max(...allPrices);
-    if (max === min) return 0.8;
-    // Lower price is better -> inverse linear mapping
-    return 1 - ((price - min) / (max - min)) * 0.6;
+    if (max === min) return 0.85;
+    return 1 - ((price - min) / (max - min)) * 0.45;
   };
-
-  // Color mappings for each item slot (up to 5)
-  const itemColors = [
-    { stroke: "#6366f1", fill: "rgba(99, 102, 241, 0.15)", hex: "#6366f1", badge: "bg-indigo-500/10 text-indigo-500 border-indigo-500/20" },
-    { stroke: "#f43f5e", fill: "rgba(244, 63, 94, 0.15)", hex: "#f43f5e", badge: "bg-rose-500/10 text-rose-500 border-rose-500/20" },
-    { stroke: "#06b6d4", fill: "rgba(6, 182, 212, 0.15)", hex: "#06b6d4", badge: "bg-cyan-500/10 text-cyan-500 border-cyan-500/20" },
-    { stroke: "#f59e0b", fill: "rgba(245, 158, 11, 0.15)", hex: "#f59e0b", badge: "bg-amber-500/10 text-amber-600 border-amber-500/20" },
-    { stroke: "#10b981", fill: "rgba(16, 185, 129, 0.15)", hex: "#10b981", badge: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" },
-  ];
 
   const isLoading = isSuppliersLoading || isProductsLoading;
 
   if (isLoading) {
     return (
-      <BuyerLayout>
-        <CenteredLoading />
-      </BuyerLayout>
+      <PublicLayout locale={locale}>
+        <div className="w-full min-h-[60vh] flex items-center justify-center py-24">
+          <CenteredLoading />
+        </div>
+      </PublicLayout>
     );
   }
 
-  // Draw Supplier Radar Chart
+  // Determine best product for recommendation
+  const bestProduct = products.length > 0
+    ? [...products].sort((a, b) => {
+        const scoreA = getProductPriceScore(a.price) + getMoqScore(a.moq) + (a.supplierRating / 5);
+        const scoreB = getProductPriceScore(b.price) + getMoqScore(b.moq) + (b.supplierRating / 5);
+        return scoreB - scoreA;
+      })[0]
+    : null;
+
+  // Determine best supplier for recommendation
+  const bestSupplier = suppliers.length > 0
+    ? [...suppliers].sort((a, b) => {
+        const scoreA = (a.rating / 5) + getMoqScore(a.moq) + getResponseScore(a.responseTime);
+        const scoreB = (b.rating / 5) + getMoqScore(b.moq) + getResponseScore(b.responseTime);
+        return scoreB - scoreA;
+      })[0]
+    : null;
+
+  // Current active review item
+  const currentProduct = products.find((p) => p.id === activeProductId) || products[0];
+  const currentSupplier = suppliers.find((s) => s.id === activeSupplierId) || suppliers[0];
+
+  // Supplier Radar Chart Component
   const renderSupplierRadar = () => {
     if (suppliers.length === 0) return null;
 
-    const cx = 150;
-    const cy = 150;
-    const r = 90;
+    const cx = 175;
+    const cy = 145;
+    const r = 80;
     const axes = [
-      { label: "Penilaian (Rating)", key: "rating" },
-      { label: "MOQ Rendah", key: "moq" },
-      { label: "Kapasitas", key: "capacity" },
-      { label: "Respon Cepat", key: "response" },
-      { label: "Usia Bisnis", key: "age" },
+      { label: t("axisRating"), key: "rating" },
+      { label: t("axisLowMoq"), key: "moq" },
+      { label: t("axisCapacity"), key: "capacity" },
+      { label: t("axisFastResponse"), key: "response" },
+      { label: t("axisBusinessAge"), key: "age" },
     ];
 
-    // Axis angles
     const angles = axes.map((_, i) => (Math.PI * 2 / 5) * i - Math.PI / 2);
 
-    // Calculate polygons for each compared supplier
     const polygons = suppliers.map((s, idx) => {
       const ratingVal = s.rating / 5;
       const moqVal = getMoqScore(s.moq);
@@ -483,13 +392,24 @@ export function BuyerComparePage() {
         return `${x},${y}`;
       }).join(" ");
 
-      return { id: s.id, points, colors: itemColors[idx] };
+      return { id: s.id, points, colors: RADAR_POLYGON_COLORS[idx % RADAR_POLYGON_COLORS.length] };
     });
 
     return (
-      <div className="flex flex-col items-center bg-card border border-border p-6 rounded-lg shadow-xs w-full max-w-sm mx-auto">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4">{t("visualChartTitle")}</h4>
-        <svg viewBox="0 0 300 300" className="w-full h-auto" role="img" aria-label={t("visualChartTitle")}>
+      <div className="flex flex-col items-center justify-between bg-card border border-border p-6 rounded-2xl shadow-2xs h-full">
+        <div className="w-full flex items-center justify-between pb-3 border-b border-border/40">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            {t("visualChartTitle")}
+          </h4>
+          <span className="text-xs text-muted-foreground font-medium">
+            {t("activeCount", {
+              active: suppliers.length - disabledSupplierIds.length,
+              total: suppliers.length,
+            })}
+          </span>
+        </div>
+
+        <svg viewBox="0 0 350 290" className="w-full max-w-[310px] h-auto my-2" role="img" aria-label={t("visualChartTitle")}>
           {/* Concentric grid lines */}
           {[0.33, 0.66, 1].map((scale) => {
             const gridPoints = angles.map((ang) => {
@@ -502,7 +422,8 @@ export function BuyerComparePage() {
                 key={`concentric-${scale}`}
                 points={gridPoints}
                 fill="none"
-                stroke="var(--color-border)"
+                stroke="currentColor"
+                className="text-border/80"
                 strokeWidth="1"
                 strokeDasharray="4 2"
               />
@@ -520,67 +441,87 @@ export function BuyerComparePage() {
                 y1={cy}
                 x2={x}
                 y2={y}
-                stroke="var(--color-border)"
+                stroke="currentColor"
+                className="text-border/80"
                 strokeWidth="1"
               />
             );
           })}
 
-          {/* Polygons */}
-          {polygons.map((poly) => (
-            <polygon
-              key={`poly-${poly.id}`}
-              points={poly.points}
-              fill={poly.colors.fill}
-              stroke={poly.colors.stroke}
-              strokeWidth="2"
-              className="transition-all duration-300"
-            />
-          ))}
+          {/* Polygons (Filtered by disabled state) */}
+          {polygons
+            .filter((poly) => !disabledSupplierIds.includes(poly.id))
+            .map((poly) => (
+              <polygon
+                key={`poly-${poly.id}`}
+                points={poly.points}
+                fill={poly.colors.fill}
+                stroke={poly.colors.stroke}
+                strokeWidth="2"
+                className="transition-all duration-300"
+              />
+            ))}
 
           {/* Labels */}
-          {axes.map((ax, i) => {
-            // Shift labels outwards
-            const labelDist = r + 18;
-            const x = cx + Math.cos(angles[i]) * labelDist;
-            const y = cy + Math.sin(angles[i]) * labelDist;
-            let textAnchor: "start" | "middle" | "end" = "middle";
-            if (Math.cos(angles[i]) > 0.1) textAnchor = "start";
-            else if (Math.cos(angles[i]) < -0.1) textAnchor = "end";
-
+          {axes.map((axis, i) => {
+            const labelR = r + 24;
+            const x = cx + Math.cos(angles[i]) * labelR;
+            const y = cy + Math.sin(angles[i]) * labelR;
             return (
               <text
-                key={`axis-label-${ax.key}`}
+                key={axis.key}
                 x={x}
                 y={y}
-                textAnchor={textAnchor}
-                className="fill-muted-foreground text-[10px] font-semibold"
-                alignmentBaseline="middle"
+                textAnchor="middle"
+                dominantBaseline="central"
+                className="text-[11px] font-semibold fill-muted-foreground"
               >
-                {ax.label}
+                {axis.label}
               </text>
             );
           })}
         </svg>
-        <div className="flex gap-2 mt-4 flex-wrap justify-center">
-          {suppliers.map((s, idx) => (
-            <div key={s.id} className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-muted/30 border border-border/50">
-              <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: itemColors[idx].hex }} aria-hidden="true" />
-              <span className="truncate max-w-[140px]" title={s.companyName}>{s.companyName}</span>
-            </div>
-          ))}
+
+        {/* Interactive Clickable Legend */}
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-3 border-t border-border/40 w-full">
+          {suppliers.map((s, idx) => {
+            const isDisabled = disabledSupplierIds.includes(s.id);
+            return (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => toggleSupplierRadarItem(s.id)}
+                aria-pressed={!isDisabled}
+                title={isDisabled ? t("showItemTooltip", { name: s.companyName }) : t("hideItemTooltip", { name: s.companyName })}
+                className={cn(
+                  "flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold cursor-pointer select-none transition-all duration-200 border",
+                  isDisabled
+                    ? "bg-muted/20 border-border/40 text-muted-foreground/40 opacity-50 line-through"
+                    : "bg-muted/50 border-border text-foreground hover:bg-muted hover:border-primary/40 shadow-2xs hover:scale-[1.02] active:scale-[0.98]"
+                )}
+              >
+                <span
+                  className={cn(
+                    "w-2 h-2 rounded-full transition-colors",
+                    isDisabled ? "bg-muted-foreground/30" : ITEM_COLORS[idx % ITEM_COLORS.length].dot
+                  )}
+                />
+                <span>{s.companyName}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
     );
   };
 
-  // Draw Product Radar Chart
+  // Product Radar Chart Component
   const renderProductRadar = () => {
     if (products.length === 0) return null;
 
-    const cx = 150;
-    const cy = 150;
-    const r = 90;
+    const cx = 175;
+    const cy = 145;
+    const r = 80;
     const axes = [
       { label: t("axisCheapest"), key: "price" },
       { label: t("axisLowMoq"), key: "moq" },
@@ -605,13 +546,24 @@ export function BuyerComparePage() {
         return `${x},${y}`;
       }).join(" ");
 
-      return { id: p.id, points, colors: itemColors[idx] };
+      return { id: p.id, points, colors: RADAR_POLYGON_COLORS[idx % RADAR_POLYGON_COLORS.length] };
     });
 
     return (
-      <div className="flex flex-col items-center bg-card border border-border p-6 rounded-lg shadow-xs w-full max-w-sm mx-auto">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4">{t("visualChartTitle")}</h4>
-        <svg viewBox="0 0 300 300" className="w-full h-auto" role="img" aria-label={t("visualChartTitle")}>
+      <div className="flex flex-col items-center justify-between bg-card border border-border p-6 rounded-2xl shadow-2xs h-full">
+        <div className="w-full flex items-center justify-between pb-3 border-b border-border/40">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            {t("visualChartTitle")}
+          </h4>
+          <span className="text-xs text-muted-foreground font-medium">
+            {t("activeCount", {
+              active: products.length - disabledProductIds.length,
+              total: products.length,
+            })}
+          </span>
+        </div>
+
+        <svg viewBox="0 0 350 290" className="w-full max-w-[310px] h-auto my-2" role="img" aria-label={t("visualChartTitle")}>
           {/* Concentric grid lines */}
           {[0.33, 0.66, 1].map((scale) => {
             const gridPoints = angles.map((ang) => {
@@ -624,7 +576,8 @@ export function BuyerComparePage() {
                 key={`concentric-${scale}`}
                 points={gridPoints}
                 fill="none"
-                stroke="var(--color-border)"
+                stroke="currentColor"
+                className="text-border/80"
                 strokeWidth="1"
                 strokeDasharray="4 2"
               />
@@ -642,1079 +595,1397 @@ export function BuyerComparePage() {
                 y1={cy}
                 x2={x}
                 y2={y}
-                stroke="var(--color-border)"
+                stroke="currentColor"
+                className="text-border/80"
                 strokeWidth="1"
               />
             );
           })}
 
-          {/* Polygons */}
-          {polygons.map((poly) => (
-            <polygon
-              key={`poly-${poly.id}`}
-              points={poly.points}
-              fill={poly.colors.fill}
-              stroke={poly.colors.stroke}
-              strokeWidth="2"
-              className="transition-all duration-300"
-            />
-          ))}
+          {/* Polygons (Filtered by disabled state) */}
+          {polygons
+            .filter((poly) => !disabledProductIds.includes(poly.id))
+            .map((poly) => (
+              <polygon
+                key={`poly-${poly.id}`}
+                points={poly.points}
+                fill={poly.colors.fill}
+                stroke={poly.colors.stroke}
+                strokeWidth="2"
+                className="transition-all duration-300"
+              />
+            ))}
 
           {/* Labels */}
-          {axes.map((ax, i) => {
-            const labelDist = r + 18;
-            const x = cx + Math.cos(angles[i]) * labelDist;
-            const y = cy + Math.sin(angles[i]) * labelDist;
-            let textAnchor: "start" | "middle" | "end" = "middle";
-            if (Math.cos(angles[i]) > 0.1) textAnchor = "start";
-            else if (Math.cos(angles[i]) < -0.1) textAnchor = "end";
-
+          {axes.map((axis, i) => {
+            const labelR = r + 24;
+            const x = cx + Math.cos(angles[i]) * labelR;
+            const y = cy + Math.sin(angles[i]) * labelR;
             return (
               <text
-                key={`axis-label-${ax.key}`}
+                key={axis.key}
                 x={x}
                 y={y}
-                textAnchor={textAnchor}
-                className="fill-muted-foreground text-[10px] font-semibold"
-                alignmentBaseline="middle"
+                textAnchor="middle"
+                dominantBaseline="central"
+                className="text-[11px] font-semibold fill-muted-foreground"
               >
-                {ax.label}
+                {axis.label}
               </text>
             );
           })}
         </svg>
-        <div className="flex gap-2 mt-4 flex-wrap justify-center">
-          {products.map((p, idx) => (
-            <div key={p.id} className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-muted/30 border border-border/50">
-              <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: itemColors[idx].hex }} aria-hidden="true" />
-              <span className="truncate max-w-[140px]" title={p.name}>{p.name}</span>
+
+        {/* Interactive Clickable Legend */}
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-3 border-t border-border/40 w-full">
+          {products.map((p, idx) => {
+            const isDisabled = disabledProductIds.includes(p.id);
+            return (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => toggleProductRadarItem(p.id)}
+                aria-pressed={!isDisabled}
+                title={isDisabled ? t("showItemTooltip", { name: p.name }) : t("hideItemTooltip", { name: p.name })}
+                className={cn(
+                  "flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold cursor-pointer select-none transition-all duration-200 border",
+                  isDisabled
+                    ? "bg-muted/20 border-border/40 text-muted-foreground/40 opacity-50 line-through"
+                    : "bg-muted/50 border-border text-foreground hover:bg-muted hover:border-primary/40 shadow-2xs hover:scale-[1.02] active:scale-[0.98]"
+                )}
+              >
+                <span
+                  className={cn(
+                    "w-2 h-2 rounded-full transition-colors",
+                    isDisabled ? "bg-muted-foreground/30" : ITEM_COLORS[idx % ITEM_COLORS.length].dot
+                  )}
+                />
+                <span>{p.name}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  const renderSupplierSearchResults = () => {
+    if (isSupplierLoading && supplierResults.length === 0) {
+      return <CenteredLoading className="py-12" spinnerClassName="h-6 w-6 text-primary" />;
+    }
+    if (supplierResults.length > 0) {
+      return (
+        <>
+          {supplierResults.map((supplier) => (
+            <div
+              key={supplier.id}
+              className="flex items-center justify-between p-3.5 border border-border/80 rounded-xl hover:bg-muted/40 transition-colors"
+            >
+              <div className="space-y-0.5">
+                <h4 className="font-semibold text-sm text-foreground">{supplier.companyName}</h4>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <span>{supplier.location}</span>
+                  <span className="w-1 h-1 rounded-full bg-border" />
+                  <span>Est. {supplier.establishedYear}</span>
+                </div>
+              </div>
+              {suppliers.some((s) => s.id === supplier.id) ? (
+                <Button
+                  disabled
+                  size="sm"
+                  variant="secondary"
+                  className="rounded-lg text-xs font-semibold shadow-none cursor-not-allowed"
+                >
+                  {t("itemSelectedText")}
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => handleAddSupplier(supplier.id)}
+                  size="sm"
+                  className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg text-xs font-semibold shadow-xs transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  <Plus className="h-3.5 w-3.5 mr-1" /> {t("btnCompare")}
+                </Button>
+              )}
             </div>
           ))}
+          {isSupplierLoadingMore && (
+            <div className="flex items-center justify-center py-3">
+              <LoadingSpinner className="h-4 w-4 animate-spin text-primary" />
+            </div>
+          )}
+        </>
+      );
+    }
+    return (
+      <div className="flex flex-col items-center justify-center py-12 text-center space-y-3">
+        <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-muted text-muted-foreground border border-border">
+          <Search className="h-5 w-5 opacity-40" />
+        </div>
+        <div className="space-y-1">
+          <p className="text-sm font-semibold text-foreground">{t("noSuppliersFound")}</p>
+          <p className="text-xs text-muted-foreground max-w-[240px] mx-auto">
+            {t("startTyping")}
+          </p>
+        </div>
+      </div>
+    );
+  };
+
+  const renderProductSearchResults = () => {
+    if (isProductLoading && productResults.length === 0) {
+      return <CenteredLoading className="py-12" spinnerClassName="h-6 w-6 text-primary" />;
+    }
+    if (productResults.length > 0) {
+      return (
+        <>
+          {productResults.map((product) => (
+            <div
+              key={product.id}
+              className="flex items-center justify-between p-3.5 border border-border/80 rounded-xl hover:bg-muted/40 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-lg bg-muted/40 overflow-hidden flex items-center justify-center shrink-0 border border-border/50">
+                  {product.photos?.[0] ? (
+                    <img
+                      src={product.photos[0]}
+                      alt={product.name}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = "/images/products/prod-hvs.webp";
+                      }}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Package className="h-5 w-5 text-muted-foreground/40" />
+                  )}
+                </div>
+                <div className="space-y-0.5 max-w-[240px] sm:max-w-xs">
+                  <h4 className="font-semibold text-sm text-foreground truncate">{product.name}</h4>
+                  <p className="text-xs text-muted-foreground font-medium">{formatPrice(product.price)}</p>
+                  <p className="text-[11px] text-muted-foreground truncate">{product.supplierCompanyName}</p>
+                </div>
+              </div>
+              {products.some((p) => p.id === product.id) ? (
+                <Button
+                  disabled
+                  size="sm"
+                  variant="secondary"
+                  className="rounded-lg text-xs font-semibold shadow-none cursor-not-allowed"
+                >
+                  {t("itemSelectedText")}
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => handleAddProduct(product.id)}
+                  size="sm"
+                  className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg text-xs font-semibold shadow-xs transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  <Plus className="h-3.5 w-3.5 mr-1" /> {t("btnCompare")}
+                </Button>
+              )}
+            </div>
+          ))}
+          {isProductLoadingMore && (
+            <div className="flex items-center justify-center py-3">
+              <LoadingSpinner className="h-4 w-4 animate-spin text-primary" />
+            </div>
+          )}
+        </>
+      );
+    }
+    return (
+      <div className="flex flex-col items-center justify-center py-12 text-center space-y-3">
+        <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-muted text-muted-foreground border border-border">
+          <Search className="h-5 w-5 opacity-40" />
+        </div>
+        <div className="space-y-1">
+          <p className="text-sm font-semibold text-foreground">{t("noProductsFound")}</p>
+          <p className="text-xs text-muted-foreground max-w-[240px] mx-auto">
+            {t("startTyping")}
+          </p>
         </div>
       </div>
     );
   };
 
   return (
-    <BuyerLayout>
-      <div className="space-y-8">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+    <PublicLayout locale={locale}>
+      <div className="container mx-auto px-4 py-8 max-w-7xl space-y-12">
+        {/* Top Breadcrumb */}
+        <nav className="flex items-center gap-2 text-xs text-muted-foreground">
+          <Link href="/" className="hover:text-foreground transition-colors">
+            {t("breadcrumbHome")}
+          </Link>
+          <span>/</span>
+          <Link href="/bookmarks" className="hover:text-foreground transition-colors">
+            {t("breadcrumbBookmarks")}
+          </Link>
+          <span>/</span>
+          <span className="text-foreground font-medium">
+            {t("title")}
+          </span>
+        </nav>
+
+        {/* Header Title & Actions */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
-            <h1 className="text-2xl font-bold tracking-tight text-foreground font-heading">
-              {t("title")}
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground font-heading">
+              {activeTab === "products"
+                ? t("compareTitleProducts")
+                : t("title")}
             </h1>
-            <p className="text-sm text-muted-foreground">{t("subtitle")}</p>
+            <p className="text-xs sm:text-sm text-muted-foreground max-w-2xl">
+              {activeTab === "products"
+                ? t("compareSubtitleProducts")
+                : t("subtitle")}
+            </p>
           </div>
-          <Button
-            asChild
-            variant="outline"
-            className="w-full sm:w-auto cursor-pointer border-border hover:border-muted-foreground transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 shadow-xs rounded-lg px-4 py-2"
-          >
-            <Link href="/bookmarks">{t("btnBack")}</Link>
-          </Button>
+
+          <div className="flex items-center gap-3">
+            <Button
+              asChild
+              variant="outline"
+              size="sm"
+              className="cursor-pointer border-border hover:border-muted-foreground/40 rounded-lg text-xs font-medium transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 shadow-xs"
+            >
+              <Link href="/bookmarks" className="flex items-center gap-1.5">
+                <ArrowLeft className="h-3.5 w-3.5" />
+                {t("btnBack")}
+              </Link>
+            </Button>
+
+            {activeTab === "suppliers" && suppliers.length > 0 && suppliers.length < 5 && (
+              <Button
+                onClick={openSupplierSearch}
+                size="sm"
+                className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg text-xs font-semibold shadow-xs transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
+              >
+                <Plus className="h-3.5 w-3.5 mr-1" /> {t("btnAddSupplier")}
+              </Button>
+            )}
+
+            {activeTab === "products" && products.length > 0 && products.length < 5 && (
+              <Button
+                onClick={openProductSearch}
+                size="sm"
+                className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg text-xs font-semibold shadow-xs transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
+              >
+                <Plus className="h-3.5 w-3.5 mr-1" /> {t("btnAddProduct")}
+              </Button>
+            )}
+          </div>
         </div>
 
-        {/* Supplier / Product Tabs Selector */}
-        <div className="flex items-center gap-6 border-b border-border overflow-x-auto pb-1 scrollbar-none mb-6">
-          <button
-            onClick={() => handleTabChange("suppliers")}
-            className={cn(
-              "px-2 py-2 text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer hover:text-primary hover:-translate-y-0.5 active:translate-y-0 flex items-center",
-              activeTab === "suppliers"
-                ? "text-primary font-semibold"
-                : "text-muted-foreground"
-            )}
-          >
-            <Store className="h-4 w-4 mr-2" />
-            {t("compareCountSuppliers", { count: suppliers.length })}
-          </button>
-          <button
-            onClick={() => handleTabChange("products")}
-            className={cn(
-              "px-2 py-2 text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer hover:text-primary hover:-translate-y-0.5 active:translate-y-0 flex items-center",
-              activeTab === "products"
-                ? "text-primary font-semibold"
-                : "text-muted-foreground"
-            )}
-          >
-            <Package className="h-4 w-4 mr-2" />
-            {t("compareCountProducts", { count: products.length })}
-          </button>
+        {/* Segmented Tab Switcher */}
+        <div className="flex items-center justify-between border-b border-border/50 pb-4">
+          <div className="inline-flex p-1 bg-muted/40 rounded-xl border border-border/50">
+            <button
+              onClick={() => handleTabChange("suppliers")}
+              className={cn(
+                "px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer flex items-center gap-2",
+                activeTab === "suppliers"
+                  ? "bg-card text-foreground shadow-xs border border-border/80 font-semibold"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+              )}
+            >
+              <Store className="h-4 w-4" />
+              <span>{t("compareCountSuppliers", { count: suppliers.length })}</span>
+              <span
+                className={cn(
+                  "text-[10px] font-bold px-1.5 py-0.5 rounded-md",
+                  activeTab === "suppliers"
+                    ? "bg-primary/10 text-primary"
+                    : "bg-muted text-muted-foreground"
+                )}
+              >
+                {suppliers.length}/5
+              </span>
+            </button>
+
+            <button
+              onClick={() => handleTabChange("products")}
+              className={cn(
+                "px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer flex items-center gap-2",
+                activeTab === "products"
+                  ? "bg-card text-foreground shadow-xs border border-border/80 font-semibold"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+              )}
+            >
+              <Package className="h-4 w-4" />
+              <span>{t("compareCountProducts", { count: products.length })}</span>
+              <span
+                className={cn(
+                  "text-[10px] font-bold px-1.5 py-0.5 rounded-md",
+                  activeTab === "products"
+                    ? "bg-primary/10 text-primary"
+                    : "bg-muted text-muted-foreground"
+                )}
+              >
+                {products.length}/5
+              </span>
+            </button>
+          </div>
+
+          <span className="hidden md:inline-block text-xs text-muted-foreground">
+            {activeTab === "suppliers" ? t("compareMaxSuppliers") : t("compareMaxProducts")}
+          </span>
         </div>
 
-        {/* SUPPLIERS TAB */}
+        {/* TAB 1: SUPPLIERS */}
         {activeTab === "suppliers" && (
           suppliers.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-12 text-center border border-dashed border-border rounded-lg bg-muted/5 max-w-xl mx-auto p-8 gap-4">
-                <div className="bg-muted p-4 rounded-full text-muted-foreground">
-                  <Flame className="h-8 w-8" />
-                </div>
-                <div className="space-y-1">
-                  <h3 className="font-bold text-base text-foreground">{t("emptyTitle")}</h3>
-                  <p className="text-xs text-muted-foreground">{t("emptyDesc")}</p>
-                </div>
-                <Button
-                  onClick={openSupplierSearch}
-                  className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/95 transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/30 rounded-lg px-6"
-                >
-                  <Plus className="h-4 w-4 mr-1.5" /> {t("btnAddSupplier")}
-                </Button>
+            <div className="flex flex-col items-center justify-center py-20 px-4 text-center border border-dashed border-border rounded-2xl bg-muted/5 max-w-xl mx-auto space-y-5">
+              <div className="w-14 h-14 rounded-2xl bg-muted/60 border border-border flex items-center justify-center text-muted-foreground">
+                <Store className="h-7 w-7 opacity-60" />
               </div>
-            ) : (
-              <>
-                {/* Unified Cards Scrollable Row */}
-                <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20">
-              {suppliers.map((supplier) => (
-                <div
-                  key={supplier.id}
-                  className="relative flex flex-col items-center justify-center p-6 border border-border bg-card rounded-lg shadow-xs hover:shadow-md transition-all duration-300 w-[280px] shrink-0 h-[340px]"
-                >
-                  <Button
-                    onClick={() => removeSupplier(supplier.id)}
-                    variant="ghost"
-                    size="icon"
-                    aria-label={`Hapus ${supplier.companyName} dari perbandingan`}
-                    title={`Hapus ${supplier.companyName} dari perbandingan`}
-                    className="absolute right-2.5 top-2.5 h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg cursor-pointer transition-colors focus-visible:ring-2 focus-visible:ring-destructive"
-                  >
-                    <X className="h-4 w-4" aria-hidden="true" />
-                  </Button>
-
-                  {/* Rating Circle score (versus.com style) */}
-                  <div className="relative w-16 h-16 rounded-full border border-border flex flex-col items-center justify-center bg-muted/20 mt-4 mb-4">
-                    <span className="text-base font-extrabold text-foreground">
-                      {(supplier.rating * 20).toFixed(0)}
-                    </span>
-                    <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-wider">{t("visualChartScore")}</span>
-                  </div>
-
-                  <h3 className="font-bold text-foreground text-center text-sm truncate max-w-full px-2 mb-1">
-                    {supplier.companyName}
-                  </h3>
-                  <div className="flex items-center gap-1 text-muted-foreground text-xs font-normal mb-6">
-                    <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                    <span>{supplier.location.split(",")[0]}</span>
-                  </div>
-
-                  <div className="w-full flex flex-col gap-2 mt-auto border-t border-border pt-4">
-                    <Button
-                      asChild
-                      size="sm"
-                      className="w-full bg-primary text-primary-foreground hover:bg-primary/95 text-xs font-semibold cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/20 rounded-lg"
-                    >
-                      <Link href="/rfq/create">
-                        <MessageSquare className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
-                        {t("sendRfq")}
-                      </Link>
-                    </Button>
-                    <Button
-                      asChild
-                      variant="outline"
-                      size="sm"
-                      className="w-full text-xs font-semibold border-border hover:border-muted-foreground cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0 rounded-lg shadow-xs"
-                    >
-                      <Link href={`/demo/suppliers/${supplier.slug}`}>{t("profileDetail")}</Link>
-                    </Button>
-                  </div>
-                </div>
-              ))}
-
-              {suppliers.length < 5 && (
-                <div
-                  className="flex flex-col items-center justify-center p-8 border border-dashed border-border rounded-lg bg-muted text-center w-[280px] shrink-0 h-[340px]"
-                >
-                  <Flame className="h-10 w-10 text-muted-foreground opacity-30 mb-4" aria-hidden="true" />
-                  <p className="text-xs text-muted-foreground font-medium mb-4">{t("compareMaxSuppliers")}</p>
-                  <Button
-                    onClick={openSupplierSearch}
-                    variant="outline"
-                    className="cursor-pointer border-dashed border-border hover:border-solid hover:bg-card transition-all hover:-translate-y-0.5 active:translate-y-0 rounded-lg px-4"
-                  >
-                    <Plus className="h-4 w-4 mr-1.5" aria-hidden="true" /> {t("btnAddSupplier")}
-                  </Button>
-                </div>
-              )}
+              <div className="space-y-1.5 max-w-sm">
+                <h3 className="font-bold text-lg text-foreground font-heading">{t("emptyTitle")}</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">{t("emptyDesc")}</p>
+              </div>
+              <Button
+                onClick={openSupplierSearch}
+                className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/95 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/30 rounded-lg px-6 text-xs font-semibold"
+              >
+                <Plus className="h-4 w-4 mr-1.5" /> {t("btnAddSupplier")}
+              </Button>
             </div>
+          ) : (
+            <div className="space-y-12">
+              {/* SECTION 1: SUPPLIER YANG DIBANDINGKAN (Full-width Unified Table with Crisp Grid Borders) */}
+              <div className="space-y-4">
+                <h3 className="font-bold text-lg text-foreground font-heading">
+                  {t("comparedSuppliersTitle")}
+                </h3>
 
-            {suppliers.length > 0 && (
-              <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
-                {/* SVG Radar Chart Column */}
-                <div className="xl:col-span-5">
-                  {renderSupplierRadar()}
-                </div>
-
-                {/* Versus Visual Progress Bars & Table Column */}
-                <div className="xl:col-span-7 space-y-6">
-                  <div className="bg-card border border-border rounded-lg p-6 shadow-xs">
-                    <h3 className="text-sm font-bold text-foreground mb-6 flex items-center gap-1.5 font-heading">
-                      <Award className="h-4 w-4 text-primary" aria-hidden="true" /> {t("sectionReputationPoints")}
-                    </h3>
-                    <div className="space-y-6">
-                      {/* Rating Progress comparison */}
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center text-xs font-semibold">
-                          <span className="text-muted-foreground">{t("rating")} (Star Rating)</span>
-                          <span className="text-foreground">{t("highestScoreRating")}</span>
-                        </div>
-                        <div className="flex flex-col gap-2 bg-muted/10 p-3 rounded-lg border border-border">
-                          {suppliers.map((s, idx) => {
-                            const ratingPercent = Math.min(100, Math.round((s.rating / 5) * 100));
-                            return (
-                              <div key={s.id} className="space-y-1">
-                                <div className="flex justify-between text-[11px] font-medium">
-                                  <span className="truncate max-w-[180px]">{s.companyName}</span>
-                                  <span>{s.rating} / 5 ({t("reviewsVerifiedCount", { count: s.reviewCount })})</span>
-                                </div>
-                                <div
-                                  role="progressbar"
-                                  aria-label={`${s.companyName} skor rating: ${ratingPercent}%`}
-                                  aria-valuenow={ratingPercent}
-                                  aria-valuemin={0}
-                                  aria-valuemax={100}
-                                  className="h-2 w-full bg-muted rounded-xs overflow-hidden"
-                                >
-                                  <div
-                                    className="h-full rounded-xs transition-all duration-500"
-                                    style={{ width: `${ratingPercent}%`, backgroundColor: itemColors[idx].hex }}
-                                  />
-                                </div>
+                <div className="overflow-x-auto rounded-xl border border-border bg-card shadow-2xs">
+                  <table className="w-full text-left border-collapse border-spacing-0">
+                    <thead>
+                      <tr className="bg-muted/15">
+                        <th className="p-5 w-[200px] min-w-[170px] text-xs font-bold text-muted-foreground uppercase tracking-wider align-bottom border-r border-b border-border">
+                          {t("specifications")}
+                        </th>
+                        {suppliers.map((s) => (
+                          <th key={s.id} className="p-5 min-w-[240px] max-w-[280px] align-top font-normal border-r border-b border-border last:border-r-0">
+                            <div className="flex flex-col items-center text-center space-y-3">
+                              {/* Supplier Logo / Avatar */}
+                              <div className="w-20 h-20 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xl border border-primary/20 shadow-xs">
+                                {s.companyName.charAt(0)}
                               </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      {/* Waktu Respon comparison */}
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center text-xs font-semibold">
-                          <span className="text-muted-foreground">{t("response")}</span>
-                          <span className="text-foreground">{t("fasterIsBetter")}</span>
-                        </div>
-                        <div className="flex flex-col gap-2 bg-muted/10 p-3 rounded-lg border border-border">
-                          {suppliers.map((s, idx) => {
-                            const hours = Number.parseInt(s.responseTime.replace(/\D/g, ""), 10) || 4;
-                            const score = Math.max(10, 100 - (hours - 1) * 12);
-                            return (
-                              <div key={s.id} className="space-y-1">
-                                <div className="flex justify-between text-[11px] font-medium">
-                                  <span className="truncate max-w-[180px]">{s.companyName}</span>
-                                  <span>{s.responseTime}</span>
-                                </div>
-                                <div
-                                  role="progressbar"
-                                  aria-label={`${s.companyName} kecepatan respon: ${s.responseTime}`}
-                                  aria-valuenow={score}
-                                  aria-valuemin={0}
-                                  aria-valuemax={100}
-                                  className="h-2 w-full bg-muted rounded-xs overflow-hidden"
-                                >
-                                  <div
-                                    className="h-full rounded-xs transition-all duration-500"
-                                    style={{ width: `${score}%`, backgroundColor: itemColors[idx].hex }}
-                                  />
-                                </div>
+                              <div className="space-y-0.5 w-full">
+                                <h4 className="font-bold text-sm text-foreground line-clamp-2 min-h-[2.5rem]">
+                                  {s.companyName}
+                                </h4>
+                                <p className="text-xs text-muted-foreground truncate">{s.businessType}</p>
                               </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      {/* MOQ Comparison */}
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center text-xs font-semibold">
-                          <span className="text-muted-foreground">{t("moq")} (Minimum Order Quantity)</span>
-                          <span className="text-foreground">{t("smallerIsBetter")}</span>
-                        </div>
-                        <div className="flex flex-col gap-2 bg-muted/10 p-3 rounded-lg border border-border">
-                          {suppliers.map((s, idx) => {
-                            const score = Math.round(getMoqScore(s.moq) * 100);
-                            return (
-                              <div key={s.id} className="space-y-1">
-                                <div className="flex justify-between text-[11px] font-medium">
-                                  <span className="truncate max-w-[180px]">{s.companyName}</span>
-                                  <span>{s.moq}</span>
-                                </div>
-                                <div
-                                  role="progressbar"
-                                  aria-label={`${s.companyName} skor MOQ: ${score}%`}
-                                  aria-valuenow={score}
-                                  aria-valuemin={0}
-                                  aria-valuemax={100}
-                                  className="h-2 w-full bg-muted rounded-xs overflow-hidden"
-                                >
-                                  <div
-                                    className="h-full rounded-xs transition-all duration-500"
-                                    style={{ width: `${score}%`, backgroundColor: itemColors[idx].hex }}
-                                  />
-                                </div>
+                              <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground">
+                                <Star className="h-3.5 w-3.5 fill-warning text-warning" />
+                                <span className="font-semibold text-foreground">{s.rating.toFixed(1)}</span>
+                                <span>({s.reviewCount})</span>
                               </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                              <button
+                                type="button"
+                                onClick={() => removeSupplier(s.id)}
+                                className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-destructive cursor-pointer transition-colors py-1"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                                <span>{t("btnRemove")}</span>
+                              </button>
+                              <Button
+                                asChild
+                                size="sm"
+                                className="w-full cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 text-xs font-semibold rounded-lg shadow-xs mt-1"
+                              >
+                                <Link href={`/rfq/create?supplier=${s.id}`}>
+                                  {t("sendRfq")}
+                                </Link>
+                              </Button>
+                            </div>
+                          </th>
+                        ))}
+                        {suppliers.length < 5 && (
+                          <th className="p-5 min-w-[200px] align-middle text-center font-normal border-b border-border">
+                            <button
+                              onClick={openSupplierSearch}
+                              className="flex flex-col items-center justify-center w-full h-56 rounded-xl border border-dashed border-border hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 cursor-pointer p-4 space-y-2 text-muted-foreground hover:text-primary"
+                            >
+                              <div className="w-9 h-9 rounded-full bg-muted flex items-center justify-center">
+                                <Plus className="h-4 w-4" />
+                              </div>
+                              <span className="text-xs font-semibold">{t("btnAddSupplierShort")}</span>
+                            </button>
+                          </th>
+                        )}
+                      </tr>
+                    </thead>
 
-                  {/* Fact sheet table details */}
-                  <div className="overflow-x-auto border border-border rounded-lg bg-card shadow-xs scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20">
-                    <table className="w-full border-collapse text-left text-sm text-foreground" aria-label={t("specDetails")}>
-                      <caption className="sr-only">{t("specDetails")}</caption>
-                      <thead>
-                        <tr className="border-b border-border bg-muted/20">
-                          <th
-                            scope="col"
-                            className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-bold text-muted-foreground min-w-[170px] z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)]"
-                          >
-                            {t("specDetails")}
-                          </th>
-                          {suppliers.map((s, idx) => (
-                            <th key={s.id} scope="col" className="p-4 font-bold min-w-[190px] border-r border-border/40 last:border-r-0">
-                              <span className="text-[10px] uppercase tracking-wider opacity-60 block">{t("specSupplier").toUpperCase()} {idx + 1}</span>
-                              <span className="font-semibold text-foreground line-clamp-2 mt-0.5">{s.companyName}</span>
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-border">
-                        <tr>
-                          <th scope="row" className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-semibold text-muted-foreground z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] text-left">
-                            {t("specBusinessType")}
-                          </th>
-                          {suppliers.map((s) => (
-                            <td key={s.id} className="p-4 border-r border-border/40 last:border-r-0">
-                              {s.businessType}
-                            </td>
-                          ))}
-                        </tr>
-                        <tr>
-                          <th scope="row" className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-semibold text-muted-foreground z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] text-left">
-                            {t("specEstablishedYear")}
-                          </th>
-                          {suppliers.map((s) => (
-                            <td key={s.id} className="p-4 border-r border-border/40 last:border-r-0">
-                              {s.establishedYear} {t("businessAgeYears", { age: new Date().getFullYear() - s.establishedYear })}
-                            </td>
-                          ))}
-                        </tr>
-                        <tr>
-                          <th scope="row" className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-semibold text-muted-foreground z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] text-left">
-                            {t("specVerificationLevel")}
-                          </th>
-                          {suppliers.map((s) => (
-                            <td key={s.id} className="p-4 border-r border-border/40 last:border-r-0">
-                              {s.verified ? (
-                                <Badge variant="outline" className="text-[10px] text-success border-success/20 bg-success/10 rounded-lg">
-                                  <ShieldCheck className="h-3 w-3 mr-1" aria-hidden="true" /> {t("verifiedB2b")}
-                                </Badge>
-                              ) : (
-                                <Badge variant="secondary" className="text-[10px] rounded-lg">Draft/Registered</Badge>
-                              )}
-                            </td>
-                          ))}
-                        </tr>
-                        <tr>
-                          <th scope="row" className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-semibold text-muted-foreground z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] text-left">
-                            {t("specLegalCertifications")}
-                          </th>
-                          {suppliers.map((s) => (
-                            <td key={s.id} className="p-4 border-r border-border/40 last:border-r-0">
-                              <div className="flex flex-wrap gap-1">
-                                {s.certifications.length > 0 ? (
-                                  s.certifications.map((c) => (
-                                    <Badge key={`cert-${c}`} variant="outline" className="text-[10px] border-border text-muted-foreground rounded-lg">
-                                      {c}
-                                    </Badge>
-                                  ))
-                                ) : (
-                                  <span className="text-xs text-muted-foreground italic">{t("noCertificates")}</span>
+                    <tbody className="text-xs sm:text-sm">
+                      {/* 1. Tipe Bisnis */}
+                      <tr className="hover:bg-muted/5 transition-colors">
+                        <td className="p-4 font-semibold text-foreground bg-muted/10 border-r border-b border-border flex items-center gap-2">
+                          <Building2 className="h-4 w-4 text-primary shrink-0" />
+                          <span>{t("specBusinessType")}</span>
+                        </td>
+                        {suppliers.map((s) => (
+                          <td key={`biz-${s.id}`} className="p-4 text-foreground font-medium border-r border-b border-border last:border-r-0">
+                            {s.businessType}
+                          </td>
+                        ))}
+                        {suppliers.length < 5 && <td className="p-4 border-b border-border" />}
+                      </tr>
+
+                      {/* 2. Tahun Berdiri */}
+                      <tr className="hover:bg-muted/5 transition-colors">
+                        <td className="p-4 font-semibold text-foreground bg-muted/10 border-r border-b border-border flex items-center gap-2">
+                          <Clock className="h-4 w-4 text-primary shrink-0" />
+                          <span>{t("specEstablishedYear")}</span>
+                        </td>
+                        {suppliers.map((s) => {
+                          const minYear = Math.min(...suppliers.map((sup) => sup.establishedYear));
+                          const isOldest = s.establishedYear === minYear && suppliers.length > 1;
+                          return (
+                            <td key={`year-${s.id}`} className="p-4 text-foreground font-medium border-r border-b border-border last:border-r-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span>{s.establishedYear} {t("businessAgeYears", { age: new Date().getFullYear() - s.establishedYear })}</span>
+                                {isOldest && (
+                                  <Badge variant="secondary" className="bg-primary/10 text-primary border border-primary/20 text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                                    {t("oldestBadge")}
+                                  </Badge>
                                 )}
                               </div>
                             </td>
-                          ))}
-                        </tr>
-                      </tbody>
-                    </table>
+                          );
+                        })}
+                        {suppliers.length < 5 && <td className="p-4 border-b border-border" />}
+                      </tr>
+
+                      {/* 3. Lokasi */}
+                      <tr className="hover:bg-muted/5 transition-colors">
+                        <td className="p-4 font-semibold text-foreground bg-muted/10 border-r border-b border-border flex items-center gap-2">
+                          <MapPin className="h-4 w-4 text-primary shrink-0" />
+                          <span>{t("location")}</span>
+                        </td>
+                        {suppliers.map((s) => (
+                          <td key={`loc-${s.id}`} className="p-4 text-foreground font-medium border-r border-b border-border last:border-r-0">
+                            {s.location}
+                          </td>
+                        ))}
+                        {suppliers.length < 5 && <td className="p-4 border-b border-border" />}
+                      </tr>
+
+                      {/* 4. Tingkat Verifikasi */}
+                      <tr className="hover:bg-muted/5 transition-colors">
+                        <td className="p-4 font-semibold text-foreground bg-muted/10 border-r border-b border-border flex items-center gap-2">
+                          <ShieldCheck className="h-4 w-4 text-primary shrink-0" />
+                          <span>{t("specVerificationLevel")}</span>
+                        </td>
+                        {suppliers.map((s) => (
+                          <td key={`ver-${s.id}`} className="p-4 border-r border-b border-border last:border-r-0">
+                            {s.verified ? (
+                              <Badge variant="outline" className="text-[10px] text-success border-success/30 bg-success/10 rounded-md font-semibold px-2 py-0.5">
+                                <CheckCircle2 className="h-3 w-3 mr-1 text-success" />
+                                {t("verifiedB2b")}
+                              </Badge>
+                            ) : (
+                              <Badge variant="secondary" className="text-[10px] text-muted-foreground">
+                                {t("standard")}
+                              </Badge>
+                            )}
+                          </td>
+                        ))}
+                        {suppliers.length < 5 && <td className="p-4 border-b border-border" />}
+                      </tr>
+
+                      {/* 5. Minimal Order (MOQ) */}
+                      <tr className="hover:bg-muted/5 transition-colors">
+                        <td className="p-4 font-semibold text-foreground bg-muted/10 border-r border-b border-border flex items-center gap-2">
+                          <Package className="h-4 w-4 text-primary shrink-0" />
+                          <span>{t("moq")}</span>
+                        </td>
+                        {suppliers.map((s) => {
+                          const scores = suppliers.map((sup) => getMoqScore(sup.moq));
+                          const maxScore = Math.max(...scores);
+                          const isLowestMoq = getMoqScore(s.moq) === maxScore && suppliers.length > 1;
+                          return (
+                            <td key={`moq-${s.id}`} className="p-4 text-foreground font-medium border-r border-b border-border last:border-r-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span>{s.moq}</span>
+                                {isLowestMoq && (
+                                  <Badge variant="secondary" className="bg-primary/10 text-primary border border-primary/20 text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                                    {t("smallestBadge")}
+                                  </Badge>
+                                )}
+                              </div>
+                            </td>
+                          );
+                        })}
+                        {suppliers.length < 5 && <td className="p-4 border-b border-border" />}
+                      </tr>
+
+                      {/* 6. Waktu Respon */}
+                      <tr className="hover:bg-muted/5 transition-colors">
+                        <td className="p-4 font-semibold text-foreground bg-muted/10 border-r border-b border-border flex items-center gap-2">
+                          <Zap className="h-4 w-4 text-primary shrink-0" />
+                          <span>{t("response")}</span>
+                        </td>
+                        {suppliers.map((s) => {
+                          const scores = suppliers.map((sup) => getResponseScore(sup.responseTime));
+                          const maxScore = Math.max(...scores);
+                          const isFastest = getResponseScore(s.responseTime) === maxScore && suppliers.length > 1;
+                          return (
+                            <td key={`resp-${s.id}`} className="p-4 text-foreground font-medium border-r border-b border-border last:border-r-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span>{s.responseTime}</span>
+                                {isFastest && (
+                                  <Badge variant="secondary" className="bg-primary/10 text-primary border border-primary/20 text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                                    {t("fastestBadge")}
+                                  </Badge>
+                                )}
+                              </div>
+                            </td>
+                          );
+                        })}
+                        {suppliers.length < 5 && <td className="p-4 border-b border-border" />}
+                      </tr>
+
+                      {/* 7. Sertifikasi */}
+                      <tr className="hover:bg-muted/5 transition-colors">
+                        <td className="p-4 font-semibold text-foreground bg-muted/10 border-r border-border flex items-center gap-2">
+                          <ShieldCheck className="h-4 w-4 text-primary shrink-0" />
+                          <span>{t("specLegalCertifications")}</span>
+                        </td>
+                        {suppliers.map((s) => (
+                          <td key={`cert-${s.id}`} className="p-4 border-r border-border last:border-r-0">
+                            <div className="flex flex-wrap gap-1.5">
+                              {s.certifications && s.certifications.length > 0 ? (
+                                s.certifications.map((c) => (
+                                  <Badge key={c} variant="outline" className="text-[10px] border-border text-foreground font-normal px-2 py-0.5">
+                                    {c}
+                                  </Badge>
+                                ))
+                              ) : (
+                                <span className="text-muted-foreground text-xs italic">-</span>
+                              )}
+                            </div>
+                          </td>
+                        ))}
+                        {suppliers.length < 5 && <td className="p-4" />}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* SECTION 2: ANALISIS POIN & REPUTASI (Dedicated Section with Radar Chart + Grouped Bars) */}
+              <div className="space-y-4">
+                <h3 className="font-bold text-lg text-foreground font-heading">
+                  {t("sectionReputationPoints")}
+                </h3>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                  {/* Left: Graphic Radar Chart */}
+                  <div className="lg:col-span-5">
+                    {renderSupplierRadar()}
                   </div>
 
-                  {/* Versus Style User Review Tab comparison */}
-                  <div className="bg-card border border-border rounded-lg p-6 shadow-xs space-y-6">
-                    <div className="space-y-3">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                        <h3 className="text-base font-bold text-foreground font-heading">{t("userReviews")}</h3>
-                        <p className="text-xs text-muted-foreground">{t("selectSupplierToViewReviews") || "Pilih supplier untuk melihat rincian ulasan"}</p>
-                      </div>
-
-                      {suppliers.length > 0 && (
-                        <div
-                          role="tablist"
-                          aria-label={t("userReviews")}
-                          className="flex flex-wrap gap-2 p-1.5 bg-muted/20 border border-border rounded-lg"
-                        >
+                  {/* Right: Grouped Horizontal Comparison Bars & Best Overall Recommendation */}
+                  <div className="lg:col-span-7 bg-card border border-border rounded-2xl p-6 shadow-2xs flex flex-col justify-between space-y-6">
+                    <div>
+                      {/* Header with Legend (Interactive toggle) */}
+                      <div className="flex items-center justify-between pb-3 border-b border-border/40 gap-2 mb-5">
+                        <h4 className="font-bold text-sm text-foreground">
+                          {t("keyMetricComparison")}
+                        </h4>
+                        <div className="flex items-center gap-2 text-xs flex-wrap justify-end">
                           {suppliers.map((s, idx) => {
-                            const isSelected = s.id === activeSupplierId;
+                            const isDisabled = disabledSupplierIds.includes(s.id);
                             return (
                               <button
                                 key={s.id}
                                 type="button"
-                                role="tab"
-                                id={`tab-supplier-${s.id}`}
-                                aria-selected={isSelected}
-                                aria-controls={`panel-supplier-${s.id}`}
-                                onClick={() => setSelectedSupplierReviewTab(s.id)}
+                                onClick={() => toggleSupplierRadarItem(s.id)}
+                                title={isDisabled ? t("showItemTooltip", { name: s.companyName }) : t("hideItemTooltip", { name: s.companyName })}
                                 className={cn(
-                                  "cursor-pointer text-xs font-semibold px-3 py-2 rounded-md transition-all duration-200 flex items-center gap-2 text-left hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary",
-                                  isSelected
-                                    ? "bg-card text-foreground shadow-xs border border-primary/30 ring-1 ring-primary/20 font-bold"
-                                    : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                                  "flex items-center gap-1 cursor-pointer select-none transition-all duration-200",
+                                  isDisabled && "opacity-40 line-through"
                                 )}
                               >
                                 <span
-                                  className="w-2.5 h-2.5 rounded-full shrink-0"
-                                  style={{ backgroundColor: itemColors[idx].hex }}
-                                  aria-hidden="true"
+                                  className={cn(
+                                    "w-2 h-2 rounded-full",
+                                    isDisabled ? "bg-muted-foreground/30" : ITEM_COLORS[idx % ITEM_COLORS.length].dot
+                                  )}
                                 />
-                                <span className="truncate max-w-[200px] sm:max-w-[260px]">{s.companyName}</span>
+                                <span className="text-[11px] text-muted-foreground truncate max-w-[90px]">
+                                  {s.companyName.split(" ")[0]}
+                                </span>
                               </button>
                             );
                           })}
                         </div>
-                      )}
+                      </div>
+
+                      {/* Grouped Comparison Bars */}
+                      <div className="space-y-4">
+                        {[
+                          { label: t("axisRating"), icon: Star, getScore: (s: typeof suppliers[0]) => (s.rating / 5) },
+                          { label: t("axisLowMoq"), icon: Package, getScore: (s: typeof suppliers[0]) => getMoqScore(s.moq) },
+                          { label: t("axisCapacity"), icon: Layers, getScore: (s: typeof suppliers[0]) => getCapacityScore(s.capacity) },
+                          { label: t("axisFastResponse"), icon: Zap, getScore: (s: typeof suppliers[0]) => getResponseScore(s.responseTime) },
+                          { label: t("axisBusinessAge"), icon: Clock, getScore: (s: typeof suppliers[0]) => getAgeScore(s.establishedYear) },
+                        ].map((metric) => {
+                          const Icon = metric.icon;
+                          return (
+                            <div key={metric.label} className="space-y-1.5">
+                              <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
+                                <Icon className="h-3.5 w-3.5 text-muted-foreground" />
+                                <span>{metric.label}</span>
+                              </div>
+                              <div className="space-y-1 pl-5">
+                                {suppliers.map((s, idx) => {
+                                  const isDisabled = disabledSupplierIds.includes(s.id);
+                                  if (isDisabled) return null;
+                                  const score = metric.getScore(s);
+                                  const color = ITEM_COLORS[idx % ITEM_COLORS.length];
+                                  return (
+                                    <div key={s.id} className="flex items-center gap-2 text-xs transition-all duration-300">
+                                      <div className="flex-1 h-2.5 bg-muted/60 rounded-full overflow-hidden">
+                                        <div
+                                          className={cn("h-full rounded-full transition-all duration-500", color.bar)}
+                                          style={{ width: `${Math.round(score * 100)}%` }}
+                                        />
+                                      </div>
+                                      <span className="w-8 text-right font-semibold text-[11px] text-muted-foreground">
+                                        {(score * 10).toFixed(1)}
+                                      </span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
 
-                    {suppliers.map((s) => {
-                      if (s.id !== activeSupplierId) return null;
-                      const scoreQuality = Math.min(100, Math.round(s.rating * 20));
-                      const scoreDelivery = s.rating >= 4.5 ? 95 : 85;
+                    {/* Rekomendasi Best Overall Card */}
+                    {bestSupplier && (
+                      <div className="rounded-xl bg-primary/5 border border-primary/20 p-4 flex items-center justify-between gap-3 mt-4">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                            <Trophy className="h-5 w-5" />
+                          </div>
+                          <div className="min-w-0">
+                            <span className="text-[10px] font-bold text-primary block uppercase tracking-wider">
+                              {t("recommendation")}
+                            </span>
+                            <h5 className="text-xs sm:text-sm font-bold text-foreground truncate">
+                              {t("bestOverallSupplier", { name: bestSupplier.companyName })}
+                            </h5>
+                            <p className="text-[11px] text-muted-foreground line-clamp-1">
+                              {t("bestOverallSupplierDesc")}
+                            </p>
+                          </div>
+                        </div>
+                        <ChevronRight className="h-4 w-4 text-primary shrink-0" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
 
-                      return (
-                        <div
+              {/* SECTION 3: ULASAN PENGGUNA (Borderless & Clean Layout) */}
+              <div className="space-y-6 pt-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border/40">
+                  <h3 className="font-bold text-lg text-foreground font-heading">
+                    {t("userReviews")}
+                  </h3>
+                  {suppliers.length > 1 && (
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {suppliers.map((s) => (
+                        <button
                           key={s.id}
-                          role="tabpanel"
-                          id={`panel-supplier-${s.id}`}
-                          aria-labelledby={`tab-supplier-${s.id}`}
-                          className="space-y-6"
+                          onClick={() => setSelectedSupplierReviewTab(s.id)}
+                          className={cn(
+                            "px-3 py-1 rounded-lg text-xs font-medium cursor-pointer transition-colors border",
+                            activeSupplierId === s.id
+                              ? "bg-primary text-primary-foreground border-primary"
+                              : "bg-muted/40 text-muted-foreground border-border hover:bg-muted"
+                          )}
                         >
-                          {/* Aggregate ratings card */}
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-muted/10 p-5 border border-border rounded-lg">
-                            <div className="flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-border pb-4 md:pb-0 md:pr-6">
-                              <span className="text-4xl font-extrabold text-foreground">{s.rating.toFixed(1)}</span>
-                              <div
-                                className="flex items-center gap-0.5 my-1.5 text-warning"
-                                aria-label={`${s.rating} dari 5 bintang`}
-                              >
-                                {STAR_KEYS.map((starKey, starIdx) => (
-                                  <Star
-                                    key={starKey}
-                                    aria-hidden="true"
-                                    className={`h-4.5 w-4.5 ${
-                                      starIdx < Math.floor(s.rating)
-                                        ? "fill-warning text-warning"
-                                        : "text-muted stroke-muted-foreground/30"
-                                    }`}
-                                  />
+                          {s.companyName}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                  {/* Left: Overall Rating Breakdown */}
+                  <div className="lg:col-span-4 space-y-4">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-4xl sm:text-5xl font-extrabold text-foreground">
+                        {currentSupplier?.rating.toFixed(1) || "4.8"}
+                      </span>
+                      <span className="text-sm font-semibold text-muted-foreground">/ 5</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-warning">
+                      {STAR_KEYS.slice(0, Math.round(currentSupplier?.rating || 5)).map((starKey) => (
+                        <Star key={starKey} className="h-4 w-4 fill-warning text-warning" />
+                      ))}
+                      {STAR_KEYS.slice(Math.round(currentSupplier?.rating || 5)).map((starKey) => (
+                        <Star key={starKey} className="h-4 w-4 text-muted" />
+                      ))}
+                    </div>
+                    <span className="text-xs text-muted-foreground block">
+                      {currentSupplier?.reviewCount || 45} {t("verifiedBuyerReviews")}
+                    </span>
+
+                    <div className="space-y-1.5 pt-2">
+                      {[
+                        { star: 5, pct: 78 },
+                        { star: 4, pct: 16 },
+                        { star: 3, pct: 4 },
+                        { star: 2, pct: 1 },
+                        { star: 1, pct: 1 },
+                      ].map((row) => (
+                        <div key={row.star} className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <span className="w-4 font-medium">{row.star}★</span>
+                          <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-primary rounded-full"
+                              style={{ width: `${row.pct}%` }}
+                            />
+                          </div>
+                          <span className="w-8 text-right font-medium text-[11px]">{row.pct}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right: Reviews Grid */}
+                  <div className="lg:col-span-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                      {currentSupplier?.reviews && currentSupplier.reviews.length > 0 ? (
+                        currentSupplier.reviews.slice(0, 3).map((rev, idx) => (
+                          <div
+                            key={rev.id}
+                            className="p-4 rounded-xl border border-border/60 bg-card/60 flex flex-col justify-between space-y-3 shadow-2xs"
+                          >
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2.5">
+                                <div className="w-8 h-8 rounded-full bg-muted-foreground/15 text-foreground font-bold text-xs flex items-center justify-center shrink-0">
+                                  {rev.buyerName.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase()}
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <h5 className="font-semibold text-xs text-foreground truncate">{rev.buyerName}</h5>
+                                  <span className="text-[10px] text-muted-foreground block">{formatDate(rev.createdAt)}</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-0.5 text-warning">
+                                {STAR_KEYS.slice(0, rev.rating).map((k) => (
+                                  <Star key={k} className="h-3 w-3 fill-warning text-warning" />
+                                ))}
+                                {STAR_KEYS.slice(rev.rating).map((k) => (
+                                  <Star key={k} className="h-3 w-3 text-muted" />
                                 ))}
                               </div>
-                              <span className="text-xs text-muted-foreground font-medium">
-                                {t("reviewsVerifiedCount", { count: s.reviewCount })}
-                              </span>
-                            </div>
-
-                            <div className="md:col-span-2 space-y-3 flex flex-col justify-center">
-                              <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                                {t("satisfactionMetrics")}
-                              </h4>
-                              <div className="space-y-2.5 text-xs">
-                                <div className="space-y-1">
-                                  <div className="flex justify-between font-medium">
-                                    <span>{t("productQuality")}</span>
-                                    <span className="font-semibold text-foreground">{scoreQuality}%</span>
-                                  </div>
-                                  <div
-                                    role="progressbar"
-                                    aria-label={t("productQuality")}
-                                    aria-valuenow={scoreQuality}
-                                    aria-valuemin={0}
-                                    aria-valuemax={100}
-                                    className="h-2 bg-muted rounded-full overflow-hidden"
-                                  >
-                                    <div
-                                      className="h-full bg-success transition-all duration-500 rounded-full"
-                                      style={{ width: `${scoreQuality}%` }}
-                                    />
-                                  </div>
-                                </div>
-
-                                <div className="space-y-1">
-                                  <div className="flex justify-between font-medium">
-                                    <span>{t("onTimeDelivery")}</span>
-                                    <span className="font-semibold text-foreground">{scoreDelivery}%</span>
-                                  </div>
-                                  <div
-                                    role="progressbar"
-                                    aria-label={t("onTimeDelivery")}
-                                    aria-valuenow={scoreDelivery}
-                                    aria-valuemin={0}
-                                    aria-valuemax={100}
-                                    className="h-2 bg-muted rounded-full overflow-hidden"
-                                  >
-                                    <div
-                                      className="h-full bg-primary transition-all duration-500 rounded-full"
-                                      style={{ width: `${scoreDelivery}%` }}
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* List of reviews */}
-                          <div className="space-y-3">
-                            <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                              {t("recentReviews")}
-                            </h4>
-                            {s.reviews && s.reviews.length > 0 ? (
-                              s.reviews.map((rev) => (
-                                <div key={rev.id} className="border border-border p-4 rounded-lg bg-card space-y-2 relative overflow-hidden">
-                                  <div className="flex items-center justify-between">
-                                    <span className="font-semibold text-xs text-foreground">{rev.buyerName}</span>
-                                    <div
-                                      className="flex items-center gap-1 text-[11px] font-bold text-warning"
-                                      aria-label={`${rev.rating} dari 5 bintang`}
-                                    >
-                                      {STAR_KEYS.slice(0, rev.rating).map((starKey) => (
-                                        <Star key={starKey} aria-hidden="true" className="h-3.5 w-3.5 fill-warning text-warning" />
-                                      ))}
-                                      {STAR_KEYS.slice(rev.rating).map((starKey) => (
-                                        <Star key={starKey} aria-hidden="true" className="h-3.5 w-3.5 text-muted" />
-                                      ))}
-                                    </div>
-                                  </div>
-                                  <p className="text-xs text-muted-foreground leading-relaxed italic">
-                                    &quot;{rev.reviewText}&quot;
-                                  </p>
-                                  <span className="text-[10px] text-muted-foreground block text-right">{formatDate(rev.createdAt)}</span>
-                                </div>
-                              ))
-                            ) : (
-                              <p className="text-xs text-muted-foreground italic text-center py-6 bg-muted/5 border border-dashed border-border rounded-lg">
-                                {t("noReviews") || "Belum ada ulasan"}
+                              <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3 italic">
+                                &quot;{rev.reviewText}&quot;
                               </p>
-                            )}
+                            </div>
+                            <div className="flex items-center justify-between pt-2 border-t border-border/40 text-[11px] text-muted-foreground">
+                              <button
+                                type="button"
+                                className="flex items-center gap-1 hover:text-foreground cursor-pointer transition-colors"
+                              >
+                                <ThumbsUp className="h-3.5 w-3.5" />
+                                <span>{12 - idx * 3 > 0 ? 12 - idx * 3 : 4}</span>
+                              </button>
+                              <button
+                                type="button"
+                                className="p-1 hover:text-foreground cursor-pointer rounded-md transition-colors"
+                              >
+                                <MoreHorizontal className="h-4 w-4" />
+                              </button>
+                            </div>
                           </div>
+                        ))
+                      ) : (
+                        <div className="col-span-full py-10 text-center text-xs text-muted-foreground italic">
+                          {t("noReviews")}
                         </div>
-                      );
-                    })}
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            )}
-          </>
-        )
-      )}
+            </div>
+          )
+        )}
 
-        {/* PRODUCTS TAB */}
+        {/* TAB 2: PRODUCTS */}
         {activeTab === "products" && (
           products.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-12 text-center border border-dashed border-border rounded-lg bg-muted/5 max-w-xl mx-auto p-8 gap-4">
-                <div className="bg-muted p-4 rounded-full text-muted-foreground">
-                  <Package className="h-8 w-8" />
-                </div>
-                <div className="space-y-1">
-                  <h3 className="font-bold text-base text-foreground">{t("emptyTitleProducts")}</h3>
-                  <p className="text-xs text-muted-foreground">{t("emptyDescProducts")}</p>
-                </div>
-                <Button
-                  onClick={openProductSearch}
-                  className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/95 transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/30 rounded-lg px-6"
-                >
-                  <Plus className="h-4 w-4 mr-1.5" /> {t("btnAddProduct")}
-                </Button>
+            <div className="flex flex-col items-center justify-center py-20 px-4 text-center border border-dashed border-border rounded-2xl bg-muted/5 max-w-xl mx-auto space-y-5">
+              <div className="w-14 h-14 rounded-2xl bg-muted/60 border border-border flex items-center justify-center text-muted-foreground">
+                <Package className="h-7 w-7 opacity-60" />
               </div>
-            ) : (
-              <>
-                {/* Unified Cards Scrollable Row */}
-                <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20">
-              {products.map((product) => (
-                <div
-                  key={product.id}
-                  className="relative flex flex-col border border-border bg-card rounded-lg shadow-xs hover:shadow-md transition-all duration-300 overflow-hidden w-[280px] shrink-0 h-[380px]"
-                >
-                  <Button
-                    onClick={() => removeProduct(product.id)}
-                    variant="ghost"
-                    size="icon"
-                    aria-label={`Hapus ${product.name} dari perbandingan`}
-                    title={`Hapus ${product.name} dari perbandingan`}
-                    className="absolute right-2.5 top-2.5 h-7 w-7 text-foreground/75 bg-card/80 backdrop-blur-xs hover:text-destructive hover:bg-destructive/10 rounded-lg cursor-pointer transition-colors z-10 shadow-xs focus-visible:ring-2 focus-visible:ring-destructive"
-                  >
-                    <X className="h-4 w-4" aria-hidden="true" />
-                  </Button>
-
-                  {/* Product Image section */}
-                  <div className="relative aspect-video bg-muted border-b border-border flex items-center justify-center overflow-hidden">
-                    {product.imageUrl ? (
-                      <img
-                        src={product.imageUrl}
-                        alt={product.name}
-                        className="object-cover w-full h-full"
-                      />
-                    ) : (
-                      <Package className="h-10 w-10 text-muted-foreground opacity-30" />
-                    )}
-                    {/* Score Circle overlaid in bottom corner */}
-                    <div className="absolute bottom-2 left-2 rounded-lg bg-card/90 backdrop-blur-xs border border-border px-2 py-1 flex items-center gap-1 shadow-xs">
-                      <span className="text-[10px] font-bold text-muted-foreground uppercase">{t("visualChartScore")}</span>
-                      <span className="text-xs font-extrabold text-foreground">
-                        {(product.supplierRating * 20).toFixed(0)}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="p-5 flex-1 flex flex-col">
-                    <h3 className="font-bold text-foreground text-sm leading-tight mb-1 line-clamp-2">
-                      {product.name}
-                    </h3>
-                    <p className="text-xs text-muted-foreground mb-4">
-                      {t("fromSupplier")} <Link href={`/demo/suppliers/${product.supplierSlug}`} className="text-foreground font-semibold hover:underline">{product.supplierCompanyName}</Link>
-                    </p>
-
-                    {/* Amazon-style pricing display box */}
-                    <div className="border border-primary/20 bg-primary/5 rounded-lg p-3 mb-6 flex justify-between items-center mt-auto">
-                      <div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">{t("startPrice")}</span>
-                        <span className="text-base font-extrabold text-primary">{formatPrice(product.price)}</span>
-                      </div>
-                      <Badge className="bg-primary hover:bg-primary text-[10px] text-primary-foreground font-bold px-2.5 py-0.5 rounded-lg">IndoSeller</Badge>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Button
-                        asChild
-                        size="sm"
-                        className="w-full bg-primary text-primary-foreground hover:bg-primary/95 text-xs font-semibold cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/20 rounded-lg"
-                      >
-                        <Link href="/rfq/create">
-                          <MessageSquare className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
-                          {t("requestQuote")}
-                        </Link>
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-              {products.length < 5 && (
-                <div
-                  className="flex flex-col items-center justify-center p-8 border border-dashed border-border rounded-lg bg-muted/5 text-center w-[280px] shrink-0 h-[380px]"
-                >
-                  <Package className="h-10 w-10 text-muted-foreground opacity-30 mb-4" aria-hidden="true" />
-                  <p className="text-xs text-muted-foreground font-medium mb-4">{t("compareMaxProducts")}</p>
-                  <Button
-                    onClick={openProductSearch}
-                    variant="outline"
-                    className="cursor-pointer border-dashed border-border hover:border-solid hover:bg-card transition-all hover:-translate-y-0.5 active:translate-y-0 rounded-lg px-4"
-                  >
-                    <Plus className="h-4 w-4 mr-1.5" aria-hidden="true" /> {t("btnAddProduct")}
-                  </Button>
-                </div>
-              )}
+              <div className="space-y-1.5 max-w-sm">
+                <h3 className="font-bold text-lg text-foreground font-heading">{t("emptyTitleProducts")}</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">{t("emptyDescProducts")}</p>
+              </div>
+              <Button
+                onClick={openProductSearch}
+                className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/95 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/30 rounded-lg px-6 text-xs font-semibold"
+              >
+                <Plus className="h-4 w-4 mr-1.5" /> {t("btnAddProduct")}
+              </Button>
             </div>
+          ) : (
+            <div className="space-y-12">
+              {/* SECTION 1: PRODUK YANG DIBANDINGKAN (Full-width Unified Table with Crisp Grid Borders) */}
+              <div className="space-y-4">
+                <h3 className="font-bold text-lg text-foreground font-heading">
+                  {t("comparedProductsTitle")}
+                </h3>
 
-            {products.length > 0 && (
-              <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
-                {/* SVG Radar Chart Column */}
-                <div className="xl:col-span-5">
-                  {renderProductRadar()}
-                </div>
-
-                {/* Progress bars & details sheet */}
-                <div className="xl:col-span-7 space-y-6">
-                  <div className="bg-card border border-border rounded-lg p-6 shadow-xs">
-                    <h3 className="text-sm font-bold text-foreground mb-6 flex items-center gap-1.5 font-heading">
-                      <Award className="h-4 w-4 text-primary" aria-hidden="true" /> {t("sectionProductPoints")}
-                    </h3>
-                    <div className="space-y-6">
-                      {/* Price comparison */}
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center text-xs font-semibold">
-                          <span className="text-muted-foreground">{t("affordablePrice")}</span>
-                          <span className="text-foreground">{t("cheaperIsBetter")}</span>
-                        </div>
-                        <div className="flex flex-col gap-2 bg-muted/10 p-3 rounded-lg border border-border">
-                          {products.map((p, idx) => {
-                            const score = Math.round(getProductPriceScore(p.price) * 100);
-                            return (
-                              <div key={p.id} className="space-y-1">
-                                <div className="flex justify-between text-[11px] font-medium">
-                                  <span className="truncate max-w-[180px]">{p.name}</span>
-                                  <span className="font-semibold">{formatPrice(p.price)}</span>
-                                </div>
-                                <div
-                                  role="progressbar"
-                                  aria-label={`${p.name} skor harga: ${score}%`}
-                                  aria-valuenow={score}
-                                  aria-valuemin={0}
-                                  aria-valuemax={100}
-                                  className="h-2 w-full bg-muted rounded-xs overflow-hidden"
-                                >
-                                  <div
-                                    className="h-full rounded-xs transition-all duration-500"
-                                    style={{ width: `${score}%`, backgroundColor: itemColors[idx].hex }}
-                                  />
-                                </div>
+                <div className="overflow-x-auto rounded-xl border border-border bg-card shadow-2xs">
+                  <table className="w-full text-left border-collapse border-spacing-0">
+                    <thead>
+                      <tr className="bg-muted/15">
+                        <th className="p-5 w-[200px] min-w-[170px] text-xs font-bold text-muted-foreground uppercase tracking-wider align-bottom border-r border-b border-border">
+                          {t("specifications")}
+                        </th>
+                        {products.map((p) => (
+                          <th key={p.id} className="p-5 min-w-[240px] max-w-[280px] align-top font-normal border-r border-b border-border last:border-r-0">
+                            <div className="flex flex-col items-center text-center space-y-3">
+                              {/* Product Image */}
+                              <div className="relative w-32 h-32 rounded-xl overflow-hidden bg-muted/20 border border-border/60 p-2 flex items-center justify-center shadow-2xs">
+                                <img
+                                  src={p.imageUrl || "/images/products/prod-hvs.webp"}
+                                  alt={p.name}
+                                  onError={(e) => {
+                                    (e.currentTarget as HTMLImageElement).src = "/images/products/prod-hvs.webp";
+                                  }}
+                                  className="object-contain w-full h-full"
+                                />
                               </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      {/* MOQ Comparison */}
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center text-xs font-semibold">
-                          <span className="text-muted-foreground">{t("moq")} (Minimum Order Quantity)</span>
-                          <span className="text-foreground">{t("smallerIsBetter")}</span>
-                        </div>
-                        <div className="flex flex-col gap-2 bg-muted/10 p-3 rounded-lg border border-border">
-                          {products.map((p, idx) => {
-                            const score = Math.round(getMoqScore(p.moq) * 100);
-                            return (
-                              <div key={p.id} className="space-y-1">
-                                <div className="flex justify-between text-[11px] font-medium">
-                                  <span className="truncate max-w-[180px]">{p.name}</span>
-                                  <span className="font-semibold">{p.moq}</span>
-                                </div>
-                                <div
-                                  role="progressbar"
-                                  aria-label={`${p.name} skor MOQ: ${score}%`}
-                                  aria-valuenow={score}
-                                  aria-valuemin={0}
-                                  aria-valuemax={100}
-                                  className="h-2 w-full bg-muted rounded-xs overflow-hidden"
-                                >
-                                  <div
-                                    className="h-full rounded-xs transition-all duration-500"
-                                    style={{ width: `${score}%`, backgroundColor: itemColors[idx].hex }}
-                                  />
-                                </div>
+                              <div className="space-y-0.5 w-full">
+                                <h4 className="font-bold text-sm text-foreground line-clamp-2 min-h-[2.5rem]">
+                                  {p.name}
+                                </h4>
+                                <p className="text-xs text-muted-foreground truncate">{p.categoryName || t("productB2B")}</p>
                               </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                              <div className="text-base font-bold text-foreground">
+                                {formatPrice(p.price)}
+                              </div>
+                              <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground">
+                                <Star className="h-3.5 w-3.5 fill-warning text-warning" />
+                                <span className="font-semibold text-foreground">{p.supplierRating.toFixed(1)}</span>
+                                <span>({p.supplierReviewCount})</span>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => removeProduct(p.id)}
+                                className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-destructive cursor-pointer transition-colors py-1"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                                <span>{t("btnRemove")}</span>
+                              </button>
+                              <Button
+                                asChild
+                                size="sm"
+                                className="w-full cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 text-xs font-semibold rounded-lg shadow-xs mt-1"
+                              >
+                                <Link href={`/rfq/create?product=${p.id}`}>
+                                  {t("requestQuote")}
+                                </Link>
+                              </Button>
+                            </div>
+                          </th>
+                        ))}
+                        {products.length < 5 && (
+                          <th className="p-5 min-w-[200px] align-middle text-center font-normal border-b border-border">
+                            <button
+                              onClick={openProductSearch}
+                              className="flex flex-col items-center justify-center w-full h-56 rounded-xl border border-dashed border-border hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 cursor-pointer p-4 space-y-2 text-muted-foreground hover:text-primary"
+                            >
+                              <div className="w-9 h-9 rounded-full bg-muted flex items-center justify-center">
+                                <Plus className="h-4 w-4" />
+                              </div>
+                              <span className="text-xs font-semibold">{t("btnAddProductShort")}</span>
+                            </button>
+                          </th>
+                        )}
+                      </tr>
+                    </thead>
 
-                  {/* Product comparative specification table */}
-                  <div className="overflow-x-auto border border-border rounded-lg bg-card shadow-xs scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20">
-                    <table className="w-full border-collapse text-left text-sm text-foreground" aria-label={t("specProductDetails")}>
-                      <caption className="sr-only">{t("specProductDetails")}</caption>
-                      <thead>
-                        <tr className="border-b border-border bg-muted/20">
-                          <th
-                            scope="col"
-                            className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-bold text-muted-foreground min-w-[170px] z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)]"
-                          >
-                            {t("specProductDetails")}
-                          </th>
-                          {products.map((p, idx) => (
-                            <th key={p.id} scope="col" className="p-4 font-bold min-w-[200px] border-r border-border/40 last:border-r-0">
-                              <span className="text-[10px] uppercase tracking-wider opacity-60 block">{t("specProduct").toUpperCase()} {idx + 1}</span>
-                              <span className="font-semibold text-foreground line-clamp-2 mt-0.5">{p.name}</span>
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-border">
-                        <tr>
-                          <th scope="row" className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-semibold text-muted-foreground z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] text-left">
-                            {t("specCategory")}
-                          </th>
-                          {products.map((p) => (
-                            <td key={p.id} className="p-4 border-r border-border/40 last:border-r-0">
-                              {p.categoryName || t("specCategoryGeneral")}
+                    <tbody className="text-xs sm:text-sm">
+                      {/* 1. Harga */}
+                      <tr className="hover:bg-muted/5 transition-colors">
+                        <td className="p-4 font-semibold text-foreground bg-muted/10 border-r border-b border-border flex items-center gap-2">
+                          <Tag className="h-4 w-4 text-primary shrink-0" />
+                          <span>{t("price")}</span>
+                        </td>
+                        {products.map((p) => {
+                          const minPrice = Math.min(...products.map((prod) => prod.price));
+                          const isCheapest = p.price === minPrice && products.length > 1;
+                          return (
+                            <td key={`price-${p.id}`} className="p-4 text-foreground font-medium border-r border-b border-border last:border-r-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span>{formatPrice(p.price)}</span>
+                                {isCheapest && (
+                                  <Badge variant="secondary" className="bg-primary/10 text-primary border border-primary/20 text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                                    {t("cheapestBadge")}
+                                  </Badge>
+                                )}
+                              </div>
                             </td>
-                          ))}
-                        </tr>
-                        <tr>
-                          <th scope="row" className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-semibold text-muted-foreground z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] text-left">
-                            {t("specSourcingCapacity")}
-                          </th>
-                          {products.map((p) => (
-                            <td key={p.id} className="p-4 border-r border-border/40 last:border-r-0">
-                              {p.capacity || t("contactUs")}
+                          );
+                        })}
+                        {products.length < 5 && <td className="p-4 border-b border-border" />}
+                      </tr>
+
+                      {/* 2. Kategori */}
+                      <tr className="hover:bg-muted/5 transition-colors">
+                        <td className="p-4 font-semibold text-foreground bg-muted/10 border-r border-b border-border flex items-center gap-2">
+                          <Package className="h-4 w-4 text-primary shrink-0" />
+                          <span>{t("specCategory")}</span>
+                        </td>
+                        {products.map((p) => (
+                          <td key={`cat-${p.id}`} className="p-4 text-foreground font-medium border-r border-b border-border last:border-r-0">
+                            {p.categoryName || "-"}
+                          </td>
+                        ))}
+                        {products.length < 5 && <td className="p-4 border-b border-border" />}
+                      </tr>
+
+                      {/* 3. Kapasitas Sourcing */}
+                      <tr className="hover:bg-muted/5 transition-colors">
+                        <td className="p-4 font-semibold text-foreground bg-muted/10 border-r border-b border-border flex items-center gap-2">
+                          <Layers className="h-4 w-4 text-primary shrink-0" />
+                          <span>{t("specSourcingCapacity")}</span>
+                        </td>
+                        {products.map((p) => {
+                          const scores = products.map((prod) => getCapacityScore(prod.capacity));
+                          const maxScore = Math.max(...scores);
+                          const isHighest = getCapacityScore(p.capacity) === maxScore && products.length > 1;
+                          return (
+                            <td key={`cap-${p.id}`} className="p-4 text-foreground font-medium border-r border-b border-border last:border-r-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span>{p.capacity}</span>
+                                {isHighest && (
+                                  <Badge variant="secondary" className="bg-primary/10 text-primary border border-primary/20 text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                                    {t("largestBadge")}
+                                  </Badge>
+                                )}
+                              </div>
                             </td>
-                          ))}
-                        </tr>
-                        <tr>
-                          <th scope="row" className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-semibold text-muted-foreground z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] text-left">
-                            {t("specSupplier")}
-                          </th>
-                          {products.map((p) => (
-                            <td key={p.id} className="p-4 border-r border-border/40 last:border-r-0">
-                              <Link href={`/demo/suppliers/${p.supplierSlug}`} className="text-primary hover:underline font-semibold cursor-pointer">
+                          );
+                        })}
+                        {products.length < 5 && <td className="p-4 border-b border-border" />}
+                      </tr>
+
+                      {/* 4. Pemasok */}
+                      <tr className="hover:bg-muted/5 transition-colors">
+                        <td className="p-4 font-semibold text-foreground bg-muted/10 border-r border-b border-border flex items-center gap-2">
+                          <Store className="h-4 w-4 text-primary shrink-0" />
+                          <span>{t("specSupplier")}</span>
+                        </td>
+                        {products.map((p) => (
+                          <td key={`sup-${p.id}`} className="p-4 text-foreground font-medium border-r border-b border-border last:border-r-0">
+                            <div className="flex items-center gap-1.5">
+                              {p.supplierVerified && (
+                                <CheckCircle2 className="h-3.5 w-3.5 text-success fill-success/20 shrink-0" />
+                              )}
+                              <Link
+                                href={`/demo/suppliers/${p.supplierSlug}`}
+                                className="hover:underline truncate font-semibold text-foreground"
+                              >
                                 {p.supplierCompanyName}
                               </Link>
-                              <div
-                                className="flex items-center gap-1 mt-1 text-xs text-muted-foreground"
-                                aria-label={`${p.supplierRating} dari 5 bintang`}
-                              >
-                                <Star className="h-3 w-3 fill-warning text-warning" aria-hidden="true" />
-                                <span className="font-semibold text-foreground">{p.supplierRating}</span>
+                            </div>
+                          </td>
+                        ))}
+                        {products.length < 5 && <td className="p-4 border-b border-border" />}
+                      </tr>
+
+                      {/* 5. Lokasi Pemasok */}
+                      <tr className="hover:bg-muted/5 transition-colors">
+                        <td className="p-4 font-semibold text-foreground bg-muted/10 border-r border-b border-border flex items-center gap-2">
+                          <MapPin className="h-4 w-4 text-primary shrink-0" />
+                          <span>{t("specSupplierLocation")}</span>
+                        </td>
+                        {products.map((p) => (
+                          <td key={`loc-${p.id}`} className="p-4 text-foreground font-medium border-r border-b border-border last:border-r-0">
+                            {p.supplierLocation}
+                          </td>
+                        ))}
+                        {products.length < 5 && <td className="p-4 border-b border-border" />}
+                      </tr>
+
+                      {/* 6. Minimal Order (MOQ) */}
+                      <tr className="hover:bg-muted/5 transition-colors">
+                        <td className="p-4 font-semibold text-foreground bg-muted/10 border-r border-b border-border flex items-center gap-2">
+                          <Package className="h-4 w-4 text-primary shrink-0" />
+                          <span>{t("moq")}</span>
+                        </td>
+                        {products.map((p) => {
+                          const scores = products.map((prod) => getMoqScore(prod.moq));
+                          const maxScore = Math.max(...scores);
+                          const isLowestMoq = getMoqScore(p.moq) === maxScore && products.length > 1;
+                          return (
+                            <td key={`moq-${p.id}`} className="p-4 text-foreground font-medium border-r border-b border-border last:border-r-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span>{p.moq}</span>
+                                {isLowestMoq && (
+                                  <Badge variant="secondary" className="bg-primary/10 text-primary border border-primary/20 text-[10px] font-semibold px-2 py-0.5 rounded-md">
+                                    {t("smallestBadge")}
+                                  </Badge>
+                                )}
                               </div>
                             </td>
-                          ))}
-                        </tr>
-                        <tr>
-                          <th scope="row" className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-semibold text-muted-foreground z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] text-left">
-                            {t("specSupplierLocation")}
-                          </th>
-                          {products.map((p) => (
-                            <td key={p.id} className="p-4 border-r border-border/40 last:border-r-0">
-                              {p.supplierLocation}
-                            </td>
-                          ))}
-                        </tr>
-                      </tbody>
-                    </table>
+                          );
+                        })}
+                        {products.length < 5 && <td className="p-4 border-b border-border" />}
+                      </tr>
+
+                      {/* 7. Waktu Respon */}
+                      <tr className="hover:bg-muted/5 transition-colors">
+                        <td className="p-4 font-semibold text-foreground bg-muted/10 border-r border-border flex items-center gap-2">
+                          <Zap className="h-4 w-4 text-primary shrink-0" />
+                          <span>{t("response")}</span>
+                        </td>
+                        {products.map((p) => (
+                          <td key={`resp-${p.id}`} className="p-4 text-foreground font-medium border-r border-border last:border-r-0">
+                            {p.supplierResponseTime}
+                          </td>
+                        ))}
+                        {products.length < 5 && <td className="p-4" />}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* SECTION 2: ANALISIS POIN PRODUK (Dedicated Section with Radar Chart + Grouped Bars) */}
+              <div className="space-y-4">
+                <h3 className="font-bold text-lg text-foreground font-heading">
+                  {t("sectionProductPoints")}
+                </h3>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+                  {/* Left: Graphic Radar Chart */}
+                  <div className="lg:col-span-5">
+                    {renderProductRadar()}
                   </div>
 
-                  {/* Versus Style User Review Tab comparison for Products */}
-                  <div className="bg-card border border-border rounded-lg p-6 shadow-xs space-y-6">
-                    <div className="space-y-3">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
-                        <h3 className="text-base font-bold text-foreground font-heading">{t("userReviews")}</h3>
-                        <p className="text-xs text-muted-foreground">{t("selectProductToViewReviews") || "Pilih produk untuk melihat rincian ulasan"}</p>
-                      </div>
-
-                      {products.length > 0 && (
-                        <div
-                          role="tablist"
-                          aria-label={t("userReviews")}
-                          className="flex flex-wrap gap-2 p-1.5 bg-muted/20 border border-border rounded-lg"
-                        >
+                  {/* Right: Grouped Horizontal Comparison Bars & Best Overall Recommendation */}
+                  <div className="lg:col-span-7 bg-card border border-border rounded-2xl p-6 shadow-2xs flex flex-col justify-between space-y-6">
+                    <div>
+                      {/* Header with Legend (Interactive toggle) */}
+                      <div className="flex items-center justify-between pb-3 border-b border-border/40 gap-2 mb-5">
+                        <h4 className="font-bold text-sm text-foreground">
+                          {t("keyMetricComparison")}
+                        </h4>
+                        <div className="flex items-center gap-2 text-xs flex-wrap justify-end">
                           {products.map((p, idx) => {
-                            const isSelected = p.id === activeProductId;
+                            const isDisabled = disabledProductIds.includes(p.id);
                             return (
                               <button
                                 key={p.id}
                                 type="button"
-                                role="tab"
-                                id={`tab-product-${p.id}`}
-                                aria-selected={isSelected}
-                                aria-controls={`panel-product-${p.id}`}
-                                onClick={() => setSelectedProductReviewTab(p.id)}
+                                onClick={() => toggleProductRadarItem(p.id)}
+                                title={isDisabled ? t("showItemTooltip", { name: p.name }) : t("hideItemTooltip", { name: p.name })}
                                 className={cn(
-                                  "cursor-pointer text-xs font-semibold px-3 py-2 rounded-md transition-all duration-200 flex items-center gap-2 text-left hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary",
-                                  isSelected
-                                    ? "bg-card text-foreground shadow-xs border border-primary/30 ring-1 ring-primary/20 font-bold"
-                                    : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                                  "flex items-center gap-1 cursor-pointer select-none transition-all duration-200",
+                                  isDisabled && "opacity-40 line-through"
                                 )}
                               >
                                 <span
-                                  className="w-2.5 h-2.5 rounded-full shrink-0"
-                                  style={{ backgroundColor: itemColors[idx].hex }}
-                                  aria-hidden="true"
+                                  className={cn(
+                                    "w-2 h-2 rounded-full",
+                                    isDisabled ? "bg-muted-foreground/30" : ITEM_COLORS[idx % ITEM_COLORS.length].dot
+                                  )}
                                 />
-                                <span className="truncate max-w-[200px] sm:max-w-[260px]">{p.name}</span>
+                                <span className="text-[11px] text-muted-foreground truncate max-w-[90px]">
+                                  {p.name.split(" ")[0]}
+                                </span>
                               </button>
                             );
                           })}
                         </div>
-                      )}
+                      </div>
+
+                      {/* Grouped Comparison Bars */}
+                      <div className="space-y-4">
+                        {[
+                          { label: t("affordablePrice"), icon: Tag, getScore: (p: typeof products[0]) => getProductPriceScore(p.price) },
+                          { label: t("axisLowMoq"), icon: Package, getScore: (p: typeof products[0]) => getMoqScore(p.moq) },
+                          { label: t("axisCapacity"), icon: Layers, getScore: (p: typeof products[0]) => getCapacityScore(p.capacity) },
+                          { label: t("axisSupplierReputation"), icon: Star, getScore: (p: typeof products[0]) => (p.supplierRating / 5) },
+                          { label: t("axisFastResponse"), icon: Zap, getScore: (p: typeof products[0]) => getResponseScore(p.supplierResponseTime) },
+                        ].map((metric) => {
+                          const Icon = metric.icon;
+                          return (
+                            <div key={metric.label} className="space-y-1.5">
+                              <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
+                                <Icon className="h-3.5 w-3.5 text-muted-foreground" />
+                                <span>{metric.label}</span>
+                              </div>
+                              <div className="space-y-1 pl-5">
+                                {products.map((p, idx) => {
+                                  const isDisabled = disabledProductIds.includes(p.id);
+                                  if (isDisabled) return null;
+                                  const score = metric.getScore(p);
+                                  const color = ITEM_COLORS[idx % ITEM_COLORS.length];
+                                  return (
+                                    <div key={p.id} className="flex items-center gap-2 text-xs transition-all duration-300">
+                                      <div className="flex-1 h-2.5 bg-muted/60 rounded-full overflow-hidden">
+                                        <div
+                                          className={cn("h-full rounded-full transition-all duration-500", color.bar)}
+                                          style={{ width: `${Math.round(score * 100)}%` }}
+                                        />
+                                      </div>
+                                      <span className="w-8 text-right font-semibold text-[11px] text-muted-foreground">
+                                        {(score * 10).toFixed(1)}
+                                      </span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
 
-                    {products.map((p) => {
-                      if (p.id !== activeProductId) return null;
-                      const scoreAccuracy = Math.min(100, Math.round(p.supplierRating * 20));
-                      const scoreSpeed = p.supplierRating >= 4.5 ? 90 : 75;
-
-                      return (
-                        <div
-                          key={p.id}
-                          role="tabpanel"
-                          id={`panel-product-${p.id}`}
-                          aria-labelledby={`tab-product-${p.id}`}
-                          className="space-y-6"
-                        >
-                          {/* Aggregate ratings card */}
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-muted/10 p-5 border border-border rounded-lg">
-                            <div className="flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-border pb-4 md:pb-0 md:pr-6">
-                              <span className="text-4xl font-extrabold text-foreground">{p.supplierRating.toFixed(1)}</span>
-                              <div
-                                className="flex items-center gap-0.5 my-1.5 text-warning"
-                                aria-label={`${p.supplierRating} dari 5 bintang`}
-                              >
-                                {STAR_KEYS.map((starKey, starIdx) => (
-                                  <Star
-                                    key={starKey}
-                                    aria-hidden="true"
-                                    className={`h-4.5 w-4.5 ${
-                                      starIdx < Math.floor(p.supplierRating)
-                                        ? "fill-warning text-warning"
-                                        : "text-muted stroke-muted-foreground/30"
-                                    }`}
-                                  />
-                                ))}
-                              </div>
-                              <span className="text-xs text-muted-foreground font-medium">
-                                {t("reviewsSupplierCount", { count: p.supplierReviewCount })}
-                              </span>
-                            </div>
-
-                            <div className="md:col-span-2 space-y-3 flex flex-col justify-center">
-                              <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                                {t("productSupplierMetrics")}
-                              </h4>
-                              <div className="space-y-2.5 text-xs">
-                                <div className="space-y-1">
-                                  <div className="flex justify-between font-medium">
-                                    <span>{t("descriptionAccuracy")}</span>
-                                    <span className="font-semibold text-foreground">{scoreAccuracy}%</span>
-                                  </div>
-                                  <div
-                                    role="progressbar"
-                                    aria-label={t("descriptionAccuracy")}
-                                    aria-valuenow={scoreAccuracy}
-                                    aria-valuemin={0}
-                                    aria-valuemax={100}
-                                    className="h-2 bg-muted rounded-full overflow-hidden"
-                                  >
-                                    <div
-                                      className="h-full bg-success transition-all duration-500 rounded-full"
-                                      style={{ width: `${scoreAccuracy}%` }}
-                                    />
-                                  </div>
-                                </div>
-
-                                <div className="space-y-1">
-                                  <div className="flex justify-between font-medium">
-                                    <span>{t("supplierResponseSpeed")}</span>
-                                    <span className="font-semibold text-foreground">{p.supplierResponseTime}</span>
-                                  </div>
-                                  <div
-                                    role="progressbar"
-                                    aria-label={t("supplierResponseSpeed")}
-                                    aria-valuenow={scoreSpeed}
-                                    aria-valuemin={0}
-                                    aria-valuemax={100}
-                                    className="h-2 bg-muted rounded-full overflow-hidden"
-                                  >
-                                    <div
-                                      className="h-full bg-primary transition-all duration-500 rounded-full"
-                                      style={{ width: `${scoreSpeed}%` }}
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                    {/* Rekomendasi Best Overall Card */}
+                    {bestProduct && (
+                      <div className="rounded-xl bg-primary/5 border border-primary/20 p-4 flex items-center justify-between gap-3 mt-4">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                            <Trophy className="h-5 w-5" />
                           </div>
-
-                          {/* List of reviews */}
-                          <div className="space-y-3">
-                            <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                              {t("productBuyerReviews")}
-                            </h4>
-                            {p.reviews && p.reviews.length > 0 ? (
-                              p.reviews.map((rev) => (
-                                <div key={rev.id} className="border border-border p-4 rounded-lg bg-card space-y-2 relative overflow-hidden">
-                                  <div className="flex items-center justify-between">
-                                    <span className="font-semibold text-xs text-foreground">{rev.buyerName}</span>
-                                    <div
-                                      className="flex items-center gap-1 text-[11px] font-bold text-warning"
-                                      aria-label={`${rev.rating} dari 5 bintang`}
-                                    >
-                                      {STAR_KEYS.slice(0, rev.rating).map((starKey) => (
-                                        <Star key={starKey} aria-hidden="true" className="h-3.5 w-3.5 fill-warning text-warning" />
-                                      ))}
-                                      {STAR_KEYS.slice(rev.rating).map((starKey) => (
-                                        <Star key={starKey} aria-hidden="true" className="h-3.5 w-3.5 text-muted" />
-                                      ))}
-                                    </div>
-                                  </div>
-                                  <p className="text-xs text-muted-foreground leading-relaxed italic">
-                                    &quot;{rev.reviewText}&quot;
-                                  </p>
-                                  <span className="text-[10px] text-muted-foreground block text-right">{formatDate(rev.createdAt)}</span>
-                                </div>
-                              ))
-                            ) : (
-                              <p className="text-xs text-muted-foreground italic text-center py-6 bg-muted/5 border border-dashed border-border rounded-lg">
-                                {t("noReviews") || "Belum ada ulasan"}
-                              </p>
-                            )}
+                          <div className="min-w-0">
+                            <span className="text-[10px] font-bold text-primary block uppercase tracking-wider">
+                              {t("recommendation")}
+                            </span>
+                            <h5 className="text-xs sm:text-sm font-bold text-foreground truncate">
+                              {t("bestOverallProduct", { name: bestProduct.name })}
+                            </h5>
+                            <p className="text-[11px] text-muted-foreground line-clamp-1">
+                              {t("bestOverallProductDesc")}
+                            </p>
                           </div>
                         </div>
-                      );
-                    })}
+                        <ChevronRight className="h-4 w-4 text-primary shrink-0" />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
-            )}
-          </>
-        )
-      )}
+
+              {/* SECTION 3: ULASAN PENGGUNA (Borderless & Clean Layout) */}
+              <div className="space-y-6 pt-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border/40">
+                  <h3 className="font-bold text-lg text-foreground font-heading">
+                    {t("userReviews")}
+                  </h3>
+                  {products.length > 1 && (
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {products.map((p) => (
+                        <button
+                          key={p.id}
+                          onClick={() => setSelectedProductReviewTab(p.id)}
+                          className={cn(
+                            "px-3 py-1 rounded-lg text-xs font-medium cursor-pointer transition-colors border",
+                            activeProductId === p.id
+                              ? "bg-primary text-primary-foreground border-primary"
+                              : "bg-muted/40 text-muted-foreground border-border hover:bg-muted"
+                          )}
+                        >
+                          {p.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                  {/* Left: Overall Rating Breakdown */}
+                  <div className="lg:col-span-4 space-y-4">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-4xl sm:text-5xl font-extrabold text-foreground">
+                        {currentProduct?.supplierRating.toFixed(1) || "4.8"}
+                      </span>
+                      <span className="text-sm font-semibold text-muted-foreground">/ 5</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-warning">
+                      {STAR_KEYS.slice(0, Math.round(currentProduct?.supplierRating || 5)).map((starKey) => (
+                        <Star key={starKey} className="h-4 w-4 fill-warning text-warning" />
+                      ))}
+                      {STAR_KEYS.slice(Math.round(currentProduct?.supplierRating || 5)).map((starKey) => (
+                        <Star key={starKey} className="h-4 w-4 text-muted" />
+                      ))}
+                    </div>
+                    <span className="text-xs text-muted-foreground block">
+                      {currentProduct?.supplierReviewCount || 88} {t("verifiedBuyerReviews")}
+                    </span>
+
+                    <div className="space-y-1.5 pt-2">
+                      {[
+                        { star: 5, pct: 78 },
+                        { star: 4, pct: 16 },
+                        { star: 3, pct: 4 },
+                        { star: 2, pct: 1 },
+                        { star: 1, pct: 1 },
+                      ].map((row) => (
+                        <div key={row.star} className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <span className="w-4 font-medium">{row.star}★</span>
+                          <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-primary rounded-full"
+                              style={{ width: `${row.pct}%` }}
+                            />
+                          </div>
+                          <span className="w-8 text-right font-medium text-[11px]">{row.pct}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right: Reviews Grid */}
+                  <div className="lg:col-span-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                      {currentProduct?.reviews && currentProduct.reviews.length > 0 ? (
+                        currentProduct.reviews.slice(0, 3).map((rev, idx) => (
+                          <div
+                            key={rev.id}
+                            className="p-4 rounded-xl border border-border/60 bg-card/60 flex flex-col justify-between space-y-3 shadow-2xs"
+                          >
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2.5">
+                                <div className="w-8 h-8 rounded-full bg-muted-foreground/15 text-foreground font-bold text-xs flex items-center justify-center shrink-0">
+                                  {rev.buyerName.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase()}
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                  <h5 className="font-semibold text-xs text-foreground truncate">{rev.buyerName}</h5>
+                                  <span className="text-[10px] text-muted-foreground block">{formatDate(rev.createdAt)}</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-0.5 text-warning">
+                                {STAR_KEYS.slice(0, rev.rating).map((k) => (
+                                  <Star key={k} className="h-3 w-3 fill-warning text-warning" />
+                                ))}
+                                {STAR_KEYS.slice(rev.rating).map((k) => (
+                                  <Star key={k} className="h-3 w-3 text-muted" />
+                                ))}
+                              </div>
+                              <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3 italic">
+                                &quot;{rev.reviewText}&quot;
+                              </p>
+                            </div>
+                            <div className="flex items-center justify-between pt-2 border-t border-border/40 text-[11px] text-muted-foreground">
+                              <button
+                                type="button"
+                                className="flex items-center gap-1 hover:text-foreground cursor-pointer transition-colors"
+                              >
+                                <ThumbsUp className="h-3.5 w-3.5" />
+                                <span>{12 - idx * 3 > 0 ? 12 - idx * 3 : 4}</span>
+                              </button>
+                              <button
+                                type="button"
+                                className="p-1 hover:text-foreground cursor-pointer rounded-md transition-colors"
+                              >
+                                <MoreHorizontal className="h-4 w-4" />
+                              </button>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="col-span-full py-10 text-center text-xs text-muted-foreground italic">
+                          {t("noReviews")}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+        )}
       </div>
 
-      {/* LOOKUP SUPPLIER MODAL */}
+      {/* Supplier Search Dialog */}
       <Dialog open={isSupplierSearchOpen} onOpenChange={setIsSupplierSearchOpen}>
-        <DialogContent size="md" className="rounded-lg">
-          <DialogHeader>
-            <DialogTitle>{t("searchSupplierTitle")}</DialogTitle>
-            <DialogDescription>
-              {t("searchSupplierDesc")}
+        <DialogContent className="sm:max-w-xl max-h-[85vh] flex flex-col p-0 overflow-hidden">
+          <DialogHeader className="p-5 pb-3 border-b border-border">
+            <DialogTitle className="text-base font-bold text-foreground font-heading">
+              {t("dialogTitleSupplier")}
+            </DialogTitle>
+            <DialogDescription className="text-xs text-muted-foreground">
+              {t("dialogDescSupplier")}
             </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 pt-2">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <div className="relative mt-3">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder={t("searchSupplierPlaceholder")}
                 value={supplierQuery}
                 onChange={(e) => setSupplierQuery(e.target.value)}
-                className="pl-9 rounded-lg"
+                placeholder={t("searchPlaceholderSupplier")}
+                className="pl-9 text-xs rounded-lg"
               />
             </div>
+          </DialogHeader>
 
-            <div
-              className="max-h-[300px] overflow-y-auto space-y-2 pr-1"
-              onScroll={handleSupplierScroll}
-            >
-              {renderSupplierSearchResults()}
-            </div>
+          <div
+            className="flex-1 overflow-y-auto p-5 space-y-3"
+            onScroll={(e) => {
+              const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+              if (scrollHeight - scrollTop <= clientHeight + 30) {
+                handleLoadMoreSuppliers();
+              }
+            }}
+          >
+            {renderSupplierSearchResults()}
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* LOOKUP PRODUCT MODAL */}
+      {/* Product Search Dialog */}
       <Dialog open={isProductSearchOpen} onOpenChange={setIsProductSearchOpen}>
-        <DialogContent size="md" className="rounded-lg">
-          <DialogHeader>
-            <DialogTitle>{t("searchProductTitle")}</DialogTitle>
-            <DialogDescription>
-              {t("searchProductDesc")}
+        <DialogContent className="sm:max-w-xl max-h-[85vh] flex flex-col p-0 overflow-hidden">
+          <DialogHeader className="p-5 pb-3 border-b border-border">
+            <DialogTitle className="text-base font-bold text-foreground font-heading">
+              {t("dialogTitleProduct")}
+            </DialogTitle>
+            <DialogDescription className="text-xs text-muted-foreground">
+              {t("dialogDescProduct")}
             </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 pt-2">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <div className="relative mt-3">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder={t("searchProductPlaceholder")}
                 value={productQuery}
                 onChange={(e) => setProductQuery(e.target.value)}
-                className="pl-9 rounded-lg"
+                placeholder={t("searchPlaceholderProduct")}
+                className="pl-9 text-xs rounded-lg"
               />
             </div>
+          </DialogHeader>
 
-            <div
-              className="max-h-[300px] overflow-y-auto space-y-2 pr-1"
-              onScroll={handleProductScroll}
-            >
-              {renderProductSearchResults()}
-            </div>
+          <div
+            className="flex-1 overflow-y-auto p-5 space-y-3"
+            onScroll={(e) => {
+              const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+              if (scrollHeight - scrollTop <= clientHeight + 30) {
+                handleLoadMoreProducts();
+              }
+            }}
+          >
+            {renderProductSearchResults()}
           </div>
         </DialogContent>
       </Dialog>
-    </BuyerLayout>
+    </PublicLayout>
   );
 }
