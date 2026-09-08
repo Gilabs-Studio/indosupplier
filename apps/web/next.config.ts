@@ -151,9 +151,6 @@ const nextConfig: NextConfig = {
           {
             key: "Link",
             value: [
-              // Preconnect to Google Fonts
-              '<https://fonts.googleapis.com>; rel=preconnect',
-              '<https://fonts.gstatic.com>; rel=preconnect; crossorigin',
               // DNS prefetch for R2 (image CDN)
               '<https://pub-d746125bb1b6423491682404faec8132.r2.dev>; rel=dns-prefetch',
             ].join(", "),

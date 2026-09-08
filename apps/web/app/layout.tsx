@@ -1,23 +1,42 @@
 import type { Metadata, Viewport } from "next";
-import { Tinos, Inter } from "next/font/google";
+import localFont from "next/font/local";
 import { getLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { getLanguageAlternates } from "@/lib/seo";
 import type { Locale } from "@/types/locale";
 import "./globals.css";
 
-const tinos = Tinos({
+const tinos = localFont({
+  src: [
+    {
+      path: "./fonts/tinos-400.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "./fonts/tinos-400-italic.woff2",
+      weight: "400",
+      style: "italic",
+    },
+    {
+      path: "./fonts/tinos-700.woff2",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "./fonts/tinos-700-italic.woff2",
+      weight: "700",
+      style: "italic",
+    },
+  ],
   variable: "--font-tinos",
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
   display: "swap",
 });
 
-const inter = Inter({
+const inter = localFont({
+  src: "./fonts/inter.woff2",
   variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: "100 900",
   display: "swap",
 });
 
