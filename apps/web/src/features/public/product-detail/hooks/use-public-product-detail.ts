@@ -79,6 +79,12 @@ export function usePublicProductDetail({ id, detailBasePath }: UsePublicProductD
   const isBookmarked = product ? bookmarks.some((item) => item.type === "product" && item.supplierProductId === product.id) : false;
   const isCompared = product ? comparedProducts.some((item) => item.id === product.id) : false;
 
+  const isProductBookmarked = (prodId: string) =>
+    bookmarks.some((item) => item.type === "product" && (item.supplierProductId === prodId || item.id === prodId));
+
+  const isProductCompared = (prodId: string) =>
+    comparedProducts.some((item) => item.id === prodId);
+
   const redirectToLogin = (message: string) => {
     toast.error(message);
     router.push(`/login?redirectTo=${encodeURIComponent(currentInternalPath)}`);
@@ -157,6 +163,8 @@ export function usePublicProductDetail({ id, detailBasePath }: UsePublicProductD
     subtotal,
     isBookmarked,
     isCompared,
+    isProductBookmarked,
+    isProductCompared,
     isLoading,
     relatedProducts: data?.relatedProducts ?? [],
     isAdding: isAdding || isDeleting,

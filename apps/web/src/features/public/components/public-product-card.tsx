@@ -40,6 +40,7 @@ export function PublicProductCard({
       isCompared={isCompared}
       onBookmark={onBookmark}
       onCompare={onCompare}
+      compareLabel={isCompared ? t("inCompare") : t("compare")}
       rating={product.supplierRating}
       reviewCount={product.supplierReviewCount}
       supplierName={product.supplierCompanyName}

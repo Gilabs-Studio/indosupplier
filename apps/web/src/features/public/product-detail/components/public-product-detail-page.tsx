@@ -67,6 +67,7 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
     subtotal,
     isBookmarked,
     isCompared,
+    isProductBookmarked,
     isLoading,
     relatedProducts,
     isAdding,
@@ -74,7 +75,6 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
     toggleBookmark,
     toggleCompare,
     toggleProductBookmark,
-    toggleProductCompare,
     handleBuyerAction,
   } = usePublicProductDetail({ id, detailBasePath: detailBasePath as "" | "/demo" });
 
@@ -589,11 +589,8 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
                     ulasanLabel={t("reviews")}
                     priceLabel={t("negotiable")}
                     showBookmarkOverlayButton={true}
-                    showCompareOverlayButton={true}
-                    isBookmarked={isBookmarked}
-                    isCompared={isCompared}
+                    isBookmarked={isProductBookmarked(item.id)}
                     onBookmark={() => toggleProductBookmark(item)}
-                    onCompare={() => toggleProductCompare(item)}
                   />
                 ))}
               </div>

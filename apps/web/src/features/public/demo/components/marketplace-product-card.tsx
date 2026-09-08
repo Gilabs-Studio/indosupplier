@@ -11,7 +11,7 @@ interface MarketplaceProductCardProps {
   onToggleBookmark: (id: string) => void;
 }
 
-function getSmartFallbackImage(name: string, categorySlug?: string): string {
+export function getSmartFallbackImage(name: string, categorySlug?: string): string {
   const lower = (name + " " + (categorySlug || "")).toLowerCase();
   if (lower.includes("kertas") || lower.includes("hvs") || lower.includes("atk") || lower.includes("pen")) {
     return "/images/products/prod-hvs.webp";
@@ -92,9 +92,10 @@ export function MarketplaceProductCard({
       isVerified={product.supplierVerified}
       rating={product.supplierRating}
       reviewCount={product.supplierReviewCount}
-      ulasanLabel={isEn ? "terjual" : "terjual"}
+      ulasanLabel={isEn ? "reviews" : "terjual"}
       supplierName={product.supplierCompanyName}
       supplierLocation={product.supplierLocation}
+      showBookmarkOverlayButton={true}
       isBookmarked={isBookmarked}
       onBookmark={onToggleBookmark}
     />

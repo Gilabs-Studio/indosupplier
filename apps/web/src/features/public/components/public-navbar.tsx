@@ -29,7 +29,6 @@ import {
   Scale,
   Settings2,
   Wallet,
-  Package,
   UserPlus,
 } from "lucide-react";
 import { useBuyerBookmarks } from "@/features/buyer/bookmarks/hooks/useBuyerBookmarks";
@@ -282,9 +281,6 @@ function resolveBookmarkThumbnail(item: {
               height={22}
               className="h-6 w-auto object-contain brightness-0"
             />
-            <span className="font-sans text-[15px] font-black tracking-wider uppercase text-foreground hidden sm:inline">
-              IndoSupplier
-            </span>
           </Link>
 
           {/* Categories Dropdown */}

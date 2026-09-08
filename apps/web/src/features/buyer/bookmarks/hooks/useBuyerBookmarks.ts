@@ -66,7 +66,7 @@ export function useBuyerBookmarks() {
     staleTime: 5 * 60 * 1000,
   });
 
-  const bookmarks = bookmarksQuery.data ?? [];
+  const bookmarks = useMemo(() => bookmarksQuery.data ?? [], [bookmarksQuery.data]);
   const productBookmarks = useMemo(
     () => bookmarks.filter((item) => item.type === "product" || Boolean(item.supplierProductId)),
     [bookmarks]

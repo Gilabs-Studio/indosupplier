@@ -58,7 +58,12 @@
       "toastSaveSuccess": "Product successfully bookmarked!",
       "toastSaveError": "Failed to save bookmark.",
       "toastDeleteSuccess": "Bookmark successfully deleted!",
-      "toastDeleteError": "Failed to delete bookmark."
+      "toastDeleteError": "Failed to delete bookmark.",
+      "removeBookmarkAria": "Remove from saved products",
+      "compareAria": "Compare product",
+      "removeCompareAria": "Remove from comparison",
+      "compareTooltip": "Compare",
+      "inCompareTooltip": "In comparison"
     },
     "following": {
       "title": "Followed Shops",
@@ -171,7 +176,9 @@
       "reviewsSupplierCount": "{count} supplier {count, plural, =1 {review} other {reviews}}",
       "emptyTitleProducts": "No products to compare",
       "emptyDescProducts": "Go to bookmarks and select up to 5 products to compare.",
-      "itemSelectedText": "Selected"
+      "itemSelectedText": "Selected",
+      "selectProductToViewReviews": "Select a product to view detailed reviews",
+      "selectSupplierToViewReviews": "Select a supplier to view detailed reviews"
     },
     "notifications": {
       "title": "Notifications",

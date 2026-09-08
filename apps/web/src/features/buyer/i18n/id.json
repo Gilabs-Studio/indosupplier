@@ -58,7 +58,12 @@
       "toastSaveSuccess": "Produk berhasil disimpan!",
       "toastSaveError": "Gagal menyimpan ke bookmark.",
       "toastDeleteSuccess": "Bookmark berhasil dihapus!",
-      "toastDeleteError": "Gagal menghapus bookmark."
+      "toastDeleteError": "Gagal menghapus bookmark.",
+      "removeBookmarkAria": "Hapus dari produk disimpan",
+      "compareAria": "Bandingkan produk",
+      "removeCompareAria": "Hapus dari perbandingan",
+      "compareTooltip": "Bandingkan",
+      "inCompareTooltip": "Dalam perbandingan"
     },
     "following": {
       "title": "Toko Diikuti",
@@ -171,7 +176,9 @@
       "reviewsSupplierCount": "{count} ulasan pemasok",
       "emptyTitleProducts": "Belum ada produk dibandingkan",
       "emptyDescProducts": "Masuk ke menu Disimpan dan pilih maksimal 5 produk untuk dibandingkan.",
-      "itemSelectedText": "Terpilih"
+      "itemSelectedText": "Terpilih",
+      "selectProductToViewReviews": "Pilih produk untuk melihat ulasan detail",
+      "selectSupplierToViewReviews": "Pilih supplier untuk melihat ulasan detail"
     },
     "notifications": {
       "title": "Notifikasi",

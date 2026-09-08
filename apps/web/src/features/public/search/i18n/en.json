@@ -47,7 +47,9 @@
       "verified": "Verified",
       "contactSupplier": "Contact Supplier",
       "moq": "MOQ",
-      "ulasan": "reviews"
+      "ulasan": "reviews",
+      "compare": "Compare",
+      "inCompare": "In comparison"
     }
   }
 }

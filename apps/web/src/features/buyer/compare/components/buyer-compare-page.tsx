@@ -2,6 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { toast } from "sonner";
 import { BuyerLayout } from "../../components/buyer-layout";
@@ -9,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
 import { CenteredLoading, LoadingSpinner } from "@/components/loading";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn, formatPrice } from "@/lib/utils";
 import {
   Dialog,
@@ -41,6 +41,9 @@ const STAR_KEYS = ["star-1", "star-2", "star-3", "star-4", "star-5"];
 export function BuyerComparePage() {
   const t = useTranslations("buyer.compare");
   const locale = useLocale();
+  const searchParams = useSearchParams();
+  const tabParam = searchParams?.get("tab");
+
   const {
     suppliers,
     removeSupplier,
@@ -52,8 +55,26 @@ export function BuyerComparePage() {
     isProductsLoading,
   } = useBuyerCompare();
 
-  // Search lookup state
-  const [activeTab, setActiveTab] = useState<"suppliers" | "products">("suppliers");
+  // User tab override state (null = derive from url or data)
+  const [userSelectedTab, setUserSelectedTab] = useState<"suppliers" | "products" | null>(null);
+
+  // Computed activeTab during render to avoid cascading renders
+  const activeTab: "suppliers" | "products" =
+    userSelectedTab ??
+    (tabParam === "products" || tabParam === "suppliers"
+      ? tabParam
+      : (!isSuppliersLoading && !isProductsLoading && products.length > 0 && suppliers.length === 0)
+        ? "products"
+        : "suppliers");
+
+  const handleTabChange = (tab: "suppliers" | "products") => {
+    setUserSelectedTab(tab);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("tab", tab);
+      window.history.replaceState({}, "", url.toString());
+    }
+  };
   const [isSupplierSearchOpen, setIsSupplierSearchOpen] = useState(false);
   const [isProductSearchOpen, setIsProductSearchOpen] = useState(false);
   const [supplierQuery, setSupplierQuery] = useState("");
@@ -468,7 +489,7 @@ export function BuyerComparePage() {
     return (
       <div className="flex flex-col items-center bg-card border border-border p-6 rounded-lg shadow-xs w-full max-w-sm mx-auto">
         <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4">{t("visualChartTitle")}</h4>
-        <svg viewBox="0 0 300 300" className="w-full h-auto">
+        <svg viewBox="0 0 300 300" className="w-full h-auto" role="img" aria-label={t("visualChartTitle")}>
           {/* Concentric grid lines */}
           {[0.33, 0.66, 1].map((scale) => {
             const gridPoints = angles.map((ang) => {
@@ -541,11 +562,11 @@ export function BuyerComparePage() {
             );
           })}
         </svg>
-        <div className="flex gap-4 mt-4 flex-wrap justify-center">
+        <div className="flex gap-2 mt-4 flex-wrap justify-center">
           {suppliers.map((s, idx) => (
-            <div key={s.id} className="flex items-center gap-1.5 text-xs font-semibold">
-              <span className="w-3 h-3 rounded-xs border" style={{ backgroundColor: itemColors[idx].hex, borderColor: itemColors[idx].stroke }} />
-              <span className="truncate max-w-[100px]">{s.companyName}</span>
+            <div key={s.id} className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-muted/30 border border-border/50">
+              <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: itemColors[idx].hex }} aria-hidden="true" />
+              <span className="truncate max-w-[140px]" title={s.companyName}>{s.companyName}</span>
             </div>
           ))}
         </div>
@@ -590,7 +611,7 @@ export function BuyerComparePage() {
     return (
       <div className="flex flex-col items-center bg-card border border-border p-6 rounded-lg shadow-xs w-full max-w-sm mx-auto">
         <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4">{t("visualChartTitle")}</h4>
-        <svg viewBox="0 0 300 300" className="w-full h-auto">
+        <svg viewBox="0 0 300 300" className="w-full h-auto" role="img" aria-label={t("visualChartTitle")}>
           {/* Concentric grid lines */}
           {[0.33, 0.66, 1].map((scale) => {
             const gridPoints = angles.map((ang) => {
@@ -662,11 +683,11 @@ export function BuyerComparePage() {
             );
           })}
         </svg>
-        <div className="flex gap-4 mt-4 flex-wrap justify-center">
+        <div className="flex gap-2 mt-4 flex-wrap justify-center">
           {products.map((p, idx) => (
-            <div key={p.id} className="flex items-center gap-1.5 text-xs font-semibold">
-              <span className="w-3 h-3 rounded-xs border" style={{ backgroundColor: itemColors[idx].hex, borderColor: itemColors[idx].stroke }} />
-              <span className="truncate max-w-[100px]">{p.name}</span>
+            <div key={p.id} className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-md bg-muted/30 border border-border/50">
+              <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: itemColors[idx].hex }} aria-hidden="true" />
+              <span className="truncate max-w-[140px]" title={p.name}>{p.name}</span>
             </div>
           ))}
         </div>
@@ -697,7 +718,7 @@ export function BuyerComparePage() {
         {/* Supplier / Product Tabs Selector */}
         <div className="flex items-center gap-6 border-b border-border overflow-x-auto pb-1 scrollbar-none mb-6">
           <button
-            onClick={() => setActiveTab("suppliers")}
+            onClick={() => handleTabChange("suppliers")}
             className={cn(
               "px-2 py-2 text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer hover:text-primary hover:-translate-y-0.5 active:translate-y-0 flex items-center",
               activeTab === "suppliers"
@@ -709,7 +730,7 @@ export function BuyerComparePage() {
             {t("compareCountSuppliers", { count: suppliers.length })}
           </button>
           <button
-            onClick={() => setActiveTab("products")}
+            onClick={() => handleTabChange("products")}
             className={cn(
               "px-2 py-2 text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer hover:text-primary hover:-translate-y-0.5 active:translate-y-0 flex items-center",
               activeTab === "products"
@@ -753,9 +774,11 @@ export function BuyerComparePage() {
                     onClick={() => removeSupplier(supplier.id)}
                     variant="ghost"
                     size="icon"
-                    className="absolute right-2.5 top-2.5 h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg cursor-pointer transition-colors"
+                    aria-label={`Hapus ${supplier.companyName} dari perbandingan`}
+                    title={`Hapus ${supplier.companyName} dari perbandingan`}
+                    className="absolute right-2.5 top-2.5 h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg cursor-pointer transition-colors focus-visible:ring-2 focus-visible:ring-destructive"
                   >
-                    <X className="h-4 w-4" />
+                    <X className="h-4 w-4" aria-hidden="true" />
                   </Button>
 
                   {/* Rating Circle score (versus.com style) */}
@@ -770,7 +793,7 @@ export function BuyerComparePage() {
                     {supplier.companyName}
                   </h3>
                   <div className="flex items-center gap-1 text-muted-foreground text-xs font-normal mb-6">
-                    <MapPin className="h-3.5 w-3.5 shrink-0" />
+                    <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                     <span>{supplier.location.split(",")[0]}</span>
                   </div>
 
@@ -781,7 +804,7 @@ export function BuyerComparePage() {
                       className="w-full bg-primary text-primary-foreground hover:bg-primary/95 text-xs font-semibold cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/20 rounded-lg"
                     >
                       <Link href="/rfq/create">
-                        <MessageSquare className="mr-1.5 h-3.5 w-3.5" />
+                        <MessageSquare className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
                         {t("sendRfq")}
                       </Link>
                     </Button>
@@ -801,31 +824,31 @@ export function BuyerComparePage() {
                 <div
                   className="flex flex-col items-center justify-center p-8 border border-dashed border-border rounded-lg bg-muted text-center w-[280px] shrink-0 h-[340px]"
                 >
-                  <Flame className="h-10 w-10 text-muted-foreground opacity-30 mb-4" />
+                  <Flame className="h-10 w-10 text-muted-foreground opacity-30 mb-4" aria-hidden="true" />
                   <p className="text-xs text-muted-foreground font-medium mb-4">{t("compareMaxSuppliers")}</p>
                   <Button
                     onClick={openSupplierSearch}
                     variant="outline"
                     className="cursor-pointer border-dashed border-border hover:border-solid hover:bg-card transition-all hover:-translate-y-0.5 active:translate-y-0 rounded-lg px-4"
                   >
-                    <Plus className="h-4 w-4 mr-1.5" /> {t("btnAddSupplier")}
+                    <Plus className="h-4 w-4 mr-1.5" aria-hidden="true" /> {t("btnAddSupplier")}
                   </Button>
                 </div>
               )}
             </div>
 
             {suppliers.length > 0 && (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+              <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
                 {/* SVG Radar Chart Column */}
-                <div className="lg:col-span-1">
+                <div className="xl:col-span-5">
                   {renderSupplierRadar()}
                 </div>
 
                 {/* Versus Visual Progress Bars & Table Column */}
-                <div className="lg:col-span-2 space-y-6">
+                <div className="xl:col-span-7 space-y-6">
                   <div className="bg-card border border-border rounded-lg p-6 shadow-xs">
-                    <h3 className="text-sm font-bold text-foreground mb-6 flex items-center gap-1.5">
-                      <Award className="h-4 w-4 text-primary" /> {t("sectionReputationPoints")}
+                    <h3 className="text-sm font-bold text-foreground mb-6 flex items-center gap-1.5 font-heading">
+                      <Award className="h-4 w-4 text-primary" aria-hidden="true" /> {t("sectionReputationPoints")}
                     </h3>
                     <div className="space-y-6">
                       {/* Rating Progress comparison */}
@@ -835,20 +858,30 @@ export function BuyerComparePage() {
                           <span className="text-foreground">{t("highestScoreRating")}</span>
                         </div>
                         <div className="flex flex-col gap-2 bg-muted/10 p-3 rounded-lg border border-border">
-                          {suppliers.map((s, idx) => (
-                            <div key={s.id} className="space-y-1">
-                              <div className="flex justify-between text-[11px] font-medium">
-                                <span className="truncate max-w-[180px]">{s.companyName}</span>
-                                <span>{s.rating} / 5 ({t("reviewsVerifiedCount", { count: s.reviewCount })})</span>
-                              </div>
-                              <div className="h-2 w-full bg-muted rounded-xs overflow-hidden">
+                          {suppliers.map((s, idx) => {
+                            const ratingPercent = Math.min(100, Math.round((s.rating / 5) * 100));
+                            return (
+                              <div key={s.id} className="space-y-1">
+                                <div className="flex justify-between text-[11px] font-medium">
+                                  <span className="truncate max-w-[180px]">{s.companyName}</span>
+                                  <span>{s.rating} / 5 ({t("reviewsVerifiedCount", { count: s.reviewCount })})</span>
+                                </div>
                                 <div
-                                  className="h-full rounded-xs transition-all duration-500"
-                                  style={{ width: `${(s.rating / 5) * 100}%`, backgroundColor: itemColors[idx].hex }}
-                                />
+                                  role="progressbar"
+                                  aria-label={`${s.companyName} skor rating: ${ratingPercent}%`}
+                                  aria-valuenow={ratingPercent}
+                                  aria-valuemin={0}
+                                  aria-valuemax={100}
+                                  className="h-2 w-full bg-muted rounded-xs overflow-hidden"
+                                >
+                                  <div
+                                    className="h-full rounded-xs transition-all duration-500"
+                                    style={{ width: `${ratingPercent}%`, backgroundColor: itemColors[idx].hex }}
+                                  />
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       </div>
 
@@ -861,7 +894,6 @@ export function BuyerComparePage() {
                         <div className="flex flex-col gap-2 bg-muted/10 p-3 rounded-lg border border-border">
                           {suppliers.map((s, idx) => {
                             const hours = Number.parseInt(s.responseTime.replace(/\D/g, ""), 10) || 4;
-                            // Width calculation: 1 hr is 100%, 8 hr is 15%
                             const score = Math.max(10, 100 - (hours - 1) * 12);
                             return (
                               <div key={s.id} className="space-y-1">
@@ -869,7 +901,14 @@ export function BuyerComparePage() {
                                   <span className="truncate max-w-[180px]">{s.companyName}</span>
                                   <span>{s.responseTime}</span>
                                 </div>
-                                <div className="h-2 w-full bg-muted rounded-xs overflow-hidden">
+                                <div
+                                  role="progressbar"
+                                  aria-label={`${s.companyName} kecepatan respon: ${s.responseTime}`}
+                                  aria-valuenow={score}
+                                  aria-valuemin={0}
+                                  aria-valuemax={100}
+                                  className="h-2 w-full bg-muted rounded-xs overflow-hidden"
+                                >
                                   <div
                                     className="h-full rounded-xs transition-all duration-500"
                                     style={{ width: `${score}%`, backgroundColor: itemColors[idx].hex }}
@@ -889,14 +928,21 @@ export function BuyerComparePage() {
                         </div>
                         <div className="flex flex-col gap-2 bg-muted/10 p-3 rounded-lg border border-border">
                           {suppliers.map((s, idx) => {
-                            const score = getMoqScore(s.moq) * 100;
+                            const score = Math.round(getMoqScore(s.moq) * 100);
                             return (
                               <div key={s.id} className="space-y-1">
                                 <div className="flex justify-between text-[11px] font-medium">
                                   <span className="truncate max-w-[180px]">{s.companyName}</span>
                                   <span>{s.moq}</span>
                                 </div>
-                                <div className="h-2 w-full bg-muted rounded-xs overflow-hidden">
+                                <div
+                                  role="progressbar"
+                                  aria-label={`${s.companyName} skor MOQ: ${score}%`}
+                                  aria-valuenow={score}
+                                  aria-valuemin={0}
+                                  aria-valuemax={100}
+                                  className="h-2 w-full bg-muted rounded-xs overflow-hidden"
+                                >
                                   <div
                                     className="h-full rounded-xs transition-all duration-500"
                                     style={{ width: `${score}%`, backgroundColor: itemColors[idx].hex }}
@@ -911,39 +957,55 @@ export function BuyerComparePage() {
                   </div>
 
                   {/* Fact sheet table details */}
-                  <div className="overflow-x-auto border border-border rounded-lg bg-card shadow-xs">
-                    <table className="w-full border-collapse text-left text-sm text-foreground">
+                  <div className="overflow-x-auto border border-border rounded-lg bg-card shadow-xs scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20">
+                    <table className="w-full border-collapse text-left text-sm text-foreground" aria-label={t("specDetails")}>
+                      <caption className="sr-only">{t("specDetails")}</caption>
                       <thead>
                         <tr className="border-b border-border bg-muted/20">
-                          <th className="p-4 font-bold text-muted-foreground min-w-[150px]">{t("specDetails")}</th>
+                          <th
+                            scope="col"
+                            className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-bold text-muted-foreground min-w-[170px] z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)]"
+                          >
+                            {t("specDetails")}
+                          </th>
                           {suppliers.map((s, idx) => (
-                            <th key={s.id} className="p-4 font-bold min-w-[150px]">
-                              <span className="text-xs uppercase tracking-wider opacity-60 block">{t("specSupplier").toUpperCase()} {idx + 1}</span>
-                              <span className="truncate block max-w-[150px]">{s.companyName}</span>
+                            <th key={s.id} scope="col" className="p-4 font-bold min-w-[190px] border-r border-border/40 last:border-r-0">
+                              <span className="text-[10px] uppercase tracking-wider opacity-60 block">{t("specSupplier").toUpperCase()} {idx + 1}</span>
+                              <span className="font-semibold text-foreground line-clamp-2 mt-0.5">{s.companyName}</span>
                             </th>
                           ))}
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-border">
                         <tr>
-                          <td className="p-4 font-semibold text-muted-foreground">{t("specBusinessType")}</td>
+                          <th scope="row" className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-semibold text-muted-foreground z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] text-left">
+                            {t("specBusinessType")}
+                          </th>
                           {suppliers.map((s) => (
-                            <td key={s.id} className="p-4">{s.businessType}</td>
+                            <td key={s.id} className="p-4 border-r border-border/40 last:border-r-0">
+                              {s.businessType}
+                            </td>
                           ))}
                         </tr>
                         <tr>
-                          <td className="p-4 font-semibold text-muted-foreground">{t("specEstablishedYear")}</td>
+                          <th scope="row" className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-semibold text-muted-foreground z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] text-left">
+                            {t("specEstablishedYear")}
+                          </th>
                           {suppliers.map((s) => (
-                            <td key={s.id} className="p-4">{s.establishedYear} {t("businessAgeYears", { age: new Date().getFullYear() - s.establishedYear })}</td>
+                            <td key={s.id} className="p-4 border-r border-border/40 last:border-r-0">
+                              {s.establishedYear} {t("businessAgeYears", { age: new Date().getFullYear() - s.establishedYear })}
+                            </td>
                           ))}
                         </tr>
                         <tr>
-                          <td className="p-4 font-semibold text-muted-foreground">{t("specVerificationLevel")}</td>
+                          <th scope="row" className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-semibold text-muted-foreground z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] text-left">
+                            {t("specVerificationLevel")}
+                          </th>
                           {suppliers.map((s) => (
-                            <td key={s.id} className="p-4">
+                            <td key={s.id} className="p-4 border-r border-border/40 last:border-r-0">
                               {s.verified ? (
                                 <Badge variant="outline" className="text-[10px] text-success border-success/20 bg-success/10 rounded-lg">
-                                  <ShieldCheck className="h-3 w-3 mr-1" /> {t("verifiedB2b")}
+                                  <ShieldCheck className="h-3 w-3 mr-1" aria-hidden="true" /> {t("verifiedB2b")}
                                 </Badge>
                               ) : (
                                 <Badge variant="secondary" className="text-[10px] rounded-lg">Draft/Registered</Badge>
@@ -952,9 +1014,11 @@ export function BuyerComparePage() {
                           ))}
                         </tr>
                         <tr>
-                          <td className="p-4 font-semibold text-muted-foreground">{t("specLegalCertifications")}</td>
+                          <th scope="row" className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-semibold text-muted-foreground z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] text-left">
+                            {t("specLegalCertifications")}
+                          </th>
                           {suppliers.map((s) => (
-                            <td key={s.id} className="p-4">
+                            <td key={s.id} className="p-4 border-r border-border/40 last:border-r-0">
                               <div className="flex flex-wrap gap-1">
                                 {s.certifications.length > 0 ? (
                                   s.certifications.map((c) => (
@@ -974,71 +1038,131 @@ export function BuyerComparePage() {
                   </div>
 
                   {/* Versus Style User Review Tab comparison */}
-                  <div className="bg-card border border-border rounded-lg p-6 shadow-xs">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                      <h3 className="text-sm font-bold text-foreground">{t("userReviews")}</h3>
+                  <div className="bg-card border border-border rounded-lg p-6 shadow-xs space-y-6">
+                    <div className="space-y-3">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                        <h3 className="text-base font-bold text-foreground font-heading">{t("userReviews")}</h3>
+                        <p className="text-xs text-muted-foreground">{t("selectSupplierToViewReviews") || "Pilih supplier untuk melihat rincian ulasan"}</p>
+                      </div>
+
                       {suppliers.length > 0 && (
-                        <Tabs
-                          value={activeSupplierId}
-                          onValueChange={setSelectedSupplierReviewTab}
-                          className="w-full sm:w-auto"
+                        <div
+                          role="tablist"
+                          aria-label={t("userReviews")}
+                          className="flex flex-wrap gap-2 p-1.5 bg-muted/20 border border-border rounded-lg"
                         >
-                          <TabsList className="bg-muted/30 p-1 border border-border rounded-lg flex gap-1 flex-wrap">
-                            {suppliers.map((s, idx) => (
-                              <TabsTrigger
+                          {suppliers.map((s, idx) => {
+                            const isSelected = s.id === activeSupplierId;
+                            return (
+                              <button
                                 key={s.id}
-                                value={s.id}
-                                className="cursor-pointer text-xs font-semibold px-3 py-1.5 rounded-md data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-xs transition-all duration-200"
+                                type="button"
+                                role="tab"
+                                id={`tab-supplier-${s.id}`}
+                                aria-selected={isSelected}
+                                aria-controls={`panel-supplier-${s.id}`}
+                                onClick={() => setSelectedSupplierReviewTab(s.id)}
+                                className={cn(
+                                  "cursor-pointer text-xs font-semibold px-3 py-2 rounded-md transition-all duration-200 flex items-center gap-2 text-left hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary",
+                                  isSelected
+                                    ? "bg-card text-foreground shadow-xs border border-primary/30 ring-1 ring-primary/20 font-bold"
+                                    : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                                )}
                               >
-                                <span className="w-2 h-2 rounded-full mr-2 inline-block" style={{ backgroundColor: itemColors[idx].hex }} />
-                                {s.companyName}
-                              </TabsTrigger>
-                            ))}
-                          </TabsList>
-                        </Tabs>
+                                <span
+                                  className="w-2.5 h-2.5 rounded-full shrink-0"
+                                  style={{ backgroundColor: itemColors[idx].hex }}
+                                  aria-hidden="true"
+                                />
+                                <span className="truncate max-w-[200px] sm:max-w-[260px]">{s.companyName}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
                       )}
                     </div>
 
                     {suppliers.map((s) => {
                       if (s.id !== activeSupplierId) return null;
+                      const scoreQuality = Math.min(100, Math.round(s.rating * 20));
+                      const scoreDelivery = s.rating >= 4.5 ? 95 : 85;
+
                       return (
-                        <div key={s.id} className="space-y-6">
+                        <div
+                          key={s.id}
+                          role="tabpanel"
+                          id={`panel-supplier-${s.id}`}
+                          aria-labelledby={`tab-supplier-${s.id}`}
+                          className="space-y-6"
+                        >
                           {/* Aggregate ratings card */}
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-muted/10 p-4 border border-border rounded-lg">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-muted/10 p-5 border border-border rounded-lg">
                             <div className="flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-border pb-4 md:pb-0 md:pr-6">
-                              <span className="text-3xl font-extrabold text-foreground">{s.rating}</span>
-                              <div className="flex items-center gap-0.5 my-1 text-warning">
+                              <span className="text-4xl font-extrabold text-foreground">{s.rating.toFixed(1)}</span>
+                              <div
+                                className="flex items-center gap-0.5 my-1.5 text-warning"
+                                aria-label={`${s.rating} dari 5 bintang`}
+                              >
                                 {STAR_KEYS.map((starKey, starIdx) => (
                                   <Star
                                     key={starKey}
+                                    aria-hidden="true"
                                     className={`h-4.5 w-4.5 ${
                                       starIdx < Math.floor(s.rating)
                                         ? "fill-warning text-warning"
-                                        : "text-muted"
+                                        : "text-muted stroke-muted-foreground/30"
                                     }`}
                                   />
                                 ))}
                               </div>
-                              <span className="text-xs text-muted-foreground font-medium">{t("reviewsVerifiedCount", { count: s.reviewCount })}</span>
+                              <span className="text-xs text-muted-foreground font-medium">
+                                {t("reviewsVerifiedCount", { count: s.reviewCount })}
+                              </span>
                             </div>
 
-                            <div className="md:col-span-2 space-y-2 flex flex-col justify-center">
-                              <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t("satisfactionMetrics")}</h4>
-                              <div className="space-y-1.5 text-xs">
-                                <div className="flex justify-between font-medium">
-                                  <span>{t("productQuality")}</span>
-                                  <span>{(s.rating * 20).toFixed(0)}%</span>
-                                </div>
-                                <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                                  <div className="h-full bg-success transition-all duration-500" style={{ width: `${s.rating * 20}%` }} />
+                            <div className="md:col-span-2 space-y-3 flex flex-col justify-center">
+                              <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                                {t("satisfactionMetrics")}
+                              </h4>
+                              <div className="space-y-2.5 text-xs">
+                                <div className="space-y-1">
+                                  <div className="flex justify-between font-medium">
+                                    <span>{t("productQuality")}</span>
+                                    <span className="font-semibold text-foreground">{scoreQuality}%</span>
+                                  </div>
+                                  <div
+                                    role="progressbar"
+                                    aria-label={t("productQuality")}
+                                    aria-valuenow={scoreQuality}
+                                    aria-valuemin={0}
+                                    aria-valuemax={100}
+                                    className="h-2 bg-muted rounded-full overflow-hidden"
+                                  >
+                                    <div
+                                      className="h-full bg-success transition-all duration-500 rounded-full"
+                                      style={{ width: `${scoreQuality}%` }}
+                                    />
+                                  </div>
                                 </div>
 
-                                <div className="flex justify-between font-medium">
-                                  <span>{t("onTimeDelivery")}</span>
-                                  <span>{s.rating >= 4.5 ? 95 : 85}%</span>
-                                </div>
-                                <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                                  <div className="h-full bg-primary transition-all duration-500" style={{ width: `${s.rating >= 4.5 ? 95 : 85}%` }} />
+                                <div className="space-y-1">
+                                  <div className="flex justify-between font-medium">
+                                    <span>{t("onTimeDelivery")}</span>
+                                    <span className="font-semibold text-foreground">{scoreDelivery}%</span>
+                                  </div>
+                                  <div
+                                    role="progressbar"
+                                    aria-label={t("onTimeDelivery")}
+                                    aria-valuenow={scoreDelivery}
+                                    aria-valuemin={0}
+                                    aria-valuemax={100}
+                                    className="h-2 bg-muted rounded-full overflow-hidden"
+                                  >
+                                    <div
+                                      className="h-full bg-primary transition-all duration-500 rounded-full"
+                                      style={{ width: `${scoreDelivery}%` }}
+                                    />
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -1046,18 +1170,23 @@ export function BuyerComparePage() {
 
                           {/* List of reviews */}
                           <div className="space-y-3">
-                            <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t("recentReviews")}</h4>
+                            <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                              {t("recentReviews")}
+                            </h4>
                             {s.reviews && s.reviews.length > 0 ? (
                               s.reviews.map((rev) => (
                                 <div key={rev.id} className="border border-border p-4 rounded-lg bg-card space-y-2 relative overflow-hidden">
                                   <div className="flex items-center justify-between">
                                     <span className="font-semibold text-xs text-foreground">{rev.buyerName}</span>
-                                    <div className="flex items-center gap-1 text-[11px] font-bold text-warning">
+                                    <div
+                                      className="flex items-center gap-1 text-[11px] font-bold text-warning"
+                                      aria-label={`${rev.rating} dari 5 bintang`}
+                                    >
                                       {STAR_KEYS.slice(0, rev.rating).map((starKey) => (
-                                        <Star key={starKey} className="h-3 w-3 fill-warning text-warning" />
+                                        <Star key={starKey} aria-hidden="true" className="h-3.5 w-3.5 fill-warning text-warning" />
                                       ))}
                                       {STAR_KEYS.slice(rev.rating).map((starKey) => (
-                                        <Star key={starKey} className="h-3 w-3 text-muted" />
+                                        <Star key={starKey} aria-hidden="true" className="h-3.5 w-3.5 text-muted" />
                                       ))}
                                     </div>
                                   </div>
@@ -1068,7 +1197,9 @@ export function BuyerComparePage() {
                                 </div>
                               ))
                             ) : (
-                              <p className="text-xs text-muted-foreground italic text-center py-4">{t("noReviews") || "Belum ada ulasan"}</p>
+                              <p className="text-xs text-muted-foreground italic text-center py-6 bg-muted/5 border border-dashed border-border rounded-lg">
+                                {t("noReviews") || "Belum ada ulasan"}
+                              </p>
                             )}
                           </div>
                         </div>
@@ -1113,9 +1244,11 @@ export function BuyerComparePage() {
                     onClick={() => removeProduct(product.id)}
                     variant="ghost"
                     size="icon"
-                    className="absolute right-2.5 top-2.5 h-7 w-7 text-foreground/75 bg-card/80 backdrop-blur-xs hover:text-destructive hover:bg-destructive/10 rounded-lg cursor-pointer transition-colors z-10 shadow-xs"
+                    aria-label={`Hapus ${product.name} dari perbandingan`}
+                    title={`Hapus ${product.name} dari perbandingan`}
+                    className="absolute right-2.5 top-2.5 h-7 w-7 text-foreground/75 bg-card/80 backdrop-blur-xs hover:text-destructive hover:bg-destructive/10 rounded-lg cursor-pointer transition-colors z-10 shadow-xs focus-visible:ring-2 focus-visible:ring-destructive"
                   >
-                    <X className="h-4 w-4" />
+                    <X className="h-4 w-4" aria-hidden="true" />
                   </Button>
 
                   {/* Product Image section */}
@@ -1162,7 +1295,7 @@ export function BuyerComparePage() {
                         className="w-full bg-primary text-primary-foreground hover:bg-primary/95 text-xs font-semibold cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-primary/20 rounded-lg"
                       >
                         <Link href="/rfq/create">
-                          <MessageSquare className="mr-1.5 h-3.5 w-3.5" />
+                          <MessageSquare className="mr-1.5 h-3.5 w-3.5" aria-hidden="true" />
                           {t("requestQuote")}
                         </Link>
                       </Button>
@@ -1175,31 +1308,31 @@ export function BuyerComparePage() {
                 <div
                   className="flex flex-col items-center justify-center p-8 border border-dashed border-border rounded-lg bg-muted/5 text-center w-[280px] shrink-0 h-[380px]"
                 >
-                  <Package className="h-10 w-10 text-muted-foreground opacity-30 mb-4" />
+                  <Package className="h-10 w-10 text-muted-foreground opacity-30 mb-4" aria-hidden="true" />
                   <p className="text-xs text-muted-foreground font-medium mb-4">{t("compareMaxProducts")}</p>
                   <Button
                     onClick={openProductSearch}
                     variant="outline"
                     className="cursor-pointer border-dashed border-border hover:border-solid hover:bg-card transition-all hover:-translate-y-0.5 active:translate-y-0 rounded-lg px-4"
                   >
-                    <Plus className="h-4 w-4 mr-1.5" /> {t("btnAddProduct")}
+                    <Plus className="h-4 w-4 mr-1.5" aria-hidden="true" /> {t("btnAddProduct")}
                   </Button>
                 </div>
               )}
             </div>
 
             {products.length > 0 && (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+              <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
                 {/* SVG Radar Chart Column */}
-                <div className="lg:col-span-1">
+                <div className="xl:col-span-5">
                   {renderProductRadar()}
                 </div>
 
                 {/* Progress bars & details sheet */}
-                <div className="lg:col-span-2 space-y-6">
+                <div className="xl:col-span-7 space-y-6">
                   <div className="bg-card border border-border rounded-lg p-6 shadow-xs">
-                    <h3 className="text-sm font-bold text-foreground mb-6 flex items-center gap-1.5">
-                      <Award className="h-4 w-4 text-primary" /> {t("sectionProductPoints")}
+                    <h3 className="text-sm font-bold text-foreground mb-6 flex items-center gap-1.5 font-heading">
+                      <Award className="h-4 w-4 text-primary" aria-hidden="true" /> {t("sectionProductPoints")}
                     </h3>
                     <div className="space-y-6">
                       {/* Price comparison */}
@@ -1210,14 +1343,21 @@ export function BuyerComparePage() {
                         </div>
                         <div className="flex flex-col gap-2 bg-muted/10 p-3 rounded-lg border border-border">
                           {products.map((p, idx) => {
-                            const score = getProductPriceScore(p.price) * 100;
+                            const score = Math.round(getProductPriceScore(p.price) * 100);
                             return (
                               <div key={p.id} className="space-y-1">
                                 <div className="flex justify-between text-[11px] font-medium">
                                   <span className="truncate max-w-[180px]">{p.name}</span>
-                                  <span>{formatPrice(p.price)}</span>
+                                  <span className="font-semibold">{formatPrice(p.price)}</span>
                                 </div>
-                                <div className="h-2 w-full bg-muted rounded-xs overflow-hidden">
+                                <div
+                                  role="progressbar"
+                                  aria-label={`${p.name} skor harga: ${score}%`}
+                                  aria-valuenow={score}
+                                  aria-valuemin={0}
+                                  aria-valuemax={100}
+                                  className="h-2 w-full bg-muted rounded-xs overflow-hidden"
+                                >
                                   <div
                                     className="h-full rounded-xs transition-all duration-500"
                                     style={{ width: `${score}%`, backgroundColor: itemColors[idx].hex }}
@@ -1237,14 +1377,21 @@ export function BuyerComparePage() {
                         </div>
                         <div className="flex flex-col gap-2 bg-muted/10 p-3 rounded-lg border border-border">
                           {products.map((p, idx) => {
-                            const score = getMoqScore(p.moq) * 100;
+                            const score = Math.round(getMoqScore(p.moq) * 100);
                             return (
                               <div key={p.id} className="space-y-1">
                                 <div className="flex justify-between text-[11px] font-medium">
                                   <span className="truncate max-w-[180px]">{p.name}</span>
-                                  <span>{p.moq}</span>
+                                  <span className="font-semibold">{p.moq}</span>
                                 </div>
-                                <div className="h-2 w-full bg-muted rounded-xs overflow-hidden">
+                                <div
+                                  role="progressbar"
+                                  aria-label={`${p.name} skor MOQ: ${score}%`}
+                                  aria-valuenow={score}
+                                  aria-valuemin={0}
+                                  aria-valuemax={100}
+                                  className="h-2 w-full bg-muted rounded-xs overflow-hidden"
+                                >
                                   <div
                                     className="h-full rounded-xs transition-all duration-500"
                                     style={{ width: `${score}%`, backgroundColor: itemColors[idx].hex }}
@@ -1259,48 +1406,73 @@ export function BuyerComparePage() {
                   </div>
 
                   {/* Product comparative specification table */}
-                  <div className="overflow-x-auto border border-border rounded-lg bg-card shadow-xs">
-                    <table className="w-full border-collapse text-left text-sm text-foreground">
+                  <div className="overflow-x-auto border border-border rounded-lg bg-card shadow-xs scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground/20">
+                    <table className="w-full border-collapse text-left text-sm text-foreground" aria-label={t("specProductDetails")}>
+                      <caption className="sr-only">{t("specProductDetails")}</caption>
                       <thead>
                         <tr className="border-b border-border bg-muted/20">
-                          <th className="p-4 font-bold text-muted-foreground min-w-[150px]">{t("specProductDetails")}</th>
+                          <th
+                            scope="col"
+                            className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-bold text-muted-foreground min-w-[170px] z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)]"
+                          >
+                            {t("specProductDetails")}
+                          </th>
                           {products.map((p, idx) => (
-                            <th key={p.id} className="p-4 font-bold min-w-[150px]">
-                              <span className="text-xs uppercase tracking-wider opacity-60 block">{t("specProduct").toUpperCase()} {idx + 1}</span>
-                              <span className="truncate block max-w-[150px]">{p.name}</span>
+                            <th key={p.id} scope="col" className="p-4 font-bold min-w-[200px] border-r border-border/40 last:border-r-0">
+                              <span className="text-[10px] uppercase tracking-wider opacity-60 block">{t("specProduct").toUpperCase()} {idx + 1}</span>
+                              <span className="font-semibold text-foreground line-clamp-2 mt-0.5">{p.name}</span>
                             </th>
                           ))}
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-border">
                         <tr>
-                          <td className="p-4 font-semibold text-muted-foreground">{t("specCategory")}</td>
+                          <th scope="row" className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-semibold text-muted-foreground z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] text-left">
+                            {t("specCategory")}
+                          </th>
                           {products.map((p) => (
-                            <td key={p.id} className="p-4">{p.categoryName || t("specCategoryGeneral")}</td>
+                            <td key={p.id} className="p-4 border-r border-border/40 last:border-r-0">
+                              {p.categoryName || t("specCategoryGeneral")}
+                            </td>
                           ))}
                         </tr>
                         <tr>
-                          <td className="p-4 font-semibold text-muted-foreground">{t("specSourcingCapacity")}</td>
+                          <th scope="row" className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-semibold text-muted-foreground z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] text-left">
+                            {t("specSourcingCapacity")}
+                          </th>
                           {products.map((p) => (
-                            <td key={p.id} className="p-4">{p.capacity || t("contactUs")}</td>
+                            <td key={p.id} className="p-4 border-r border-border/40 last:border-r-0">
+                              {p.capacity || t("contactUs")}
+                            </td>
                           ))}
                         </tr>
                         <tr>
-                          <td className="p-4 font-semibold text-muted-foreground">{t("specSupplier")}</td>
+                          <th scope="row" className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-semibold text-muted-foreground z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] text-left">
+                            {t("specSupplier")}
+                          </th>
                           {products.map((p) => (
-                            <td key={p.id} className="p-4">
-                              <Link href={`/demo/suppliers/${p.supplierSlug}`} className="text-primary hover:underline font-semibold">{p.supplierCompanyName}</Link>
-                              <div className="flex items-center gap-1 mt-1 text-xs text-muted-foreground">
-                                <Star className="h-3 w-3 fill-warning text-warning" />
-                                <span>{p.supplierRating}</span>
+                            <td key={p.id} className="p-4 border-r border-border/40 last:border-r-0">
+                              <Link href={`/demo/suppliers/${p.supplierSlug}`} className="text-primary hover:underline font-semibold cursor-pointer">
+                                {p.supplierCompanyName}
+                              </Link>
+                              <div
+                                className="flex items-center gap-1 mt-1 text-xs text-muted-foreground"
+                                aria-label={`${p.supplierRating} dari 5 bintang`}
+                              >
+                                <Star className="h-3 w-3 fill-warning text-warning" aria-hidden="true" />
+                                <span className="font-semibold text-foreground">{p.supplierRating}</span>
                               </div>
                             </td>
                           ))}
                         </tr>
                         <tr>
-                          <td className="p-4 font-semibold text-muted-foreground">{t("specSupplierLocation")}</td>
+                          <th scope="row" className="sticky left-0 bg-card/95 backdrop-blur-xs p-4 font-semibold text-muted-foreground z-10 border-r border-border/80 shadow-[2px_0_4px_-2px_rgba(0,0,0,0.1)] text-left">
+                            {t("specSupplierLocation")}
+                          </th>
                           {products.map((p) => (
-                            <td key={p.id} className="p-4">{p.supplierLocation}</td>
+                            <td key={p.id} className="p-4 border-r border-border/40 last:border-r-0">
+                              {p.supplierLocation}
+                            </td>
                           ))}
                         </tr>
                       </tbody>
@@ -1308,71 +1480,131 @@ export function BuyerComparePage() {
                   </div>
 
                   {/* Versus Style User Review Tab comparison for Products */}
-                  <div className="bg-card border border-border rounded-lg p-6 shadow-xs">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                      <h3 className="text-sm font-bold text-foreground">{t("userReviews")}</h3>
+                  <div className="bg-card border border-border rounded-lg p-6 shadow-xs space-y-6">
+                    <div className="space-y-3">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                        <h3 className="text-base font-bold text-foreground font-heading">{t("userReviews")}</h3>
+                        <p className="text-xs text-muted-foreground">{t("selectProductToViewReviews") || "Pilih produk untuk melihat rincian ulasan"}</p>
+                      </div>
+
                       {products.length > 0 && (
-                        <Tabs
-                          value={activeProductId}
-                          onValueChange={setSelectedProductReviewTab}
-                          className="w-full sm:w-auto"
+                        <div
+                          role="tablist"
+                          aria-label={t("userReviews")}
+                          className="flex flex-wrap gap-2 p-1.5 bg-muted/20 border border-border rounded-lg"
                         >
-                          <TabsList className="bg-muted/30 p-1 border border-border rounded-lg flex gap-1 flex-wrap">
-                            {products.map((p, idx) => (
-                              <TabsTrigger
+                          {products.map((p, idx) => {
+                            const isSelected = p.id === activeProductId;
+                            return (
+                              <button
                                 key={p.id}
-                                value={p.id}
-                                className="cursor-pointer text-xs font-semibold px-3 py-1.5 rounded-md data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-xs transition-all duration-200"
+                                type="button"
+                                role="tab"
+                                id={`tab-product-${p.id}`}
+                                aria-selected={isSelected}
+                                aria-controls={`panel-product-${p.id}`}
+                                onClick={() => setSelectedProductReviewTab(p.id)}
+                                className={cn(
+                                  "cursor-pointer text-xs font-semibold px-3 py-2 rounded-md transition-all duration-200 flex items-center gap-2 text-left hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary",
+                                  isSelected
+                                    ? "bg-card text-foreground shadow-xs border border-primary/30 ring-1 ring-primary/20 font-bold"
+                                    : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
+                                )}
                               >
-                                <span className="w-2 h-2 rounded-full mr-2 inline-block" style={{ backgroundColor: itemColors[idx].hex }} />
-                                {p.name}
-                              </TabsTrigger>
-                            ))}
-                          </TabsList>
-                        </Tabs>
+                                <span
+                                  className="w-2.5 h-2.5 rounded-full shrink-0"
+                                  style={{ backgroundColor: itemColors[idx].hex }}
+                                  aria-hidden="true"
+                                />
+                                <span className="truncate max-w-[200px] sm:max-w-[260px]">{p.name}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
                       )}
                     </div>
 
                     {products.map((p) => {
                       if (p.id !== activeProductId) return null;
+                      const scoreAccuracy = Math.min(100, Math.round(p.supplierRating * 20));
+                      const scoreSpeed = p.supplierRating >= 4.5 ? 90 : 75;
+
                       return (
-                        <div key={p.id} className="space-y-6">
+                        <div
+                          key={p.id}
+                          role="tabpanel"
+                          id={`panel-product-${p.id}`}
+                          aria-labelledby={`tab-product-${p.id}`}
+                          className="space-y-6"
+                        >
                           {/* Aggregate ratings card */}
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-muted/10 p-4 border border-border rounded-lg">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-muted/10 p-5 border border-border rounded-lg">
                             <div className="flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-border pb-4 md:pb-0 md:pr-6">
-                              <span className="text-3xl font-extrabold text-foreground">{p.supplierRating}</span>
-                              <div className="flex items-center gap-0.5 my-1 text-warning">
+                              <span className="text-4xl font-extrabold text-foreground">{p.supplierRating.toFixed(1)}</span>
+                              <div
+                                className="flex items-center gap-0.5 my-1.5 text-warning"
+                                aria-label={`${p.supplierRating} dari 5 bintang`}
+                              >
                                 {STAR_KEYS.map((starKey, starIdx) => (
                                   <Star
                                     key={starKey}
+                                    aria-hidden="true"
                                     className={`h-4.5 w-4.5 ${
                                       starIdx < Math.floor(p.supplierRating)
                                         ? "fill-warning text-warning"
-                                        : "text-muted"
+                                        : "text-muted stroke-muted-foreground/30"
                                     }`}
                                   />
                                 ))}
                               </div>
-                              <span className="text-xs text-muted-foreground font-medium">{t("reviewsSupplierCount", { count: p.supplierReviewCount })}</span>
+                              <span className="text-xs text-muted-foreground font-medium">
+                                {t("reviewsSupplierCount", { count: p.supplierReviewCount })}
+                              </span>
                             </div>
 
-                            <div className="md:col-span-2 space-y-2 flex flex-col justify-center">
-                              <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t("productSupplierMetrics")}</h4>
-                              <div className="space-y-1.5 text-xs">
-                                <div className="flex justify-between font-medium">
-                                  <span>{t("descriptionAccuracy")}</span>
-                                  <span>{(p.supplierRating * 20).toFixed(0)}%</span>
-                                </div>
-                                <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                                  <div className="h-full bg-success transition-all duration-500" style={{ width: `${p.supplierRating * 20}%` }} />
+                            <div className="md:col-span-2 space-y-3 flex flex-col justify-center">
+                              <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                                {t("productSupplierMetrics")}
+                              </h4>
+                              <div className="space-y-2.5 text-xs">
+                                <div className="space-y-1">
+                                  <div className="flex justify-between font-medium">
+                                    <span>{t("descriptionAccuracy")}</span>
+                                    <span className="font-semibold text-foreground">{scoreAccuracy}%</span>
+                                  </div>
+                                  <div
+                                    role="progressbar"
+                                    aria-label={t("descriptionAccuracy")}
+                                    aria-valuenow={scoreAccuracy}
+                                    aria-valuemin={0}
+                                    aria-valuemax={100}
+                                    className="h-2 bg-muted rounded-full overflow-hidden"
+                                  >
+                                    <div
+                                      className="h-full bg-success transition-all duration-500 rounded-full"
+                                      style={{ width: `${scoreAccuracy}%` }}
+                                    />
+                                  </div>
                                 </div>
 
-                                <div className="flex justify-between font-medium">
-                                  <span>{t("supplierResponseSpeed")}</span>
-                                  <span>{p.supplierResponseTime}</span>
-                                </div>
-                                <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                                  <div className="h-full bg-primary transition-all duration-500" style={{ width: `${p.supplierRating >= 4.5 ? 90 : 75}%` }} />
+                                <div className="space-y-1">
+                                  <div className="flex justify-between font-medium">
+                                    <span>{t("supplierResponseSpeed")}</span>
+                                    <span className="font-semibold text-foreground">{p.supplierResponseTime}</span>
+                                  </div>
+                                  <div
+                                    role="progressbar"
+                                    aria-label={t("supplierResponseSpeed")}
+                                    aria-valuenow={scoreSpeed}
+                                    aria-valuemin={0}
+                                    aria-valuemax={100}
+                                    className="h-2 bg-muted rounded-full overflow-hidden"
+                                  >
+                                    <div
+                                      className="h-full bg-primary transition-all duration-500 rounded-full"
+                                      style={{ width: `${scoreSpeed}%` }}
+                                    />
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -1380,18 +1612,23 @@ export function BuyerComparePage() {
 
                           {/* List of reviews */}
                           <div className="space-y-3">
-                            <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t("productBuyerReviews")}</h4>
+                            <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                              {t("productBuyerReviews")}
+                            </h4>
                             {p.reviews && p.reviews.length > 0 ? (
                               p.reviews.map((rev) => (
                                 <div key={rev.id} className="border border-border p-4 rounded-lg bg-card space-y-2 relative overflow-hidden">
                                   <div className="flex items-center justify-between">
                                     <span className="font-semibold text-xs text-foreground">{rev.buyerName}</span>
-                                    <div className="flex items-center gap-1 text-[11px] font-bold text-warning">
+                                    <div
+                                      className="flex items-center gap-1 text-[11px] font-bold text-warning"
+                                      aria-label={`${rev.rating} dari 5 bintang`}
+                                    >
                                       {STAR_KEYS.slice(0, rev.rating).map((starKey) => (
-                                        <Star key={starKey} className="h-3 w-3 fill-warning text-warning" />
+                                        <Star key={starKey} aria-hidden="true" className="h-3.5 w-3.5 fill-warning text-warning" />
                                       ))}
                                       {STAR_KEYS.slice(rev.rating).map((starKey) => (
-                                        <Star key={starKey} className="h-3 w-3 text-muted" />
+                                        <Star key={starKey} aria-hidden="true" className="h-3.5 w-3.5 text-muted" />
                                       ))}
                                     </div>
                                   </div>
@@ -1402,7 +1639,9 @@ export function BuyerComparePage() {
                                 </div>
                               ))
                             ) : (
-                              <p className="text-xs text-muted-foreground italic text-center py-4">{t("noReviews") || "Belum ada ulasan"}</p>
+                              <p className="text-xs text-muted-foreground italic text-center py-6 bg-muted/5 border border-dashed border-border rounded-lg">
+                                {t("noReviews") || "Belum ada ulasan"}
+                              </p>
                             )}
                           </div>
                         </div>
