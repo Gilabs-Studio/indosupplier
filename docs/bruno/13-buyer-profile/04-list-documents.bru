@@ -1,0 +1,24 @@
+meta {
+  name: List Buyer Documents
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{base_url}}/api/v1/buyer/profile/documents
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Lists all verified or pending legal verification documents submitted by buyer.
+}

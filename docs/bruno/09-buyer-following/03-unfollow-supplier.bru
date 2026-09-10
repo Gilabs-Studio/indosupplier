@@ -1,0 +1,25 @@
+meta {
+  name: Unfollow Supplier
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{base_url}}/api/v1/buyer/following/{{supplier_profile_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+  supplier_profile_id: ecd61c81-ec5f-4676-be35-da8d6ef6e561
+}
+
+docs {
+  Unfollows a supplier.
+}

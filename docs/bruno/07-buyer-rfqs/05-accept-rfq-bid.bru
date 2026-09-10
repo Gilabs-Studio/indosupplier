@@ -1,0 +1,26 @@
+meta {
+  name: Accept RFQ Bid
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/api/v1/buyer/rfqs/{{rfq_id}}/bids/{{bid_id}}/accept
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+  rfq_id: 3731f94d-4bb6-4e18-a516-bbe29887b518
+  bid_id: 95c6db1e-6e93-4f57-9346-bb1361ff35c3
+}
+
+docs {
+  Accepts a supplier bid for this RFQ and marks the RFQ as completed/accepted.
+}

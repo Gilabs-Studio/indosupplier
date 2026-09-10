@@ -1,0 +1,31 @@
+meta {
+  name: Update User Profile
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{base_url}}/api/v1/profile
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "name": "Raka Wijaya",
+    "email": "admin@example.com"
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Updates account name and email for currently authenticated user.
+}

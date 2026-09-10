@@ -1,0 +1,24 @@
+meta {
+  name: List Compared Products
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{base_url}}/api/v1/buyer/compare/products
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Lists all products currently added to the buyer's comparison session.
+}

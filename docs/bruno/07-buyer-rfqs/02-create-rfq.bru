@@ -1,0 +1,35 @@
+meta {
+  name: Create RFQ
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/v1/buyer/rfqs
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "product_name": "Premium White Pepper Muntok",
+    "category": "agricultural-products",
+    "quantity": "5",
+    "unit": "Ton",
+    "target_port": "Tanjung Priok, Jakarta",
+    "description": "Mencari supplier lada putih Muntok grade premium dengan sertifikat uji lab kandungan piperin minimal 4%."
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Submits a new Request for Quotation (RFQ).
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Mark Messages As Read
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/api/v1/buyer/chat/rooms/{{room_id}}/read
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+  room_id: fe666721-371d-4108-bb6e-00e3af635fc6
+}
+
+docs {
+  Marks all unread messages inside a chat room as read.
+}

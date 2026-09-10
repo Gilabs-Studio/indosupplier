@@ -1,0 +1,31 @@
+meta {
+  name: Reply Support Ticket
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/api/v1/buyer/support/tickets/{{ticket_number}}/messages
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "text": "Terima kasih infonya, kami tunggu kabar selanjutnya."
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+  ticket_number: TK-2026-0001
+}
+
+docs {
+  Appends a reply message to an existing support ticket thread.
+}

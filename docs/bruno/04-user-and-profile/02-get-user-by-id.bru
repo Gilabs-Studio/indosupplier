@@ -1,0 +1,25 @@
+meta {
+  name: Get User By ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/v1/users/{{user_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+  user_id: 30c34cc3-2fe3-45a3-a27e-d5ea74407354
+}
+
+docs {
+  Retrieves specific user details by their UUID.
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Get Support Ticket Detail
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/v1/buyer/support/tickets/{{ticket_number}}
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+  ticket_number: TK-2026-0001
+}
+
+docs {
+  Retrieves conversation messages and status for a specific support ticket.
+}

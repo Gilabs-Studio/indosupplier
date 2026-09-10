@@ -1,0 +1,25 @@
+meta {
+  name: Get RFQ Detail
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/v1/buyer/rfqs/{{rfq_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+  rfq_id: 3731f94d-4bb6-4e18-a516-bbe29887b518
+}
+
+docs {
+  Retrieves detailed information of an RFQ.
+}

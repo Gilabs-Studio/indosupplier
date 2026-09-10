@@ -1,0 +1,32 @@
+meta {
+  name: Upload Buyer Document
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/api/v1/buyer/profile/documents
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "document_type": "NIB",
+    "document_number": "9120002134567",
+    "file_url": "https://pub-d746125bb1b6423491682404faec8132.r2.dev/documents/nib_pt_baja.pdf"
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Submits a legal KYB verification document (NIB, SIUP, NPWP) for buyer profile validation.
+}

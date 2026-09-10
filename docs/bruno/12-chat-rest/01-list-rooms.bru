@@ -1,0 +1,24 @@
+meta {
+  name: List Chat Rooms
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/v1/buyer/chat/rooms
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Lists all active chat conversation rooms between the buyer and suppliers.
+}

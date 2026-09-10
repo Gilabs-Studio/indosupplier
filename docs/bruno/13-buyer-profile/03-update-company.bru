@@ -1,0 +1,33 @@
+meta {
+  name: Update Company Info
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{base_url}}/api/v1/buyer/profile/company
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "company_name": "PT Baja Sentosa Perkasa",
+    "industry": "Steel Manufacturing",
+    "website": "https://bajasentosa.indosupplier.local",
+    "address": "Jl. Industri Baja No. 88, Cakung, Jakarta Timur"
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Updates company profile details and legal business address.
+}

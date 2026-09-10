@@ -1,0 +1,25 @@
+meta {
+  name: Get Transaction By ID
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/v1/buyer/transactions/{{transaction_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+  transaction_id: a91c4536-b5b9-4ea5-8599-b1ea3d8da72d
+}
+
+docs {
+  Retrieves specific purchase order details by ID.
+}

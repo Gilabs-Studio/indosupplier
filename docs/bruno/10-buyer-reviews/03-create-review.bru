@@ -1,0 +1,32 @@
+meta {
+  name: Create Supplier Review
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/api/v1/buyer/reviews
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "purchaseOrderId": "de72dd0d-115b-4af7-b95d-b8677a4c93e7",
+    "rating": 5,
+    "reviewText": "Kualitas material sangat memuaskan, pengiriman tepat waktu dan dokumen pengujian lengkap."
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Submits a star rating and written review for a completed purchase order.
+}

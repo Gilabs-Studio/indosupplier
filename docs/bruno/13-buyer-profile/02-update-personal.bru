@@ -1,0 +1,31 @@
+meta {
+  name: Update Personal Info
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{base_url}}/api/v1/buyer/profile/personal
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "full_name": "Raka Wijaya Perkasa",
+    "phone": "+6281234567890"
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Updates personal contact information for buyer representative.
+}

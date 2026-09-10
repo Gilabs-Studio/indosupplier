@@ -1,0 +1,24 @@
+meta {
+  name: List Support Tickets
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/v1/buyer/support/tickets
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Lists all helpdesk support tickets submitted by the authenticated buyer.
+}

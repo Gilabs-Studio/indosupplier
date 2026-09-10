@@ -1,0 +1,24 @@
+meta {
+  name: Get Buyer Profile
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/v1/buyer/profile
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Fetches buyer account details and profile completeness score.
+}

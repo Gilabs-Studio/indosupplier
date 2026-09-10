@@ -1,0 +1,36 @@
+meta {
+  name: Create Transaction
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/v1/buyer/transactions
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "supplier_profile_id": "ecd61c81-ec5f-4676-be35-da8d6ef6e561",
+    "product_name": "Organic Black Pepper Premium",
+    "quantity_value": 250,
+    "quantity_unit": "kg",
+    "price_per_unit": 85000,
+    "delivery_address": "Kawasan Industri Jababeka 1, Cikarang",
+    "notes": "Pengiriman pesanan rutin bulanan"
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Creates a new purchase order transaction between buyer and supplier.
+}

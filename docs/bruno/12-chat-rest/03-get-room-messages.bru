@@ -1,0 +1,25 @@
+meta {
+  name: Get Room Messages
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/v1/buyer/chat/rooms/{{room_id}}/messages
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+  room_id: fe666721-371d-4108-bb6e-00e3af635fc6
+}
+
+docs {
+  Fetches historical messages exchanged within a chat room.
+}
