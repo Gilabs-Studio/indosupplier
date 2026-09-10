@@ -51,7 +51,7 @@ type Notification struct {
 	IsRead        bool           `gorm:"not null;default:false;index" json:"is_read"`
 	ReadAt        *time.Time     `json:"read_at"`
 	RelatedType   string         `gorm:"type:varchar(80);index" json:"related_type"`
-	RelatedID     string         `gorm:"type:uuid;index" json:"related_id"`
+	RelatedID     *string        `gorm:"type:uuid;index" json:"related_id"`
 	CreatedAt     time.Time      `gorm:"autoCreateTime;index" json:"created_at"`
 	UpdatedAt     time.Time      `gorm:"autoUpdateTime;index" json:"updated_at"`
 	DeletedAt     gorm.DeletedAt `gorm:"index" json:"-"`

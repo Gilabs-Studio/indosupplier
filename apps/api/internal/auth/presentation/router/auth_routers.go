@@ -19,6 +19,7 @@ func RegisterAuthRoutes(rg *gin.RouterGroup, h *handler.AuthHandler, jwtManager 
 		protected := g.Group("")
 		protected.Use(middleware.AuthMiddleware(jwtManager))
 		{
+			protected.GET("/me", h.Me)
 			protected.POST("/supplier-profile", h.BecomeSupplier)
 			protected.POST("/logout", h.Logout)
 		}

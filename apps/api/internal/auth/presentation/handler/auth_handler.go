@@ -332,3 +332,32 @@ func (h *AuthHandler) GetCSRFToken(c *gin.Context) {
 
 	response.SuccessResponse(c, gin.H{"csrf_token": token}, nil)
 }
+
+func (h *AuthHandler) Me(c *gin.Context) {
+	userIDVal, exists := c.Get("user_id")
+	if !exists {
+		errors.UnauthorizedResponse(c, "unauthorized")
+		return
+	}
+	userID, ok := userIDVal.(string)
+	if !ok || userID == "" {
+		errors.ErrorResponse(c, "TOKEN_INVALID", nil, nil)
+		return
+	}
+
+	user, err := h.authUC.GetCurrentUser(c.Request.Context(), userID)
+	if err != nil {
+		if err == usecase.ErrUserNotFound {
+			errors.ErrorResponse(c, "USER_NOT_FOUND", map[string]interface{}{"user_id": userID}, nil)
+			return
+		}
+		if err == usecase.ErrUserInactive {
+			errors.ErrorResponse(c, "ACCOUNT_DISABLED", map[string]interface{}{"reason": "User account is inactive"}, nil)
+			return
+		}
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, toAuthUserDTO(user), nil)
+}

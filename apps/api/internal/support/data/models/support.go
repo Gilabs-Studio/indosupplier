@@ -17,7 +17,7 @@ type SupportTicket struct {
 	Description   string         `gorm:"type:text;not null" json:"description"`
 	Priority      string         `gorm:"type:varchar(40);not null;default:'normal';index" json:"priority"`
 	Status        string         `gorm:"type:varchar(40);not null;default:'open';index" json:"status"`
-	AssignedTo    string         `gorm:"type:uuid;index" json:"assigned_to"`
+	AssignedTo    *string        `gorm:"type:uuid;index" json:"assigned_to"`
 	SLADeadlineAt *time.Time     `json:"sla_deadline_at"`
 	ClosedAt      *time.Time     `json:"closed_at"`
 	CreatedAt     time.Time      `gorm:"autoCreateTime" json:"created_at"`
@@ -68,7 +68,7 @@ func (s *SupportTicketMessage) BeforeCreate(tx *gorm.DB) error {
 type SupportTicketAttachment struct {
 	ID              string         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
 	SupportTicketID string         `gorm:"type:uuid;not null;index" json:"support_ticket_id"`
-	MessageID       string         `gorm:"type:uuid;index" json:"message_id"`
+	MessageID       *string        `gorm:"type:uuid;index" json:"message_id"`
 	FileURL         string         `gorm:"type:text;not null" json:"file_url"`
 	FileName        string         `gorm:"type:varchar(255);not null" json:"file_name"`
 	MimeType        string         `gorm:"type:varchar(120)" json:"mime_type"`
@@ -97,8 +97,8 @@ type FAQArticle struct {
 	Topic     string         `gorm:"type:varchar(120);index" json:"topic"`
 	Status    string         `gorm:"type:varchar(40);not null;default:'draft';index" json:"status"`
 	SortOrder int            `gorm:"not null;default:0;index" json:"sort_order"`
-	CreatedBy string         `gorm:"type:uuid;index" json:"created_by"`
-	UpdatedBy string         `gorm:"type:uuid;index" json:"updated_by"`
+	CreatedBy *string        `gorm:"type:uuid;index" json:"created_by"`
+	UpdatedBy *string        `gorm:"type:uuid;index" json:"updated_by"`
 	CreatedAt time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt time.Time      `gorm:"autoUpdateTime;index" json:"updated_at"`
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
@@ -127,7 +127,7 @@ type AbuseReport struct {
 	Reason       string         `gorm:"type:varchar(160);not null;index" json:"reason"`
 	Description  string         `gorm:"type:text" json:"description"`
 	Status       string         `gorm:"type:varchar(40);not null;default:'open';index" json:"status"`
-	AssignedTo   string         `gorm:"type:uuid;index" json:"assigned_to"`
+	AssignedTo   *string        `gorm:"type:uuid;index" json:"assigned_to"`
 	Resolution   string         `gorm:"type:text" json:"resolution"`
 	CreatedAt    time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt    time.Time      `gorm:"autoUpdateTime;index" json:"updated_at"`

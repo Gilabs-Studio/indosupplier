@@ -121,7 +121,7 @@ func SeedRFQs() error {
 				QuantityValue:       d.Quantity,
 				QuantityUnit:        d.Unit,
 				DestinationLocation: d.TargetPort,
-				CategoryID:          cat.ID,
+				CategoryID:          &cat.ID,
 				VisibilityStatus:    "open",
 				Mode:                "broadcast",
 				CreatedAt:           now.AddDate(0, 0, -10),

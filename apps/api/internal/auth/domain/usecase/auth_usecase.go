@@ -61,6 +61,7 @@ type AuthUsecase interface {
 	Login(ctx context.Context, req *dto.LoginRequest) (*dto.LoginResponse, error)
 	Register(ctx context.Context, req *dto.RegisterRequest) (*dto.LoginResponse, error)
 	BecomeSupplier(ctx context.Context, userID string, req *dto.SupplierOnboardingRequest) (*dto.UserResponse, error)
+	GetCurrentUser(ctx context.Context, userID string) (*dto.UserResponse, error)
 	RefreshToken(ctx context.Context, refreshToken string) (*dto.LoginResponse, error)
 	Logout(ctx context.Context, refreshToken string) error
 }
@@ -116,6 +117,20 @@ func (u *authUsecase) toAuthUserResponse(ctx context.Context, userID, name, emai
 	}
 
 	return resp
+}
+
+func (u *authUsecase) GetCurrentUser(ctx context.Context, userID string) (*dto.UserResponse, error) {
+	user, err := u.userRepo.FindByID(ctx, userID)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrUserNotFound
+		}
+		return nil, err
+	}
+	if user.Status != "active" {
+		return nil, ErrUserInactive
+	}
+	return u.toAuthUserResponse(ctx, user.ID, user.Name, user.Email), nil
 }
 
 func (u *authUsecase) issueLoginResponse(ctx context.Context, userID, name, email string) (*dto.LoginResponse, error) {

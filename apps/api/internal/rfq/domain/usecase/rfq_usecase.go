@@ -133,6 +133,11 @@ func (u *rfqUsecase) Create(ctx context.Context, userID string, req *dto.CreateR
 		return dto.RFQResponse{}, err
 	}
 
+	var categoryIDPtr *string
+	if categoryID != "" {
+		categoryIDPtr = &categoryID
+	}
+
 	rfq := &models.RFQ{
 		ID:                  uuid.NewString(),
 		BuyerProfileID:      buyerID,
@@ -141,7 +146,7 @@ func (u *rfqUsecase) Create(ctx context.Context, userID string, req *dto.CreateR
 		QuantityValue:       qtyValue,
 		QuantityUnit:        req.Unit,
 		DestinationLocation: req.TargetPort,
-		CategoryID:          categoryID,
+		CategoryID:          categoryIDPtr,
 		VisibilityStatus:    "open",
 		Mode:                "broadcast",
 		CreatedAt:           apptime.Now(),
@@ -199,10 +204,12 @@ func (u *rfqUsecase) GetByID(ctx context.Context, userID string, id string) (dto
 
 	// Get Category Name
 	var categoryName string
-	u.db.WithContext(ctx).
-		Table("categories").
-		Where("id = ?", rfq.CategoryID).
-		Pluck("name", &categoryName)
+	if rfq.CategoryID != nil && *rfq.CategoryID != "" {
+		u.db.WithContext(ctx).
+			Table("categories").
+			Where("id = ?", *rfq.CategoryID).
+			Pluck("name", &categoryName)
+	}
 
 	return mapper.ToRFQResponse(rfq, categoryName, replies, attachment), nil
 }
@@ -219,9 +226,11 @@ func (u *rfqUsecase) List(ctx context.Context, userID string, status string, pag
 	}
 
 	// Fetch categories in batch
-	catIDs := make([]string, len(rfqs))
-	for i, r := range rfqs {
-		catIDs[i] = r.CategoryID
+	catIDs := make([]string, 0, len(rfqs))
+	for _, r := range rfqs {
+		if r.CategoryID != nil && *r.CategoryID != "" {
+			catIDs = append(catIDs, *r.CategoryID)
+		}
 	}
 
 	var categories []supplierModels.Category
@@ -250,7 +259,10 @@ func (u *rfqUsecase) List(ctx context.Context, userID string, status string, pag
 
 	var response []dto.RFQResponse
 	for i, rfq := range rfqs {
-		catName := catMap[rfq.CategoryID]
+		var catName string
+		if rfq.CategoryID != nil {
+			catName = catMap[*rfq.CategoryID]
+		}
 		attach := attachMap[rfq.ID]
 		response = append(response, mapper.ToRFQResponse(&rfq, catName, replies[i], attach))
 	}
@@ -357,8 +369,8 @@ func (u *rfqUsecase) buildSupplierRFQResponse(ctx context.Context, recipient mod
 	}
 
 	var categoryName string
-	if rfq.CategoryID != "" {
-		_ = u.db.WithContext(ctx).Table("categories").Where("id = ?", rfq.CategoryID).Pluck("name", &categoryName).Error
+	if rfq.CategoryID != nil && *rfq.CategoryID != "" {
+		_ = u.db.WithContext(ctx).Table("categories").Where("id = ?", *rfq.CategoryID).Pluck("name", &categoryName).Error
 	}
 
 	var buyer buyerModels.BuyerProfile

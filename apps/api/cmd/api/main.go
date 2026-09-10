@@ -217,6 +217,10 @@ func main() {
 	reviewUC := buyerUsecase.NewReviewUsecase(database.DB, reviewRepository)
 	reviewH := buyerHandler.NewReviewHandler(reviewUC)
 
+	notificationRepository := buyerRepo.NewNotificationRepository(database.DB)
+	notificationUC := buyerUsecase.NewNotificationUsecase(database.DB, notificationRepository)
+	notificationH := buyerHandler.NewNotificationHandler(notificationUC)
+
 	supportRepository := supportRepo.NewSupportRepository(database.DB)
 	supportUC := supportUsecase.NewSupportUsecase(supportRepository)
 	supportH := supportHandler.NewBuyerSupportHandler(supportUC)
@@ -270,6 +274,7 @@ func main() {
 		buyerRouter.RegisterFollowingRoutes(v1, followingH, jwtManager)
 		buyerRouter.RegisterCompareRoutes(v1, compareH, jwtManager)
 		buyerRouter.RegisterReviewRoutes(v1, reviewH, jwtManager)
+		buyerRouter.RegisterNotificationRoutes(v1, notificationH, jwtManager)
 		supportRouter.RegisterBuyerSupportRoutes(v1, supportH, jwtManager)
 		chatRouter.RegisterChatRoutes(v1, chatH, jwtManager)
 		rfqRouter.RegisterRFQRoutes(v1, rfqH, jwtManager)
