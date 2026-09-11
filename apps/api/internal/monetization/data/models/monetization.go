@@ -37,7 +37,7 @@ type AdCampaign struct {
 	ID                string         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
 	SupplierProfileID string         `gorm:"type:uuid;not null;index" json:"supplier_profile_id"`
 	AdProductID       string         `gorm:"type:uuid;not null;index" json:"ad_product_id"`
-	CategoryID        string         `gorm:"type:uuid;index" json:"category_id"`
+	CategoryID        *string        `gorm:"type:uuid;index" json:"category_id"`
 	Title             string         `gorm:"type:varchar(255);not null;index" json:"title"`
 	Description       string         `gorm:"type:text" json:"description"`
 	ImageURL          string         `gorm:"type:text" json:"image_url"`
@@ -47,7 +47,7 @@ type AdCampaign struct {
 	ApprovalStatus    string         `gorm:"type:varchar(40);not null;default:'pending';index" json:"approval_status"`
 	SearchBoostWeight float64        `gorm:"not null;default:0" json:"search_boost_weight"`
 	TargetKeywords    string         `gorm:"type:text" json:"target_keywords"`
-	ReviewedBy        string         `gorm:"type:uuid;index" json:"reviewed_by"`
+	ReviewedBy        *string        `gorm:"type:uuid;index" json:"reviewed_by"`
 	ReviewedAt        *time.Time     `json:"reviewed_at"`
 	ReviewReason      string         `gorm:"type:text" json:"review_reason"`
 	CreatedAt         time.Time      `gorm:"autoCreateTime" json:"created_at"`
@@ -81,8 +81,8 @@ type AuctionSession struct {
 	BiddingStartAt   *time.Time     `json:"bidding_start_at"`
 	BiddingEndAt     *time.Time     `json:"bidding_end_at"`
 	Status           string         `gorm:"type:varchar(40);not null;default:'draft';index" json:"status"`
-	CreatedBy        string         `gorm:"type:uuid;index" json:"created_by"`
-	ClosedBy         string         `gorm:"type:uuid;index" json:"closed_by"`
+	CreatedBy        *string        `gorm:"type:uuid;index" json:"created_by"`
+	ClosedBy         *string        `gorm:"type:uuid;index" json:"closed_by"`
 	ClosedAt         *time.Time     `json:"closed_at"`
 	CreatedAt        time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt        time.Time      `gorm:"autoUpdateTime;index" json:"updated_at"`

@@ -1,0 +1,24 @@
+meta {
+  name: Supplier List RFQs
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{base_url}}/api/v1/supplier/rfqs
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Lists RFQs received by the authenticated supplier profile.
+}

@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 
 	buyerModels "github.com/gilabs/indosupplier/api/internal/buyer/data/models"
 	"github.com/gilabs/indosupplier/api/internal/buyer/domain/dto"
@@ -254,30 +255,39 @@ func (u *compareUsecase) Add(ctx context.Context, userID string, supplierProfile
 		return nil, err
 	}
 
-	// Check current count
-	var count int64
-	if err := u.db.WithContext(ctx).Model(&buyerModels.ComparisonSessionItem{}).Where("comparison_session_id = ?", session.ID).Count(&count).Error; err != nil {
-		return nil, err
-	}
-	if count >= 5 {
-		return nil, ErrMaxComparisonReached
-	}
+	err = u.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		// Lock the session row to prevent race conditions on item count
+		var lockedSession buyerModels.ComparisonSession
+		if err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).Where("id = ?", session.ID).First(&lockedSession).Error; err != nil {
+			return err
+		}
 
-	// Check duplicate
-	var existing buyerModels.ComparisonSessionItem
-	err = u.db.WithContext(ctx).Where("comparison_session_id = ? AND supplier_profile_id = ?", session.ID, supplierProfileID).First(&existing).Error
-	if err == nil {
-		return u.List(ctx, userID) // already exists
-	}
+		// Check current count with lock
+		var count int64
+		if err := tx.Model(&buyerModels.ComparisonSessionItem{}).Where("comparison_session_id = ?", session.ID).Count(&count).Error; err != nil {
+			return err
+		}
+		if count >= 5 {
+			return ErrMaxComparisonReached
+		}
 
-	item := buyerModels.ComparisonSessionItem{
-		ID:                  uuid.New().String(),
-		ComparisonSessionID: session.ID,
-		SupplierProfileID:   supplierProfileID,
-		SortOrder:           int(count),
-	}
+		// Check duplicate
+		var existing buyerModels.ComparisonSessionItem
+		err = tx.Where("comparison_session_id = ? AND supplier_profile_id = ?", session.ID, supplierProfileID).First(&existing).Error
+		if err == nil {
+			return nil // already exists
+		}
 
-	if err := u.db.WithContext(ctx).Create(&item).Error; err != nil {
+		item := buyerModels.ComparisonSessionItem{
+			ID:                  uuid.New().String(),
+			ComparisonSessionID: session.ID,
+			SupplierProfileID:   supplierProfileID,
+			SortOrder:           int(count),
+		}
+
+		return tx.Create(&item).Error
+	})
+	if err != nil {
 		return nil, err
 	}
 
@@ -445,28 +455,37 @@ func (u *compareUsecase) AddProduct(ctx context.Context, userID string, supplier
 		return nil, err
 	}
 
-	var count int64
-	if err := u.db.WithContext(ctx).Model(&buyerModels.ComparisonProductSessionItem{}).Where("comparison_session_id = ?", session.ID).Count(&count).Error; err != nil {
-		return nil, err
-	}
-	if count >= 5 {
-		return nil, ErrMaxProductComparisonReached
-	}
+	err = u.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		// Lock the session row to prevent race conditions on product item count
+		var lockedSession buyerModels.ComparisonSession
+		if err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).Where("id = ?", session.ID).First(&lockedSession).Error; err != nil {
+			return err
+		}
 
-	var existing buyerModels.ComparisonProductSessionItem
-	err = u.db.WithContext(ctx).Where("comparison_session_id = ? AND supplier_product_id = ?", session.ID, supplierProductID).First(&existing).Error
-	if err == nil {
-		return u.ListProducts(ctx, userID)
-	}
+		var count int64
+		if err := tx.Model(&buyerModels.ComparisonProductSessionItem{}).Where("comparison_session_id = ?", session.ID).Count(&count).Error; err != nil {
+			return err
+		}
+		if count >= 5 {
+			return ErrMaxProductComparisonReached
+		}
 
-	item := buyerModels.ComparisonProductSessionItem{
-		ID:                  uuid.New().String(),
-		ComparisonSessionID: session.ID,
-		SupplierProductID:   supplierProductID,
-		SortOrder:           int(count),
-	}
+		var existing buyerModels.ComparisonProductSessionItem
+		err = tx.Where("comparison_session_id = ? AND supplier_product_id = ?", session.ID, supplierProductID).First(&existing).Error
+		if err == nil {
+			return nil // already exists
+		}
 
-	if err := u.db.WithContext(ctx).Create(&item).Error; err != nil {
+		item := buyerModels.ComparisonProductSessionItem{
+			ID:                  uuid.New().String(),
+			ComparisonSessionID: session.ID,
+			SupplierProductID:   supplierProductID,
+			SortOrder:           int(count),
+		}
+
+		return tx.Create(&item).Error
+	})
+	if err != nil {
 		return nil, err
 	}
 

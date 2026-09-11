@@ -11,6 +11,8 @@ import (
 
 	"gorm.io/gorm"
 
+	"github.com/google/uuid"
+
 	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	"github.com/gilabs/indosupplier/api/internal/supplier/data/models"
 	"github.com/gilabs/indosupplier/api/internal/supplier/domain/dto"
@@ -68,38 +70,33 @@ func (u *discoveryUsecase) List(ctx context.Context, q string, categoryID string
 		return nil, err
 	}
 
-	responses := make([]dto.PublicSupplierDto, 0, len(profiles))
-	for _, p := range profiles {
-		response, err := u.buildSupplierResponse(ctx, p, false)
-		if err != nil {
-			return nil, err
-		}
-		responses = append(responses, response)
-	}
-
-	return responses, nil
+	return u.buildSupplierResponses(ctx, profiles)
 }
 
 func (u *discoveryUsecase) GetBySlug(ctx context.Context, slug string) (*dto.PublicSupplierDto, error) {
-	var profiles []models.SupplierProfile
-	if err := u.db.WithContext(ctx).Where("status = ?", "active").Find(&profiles).Error; err != nil {
-		return nil, err
+	var profile models.SupplierProfile
+	// Direct indexed lookup by slug (and by ID if input is a valid UUID)
+	query := u.db.WithContext(ctx).Where("status = ?", "active")
+	if _, errUUID := uuid.Parse(slug); errUUID == nil {
+		query = query.Where("slug = ? OR id = ?", slug, slug)
+	} else {
+		query = query.Where("slug = ?", slug)
 	}
 
-	var matchedProfile *models.SupplierProfile
-	for _, p := range profiles {
-		profile := p
-		if slugify(profile.CompanyName) == slug {
-			matchedProfile = &profile
-			break
+	err := query.First(&profile).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			// Fallback: match by company_name converted with LIMIT 1 instead of loading all database
+			likePattern := "%" + strings.ReplaceAll(slug, "-", "%") + "%"
+			if err = u.db.WithContext(ctx).Where("status = ? AND company_name ILIKE ?", "active", likePattern).First(&profile).Error; err != nil {
+				return nil, errors.New("supplier profile not found")
+			}
+		} else {
+			return nil, err
 		}
 	}
 
-	if matchedProfile == nil {
-		return nil, errors.New("supplier profile not found")
-	}
-
-	response, err := u.buildSupplierResponse(ctx, *matchedProfile, true)
+	response, err := u.buildSupplierResponse(ctx, profile, true)
 	if err != nil {
 		return nil, err
 	}
@@ -256,16 +253,7 @@ func (u *discoveryUsecase) LookupSuppliers(ctx context.Context, q string, page i
 		return nil, err
 	}
 
-	responses := make([]dto.PublicSupplierDto, 0, len(profiles))
-	for _, p := range profiles {
-		response, err := u.buildSupplierResponse(ctx, p, false)
-		if err != nil {
-			return nil, err
-		}
-		responses = append(responses, response)
-	}
-
-	return responses, nil
+	return u.buildSupplierResponses(ctx, profiles)
 }
 
 func (u *discoveryUsecase) LookupProducts(ctx context.Context, q string, page int, limit int) ([]dto.PublicProductDto, error) {
@@ -289,6 +277,173 @@ func (u *discoveryUsecase) LookupProducts(ctx context.Context, q string, page in
 	}
 
 	return u.buildProductResponses(ctx, products)
+}
+
+func (u *discoveryUsecase) buildSupplierResponses(ctx context.Context, profiles []models.SupplierProfile) ([]dto.PublicSupplierDto, error) {
+	if len(profiles) == 0 {
+		return []dto.PublicSupplierDto{}, nil
+	}
+
+	supplierIDs := make([]string, 0, len(profiles))
+	userIDs := make([]string, 0, len(profiles))
+	for _, p := range profiles {
+		supplierIDs = append(supplierIDs, p.ID)
+		if p.UserID != "" {
+			userIDs = append(userIDs, p.UserID)
+		}
+	}
+
+	// 1. Batch categories
+	type supplierCatRow struct {
+		SupplierProfileID string
+		Name              string
+	}
+	var catRows []supplierCatRow
+	u.db.WithContext(ctx).
+		Table("supplier_categories").
+		Select("supplier_categories.supplier_profile_id, categories.name").
+		Joins("join categories on categories.id = supplier_categories.category_id").
+		Where("supplier_categories.supplier_profile_id IN ?", supplierIDs).
+		Order("supplier_categories.is_primary DESC, supplier_categories.created_at ASC").
+		Scan(&catRows)
+
+	catMap := make(map[string][]string)
+	for _, row := range catRows {
+		catMap[row.SupplierProfileID] = append(catMap[row.SupplierProfileID], row.Name)
+	}
+
+	// 2. Batch key products (top 3 per supplier)
+	var keyProdRows []models.SupplierProduct
+	u.db.WithContext(ctx).
+		Model(&models.SupplierProduct{}).
+		Select("supplier_profile_id, name").
+		Where("supplier_profile_id IN ?", supplierIDs).
+		Order("is_featured DESC, sort_order ASC").
+		Find(&keyProdRows)
+
+	keyProdMap := make(map[string][]string)
+	for _, p := range keyProdRows {
+		if len(keyProdMap[p.SupplierProfileID]) < 3 {
+			keyProdMap[p.SupplierProfileID] = append(keyProdMap[p.SupplierProfileID], p.Name)
+		}
+	}
+
+	// 3. Batch certifications
+	type certRow struct {
+		ID                string
+		SupplierProfileID string
+		Name              string
+		IssuedBy          string
+		IssuedAt          *time.Time
+	}
+	var certRows []certRow
+	u.db.WithContext(ctx).
+		Table("supplier_certifications").
+		Select("supplier_certifications.id, supplier_certifications.supplier_profile_id, certifications.name, supplier_certifications.issued_by, supplier_certifications.issued_at").
+		Joins("join certifications on certifications.id = supplier_certifications.certification_id").
+		Where("supplier_certifications.supplier_profile_id IN ? AND supplier_certifications.status = ?", supplierIDs, "approved").
+		Order("certifications.sort_order ASC").
+		Scan(&certRows)
+
+	certNameMap := make(map[string][]string)
+	certDtoMap := make(map[string][]dto.SupplierCertificationDto)
+	for _, c := range certRows {
+		certNameMap[c.SupplierProfileID] = append(certNameMap[c.SupplierProfileID], c.Name)
+		year := 0
+		if c.IssuedAt != nil {
+			year = c.IssuedAt.Year()
+		}
+		certDtoMap[c.SupplierProfileID] = append(certDtoMap[c.SupplierProfileID], dto.SupplierCertificationDto{
+			ID:          c.ID,
+			Name:        c.Name,
+			Institution: c.IssuedBy,
+			Year:        year,
+		})
+	}
+
+	// 4. Batch user avatars
+	type userAvatarRow struct {
+		ID        string
+		AvatarURL string
+	}
+	var avatarRows []userAvatarRow
+	if len(userIDs) > 0 {
+		u.db.WithContext(ctx).
+			Table("users").
+			Select("id, avatar_url").
+			Where("id IN ?", userIDs).
+			Scan(&avatarRows)
+	}
+	avatarMap := make(map[string]string)
+	for _, a := range avatarRows {
+		avatarMap[a.ID] = a.AvatarURL
+	}
+
+	// Assemble responses in memory
+	responses := make([]dto.PublicSupplierDto, 0, len(profiles))
+	for _, p := range profiles {
+		catNames := catMap[p.ID]
+		if catNames == nil {
+			catNames = []string{}
+		}
+
+		keyProducts := keyProdMap[p.ID]
+		if keyProducts == nil {
+			keyProducts = []string{}
+		}
+
+		certNames := certNameMap[p.ID]
+		if certNames == nil {
+			certNames = []string{}
+		}
+
+		certDtos := certDtoMap[p.ID]
+		if certDtos == nil {
+			certDtos = []dto.SupplierCertificationDto{}
+		}
+
+		establishedYear, _ := strconv.Atoi(p.EstablishedYear)
+		if establishedYear == 0 {
+			establishedYear = 2015
+		}
+
+		slug := p.Slug
+		if slug == "" {
+			slug = slugify(p.CompanyName)
+		}
+
+		res := dto.PublicSupplierDto{
+			ID:                p.ID,
+			Slug:              slug,
+			CompanyName:       p.CompanyName,
+			BusinessType:      p.CompanyType,
+			EstablishedYear:   establishedYear,
+			EmployeeCount:     p.EmployeesCount,
+			Location:          p.CityID,
+			Province:          p.ProvinceID,
+			Address:           p.Address,
+			Description:       p.Description,
+			IsVerified:        p.VerificationLevel >= 2,
+			VerificationLevel: p.VerificationLevel,
+			IsPremiumVerified: p.IsPremiumVerified,
+			TaxStatus:         p.TaxStatus,
+			ResponseRate:      p.ResponseRate,
+			ResponseTime:      responseTimeLabel(p.AvgResponseTimeMinutes),
+			Rating:            p.StarRating,
+			ReviewCount:       p.ReviewCount,
+			KeyProducts:       keyProducts,
+			Certifications:    certNames,
+			CertificationList: certDtos,
+			Logo:              avatarMap[p.UserID],
+		}
+		if len(res.KeyProducts) == 0 {
+			res.KeyProducts = catNames
+		}
+
+		responses = append(responses, res)
+	}
+
+	return responses, nil
 }
 
 func (u *discoveryUsecase) buildSupplierResponse(ctx context.Context, p models.SupplierProfile, includeDetail bool) (dto.PublicSupplierDto, error) {

@@ -168,17 +168,13 @@ func (u *supportUsecase) CreateBuyerTicket(ctx context.Context, userID string, r
 		SLADeadlineAt: &slaDeadline,
 	}
 
-	if err := u.repo.CreateTicket(ctx, ticket); err != nil {
-		return nil, err
+	message := &supportModels.SupportTicketMessage{
+		SenderType: "buyer",
+		SenderID:   profile.ID,
+		Body:       strings.TrimSpace(req.Message),
 	}
 
-	message := &supportModels.SupportTicketMessage{
-		SupportTicketID: ticket.ID,
-		SenderType:      "buyer",
-		SenderID:        profile.ID,
-		Body:            strings.TrimSpace(req.Message),
-	}
-	if err := u.repo.CreateMessage(ctx, message); err != nil {
+	if err := u.repo.CreateTicketWithMessage(ctx, ticket, message); err != nil {
 		return nil, err
 	}
 

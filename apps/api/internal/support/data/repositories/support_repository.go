@@ -17,6 +17,7 @@ type SupportRepository interface {
 	ListMessagesByTicketID(ctx context.Context, ticketID string) ([]supportModels.SupportTicketMessage, error)
 	CreateTicket(ctx context.Context, ticket *supportModels.SupportTicket) error
 	CreateMessage(ctx context.Context, message *supportModels.SupportTicketMessage) error
+	CreateTicketWithMessage(ctx context.Context, ticket *supportModels.SupportTicket, message *supportModels.SupportTicketMessage) error
 	SaveTicket(ctx context.Context, ticket *supportModels.SupportTicket) error
 }
 
@@ -78,6 +79,16 @@ func (r *supportRepository) CreateTicket(ctx context.Context, ticket *supportMod
 
 func (r *supportRepository) CreateMessage(ctx context.Context, message *supportModels.SupportTicketMessage) error {
 	return r.getDB(ctx).Create(message).Error
+}
+
+func (r *supportRepository) CreateTicketWithMessage(ctx context.Context, ticket *supportModels.SupportTicket, message *supportModels.SupportTicketMessage) error {
+	return r.getDB(ctx).Transaction(func(tx *gorm.DB) error {
+		if err := tx.Create(ticket).Error; err != nil {
+			return err
+		}
+		message.SupportTicketID = ticket.ID
+		return tx.Create(message).Error
+	})
 }
 
 func (r *supportRepository) SaveTicket(ctx context.Context, ticket *supportModels.SupportTicket) error {

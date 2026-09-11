@@ -184,10 +184,29 @@ func (u *transactionUsecase) List(ctx context.Context, userID string, req *dto.L
 
 	totalPages := utils.TotalPages(total, perPage)
 
+	// Batch fetch supplier names to eliminate N+1 queries
+	supplierMap := make(map[string]string)
+	if len(poList) > 0 {
+		supplierIDs := make([]string, 0, len(poList))
+		for _, po := range poList {
+			if po.SupplierProfileID != "" {
+				supplierIDs = append(supplierIDs, po.SupplierProfileID)
+			}
+		}
+		if len(supplierIDs) > 0 {
+			var suppliers []supplierModels.SupplierProfile
+			if err := u.db.WithContext(ctx).Where("id IN ?", supplierIDs).Find(&suppliers).Error; err == nil {
+				for _, s := range suppliers {
+					supplierMap[s.ID] = s.CompanyName
+				}
+			}
+		}
+	}
+
 	var responseList []dto.TransactionResponse
 	for i := range poList {
 		po := &poList[i]
-		supplierName, _ := u.getSupplierName(ctx, po.SupplierProfileID)
+		supplierName := supplierMap[po.SupplierProfileID]
 		if supplierName == "" {
 			supplierName = utils.DefaultSupplierName
 		}

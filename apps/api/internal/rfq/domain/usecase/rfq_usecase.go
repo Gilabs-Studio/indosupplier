@@ -421,13 +421,118 @@ func (u *rfqUsecase) ListForSupplier(ctx context.Context, userID string, page, p
 	if err != nil {
 		return nil, 0, err
 	}
-	responses := make([]dto.SupplierRFQResponse, 0, len(recipients))
-	for _, recipient := range recipients {
-		item, err := u.buildSupplierRFQResponse(ctx, recipient)
-		if err == nil {
-			responses = append(responses, item)
+
+	if len(recipients) == 0 {
+		return []dto.SupplierRFQResponse{}, total, nil
+	}
+
+	// Batch fetch all RFQs to eliminate N+1 queries
+	rfqIDs := make([]string, 0, len(recipients))
+	for _, r := range recipients {
+		if r.RFQID != "" {
+			rfqIDs = append(rfqIDs, r.RFQID)
 		}
 	}
+
+	rfqMap := make(map[string]models.RFQ)
+	catIDSet := make(map[string]struct{})
+	buyerIDSet := make(map[string]struct{})
+
+	if len(rfqIDs) > 0 {
+		var rfqs []models.RFQ
+		if err := u.db.WithContext(ctx).Where("id IN ?", rfqIDs).Find(&rfqs).Error; err == nil {
+			for _, rfq := range rfqs {
+				rfqMap[rfq.ID] = rfq
+				if rfq.CategoryID != nil && *rfq.CategoryID != "" {
+					catIDSet[*rfq.CategoryID] = struct{}{}
+				}
+				if rfq.BuyerProfileID != "" {
+					buyerIDSet[rfq.BuyerProfileID] = struct{}{}
+				}
+			}
+		}
+	}
+
+	// Batch fetch Categories
+	catMap := make(map[string]string)
+	if len(catIDSet) > 0 {
+		catIDs := make([]string, 0, len(catIDSet))
+		for id := range catIDSet {
+			catIDs = append(catIDs, id)
+		}
+		var categories []supplierModels.Category
+		if err := u.db.WithContext(ctx).Where("id IN ?", catIDs).Find(&categories).Error; err == nil {
+			for _, c := range categories {
+				catMap[c.ID] = c.Name
+			}
+		}
+	}
+
+	// Batch fetch Buyer Profiles
+	buyerMap := make(map[string]buyerModels.BuyerProfile)
+	if len(buyerIDSet) > 0 {
+		buyerIDs := make([]string, 0, len(buyerIDSet))
+		for id := range buyerIDSet {
+			buyerIDs = append(buyerIDs, id)
+		}
+		var buyers []buyerModels.BuyerProfile
+		if err := u.db.WithContext(ctx).Where("id IN ?", buyerIDs).Find(&buyers).Error; err == nil {
+			for _, b := range buyers {
+				buyerMap[b.ID] = b
+			}
+		}
+	}
+
+	responses := make([]dto.SupplierRFQResponse, 0, len(recipients))
+	for _, recipient := range recipients {
+		rfq, exists := rfqMap[recipient.RFQID]
+		if !exists {
+			continue
+		}
+
+		var catName string
+		if rfq.CategoryID != nil {
+			catName = catMap[*rfq.CategoryID]
+		}
+		buyer := buyerMap[rfq.BuyerProfileID]
+
+		status := "open"
+		if rfq.ClosedAt != nil {
+			status = "closed"
+		} else if recipient.Status == "responded" || recipient.Status == "processing" || recipient.Status == "accepted" {
+			status = recipient.Status
+		}
+
+		res := dto.SupplierRFQResponse{
+			ID:             rfq.ID,
+			Product:        rfq.Title,
+			Category:       catName,
+			Port:           rfq.DestinationLocation,
+			Date:           rfq.CreatedAt.Format("2006-01-02"),
+			Budget:         "",
+			Status:         status,
+			Description:    rfq.ProductDescription,
+			ShippingTerm:   rfq.PreferredContactMethod,
+			TargetDelivery: rfq.DeliveryTimeline,
+		}
+		if rfq.QuantityValue == float64(int(rfq.QuantityValue)) {
+			res.Quantity = fmt.Sprintf("%d %s", int(rfq.QuantityValue), rfq.QuantityUnit)
+		} else {
+			res.Quantity = fmt.Sprintf("%.2f %s", rfq.QuantityValue, rfq.QuantityUnit)
+		}
+		if rfq.BudgetMax > 0 {
+			res.Budget = fmt.Sprintf("%.0f", rfq.BudgetMax)
+		}
+		res.Buyer.Name = buyer.CompanyName
+		if res.Buyer.Name == "" {
+			res.Buyer.Name = buyer.FullName
+		}
+		res.Buyer.Location = buyer.Address
+		res.Buyer.Rating = ""
+
+		responses = append(responses, res)
+	}
+
 	return responses, total, nil
 }
 

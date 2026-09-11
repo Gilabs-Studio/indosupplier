@@ -85,5 +85,13 @@ func AutoMigrate() error {
 	DB.Exec("ALTER TABLE supplier_products ALTER COLUMN currency DROP DEFAULT")
 	DB.Exec("ALTER TABLE payments ALTER COLUMN currency DROP DEFAULT")
 
+	// Extensions and performance indexes
+	DB.Exec("CREATE EXTENSION IF NOT EXISTS pg_trgm")
+	DB.Exec("CREATE INDEX IF NOT EXISTS idx_supplier_profiles_name_trgm ON supplier_profiles USING gin (company_name gin_trgm_ops)")
+	DB.Exec("CREATE INDEX IF NOT EXISTS idx_supplier_products_name_trgm ON supplier_products USING gin (name gin_trgm_ops)")
+	DB.Exec("CREATE INDEX IF NOT EXISTS idx_po_buyer_status_created ON purchase_orders (buyer_profile_id, status, created_at DESC)")
+	DB.Exec("CREATE INDEX IF NOT EXISTS idx_notifications_recipient_channel_created ON notifications (recipient_id, channel, created_at DESC)")
+	DB.Exec("UPDATE supplier_profiles SET slug = LOWER(REGEXP_REPLACE(company_name, '[^a-zA-Z0-9]+', '-', 'g')) WHERE slug IS NULL OR slug = ''")
+
 	return nil
 }

@@ -2,8 +2,10 @@ package repositories
 
 import (
 	"context"
+	"errors"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 
 	"github.com/gilabs/indosupplier/api/internal/core/apptime"
 	"github.com/gilabs/indosupplier/api/internal/core/utils"
@@ -129,6 +131,15 @@ func (r *rfqRepository) GetBids(ctx context.Context, rfqID string) ([]models.RFQ
 
 func (r *rfqRepository) AcceptBid(ctx context.Context, rfqID string, bidID string) error {
 	return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		// Pessimistic lock on the RFQ to prevent concurrent bid acceptance
+		var rfq models.RFQ
+		if err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).Where("id = ?", rfqID).First(&rfq).Error; err != nil {
+			return err
+		}
+		if rfq.ClosedAt != nil {
+			return errors.New("rfq is already closed")
+		}
+
 		// Verify recipient exists and belongs to this RFQ
 		var recipient models.RFQRecipient
 		if err := tx.Where("id = ? AND rfq_id = ?", bidID, rfqID).First(&recipient).Error; err != nil {

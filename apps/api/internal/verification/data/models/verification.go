@@ -29,7 +29,7 @@ type VerificationRequest struct {
 	AccountNumber     string         `gorm:"type:varchar(80)" json:"account_number"`
 	AccountName       string         `gorm:"type:varchar(255)" json:"account_name"`
 	SubmittedAt       *time.Time     `json:"submitted_at"`
-	ReviewedBy        string         `gorm:"type:uuid;index" json:"reviewed_by"`
+	ReviewedBy        *string        `gorm:"type:uuid;index" json:"reviewed_by"`
 	ReviewedAt        *time.Time     `json:"reviewed_at"`
 	ReviewReason      string         `gorm:"type:text" json:"review_reason"`
 	CreatedAt         time.Time      `gorm:"autoCreateTime" json:"created_at"`

@@ -38,6 +38,7 @@ type SupplierProfile struct {
 	ID                     string         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
 	UserID                 string         `gorm:"type:uuid;not null;uniqueIndex" json:"user_id"`
 	CompanyName            string         `gorm:"type:varchar(255);not null;index" json:"company_name"`
+	Slug                   string         `gorm:"type:varchar(255);index" json:"slug"`
 	CompanyType            string         `gorm:"type:varchar(80);index" json:"company_type"`
 	TaxStatus              string         `gorm:"type:varchar(80);index" json:"tax_status"`
 	NPWP                   string         `gorm:"type:varchar(80);index" json:"npwp"`
@@ -83,6 +84,16 @@ func (s *SupplierProfile) BeforeCreate(tx *gorm.DB) error {
 	}
 	if s.Status == "" {
 		s.Status = "draft"
+	}
+	if s.Slug == "" && s.CompanyName != "" {
+		s.Slug = utils.Slugify(s.CompanyName)
+	}
+	return nil
+}
+
+func (s *SupplierProfile) BeforeSave(tx *gorm.DB) error {
+	if s.Slug == "" && s.CompanyName != "" {
+		s.Slug = utils.Slugify(s.CompanyName)
 	}
 	return nil
 }
@@ -235,7 +246,7 @@ type SupplierCertification struct {
 	ExpiredAt         *time.Time     `json:"expired_at"`
 	FileURL           string         `gorm:"type:text;not null" json:"file_url"`
 	Status            string         `gorm:"type:varchar(40);not null;default:'pending';index" json:"status"`
-	ReviewedBy        string         `gorm:"type:uuid;index" json:"reviewed_by"`
+	ReviewedBy        *string        `gorm:"type:uuid;index" json:"reviewed_by"`
 	ReviewedAt        *time.Time     `json:"reviewed_at"`
 	ReviewReason      string         `gorm:"type:text" json:"review_reason"`
 	CreatedAt         time.Time      `gorm:"autoCreateTime" json:"created_at"`
@@ -264,7 +275,7 @@ type SupplierDocument struct {
 	DocumentNumber    string         `gorm:"type:varchar(120)" json:"document_number"`
 	FileURL           string         `gorm:"type:text;not null" json:"file_url"`
 	Status            string         `gorm:"type:varchar(40);not null;default:'pending';index" json:"status"`
-	ReviewedBy        string         `gorm:"type:uuid;index" json:"reviewed_by"`
+	ReviewedBy        *string        `gorm:"type:uuid;index" json:"reviewed_by"`
 	ReviewedAt        *time.Time     `json:"reviewed_at"`
 	ReviewReason      string         `gorm:"type:text" json:"review_reason"`
 	CreatedAt         time.Time      `gorm:"autoCreateTime" json:"created_at"`
