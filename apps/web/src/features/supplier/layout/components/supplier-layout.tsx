@@ -59,7 +59,7 @@ function SupplierSidebar() {
   const { menuGroups, pathname } = useSupplierLayout();
 
   return (
-    <Sidebar collapsible="icon" className="h-screen shrink-0 border-none bg-card">
+    <Sidebar collapsible="icon" className="h-screen shrink-0 border-none bg-background">
       <SidebarHeader className="h-16 flex flex-row items-center justify-start px-6 overflow-hidden shrink-0">
         <span className="font-extrabold text-foreground tracking-tight text-lg select-none leading-none">
           supplier

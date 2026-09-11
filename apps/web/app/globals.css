@@ -95,7 +95,7 @@
     --background: 0 0% 100%;
     --foreground: 0 0% 10%;
     
-    --card: 0 0% 100%;
+    --card: 0 0% 96.8%;
     --card-foreground: 0 0% 10%;
     
     --popover: 0 0% 100%;
@@ -130,7 +130,7 @@
     --chart-5: 27 87% 67%;
 
     /* Sidebar Light */
-    --sidebar: 0 0% 98%;
+    --sidebar: 0 0% 100%;
     --sidebar-foreground: 0 0% 10%;
     --sidebar-primary: 0 0% 10%;
     --sidebar-primary-foreground: 0 0% 100%;
