@@ -1,0 +1,42 @@
+meta {
+  name: Update Profile - Input Aneh XSS and SQL Injection Payload
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{base_url}}/api/v1/supplier/profile
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "companyName": "PT Test <script>alert('xss')</script> ' OR '1'='1",
+    "businessType": "PT",
+    "established": "2020",
+    "employees": "10-50",
+    "email": "security_test@bajasentosa.co.id",
+    "phone": "+628199998888",
+    "website": "https://example.com/test?q=<script>alert(1)</script>",
+    "taxId": "01.000.000.0-000.000",
+    "nib": "1234567890123",
+    "overview": "Testing input aneh: '; DROP TABLE supplier_profiles; -- <img src=x onerror=alert(1)>",
+    "location": "Gedung Cyber 2 Lt. 15, Jl. H.R. Rasuna Said, Jakarta Selatan"
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Edge case testing: Unusual input ("input aneh-aneh") containing XSS tags and SQL injection strings.
+  Verifies that parameterized ORM queries handle special characters safely without executing SQL injections,
+  and the system processes and stores them as literal strings cleanly.
+}

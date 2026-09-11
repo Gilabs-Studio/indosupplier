@@ -1,64 +1,36 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Field, FieldLabel, FieldGroup } from "@/components/ui/field";
+import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
 import { Save, Loader2, Eye } from "lucide-react";
-import { useSupplierProfile, useUpdateSupplierProfile } from "../hooks/useProfile";
+import { useSupplierProfileForm } from "../hooks/useProfile";
 import { SupplierProfilePreview } from "./supplier-profile-preview";
 import { ImageUpload } from "@/components/ui/image-upload";
 
 export function SupplierProfilePage() {
   const t = useTranslations("supplier.profile");
-  const { data: profile, isLoading } = useSupplierProfile();
-  const updateMutation = useUpdateSupplierProfile();
-  const [isPreview, setIsPreview] = useState(false);
+  const {
+    form,
+    isLoading,
+    isUpdating,
+    onSubmit,
+    isPreview,
+    setIsPreview,
+  } = useSupplierProfileForm();
 
-  const [form, setForm] = useState({
-    companyName: "",
-    businessType: "",
-    established: "",
-    employees: "",
-    email: "",
-    phone: "",
-    website: "",
-    taxId: "",
-    nib: "",
-    overview: "",
-    location: "",
-    logo: "",
-  });
+  const {
+    register,
+    watch,
+    setValue,
+    formState: { errors },
+  } = form;
 
-  useEffect(() => {
-    if (profile) {
-      const timer = setTimeout(() => {
-        setForm({
-          companyName: profile.companyName || "",
-          businessType: profile.businessType || "",
-          established: profile.established || "",
-          employees: profile.employees || "",
-          email: profile.email || "",
-          phone: profile.phone || "",
-          website: profile.website || "",
-          taxId: profile.taxId || "",
-          nib: profile.nib || "",
-          overview: profile.overview || "",
-          location: profile.location || "",
-          logo: profile.logo || "",
-        });
-      }, 0);
-      return () => clearTimeout(timer);
-    }
-  }, [profile]);
-
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    updateMutation.mutate(form);
-  };
+  const currentLogo = watch("logo");
 
   if (isLoading) {
     return (
@@ -82,6 +54,7 @@ export function SupplierProfilePage() {
           </p>
         </div>
         <Button
+          type="button"
           onClick={() => setIsPreview(!isPreview)}
           variant="outline"
           className="cursor-pointer font-semibold flex items-center gap-2 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-md"
@@ -94,7 +67,7 @@ export function SupplierProfilePage() {
       {isPreview ? (
         <SupplierProfilePreview />
       ) : (
-        <form onSubmit={handleSave}>
+        <form onSubmit={onSubmit} noValidate>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
             {/* Main Info */}
             <div className="lg:col-span-2 space-y-6">
@@ -105,62 +78,71 @@ export function SupplierProfilePage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <FieldGroup className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Field>
-                      <FieldLabel>{t("fieldCompanyName")}</FieldLabel>
+                    <Field invalid={!!errors.companyName}>
+                      <FieldLabel htmlFor="companyName">{t("fieldCompanyName")}</FieldLabel>
                       <Input
-                        value={form.companyName}
-                        onChange={(e) => setForm({ ...form, companyName: e.target.value })}
-                        required
+                        id="companyName"
+                        {...register("companyName")}
+                        placeholder="e.g. PT Baja Sentosa"
                       />
+                      {errors.companyName && <FieldError>{errors.companyName.message}</FieldError>}
                     </Field>
-                    <Field>
-                      <FieldLabel>{t("fieldBusinessType")}</FieldLabel>
+                    <Field invalid={!!errors.businessType}>
+                      <FieldLabel htmlFor="businessType">{t("fieldBusinessType")}</FieldLabel>
                       <Input
-                        value={form.businessType}
-                        onChange={(e) => setForm({ ...form, businessType: e.target.value })}
-                        required
+                        id="businessType"
+                        {...register("businessType")}
+                        placeholder="e.g. PT, CV, atau Manufacturer"
                       />
+                      {errors.businessType && <FieldError>{errors.businessType.message}</FieldError>}
                     </Field>
                   </FieldGroup>
 
                   <FieldGroup className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Field>
-                      <FieldLabel>{t("fieldEstablished")}</FieldLabel>
+                    <Field invalid={!!errors.established}>
+                      <FieldLabel htmlFor="established">{t("fieldEstablished")}</FieldLabel>
                       <Input
-                        value={form.established}
-                        onChange={(e) => setForm({ ...form, established: e.target.value })}
-                        required
+                        id="established"
+                        type="number"
+                        min="1800"
+                        max={new Date().getFullYear() + 1}
+                        inputMode="numeric"
+                        {...register("established")}
+                        placeholder="e.g. 2018"
                       />
+                      {errors.established && <FieldError>{errors.established.message}</FieldError>}
                     </Field>
-                    <Field>
-                      <FieldLabel>{t("fieldEmployees")}</FieldLabel>
+                    <Field invalid={!!errors.employees}>
+                      <FieldLabel htmlFor="employees">{t("fieldEmployees")}</FieldLabel>
                       <Input
-                        value={form.employees}
-                        onChange={(e) => setForm({ ...form, employees: e.target.value })}
-                        required
+                        id="employees"
+                        {...register("employees")}
+                        placeholder="e.g. 50-100"
                       />
+                      {errors.employees && <FieldError>{errors.employees.message}</FieldError>}
                     </Field>
                   </FieldGroup>
 
-                  <Field>
-                    <FieldLabel>{t("fieldLocation")}</FieldLabel>
+                  <Field invalid={!!errors.location}>
+                    <FieldLabel htmlFor="location">{t("fieldLocation")}</FieldLabel>
                     <Input
-                      value={form.location}
-                      onChange={(e) => setForm({ ...form, location: e.target.value })}
+                      id="location"
+                      {...register("location")}
                       placeholder="e.g. Kawasan Industri Jababeka, Cikarang, Jawa Barat, Indonesia"
-                      required
                     />
+                    {errors.location && <FieldError>{errors.location.message}</FieldError>}
                   </Field>
 
-                  <Field>
-                    <FieldLabel>{t("fieldOverview")}</FieldLabel>
+                  <Field invalid={!!errors.overview}>
+                    <FieldLabel htmlFor="overview">{t("fieldOverview")}</FieldLabel>
                     <Textarea
+                      id="overview"
                       rows={4}
-                      value={form.overview}
-                      onChange={(e) => setForm({ ...form, overview: e.target.value })}
-                      required
+                      {...register("overview")}
+                      placeholder="e.g. Profil dan spesialisasi perusahaan Anda..."
                       className="resize-none"
                     />
+                    {errors.overview && <FieldError>{errors.overview.message}</FieldError>}
                   </Field>
                 </CardContent>
               </Card>
@@ -172,21 +154,27 @@ export function SupplierProfilePage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <FieldGroup className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Field>
-                      <FieldLabel>{t("fieldTaxId")}</FieldLabel>
+                    <Field invalid={!!errors.taxId}>
+                      <FieldLabel htmlFor="taxId">{t("fieldTaxId")}</FieldLabel>
                       <Input
-                        value={form.taxId}
-                        onChange={(e) => setForm({ ...form, taxId: e.target.value })}
-                        required
+                        id="taxId"
+                        type="text"
+                        inputMode="numeric"
+                        {...register("taxId")}
+                        placeholder="01.234.567.8-901.000"
                       />
+                      {errors.taxId && <FieldError>{errors.taxId.message}</FieldError>}
                     </Field>
-                    <Field>
-                      <FieldLabel>{t("fieldNib")}</FieldLabel>
+                    <Field invalid={!!errors.nib}>
+                      <FieldLabel htmlFor="nib">{t("fieldNib")}</FieldLabel>
                       <Input
-                        value={form.nib}
-                        onChange={(e) => setForm({ ...form, nib: e.target.value })}
-                        required
+                        id="nib"
+                        type="text"
+                        inputMode="numeric"
+                        {...register("nib")}
+                        placeholder="9120001234567"
                       />
+                      {errors.nib && <FieldError>{errors.nib.message}</FieldError>}
                     </Field>
                   </FieldGroup>
                 </CardContent>
@@ -202,10 +190,11 @@ export function SupplierProfilePage() {
                 </CardHeader>
                 <CardContent className="flex flex-col items-center gap-4">
                   <ImageUpload
-                    value={form.logo}
-                    onChange={(url) => setForm({ ...form, logo: url })}
+                    value={currentLogo}
+                    onChange={(url) => setValue("logo", url, { shouldDirty: true })}
                     uploadFolder="logos"
                   />
+                  {errors.logo && <FieldError>{errors.logo.message}</FieldError>}
                 </CardContent>
               </Card>
 
@@ -215,41 +204,46 @@ export function SupplierProfilePage() {
                   <CardDescription className="text-xs">{t("sectionContactDesc")}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <Field>
-                    <FieldLabel>{t("fieldEmail")}</FieldLabel>
+                  <Field invalid={!!errors.email}>
+                    <FieldLabel htmlFor="email">{t("fieldEmail")}</FieldLabel>
                     <Input
+                      id="email"
                       type="email"
-                      value={form.email}
-                      onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      required
+                      {...register("email")}
+                      placeholder="contact@company.com"
                     />
+                    {errors.email && <FieldError>{errors.email.message}</FieldError>}
                   </Field>
-                  <Field>
-                    <FieldLabel>{t("fieldPhone")}</FieldLabel>
+                  <Field invalid={!!errors.phone}>
+                    <FieldLabel htmlFor="phone">{t("fieldPhone")}</FieldLabel>
                     <Input
-                      value={form.phone}
-                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                      required
+                      id="phone"
+                      type="tel"
+                      inputMode="tel"
+                      {...register("phone")}
+                      placeholder="+6281234567890"
                     />
+                    {errors.phone && <FieldError>{errors.phone.message}</FieldError>}
                   </Field>
-                  <Field>
-                    <FieldLabel>{t("fieldWebsite")}</FieldLabel>
+                  <Field invalid={!!errors.website}>
+                    <FieldLabel htmlFor="website">{t("fieldWebsite")}</FieldLabel>
                     <Input
+                      id="website"
                       type="url"
-                      value={form.website}
-                      onChange={(e) => setForm({ ...form, website: e.target.value })}
-                      required
+                      {...register("website")}
+                      placeholder="https://company.com"
                     />
+                    {errors.website && <FieldError>{errors.website.message}</FieldError>}
                   </Field>
                 </CardContent>
               </Card>
 
               <Button
                 type="submit"
-                disabled={updateMutation.isPending}
+                disabled={isUpdating}
                 className="w-full bg-primary text-primary-foreground hover:bg-primary/95 cursor-pointer font-semibold py-6 text-sm flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-lg hover:shadow-primary/30"
               >
-                {updateMutation.isPending ? (
+                {isUpdating ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" /> {t("btnSaving")}
                   </>

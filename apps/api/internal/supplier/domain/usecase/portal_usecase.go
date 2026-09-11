@@ -78,6 +78,9 @@ func (u *portalUsecase) UpdateProfile(ctx context.Context, userID string, req *d
 		return nil, err
 	}
 
+	if req.CompanyName != "" && (profile.Slug == "" || profile.CompanyName != req.CompanyName) {
+		profile.Slug = utils.Slugify(req.CompanyName)
+	}
 	profile.CompanyName = req.CompanyName
 	profile.CompanyType = req.BusinessType
 	profile.EstablishedYear = req.Established
@@ -98,6 +101,11 @@ func (u *portalUsecase) UpdateProfile(ctx context.Context, userID string, req *d
 	err = u.portalRepo.UpdateUserAvatar(ctx, userID, req.Logo)
 	if err != nil {
 		return nil, err
+	}
+
+	if redisClient := infraRedis.GetClient(); redisClient != nil {
+		cacheKey := "supplier:dashboard:" + profile.ID
+		_ = redisClient.Del(ctx, cacheKey).Err()
 	}
 
 	logo, _ := u.portalRepo.GetUserAvatarURL(ctx, userID)

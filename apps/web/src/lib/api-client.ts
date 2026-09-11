@@ -516,6 +516,17 @@ apiClient.interceptors.response.use(
 
     // Handle CSRF errors
     if (errorCode === "CSRF_INVALID") {
+      const retryConfig = originalRequest as InternalAxiosRequestConfig & { _csrfRetry?: boolean };
+      if (!retryConfig._csrfRetry) {
+        retryConfig._csrfRetry = true;
+        emitAuthTelemetry("csrf_invalid_retry", { url: requestUrl });
+        const freshToken = await ensureCSRFToken({ forceRefresh: true, reason: "csrf_invalid_retry" });
+        if (freshToken && retryConfig.headers) {
+          retryConfig.headers["X-CSRF-Token"] = freshToken;
+          return apiClient(retryConfig);
+        }
+      }
+
       // CSRF token invalid - try to get a new one
       const msg = formatError("backend", "csrfError");
       notifyGlobalError(

@@ -1,0 +1,35 @@
+meta {
+  name: Update Profile - Missing Required Fields
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/api/v1/supplier/profile
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "companyName": "",
+    "businessType": "",
+    "email": "",
+    "phone": "",
+    "location": ""
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Edge case testing: Submitting payload with empty/missing required fields.
+  Expected: 400 Bad Request with VALIDATION_ERROR.
+}

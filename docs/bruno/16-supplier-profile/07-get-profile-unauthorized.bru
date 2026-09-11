@@ -1,0 +1,24 @@
+meta {
+  name: Get Supplier Profile - Unauthorized
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{base_url}}/api/v1/supplier/profile
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Edge case testing: Request without valid JWT authentication cookies.
+  Expected: 401 Unauthorized.
+}

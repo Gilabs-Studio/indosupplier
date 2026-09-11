@@ -172,7 +172,8 @@ func CSRF() gin.HandlerFunc {
 			return
 		}
 
-		// ALWAYS expose the current token in the header so frontend can read it (cross-origin support)
+		// ALWAYS expose the current token in the header and context so frontend and handlers can read it
+		c.Set("csrf_token", token)
 		c.Header("X-CSRF-Token", token)
 
 		path := c.Request.URL.Path

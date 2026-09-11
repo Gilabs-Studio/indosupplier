@@ -18,18 +18,18 @@ type SupplierProfileDTO struct {
 }
 
 type UpdateProfileRequest struct {
-	CompanyName  string `json:"companyName" binding:"required"`
-	BusinessType string `json:"businessType" binding:"required"`
-	Established  string `json:"established"`
-	Employees    string `json:"employees"`
-	Email        string `json:"email" binding:"required,email"`
-	Phone        string `json:"phone" binding:"required"`
-	Website      string `json:"website"`
-	TaxID        string `json:"taxId"`
-	NIB          string `json:"nib"`
-	Overview     string `json:"overview"`
-	Location     string `json:"location" binding:"required"`
-	Logo         string `json:"logo"`
+	CompanyName  string `json:"companyName" binding:"required,min=2,max=255"`
+	BusinessType string `json:"businessType" binding:"required,min=2,max=80"`
+	Established  string `json:"established" binding:"omitempty,numeric,len=4"`
+	Employees    string `json:"employees" binding:"omitempty,max=80"`
+	Email        string `json:"email" binding:"required,email,max=255"`
+	Phone        string `json:"phone" binding:"required,min=6,max=50"`
+	Website      string `json:"website" binding:"omitempty,max=255"`
+	TaxID        string `json:"taxId" binding:"omitempty,max=80"`
+	NIB          string `json:"nib" binding:"omitempty,numeric,min=9,max=16"`
+	Overview     string `json:"overview" binding:"omitempty,max=5000"`
+	Location     string `json:"location" binding:"required,min=3,max=500"`
+	Logo         string `json:"logo" binding:"omitempty,max=1000"`
 }
 
 type BillingInvoiceDTO struct {

@@ -315,6 +315,12 @@ func (h *AuthHandler) Logout(c *gin.Context) {
 func (h *AuthHandler) GetCSRFToken(c *gin.Context) {
 	token := c.GetString("csrf_token")
 	if token == "" {
+		token, _ = c.Cookie("indosupplier_csrf_token")
+	}
+	if token == "" {
+		token = strings.TrimSpace(c.Writer.Header().Get("X-CSRF-Token"))
+	}
+	if token == "" {
 		token = strings.TrimSpace(c.GetHeader("X-CSRF-Token"))
 	}
 

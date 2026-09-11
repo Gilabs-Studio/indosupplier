@@ -1,0 +1,30 @@
+meta {
+  name: Get Supplier Profile
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/v1/supplier/profile
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Retrieves business profile and operational details for the authenticated supplier:
+  - ID, Company Name, Business Type (PT/CV/UD)
+  - Established year, Employee count
+  - Official Email, Phone, Website
+  - Tax ID (NPWP), NIB (Business Identification Number)
+  - Business Overview & Warehouse/Office Location
+  - Account Status & Logo
+}

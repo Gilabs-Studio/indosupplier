@@ -1,0 +1,38 @@
+meta {
+  name: Update Profile - Overflow Length Constraint
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{base_url}}/api/v1/supplier/profile
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "companyName": "PT Very Long Company Name That Exceeds The Maximum Permitted Length In Database And DTO Constraints AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "businessType": "PT",
+    "established": "2020",
+    "employees": "10",
+    "email": "valid@email.com",
+    "phone": "123456789012345678901234567890123456789012345678901234567890",
+    "location": "Jakarta"
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Edge case testing: Buffer overflow / max length violation.
+  Phone length is 60 characters (exceeds max=50), CompanyName exceeds 255.
+  Expected: 400 Bad Request with VALIDATION_ERROR.
+}

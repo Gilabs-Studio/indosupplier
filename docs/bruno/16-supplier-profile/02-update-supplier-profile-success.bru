@@ -1,0 +1,41 @@
+meta {
+  name: Update Supplier Profile - Success
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{base_url}}/api/v1/supplier/profile
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "companyName": "PT Baja Sentosa Perkasa",
+    "businessType": "PT",
+    "established": "2018",
+    "employees": "50-100",
+    "email": "contact@bajasentosa.co.id",
+    "phone": "+6281234567890",
+    "website": "https://bajasentosa.co.id",
+    "taxId": "01.234.567.8-901.000",
+    "nib": "9120001234567",
+    "overview": "Distributor besi dan baja konstruksi terkemuka di Jabodetabek dengan pengalaman lebih dari 8 tahun.",
+    "location": "Jl. Industri Raya Blok C No. 12, Kawasan Industri Jababeka, Cikarang, Jawa Barat"
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Updates supplier business profile with valid information.
+  Verifies that slug is updated, profile records are updated, and 200 OK is returned.
+}
