@@ -133,3 +133,22 @@ func (h *SupplierPortalHandler) UpgradeSubscriptionPlan(c *gin.Context) {
 
 	response.SuccessResponse(c, overview, &response.Meta{UpdatedBy: userID})
 }
+
+func (h *SupplierPortalHandler) GetDashboard(c *gin.Context) {
+	userID, ok := h.getAuthenticatedUserID(c)
+	if !ok {
+		return
+	}
+
+	dashboard, err := h.portalUC.GetDashboard(c.Request.Context(), userID)
+	if err != nil {
+		if stderrors.Is(err, usecase.ErrProfileNotFound) {
+			errors.ErrorResponse(c, "SUPPLIER_PROFILE_NOT_FOUND", map[string]interface{}{"user_id": userID}, nil)
+			return
+		}
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, dashboard, nil)
+}

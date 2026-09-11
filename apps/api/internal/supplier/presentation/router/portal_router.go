@@ -12,6 +12,7 @@ func RegisterSupplierPortalRoutes(rg *gin.RouterGroup, h *handler.SupplierPortal
 	g := rg.Group("/supplier")
 	g.Use(middleware.AuthMiddleware(jwtManager))
 	{
+		g.GET("/dashboard", h.GetDashboard)
 		g.GET("/profile", h.GetProfile)
 		g.PUT("/profile", h.UpdateProfile)
 		g.GET("/billing-overview", h.GetBillingOverview)

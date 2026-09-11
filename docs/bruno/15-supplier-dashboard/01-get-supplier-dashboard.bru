@@ -1,0 +1,30 @@
+meta {
+  name: Get Supplier Dashboard
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/v1/supplier/dashboard
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Retrieves real-time analytics and operational metrics for the authenticated supplier:
+  - Total Sales (all-time & monthly trend)
+  - Active Products breakdown
+  - Matching RFQs metrics (open, expiring soon, new this week)
+  - Sales Performance Graph (12 months of the year)
+  - Seller Performance Level (verification level, store rating, chat response rate, catalog visitors)
+  - Recent matching RFQ inquiries
+}

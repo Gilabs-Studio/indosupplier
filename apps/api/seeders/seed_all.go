@@ -17,5 +17,8 @@ func SeedAll() error {
 	if err := SeedRFQs(); err != nil {
 		return err
 	}
+	if err := SeedSupplierDashboard(); err != nil {
+		return err
+	}
 	return SeedContent()
 }

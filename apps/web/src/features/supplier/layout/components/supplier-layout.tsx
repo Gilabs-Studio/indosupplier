@@ -271,7 +271,7 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
             </header>
 
             {/* Main content body with verification warning */}
-            <main className="flex-1 min-h-0 bg-muted/10 overflow-y-auto p-6 md:p-8">
+            <main className="flex-1 min-h-0 bg-background overflow-y-auto p-6 md:p-8">
               <div className="max-w-6xl mx-auto space-y-6">
                 {!isVerified && (
                   <div className="bg-card border border-border/80 border-l-4 border-l-primary p-4.5 rounded-lg flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 select-none shadow-xs transition-all duration-300 hover:shadow-md">
