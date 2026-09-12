@@ -1,0 +1,39 @@
+meta {
+  name: Create Product - XSS and SQLi Injected Strings
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{base_url}}/api/v1/supplier/products
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "category_id": "1e48ff95-01cf-486b-ad2a-c407ed1c1225",
+    "name": "Besi Baja <script>alert('xss')</script> '; DROP TABLE test;--",
+    "description": "Deskripsi produk aman dari SQL injection: ' OR '1'='1' AND SLEEP(5); <img src=x onerror=alert(1)>",
+    "moq": "5 Batang",
+    "starting_price": 500000,
+    "currency": "IDR",
+    "capacity_text": "100 Ton ';--",
+    "is_featured": false,
+    "sort_order": 0
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Tests that string fields containing XSS payloads and SQL injection tokens are safely parameterized by GORM.
+  Expected Response: HTTP 201 Created without executing injected scripts or queries.
+}

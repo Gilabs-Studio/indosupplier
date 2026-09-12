@@ -1,0 +1,26 @@
+meta {
+  name: Get Product By ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/v1/supplier/products/{{product_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+  product_id: e9ebb761-f46f-4793-8d22-3564ac3512cb
+}
+
+docs {
+  Retrieves detailed product catalog item by ID for authenticated supplier.
+  Includes Category details and Photos sorted by sort_order.
+}

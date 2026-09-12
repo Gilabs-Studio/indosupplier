@@ -42,8 +42,12 @@ func NewEngine(jwtManager *jwt.JWTManager) *gin.Engine {
 		r.Use(middleware.CSRF()) // Add CSRF protection
 	}
 
-	// Statically serve uploads folder for local filesystem fallback
-	r.Static("/uploads", "./uploads")
+	// Statically serve uploads folder for local filesystem storage
+	uploadDir := "./uploads"
+	if config.AppConfig != nil && config.AppConfig.Storage.LocalUploadDir != "" {
+		uploadDir = config.AppConfig.Storage.LocalUploadDir
+	}
+	r.Static("/uploads", uploadDir)
 
 	return r
 }

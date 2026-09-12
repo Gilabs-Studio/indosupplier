@@ -1,0 +1,35 @@
+meta {
+  name: Create Product - Overflow Field Length
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{base_url}}/api/v1/supplier/products
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "category_id": "1e48ff95-01cf-486b-ad2a-c407ed1c1225",
+    "name": "Produk Super Panjang Sekali Yang Melebihi Batas Maksimal Dua Ratus Lima Puluh Lima Karakter Yang Ditetapkan Oleh Skema Basis Data dan Validator Backend Golang Untuk Mencegah Buffer Overflow dan Penumpukan Memori Pada Server Produksi Berkecepatan Tinggi dan Skala Besar Sekali Ini",
+    "description": "Deskripsi produk valid",
+    "starting_price": 500000,
+    "moq": "10 Unit"
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Tests that product name exceeding 255 characters is rejected with 400 Bad Request.
+  Expected Response: HTTP 400 Bad Request with code `VALIDATION_ERROR` and code `max` on name.
+}

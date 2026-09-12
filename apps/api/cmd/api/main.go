@@ -86,13 +86,7 @@ func initInfrastructure() {
 
 	apptime.Init(config.AppConfig.Server.Timezone)
 
-	if err := storage.Init(
-		config.AppConfig.Storage.R2AccountID,
-		config.AppConfig.Storage.R2AccessKeyID,
-		config.AppConfig.Storage.R2SecretAccessKey,
-		config.AppConfig.Storage.R2BucketName,
-		config.AppConfig.Storage.R2PublicURL,
-	); err != nil {
+	if err := storage.InitStorage(config.AppConfig.Storage, config.AppConfig.Server.Port); err != nil {
 		log.Printf("warning: failed to initialize storage: %v", err)
 	}
 

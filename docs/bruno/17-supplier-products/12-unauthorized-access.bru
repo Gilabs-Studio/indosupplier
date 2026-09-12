@@ -1,0 +1,24 @@
+meta {
+  name: List Products - Unauthorized
+  type: http
+  seq: 12
+}
+
+get {
+  url: {{base_url}}/api/v1/supplier/products
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Tests endpoint security rejection when called without authentication token / session cookie.
+  Expected Response: HTTP 401 Unauthorized with code `UNAUTHORIZED`.
+}

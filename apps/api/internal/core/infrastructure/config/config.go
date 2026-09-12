@@ -125,6 +125,9 @@ type XenditConfig struct {
 }
 
 type StorageConfig struct {
+	Driver            string // Storage driver: "local" or "r2" (default: "r2")
+	LocalUploadDir    string // Local filesystem directory for uploads (default: "./uploads")
+	LocalBaseURL      string // Base public URL for serving local uploads (default: "http://localhost:8088/uploads")
 	MaxUploadSize     int64  // Maximum upload size in bytes (default: 10MB)
 	R2AccountID       string // Cloudflare account ID
 	R2AccessKeyID     string // R2 API token access key ID
@@ -268,6 +271,9 @@ func Load() error {
 			BaseURL:      getEnv("XENDIT_BASE_URL", "https://api.xendit.co"),
 		},
 		Storage: StorageConfig{
+			Driver:            getEnv("STORAGE_DRIVER", "r2"),
+			LocalUploadDir:    getEnv("STORAGE_LOCAL_DIR", "./uploads"),
+			LocalBaseURL:      getEnv("STORAGE_LOCAL_BASE_URL", "http://localhost:8088/uploads"),
 			MaxUploadSize:     getEnvAsInt64("STORAGE_MAX_UPLOAD_SIZE", 10*1024*1024), // 10MB default
 			R2AccountID:       getEnv("R2_ACCOUNT_ID", ""),
 			R2AccessKeyID:     getEnv("R2_ACCESS_KEY_ID", ""),

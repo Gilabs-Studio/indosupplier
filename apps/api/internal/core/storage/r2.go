@@ -16,55 +16,56 @@ import (
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/config"
 )
 
-var (
+// R2StorageProvider implements StorageProvider for Cloudflare R2 (S3-compatible API).
+type R2StorageProvider struct {
 	client    *s3.Client
 	bucket    string
 	publicURL string
-)
+}
 
-// Init initializes the Cloudflare R2 client. Must be called once at application startup.
-func Init(accountID, accessKeyID, secretKey, bucketName, pubURL string) error {
+// NewR2StorageProvider initializes a new Cloudflare R2 client.
+func NewR2StorageProvider(accountID, accessKeyID, secretKey, bucketName, pubURL string) (*R2StorageProvider, error) {
 	if accountID == "" || accessKeyID == "" || secretKey == "" || bucketName == "" {
-		return fmt.Errorf("storage: R2 config incomplete — R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, and R2_BUCKET_NAME are required")
+		return nil, fmt.Errorf("storage: R2 config incomplete — R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, and R2_BUCKET_NAME are required")
 	}
 
 	endpoint := fmt.Sprintf("https://%s.r2.cloudflarestorage.com", accountID)
 
-	client = s3.New(s3.Options{
+	c := s3.New(s3.Options{
 		Region:       "auto",
 		BaseEndpoint: aws.String(endpoint),
 		Credentials:  credentials.NewStaticCredentialsProvider(accessKeyID, secretKey, ""),
 		UsePathStyle: true,
 	})
 
-	bucket = bucketName
-	publicURL = strings.TrimSuffix(pubURL, "/")
-
-	return nil
+	return &R2StorageProvider{
+		client:    c,
+		bucket:    bucketName,
+		publicURL: strings.TrimSuffix(pubURL, "/"),
+	}, nil
 }
 
-// Upload stores data under the given key in the R2 bucket and returns the public URL.
-// Falls back to local filesystem if R2 configuration is empty or upload fails.
-func Upload(ctx context.Context, key string, data []byte, contentType string) (string, error) {
+// Upload stores data under the given key in Cloudflare R2.
+// Falls back to local filesystem if R2 client fails.
+func (p *R2StorageProvider) Upload(ctx context.Context, key string, data []byte, contentType string) (string, error) {
 	var uploadErr error
-	if client != nil {
-		_, uploadErr = client.PutObject(ctx, &s3.PutObjectInput{
-			Bucket:        aws.String(bucket),
+	if p.client != nil {
+		_, uploadErr = p.client.PutObject(ctx, &s3.PutObjectInput{
+			Bucket:        aws.String(p.bucket),
 			Key:           aws.String(key),
 			Body:          bytes.NewReader(data),
 			ContentType:   aws.String(contentType),
 			ContentLength: aws.Int64(int64(len(data))),
 		})
 		if uploadErr == nil {
-			return URL(key), nil
+			return p.URL(key), nil
 		}
 		log.Printf("[WARN] R2 upload failed for key %q: %v. Falling back to local filesystem storage.", key, uploadErr)
 	} else {
 		log.Printf("[WARN] R2 storage client is not initialized. Falling back to local filesystem storage.")
 	}
 
-	// Local filesystem fallback:
-	// key is e.g. "uploads/user_id/products/uuid.webp"
+	// Local filesystem fallback
 	localPath := filepath.Clean(key)
 	dir := filepath.Dir(localPath)
 	if err := os.MkdirAll(dir, 0755); err != nil {
@@ -86,10 +87,10 @@ func Upload(ctx context.Context, key string, data []byte, contentType string) (s
 }
 
 // Delete removes the object identified by key from the R2 bucket.
-func Delete(ctx context.Context, key string) error {
-	if client != nil {
-		_, err := client.DeleteObject(ctx, &s3.DeleteObjectInput{
-			Bucket: aws.String(bucket),
+func (p *R2StorageProvider) Delete(ctx context.Context, key string) error {
+	if p.client != nil {
+		_, err := p.client.DeleteObject(ctx, &s3.DeleteObjectInput{
+			Bucket: aws.String(p.bucket),
 			Key:    aws.String(key),
 		})
 		if err == nil {
@@ -98,7 +99,7 @@ func Delete(ctx context.Context, key string) error {
 		log.Printf("[WARN] R2 delete failed for key %q: %v. Attempting local deletion fallback.", key, err)
 	}
 
-	// Local filesystem fallback:
+	// Local filesystem fallback
 	localPath := filepath.Clean(key)
 	if _, err := os.Stat(localPath); err == nil {
 		if err := os.Remove(localPath); err != nil {
@@ -110,13 +111,13 @@ func Delete(ctx context.Context, key string) error {
 }
 
 // DeleteByPrefix removes all objects under a prefix from the R2 bucket.
-func DeleteByPrefix(ctx context.Context, prefix string) error {
+func (p *R2StorageProvider) DeleteByPrefix(ctx context.Context, prefix string) error {
 	trimmed := strings.TrimSpace(prefix)
 	if trimmed == "" {
 		return nil
 	}
 
-	if client == nil {
+	if p.client == nil {
 		log.Printf("[WARN] R2 storage client is not initialized. Attempting local directory deletion fallback.")
 		localPath := filepath.Clean(trimmed)
 		if _, err := os.Stat(localPath); err == nil {
@@ -128,8 +129,8 @@ func DeleteByPrefix(ctx context.Context, prefix string) error {
 		return nil
 	}
 
-	pager := s3.NewListObjectsV2Paginator(client, &s3.ListObjectsV2Input{
-		Bucket: aws.String(bucket),
+	pager := s3.NewListObjectsV2Paginator(p.client, &s3.ListObjectsV2Input{
+		Bucket: aws.String(p.bucket),
 		Prefix: aws.String(strings.TrimPrefix(trimmed, "/")),
 	})
 
@@ -155,8 +156,8 @@ func DeleteByPrefix(ctx context.Context, prefix string) error {
 			continue
 		}
 
-		_, err = client.DeleteObjects(ctx, &s3.DeleteObjectsInput{
-			Bucket: aws.String(bucket),
+		_, err = p.client.DeleteObjects(ctx, &s3.DeleteObjectsInput{
+			Bucket: aws.String(p.bucket),
 			Delete: &types.Delete{Objects: objects, Quiet: aws.Bool(true)},
 		})
 		if err != nil {
@@ -167,21 +168,33 @@ func DeleteByPrefix(ctx context.Context, prefix string) error {
 	return nil
 }
 
-// URL returns the public URL for a given object key.
-func URL(key string) string {
-	return publicURL + "/" + key
+// URL returns the public URL for a given object key in R2.
+func (p *R2StorageProvider) URL(key string) string {
+	cleanKey := strings.TrimPrefix(key, "/")
+	if p.publicURL == "" {
+		return cleanKey
+	}
+	return p.publicURL + "/" + cleanKey
 }
 
-// KeyFromURL extracts the R2 object key from a public URL (reverse of URL function).
-// Example: https://pub-abc123.r2.dev/avatars/user123.webp → avatars/user123.webp
-// Returns empty string if URL is not from this R2 bucket.
-func KeyFromURL(fullURL string) string {
-	if publicURL == "" || fullURL == "" {
+// KeyFromURL extracts the R2 object key from a public URL.
+func (p *R2StorageProvider) KeyFromURL(fullURL string) string {
+	if p.publicURL == "" || fullURL == "" {
 		return ""
 	}
-	// Try to extract key by stripping publicURL prefix
-	if strings.HasPrefix(fullURL, publicURL+"/") {
-		return strings.TrimPrefix(fullURL, publicURL+"/")
+	prefix := p.publicURL + "/"
+	if strings.HasPrefix(fullURL, prefix) {
+		return strings.TrimPrefix(fullURL, prefix)
 	}
 	return ""
+}
+
+// Init initializes the Cloudflare R2 client. Provided for backward compatibility.
+func Init(accountID, accessKeyID, secretKey, bucketName, pubURL string) error {
+	r2, err := NewR2StorageProvider(accountID, accessKeyID, secretKey, bucketName, pubURL)
+	if err != nil {
+		return err
+	}
+	defaultProvider = r2
+	return nil
 }

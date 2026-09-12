@@ -107,7 +107,7 @@ function SupplierSidebar() {
   );
 }
 
-function MobileMenuButton() {
+export function MobileMenuButton() {
   const { toggleSidebar } = useSidebar();
   return (
     <Button
@@ -153,6 +153,8 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
     .find((item) => pathname === item.url || (item.url !== "/supplier/dashboard" && pathname.startsWith(item.url)));
   const activeTitle = activeItem ? activeItem.name : t("menu.dashboard");
 
+  const isCreateProduct = pathname.includes("/supplier/products/create");
+
   return (
     <TooltipProvider>
       <SidebarProvider defaultOpen={true}>
@@ -162,8 +164,12 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
 
           {/* Main Workspace */}
           <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden relative">
-            {/* Header */}
-            <header className="shrink-0 z-20 bg-background/95 backdrop-blur h-16 w-full flex items-center justify-between px-4 md:px-6">
+            {isCreateProduct ? (
+              children
+            ) : (
+              <>
+                {/* Header */}
+                <header className="shrink-0 z-20 bg-background/95 backdrop-blur h-16 w-full flex items-center justify-between px-4 md:px-6">
               <div className="flex flex-1 items-center justify-between min-w-0 gap-4">
                 <div className="flex min-w-0 flex-1 items-center gap-3">
                   {/* Mobile toggle button */}
@@ -299,8 +305,10 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
                 {children}
               </div>
             </main>
-          </div>
-        </div>
+          </>
+        )}
+      </div>
+    </div>
 
         {/* Logout Dialog */}
         <Dialog open={showLogoutConfirm} onOpenChange={setShowLogoutConfirm}>

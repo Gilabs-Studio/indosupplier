@@ -1,0 +1,35 @@
+meta {
+  name: Create Product - Invalid Category UUID
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{base_url}}/api/v1/supplier/products
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "category_id": "invalid-non-uuid-sql-inject' OR 1=1--",
+    "name": "Besi Hollow Hitam 40x40",
+    "description": "Besi pipa kotak hollow hitam tebal 1.6mm panjang 6 meter.",
+    "starting_price": 120000,
+    "moq": "10 Batang"
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Tests that category_id rejects invalid string / SQL injection and enforces UUID format.
+  Expected Response: HTTP 400 Bad Request with code `VALIDATION_ERROR` on category_id (uuid code).
+}

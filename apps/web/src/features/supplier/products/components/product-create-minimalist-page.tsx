@@ -10,12 +10,13 @@ import { Switch } from "@/components/ui/switch";
 import { NumericInput } from "@/components/ui/numeric-input";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { productFormSchema } from "../schemas/products.schema";
+import { productFormSchema, CURRENCY_OPTIONS, type ProductFormValues } from "../schemas/products.schema";
 import {
   useCategories,
   useCreateProduct,
   useUploadProductImage,
 } from "../hooks/useProducts";
+import { MobileMenuButton } from "@/features/supplier/layout/components/supplier-layout";
 import {
   ArrowLeft,
   Upload,
@@ -28,9 +29,11 @@ import {
   DollarSign,
   Sparkles,
   X,
+  AlertCircle,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 
 /* ─────────────────────────────────────────────
    Step definition
@@ -49,11 +52,11 @@ export function ProductCreateMinimalistPage() {
   const t = useTranslations("supplier.products");
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [submitting, setSubmitting] = useState(false);
+  const [previewMap, setPreviewMap] = useState<Record<string, string>>({});
 
   const { data: categories } = useCategories();
   const { mutate: createProduct, isPending: isCreating } = useCreateProduct();
-  const { mutateAsync: uploadImage, isPending: isUploading } =
-    useUploadProductImage();
+  const { mutateAsync: uploadImage, isPending: isUploading } = useUploadProductImage();
 
   const getStepLabel = (id: string) => {
     switch (id) {
@@ -77,7 +80,7 @@ export function ProductCreateMinimalistPage() {
     watch,
     trigger,
     formState: { errors },
-  } = useForm({
+  } = useForm<ProductFormValues>({
     resolver: zodResolver(productFormSchema),
     defaultValues: {
       name: "",
@@ -89,12 +92,7 @@ export function ProductCreateMinimalistPage() {
       capacity_text: "",
       is_featured: false,
       sort_order: 0,
-      photos: [] as {
-        file_url: string;
-        caption?: string;
-        sort_order: number;
-        id?: string;
-      }[],
+      photos: [],
     },
   });
 
@@ -104,59 +102,81 @@ export function ProductCreateMinimalistPage() {
     remove: removePhoto,
   } = useFieldArray({ control, name: "photos" });
 
-  const watchPhotos = (watch("photos") || []) as {
-    file_url: string;
-    caption?: string;
-    sort_order: number;
-    id?: string;
-  }[];
-  const watchIsFeatured = watch("is_featured") as boolean;
-  const watchName = watch("name") as string;
+  const watchPhotos = watch("photos") || [];
+  const watchIsFeatured = watch("is_featured");
+  const watchName = watch("name");
 
   /* Step field groups for validation */
-  const stepFields: Record<StepId, string[]> = {
+  const stepFields: Record<StepId, (keyof ProductFormValues)[]> = {
     info: ["name", "category_id", "description"],
     price: ["starting_price", "currency", "moq", "capacity_text"],
-    photos: [],
+    photos: ["photos"],
     settings: [],
   };
 
-  const goNext = async () => {
+  const goNext = async (e?: React.MouseEvent) => {
+    e?.preventDefault();
     const stepId = STEPS[currentStep].id;
+    if (stepId === "photos") {
+      if (photoFields.length === 0) {
+        toast.error(t("photoRequired"));
+        return;
+      }
+    }
     const fieldList = stepFields[stepId];
-    const valid =
-      fieldList.length > 0
-        ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          await trigger(fieldList as any)
-        : true;
-    if (valid && currentStep < STEPS.length - 1) setCurrentStep((s) => s + 1);
+    const valid = fieldList.length > 0 ? await trigger(fieldList) : true;
+    if (valid && currentStep < STEPS.length - 1) {
+      setCurrentStep((s) => s + 1);
+    }
   };
 
-  const goPrev = () => {
+  const goPrev = (e?: React.MouseEvent) => {
+    e?.preventDefault();
     if (currentStep > 0) setCurrentStep((s) => s - 1);
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (!files) return;
+    if (!files || files.length === 0) return;
+
     for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const localBlobUrl = URL.createObjectURL(file);
+
       try {
-        const result = await uploadImage(files[i]);
+        const result = await uploadImage(file);
+        setPreviewMap((prev) => ({
+          ...prev,
+          [result.url]: localBlobUrl,
+        }));
         appendPhoto({
           file_url: result.url,
-          caption: files[i].name,
+          caption: file.name,
           sort_order: watchPhotos.length,
         });
       } catch (err) {
         console.error("Upload failed:", err);
+        toast.error("Gagal mengunggah foto.");
       }
     }
-    // reset input
     e.target.value = "";
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = (values: any) => {
+  const onFormError = (formErrors: Partial<Record<keyof ProductFormValues, unknown>>) => {
+    if (formErrors.photos || watchPhotos.length === 0) {
+      toast.error(t("photoRequired"));
+      setCurrentStep(2);
+      return;
+    }
+    toast.error("Mohon lengkapi semua data wajib sebelum menyimpan.");
+  };
+
+  const onSubmit = (values: ProductFormValues) => {
+    if (!values.photos || values.photos.length === 0) {
+      toast.error(t("photoRequired"));
+      setCurrentStep(2);
+      return;
+    }
     setSubmitting(true);
     createProduct(values, {
       onSuccess: () => router.push("/supplier/products"),
@@ -168,22 +188,29 @@ export function ProductCreateMinimalistPage() {
   const progress = ((currentStep + 1) / STEPS.length) * 100;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* ── Slim Top Bar ─────────────────────────────────────────────────── */}
-      <div className="sticky top-0 z-40 bg-background/90 backdrop-blur-md border-b border-border">
-        <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-4">
+    <form
+      onSubmit={handleSubmit(onSubmit, onFormError)}
+      className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden bg-background text-foreground relative"
+    >
+      {/* ── Progressive Header (Replacing layout header) ────────────────── */}
+      <header className="shrink-0 z-20 bg-background/95 backdrop-blur h-16 w-full border-b border-border flex items-center justify-between px-4 md:px-6 relative select-none">
+        <div className="flex items-center gap-3 min-w-0">
+          <MobileMenuButton />
+
           <button
+            type="button"
             onClick={() => router.push("/supplier/products")}
-            className="h-8 w-8 rounded-lg border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-border hover:bg-muted/40 transition-all cursor-pointer shrink-0"
+            className="p-1.5 rounded-lg border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all cursor-pointer shrink-0"
+            aria-label="Back to products"
           >
-            <ArrowLeft className="h-3.5 w-3.5" />
+            <ArrowLeft className="h-4 w-4" />
           </button>
 
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-extrabold text-foreground truncate">
-              {watchName || t("addProduct")}
-            </p>
-            <p className="text-[10px] text-muted-foreground">
+          <div className="flex flex-col min-w-0">
+            <h1 className="text-sm font-extrabold text-foreground truncate leading-none">
+              {watchName.trim() || t("addProduct")}
+            </h1>
+            <p className="text-[11px] text-muted-foreground mt-1 leading-none font-medium truncate">
               {t("stepOf", {
                 current: currentStep + 1,
                 total: STEPS.length,
@@ -191,38 +218,54 @@ export function ProductCreateMinimalistPage() {
               })}
             </p>
           </div>
-
-          {/* Step dots */}
-          <div className="flex items-center gap-1.5 shrink-0">
-            {STEPS.map((s, i) => (
-              <button
-                key={s.id}
-                onClick={() => setCurrentStep(i)}
-                className={`transition-all cursor-pointer rounded-full ${
-                  i === currentStep
-                    ? "h-2 w-6 bg-primary"
-                    : i < currentStep
-                    ? "h-2 w-2 bg-primary/40"
-                    : "h-2 w-2 bg-border"
-                }`}
-              />
-            ))}
-          </div>
         </div>
 
-        {/* Progress bar */}
-        <div className="h-0.5 bg-border">
+        {/* Interactive Step Pills */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {STEPS.map((s, i) => {
+            const isCurrent = i === currentStep;
+            const isPassed = i < currentStep;
+            const Icon = s.icon;
+            return (
+              <button
+                key={s.id}
+                type="button"
+                onClick={async () => {
+                  if (i < currentStep) {
+                    setCurrentStep(i);
+                  } else if (i === currentStep + 1) {
+                    await goNext();
+                  }
+                }}
+                className={`flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  isCurrent
+                    ? "bg-primary text-primary-foreground shadow-xs shadow-primary/25"
+                    : isPassed
+                    ? "bg-muted text-foreground hover:bg-muted/80"
+                    : "text-muted-foreground/60 hover:text-muted-foreground hover:bg-muted/30"
+                }`}
+              >
+                <Icon className="h-3.5 w-3.5 shrink-0" />
+                <span className="hidden md:inline">{getStepLabel(s.id)}</span>
+                <span className="md:hidden">{i + 1}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Animated Progress Bar at bottom border */}
+        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-border overflow-hidden">
           <motion.div
             className="h-full bg-primary"
             animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
+            transition={{ duration: 0.35, ease: "easeInOut" }}
           />
         </div>
-      </div>
+      </header>
 
-      {/* ── Form Content ─────────────────────────────────────────────────── */}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="max-w-2xl mx-auto px-4 py-10">
+      {/* ── Scrollable Form Body ────────────────────────────────────────── */}
+      <main className="flex-1 min-h-0 overflow-y-auto px-4 md:px-6 py-8">
+        <div className="max-w-2xl mx-auto space-y-6">
           <AnimatePresence mode="wait">
             {/* ── STEP 0: Info Produk ──────────────────────────────────── */}
             {currentStep === 0 && (
@@ -242,7 +285,7 @@ export function ProductCreateMinimalistPage() {
                     />
                   </MinimalField>
 
-                  <MinimalField label={t("category")} required error={errors.category_id?.message as string}>
+                  <MinimalField label={t("category")} required error={errors.category_id?.message}>
                     <select
                       id="category_id"
                       className="w-full h-11 px-3 bg-background border border-border text-sm rounded-lg outline-hidden focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all cursor-pointer text-foreground"
@@ -257,7 +300,7 @@ export function ProductCreateMinimalistPage() {
                     </select>
                   </MinimalField>
 
-                  <MinimalField label={t("description")} error={errors.description?.message as string}>
+                  <MinimalField label={t("description")} error={errors.description?.message}>
                     <Textarea
                       id="description"
                       placeholder={t("descriptionPlaceholder")}
@@ -279,10 +322,9 @@ export function ProductCreateMinimalistPage() {
                 />
 
                 <div className="space-y-6">
-                  {/* Price + Currency in one row */}
                   <div className="grid grid-cols-3 gap-3">
                     <div className="col-span-2">
-                      <MinimalField label={t("price")} required error={errors.starting_price?.message as string}>
+                      <MinimalField label={t("price")} required error={errors.starting_price?.message}>
                         <Controller
                           control={control}
                           name="starting_price"
@@ -301,18 +343,23 @@ export function ProductCreateMinimalistPage() {
                       </MinimalField>
                     </div>
                     <div className="col-span-1">
-                      <MinimalField label={t("currency")} error={errors.currency?.message as string}>
-                        <Input
+                      <MinimalField label={t("currency")} error={errors.currency?.message}>
+                        <select
                           id="currency"
-                          placeholder={t("currencyPlaceholder")}
-                          className="h-11 text-sm border-border focus:ring-2 focus:ring-primary/15"
+                          className="h-11 w-full rounded-md border border-border bg-background px-3 py-2 text-sm font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/15 cursor-pointer"
                           {...register("currency")}
-                        />
+                        >
+                          {CURRENCY_OPTIONS.map((opt) => (
+                            <option key={opt.value} value={opt.value} className="bg-popover text-popover-foreground">
+                              {opt.label}
+                            </option>
+                          ))}
+                        </select>
                       </MinimalField>
                     </div>
                   </div>
 
-                  <MinimalField label={t("moq")} required error={errors.moq?.message as string}>
+                  <MinimalField label={t("moq")} required error={errors.moq?.message}>
                     <Input
                       id="moq"
                       placeholder={t("moqPlaceholder")}
@@ -321,7 +368,7 @@ export function ProductCreateMinimalistPage() {
                     />
                   </MinimalField>
 
-                  <MinimalField label={t("capacity")} error={errors.capacity_text?.message as string}>
+                  <MinimalField label={t("capacity")} error={errors.capacity_text?.message}>
                     <Input
                       id="capacity_text"
                       placeholder={t("capacityPlaceholder")}
@@ -347,6 +394,8 @@ export function ProductCreateMinimalistPage() {
                     className={`border-2 border-dashed rounded-xl p-10 flex flex-col items-center justify-center gap-3 transition-all ${
                       isUploading
                         ? "border-primary/40 bg-primary/5"
+                        : photoFields.length === 0 && errors.photos
+                        ? "border-destructive/50 bg-destructive/5"
                         : "border-border hover:border-primary/50 hover:bg-muted/30"
                     }`}
                   >
@@ -381,6 +430,14 @@ export function ProductCreateMinimalistPage() {
                   />
                 </label>
 
+                {/* Validation Warning Alert */}
+                {photoFields.length === 0 && (
+                  <div className="p-3.5 rounded-lg border border-destructive/30 bg-destructive/5 flex items-center gap-2.5 text-destructive">
+                    <AlertCircle className="h-4 w-4 shrink-0" />
+                    <p className="text-xs font-medium">{t("photoRequired")}</p>
+                  </div>
+                )}
+
                 {/* Photo Grid */}
                 {photoFields.length > 0 && (
                   <div className="mt-6">
@@ -391,17 +448,18 @@ export function ProductCreateMinimalistPage() {
                       <AnimatePresence>
                         {photoFields.map((field, index) => {
                           const isCover = index === 0;
+                          const displaySrc = previewMap[field.file_url] || field.file_url;
                           return (
                             <motion.div
                               key={field.id}
                               initial={{ opacity: 0, scale: 0.85 }}
                               animate={{ opacity: 1, scale: 1 }}
                               exit={{ opacity: 0, scale: 0.85 }}
-                              className="relative group rounded-lg overflow-hidden border border-border aspect-square bg-muted/10"
+                              className="relative group rounded-lg overflow-hidden border border-border aspect-square bg-muted/20"
                             >
                               {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img
-                                src={field.file_url}
+                                src={displaySrc}
                                 alt={`Photo ${index + 1}`}
                                 className="w-full h-full object-cover"
                               />
@@ -435,6 +493,25 @@ export function ProductCreateMinimalistPage() {
                   description={t("settingsDesc")}
                 />
 
+                {/* Warning if photos missing */}
+                {watchPhotos.length === 0 && (
+                  <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-4 flex items-center justify-between gap-4 text-destructive">
+                    <div className="flex items-center gap-2.5">
+                      <AlertCircle className="h-4.5 w-4.5 shrink-0" />
+                      <p className="text-xs font-semibold">{t("photoRequiredDesc")}</p>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentStep(2)}
+                      className="cursor-pointer border-destructive/40 text-destructive hover:bg-destructive/10 text-xs shrink-0"
+                    >
+                      {t("goToPhotos")}
+                    </Button>
+                  </div>
+                )}
+
                 {/* Featured toggle */}
                 <div className="rounded-xl border border-border bg-card p-5">
                   <div className="flex items-center justify-between gap-6">
@@ -442,13 +519,13 @@ export function ProductCreateMinimalistPage() {
                       <div
                         className={`h-9 w-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${
                           watchIsFeatured
-                            ? "bg-amber-500/15 text-amber-500"
+                            ? "bg-warning/15 text-warning"
                             : "bg-muted text-muted-foreground"
                         }`}
                       >
                         <Star
                           className={`h-4 w-4 transition-all ${
-                            watchIsFeatured ? "fill-amber-500" : ""
+                            watchIsFeatured ? "fill-warning" : ""
                           }`}
                         />
                       </div>
@@ -476,8 +553,8 @@ export function ProductCreateMinimalistPage() {
                 </div>
 
                 {/* Summary Preview Card */}
-                <div className="mt-6 rounded-xl border border-border bg-muted/20 overflow-hidden">
-                  <div className="px-5 py-3 border-b border-border">
+                <div className="mt-6 rounded-xl border border-border bg-card overflow-hidden">
+                  <div className="px-5 py-3 border-b border-border bg-muted/30">
                     <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
                       {t("summaryTitle")}
                     </p>
@@ -508,65 +585,63 @@ export function ProductCreateMinimalistPage() {
             )}
           </AnimatePresence>
         </div>
+      </main>
 
-        {/* ── Sticky Navigation ──────────────────────────────────────────── */}
-        <div className="sticky bottom-0 z-40 bg-background/90 backdrop-blur-md border-t border-border">
-          <div className="max-w-2xl mx-auto px-4 py-4 flex items-center gap-3">
-            {currentStep > 0 ? (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={goPrev}
-                className="cursor-pointer border-border hover:bg-muted text-sm font-medium"
-              >
-                <ArrowLeft className="h-3.5 w-3.5 mr-1.5" />
-                {t("back")}
-              </Button>
-            ) : (
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={() => router.push("/supplier/products")}
-                className="cursor-pointer text-muted-foreground hover:text-foreground text-sm"
-              >
-                {t("cancel")}
-              </Button>
-            )}
+      {/* ── Pinned Bottom Footer Navigation ─────────────────────────────── */}
+      <footer className="shrink-0 z-20 bg-background/95 backdrop-blur h-16 w-full border-t border-border flex items-center justify-between px-4 md:px-6">
+        {currentStep > 0 ? (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={(e) => goPrev(e)}
+            className="cursor-pointer border-border hover:bg-muted text-xs sm:text-sm font-medium"
+          >
+            <ArrowLeft className="h-3.5 w-3.5 mr-1.5" />
+            {t("back")}
+          </Button>
+        ) : (
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => router.push("/supplier/products")}
+            className="cursor-pointer text-muted-foreground hover:text-foreground text-xs sm:text-sm"
+          >
+            {t("cancel")}
+          </Button>
+        )}
 
-            <div className="flex-1" />
-
-            {isLastStep ? (
-              <Button
-                type="submit"
-                disabled={isCreating || submitting}
-                className="cursor-pointer bg-primary text-primary-foreground font-bold px-7 py-2.5 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-lg hover:shadow-primary/25 text-sm"
-              >
-                {isCreating || submitting ? (
-                  <>
-                    <Loader2 className="h-3.5 w-3.5 animate-spin mr-2" />
-                    {t("saving")}
-                  </>
-                ) : (
-                  <>
-                    <Check className="h-3.5 w-3.5 mr-2" />
-                    {t("save")}
-                  </>
-                )}
-              </Button>
-            ) : (
-              <Button
-                type="button"
-                onClick={goNext}
-                className="cursor-pointer bg-primary text-primary-foreground font-bold px-6 py-2.5 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-lg hover:shadow-primary/25 text-sm"
-              >
-                {t("next")}
-                <ChevronRight className="h-3.5 w-3.5 ml-1.5" />
-              </Button>
-            )}
-          </div>
+        <div className="flex items-center gap-2">
+          {isLastStep ? (
+            <Button
+              type="submit"
+              disabled={isCreating || submitting}
+              className="cursor-pointer bg-primary text-primary-foreground font-bold px-6 sm:px-7 py-2 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-lg hover:shadow-primary/25 text-xs sm:text-sm"
+            >
+              {isCreating || submitting ? (
+                <>
+                  <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />
+                  {t("saving")}
+                </>
+              ) : (
+                <>
+                  <Check className="h-3.5 w-3.5 mr-1.5" />
+                  {t("save")}
+                </>
+              )}
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              onClick={(e) => goNext(e)}
+              className="cursor-pointer bg-primary text-primary-foreground font-bold px-5 sm:px-6 py-2 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-lg hover:shadow-primary/25 text-xs sm:text-sm"
+            >
+              {t("next")}
+              <ChevronRight className="h-3.5 w-3.5 ml-1.5" />
+            </Button>
+          )}
         </div>
-      </form>
-    </div>
+      </footer>
+    </form>
   );
 }
 
@@ -579,7 +654,7 @@ function StepWrapper({ children }: { children: React.ReactNode }) {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-      className="space-y-8"
+      className="space-y-6"
     >
       {children}
     </motion.div>
@@ -633,7 +708,7 @@ function SummaryRow({
 }) {
   return (
     <div className="flex items-center justify-between px-5 py-3.5 border-b border-border last:border-0">
-      <span className="text-sm text-foreground/80">
+      <span className="text-sm text-muted-foreground font-medium">
         {label}
       </span>
       <span className="text-sm font-semibold text-foreground max-w-[60%] text-right truncate">

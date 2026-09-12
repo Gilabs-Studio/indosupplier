@@ -1,0 +1,46 @@
+meta {
+  name: Create Supplier Product - Success
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/api/v1/supplier/products
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "category_id": "1e48ff95-01cf-486b-ad2a-c407ed1c1225",
+    "name": "Plat Baja Tahan Karat SUS 304 High Grade",
+    "description": "Plat baja tahan karat SUS 304 grade industri food & pharma tebal 3mm, tahan korosi kimiawi, sertifikasi ISO 9001.",
+    "moq": "5 Lembar",
+    "starting_price": 8500000,
+    "currency": "IDR",
+    "capacity_text": "250 Lembar / Bulan",
+    "is_featured": false,
+    "sort_order": 4,
+    "photos": [
+      {
+        "file_url": "/images/categories/cat-bahan-baku.webp",
+        "caption": "Tampak Depan Plat SUS 304",
+        "sort_order": 0
+      }
+    ]
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Creates a new product in the authenticated supplier's catalog.
+  Expected Response: HTTP 201 Created with product ID and preloaded photos/category.
+}

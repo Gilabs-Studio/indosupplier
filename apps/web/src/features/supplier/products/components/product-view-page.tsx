@@ -14,6 +14,8 @@ import {
   ChevronRight,
   ZoomIn,
   ShoppingBag,
+  Eye,
+  ExternalLink,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslations } from "next-intl";
@@ -101,19 +103,34 @@ export function ProductViewPage({ id }: ProductViewPageProps) {
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="flex items-center gap-2 text-xs text-muted-foreground"
+        className="flex items-center justify-between gap-4"
       >
-        <button
-          onClick={() => router.push("/supplier/products")}
-          className="flex items-center gap-1.5 hover:text-foreground transition-colors cursor-pointer font-medium"
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <button
+            onClick={() => router.push("/supplier/products")}
+            className="flex items-center gap-1.5 hover:text-foreground transition-colors cursor-pointer font-medium"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            {t("title")}
+          </button>
+          <span>/</span>
+          <span className="text-foreground font-semibold truncate max-w-[200px]">
+            {product.name}
+          </span>
+        </div>
+
+        <Button
+          variant="outline"
+          size="sm"
+          asChild
+          className="cursor-pointer gap-1.5 text-xs font-semibold border-border hover:bg-muted"
         >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          {t("title")}
-        </button>
-        <span>/</span>
-        <span className="text-foreground font-semibold truncate max-w-[200px]">
-          {product.name}
-        </span>
+          <Link href={`/products/${product.id}`} target="_blank" rel="noopener noreferrer">
+            <Eye className="h-3.5 w-3.5 text-muted-foreground" />
+            {t("previewAsBuyer")}
+            <ExternalLink className="h-3 w-3 text-muted-foreground/70 ml-0.5" />
+          </Link>
+        </Button>
       </motion.div>
 
       {/* ── Main Content Grid ─────────────────────────────────────────────── */}
@@ -177,8 +194,8 @@ export function ProductViewPage({ id }: ProductViewPageProps) {
 
                 {/* Featured badge */}
                 {product.is_featured && (
-                  <Badge className="absolute top-3 left-3 bg-amber-500 hover:bg-amber-500 text-white border-0 flex items-center gap-1 text-[10px] px-2 py-0.5">
-                    <Star className="h-3 w-3 fill-white" /> Featured
+                  <Badge className="absolute top-3 left-3 bg-warning text-warning-foreground border-0 flex items-center gap-1 text-[10px] px-2 py-0.5 font-bold shadow-xs">
+                    <Star className="h-3 w-3 fill-current" /> Featured
                   </Badge>
                 )}
               </>
@@ -323,11 +340,22 @@ export function ProductViewPage({ id }: ProductViewPageProps) {
             </Button>
             <Button
               variant="outline"
+              asChild
+              className="w-full cursor-pointer border-border hover:bg-muted transition-all text-sm font-semibold py-5"
+            >
+              <Link href={`/products/${product.id}`} target="_blank" rel="noopener noreferrer">
+                <Eye className="h-4 w-4 mr-2" />
+                {t("previewAsBuyer")}
+                <ExternalLink className="h-3.5 w-3.5 ml-auto opacity-60" />
+              </Link>
+            </Button>
+            <Button
+              variant="outline"
               onClick={() => router.push("/supplier/products")}
-              className="w-full cursor-pointer border-border hover:bg-muted transition-all text-sm"
+              className="w-full cursor-pointer border-border hover:bg-muted transition-all text-sm font-semibold"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
-              {t("backToCatalog")}
+              {t("back")}
             </Button>
           </div>
         </motion.div>

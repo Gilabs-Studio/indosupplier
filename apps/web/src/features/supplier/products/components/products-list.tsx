@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
-import { Edit2, Plus, Search, Trash2, Star, ShoppingBag } from "lucide-react";
+import { Edit2, Plus, Search, Trash2, Star, ShoppingBag, Eye } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useSupplierProducts, useDeleteProduct, useCategories } from "../hooks/useProducts";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -101,8 +101,8 @@ export function SupplierProductsList() {
                   )}
 
                   {product.is_featured && (
-                    <Badge className="absolute top-3 left-3 bg-amber-500 hover:bg-amber-600 text-white border-0 flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full">
-                      <Star className="h-3 w-3 fill-white" /> Featured
+                    <Badge className="absolute top-3 left-3 bg-warning text-warning-foreground border-0 flex items-center gap-1 text-[10px] px-2 py-0.5 font-bold shadow-xs">
+                      <Star className="h-3 w-3 fill-current" /> Featured
                     </Badge>
                   )}
                 </div>
@@ -158,6 +158,17 @@ export function SupplierProductsList() {
 
               {/* Actions Footer */}
               <div className="px-5 py-4 border-t border-border flex items-center justify-end gap-2 shrink-0">
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="sm"
+                  title={t("previewAsBuyer")}
+                  className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer border border-border"
+                >
+                  <Link href={`/products/${product.id}`} target="_blank" rel="noopener noreferrer">
+                    <Eye className="h-3.5 w-3.5" />
+                  </Link>
+                </Button>
                 <Button
                   asChild
                   variant="outline"

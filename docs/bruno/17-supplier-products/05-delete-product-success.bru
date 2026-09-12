@@ -1,0 +1,26 @@
+meta {
+  name: Delete Supplier Product - Success
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base_url}}/api/v1/supplier/products/{{product_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+  product_id: cef2c06f-e423-4788-81bc-5d4f6e685c69
+}
+
+docs {
+  Deletes product from supplier catalog and cascade removes associated photos.
+  Expected Response: HTTP 200 OK with success flag and resource deleted metadata.
+}

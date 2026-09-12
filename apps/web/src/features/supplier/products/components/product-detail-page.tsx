@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { useRouter } from "@/i18n/routing";
+import { useRouter, Link } from "@/i18n/routing";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,9 +11,9 @@ import { Switch } from "@/components/ui/switch";
 import { NumericInput } from "@/components/ui/numeric-input";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { productFormSchema } from "../schemas/products.schema";
+import { productFormSchema, CURRENCY_OPTIONS, SUPPORTED_CURRENCIES, type SupportedCurrency, type ProductFormValues } from "../schemas/products.schema";
 import { useSupplierProduct, useCategories, useCreateProduct, useUpdateProduct, useUploadProductImage } from "../hooks/useProducts";
-import { ArrowLeft, Upload, Trash2, Star, Loader2 } from "lucide-react";
+import { ArrowLeft, Upload, Trash2, Star, Loader2, Eye, ExternalLink } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion, AnimatePresence } from "framer-motion";
@@ -27,6 +27,7 @@ export function ProductDetailPage({ id, isCreate = false }: Readonly<ProductDeta
   const router = useRouter();
   const t = useTranslations("supplier.products");
 
+  const [previewMap, setPreviewMap] = React.useState<Record<string, string>>({});
   const { data: product, isLoading: isLoadingProduct } = useSupplierProduct(id || "");
   const { data: categories } = useCategories();
   const { mutate: createProduct, isPending: isCreating } = useCreateProduct();
@@ -40,7 +41,7 @@ export function ProductDetailPage({ id, isCreate = false }: Readonly<ProductDeta
     watch,
     reset,
     formState: { errors },
-  } = useForm({
+  } = useForm<ProductFormValues>({
     resolver: zodResolver(productFormSchema),
     defaultValues: {
       name: "",
@@ -52,7 +53,7 @@ export function ProductDetailPage({ id, isCreate = false }: Readonly<ProductDeta
       capacity_text: "",
       is_featured: false,
       sort_order: 0,
-      photos: [] as { file_url: string; caption?: string; sort_order: number; id?: string }[],
+      photos: [],
     },
   });
 
@@ -61,19 +62,25 @@ export function ProductDetailPage({ id, isCreate = false }: Readonly<ProductDeta
     name: "photos",
   });
 
-  const watchIsFeatured = watch("is_featured") as boolean;
-  const watchPhotos = (watch("photos") || []) as { file_url: string; caption?: string; sort_order: number; id?: string }[];
+  const watchIsFeatured = watch("is_featured");
+  const watchPhotos = watch("photos") || [];
 
   // Reset form with product values when editing
   useEffect(() => {
     if (!isCreate && product) {
+      const safeCurrency = (
+        product.currency && SUPPORTED_CURRENCIES.includes(product.currency as SupportedCurrency)
+          ? product.currency
+          : "IDR"
+      ) as SupportedCurrency;
+
       reset({
         name: product.name,
         category_id: product.category_id,
         description: product.description,
         moq: product.moq,
         starting_price: product.starting_price,
-        currency: product.currency,
+        currency: safeCurrency,
         capacity_text: product.capacity_text,
         is_featured: product.is_featured,
         sort_order: product.sort_order,
@@ -87,8 +94,13 @@ export function ProductDetailPage({ id, isCreate = false }: Readonly<ProductDeta
     if (!files) return;
 
     for (const file of Array.from(files)) {
+      const localUrl = URL.createObjectURL(file);
       try {
         const result = await uploadImage(file);
+        setPreviewMap((prev) => ({
+          ...prev,
+          [result.url]: localUrl,
+        }));
         appendPhoto({
           file_url: result.url,
           caption: file.name,
@@ -100,15 +112,13 @@ export function ProductDetailPage({ id, isCreate = false }: Readonly<ProductDeta
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleCreateProduct = (values: any) => {
+  const handleCreateProduct = (values: ProductFormValues) => {
     createProduct(values, {
       onSuccess: () => router.push("/supplier/products"),
     });
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleUpdateProduct = (values: any) => {
+  const handleUpdateProduct = (values: ProductFormValues) => {
     if (id) {
       updateProduct(
         { id, data: values },
@@ -142,24 +152,42 @@ export function ProductDetailPage({ id, isCreate = false }: Readonly<ProductDeta
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 pb-32 text-left space-y-8 relative">
       {/* Header */}
-      <div className="flex items-center gap-3 pb-5 border-b border-border">
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={() => router.push("/supplier/products")}
-          className="h-10 w-10 cursor-pointer text-muted-foreground hover:text-primary hover:bg-muted rounded-full transition-all duration-200"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </Button>
-        <div className="space-y-1">
-          <h1 className="text-xl font-bold tracking-tight text-foreground font-heading">
-            {isCreate ? t("addProduct") : t("editProduct")}
-          </h1>
-          <p className="text-xs text-muted-foreground">
-            {isCreate ? t("createProductDescription") : t("editProductDescription")}
-          </p>
+      <div className="flex items-center justify-between gap-3 pb-5 border-b border-border">
+        <div className="flex items-center gap-3">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            onClick={() => router.push("/supplier/products")}
+            className="h-10 w-10 cursor-pointer text-muted-foreground hover:text-primary hover:bg-muted rounded-full transition-all duration-200"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div className="space-y-1">
+            <h1 className="text-xl font-bold tracking-tight text-foreground font-heading">
+              {isCreate ? t("addProduct") : t("editProduct")}
+            </h1>
+            <p className="text-xs text-muted-foreground">
+              {isCreate ? t("createProductDescription") : t("editProductDescription")}
+            </p>
+          </div>
         </div>
+
+        {!isCreate && id && (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            asChild
+            className="cursor-pointer gap-1.5 text-xs font-semibold border-border hover:bg-muted"
+          >
+            <Link href={`/products/${id}`} target="_blank" rel="noopener noreferrer">
+              <Eye className="h-3.5 w-3.5 text-muted-foreground" />
+              {t("previewAsBuyer")}
+              <ExternalLink className="h-3 w-3 text-muted-foreground/70 ml-0.5" />
+            </Link>
+          </Button>
+        )}
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -268,12 +296,17 @@ export function ProductDetailPage({ id, isCreate = false }: Readonly<ProductDeta
 
                   <Field>
                     <FieldLabel htmlFor="currency" className="text-xs font-semibold text-foreground/80">{t("currency")}</FieldLabel>
-                    <Input
+                    <select
                       id="currency"
-                      placeholder={t("currencyPlaceholder")}
-                      className="focus:ring-2 focus:ring-primary/20 border-border rounded-lg h-10"
+                      className="h-10 w-full rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer"
                       {...register("currency")}
-                    />
+                    >
+                      {CURRENCY_OPTIONS.map((opt) => (
+                        <option key={opt.value} value={opt.value} className="bg-popover text-popover-foreground">
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
                     {errors.currency && <FieldError>{errors.currency.message}</FieldError>}
                   </Field>
 
@@ -350,7 +383,7 @@ export function ProductDetailPage({ id, isCreate = false }: Readonly<ProductDeta
                             <div className="relative h-11 w-11 rounded border border-border overflow-hidden bg-background shrink-0">
                               {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img
-                                src={field.file_url}
+                                src={previewMap[field.file_url] || field.file_url}
                                 alt={`Product detail ${index + 1}`}
                                 className="h-full w-full object-cover"
                               />
@@ -427,7 +460,7 @@ export function ProductDetailPage({ id, isCreate = false }: Readonly<ProductDeta
               type="button"
               variant="outline"
               onClick={() => router.push("/supplier/products")}
-              className="cursor-pointer border-primary text-primary hover:bg-primary/5 hover:border-primary/80 font-bold px-6 py-2.5 h-10 text-xs rounded-lg transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 shadow-xs"
+              className="cursor-pointer border-border hover:bg-muted text-foreground font-semibold px-6 py-2.5 h-10 text-xs rounded-lg transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
             >
               {t("cancel")}
             </Button>
@@ -444,7 +477,7 @@ export function ProductDetailPage({ id, isCreate = false }: Readonly<ProductDeta
                 </>
               ) : (
                 <>
-                  {isCreate ? t("save") : t("saveChanges")}
+                  {t("save")}
                 </>
               )}
             </Button>

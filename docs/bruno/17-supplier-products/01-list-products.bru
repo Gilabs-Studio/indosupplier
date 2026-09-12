@@ -1,0 +1,29 @@
+meta {
+  name: List Supplier Products
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/v1/supplier/products
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Lists all catalog products belonging to the authenticated supplier.
+  Supports query params:
+  - `page`: Page number (default: 1)
+  - `per_page`: Products per page (default: 20)
+  - `search`: Keyword filter for name or description
+  - `category_id`: Filter by UUID category
+}

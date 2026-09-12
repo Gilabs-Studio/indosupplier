@@ -1,0 +1,33 @@
+meta {
+  name: Create Product - Missing Required Fields
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/api/v1/supplier/products
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "category_id": "",
+    "name": "",
+    "description": ""
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Tests validation error when mandatory fields (category_id, name, description) are omitted or empty.
+  Expected Response: HTTP 400 Bad Request with code `VALIDATION_ERROR` and specific field_errors.
+}

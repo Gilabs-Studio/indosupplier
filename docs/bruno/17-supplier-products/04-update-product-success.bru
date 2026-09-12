@@ -1,0 +1,47 @@
+meta {
+  name: Update Supplier Product - Success
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/api/v1/supplier/products/{{product_id}}
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "category_id": "1e48ff95-01cf-486b-ad2a-c407ed1c1225",
+    "name": "Plat Baja Tahan Karat SUS 304 High Grade (Updated)",
+    "description": "Plat baja tahan karat SUS 304 grade industri food & pharma tebal 3mm, tahan korosi kimiawi, sertifikasi ISO 9001. Stok ready gudang Cikarang.",
+    "moq": "10 Lembar",
+    "starting_price": 9000000,
+    "currency": "IDR",
+    "capacity_text": "300 Lembar / Bulan",
+    "is_featured": true,
+    "sort_order": 2,
+    "photos": [
+      {
+        "file_url": "/images/categories/cat-bahan-baku.webp",
+        "caption": "Tampak Depan Plat SUS 304 Updated",
+        "sort_order": 0
+      }
+    ]
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+  product_id: 98dd90a3-e21d-4551-acb8-02bb593e9a15
+}
+
+docs {
+  Updates existing product catalog item owned by authenticated supplier.
+  Expected Response: HTTP 200 OK with updated attributes.
+}

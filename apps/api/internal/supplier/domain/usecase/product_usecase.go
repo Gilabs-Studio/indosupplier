@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"errors"
+	"strings"
 
 	"github.com/gilabs/indosupplier/api/internal/core/utils"
 	"github.com/gilabs/indosupplier/api/internal/supplier/data/models"
@@ -211,9 +212,18 @@ func (u *productUsecase) ListCategories(ctx context.Context) ([]dto.CategoryResp
 	return resp, nil
 }
 
+var supportedCurrencies = map[string]bool{
+	"IDR": true,
+	"USD": true,
+	"SGD": true,
+	"EUR": true,
+	"CNY": true,
+}
+
 func normalizeCurrency(currency string) string {
-	if currency == "" {
+	c := strings.ToUpper(strings.TrimSpace(currency))
+	if !supportedCurrencies[c] {
 		return utils.DefaultCurrency()
 	}
-	return currency
+	return c
 }

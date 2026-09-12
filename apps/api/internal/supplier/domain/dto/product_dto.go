@@ -3,34 +3,34 @@ package dto
 import "time"
 
 type PhotoDTO struct {
-	FileURL   string `json:"file_url" binding:"required"`
-	Caption   string `json:"caption"`
+	FileURL   string `json:"file_url" binding:"required,max=1000"`
+	Caption   string `json:"caption" binding:"omitempty,max=255"`
 	SortOrder int    `json:"sort_order"`
 }
 
 type CreateProductRequest struct {
-	CategoryID    string     `json:"category_id" binding:"required"`
-	Name          string     `json:"name" binding:"required"`
-	Description   string     `json:"description" binding:"required"`
-	MOQ           string     `json:"moq"`
-	StartingPrice float64    `json:"starting_price"`
-	Currency      string     `json:"currency"`
-	CapacityText  string     `json:"capacity_text"`
+	CategoryID    string     `json:"category_id" binding:"required,uuid"`
+	Name          string     `json:"name" binding:"required,min=2,max=255"`
+	Description   string     `json:"description" binding:"required,max=2000"`
+	MOQ           string     `json:"moq" binding:"omitempty,max=120"`
+	StartingPrice float64    `json:"starting_price" binding:"required,gte=0"`
+	Currency      string     `json:"currency" binding:"omitempty,oneof=IDR USD SGD EUR CNY idr usd sgd eur cny"`
+	CapacityText  string     `json:"capacity_text" binding:"omitempty,max=255"`
 	IsFeatured    bool       `json:"is_featured"`
-	SortOrder     int        `json:"sort_order"`
+	SortOrder     int        `json:"sort_order" binding:"omitempty,gte=0"`
 	Photos        []PhotoDTO `json:"photos"`
 }
 
 type UpdateProductRequest struct {
-	CategoryID    string     `json:"category_id" binding:"required"`
-	Name          string     `json:"name" binding:"required"`
-	Description   string     `json:"description" binding:"required"`
-	MOQ           string     `json:"moq"`
-	StartingPrice float64    `json:"starting_price"`
-	Currency      string     `json:"currency"`
-	CapacityText  string     `json:"capacity_text"`
+	CategoryID    string     `json:"category_id" binding:"required,uuid"`
+	Name          string     `json:"name" binding:"required,min=2,max=255"`
+	Description   string     `json:"description" binding:"required,max=2000"`
+	MOQ           string     `json:"moq" binding:"omitempty,max=120"`
+	StartingPrice float64    `json:"starting_price" binding:"required,gte=0"`
+	Currency      string     `json:"currency" binding:"omitempty,oneof=IDR USD SGD EUR CNY idr usd sgd eur cny"`
+	CapacityText  string     `json:"capacity_text" binding:"omitempty,max=255"`
 	IsFeatured    bool       `json:"is_featured"`
-	SortOrder     int        `json:"sort_order"`
+	SortOrder     int        `json:"sort_order" binding:"omitempty,gte=0"`
 	Photos        []PhotoDTO `json:"photos"`
 }
 

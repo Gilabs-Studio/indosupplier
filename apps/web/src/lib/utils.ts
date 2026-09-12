@@ -15,6 +15,14 @@ export function getDicebearUrl(
 }
 
 
+const VALID_ISO_CURRENCY_REGEX = /^[A-Z]{3}$/;
+
+export function sanitizeCurrency(currency: string | null | undefined): string {
+  if (!currency) return "IDR";
+  const cleaned = currency.trim().toUpperCase();
+  return VALID_ISO_CURRENCY_REGEX.test(cleaned) ? cleaned : "IDR";
+}
+
 export function formatCurrency(
   value: number | string | null | undefined,
   locale: string = "id-ID",
@@ -27,12 +35,18 @@ export function formatCurrency(
   if (isNaN(numValue)) {
     return "Rp 0";
   }
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(numValue);
+  const cleanCurrency = sanitizeCurrency(currency);
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: cleanCurrency,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(numValue);
+  } catch {
+    const symbol = cleanCurrency === "IDR" ? "Rp " : `${cleanCurrency} `;
+    return `${symbol}${Math.round(numValue).toLocaleString("id-ID")}`;
+  }
 }
 
 export function formatPrice(
@@ -46,15 +60,24 @@ export function formatPrice(
   const value = typeof price === "string" ? parseFloat(price) : price;
   if (isNaN(value)) return "";
 
-  const cleanCurrency = currency.trim().toUpperCase() || "IDR";
+  const cleanCurrency = sanitizeCurrency(currency);
   const isIDR = cleanCurrency === "IDR";
   
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency: cleanCurrency,
-    minimumFractionDigits: isIDR ? 0 : 2,
-    maximumFractionDigits: isIDR ? 0 : 2,
-  }).format(value);
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: cleanCurrency,
+      minimumFractionDigits: isIDR ? 0 : 2,
+      maximumFractionDigits: isIDR ? 0 : 2,
+    }).format(value);
+  } catch {
+    const symbol = isIDR ? "Rp " : `${cleanCurrency} `;
+    const decimals = isIDR ? 0 : 2;
+    return `${symbol}${value.toLocaleString(locale === "en-US" ? "en-US" : "id-ID", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    })}`;
+  }
 }
 
 export function formatDate(

@@ -1,7 +1,22 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import { productsService } from "../services/products.service";
 import type { CreateProductPayload, UpdateProductPayload } from "../types/products.types";
 import { toast } from "sonner";
+
+function getErrorMessage(error: unknown, fallback: string): string {
+  if (axios.isAxiosError(error)) {
+    return (
+      error.response?.data?.error?.message ||
+      error.response?.data?.message ||
+      fallback
+    );
+  }
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return fallback;
+}
 
 export function useSupplierProducts(params?: {
   search?: string;
@@ -39,10 +54,8 @@ export function useCreateProduct() {
       queryClient.invalidateQueries({ queryKey: ["supplier-products"] });
       toast.success("Product created successfully!");
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onError: (error: any) => {
-      const msg = error.response?.data?.message || "Failed to create product";
-      toast.error(msg);
+    onError: (error: unknown) => {
+      toast.error(getErrorMessage(error, "Failed to create product"));
     },
   });
 }
@@ -58,10 +71,8 @@ export function useUpdateProduct() {
       queryClient.invalidateQueries({ queryKey: ["supplier-product", data.id] });
       toast.success("Product updated successfully!");
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onError: (error: any) => {
-      const msg = error.response?.data?.message || "Failed to update product";
-      toast.error(msg);
+    onError: (error: unknown) => {
+      toast.error(getErrorMessage(error, "Failed to update product"));
     },
   });
 }
@@ -75,10 +86,8 @@ export function useDeleteProduct() {
       queryClient.invalidateQueries({ queryKey: ["supplier-products"] });
       toast.success("Product deleted successfully!");
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onError: (error: any) => {
-      const msg = error.response?.data?.message || "Failed to delete product";
-      toast.error(msg);
+    onError: (error: unknown) => {
+      toast.error(getErrorMessage(error, "Failed to delete product"));
     },
   });
 }
@@ -86,10 +95,8 @@ export function useDeleteProduct() {
 export function useUploadProductImage() {
   return useMutation({
     mutationFn: (file: File) => productsService.uploadImage(file),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onError: (error: any) => {
-      const msg = error.response?.data?.message || "Failed to upload image";
-      toast.error(msg);
+    onError: (error: unknown) => {
+      toast.error(getErrorMessage(error, "Failed to upload image"));
     },
   });
 }

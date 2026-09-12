@@ -1,0 +1,26 @@
+meta {
+  name: Get Product By ID - Not Found
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{base_url}}/api/v1/supplier/products/{{product_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+  product_id: 00000000-0000-0000-0000-000000000000
+}
+
+docs {
+  Tests querying a product ID that does not exist in the database.
+  Expected Response: HTTP 400/404 with error code `PRODUCT_NOT_FOUND`.
+}

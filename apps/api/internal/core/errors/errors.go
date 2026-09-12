@@ -101,6 +101,10 @@ var ErrorCodeMap = map[string]ErrorInfo{
 		HTTPStatus: http.StatusNotFound,
 		Message:    "Supplier product not found",
 	},
+	"PRODUCT_NOT_FOUND": {
+		HTTPStatus: http.StatusNotFound,
+		Message:    "Product not found",
+	},
 	"BOOKMARK_NOT_FOUND": {
 		HTTPStatus: http.StatusNotFound,
 		Message:    "Bookmark not found",
