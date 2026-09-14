@@ -12,8 +12,10 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { usePublicProductDetail } from "../hooks/use-public-product-detail";
 import {
+  ChevronDown,
   GitCompareArrows,
   Heart,
+  Loader2,
   MapPin,
   MessageSquare,
   Minus,
@@ -33,6 +35,35 @@ interface PublicProductDetailPageProps {
   detailBasePath?: "" | "/demo";
 }
 
+function RatingStars({ rating, size = "md" }: { rating: number; size?: "sm" | "md" | "lg" }) {
+  const sizeClasses = {
+    sm: "h-3.5 w-3.5",
+    md: "h-4 w-4",
+    lg: "h-5 w-5",
+  };
+  const iconSize = sizeClasses[size];
+
+  return (
+    <div className="flex items-center gap-0.5">
+      {[1, 2, 3, 4, 5].map((starIndex) => {
+        const isFilled = rating >= starIndex;
+        const isHalf = !isFilled && rating >= starIndex - 0.5;
+        return (
+          <Star
+            key={starIndex}
+            className={`${iconSize} transition-colors ${
+              isFilled
+                ? "fill-warning text-warning"
+                : isHalf
+                ? "fill-warning/50 text-warning"
+                : "text-muted-foreground/30"
+            }`}
+          />
+        );
+      })}
+    </div>
+  );
+}
 
 function formatDate(value: string) {
   if (!value) return "";
@@ -76,6 +107,9 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
     toggleCompare,
     toggleProductBookmark,
     handleBuyerAction,
+    reviewState,
+    productRating,
+    productReviewCount,
   } = usePublicProductDetail({ id, detailBasePath: detailBasePath as "" | "/demo" });
 
   const homeHref = detailBasePath || "/";
@@ -135,7 +169,7 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
           </nav>
 
           {/* Main Grid: Info, Gallery, and Actions */}
-          <section className="grid grid-cols-1 gap-8 lg:grid-cols-[380px_minmax(0,1fr)_286px]">
+          <section id="detail" className="grid grid-cols-1 gap-8 lg:grid-cols-[380px_minmax(0,1fr)_286px] scroll-mt-24">
             {/* Gallery Column */}
             <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
               <div className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-muted/30 shadow-xs transition-all duration-300 hover:shadow-md">
@@ -150,7 +184,7 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
               <div className="grid grid-cols-5 gap-2">
                 {(photos.length ? photos : [""]).slice(0, 5).map((photo, index) => (
                   <button
-                    key={photo || index}
+                    key={`photo-thumb-${index}`}
                     type="button"
                     onClick={() => setActivePhoto(index)}
                     className={`aspect-square overflow-hidden rounded-lg border bg-card transition-all duration-300 cursor-pointer ${
@@ -177,10 +211,16 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
                   {product.name}
                 </h1>
                 <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                  <div className="flex items-center gap-1">
-                    <Star className="h-3.5 w-3.5 fill-warning text-warning" />
-                    <span className="font-bold text-foreground">{averageRating.toFixed(1)}</span>
-                    <span>({supplier.reviewCount || reviews.length} {t("rating")})</span>
+                  <div className="flex items-center gap-1.5">
+                    <Star className="h-4 w-4 fill-warning text-warning" />
+                    {productReviewCount > 0 ? (
+                      <>
+                        <span className="font-extrabold text-foreground">{productRating.toFixed(1)}</span>
+                        <span>({productReviewCount} {t("rating")})</span>
+                      </>
+                    ) : (
+                      <span className="font-medium text-muted-foreground">{t("noReviewsYet")}</span>
+                    )}
                   </div>
                   <span className="h-3 w-px bg-border" />
                   <span>{t("soldCount")}</span>
@@ -348,7 +388,7 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
                     disabled={isAdding}
                     className="flex flex-col items-center justify-center gap-1 rounded-md py-1.5 hover:bg-muted hover:text-foreground cursor-pointer transition-colors"
                   >
-                    <Heart className={`h-3.5 w-3.5 ${isBookmarked ? "fill-rose-600 text-rose-600" : ""}`} />
+                    <Heart className={`h-3.5 w-3.5 ${isBookmarked ? "fill-destructive text-destructive" : ""}`} />
                     <span>{t("btnWishlist")}</span>
                   </button>
                   <button
@@ -428,132 +468,361 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
             </aside>
           </section>
 
-          {/* Separator before Review Section */}
-          <div className="my-10 border-t border-border" />
-
-          {/* Reviews Section (Placed below main content grid) */}
-          <section className="space-y-6">
-            <div className="flex flex-col gap-1.5">
-              <h2 className="text-base font-bold text-foreground font-heading tracking-tight md:text-lg">
-                {t("buyerReviews", { count: supplier.reviewCount || reviews.length })}
-              </h2>
-              <p className="text-xs text-muted-foreground">{t("buyerReviewsDesc")}</p>
+          {/* Section Navigation Tabs (Minimalist sticky anchor bar) */}
+          <div className="sticky top-16 z-20 -mx-4 my-8 border-y border-border bg-background/95 px-4 backdrop-blur-md sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+            <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
+              <span className="hidden truncate text-xs font-bold text-foreground md:inline-block max-w-[320px]">
+                {product.name}
+              </span>
+              <div className="flex items-center gap-6 text-xs font-bold">
+                <a
+                  href="#detail"
+                  className="py-3 border-b-2 border-transparent text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                >
+                  {t("navDetail")}
+                </a>
+                <a
+                  href="#reviews"
+                  className="py-3 border-b-2 border-primary text-primary transition-colors cursor-pointer flex items-center gap-1.5"
+                >
+                  <span>{t("navReviews")}</span>
+                  {reviewState.summary.totalReviews > 0 && (
+                    <span className="text-[11px] font-semibold opacity-80">
+                      ({reviewState.summary.totalReviews})
+                    </span>
+                  )}
+                </a>
+                {relatedProducts.length > 0 && (
+                  <a
+                    href="#recommendations"
+                    className="py-3 border-b-2 border-transparent text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                  >
+                    {t("navRecommendations")}
+                  </a>
+                )}
+              </div>
             </div>
+          </div>
 
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-[280px_1fr]">
-              {/* Left Column: Rating breakdown & Filters */}
-              <div className="space-y-4">
-                <div className="rounded-lg border border-border bg-card p-4.5 space-y-4.5">
-                  <div className="flex items-end gap-2.5">
-                    <Star className="h-7 w-7 fill-warning text-warning" />
-                    <span className="text-3xl font-black text-foreground leading-none">{averageRating.toFixed(1)}</span>
-                    <span className="text-xs text-muted-foreground pb-1">/ 5.0</span>
-                  </div>
-                  
-                  <div className="space-y-1">
-                    <p className="text-xs font-bold text-foreground">
-                      {reviews.length ? `100% ${t("satisfactionRate")}` : t("noReviewsYet")}
-                    </p>
-                    <p className="text-[10px] text-muted-foreground">
-                      {supplier.reviewCount || reviews.length} {t("reviewsBreakdown")}
-                    </p>
-                  </div>
+          {/* Reviews Section (Minimalism Modern Tokopedia-Style) */}
+          <section id="reviews" className="space-y-6 scroll-mt-24">
+            <h2 className="text-sm font-extrabold uppercase tracking-wider text-foreground">
+              {t("buyerReviewsTitle")}
+            </h2>
 
-                  <div className="space-y-2 pt-2 border-t border-border">
-                    {distribution.map((item) => (
-                      <div key={item.rating} className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                        <span className="w-2 text-right font-medium">{item.rating}</span>
-                        <Star className="h-3 w-3 fill-warning text-warning shrink-0" />
-                        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted/60">
-                          <div className="h-full rounded-full bg-primary transition-all duration-500" style={{ width: `${item.percent}%` }} />
-                        </div>
-                        <span className="w-6 text-right">({item.count})</span>
-                      </div>
-                    ))}
+            {/* Top Rating Summary Card */}
+            <div className="rounded-xl border border-border bg-card p-6 shadow-2xs">
+              <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-8 items-center">
+                {/* Left: Big Score & Satisfaction */}
+                <div className="space-y-2 border-b md:border-b-0 md:border-r border-border pb-6 md:pb-0 md:pr-6">
+                  <div className="flex items-center gap-2.5">
+                    <Star className="h-8 w-8 fill-warning text-warning shrink-0" />
+                    <span className="text-4xl font-black text-foreground leading-none">
+                      {reviewState.summary.averageRating > 0 ? reviewState.summary.averageRating.toFixed(1) : "0.0"}
+                    </span>
+                    <span className="text-xs font-semibold text-muted-foreground self-end pb-1">/ 5.0</span>
                   </div>
+                  <p className="text-xs font-bold text-foreground">
+                    {reviewState.summary.totalReviews > 0
+                      ? `${reviewState.summary.positivePercent}% ${t("satisfactionRate")}`
+                      : t("noReviewsYet")}
+                  </p>
+                  <p className="text-[11px] text-muted-foreground">
+                    {reviewState.summary.totalReviews} rating • {reviewState.summary.totalReviews} {t("reviews")}
+                  </p>
                 </div>
 
-                {/* Filter Side Card */}
-                <div className="rounded-lg border border-border bg-card overflow-hidden">
-                  <div className="border-b border-border bg-muted/10 px-4 py-2.5">
-                    <p className="text-[10px] font-bold text-foreground uppercase tracking-wider">{t("filterReviews")}</p>
-                  </div>
-                  <div className="divide-y divide-border">
-                    {[
-                      ["all", t("filterAll")],
-                      ["media", t("filterMedia")],
-                      ["high", t("filterHigh")],
-                    ].map(([key, label]) => {
-                      const isActive = reviewFilter === key;
+                {/* Right: 2 Sub-columns of Rating Bars */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2.5">
+                  {/* Left sub-column: 5, 4, 3 */}
+                  <div className="space-y-2">
+                    {[5, 4, 3].map((star) => {
+                      const count = reviewState.summary.ratingBreakdown[String(star)] || 0;
+                      const total = reviewState.summary.totalReviews || 1;
+                      const percent = reviewState.summary.totalReviews > 0 ? Math.round((count / total) * 100) : 0;
+                      const isSelected = reviewState.selectedRating === star;
+
                       return (
                         <button
-                          key={key}
+                          key={star}
                           type="button"
-                          onClick={() => setReviewFilter(key as "all" | "media" | "high")}
-                          className={`flex w-full items-center justify-between px-4 py-2.5 text-xs font-medium cursor-pointer transition-all duration-300 hover:bg-muted/50 ${
-                            isActive ? "bg-primary/[0.02] text-primary font-bold" : "text-foreground"
+                          onClick={() => reviewState.setSelectedRating(star)}
+                          className={`w-full flex items-center gap-2 text-xs cursor-pointer group py-0.5 rounded transition-opacity ${
+                            isSelected ? "font-bold" : "opacity-90 hover:opacity-100"
                           }`}
                         >
-                          <span>{label}</span>
-                          <span className={`h-1.5 w-1.5 rounded-full transition-transform ${isActive ? "bg-primary scale-120" : "bg-transparent"}`} />
+                          <div className="flex items-center gap-1 w-6 shrink-0">
+                            <Star className="h-3 w-3 fill-warning text-warning shrink-0" />
+                            <span className="text-xs text-foreground font-semibold">{star}</span>
+                          </div>
+                          <div className="h-1.5 flex-1 rounded-full bg-muted overflow-hidden">
+                            <div
+                              className="h-full rounded-full bg-primary transition-all duration-500"
+                              style={{ width: `${percent}%` }}
+                            />
+                          </div>
+                          <span className="w-12 text-right text-[11px] text-muted-foreground">
+                            ({count})
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Right sub-column: 2, 1 */}
+                  <div className="space-y-2">
+                    {[2, 1].map((star) => {
+                      const count = reviewState.summary.ratingBreakdown[String(star)] || 0;
+                      const total = reviewState.summary.totalReviews || 1;
+                      const percent = reviewState.summary.totalReviews > 0 ? Math.round((count / total) * 100) : 0;
+                      const isSelected = reviewState.selectedRating === star;
+
+                      return (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => reviewState.setSelectedRating(star)}
+                          className={`w-full flex items-center gap-2 text-xs cursor-pointer group py-0.5 rounded transition-opacity ${
+                            isSelected ? "font-bold" : "opacity-90 hover:opacity-100"
+                          }`}
+                        >
+                          <div className="flex items-center gap-1 w-6 shrink-0">
+                            <Star className="h-3 w-3 fill-warning text-warning shrink-0" />
+                            <span className="text-xs text-foreground font-semibold">{star}</span>
+                          </div>
+                          <div className="h-1.5 flex-1 rounded-full bg-muted overflow-hidden">
+                            <div
+                              className="h-full rounded-full bg-primary transition-all duration-500"
+                              style={{ width: `${percent}%` }}
+                            />
+                          </div>
+                          <span className="w-12 text-right text-[11px] text-muted-foreground">
+                            ({count})
+                          </span>
                         </button>
                       );
                     })}
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Right Column: Reviews List */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-border pb-3">
-                  <p className="text-xs text-muted-foreground font-semibold">
-                    {t("showingReviews", { visibleCount: visibleReviews.length, totalCount: reviews.length })}
-                  </p>
-                  <Button variant="outline" size="sm" className="cursor-pointer text-xs font-semibold h-8 rounded-lg border-border hover:bg-muted">
-                    {t("mostHelpful")}
-                  </Button>
+            {/* Lower Area: Filter Sidebar & Reviews List */}
+            <div className="grid grid-cols-1 md:grid-cols-[220px_1fr] gap-8 pt-2">
+              {/* Left Column: Filter Ulasan Sidebar */}
+              <aside className="space-y-4">
+                <div className="rounded-xl border border-border bg-card p-4 space-y-3 shadow-2xs">
+                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-foreground">
+                    {t("filterReviewsTitle")}
+                  </h3>
+
+                  <div className="space-y-2.5 pt-2 border-t border-border">
+                    <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+                      {t("ratingSection")}
+                    </p>
+                    <div className="space-y-2">
+                      {/* All */}
+                      <label className="flex items-center gap-2.5 text-xs cursor-pointer select-none group">
+                        <input
+                          type="checkbox"
+                          checked={reviewState.selectedRating === null}
+                          onChange={() => reviewState.setSelectedRating(null)}
+                          className="h-4 w-4 rounded border-border text-primary cursor-pointer accent-primary"
+                        />
+                        <span className={`text-xs ${reviewState.selectedRating === null ? "font-bold text-foreground" : "text-muted-foreground group-hover:text-foreground"}`}>
+                          {t("allRatings")}
+                        </span>
+                        <span className="ml-auto text-[11px] text-muted-foreground">
+                          ({reviewState.summary.totalReviews})
+                        </span>
+                      </label>
+
+                      {/* Stars 5 to 1 */}
+                      {[5, 4, 3, 2, 1].map((star) => {
+                        const count = reviewState.summary.ratingBreakdown[String(star)] || 0;
+                        const isChecked = reviewState.selectedRating === star;
+
+                        return (
+                          <label key={star} className="flex items-center gap-2.5 text-xs cursor-pointer select-none group">
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => reviewState.setSelectedRating(star)}
+                              className="h-4 w-4 rounded border-border text-primary cursor-pointer accent-primary"
+                            />
+                            <div className="flex items-center gap-1">
+                              <Star className="h-3.5 w-3.5 fill-warning text-warning" />
+                              <span className={`text-xs ${isChecked ? "font-bold text-foreground" : "text-muted-foreground group-hover:text-foreground"}`}>
+                                {star}
+                              </span>
+                            </div>
+                            <span className="ml-auto text-[11px] text-muted-foreground">
+                              ({count})
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              </aside>
+
+              {/* Right Column: Ulasan Pilihan List */}
+              <div className="space-y-4 min-w-0">
+                {/* Header: Title + Sort + Counter */}
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-3">
+                  <div>
+                    <h3 className="text-xs font-extrabold uppercase tracking-wider text-foreground">
+                      {t("featuredReviewsTitle")}
+                    </h3>
+                    <p className="text-[11px] text-muted-foreground mt-0.5">
+                      {t("showingReviews", {
+                        visibleCount: reviewState.reviews.length,
+                        totalCount: reviewState.totalItems,
+                      })}
+                    </p>
+                  </div>
+
+                  {/* Sort Dropdown */}
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="text-muted-foreground font-medium">{t("sortByLabel")}</span>
+                    <select
+                      value={reviewState.sortBy}
+                      onChange={(e) => reviewState.setSortBy(e.target.value as "newest" | "highest" | "lowest")}
+                      className="rounded-lg border border-border bg-background px-2.5 py-1 text-xs font-semibold text-foreground cursor-pointer focus:outline-hidden focus:ring-1 focus:ring-primary"
+                    >
+                      <option value="newest">{t("sortNewest")}</option>
+                      <option value="highest">{t("sortHighest")}</option>
+                      <option value="lowest">{t("sortLowest")}</option>
+                    </select>
+                  </div>
                 </div>
 
-                {visibleReviews.length === 0 ? (
-                  <div className="rounded-lg border border-dashed border-border py-12 text-center text-xs text-muted-foreground bg-card">
-                    {t("noReviewsFilter")}
+                {/* Minimalist Reviews List (No heavy containers, clean divider lines) */}
+                {reviewState.isEmpty ? (
+                  <div className="rounded-xl border border-dashed border-border p-12 text-center">
+                    <Star className="mx-auto h-8 w-8 text-muted-foreground/30 stroke-1" />
+                    <h4 className="mt-3 text-sm font-bold text-foreground">
+                      {t("emptyReviewsTitle")}
+                    </h4>
+                    <p className="mt-1 text-xs text-muted-foreground max-w-sm mx-auto">
+                      {t("emptyReviewsDesc")}
+                    </p>
+                  </div>
+                ) : reviewState.isFilteredEmpty ? (
+                  <div className="rounded-xl border border-dashed border-border p-8 text-center space-y-3">
+                    <p className="text-xs text-muted-foreground">{t("noReviewsFilter")}</p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => reviewState.setSelectedRating(null)}
+                      className="cursor-pointer text-xs font-bold rounded-lg"
+                    >
+                      {t("allRatings")}
+                    </Button>
                   </div>
                 ) : (
-                  <div className="space-y-4">
-                    {visibleReviews.map((review) => (
-                      <article
-                        key={review.id}
-                        className="rounded-lg border border-border bg-card p-4 transition-all duration-300 hover:shadow-xs hover:border-border/80"
-                      >
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="flex items-center gap-3">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/5 text-xs font-bold text-primary uppercase">
-                              {review.buyerName.slice(0, 2)}
-                            </div>
-                            <div>
-                              <p className="text-xs font-bold text-foreground">{review.buyerName}</p>
-                              <p className="text-[10px] text-muted-foreground mt-0.5">{formatDate(review.createdAt)}</p>
-                            </div>
+                  <div className="divide-y divide-border">
+                    {reviewState.reviews.map((review) => (
+                      <article key={review.id} className="py-5 first:pt-2 space-y-2.5">
+                        {/* Top Line: Stars + Date */}
+                        <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-0.5">
+                            {[1, 2, 3, 4, 5].map((s) => (
+                              <Star
+                                key={s}
+                                className={`h-3.5 w-3.5 ${
+                                  review.rating >= s
+                                    ? "fill-warning text-warning"
+                                    : "text-muted-foreground/20"
+                                }`}
+                              />
+                            ))}
                           </div>
-                          <div className="flex items-center gap-1 rounded-lg bg-muted/40 px-2 py-1 border border-border text-xs font-bold">
-                            <Star className="h-3 w-3 fill-warning text-warning" />
-                            <span>{review.rating}</span>
-                          </div>
+                          <span className="text-[11px] text-muted-foreground">
+                            {formatDate(review.createdAt)}
+                          </span>
                         </div>
-                        
-                        <p className="mt-3 text-xs leading-relaxed text-foreground/90 pl-1">
+
+                        {/* User Line: Avatar initial + Name + Optional Company */}
+                        <div className="flex items-center gap-2">
+                          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-bold text-foreground uppercase">
+                            {review.buyerName.slice(0, 1)}
+                          </div>
+                          <span className="text-xs font-bold text-foreground">
+                            {review.buyerName}
+                          </span>
+                          {review.buyerCompany && review.buyerCompany !== review.buyerName && (
+                            <span className="text-[10px] text-muted-foreground">
+                              • {review.buyerCompany}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Review Content */}
+                        <p className="text-xs leading-relaxed text-foreground/90">
                           {review.reviewText}
                         </p>
-                        
+
+                        {/* Supplier Reply (Modern conversational thread style) */}
                         {review.supplierReply && (
-                          <div className="mt-3 rounded-lg border border-primary/10 bg-primary/[0.01] p-3 text-xs text-muted-foreground relative pl-8">
-                            <span className="absolute left-3 top-3.5 h-1.5 w-1.5 rounded-full bg-primary/40" />
-                            <p className="font-bold text-primary">{t("supplierReply")}</p>
-                            <p className="mt-1 text-foreground/80 leading-relaxed font-medium">{review.supplierReply}</p>
+                          <div className="mt-3 relative pl-4 sm:pl-5 before:absolute before:left-1 before:top-2 before:bottom-2 before:w-0.5 before:bg-border before:rounded-full">
+                            <div className="rounded-lg border border-border/80 bg-muted/30 p-3 text-xs space-y-1.5 transition-colors hover:bg-muted/50">
+                              <div className="flex flex-wrap items-center justify-between gap-2">
+                                <div className="flex items-center gap-1.5">
+                                  <div className="flex h-4 w-4 items-center justify-center rounded-full bg-primary/10 text-primary">
+                                    <Store className="h-2.5 w-2.5" />
+                                  </div>
+                                  <span className="font-bold text-foreground text-xs">{supplier.companyName || t("supplierReply")}</span>
+                                  <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold text-primary">
+                                    {t("supplierReply")}
+                                  </span>
+                                </div>
+                                {review.supplierRepliedAt && (
+                                  <span className="text-[10px] text-muted-foreground font-medium">
+                                    {formatDate(review.supplierRepliedAt)}
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-xs text-foreground/85 leading-relaxed pl-5.5 font-normal">
+                                {review.supplierReply}
+                              </p>
+                            </div>
                           </div>
                         )}
                       </article>
                     ))}
+
+                    {/* Button-driven Load More */}
+                    {reviewState.hasMore && (
+                      <div className="pt-6 text-center">
+                        <Button
+                          type="button"
+                          onClick={reviewState.loadMore}
+                          disabled={reviewState.isLoadingMore}
+                          variant="outline"
+                          className="cursor-pointer font-bold border-border hover:bg-muted rounded-lg px-6 py-2 text-xs shadow-2xs"
+                        >
+                          {reviewState.isLoadingMore ? (
+                            <div className="flex items-center gap-2">
+                              <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
+                              <span>{t("loadingMore")}</span>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-1.5">
+                              <span>{t("loadMoreReviews")}</span>
+                              <ChevronDown className="h-3.5 w-3.5" />
+                            </div>
+                          )}
+                        </Button>
+                      </div>
+                    )}
+
+                    {!reviewState.hasMore && reviewState.reviews.length > 5 && (
+                      <p className="text-center text-[11px] text-muted-foreground font-medium pt-6">
+                        {t("allReviewsLoaded")}
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
@@ -562,7 +831,7 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
 
           {/* Recommendations Section */}
           {relatedProducts.length > 0 && (
-            <section className="mt-16 space-y-6">
+            <section id="recommendations" className="mt-16 space-y-6 scroll-mt-24">
               <div className="flex flex-col gap-1.5 border-b border-border pb-3">
                 <h2 className="text-base font-bold text-foreground font-heading tracking-tight md:text-lg">
                   {t("recommendationsTitle")}

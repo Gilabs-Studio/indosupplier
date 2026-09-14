@@ -9,6 +9,7 @@ import type { PublicProductDto, PublicReviewDto } from "@/features/public/search
 import { useBuyerBookmarks } from "@/features/buyer/bookmarks/hooks/useBuyerBookmarks";
 import { useBuyerCompare } from "@/features/buyer/compare/hooks/useBuyerCompare";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
+import { useProductReviews } from "./use-product-reviews";
 import { toast } from "sonner";
 
 interface UsePublicProductDetailProps {
@@ -62,6 +63,13 @@ export function usePublicProductDetail({ id, detailBasePath }: UsePublicProductD
     [product?.minOrder, product?.capacityText],
   );
   const [selectedVariant, setSelectedVariant] = useState(0);
+
+  // Dedicated real reviews API with zero N+1 and button-driven load more
+  const reviewState = useProductReviews({ productId: id });
+
+  const productRating = product?.rating ?? reviewState.summary.averageRating;
+  const productReviewCount = product?.reviewCount ?? reviewState.summary.totalReviews;
+
   const reviews = data?.reviews ?? [];
   
   const visibleReviews = reviews.filter((review) => {
@@ -69,9 +77,9 @@ export function usePublicProductDetail({ id, detailBasePath }: UsePublicProductD
     return true;
   });
   
-  const averageRating = reviews.length
+  const averageRating = productRating || (reviews.length
     ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
-    : supplier?.rating ?? 0;
+    : supplier?.rating ?? 0);
   
   const distribution = ratingDistribution(reviews);
   const subtotal = product ? product.price * quantity : 0;
@@ -160,6 +168,9 @@ export function usePublicProductDetail({ id, detailBasePath }: UsePublicProductD
     reviews,
     averageRating,
     distribution,
+    reviewState,
+    productRating,
+    productReviewCount,
     subtotal,
     isBookmarked,
     isCompared,

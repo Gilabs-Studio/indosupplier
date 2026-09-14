@@ -1,0 +1,24 @@
+meta {
+  name: Get Product Reviews (Page 2, Load More)
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/v1/products/e9ebb761-f46f-4793-8d22-3564ac3512cb/reviews?page=2&limit=5
+  body: none
+  auth: none
+}
+
+params:query {
+  page: 2
+  limit: 5
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Fetch second page for button-driven infinite loading ("Muat Lebih Banyak"). Demonstrates has_more = false when reaching the end of reviews.
+}

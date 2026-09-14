@@ -81,6 +81,8 @@ export interface PublicProductDto {
   supplierVerified: boolean;
   supplierRating: number;
   supplierReviewCount: number;
+  rating?: number;
+  reviewCount?: number;
 }
 
 export interface PublicReviewDto {
@@ -91,6 +93,38 @@ export interface PublicReviewDto {
   supplierReply: string;
   supplierRepliedAt?: string;
   createdAt: string;
+}
+
+export interface ProductReviewSummary {
+  averageRating: number;
+  totalReviews: number;
+  ratingBreakdown: Record<string, number>;
+  positivePercent: number;
+}
+
+export interface ProductReviewItem {
+  id: string;
+  buyerName: string;
+  buyerCompany: string;
+  rating: number;
+  reviewText: string;
+  supplierReply?: string;
+  supplierRepliedAt?: string;
+  createdAt: string;
+}
+
+export interface ProductReviewsPagination {
+  currentPage: number;
+  perPage: number;
+  totalItems: number;
+  totalPages: number;
+  hasMore: boolean;
+}
+
+export interface ProductReviewsResponse {
+  summary: ProductReviewSummary;
+  reviews: ProductReviewItem[];
+  pagination: ProductReviewsPagination;
 }
 
 export interface PublicProductDetailDto {

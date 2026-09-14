@@ -212,7 +212,7 @@ export function ProductViewPage({ id }: ProductViewPageProps) {
             <div className="flex gap-2 overflow-x-auto pb-1">
               {photos.map((photo, idx) => (
                 <button
-                  key={photo.id ?? idx}
+                  key={photo.id || `photo-${idx}`}
                   onClick={() => setActivePhoto(idx)}
                   className={`shrink-0 h-16 w-16 rounded-lg border-2 overflow-hidden transition-all cursor-pointer ${
                     idx === activePhoto

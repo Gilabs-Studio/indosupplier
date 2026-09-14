@@ -5,6 +5,7 @@ import type {
   SupplierSearchParams,
   PublicProductDto,
   PublicProductDetailDto,
+  ProductReviewsResponse,
 } from "../types";
 
 export const searchService = {
@@ -89,6 +90,83 @@ export const searchService = {
     } catch (error) {
       console.warn("API error in lookupProducts, returning empty:", error);
       return [];
+    }
+  },
+
+  async getProductReviews(
+    productId: string,
+    params?: { page?: number; limit?: number; rating?: number }
+  ): Promise<ProductReviewsResponse> {
+    try {
+      const response = await apiClient.get<{
+        data: {
+          summary: {
+            average_rating: number;
+            total_reviews: number;
+            rating_breakdown: Record<string, number>;
+            positive_percent: number;
+          };
+          reviews: Array<{
+            id: string;
+            buyer_name: string;
+            buyer_company: string;
+            rating: number;
+            review_text: string;
+            supplier_reply: string;
+            supplier_replied_at?: string;
+            created_at: string;
+          }>;
+          pagination: {
+            current_page: number;
+            per_page: number;
+            total_items: number;
+            total_pages: number;
+            has_more: boolean;
+          };
+        };
+      }>(`/products/${productId}/reviews`, { params });
+
+      const raw = response.data?.data;
+      if (!raw) {
+        return {
+          summary: { averageRating: 0, totalReviews: 0, ratingBreakdown: { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0 }, positivePercent: 0 },
+          reviews: [],
+          pagination: { currentPage: 1, perPage: 5, totalItems: 0, totalPages: 0, hasMore: false },
+        };
+      }
+
+      return {
+        summary: {
+          averageRating: raw.summary.average_rating || 0,
+          totalReviews: raw.summary.total_reviews || 0,
+          ratingBreakdown: raw.summary.rating_breakdown || { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0 },
+          positivePercent: raw.summary.positive_percent || 0,
+        },
+        reviews: (raw.reviews || []).map((r) => ({
+          id: r.id,
+          buyerName: r.buyer_name || "Pembeli Terverifikasi",
+          buyerCompany: r.buyer_company || "",
+          rating: r.rating || 5,
+          reviewText: r.review_text || "",
+          supplierReply: r.supplier_reply || "",
+          supplierRepliedAt: r.supplier_replied_at,
+          createdAt: r.created_at,
+        })),
+        pagination: {
+          currentPage: raw.pagination.current_page || 1,
+          perPage: raw.pagination.per_page || 5,
+          totalItems: raw.pagination.total_items || 0,
+          totalPages: raw.pagination.total_pages || 0,
+          hasMore: !!raw.pagination.has_more,
+        },
+      };
+    } catch (error) {
+      console.warn(`API error in getProductReviews for ${productId}:`, error);
+      return {
+        summary: { averageRating: 0, totalReviews: 0, ratingBreakdown: { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0 }, positivePercent: 0 },
+        reviews: [],
+        pagination: { currentPage: 1, perPage: 5, totalItems: 0, totalPages: 0, hasMore: false },
+      };
     }
   },
 };

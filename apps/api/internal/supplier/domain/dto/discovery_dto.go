@@ -70,6 +70,8 @@ type PublicProductDto struct {
 	IsPowerSupplier     bool     `json:"isPowerSupplier"`
 	SupplierRating      float64  `json:"supplierRating"`
 	SupplierReviewCount int      `json:"supplierReviewCount"`
+	Rating              float64  `json:"rating"`
+	ReviewCount         int      `json:"reviewCount"`
 	Tags                []string `json:"tags,omitempty"`
 }
 
@@ -104,4 +106,36 @@ type PublicProductDetailDto struct {
 	Supplier        PublicSupplierDto  `json:"supplier"`
 	Reviews         []PublicReviewDto  `json:"reviews"`
 	RelatedProducts []PublicProductDto `json:"relatedProducts"`
+}
+
+type ProductReviewSummaryDto struct {
+	AverageRating   float64        `json:"average_rating"`
+	TotalReviews    int64          `json:"total_reviews"`
+	RatingBreakdown map[string]int `json:"rating_breakdown"`
+	PositivePercent int            `json:"positive_percent"`
+}
+
+type ProductReviewItemDto struct {
+	ID                string `json:"id"`
+	BuyerName         string `json:"buyer_name"`
+	BuyerCompany      string `json:"buyer_company"`
+	Rating            int    `json:"rating"`
+	ReviewText        string `json:"review_text"`
+	SupplierReply     string `json:"supplier_reply"`
+	SupplierRepliedAt string `json:"supplier_replied_at,omitempty"`
+	CreatedAt         string `json:"created_at"`
+}
+
+type ProductReviewsPaginationDto struct {
+	CurrentPage int   `json:"current_page"`
+	PerPage     int   `json:"per_page"`
+	TotalItems  int64 `json:"total_items"`
+	TotalPages  int   `json:"total_pages"`
+	HasMore     bool  `json:"has_more"`
+}
+
+type ProductReviewsResponseDto struct {
+	Summary    ProductReviewSummaryDto     `json:"summary"`
+	Reviews    []ProductReviewItemDto      `json:"reviews"`
+	Pagination ProductReviewsPaginationDto `json:"pagination"`
 }

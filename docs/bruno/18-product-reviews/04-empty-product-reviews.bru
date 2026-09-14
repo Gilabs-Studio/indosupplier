@@ -1,0 +1,24 @@
+meta {
+  name: Empty Reviews Product
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{base_url}}/api/v1/products/41749c04-bdeb-413f-ae4a-30ff7229c145/reviews?page=1&limit=5
+  body: none
+  auth: none
+}
+
+params:query {
+  page: 1
+  limit: 5
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Fetch reviews for a newly created product with 0 reviews (Product: Skibidi). Verifies clean empty response with 0 rating and empty reviews array.
+}

@@ -32,4 +32,5 @@ func RegisterDiscoveryRoutes(rg *gin.RouterGroup, h *handler.DiscoveryHandler) {
 	rg.GET("/products", h.ListProducts)
 	rg.GET("/products/lookup", h.LookupProducts)
 	rg.GET("/products/:id", h.GetProductByID)
+	rg.GET("/products/:id/reviews", h.GetProductReviews)
 }

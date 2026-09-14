@@ -1,0 +1,19 @@
+meta {
+  name: Product Not Found (404)
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{base_url}}/api/v1/products/00000000-0000-0000-0000-000000000000/reviews
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Returns 404 NOT_FOUND when querying reviews for a non-existent product UUID.
+}

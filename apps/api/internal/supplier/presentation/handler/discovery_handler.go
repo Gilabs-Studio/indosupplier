@@ -108,6 +108,31 @@ func (h *DiscoveryHandler) GetProductByID(c *gin.Context) {
 	response.SuccessResponse(c, product, nil)
 }
 
+func (h *DiscoveryHandler) GetProductReviews(c *gin.Context) {
+	id := c.Param("id")
+	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, _ := strconv.Atoi(c.DefaultQuery("limit", "5"))
+
+	var ratingFilter *int
+	if ratingStr := c.Query("rating"); ratingStr != "" {
+		if r, err := strconv.Atoi(ratingStr); err == nil && r >= 1 && r <= 5 {
+			ratingFilter = &r
+		}
+	}
+
+	res, err := h.discoveryUC.GetProductReviews(c.Request.Context(), id, page, limit, ratingFilter)
+	if err != nil {
+		if err.Error() == "product not found" {
+			errors.NotFoundResponse(c, "product", id)
+			return
+		}
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, res, nil)
+}
+
 func (h *DiscoveryHandler) LookupSuppliers(c *gin.Context) {
 	q := c.Query("q")
 	page, _ := strconv.Atoi(c.DefaultQuery("page", "1"))

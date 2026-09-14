@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math"
 	"regexp"
 	"strconv"
 	"strings"
@@ -23,6 +24,7 @@ type DiscoveryUsecase interface {
 	GetBySlug(ctx context.Context, slug string) (*dto.PublicSupplierDto, error)
 	ListProducts(ctx context.Context, params dto.ListPublicProductsParams) ([]dto.PublicProductDto, error)
 	GetProductByID(ctx context.Context, id string) (*dto.PublicProductDetailDto, error)
+	GetProductReviews(ctx context.Context, id string, page int, limit int, ratingFilter *int) (*dto.ProductReviewsResponseDto, error)
 	LookupSuppliers(ctx context.Context, q string, page int, limit int) ([]dto.PublicSupplierDto, error)
 	LookupProducts(ctx context.Context, q string, page int, limit int) ([]dto.PublicProductDto, error)
 }
@@ -229,6 +231,155 @@ func (u *discoveryUsecase) GetProductByID(ctx context.Context, id string) (*dto.
 		Supplier:        supplierResponse,
 		Reviews:         reviews,
 		RelatedProducts: relatedResponses,
+	}, nil
+}
+
+func (u *discoveryUsecase) GetProductReviews(ctx context.Context, productID string, page int, limit int, ratingFilter *int) (*dto.ProductReviewsResponseDto, error) {
+	if page < 1 {
+		page = 1
+	}
+	if limit <= 0 || limit > 20 {
+		limit = 5
+	}
+
+	// 1. Verify product exists
+	var product models.SupplierProduct
+	if err := u.db.WithContext(ctx).Select("id, supplier_profile_id").Where("id = ?", productID).First(&product).Error; err != nil {
+		return nil, errors.New("product not found")
+	}
+
+	// 2. Aggregated Summary & Rating Breakdown (Single SQL Query, zero N+1)
+	type summaryResult struct {
+		TotalReviews  int64   `gorm:"column:total_reviews"`
+		AverageRating float64 `gorm:"column:avg_rating"`
+		Count5        int     `gorm:"column:count_5"`
+		Count4        int     `gorm:"column:count_4"`
+		Count3        int     `gorm:"column:count_3"`
+		Count2        int     `gorm:"column:count_2"`
+		Count1        int     `gorm:"column:count_1"`
+	}
+
+	var sumRes summaryResult
+	summarySQL := `
+		SELECT 
+			COUNT(*) as total_reviews,
+			COALESCE(AVG(rating), 0) as avg_rating,
+			COUNT(CASE WHEN rating = 5 THEN 1 END) as count_5,
+			COUNT(CASE WHEN rating = 4 THEN 1 END) as count_4,
+			COUNT(CASE WHEN rating = 3 THEN 1 END) as count_3,
+			COUNT(CASE WHEN rating = 2 THEN 1 END) as count_2,
+			COUNT(CASE WHEN rating = 1 THEN 1 END) as count_1
+		FROM supplier_reviews
+		WHERE product_id = ? AND status = 'approved' AND deleted_at IS NULL
+	`
+	if err := u.db.WithContext(ctx).Raw(summarySQL, productID).Scan(&sumRes).Error; err != nil {
+		return nil, err
+	}
+
+	positivePercent := 0
+	if sumRes.TotalReviews > 0 {
+		positivePercent = int(float64(sumRes.Count5+sumRes.Count4) / float64(sumRes.TotalReviews) * 100)
+	}
+
+	summaryDto := dto.ProductReviewSummaryDto{
+		AverageRating: math.Round(sumRes.AverageRating*10) / 10,
+		TotalReviews:  sumRes.TotalReviews,
+		RatingBreakdown: map[string]int{
+			"5": sumRes.Count5,
+			"4": sumRes.Count4,
+			"3": sumRes.Count3,
+			"2": sumRes.Count2,
+			"1": sumRes.Count1,
+		},
+		PositivePercent: positivePercent,
+	}
+
+	// 3. Paginated Reviews list with SQL JOIN on buyer_profiles (Single Query, zero N+1)
+	type reviewRow struct {
+		ID                string
+		Rating            int
+		ReviewText        string
+		SupplierReply     string
+		SupplierRepliedAt *time.Time
+		BuyerName         string
+		BuyerCompany      string
+		CreatedAt         time.Time
+	}
+
+	filteredTotal := sumRes.TotalReviews
+	listQuery := u.db.WithContext(ctx).
+		Table("supplier_reviews").
+		Select(`
+			supplier_reviews.id,
+			supplier_reviews.rating,
+			supplier_reviews.review_text,
+			supplier_reviews.supplier_reply,
+			supplier_reviews.supplier_replied_at,
+			supplier_reviews.created_at,
+			COALESCE(buyer_profiles.company_name, 'Pembeli Terverifikasi') as buyer_name,
+			COALESCE(buyer_profiles.company_name, 'Perusahaan Industri') as buyer_company
+		`).
+		Joins("LEFT JOIN buyer_profiles ON buyer_profiles.id = supplier_reviews.buyer_profile_id").
+		Where("supplier_reviews.product_id = ? AND supplier_reviews.status = ? AND supplier_reviews.deleted_at IS NULL", productID, "approved")
+
+	if ratingFilter != nil && *ratingFilter >= 1 && *ratingFilter <= 5 {
+		listQuery = listQuery.Where("supplier_reviews.rating = ?", *ratingFilter)
+		switch *ratingFilter {
+		case 5:
+			filteredTotal = int64(sumRes.Count5)
+		case 4:
+			filteredTotal = int64(sumRes.Count4)
+		case 3:
+			filteredTotal = int64(sumRes.Count3)
+		case 2:
+			filteredTotal = int64(sumRes.Count2)
+		case 1:
+			filteredTotal = int64(sumRes.Count1)
+		}
+	}
+
+	offset := (page - 1) * limit
+	var rows []reviewRow
+	if err := listQuery.Order("supplier_reviews.created_at DESC").Limit(limit).Offset(offset).Scan(&rows).Error; err != nil {
+		return nil, err
+	}
+
+	reviewItems := make([]dto.ProductReviewItemDto, 0, len(rows))
+	for _, r := range rows {
+		repliedAt := ""
+		if r.SupplierRepliedAt != nil {
+			repliedAt = r.SupplierRepliedAt.Format(time.RFC3339)
+		}
+		reviewItems = append(reviewItems, dto.ProductReviewItemDto{
+			ID:                r.ID,
+			BuyerName:         r.BuyerName,
+			BuyerCompany:      r.BuyerCompany,
+			Rating:            r.Rating,
+			ReviewText:        r.ReviewText,
+			SupplierReply:     r.SupplierReply,
+			SupplierRepliedAt: repliedAt,
+			CreatedAt:         r.CreatedAt.Format(time.RFC3339),
+		})
+	}
+
+	totalPages := 0
+	if filteredTotal > 0 {
+		totalPages = int(math.Ceil(float64(filteredTotal) / float64(limit)))
+	}
+	hasMore := page < totalPages
+
+	paginationDto := dto.ProductReviewsPaginationDto{
+		CurrentPage: page,
+		PerPage:     limit,
+		TotalItems:  filteredTotal,
+		TotalPages:  totalPages,
+		HasMore:     hasMore,
+	}
+
+	return &dto.ProductReviewsResponseDto{
+		Summary:    summaryDto,
+		Reviews:    reviewItems,
+		Pagination: paginationDto,
 	}, nil
 }
 
@@ -675,12 +826,40 @@ func (u *discoveryUsecase) buildProductResponses(ctx context.Context, products [
 		supplierMap[supplier.ID] = supplier
 	}
 
+	productIDs := make([]string, len(products))
+	for i, product := range products {
+		productIDs[i] = product.ID
+	}
+
+	type productReviewStat struct {
+		ProductID string  `gorm:"column:product_id"`
+		Count     int     `gorm:"column:count"`
+		AvgRating float64 `gorm:"column:avg_rating"`
+	}
+	var reviewStats []productReviewStat
+	if len(productIDs) > 0 {
+		u.db.WithContext(ctx).
+			Table("supplier_reviews").
+			Select("product_id, COUNT(*) as count, COALESCE(AVG(rating), 0) as avg_rating").
+			Where("product_id IN ? AND status = ? AND deleted_at IS NULL", productIDs, "approved").
+			Group("product_id").
+			Scan(&reviewStats)
+	}
+	reviewStatMap := make(map[string]productReviewStat)
+	for _, stat := range reviewStats {
+		reviewStatMap[stat.ProductID] = stat
+	}
+
 	responses := make([]dto.PublicProductDto, 0, len(products))
 	for _, product := range products {
 		supplier, exists := supplierMap[product.SupplierProfileID]
 		if !exists {
 			continue
 		}
+
+		stat := reviewStatMap[product.ID]
+		productRating := math.Round(stat.AvgRating*10) / 10
+		productReviewCount := stat.Count
 
 		categoryName := ""
 		categorySlug := ""
@@ -717,6 +896,8 @@ func (u *discoveryUsecase) buildProductResponses(ctx context.Context, products [
 			IsPowerSupplier:     supplier.IsPremiumVerified,
 			SupplierRating:      supplier.StarRating,
 			SupplierReviewCount: supplier.ReviewCount,
+			Rating:              productRating,
+			ReviewCount:         productReviewCount,
 			Tags:                tags,
 		})
 	}

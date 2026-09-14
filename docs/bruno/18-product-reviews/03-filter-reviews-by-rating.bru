@@ -1,0 +1,25 @@
+meta {
+  name: Filter Reviews by Star Rating
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/v1/products/e9ebb761-f46f-4793-8d22-3564ac3512cb/reviews?page=1&limit=5&rating=5
+  body: none
+  auth: none
+}
+
+params:query {
+  page: 1
+  limit: 5
+  rating: 5
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Filter reviews specifically by rating score (e.g., 5 stars). The summary breakdown remains comprehensive across all ratings, while the paginated review list is filtered.
+}

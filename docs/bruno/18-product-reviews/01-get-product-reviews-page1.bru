@@ -1,0 +1,24 @@
+meta {
+  name: Get Product Reviews (Page 1, Limit 5)
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/v1/products/e9ebb761-f46f-4793-8d22-3564ac3512cb/reviews?page=1&limit=5
+  body: none
+  auth: none
+}
+
+params:query {
+  page: 1
+  limit: 5
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Fetch real paginated reviews for a product with rating summary, star breakdown (1 to 5 stars), positive review percentage, and zero N+1 database queries.
+}
