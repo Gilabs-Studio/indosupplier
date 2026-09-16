@@ -1,0 +1,38 @@
+meta {
+  name: 03 Submit RFQ Proposal
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/api/v1/supplier/rfqs/{{test_rfq_id}}/proposals
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "price": "Rp 12.500.000 / Ton",
+    "moq": "5 Ton",
+    "deliveryTime": "7 Hari Kerja",
+    "notes": "Spesifikasi mutu terjamin sesuai standar SNI. Harga sudah termasuk ongkir pelabuhan."
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+assert {
+  res.status: eq 200
+  res.body.success: eq true
+}
+
+docs {
+  Submits a quotation proposal/offer to the specified RFQ.
+}

@@ -9,6 +9,7 @@ import (
 	buyerModels "github.com/gilabs/indosupplier/api/internal/buyer/data/models"
 	"github.com/gilabs/indosupplier/api/internal/buyer/data/repositories"
 	"github.com/gilabs/indosupplier/api/internal/buyer/domain/dto"
+	supplierModels "github.com/gilabs/indosupplier/api/internal/supplier/data/models"
 	trustModels "github.com/gilabs/indosupplier/api/internal/trust/data/models"
 )
 
@@ -34,6 +35,10 @@ func (u *notificationUsecase) getRecipientIDs(ctx context.Context, userID string
 	var buyer buyerModels.BuyerProfile
 	if err := u.db.WithContext(ctx).Where("user_id = ?", userID).First(&buyer).Error; err == nil && buyer.ID != "" {
 		recipientIDs = append(recipientIDs, buyer.ID)
+	}
+	var supplier supplierModels.SupplierProfile
+	if err := u.db.WithContext(ctx).Where("user_id = ?", userID).First(&supplier).Error; err == nil && supplier.ID != "" {
+		recipientIDs = append(recipientIDs, supplier.ID)
 	}
 	return recipientIDs
 }

@@ -17,6 +17,14 @@ export interface SupplierRfqItem {
   description?: string;
   shippingTerm?: string;
   targetDelivery?: string;
+  submittedOffer?: {
+    price: string;
+    moq: string;
+    deliveryTime: string;
+    notes: string;
+    submittedAt?: string;
+    respondedAt?: string;
+  };
   buyer: SupplierRfqBuyer;
 }
 

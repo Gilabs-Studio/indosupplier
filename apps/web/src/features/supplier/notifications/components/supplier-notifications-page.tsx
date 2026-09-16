@@ -1,49 +1,45 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/routing";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { Bell, CreditCard, Inbox, Check } from "lucide-react";
+import { Bell, CreditCard, Inbox, Check, Loader2 } from "lucide-react";
+import { useSupplierNotifications } from "../hooks/useSupplierNotifications";
 
 export function SupplierNotificationsPage() {
   const t = useTranslations("supplier.notifications");
-  const [activeTab, setActiveTab] = useState("all");
-
-  const [notifications, setNotifications] = useState([
-    { id: "N1", title: "New RFQ Inquiry Matching Category", text: "CV Borneo Abadi is looking for Bentonite Clay Powder (10 Ton). Submit your quote proposal now.", type: "rfq", date: "Just now", read: false },
-    { id: "N2", title: "Billing Outstanding Charge", text: "Your advertising clicks balance is due. Click here to settle payment for invoice INV-2026-005.", type: "billing", date: "2 hours ago", read: false },
-    { id: "N3", title: "Gold Tier Subscription Active", text: "PT Nusantara Supplier Utama membership has been successfully upgraded to Gold Enterprise tier.", type: "system", date: "1 day ago", read: true },
-    { id: "N4", title: "Admin Support Chat Update", text: "Helpdesk agent has replied to ticket TCK-2026-908 regarding document evaluations.", type: "system", date: "2 days ago", read: true },
-  ]);
-
-  const handleMarkAllRead = () => {
-    setNotifications(notifications.map(n => ({ ...n, read: true })));
-    toast.success("All notifications marked as read!");
-  };
-
-  const handleMarkSingleRead = (id: string) => {
-    setNotifications(notifications.map(n => n.id === id ? { ...n, read: true } : n));
-  };
+  const router = useRouter();
+  const {
+    notifications,
+    isLoading,
+    activeTab,
+    setActiveTab,
+    markAllRead,
+    isMarkingAllRead,
+  } = useSupplierNotifications();
 
   const tabs = [
-    { id: "all", label: "All Alerts" },
-    { id: "rfq", label: "RFQ Sourcing" },
-    { id: "billing", label: "Billing" },
-    { id: "system", label: "System Notices" }
+    { id: "all", label: "Semua Notifikasi" },
+    { id: "rfq", label: "RFQ & Penawaran" },
+    { id: "system", label: "Sistem & Info" }
   ];
-
-  const filtered = notifications.filter(n => activeTab === "all" || n.type === activeTab);
 
   const getIcon = (type: string) => {
     switch (type) {
-      case "rfq":
+      case "quote":
         return <Inbox className="h-4 w-4 text-primary" />;
-      case "billing":
+      case "alert":
         return <CreditCard className="h-4 w-4 text-warning" />;
       default:
         return <Bell className="h-4 w-4 text-muted-foreground" />;
+    }
+  };
+
+  const handleItemClick = (n: { id: string; type: string }) => {
+    if (n.type === "quote") {
+      router.push("/supplier/rfq");
     }
   };
 
@@ -59,8 +55,18 @@ export function SupplierNotificationsPage() {
             {t("subtitle")}
           </p>
         </div>
-        <Button onClick={handleMarkAllRead} variant="outline" className="cursor-pointer border-border font-semibold text-xs h-9">
-          <Check className="mr-1.5 h-4 w-4" /> {t("btnMarkAll")}
+        <Button
+          onClick={() => markAllRead()}
+          disabled={isMarkingAllRead}
+          variant="outline"
+          className="cursor-pointer border-border font-semibold text-xs h-9"
+        >
+          {isMarkingAllRead ? (
+            <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin text-primary" />
+          ) : (
+            <Check className="mr-1.5 h-4 w-4" />
+          )}
+          {t("btnMarkAll")}
         </Button>
       </div>
 
@@ -84,13 +90,17 @@ export function SupplierNotificationsPage() {
 
       {/* List */}
       <div className="space-y-3">
-        {filtered.length > 0 ? (
-          filtered.map((n) => (
+        {isLoading ? (
+          <div className="flex justify-center py-12">
+            <Loader2 className="h-6 w-6 animate-spin text-primary" />
+          </div>
+        ) : notifications.length > 0 ? (
+          notifications.map((n) => (
             <Card
               key={n.id}
-              onClick={() => handleMarkSingleRead(n.id)}
-              className={`border border-border shadow-xs rounded-xl overflow-hidden bg-card cursor-pointer transition-colors p-4 flex items-start gap-4 ${
-                !n.read ? "border-l-4 border-l-primary" : ""
+              onClick={() => handleItemClick(n)}
+              className={`border border-border shadow-xs rounded-xl overflow-hidden bg-card cursor-pointer transition-colors p-4 flex items-start gap-4 hover:border-primary/40 ${
+                n.unread ? "border-l-4 border-l-primary" : ""
               }`}
             >
               {/* Icon */}
@@ -100,17 +110,19 @@ export function SupplierNotificationsPage() {
 
               {/* Text contents */}
               <div className="space-y-1 flex-1">
-                <h4 className="text-sm font-bold text-foreground flex items-center justify-between gap-2">
-                  {n.title}
+                <div className="flex items-center justify-between gap-2">
+                  <h4 className="text-sm font-bold text-foreground">
+                    {n.title}
+                  </h4>
                   <span className="text-[10px] text-muted-foreground font-semibold shrink-0">{n.date}</span>
-                </h4>
+                </div>
                 <p className="text-xs text-muted-foreground leading-relaxed font-semibold">
-                  {n.text}
+                  {n.desc}
                 </p>
               </div>
 
               {/* Unread indicator */}
-              {!n.read && (
+              {n.unread && (
                 <div className="h-2 w-2 rounded-full bg-primary shrink-0 self-center" />
               )}
             </Card>

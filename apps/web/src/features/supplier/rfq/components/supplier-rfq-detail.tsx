@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldLabel, FieldGroup } from "@/components/ui/field";
-import { ArrowLeft, Send, ShieldCheck, Calendar, MapPin, DollarSign, Scale } from "lucide-react";
+import { ArrowLeft, Send, ShieldCheck, Calendar, MapPin, DollarSign, Scale, CheckCircle2, Clock } from "lucide-react";
 import { CenteredLoading } from "@/components/loading";
 import { useSubmitSupplierRfqProposal, useSupplierRfqDetail } from "../hooks/useSupplierRfqs";
 
@@ -121,72 +121,147 @@ export function SupplierRfqDetail({ id }: SupplierRfqDetailProps) {
             </CardContent>
           </Card>
 
-          {/* Proposal form */}
-          <Card className="border border-border shadow-xs rounded-xl overflow-hidden bg-card">
-            <CardHeader>
-              <CardTitle className="text-base font-bold font-heading">{t("formTitle")}</CardTitle>
-              <CardDescription className="text-xs">Provide details for your bidding proposal.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmitProposal} className="space-y-4">
-                <FieldGroup className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <Field>
-                    <FieldLabel>{t("formPrice")}</FieldLabel>
-                    <Input
-                      placeholder="e.g. Rp 3.200.000 / Ton"
-                      value={form.price}
-                      onChange={(e) => setForm({ ...form, price: e.target.value })}
-                      required
-                    />
-                  </Field>
-                  <Field>
-                    <FieldLabel>{t("formMinQty")}</FieldLabel>
-                    <Input
-                      placeholder="e.g. 15 Ton"
-                      value={form.moq}
-                      onChange={(e) => setForm({ ...form, moq: e.target.value })}
-                      required
-                    />
-                  </Field>
-                  <Field>
-                    <FieldLabel>{t("formDeliveryTime")}</FieldLabel>
-                    <Input
-                      placeholder="e.g. 14 Days"
-                      value={form.deliveryTime}
-                      onChange={(e) => setForm({ ...form, deliveryTime: e.target.value })}
-                      required
-                    />
-                  </Field>
-                </FieldGroup>
-
-                <Field>
-                  <FieldLabel>{t("formNotes")}</FieldLabel>
-                  <Textarea
-                    placeholder="Provide shipping availability, packaging details, cargo assurances..."
-                    rows={4}
-                    value={form.notes}
-                    onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                    required
-                    className="resize-none"
-                  />
-                </Field>
-
-                <div className="flex justify-end pt-2">
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="bg-primary text-primary-foreground hover:bg-primary/95 cursor-pointer font-semibold py-5 px-6 text-sm flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-lg hover:shadow-primary/20"
+          {/* Proposal form or submitted proposal */}
+          {rfq.status === "responded" || rfq.status === "accepted" || !!rfq.submittedOffer ? (
+            <Card className="border border-border shadow-xs rounded-xl overflow-hidden bg-card">
+              <CardHeader className="border-b border-border bg-muted/10">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="text-base font-bold font-heading">
+                      {rfq.status === "accepted" ? "Penawaran Diterima Pembeli" : "Penawaran Telah Dikirim"}
+                    </CardTitle>
+                    <CardDescription className="text-xs mt-0.5">
+                      {rfq.status === "accepted"
+                        ? "Pembeli telah menyetujui penawaran harga Anda. Proses transaksi dapat dilanjutkan."
+                        : "Anda telah mengirimkan respon penawaran harga untuk RFQ ini."}
+                    </CardDescription>
+                  </div>
+                  <div
+                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
+                      rfq.status === "accepted"
+                        ? "bg-success/15 text-success border border-success/30"
+                        : "bg-primary/10 text-primary border border-primary/20"
+                    }`}
                   >
-                    {isSubmitting ? "Sending..." : (
+                    {rfq.status === "accepted" ? (
                       <>
-                        <Send className="h-4 w-4" /> {t("btnSubmit")}
+                        <CheckCircle2 className="h-3.5 w-3.5" />
+                        <span>Diterima</span>
+                      </>
+                    ) : (
+                      <>
+                        <Clock className="h-3.5 w-3.5" />
+                        <span>Terkirim</span>
                       </>
                     )}
-                  </Button>
+                  </div>
                 </div>
-              </form>
-            </CardContent>
-          </Card>
+              </CardHeader>
+              <CardContent className="p-6 space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="p-3 border border-border bg-muted/20 rounded-xl flex flex-col">
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase">Harga Penawaran</span>
+                    <span className="text-base font-extrabold text-foreground mt-1">
+                      {rfq.submittedOffer?.price || "-"}
+                    </span>
+                  </div>
+                  <div className="p-3 border border-border bg-muted/20 rounded-xl flex flex-col">
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase">Min. Order (MOQ)</span>
+                    <span className="text-base font-extrabold text-foreground mt-1">
+                      {rfq.submittedOffer?.moq || "-"}
+                    </span>
+                  </div>
+                  <div className="p-3 border border-border bg-muted/20 rounded-xl flex flex-col">
+                    <span className="text-[10px] font-bold text-muted-foreground uppercase">Waktu Pengiriman</span>
+                    <span className="text-base font-extrabold text-foreground mt-1">
+                      {rfq.submittedOffer?.deliveryTime || "-"}
+                    </span>
+                  </div>
+                </div>
+
+                {rfq.submittedOffer?.notes && (
+                  <div className="space-y-2">
+                    <h4 className="text-xs font-bold text-muted-foreground uppercase">Catatan Penawaran</h4>
+                    <p className="text-sm text-foreground leading-relaxed bg-muted/10 p-4 rounded-xl border border-border whitespace-pre-line">
+                      {rfq.submittedOffer.notes}
+                    </p>
+                  </div>
+                )}
+
+                {(rfq.submittedOffer?.submittedAt || rfq.submittedOffer?.respondedAt) && (
+                  <p className="text-[11px] text-muted-foreground">
+                    Dikirim pada: <span className="font-semibold text-foreground">{rfq.submittedOffer.submittedAt || rfq.submittedOffer.respondedAt}</span>
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="border border-border shadow-xs rounded-xl overflow-hidden bg-card">
+              <CardHeader>
+                <CardTitle className="text-base font-bold font-heading">{t("formTitle")}</CardTitle>
+                <CardDescription className="text-xs">Provide details for your bidding proposal.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmitProposal} className="space-y-4">
+                  <FieldGroup className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <Field>
+                      <FieldLabel>{t("formPrice")}</FieldLabel>
+                      <Input
+                        placeholder="e.g. Rp 3.200.000 / Ton"
+                        value={form.price}
+                        onChange={(e) => setForm({ ...form, price: e.target.value })}
+                        required
+                      />
+                    </Field>
+                    <Field>
+                      <FieldLabel>{t("formMinQty")}</FieldLabel>
+                      <Input
+                        placeholder="e.g. 15 Ton"
+                        value={form.moq}
+                        onChange={(e) => setForm({ ...form, moq: e.target.value })}
+                        required
+                      />
+                    </Field>
+                    <Field>
+                      <FieldLabel>{t("formDeliveryTime")}</FieldLabel>
+                      <Input
+                        placeholder="e.g. 14 Days"
+                        value={form.deliveryTime}
+                        onChange={(e) => setForm({ ...form, deliveryTime: e.target.value })}
+                        required
+                      />
+                    </Field>
+                  </FieldGroup>
+
+                  <Field>
+                    <FieldLabel>{t("formNotes")}</FieldLabel>
+                    <Textarea
+                      placeholder="Provide shipping availability, packaging details, cargo assurances..."
+                      rows={4}
+                      value={form.notes}
+                      onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                      required
+                      className="resize-none"
+                    />
+                  </Field>
+
+                  <div className="flex justify-end pt-2">
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="bg-primary text-primary-foreground hover:bg-primary/95 cursor-pointer font-semibold py-5 px-6 text-sm flex items-center justify-center gap-2 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:shadow-lg hover:shadow-primary/20"
+                    >
+                      {isSubmitting ? "Sending..." : (
+                        <>
+                          <Send className="h-4 w-4" /> {t("btnSubmit")}
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {/* Buyer info sidebar */}

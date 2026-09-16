@@ -1,0 +1,28 @@
+meta {
+  name: 08 Unauthorized Access (Edge Case)
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{base_url}}/api/v1/supplier/rfqs
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Cookie: access_token=invalid_expired_token
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+assert {
+  res.status: eq 401
+}
+
+docs {
+  Tests edge case: accessing supplier RFQs without authentication returns 401 Unauthorized.
+}

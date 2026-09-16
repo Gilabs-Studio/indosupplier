@@ -105,6 +105,14 @@ var ErrorCodeMap = map[string]ErrorInfo{
 		HTTPStatus: http.StatusNotFound,
 		Message:    "Product not found",
 	},
+	"RFQ_NOT_FOUND": {
+		HTTPStatus: http.StatusNotFound,
+		Message:    "RFQ not found",
+	},
+	"BID_NOT_FOUND": {
+		HTTPStatus: http.StatusNotFound,
+		Message:    "Bid proposal not found",
+	},
 	"BOOKMARK_NOT_FOUND": {
 		HTTPStatus: http.StatusNotFound,
 		Message:    "Bookmark not found",

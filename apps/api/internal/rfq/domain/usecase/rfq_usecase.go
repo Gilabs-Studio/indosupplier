@@ -19,6 +19,7 @@ import (
 	"github.com/gilabs/indosupplier/api/internal/rfq/domain/dto"
 	"github.com/gilabs/indosupplier/api/internal/rfq/domain/mapper"
 	supplierModels "github.com/gilabs/indosupplier/api/internal/supplier/data/models"
+	trustModels "github.com/gilabs/indosupplier/api/internal/trust/data/models"
 )
 
 var (
@@ -138,6 +139,31 @@ func (u *rfqUsecase) Create(ctx context.Context, userID string, req *dto.CreateR
 		categoryIDPtr = &categoryID
 	}
 
+	mode := "broadcast"
+	var recipients []models.RFQRecipient
+	if req.TargetSupplierID != "" {
+		var targetSupplier supplierModels.SupplierProfile
+		if err := u.db.WithContext(ctx).Where("id = ?", req.TargetSupplierID).First(&targetSupplier).Error; err == nil {
+			mode = "specific"
+			recipients = append(recipients, models.RFQRecipient{
+				ID:                uuid.NewString(),
+				SupplierProfileID: targetSupplier.ID,
+				Status:            "new",
+				RankPosition:      1,
+				CreatedAt:         apptime.Now(),
+				UpdatedAt:         apptime.Now(),
+			})
+		}
+	}
+
+	if len(recipients) == 0 {
+		var err error
+		recipients, err = u.buildRecipients(ctx, categoryID, userID)
+		if err != nil {
+			return dto.RFQResponse{}, err
+		}
+	}
+
 	rfq := &models.RFQ{
 		ID:                  uuid.NewString(),
 		BuyerProfileID:      buyerID,
@@ -148,7 +174,9 @@ func (u *rfqUsecase) Create(ctx context.Context, userID string, req *dto.CreateR
 		DestinationLocation: req.TargetPort,
 		CategoryID:          categoryIDPtr,
 		VisibilityStatus:    "open",
-		Mode:                "broadcast",
+		Mode:                mode,
+		BudgetMax:           req.Budget,
+		DeliveryTimeline:    req.DeliveryTimeline,
 		CreatedAt:           apptime.Now(),
 		UpdatedAt:           apptime.Now(),
 	}
@@ -169,13 +197,27 @@ func (u *rfqUsecase) Create(ctx context.Context, userID string, req *dto.CreateR
 		}
 	}
 
-	recipients, err := u.buildRecipients(ctx, categoryID, userID)
-	if err != nil {
+	if err := u.rfqRepo.Create(ctx, rfq, attachment, recipients); err != nil {
 		return dto.RFQResponse{}, err
 	}
 
-	if err := u.rfqRepo.Create(ctx, rfq, attachment, recipients); err != nil {
-		return dto.RFQResponse{}, err
+	// Send in-app notification to recipient suppliers
+	for _, rec := range recipients {
+		notif := trustModels.Notification{
+			ID:            uuid.NewString(),
+			RecipientType: "supplier",
+			RecipientID:   rec.SupplierProfileID,
+			Type:          "rfq",
+			Title:         fmt.Sprintf("Permintaan RFQ Baru: %s", rfq.Title),
+			Body:          fmt.Sprintf("Terdapat permintaan RFQ baru untuk produk %s dengan jumlah %s %s.", rfq.Title, req.Quantity, req.Unit),
+			Channel:       "in_app",
+			IsRead:        false,
+			RelatedType:   "rfq",
+			RelatedID:     &rfq.ID,
+			CreatedAt:     apptime.Now(),
+			UpdatedAt:     apptime.Now(),
+		}
+		_ = u.db.WithContext(ctx).Create(&notif).Error
 	}
 
 	return mapper.ToRFQResponse(rfq, categoryName, 0, attachment), nil
@@ -188,6 +230,9 @@ func (u *rfqUsecase) GetByID(ctx context.Context, userID string, id string) (dto
 	}
 
 	resolvedID := mapper.ResolveRFQID(id)
+	if _, err := uuid.Parse(resolvedID); err != nil {
+		return dto.RFQResponse{}, ErrRFQNotFound
+	}
 
 	rfq, attachment, replies, err := u.rfqRepo.FindByID(ctx, resolvedID)
 	if err != nil {
@@ -277,6 +322,9 @@ func (u *rfqUsecase) GetBids(ctx context.Context, userID string, rfqID string) (
 	}
 
 	resolvedRFQID := mapper.ResolveRFQID(rfqID)
+	if _, err := uuid.Parse(resolvedRFQID); err != nil {
+		return nil, ErrRFQNotFound
+	}
 
 	// Verify RFQ ownership
 	var rfq models.RFQ
@@ -346,6 +394,12 @@ func (u *rfqUsecase) AcceptBid(ctx context.Context, userID string, rfqID string,
 	}
 
 	resolvedRFQID := mapper.ResolveRFQID(rfqID)
+	if _, err := uuid.Parse(resolvedRFQID); err != nil {
+		return ErrRFQNotFound
+	}
+	if _, err := uuid.Parse(bidID); err != nil {
+		return ErrBidNotFound
+	}
 
 	// Verify RFQ ownership
 	var rfq models.RFQ
@@ -356,7 +410,31 @@ func (u *rfqUsecase) AcceptBid(ctx context.Context, userID string, rfqID string,
 		return err
 	}
 
-	return u.rfqRepo.AcceptBid(ctx, resolvedRFQID, bidID)
+	if err := u.rfqRepo.AcceptBid(ctx, resolvedRFQID, bidID); err != nil {
+		return err
+	}
+
+	// Notify winning supplier
+	var rec models.RFQRecipient
+	if err := u.db.WithContext(ctx).Where("id = ?", bidID).First(&rec).Error; err == nil {
+		notif := trustModels.Notification{
+			ID:            uuid.NewString(),
+			RecipientType: "supplier",
+			RecipientID:   rec.SupplierProfileID,
+			Type:          "rfq_accepted",
+			Title:         fmt.Sprintf("Penawaran Diterima: %s", rfq.Title),
+			Body:          fmt.Sprintf("Selamat! Pembeli telah menerima penawaran Anda untuk RFQ %s.", rfq.Title),
+			Channel:       "in_app",
+			IsRead:        false,
+			RelatedType:   "rfq",
+			RelatedID:     &rfq.ID,
+			CreatedAt:     apptime.Now(),
+			UpdatedAt:     apptime.Now(),
+		}
+		_ = u.db.WithContext(ctx).Create(&notif).Error
+	}
+
+	return nil
 }
 
 func (u *rfqUsecase) buildSupplierRFQResponse(ctx context.Context, recipient models.RFQRecipient) (dto.SupplierRFQResponse, error) {
@@ -377,9 +455,11 @@ func (u *rfqUsecase) buildSupplierRFQResponse(ctx context.Context, recipient mod
 	_ = u.db.WithContext(ctx).Where("id = ?", rfq.BuyerProfileID).First(&buyer).Error
 
 	status := "open"
-	if rfq.ClosedAt != nil {
+	if recipient.Status == "accepted" {
+		status = "accepted"
+	} else if rfq.ClosedAt != nil {
 		status = "closed"
-	} else if recipient.Status == "responded" || recipient.Status == "processing" || recipient.Status == "accepted" {
+	} else if recipient.Status == "responded" || recipient.Status == "processing" {
 		status = recipient.Status
 	}
 
@@ -409,6 +489,28 @@ func (u *rfqUsecase) buildSupplierRFQResponse(ctx context.Context, recipient mod
 	}
 	res.Buyer.Location = buyer.Address
 	res.Buyer.Rating = ""
+
+	if recipient.Status == "responded" || recipient.Status == "accepted" {
+		var offerMsg models.RFQMessage
+		if err := u.db.WithContext(ctx).
+			Where("rfq_id = ? AND sender_id = ? AND message_type = ?", rfq.ID, recipient.SupplierProfileID, "offer").
+			Order("created_at DESC").
+			First(&offerMsg).Error; err == nil {
+			var meta map[string]interface{}
+			_ = json.Unmarshal([]byte(offerMsg.Metadata), &meta)
+			priceStr, _ := meta["price"].(string)
+			moqStr, _ := meta["moq"].(string)
+			delivStr, _ := meta["deliveryTime"].(string)
+			res.SubmittedOffer = &dto.SupplierSubmittedOfferDto{
+				Price:        priceStr,
+				MOQ:          moqStr,
+				DeliveryTime: delivStr,
+				Notes:        offerMsg.Body,
+				RespondedAt:  offerMsg.CreatedAt.Format("2006-01-02 15:04"),
+			}
+		}
+	}
+
 	return res, nil
 }
 
@@ -497,9 +599,11 @@ func (u *rfqUsecase) ListForSupplier(ctx context.Context, userID string, page, p
 		buyer := buyerMap[rfq.BuyerProfileID]
 
 		status := "open"
-		if rfq.ClosedAt != nil {
+		if recipient.Status == "accepted" {
+			status = "accepted"
+		} else if rfq.ClosedAt != nil {
 			status = "closed"
-		} else if recipient.Status == "responded" || recipient.Status == "processing" || recipient.Status == "accepted" {
+		} else if recipient.Status == "responded" || recipient.Status == "processing" {
 			status = recipient.Status
 		}
 
@@ -542,6 +646,9 @@ func (u *rfqUsecase) GetSupplierRFQByID(ctx context.Context, userID string, id s
 		return dto.SupplierRFQResponse{}, err
 	}
 	resolvedID := mapper.ResolveRFQID(id)
+	if _, err := uuid.Parse(resolvedID); err != nil {
+		return dto.SupplierRFQResponse{}, ErrRFQNotFound
+	}
 	recipient, err := u.rfqRepo.FindForSupplier(ctx, supplierID, resolvedID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -558,6 +665,9 @@ func (u *rfqUsecase) SubmitProposal(ctx context.Context, userID string, rfqID st
 		return err
 	}
 	resolvedID := mapper.ResolveRFQID(rfqID)
+	if _, err := uuid.Parse(resolvedID); err != nil {
+		return ErrRFQNotFound
+	}
 	recipient, err := u.rfqRepo.FindForSupplier(ctx, supplierID, resolvedID)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -565,6 +675,18 @@ func (u *rfqUsecase) SubmitProposal(ctx context.Context, userID string, rfqID st
 		}
 		return err
 	}
+
+	var rfq models.RFQ
+	if err := u.db.WithContext(ctx).Where("id = ?", resolvedID).First(&rfq).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return ErrRFQNotFound
+		}
+		return err
+	}
+	if rfq.ClosedAt != nil || rfq.VisibilityStatus == "closed" {
+		return errors.New("rfq is closed")
+	}
+
 	metadata, err := json.Marshal(map[string]string{
 		"price":        strings.TrimSpace(req.Price),
 		"moq":          strings.TrimSpace(req.MOQ),
@@ -584,5 +706,32 @@ func (u *rfqUsecase) SubmitProposal(ctx context.Context, userID string, rfqID st
 		CreatedAt:   apptime.Now(),
 		UpdatedAt:   apptime.Now(),
 	}
-	return u.rfqRepo.SubmitProposal(ctx, recipient, message)
+	if err := u.rfqRepo.SubmitProposal(ctx, recipient, message); err != nil {
+		return err
+	}
+
+	// Notify buyer
+	var supplier supplierModels.SupplierProfile
+	_ = u.db.WithContext(ctx).Where("id = ?", supplierID).First(&supplier).Error
+	supplierName := supplier.CompanyName
+	if supplierName == "" {
+		supplierName = "Supplier"
+	}
+	notif := trustModels.Notification{
+		ID:            uuid.NewString(),
+		RecipientType: "buyer",
+		RecipientID:   rfq.BuyerProfileID,
+		Type:          "rfq_proposal",
+		Title:         fmt.Sprintf("Penawaran Baru: %s", rfq.Title),
+		Body:          fmt.Sprintf("%s telah mengirimkan penawaran harga sebesar %s untuk RFQ %s.", supplierName, req.Price, rfq.Title),
+		Channel:       "in_app",
+		IsRead:        false,
+		RelatedType:   "rfq",
+		RelatedID:     &rfq.ID,
+		CreatedAt:     apptime.Now(),
+		UpdatedAt:     apptime.Now(),
+	}
+	_ = u.db.WithContext(ctx).Create(&notif).Error
+
+	return nil
 }

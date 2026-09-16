@@ -1,0 +1,38 @@
+meta {
+  name: 05 Submit Proposal Empty Body (Edge Case)
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/api/v1/supplier/rfqs/{{test_rfq_id}}/proposals
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "price": "",
+    "moq": "",
+    "deliveryTime": "",
+    "notes": ""
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+assert {
+  res.status: eq 400
+  res.body.success: eq false
+}
+
+docs {
+  Tests edge case: submitting proposal with missing/empty required fields returns 400 Bad Request.
+}

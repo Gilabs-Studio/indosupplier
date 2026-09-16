@@ -1,0 +1,33 @@
+meta {
+  name: 02 Get Supplier RFQ Detail
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/v1/supplier/rfqs/{{test_rfq_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+assert {
+  res.status: eq 200
+  res.body.success: eq true
+  res.body.data.id: eq {{test_rfq_id}}
+  res.body.data.product: isDefined
+  res.body.data.quantity: isDefined
+  res.body.data.buyer: isDefined
+}
+
+docs {
+  Retrieves comprehensive RFQ specifications and buyer metrics for a supplier.
+}

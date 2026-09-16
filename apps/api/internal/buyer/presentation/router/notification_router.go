@@ -9,10 +9,17 @@ import (
 )
 
 func RegisterNotificationRoutes(rg *gin.RouterGroup, h *handler.NotificationHandler, jwtManager *jwt.JWTManager) {
-	g := rg.Group("/buyer/notifications")
-	g.Use(middleware.AuthMiddleware(jwtManager))
+	buyerGroup := rg.Group("/buyer/notifications")
+	buyerGroup.Use(middleware.AuthMiddleware(jwtManager))
 	{
-		g.GET("", h.List)
-		g.POST("/mark-read", h.MarkAllRead)
+		buyerGroup.GET("", h.List)
+		buyerGroup.POST("/mark-read", h.MarkAllRead)
+	}
+
+	supplierGroup := rg.Group("/supplier/notifications")
+	supplierGroup.Use(middleware.AuthMiddleware(jwtManager))
+	{
+		supplierGroup.GET("", h.List)
+		supplierGroup.POST("/mark-read", h.MarkAllRead)
 	}
 }

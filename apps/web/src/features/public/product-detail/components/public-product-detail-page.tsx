@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { usePublicProductDetail } from "../hooks/use-public-product-detail";
 import {
+  Check,
   ChevronDown,
   GitCompareArrows,
   Heart,
@@ -28,6 +29,8 @@ import {
   Store,
   Truck,
 } from "lucide-react";
+import { ProductRfqModal } from "./product-rfq-modal";
+import { ProductDirectBuyModal } from "./product-direct-buy-modal";
 
 interface PublicProductDetailPageProps {
   locale: string;
@@ -106,7 +109,16 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
     toggleBookmark,
     toggleCompare,
     toggleProductBookmark,
-    handleBuyerAction,
+    isRfqModalOpen,
+    setIsRfqModalOpen,
+    isDirectBuyModalOpen,
+    setIsDirectBuyModalOpen,
+    isStartingChat,
+    isCopied,
+    openRfqModal,
+    openDirectBuyModal,
+    handleStartChat,
+    handleShare,
     reviewState,
     productRating,
     productReviewCount,
@@ -358,14 +370,14 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
 
                 <div className="mt-4 space-y-2">
                   <Button
-                    onClick={() => handleBuyerAction(t("authRequireRfq"))}
+                    onClick={openRfqModal}
                     className="w-full cursor-pointer font-bold text-xs py-2 bg-primary text-primary-foreground hover:bg-primary/95 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 hover:shadow-md hover:shadow-primary/20 rounded-lg"
                   >
                     <Send className="mr-1.5 h-3.5 w-3.5" />
                     {t("btnRfq")}
                   </Button>
                   <Button
-                    onClick={() => handleBuyerAction(t("authRequireBuy"))}
+                    onClick={openDirectBuyModal}
                     variant="outline"
                     className="w-full cursor-pointer font-bold text-xs py-2 border-border text-foreground hover:bg-muted hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 hover:shadow-xs rounded-lg"
                   >
@@ -376,11 +388,16 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
                 <div className="mt-3.5 grid grid-cols-3 gap-1 border-t border-border pt-3 text-[10px] font-bold text-muted-foreground">
                   <button
                     type="button"
-                    onClick={() => handleBuyerAction(t("authRequireChat"))}
-                    className="flex flex-col items-center justify-center gap-1 rounded-md py-1.5 hover:bg-muted hover:text-foreground cursor-pointer transition-colors"
+                    onClick={handleStartChat}
+                    disabled={isStartingChat}
+                    className="flex flex-col items-center justify-center gap-1 rounded-md py-1.5 hover:bg-muted hover:text-foreground cursor-pointer transition-colors disabled:opacity-60"
                   >
-                    <MessageSquare className="h-3.5 w-3.5" />
-                    <span>{t("btnChat")}</span>
+                    {isStartingChat ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
+                    ) : (
+                      <MessageSquare className="h-3.5 w-3.5" />
+                    )}
+                    <span>{isStartingChat ? t("startingChat") : t("btnChat")}</span>
                   </button>
                   <button
                     type="button"
@@ -393,14 +410,15 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
                   </button>
                   <button
                     type="button"
-                    onClick={() => {
-                      navigator.clipboard.writeText(window.location.href);
-                      toast.success(t("linkCopied"));
-                    }}
+                    onClick={handleShare}
                     className="flex flex-col items-center justify-center gap-1 rounded-md py-1.5 hover:bg-muted hover:text-foreground cursor-pointer transition-colors"
                   >
-                    <Share2 className="h-3.5 w-3.5" />
-                    <span>{t("btnShare")}</span>
+                    {isCopied ? (
+                      <Check className="h-3.5 w-3.5 text-success" />
+                    ) : (
+                      <Share2 className="h-3.5 w-3.5" />
+                    )}
+                    <span>{isCopied ? "Tersalin" : t("btnShare")}</span>
                   </button>
                 </div>
                 
@@ -865,6 +883,24 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
               </div>
             </section>
           )}
+
+          {/* Modals */}
+          <ProductRfqModal
+            isOpen={isRfqModalOpen}
+            onClose={() => setIsRfqModalOpen(false)}
+            product={product}
+            supplier={supplier}
+            initialQuantity={quantity}
+            selectedVariantText={variants[selectedVariant] || "Standar"}
+          />
+          <ProductDirectBuyModal
+            isOpen={isDirectBuyModalOpen}
+            onClose={() => setIsDirectBuyModalOpen(false)}
+            product={product}
+            supplier={supplier}
+            quantity={quantity}
+            selectedVariantText={variants[selectedVariant] || "Standar"}
+          />
         </div>
       </main>
     </PublicLayout>

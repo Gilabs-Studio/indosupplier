@@ -9,6 +9,7 @@ import type { PublicProductDto, PublicReviewDto } from "@/features/public/search
 import { useBuyerBookmarks } from "@/features/buyer/bookmarks/hooks/useBuyerBookmarks";
 import { useBuyerCompare } from "@/features/buyer/compare/hooks/useBuyerCompare";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
+import { chatService } from "@/features/buyer/chat/services/chat.service";
 import { useProductReviews } from "./use-product-reviews";
 import { toast } from "sonner";
 
@@ -48,6 +49,10 @@ export function usePublicProductDetail({ id, detailBasePath }: UsePublicProductD
   const { isAuthenticated } = useAuthStore();
   const { bookmarks, addBookmark, deleteBookmark, isAdding, isDeleting } = useBuyerBookmarks();
   const { products: comparedProducts, addProduct, removeProduct, isAddingProduct, isRemovingProduct } = useBuyerCompare();
+  const [isRfqModalOpen, setIsRfqModalOpen] = useState(false);
+  const [isDirectBuyModalOpen, setIsDirectBuyModalOpen] = useState(false);
+  const [isStartingChat, setIsStartingChat] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
 
   const { data, isLoading } = useQuery({
     queryKey: ["public-product-detail", id],
@@ -146,9 +151,54 @@ export function usePublicProductDetail({ id, detailBasePath }: UsePublicProductD
     }
   };
 
-  const handleBuyerAction = (message: string) => {
-    if (!requireAuth(message)) return;
-    toast.success(t("actionReady"));
+  const openRfqModal = () => {
+    if (!requireAuth(t("authRequireRfq"))) return;
+    setIsRfqModalOpen(true);
+  };
+
+  const openDirectBuyModal = () => {
+    if (!requireAuth(t("authRequireBuy"))) return;
+    setIsDirectBuyModalOpen(true);
+  };
+
+  const handleStartChat = async () => {
+    if (!product || !supplier) return;
+    if (!requireAuth(t("authRequireChat"))) return;
+
+    try {
+      setIsStartingChat(true);
+      const room = await chatService.getOrCreateRoom(supplier.id);
+      router.push(`/chat?roomId=${encodeURIComponent(room.id)}`);
+    } catch {
+      toast.error("Gagal memulai obrolan dengan supplier.");
+    } finally {
+      setIsStartingChat(false);
+    }
+  };
+
+  const handleShare = async () => {
+    if (!product) return;
+    try {
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share({
+          title: product.name,
+          text: `Cek produk ${product.name} di Indosupplier`,
+          url: window.location.href,
+        });
+      } else if (typeof navigator !== "undefined" && navigator.clipboard) {
+        await navigator.clipboard.writeText(window.location.href);
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 2000);
+        toast.success(t("linkCopied"));
+      }
+    } catch (err: unknown) {
+      if ((err as Error)?.name !== "AbortError" && typeof navigator !== "undefined" && navigator.clipboard) {
+        await navigator.clipboard.writeText(window.location.href);
+        setIsCopied(true);
+        setTimeout(() => setIsCopied(false), 2000);
+        toast.success(t("linkCopied"));
+      }
+    }
   };
 
   return {
@@ -184,6 +234,15 @@ export function usePublicProductDetail({ id, detailBasePath }: UsePublicProductD
     toggleCompare,
     toggleProductBookmark,
     toggleProductCompare,
-    handleBuyerAction,
+    isRfqModalOpen,
+    setIsRfqModalOpen,
+    isDirectBuyModalOpen,
+    setIsDirectBuyModalOpen,
+    isStartingChat,
+    isCopied,
+    openRfqModal,
+    openDirectBuyModal,
+    handleStartChat,
+    handleShare,
   };
 }

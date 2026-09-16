@@ -35,4 +35,8 @@ export interface CreateRfqPayload {
   attachment_url?: string;
   attachment_name?: string;
   attachment_size?: number;
+  target_supplier_id?: string;
+  product_id?: string;
+  budget?: number;
+  delivery_timeline?: string;
 }

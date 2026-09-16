@@ -3,6 +3,7 @@
 import React from "react";
 import { Link } from "@/i18n/routing";
 import { useSupplierLayout } from "../hooks/use-supplier-layout";
+import { useSupplierNotifications } from "@/features/supplier/notifications/hooks/useSupplierNotifications";
 import {
   Loader2,
   Search,
@@ -136,6 +137,7 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
     menuGroups,
     handleLogout,
   } = useSupplierLayout();
+  const { unreadCount } = useSupplierNotifications();
 
   if (!mounted || isAuthorizing) {
     return (
@@ -215,14 +217,18 @@ export default function SupplierLayoutComponent({ children }: SupplierLayoutProp
 
                 {/* User actions / notifications */}
                 <div className="flex items-center gap-4 shrink-0">
-                  <button
-                    onClick={() => toast.info(t("notificationAlert"))}
+                  <Link
+                    href="/supplier/notifications"
                     className="relative p-2 text-muted-foreground hover:text-foreground rounded-lg hover:bg-muted/40 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
                     aria-label="Notifications"
                   >
                     <Bell className="h-4.5 w-4.5" />
-                    <span className="absolute top-1.5 right-1.5 flex h-1.5 w-1.5 rounded-full bg-destructive" />
-                  </button>
+                    {unreadCount > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[9px] font-black text-destructive-foreground">
+                        {unreadCount > 9 ? "9+" : unreadCount}
+                      </span>
+                    )}
+                  </Link>
 
                   <div className="h-6 w-px bg-border/80" />
 
