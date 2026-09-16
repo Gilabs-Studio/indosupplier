@@ -146,6 +146,17 @@ export function resolveImageUrl(
   ) {
     return url;
   }
+  // If it's a local public asset in the Next.js web application
+  if (
+    url.startsWith("/images/") ||
+    url.startsWith("/icons/") ||
+    url.startsWith("/logo") ||
+    url.startsWith("/placeholder") ||
+    url.startsWith("/avatars/") ||
+    url.startsWith("/screenshots/")
+  ) {
+    return url;
+  }
   // Try to use NEXT_PUBLIC_API_URL, fallback to localhost:8088
   // Note: This needs to match the backend's static file serving URL
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8088";
@@ -155,8 +166,6 @@ export function resolveImageUrl(
 
   // If the path already has "uploads/" prefix and API serves from root, good.
   // Assuming API serves static files typically under /uploads or similar route.
-  // The user paths were like apps/api/uploads/..., so likely just appending to base is correct if backend routes it.
-  // If backend is Go Fiber/Echo/Gin usually Static("/uploads", "./uploads")
   return `${baseUrl}/${cleanPath}`;
 }
 

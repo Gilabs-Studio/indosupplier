@@ -88,74 +88,25 @@ export const demoService = {
     ];
   },
 
-  // Popular Categories mock data (8 items with 1-object realistic images)
+  // Popular Categories from live API
   async getPopularCategories(): Promise<DemoCategoryItem[]> {
-    return [
-      {
-        id: "cat-1",
-        slug: "elektronik",
-        nameId: "Elektronik & IT",
-        nameEn: "Electronics & IT",
-        image: "/images/categories/cat-elektronik.webp",
-        href: "/demo/search?category=elektronik",
-      },
-      {
-        id: "cat-2",
-        slug: "bahan-baku",
-        nameId: "Bahan Baku",
-        nameEn: "Raw Materials",
-        image: "/images/categories/cat-bahan-baku.webp",
-        href: "/demo/search?category=bahan-baku",
-      },
-      {
-        id: "cat-3",
-        slug: "kantor-atk",
-        nameId: "Kantor & ATK",
-        nameEn: "Office & Stationery",
-        image: "/images/categories/cat-kantor-atk.webp",
-        href: "/demo/search?category=kantor-atk",
-      },
-      {
-        id: "cat-4",
-        slug: "kebersihan-k3",
-        nameId: "Kebersihan & K3",
-        nameEn: "Safety & Cleaning",
-        image: "/images/categories/cat-kebersihan-k3.webp",
-        href: "/demo/search?category=kebersihan-k3",
-      },
-      {
-        id: "cat-5",
-        slug: "makanan-minuman",
-        nameId: "Makanan & Minuman",
-        nameEn: "Food & Beverage",
-        image: "/images/categories/cat-makanan-minuman.webp",
-        href: "/demo/search?category=makanan-minuman",
-      },
-      {
-        id: "cat-6",
-        slug: "packaging",
-        nameId: "Packaging",
-        nameEn: "Packaging",
-        image: "/images/categories/cat-packaging.webp",
-        href: "/demo/search?category=packaging",
-      },
-      {
-        id: "cat-7",
-        slug: "mesin-industrial",
-        nameId: "Mesin & Industrial",
-        nameEn: "Machinery & Industrial",
-        image: "/images/categories/cat-mesin-industrial.webp",
-        href: "/demo/search?category=mesin-industrial",
-      },
-      {
-        id: "cat-8",
-        slug: "furniture",
-        nameId: "Furniture",
-        nameEn: "Furniture",
-        image: "/images/categories/cat-furniture.webp",
-        href: "/demo/search?category=furniture",
-      },
-    ];
+    try {
+      const response = await apiClient.get<{ data: Array<{ id: string; slug: string; name: string; description?: string }> }>("/categories");
+      const cats = response.data?.data || [];
+      if (cats.length > 0) {
+        return cats.map((cat) => ({
+          id: cat.id,
+          slug: cat.slug,
+          nameId: cat.name,
+          nameEn: cat.name,
+          image: `/images/categories/cat-${cat.slug}.webp`,
+          href: `/demo/search?category=${cat.slug}`,
+        }));
+      }
+    } catch (err) {
+      console.warn("Failed to fetch live categories:", err);
+    }
+    return [];
   },
 
   // Live Product Discovery API call with rich filtering
@@ -177,7 +128,7 @@ export const demoService = {
         },
       });
 
-      if (response.data?.data && Array.isArray(response.data.data) && response.data.data.length > 0) {
+      if (response.data?.data && Array.isArray(response.data.data)) {
         return response.data.data.map((item) => {
           const sanitizedPhotos = (item.photos || []).filter(
             (p) => p && !p.includes("unsplash.com")
@@ -188,172 +139,10 @@ export const demoService = {
           };
         });
       }
+      return [];
     } catch (err) {
-      console.warn("API product discovery fallback:", err);
+      console.warn("API product discovery error:", err);
+      return [];
     }
-
-    // Default fallback matching reference screenshot
-    return [
-      {
-        id: "prod-hvs-01",
-        name: "Kertas HVS A4 80gsm (1 Karton / 5 Rim)",
-        price: 215000,
-        currency: "IDR",
-        unit: "karton",
-        minOrder: "10 karton",
-        categoryName: "Kantor & ATK",
-        categorySlug: "kantor-atk",
-        photos: ["/images/products/prod-hvs.webp"],
-        supplierId: "supp-01",
-        supplierCompanyName: "PT Maju Abadi Supply",
-        supplierSlug: "pt-maju-abadi-supply",
-        supplierLocation: "Jakarta Barat",
-        supplierVerified: true,
-        isPowerSupplier: true,
-        supplierRating: 4.9,
-        supplierReviewCount: 12400,
-        tags: ["Ready Stock", "Pengiriman Cepat"],
-      },
-      {
-        id: "prod-masker-02",
-        name: "Masker Medis 3 Ply (1 Box / 50 pcs)",
-        price: 28500,
-        currency: "IDR",
-        unit: "box",
-        minOrder: "20 box",
-        categoryName: "Kebersihan & K3",
-        categorySlug: "kebersihan-k3",
-        photos: ["/images/products/prod-masker.webp"],
-        supplierId: "supp-02",
-        supplierCompanyName: "IndoTech Official",
-        supplierSlug: "indotech-official",
-        supplierLocation: "Kota Tangerang",
-        supplierVerified: true,
-        isPowerSupplier: true,
-        supplierRating: 4.8,
-        supplierReviewCount: 9200,
-        tags: ["Ready Stock"],
-      },
-      {
-        id: "prod-laptop-03",
-        name: "Laptop Business i5 8GB / 512GB SSD",
-        price: 8950000,
-        currency: "IDR",
-        unit: "unit",
-        minOrder: "5 unit",
-        categoryName: "Elektronik & IT",
-        categorySlug: "elektronik",
-        photos: ["/images/products/prod-laptop.webp"],
-        supplierId: "supp-03",
-        supplierCompanyName: "Techno Indo",
-        supplierSlug: "techno-indo",
-        supplierLocation: "Jakarta Pusat",
-        supplierVerified: true,
-        isPowerSupplier: false,
-        supplierRating: 4.9,
-        supplierReviewCount: 6100,
-        tags: ["Ready Stock", "Garansi Resmi"],
-      },
-      {
-        id: "prod-helmet-04",
-        name: "Safety Helmet SNI",
-        price: 42000,
-        currency: "IDR",
-        unit: "unit",
-        minOrder: "50 unit",
-        categoryName: "Kebersihan & K3",
-        categorySlug: "kebersihan-k3",
-        photos: ["/images/products/prod-helmet.webp"],
-        supplierId: "supp-04",
-        supplierCompanyName: "Sumber Makmur Jaya",
-        supplierSlug: "sumber-makmur-jaya",
-        supplierLocation: "Surabaya",
-        supplierVerified: true,
-        isPowerSupplier: false,
-        supplierRating: 4.9,
-        supplierReviewCount: 8700,
-        tags: ["Ready Stock", "Harga Grosir"],
-      },
-      {
-        id: "prod-pump-05",
-        name: "Pompa Air Sentrifugal Industri 3HP",
-        price: 4850000,
-        currency: "IDR",
-        unit: "unit",
-        minOrder: "2 unit",
-        categoryName: "Mesin & Industrial",
-        categorySlug: "mesin-industrial",
-        photos: ["/images/products/prod-water-pump.webp"],
-        supplierId: "supp-05",
-        supplierCompanyName: "CV Mesin Karya",
-        supplierSlug: "cv-mesin-karya",
-        supplierLocation: "Kota Bandung",
-        supplierVerified: true,
-        isPowerSupplier: true,
-        supplierRating: 4.7,
-        supplierReviewCount: 1540,
-        tags: ["Ready Stock", "Garansi Resmi"],
-      },
-      {
-        id: "prod-chair-06",
-        name: "Kursi Kantor Ergonomis Mesh Headrest",
-        price: 1250000,
-        currency: "IDR",
-        unit: "unit",
-        minOrder: "5 unit",
-        categoryName: "Furniture",
-        categorySlug: "furniture",
-        photos: ["/images/products/prod-office-chair.webp"],
-        supplierId: "supp-06",
-        supplierCompanyName: "PT Karya Furnitur Modern",
-        supplierSlug: "pt-karya-furnitur-modern",
-        supplierLocation: "Kab. Jepara",
-        supplierVerified: true,
-        isPowerSupplier: true,
-        supplierRating: 4.9,
-        supplierReviewCount: 3820,
-        tags: ["Ready Stock", "Pengiriman Cepat"],
-      },
-      {
-        id: "prod-box-07",
-        name: "Karton Box Double Wall 40x30x30cm (25 pcs)",
-        price: 350000,
-        currency: "IDR",
-        unit: "bundle",
-        minOrder: "10 bundle",
-        categoryName: "Packaging",
-        categorySlug: "packaging",
-        photos: ["/images/products/prod-carton-boxes.webp"],
-        supplierId: "supp-07",
-        supplierCompanyName: "CV Prima Packaging",
-        supplierSlug: "cv-prima-packaging",
-        supplierLocation: "Kota Bekasi",
-        supplierVerified: true,
-        isPowerSupplier: false,
-        supplierRating: 4.8,
-        supplierReviewCount: 4200,
-        tags: ["Ready Stock", "Harga Grosir"],
-      },
-      {
-        id: "prod-mineral-08",
-        name: "Sodium Bentonite Clay Powder 25kg",
-        price: 4500000,
-        currency: "IDR",
-        unit: "ton",
-        minOrder: "10 ton",
-        categoryName: "Bahan Baku",
-        categorySlug: "bahan-baku",
-        photos: ["/images/products/prod-mineral-powder.webp"],
-        supplierId: "supp-08",
-        supplierCompanyName: "PT Kimia Cemerlang",
-        supplierSlug: "pt-kimia-cemerlang",
-        supplierLocation: "Cilegon",
-        supplierVerified: true,
-        isPowerSupplier: true,
-        supplierRating: 4.9,
-        supplierReviewCount: 2190,
-        tags: ["Ready Stock", "Kualitas Ekspor"],
-      },
-    ];
   },
 };

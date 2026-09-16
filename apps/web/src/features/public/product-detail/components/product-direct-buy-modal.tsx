@@ -43,6 +43,7 @@ export function ProductDirectBuyModal({
   const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   const subtotal = product.price * quantity;
 
@@ -92,10 +93,11 @@ export function ProductDirectBuyModal({
         <div className="mt-3 rounded-lg border border-border bg-muted/20 p-3.5 space-y-3">
           <div className="flex items-center gap-3">
             <div className="h-12 w-12 shrink-0 overflow-hidden rounded-md border border-border bg-card flex items-center justify-center">
-              {product.photos && product.photos.length > 0 ? (
+              {product.photos && product.photos.length > 0 && !imageError ? (
                 <img
                   src={resolveImageUrl(product.photos[0])}
-                  alt={product.name}
+                  alt=""
+                  onError={() => setImageError(true)}
                   className="h-full w-full object-cover"
                 />
               ) : (

@@ -113,6 +113,10 @@ var ErrorCodeMap = map[string]ErrorInfo{
 		HTTPStatus: http.StatusNotFound,
 		Message:    "Bid proposal not found",
 	},
+	"RFQ_ALREADY_CLOSED": {
+		HTTPStatus: http.StatusBadRequest,
+		Message:    "RFQ is already closed",
+	},
 	"BOOKMARK_NOT_FOUND": {
 		HTTPStatus: http.StatusNotFound,
 		Message:    "Bookmark not found",

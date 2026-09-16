@@ -214,11 +214,6 @@ export function SupplierPublicProfileView({
     const originalPrice = hasDiscount
       ? Math.round((product.price || 0) * (100 / (100 - discountPercentage)))
       : 0;
-    const mockSoldCount =
-      product.id.charCodeAt(2) % 2 === 0
-        ? `${(product.id.charCodeAt(3) % 9) + 1}rb+ terjual`
-        : `${(product.id.charCodeAt(3) % 80) + 10}+ terjual`;
-
     const isCompared = isProductCompared?.(product.id) ?? false;
 
     return (
@@ -233,7 +228,6 @@ export function SupplierPublicProfileView({
         discountPercentage={discountPercentage || undefined}
         originalPrice={originalPrice || undefined}
         rating={product.supplierRating || supplier.rating}
-        soldCountText={mockSoldCount}
         categoryName={product.categoryName || undefined}
         minOrder={product.minOrder || undefined}
         moqLabel={tSup("moqLabel")}

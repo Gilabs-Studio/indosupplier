@@ -68,7 +68,7 @@ func (r *rfqRepository) FindByID(ctx context.Context, id string) (*models.RFQ, *
 	var replies int64
 	r.db.WithContext(ctx).
 		Model(&models.RFQRecipient{}).
-		Where("rfq_id = ? AND (status = ? OR status = ?)", rfq.ID, "responded", "processing").
+		Where("rfq_id = ? AND status IN ?", rfq.ID, []string{"responded", "processing", "accepted"}).
 		Count(&replies)
 
 	return &rfq, attachPtr, int(replies), nil
@@ -80,19 +80,17 @@ func (r *rfqRepository) List(ctx context.Context, buyerProfileID string, status 
 
 	q := r.db.WithContext(ctx).Model(&models.RFQ{}).Where("buyer_profile_id = ?", buyerProfileID)
 
-	// In transaction_usecase list, completed status gets filtered.
-	// RFQ status is calculated dynamically.
+	// Filter based on tab status
 	// Waiting: ClosedAt IS NULL, replies count = 0
-	// Received (Offers Received): ClosedAt IS NULL, replies count > 0
+	// Received (Offers Received): RFQs that have replies/proposals from suppliers
 	// Completed: ClosedAt IS NOT NULL
 	if status == "waiting" {
 		// Filter RFQs with no replies yet
 		q = q.Where("closed_at IS NULL").
-			Where("id NOT IN (?)", r.db.Model(&models.RFQRecipient{}).Select("rfq_id").Where("status = ?", "responded"))
+			Where("id NOT IN (?)", r.db.Model(&models.RFQRecipient{}).Select("rfq_id").Where("status IN ?", []string{"responded", "processing", "accepted"}))
 	} else if status == "received" {
-		// Filter RFQs that have replies
-		q = q.Where("closed_at IS NULL").
-			Where("id IN (?)", r.db.Model(&models.RFQRecipient{}).Select("rfq_id").Where("status = ?", "responded"))
+		// Filter RFQs that have received offers/proposals
+		q = q.Where("id IN (?)", r.db.Model(&models.RFQRecipient{}).Select("rfq_id").Where("status IN ?", []string{"responded", "processing", "accepted"}))
 	} else if status == "completed" {
 		q = q.Where("closed_at IS NOT NULL")
 	}
@@ -112,7 +110,7 @@ func (r *rfqRepository) List(ctx context.Context, buyerProfileID string, status 
 		var replies int64
 		r.db.WithContext(ctx).
 			Model(&models.RFQRecipient{}).
-			Where("rfq_id = ? AND (status = ? OR status = ?)", rfq.ID, "responded", "processing").
+			Where("rfq_id = ? AND status IN ?", rfq.ID, []string{"responded", "processing", "accepted"}).
 			Count(&replies)
 		repliesCounts[i] = int(replies)
 	}
@@ -122,9 +120,9 @@ func (r *rfqRepository) List(ctx context.Context, buyerProfileID string, status 
 
 func (r *rfqRepository) GetBids(ctx context.Context, rfqID string) ([]models.RFQRecipient, error) {
 	var recipients []models.RFQRecipient
-	// Only return recipients that responded or prepared a quote
+	// Return recipients that responded, are processing, or have been accepted
 	err := r.db.WithContext(ctx).
-		Where("rfq_id = ? AND (status = ? OR status = ?)", rfqID, "responded", "processing").
+		Where("rfq_id = ? AND status IN ?", rfqID, []string{"responded", "processing", "accepted"}).
 		Find(&recipients).Error
 	return recipients, err
 }

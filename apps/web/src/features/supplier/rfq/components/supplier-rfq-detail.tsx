@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { NumericInput } from "@/components/ui/numeric-input";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldLabel, FieldGroup } from "@/components/ui/field";
 import { ArrowLeft, Send, ShieldCheck, Calendar, MapPin, DollarSign, Scale, CheckCircle2, Clock } from "lucide-react";
@@ -22,6 +23,7 @@ export function SupplierRfqDetail({ id }: SupplierRfqDetailProps) {
   const { data: rfq, isLoading } = useSupplierRfqDetail(id);
   const { mutate: submitProposal, isPending: isSubmitting } = useSubmitSupplierRfqProposal(id);
 
+  const [priceValue, setPriceValue] = useState<number | undefined>(undefined);
   const [form, setForm] = useState({
     price: "",
     moq: "",
@@ -29,9 +31,13 @@ export function SupplierRfqDetail({ id }: SupplierRfqDetailProps) {
     notes: "",
   });
 
+  const unit = rfq?.quantity ? rfq.quantity.split(" ").slice(1).join(" ") : "";
+  const unitSuffix = unit ? ` / ${unit}` : "";
+
   const handleSubmitProposal = (e: React.FormEvent) => {
     e.preventDefault();
-    submitProposal(form);
+    const finalPrice = priceValue ? `Rp ${priceValue.toLocaleString("id-ID")}${unitSuffix}` : form.price;
+    submitProposal({ ...form, price: finalPrice });
   };
 
   if (isLoading || !rfq) {
@@ -206,10 +212,13 @@ export function SupplierRfqDetail({ id }: SupplierRfqDetailProps) {
                   <FieldGroup className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <Field>
                       <FieldLabel>{t("formPrice")}</FieldLabel>
-                      <Input
-                        placeholder="e.g. Rp 3.200.000 / Ton"
-                        value={form.price}
-                        onChange={(e) => setForm({ ...form, price: e.target.value })}
+                      <NumericInput
+                        placeholder="Contoh: 12.000.000"
+                        value={priceValue}
+                        onChange={(val) => {
+                          setPriceValue(val);
+                          setForm({ ...form, price: val ? `Rp ${val.toLocaleString("id-ID")}${unitSuffix}` : "" });
+                        }}
                         required
                       />
                     </Field>

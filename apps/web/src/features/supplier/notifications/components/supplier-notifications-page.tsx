@@ -5,8 +5,9 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Bell, CreditCard, Inbox, Check, Loader2 } from "lucide-react";
+import { Bell, CreditCard, Inbox, Check, Loader2, MessageSquare, ArrowRight } from "lucide-react";
 import { useSupplierNotifications } from "../hooks/useSupplierNotifications";
+import type { SupplierNotification } from "../types/notifications.types";
 
 export function SupplierNotificationsPage() {
   const t = useTranslations("supplier.notifications");
@@ -37,8 +38,12 @@ export function SupplierNotificationsPage() {
     }
   };
 
-  const handleItemClick = (n: { id: string; type: string }) => {
-    if (n.type === "quote") {
+  const handleItemClick = (n: SupplierNotification) => {
+    if (n.related_type === "chat" && n.related_id) {
+      router.push(`/chat?roomId=${n.related_id}`);
+    } else if (n.related_id) {
+      router.push(`/supplier/rfq/${n.related_id}`);
+    } else if (n.type === "quote") {
       router.push("/supplier/rfq");
     }
   };
@@ -109,21 +114,48 @@ export function SupplierNotificationsPage() {
               </div>
 
               {/* Text contents */}
-              <div className="space-y-1 flex-1">
+              <div className="space-y-2 flex-1">
                 <div className="flex items-center justify-between gap-2">
-                  <h4 className="text-sm font-bold text-foreground">
-                    {n.title}
-                  </h4>
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-sm font-bold text-foreground">
+                      {n.title}
+                    </h4>
+                    {n.unread && (
+                      <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-destructive/10 text-destructive border border-destructive/20">
+                        Baru
+                      </span>
+                    )}
+                  </div>
                   <span className="text-[10px] text-muted-foreground font-semibold shrink-0">{n.date}</span>
                 </div>
-                <p className="text-xs text-muted-foreground leading-relaxed font-semibold">
+                <p className="text-xs text-muted-foreground leading-relaxed">
                   {n.desc}
                 </p>
+
+                {/* Quick Action Button */}
+                {(n.related_id || n.type === "quote") && (
+                  <div className="pt-1 flex items-center gap-2">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 cursor-pointer">
+                      {n.related_type === "chat" ? (
+                        <>
+                          <MessageSquare className="h-3.5 w-3.5" />
+                          Buka Sesi Chat
+                        </>
+                      ) : (
+                        <>
+                          <Inbox className="h-3.5 w-3.5" />
+                          Buka Detail & Ajukan Penawaran
+                        </>
+                      )}
+                      <ArrowRight className="h-3 w-3" />
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Unread indicator */}
               {n.unread && (
-                <div className="h-2 w-2 rounded-full bg-primary shrink-0 self-center" />
+                <div className="h-2.5 w-2.5 rounded-full bg-destructive shrink-0 self-center" />
               )}
             </Card>
           ))

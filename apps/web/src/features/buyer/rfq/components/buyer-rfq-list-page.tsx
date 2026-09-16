@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
 import { CenteredLoading } from "@/components/loading";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import { cn, resolveImageUrl } from "@/lib/utils";
 import {
   Plus,
   Search,
@@ -17,6 +17,8 @@ import {
   FileText,
   Calendar,
   MessageSquare,
+  Package,
+  MapPin,
 } from "lucide-react";
 import { useBuyerRfqs } from "../hooks/useBuyerRfqs";
 
@@ -32,11 +34,22 @@ export function BuyerRfqListPage() {
     status: activeTab,
   });
 
+  // Dedicated query to keep the received offers count accurate and persistent across all tabs
+  const { data: receivedCountData } = useBuyerRfqs({
+    status: "received",
+    per_page: 1,
+  });
+
+  const rfqs = rfqData?.items || [];
+
+  // Count active offers for notification badge from server total, falling back to current list
+  const offersCount = receivedCountData?.total ?? rfqs.filter((r) => r.status === "Offers Received" || r.replies > 0).length;
+
   const tabs = [
-    { id: "all", name: t("tabAll") },
-    { id: "waiting", name: t("tabWaiting") },
-    { id: "received", name: t("tabReceived") },
-    { id: "completed", name: t("tabCompleted") },
+    { id: "all", name: t("tabAll"), count: 0 },
+    { id: "waiting", name: t("tabWaiting"), count: 0 },
+    { id: "received", name: t("tabReceived"), count: offersCount },
+    { id: "completed", name: t("tabCompleted"), count: 0 },
   ];
 
   if (isLoading) {
@@ -47,12 +60,20 @@ export function BuyerRfqListPage() {
     );
   }
 
-  const rfqs = rfqData?.items || [];
   const filteredRfqs = rfqs.filter((rfq) =>
     rfq.product.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    rfq.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    rfq.category.toLowerCase().includes(searchQuery.toLowerCase())
+    rfq.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    rfq.targetPort.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Sort priority: RFQs with offers received come first, then by date
+  const sortedRfqs = [...filteredRfqs].sort((a, b) => {
+    const aHasOffer = a.status === "Offers Received" || a.replies > 0;
+    const bHasOffer = b.status === "Offers Received" || b.replies > 0;
+    if (aHasOffer && !bHasOffer) return -1;
+    if (!aHasOffer && bHasOffer) return 1;
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
 
   return (
     <BuyerLayout>
@@ -72,8 +93,8 @@ export function BuyerRfqListPage() {
         </div>
 
         {/* Tabs & Search */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-border pb-1">
-          <div className="flex flex-wrap gap-1.5 overflow-x-auto scrollbar-none">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-border">
+          <div className="flex items-center gap-1 overflow-x-auto scrollbar-none">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -82,25 +103,30 @@ export function BuyerRfqListPage() {
                   setPage(1);
                 }}
                 className={cn(
-                  "px-4 py-2 text-sm font-medium transition-all duration-200 whitespace-nowrap cursor-pointer hover:text-primary hover:-translate-y-0.5 active:translate-y-0",
+                  "relative pb-3 px-3 text-sm font-medium transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2",
                   activeTab === tab.id
-                    ? "text-primary font-semibold border-b-2 border-primary -mb-[5px]"
-                    : "text-muted-foreground"
+                    ? "text-primary font-semibold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                {tab.name}
+                <span>{tab.name}</span>
+                {tab.count > 0 && (
+                  <span className="inline-flex items-center justify-center h-4.5 min-w-4.5 px-1 rounded-full text-[11px] font-semibold bg-destructive/15 text-destructive leading-none shrink-0">
+                    {tab.count}
+                  </span>
+                )}
               </button>
             ))}
           </div>
 
-          <div className="relative max-w-xs w-full">
-            <Search className="absolute left-3 top-3 h-4.5 w-4.5 text-muted-foreground" />
+          <div className="relative max-w-xs w-full pb-2 md:pb-0">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
               placeholder={t("searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 pr-4 py-1.5 bg-card border border-border text-sm rounded-lg outline-hidden focus-visible:ring-primary focus-visible:border-primary transition-all cursor-pointer h-9"
+              className="pl-9 pr-4 py-1 bg-card border border-border text-sm rounded-lg outline-hidden focus-visible:ring-primary focus-visible:border-primary transition-all h-8.5"
             />
           </div>
         </div>
@@ -108,7 +134,7 @@ export function BuyerRfqListPage() {
         {/* RFQ List Table */}
         <Card className="border border-border rounded-xl shadow-xs overflow-hidden bg-card">
           <CardContent className="p-0">
-            {filteredRfqs.length === 0 ? (
+            {sortedRfqs.length === 0 ? (
               <div className="text-center py-16">
                 <FileText className="mx-auto h-12 w-12 text-muted-foreground opacity-40" />
                 <h3 className="mt-4 text-sm font-semibold text-foreground">{t("emptyRfqs")}</h3>
@@ -119,65 +145,103 @@ export function BuyerRfqListPage() {
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm text-foreground">
-                  <thead className="bg-muted/30 border-b border-border text-muted-foreground text-xs font-bold uppercase tracking-wider">
+                  <thead className="border-b border-border text-muted-foreground text-[11px] font-medium uppercase tracking-wider">
                     <tr>
-                      <th className="p-4 px-6">{t("colId")}</th>
-                      <th className="p-4">{t("colProduct")}</th>
-                      <th className="p-4">{t("colQty")}</th>
-                      <th className="p-4">{t("colDestination")}</th>
-                      <th className="p-4">{t("colStatus")}</th>
-                      <th className="p-4 text-right px-6">{t("colAction")}</th>
+                      <th className="py-3 px-6">{t("colProduct")}</th>
+                      <th className="py-3 px-4">{t("colQty")}</th>
+                      <th className="py-3 px-4">{t("colDestination")}</th>
+                      <th className="py-3 px-4">{t("colStatus")}</th>
+                      <th className="py-3 px-6 text-right">{t("colAction")}</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-border">
-                    {filteredRfqs.map((rfq) => (
-                      <tr key={rfq.id} className="hover:bg-muted/10 transition-colors">
-                        <td className="p-4 px-6 space-y-0.5">
-                          <span className="text-xs font-bold text-muted-foreground">{rfq.id}</span>
-                          <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
-                            <Calendar className="h-3 w-3" />
-                            <span>{rfq.date}</span>
-                          </div>
-                        </td>
-                        <td className="p-4 font-semibold text-foreground">
-                          <Link href={`/rfq/${rfq.id}`} className="hover:text-primary transition-colors cursor-pointer">
-                            {rfq.product}
-                          </Link>
-                          <p className="text-[11px] font-normal text-muted-foreground mt-0.5">{rfq.category}</p>
-                        </td>
-                        <td className="p-4 font-semibold text-foreground">{rfq.quantity}</td>
-                        <td className="p-4 text-xs text-muted-foreground">{rfq.targetPort}</td>
-                        <td className="p-4">
-                          <Badge
-                            variant="outline"
-                            className={
-                              rfq.status === "Waiting for Quotes"
-                                ? "bg-cyan/10 text-cyan border-cyan/20 rounded-full text-[10px]"
-                                : rfq.status === "Offers Received"
-                                ? "bg-success/10 text-success border-success/25 rounded-full text-[10px]"
-                                : "bg-muted text-muted-foreground border-border rounded-full text-[10px]"
-                            }
-                          >
-                            {rfq.status}
-                          </Badge>
-                        </td>
-                        <td className="p-4 px-6 text-right">
-                          <Button asChild variant="ghost" size="sm" className="text-primary hover:bg-primary/5 cursor-pointer font-semibold gap-1 transition-all">
-                            <Link href={`/rfq/${rfq.id}`}>
-                              {rfq.status === "Offers Received" ? (
-                                <span className="flex items-center gap-1">
-                                  <MessageSquare className="h-3.5 w-3.5" /> {t("viewReplies", { count: rfq.replies })}
-                                </span>
-                              ) : (
-                                t("viewDetail")
-                              )}
-                              <ChevronRight className="h-4 w-4" />
-                            </Link>
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
+                  <tbody className="divide-y divide-border/60">
+                    {sortedRfqs.map((rfq) => {
+                      const hasOffer = rfq.status === "Offers Received" || rfq.replies > 0;
+                      const defaultThumbnail = "/images/categories/cat-bahan-baku.webp";
+                      const imageSrc = resolveImageUrl(rfq.imageUrl || defaultThumbnail);
+
+                      return (
+                        <tr
+                          key={rfq.id}
+                          className="hover:bg-muted/20 border-b border-border/60 transition-colors"
+                        >
+                          <td className="py-3.5 px-6">
+                            <div className="flex items-center gap-3">
+                              <div className="h-11 w-11 shrink-0 rounded-lg overflow-hidden border border-border/80 bg-muted/20">
+                                <img
+                                  src={imageSrc}
+                                  alt={rfq.product}
+                                  className="h-full w-full object-cover"
+                                  onError={(e) => {
+                                    e.currentTarget.src = defaultThumbnail;
+                                  }}
+                                />
+                              </div>
+                              <div className="min-w-0 max-w-md space-y-0.5">
+                                <Link
+                                  href={`/rfq/${rfq.id}`}
+                                  className="font-medium text-sm text-foreground hover:text-primary transition-colors cursor-pointer line-clamp-1"
+                                >
+                                  {rfq.product}
+                                </Link>
+                                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                  <span>{rfq.category}</span>
+                                  <span>•</span>
+                                  <span>{rfq.date}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-3.5 px-4 text-sm text-foreground whitespace-nowrap">
+                            {rfq.quantity}
+                          </td>
+                          <td className="py-3.5 px-4 text-xs text-muted-foreground max-w-xs truncate">
+                            {rfq.targetPort}
+                          </td>
+                          <td className="py-3.5 px-4 whitespace-nowrap">
+                            {hasOffer ? (
+                              <div className="flex items-center gap-1.5 text-xs font-medium text-foreground">
+                                <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                                <span>Ada Penawaran</span>
+                              </div>
+                            ) : rfq.status === "Waiting for Quotes" ? (
+                              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30 shrink-0" />
+                                <span>Menunggu</span>
+                              </div>
+                            ) : (
+                              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
+                                <span>{rfq.status}</span>
+                              </div>
+                            )}
+                          </td>
+                          <td className="py-3.5 px-6 text-right whitespace-nowrap">
+                            {hasOffer ? (
+                              <Link
+                                href={`/rfq/${rfq.id}`}
+                                className="inline-flex items-center justify-end gap-1.5 text-foreground hover:text-primary transition-colors cursor-pointer py-1 px-2 rounded-md hover:bg-muted/40 group"
+                                title={`${rfq.replies || 1} Penawaran Masuk`}
+                              >
+                                <MessageSquare className="h-4 w-4 text-primary shrink-0 group-hover:scale-110 transition-transform" />
+                                <span className="text-xs font-semibold">{rfq.replies || 1}</span>
+                                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/60 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                              </Link>
+                            ) : (
+                              <Link
+                                href={`/rfq/${rfq.id}`}
+                                className="inline-flex items-center justify-end gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer py-1 px-2 rounded-md hover:bg-muted/40"
+                              >
+                                <span>{t("viewDetail")}</span>
+                                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/60" />
+                              </Link>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
+
                 </table>
               </div>
             )}

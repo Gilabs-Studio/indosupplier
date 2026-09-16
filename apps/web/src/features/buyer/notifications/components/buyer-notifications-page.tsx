@@ -6,7 +6,8 @@ import { BuyerLayout } from "../../components/buyer-layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CenteredLoading } from "@/components/loading";
-import { Bell, Mail, RefreshCw, AlertCircle } from "lucide-react";
+import { Link } from "@/i18n/routing";
+import { Bell, Mail, RefreshCw, AlertCircle, MessageSquare, ArrowRight } from "lucide-react";
 import { useBuyerNotifications } from "../hooks/useBuyerNotifications";
 
 export function BuyerNotificationsPage() {
@@ -87,6 +88,14 @@ export function BuyerNotificationsPage() {
               <div className="divide-y divide-border">
                 {notifications.map((notif) => {
                   const IconComponent = getIcon(notif.type);
+                  const isRfq = notif.related_type === "rfq" || notif.type === "quote";
+                  const isChat = notif.related_type === "chat" || notif.type === "message";
+                  const targetHref = isChat && notif.related_id
+                    ? `/chat?roomId=${notif.related_id}`
+                    : notif.related_id
+                    ? `/rfq/${notif.related_id}`
+                    : "/rfq";
+
                   return (
                     <div
                       key={notif.id}
@@ -97,15 +106,40 @@ export function BuyerNotificationsPage() {
                       <div className={`p-2.5 rounded-lg h-fit ${getColorClass(notif.type)} shrink-0`}>
                         <IconComponent className="h-5 w-5" />
                       </div>
-                      <div className="flex-1 space-y-1">
+                      <div className="flex-1 space-y-2">
                         <div className="flex items-center justify-between gap-4">
-                          <h4 className="text-sm font-bold text-foreground leading-none">{notif.title}</h4>
+                          <div className="flex items-center gap-2">
+                            <h4 className="text-sm font-bold text-foreground leading-none">{notif.title}</h4>
+                            {notif.unread && (
+                              <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-destructive/10 text-destructive border border-destructive/20">
+                                Baru
+                              </span>
+                            )}
+                          </div>
                           <span className="text-[10px] text-muted-foreground shrink-0">{notif.date}</span>
                         </div>
                         <p className="text-xs text-muted-foreground leading-relaxed">{notif.desc}</p>
+
+                        {/* Action Link & Conversation detail button */}
+                        {(notif.related_id || isRfq || isChat) && (
+                          <div className="pt-1.5 flex items-center gap-2">
+                            <Link
+                              href={targetHref}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200 cursor-pointer"
+                            >
+                              <MessageSquare className="h-3.5 w-3.5" />
+                              {isChat
+                                ? "Buka Sesi Chat"
+                                : isRfq
+                                ? "Lihat Penawaran & Chat"
+                                : "Buka Detail"}
+                              <ArrowRight className="h-3 w-3" />
+                            </Link>
+                          </div>
+                        )}
                       </div>
                       {notif.unread && (
-                        <div className="h-2.5 w-2.5 rounded-full bg-primary shrink-0 self-center" />
+                        <div className="h-2.5 w-2.5 rounded-full bg-destructive shrink-0 self-center" />
                       )}
                     </div>
                   );

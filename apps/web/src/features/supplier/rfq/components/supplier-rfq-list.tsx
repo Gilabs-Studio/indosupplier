@@ -7,8 +7,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { FileText, Search, ArrowUpRight, Calendar, MapPin } from "lucide-react";
+import { FileText, Search, ArrowUpRight, Calendar, MapPin, Package } from "lucide-react";
 import { CenteredLoading } from "@/components/loading";
+import { resolveImageUrl } from "@/lib/utils";
 import { useSupplierRfqs } from "../hooks/useSupplierRfqs";
 
 export function SupplierRfqList() {
@@ -19,7 +20,8 @@ export function SupplierRfqList() {
 
   const filtered = rfqs.filter(r =>
     r.product.toLowerCase().includes(search.toLowerCase()) ||
-    r.id.toLowerCase().includes(search.toLowerCase())
+    r.category.toLowerCase().includes(search.toLowerCase()) ||
+    r.port.toLowerCase().includes(search.toLowerCase())
   );
 
   if (isLoading) {
@@ -60,59 +62,84 @@ export function SupplierRfqList() {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="border-b border-border bg-muted/10">
-                  <TableHead className="font-bold text-foreground py-3 px-6">{t("tableId")}</TableHead>
-                  <TableHead className="font-bold text-foreground">{t("tableProduct")}</TableHead>
-                  <TableHead className="font-bold text-foreground">{t("tableQty")}</TableHead>
-                  <TableHead className="font-bold text-foreground">{t("tablePort")}</TableHead>
-                  <TableHead className="font-bold text-foreground">{t("tableDate")}</TableHead>
-                  <TableHead className="font-bold text-foreground">Status</TableHead>
-                  <TableHead className="font-bold text-foreground text-right px-6">Actions</TableHead>
+                <TableRow className="border-b border-border text-muted-foreground text-[11px] font-medium uppercase tracking-wider">
+                  <TableHead className="py-3 px-6">{t("tableProduct")}</TableHead>
+                  <TableHead className="py-3 px-4">{t("tableQty")}</TableHead>
+                  <TableHead className="py-3 px-4">{t("tablePort")}</TableHead>
+                  <TableHead className="py-3 px-4">Status</TableHead>
+                  <TableHead className="py-3 px-6 text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
-                {filtered.map((r) => (
-                  <TableRow key={r.id} className="hover:bg-muted/10 border-b border-border transition-colors">
-                    <TableCell className="py-4 px-6 font-bold text-muted-foreground">{r.id}</TableCell>
-                    <TableCell className="py-4">
-                      <div className="flex items-center gap-2 font-semibold text-foreground">
-                        <FileText className="h-4.5 w-4.5 text-primary shrink-0" />
-                        <span>{r.product}</span>
-                      </div>
-                      <p className="text-[10px] text-muted-foreground mt-0.5">{r.category}</p>
-                    </TableCell>
-                    <TableCell className="py-4">
-                      <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">{r.quantity}</Badge>
-                    </TableCell>
-                    <TableCell className="py-4 text-xs text-muted-foreground font-semibold">
-                      <span className="flex items-center gap-1">
-                        <MapPin className="h-3.5 w-3.5" />
+              <TableBody className="divide-y divide-border/60">
+                {filtered.map((r) => {
+                  const defaultThumbnail = "/images/categories/cat-bahan-baku.webp";
+                  const imageSrc = resolveImageUrl(r.imageUrl || defaultThumbnail);
+
+                  return (
+                    <TableRow key={r.id} className="hover:bg-muted/20 border-b border-border/60 transition-colors">
+                      <TableCell className="py-3.5 px-6">
+                        <div className="flex items-center gap-3">
+                          <div className="h-11 w-11 shrink-0 rounded-lg overflow-hidden border border-border/80 bg-muted/20">
+                            <img
+                              src={imageSrc}
+                              alt={r.product}
+                              className="h-full w-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.src = defaultThumbnail;
+                              }}
+                            />
+                          </div>
+                          <div className="min-w-0 max-w-md space-y-0.5">
+                            <Link
+                              href={`/supplier/rfq/${r.id}`}
+                              className="font-medium text-sm text-foreground hover:text-primary transition-colors cursor-pointer line-clamp-1"
+                            >
+                              {r.product}
+                            </Link>
+                            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                              <span>{r.category}</span>
+                              <span>•</span>
+                              <span>{r.date}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="py-3.5 px-4 text-sm text-foreground whitespace-nowrap">
+                        {r.quantity}
+                      </TableCell>
+                      <TableCell className="py-3.5 px-4 text-xs text-muted-foreground max-w-xs truncate">
                         {r.port}
-                      </span>
-                    </TableCell>
-                    <TableCell className="py-4 text-xs font-semibold text-muted-foreground">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="h-3.5 w-3.5" />
-                        {r.date}
-                      </span>
-                    </TableCell>
-                    <TableCell className="py-4">
-                      {r.status === "open" || r.status === "new" ? (
-                        <Badge className="bg-success/15 text-success border border-success/30 font-bold">Open</Badge>
-                      ) : (
-                        <Badge variant="secondary" className="font-bold">{r.status}</Badge>
-                      )}
-                    </TableCell>
-                    <TableCell className="py-4 px-6 text-right space-x-2">
-                      <Button asChild size="sm" variant={r.status === "open" || r.status === "new" ? "default" : "outline"} disabled={r.status !== "open" && r.status !== "new"} className="text-xs font-semibold h-8 cursor-pointer border-border">
-                        <Link href={`/supplier/rfq/${r.id}`}>
-                          {t("actionSubmit")}
+                      </TableCell>
+                      <TableCell className="py-3.5 px-4 whitespace-nowrap">
+                        {r.status === "open" || r.status === "new" ? (
+                          <div className="flex items-center gap-1.5 text-xs font-medium text-foreground">
+                            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
+                            <span>Open</span>
+                          </div>
+                        ) : r.status === "accepted" ? (
+                          <div className="flex items-center gap-1.5 text-xs font-medium text-foreground">
+                            <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                            <span>Diterima</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                            <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30 shrink-0" />
+                            <span className="capitalize">{r.status}</span>
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell className="py-3.5 px-6 text-right whitespace-nowrap">
+                        <Link
+                          href={`/supplier/rfq/${r.id}`}
+                          className="inline-flex items-center justify-end gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer py-1 px-2 rounded-md hover:bg-muted/40"
+                        >
+                          <span>{r.status === "open" || r.status === "new" ? t("actionSubmit") : "Lihat Detail"}</span>
                           <ArrowUpRight className="ml-1 h-3.5 w-3.5" />
                         </Link>
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </div>

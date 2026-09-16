@@ -5,4 +5,6 @@ export interface BuyerNotification {
   date: string;
   unread: boolean;
   type: "quote" | "message" | "system" | "alert";
+  related_type?: string;
+  related_id?: string;
 }

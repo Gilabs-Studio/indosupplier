@@ -5,4 +5,6 @@ export interface SupplierNotification {
   date: string;
   unread: boolean;
   type: "quote" | "message" | "alert" | "system";
+  related_type?: string;
+  related_id?: string;
 }

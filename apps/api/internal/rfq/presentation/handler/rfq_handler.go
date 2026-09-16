@@ -82,6 +82,10 @@ func (h *RFQHandler) GetByID(c *gin.Context) {
 			errors.ErrorResponse(c, "RFQ_NOT_FOUND", map[string]interface{}{"id": id}, nil)
 			return
 		}
+		if stderrors.Is(err, usecase.ErrUnauthorizedAccess) {
+			errors.ErrorResponse(c, "FORBIDDEN", nil, nil)
+			return
+		}
 		errors.InternalServerErrorResponse(c, err.Error())
 		return
 	}
@@ -174,6 +178,10 @@ func (h *RFQHandler) AcceptBid(c *gin.Context) {
 		}
 		if stderrors.Is(err, usecase.ErrBidNotFound) {
 			errors.ErrorResponse(c, "BID_NOT_FOUND", map[string]interface{}{"bidId": bidID}, nil)
+			return
+		}
+		if stderrors.Is(err, usecase.ErrRFQAlreadyClosed) {
+			errors.ErrorResponse(c, "RFQ_ALREADY_CLOSED", map[string]interface{}{"id": id}, nil)
 			return
 		}
 		errors.InternalServerErrorResponse(c, err.Error())

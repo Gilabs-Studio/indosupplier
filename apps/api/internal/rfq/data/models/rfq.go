@@ -22,6 +22,8 @@ type RFQ struct {
 	PreferredContactMethod string         `gorm:"type:varchar(60)" json:"preferred_contact_method"`
 	Mode                   string         `gorm:"type:varchar(40);not null;default:'specific';index" json:"mode"`
 	CategoryID             *string        `gorm:"type:uuid;index" json:"category_id"`
+	ProductID              *string        `gorm:"type:uuid;index" json:"product_id"`
+	ImageURL               string         `gorm:"type:text" json:"image_url"`
 	VisibilityStatus       string         `gorm:"type:varchar(40);not null;default:'open';index" json:"visibility_status"`
 	CreatedAt              time.Time      `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt              time.Time      `gorm:"autoUpdateTime;index" json:"updated_at"`

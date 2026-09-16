@@ -12,6 +12,7 @@ type CreateRFQRequest struct {
 	AttachmentSize   int64    `json:"attachment_size"`
 	TargetSupplierID string   `json:"target_supplier_id,omitempty"`
 	ProductID        *string  `json:"product_id,omitempty"`
+	ImageURL         string   `json:"image_url,omitempty"`
 	Budget           float64  `json:"budget,omitempty"`
 	DeliveryTimeline string   `json:"delivery_timeline,omitempty"`
 }
@@ -25,6 +26,7 @@ type RFQResponse struct {
 	Date           string `json:"date"`
 	Status         string `json:"status"`
 	Replies        int    `json:"replies"`
+	ImageURL       string `json:"imageUrl,omitempty"`
 	Description    string `json:"description,omitempty"`
 	AttachmentURL  string `json:"attachmentUrl,omitempty"`
 	AttachmentName string `json:"attachmentName,omitempty"`
@@ -32,12 +34,13 @@ type RFQResponse struct {
 }
 
 type RFQBidResponse struct {
-	ID           string `json:"id"`
-	SupplierName string `json:"supplierName"`
-	Price        string `json:"price"`
-	MOQ          string `json:"moq"`
-	ResponseTime string `json:"responseTime"`
-	Verified     bool   `json:"verified"`
+	ID                string `json:"id"`
+	SupplierName      string `json:"supplierName"`
+	SupplierProfileID string `json:"supplierProfileId,omitempty"`
+	Price             string `json:"price"`
+	MOQ               string `json:"moq"`
+	ResponseTime      string `json:"responseTime"`
+	Verified          bool   `json:"verified"`
 }
 
 type SupplierSubmittedOfferDto struct {
@@ -57,6 +60,7 @@ type SupplierRFQResponse struct {
 	Date           string                     `json:"date"`
 	Budget         string                     `json:"budget"`
 	Status         string                     `json:"status"`
+	ImageURL       string                     `json:"imageUrl,omitempty"`
 	Description    string                     `json:"description,omitempty"`
 	ShippingTerm   string                     `json:"shippingTerm,omitempty"`
 	TargetDelivery string                     `json:"targetDelivery,omitempty"`

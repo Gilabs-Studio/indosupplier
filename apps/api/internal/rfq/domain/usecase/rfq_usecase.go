@@ -27,6 +27,8 @@ var (
 	ErrSupplierProfileNotFound = errors.New("supplier profile not found")
 	ErrRFQNotFound             = errors.New("rfq not found")
 	ErrBidNotFound             = errors.New("bid not found")
+	ErrRFQAlreadyClosed        = errors.New("rfq is already closed")
+	ErrUnauthorizedAccess      = errors.New("unauthorized access")
 )
 
 type RFQUsecase interface {
@@ -164,6 +166,16 @@ func (u *rfqUsecase) Create(ctx context.Context, userID string, req *dto.CreateR
 		}
 	}
 
+	imageURL := req.ImageURL
+	if imageURL == "" && req.ProductID != nil && *req.ProductID != "" {
+		var photoRow struct {
+			PhotoURL string `gorm:"column:photo_url"`
+		}
+		if err := u.db.WithContext(ctx).Table("supplier_product_photos").Where("supplier_product_id = ?", *req.ProductID).Order("sort_order ASC").First(&photoRow).Error; err == nil {
+			imageURL = photoRow.PhotoURL
+		}
+	}
+
 	rfq := &models.RFQ{
 		ID:                  uuid.NewString(),
 		BuyerProfileID:      buyerID,
@@ -173,6 +185,8 @@ func (u *rfqUsecase) Create(ctx context.Context, userID string, req *dto.CreateR
 		QuantityUnit:        req.Unit,
 		DestinationLocation: req.TargetPort,
 		CategoryID:          categoryIDPtr,
+		ProductID:           req.ProductID,
+		ImageURL:            imageURL,
 		VisibilityStatus:    "open",
 		Mode:                mode,
 		BudgetMax:           req.Budget,
@@ -244,7 +258,7 @@ func (u *rfqUsecase) GetByID(ctx context.Context, userID string, id string) (dto
 
 	// Check if this RFQ belongs to the buyer
 	if rfq.BuyerProfileID != buyerID {
-		return dto.RFQResponse{}, errors.New("unauthorized to view this rfq")
+		return dto.RFQResponse{}, ErrUnauthorizedAccess
 	}
 
 	// Get Category Name
@@ -375,12 +389,13 @@ func (u *rfqUsecase) GetBids(ctx context.Context, userID string, rfqID string) (
 		}
 
 		responses = append(responses, dto.RFQBidResponse{
-			ID:           rec.ID,
-			SupplierName: supplier.CompanyName,
-			Price:        price,
-			MOQ:          moq,
-			ResponseTime: responseTimeStr,
-			Verified:     supplier.VerificationLevel >= 2,
+			ID:                rec.ID,
+			SupplierName:      supplier.CompanyName,
+			SupplierProfileID: supplier.ID,
+			Price:             price,
+			MOQ:               moq,
+			ResponseTime:      responseTimeStr,
+			Verified:          supplier.VerificationLevel >= 2,
 		})
 	}
 
@@ -411,6 +426,12 @@ func (u *rfqUsecase) AcceptBid(ctx context.Context, userID string, rfqID string,
 	}
 
 	if err := u.rfqRepo.AcceptBid(ctx, resolvedRFQID, bidID); err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return ErrBidNotFound
+		}
+		if err.Error() == "rfq is already closed" {
+			return ErrRFQAlreadyClosed
+		}
 		return err
 	}
 
@@ -471,6 +492,7 @@ func (u *rfqUsecase) buildSupplierRFQResponse(ctx context.Context, recipient mod
 		Date:           rfq.CreatedAt.Format("2006-01-02"),
 		Budget:         "",
 		Status:         status,
+		ImageURL:       mapper.ResolveRFQImageURL(rfq.ImageURL, rfq.Title, categoryName),
 		Description:    rfq.ProductDescription,
 		ShippingTerm:   rfq.PreferredContactMethod,
 		TargetDelivery: rfq.DeliveryTimeline,
@@ -615,6 +637,7 @@ func (u *rfqUsecase) ListForSupplier(ctx context.Context, userID string, page, p
 			Date:           rfq.CreatedAt.Format("2006-01-02"),
 			Budget:         "",
 			Status:         status,
+			ImageURL:       mapper.ResolveRFQImageURL(rfq.ImageURL, rfq.Title, catName),
 			Description:    rfq.ProductDescription,
 			ShippingTerm:   rfq.PreferredContactMethod,
 			TargetDelivery: rfq.DeliveryTimeline,

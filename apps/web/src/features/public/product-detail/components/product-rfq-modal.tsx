@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { NumericInput } from "@/components/ui/numeric-input";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldLabel, FieldGroup } from "@/components/ui/field";
 import { rfqService } from "@/features/buyer/rfq/services/rfq.service";
@@ -47,6 +48,7 @@ export function ProductRfqModal({
   const [notes, setNotes] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createdRfqId, setCreatedRfqId] = useState<string | null>(null);
+  const [imageError, setImageError] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,6 +69,7 @@ export function ProductRfqModal({
         description: `[Varian: ${selectedVariantText}] ${notes.trim()}`,
         target_supplier_id: supplier.id,
         product_id: product.id,
+        image_url: product.photos?.[0],
         budget: budgetNum > 0 ? budgetNum : undefined,
         delivery_timeline: deliveryTimeline.trim() || undefined,
       });
@@ -128,10 +131,11 @@ export function ProductRfqModal({
             {/* Product & Supplier Summary Card */}
             <div className="mt-3 flex items-center gap-3 rounded-lg border border-border bg-muted/20 p-3">
               <div className="h-12 w-12 shrink-0 overflow-hidden rounded-md border border-border bg-card flex items-center justify-center">
-                {product.photos && product.photos.length > 0 ? (
+                {product.photos && product.photos.length > 0 && !imageError ? (
                   <img
                     src={resolveImageUrl(product.photos[0])}
-                    alt={product.name}
+                    alt=""
+                    onError={() => setImageError(true)}
                     className="h-full w-full object-cover"
                   />
                 ) : (
@@ -194,11 +198,10 @@ export function ProductRfqModal({
               <FieldGroup className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <Field>
                   <FieldLabel className="text-xs font-bold">{t("rfqBudgetLabel") || "Target Budget Total (Rp)"}</FieldLabel>
-                  <Input
-                    type="number"
-                    value={budget}
-                    onChange={(e) => setBudget(e.target.value)}
-                    placeholder="Target total budget"
+                  <NumericInput
+                    value={budget ? Number(budget) : undefined}
+                    onChange={(val) => setBudget(val !== undefined ? String(val) : "")}
+                    placeholder="Contoh: 12.500.000"
                     className="h-9 text-xs"
                   />
                 </Field>

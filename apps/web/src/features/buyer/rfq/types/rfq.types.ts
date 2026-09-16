@@ -7,11 +7,13 @@ export interface RFQItem {
   date: string;
   status: string;
   replies: number;
+  imageUrl?: string;
 }
 
 export interface RFQBid {
   id: string;
   supplierName: string;
+  supplierProfileId?: string;
   price: string;
   moq: string;
   responseTime: string;
@@ -37,6 +39,7 @@ export interface CreateRfqPayload {
   attachment_size?: number;
   target_supplier_id?: string;
   product_id?: string;
+  image_url?: string;
   budget?: number;
   delivery_timeline?: string;
 }

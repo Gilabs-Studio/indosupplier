@@ -6,7 +6,7 @@ import { BuyerLayout } from "../../components/buyer-layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Link } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/routing";
 import { CenteredLoading } from "@/components/loading";
 import { cn } from "@/lib/utils";
 import {
@@ -19,6 +19,7 @@ import {
   FileText,
 } from "lucide-react";
 import { useBuyerRfqDetail } from "../hooks/useBuyerRfqs";
+import { chatService } from "@/features/buyer/chat/services/chat.service";
 
 interface BuyerRfqDetailPageProps {
   readonly id: string;
@@ -26,7 +27,9 @@ interface BuyerRfqDetailPageProps {
 
 export function BuyerRfqDetailPage({ id }: BuyerRfqDetailPageProps) {
   const t = useTranslations("buyerRfq.rfqDetail");
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("quotes");
+  const [openingChatSupplierId, setOpeningChatSupplierId] = useState<string | null>(null);
 
   const {
     rfq,
@@ -36,6 +39,26 @@ export function BuyerRfqDetailPage({ id }: BuyerRfqDetailPageProps) {
     acceptBid,
     isAccepting,
   } = useBuyerRfqDetail(id);
+
+  const handleOpenChat = async (supplierProfileId?: string) => {
+    if (!supplierProfileId) {
+      router.push("/chat");
+      return;
+    }
+    try {
+      setOpeningChatSupplierId(supplierProfileId);
+      const room = await chatService.getOrCreateRoom(supplierProfileId);
+      if (room && room.id) {
+        router.push(`/chat?roomId=${room.id}`);
+      } else {
+        router.push("/chat");
+      }
+    } catch {
+      router.push("/chat");
+    } finally {
+      setOpeningChatSupplierId(null);
+    }
+  };
 
   if (isLoadingRfq || isLoadingBids) {
     return (
@@ -146,13 +169,16 @@ export function BuyerRfqDetailPage({ id }: BuyerRfqDetailPageProps) {
                         </div>
                       </div>
                     </div>
-
                     <div className="flex gap-2 shrink-0 md:self-center">
-                      <Button asChild variant="outline" size="sm" className="text-xs font-semibold cursor-pointer border-border hover:border-muted-foreground transition-all hover:-translate-y-0.5 active:translate-y-0">
-                        <Link href="/search">
-                          <MessageSquare className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
-                          {t("btnChat")}
-                        </Link>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={openingChatSupplierId === bid.supplierProfileId}
+                        onClick={() => handleOpenChat(bid.supplierProfileId)}
+                        className="text-xs font-semibold cursor-pointer border-border hover:border-muted-foreground transition-all hover:-translate-y-0.5 active:translate-y-0"
+                      >
+                        <MessageSquare className="mr-1.5 h-3.5 w-3.5 text-muted-foreground" />
+                        {openingChatSupplierId === bid.supplierProfileId ? "Menghubungkan..." : t("btnChat")}
                       </Button>
                       <Button
                         onClick={() => acceptBid(bid.id)}

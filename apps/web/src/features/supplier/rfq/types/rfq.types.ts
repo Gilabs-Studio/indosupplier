@@ -14,6 +14,7 @@ export interface SupplierRfqItem {
   date: string;
   budget: string;
   status: "open" | "new" | "responded" | "processing" | "accepted" | "closed";
+  imageUrl?: string;
   description?: string;
   shippingTerm?: string;
   targetDelivery?: string;

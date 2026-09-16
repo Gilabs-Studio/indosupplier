@@ -58,12 +58,14 @@ func mapNotificationType(rawType string) string {
 
 func mapBuyerNotification(n trustModels.Notification) dto.BuyerNotificationResponse {
 	return dto.BuyerNotificationResponse{
-		ID:     n.ID,
-		Title:  n.Title,
-		Desc:   n.Body,
-		Date:   n.CreatedAt.Format("2006-01-02 15:04"),
-		Unread: !n.IsRead,
-		Type:   mapNotificationType(n.Type),
+		ID:          n.ID,
+		Title:       n.Title,
+		Desc:        n.Body,
+		Date:        n.CreatedAt.Format("2006-01-02 15:04"),
+		Unread:      !n.IsRead,
+		Type:        mapNotificationType(n.Type),
+		RelatedType: n.RelatedType,
+		RelatedID:   n.RelatedID,
 	}
 }
 
