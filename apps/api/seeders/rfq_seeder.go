@@ -289,41 +289,64 @@ func ensureRFQRecipients(rfqID string, seedStatus string, suppliers []supplierMo
 }
 
 func ensureRFQOffer(rfqID string, supplierID string, price float64, moq string, deliveryTime string, now time.Time) error {
+	var supplier supplierModels.SupplierProfile
+	_ = database.DB.Where("id = ?", supplierID).First(&supplier).Error
+	compName := supplier.CompanyName
+	if compName == "" {
+		compName = "Supplier"
+	}
+
+	var rfq models.RFQ
+	_ = database.DB.Where("id = ?", rfqID).First(&rfq).Error
+
+	priceFormatted := fmt.Sprintf("%s / Kg", utils.FormatMoney(price, utils.DefaultCurrency()))
+	if rfq.QuantityUnit != "" && rfq.QuantityUnit != "Kg" {
+		priceFormatted = fmt.Sprintf("%s / %s", utils.FormatMoney(price, utils.DefaultCurrency()), rfq.QuantityUnit)
+	}
+
 	metadataMap := map[string]string{
-		"price":        fmt.Sprintf("%s / Kg", utils.FormatMoney(price, utils.DefaultCurrency())),
+		"price":        priceFormatted,
 		"moq":          moq,
 		"deliveryTime": deliveryTime,
 	}
-	metadataBytes, err := json.Marshal(metadataMap)
-	if err != nil {
-		return err
-	}
+	metadataBytes, _ := json.Marshal(metadataMap)
 
-	body := "Penawaran awal dari supplier untuk kebutuhan RFQ ini."
+	body := fmt.Sprintf("Halo Pak, perkenalkan kami dari %s.\n\nKami tertarik untuk memenuhi kebutuhan pengadaan %s Anda. Kami memiliki kapasitas pasokan siap kirim dengan standar mutu terjamin sesuai spesifikasi yang diminta.\n\n- Mutu/Grade terjamin dan sertifikasi uji mutu lengkap\n- Kemasan aman siap muat pelabuhan\n- Jadwal pengiriman dapat disesuaikan kebutuhan\n\nSilakan diskusikan kebutuhan lebih lanjut melalui balasan chat ini jika ada penyesuaian teknis.", compName, rfq.Title)
+
 	message := models.RFQMessage{}
-	err = database.DB.
-		Where("rfq_id = ? AND sender_id = ? AND message_type = ?", rfqID, supplierID, "offer").
+	err := database.DB.
+		Where("rfq_id = ? AND supplier_profile_id = ? AND message_type = ?", rfqID, supplierID, "offer").
 		First(&message).Error
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return err
 	}
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		message = models.RFQMessage{
-			RFQID:       rfqID,
-			SenderType:  "supplier",
-			SenderID:    supplierID,
-			MessageType: "offer",
-			Body:        body,
-			Metadata:    string(metadataBytes),
-			CreatedAt:   now.AddDate(0, 0, -9),
-			UpdatedAt:   now,
+			RFQID:             rfqID,
+			SupplierProfileID: supplierID,
+			SenderType:        "supplier",
+			SenderID:          supplierID,
+			MessageType:       "offer",
+			Body:              body,
+			Price:             &price,
+			PriceFormatted:    priceFormatted,
+			MOQ:               moq,
+			DeliveryTime:      deliveryTime,
+			Metadata:          string(metadataBytes),
+			CreatedAt:         now.AddDate(0, 0, -9),
+			UpdatedAt:         now,
 		}
 		return database.DB.Create(&message).Error
 	}
 
 	return database.DB.Model(&message).Updates(map[string]interface{}{
-		"body":       body,
-		"metadata":   string(metadataBytes),
-		"updated_at": now,
+		"supplier_profile_id": supplierID,
+		"body":                body,
+		"price":               price,
+		"price_formatted":     priceFormatted,
+		"moq":                 moq,
+		"delivery_time":       deliveryTime,
+		"metadata":            string(metadataBytes),
+		"updated_at":          now,
 	}).Error
 }

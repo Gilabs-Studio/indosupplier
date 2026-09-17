@@ -10,14 +10,15 @@ import (
 
 func RegisterChatRoutes(rg *gin.RouterGroup, h *handler.ChatHandler, jwtManager *jwt.JWTManager) {
 	// REST Routes
-	g := rg.Group("/buyer/chat/rooms")
-	g.Use(middleware.AuthMiddleware(jwtManager))
+	chatGroup := rg.Group("/buyer/chat")
+	chatGroup.Use(middleware.AuthMiddleware(jwtManager))
 	{
-		g.GET("", h.ListRooms)
-		g.POST("", h.GetOrCreateRoom)
-		g.GET("/:id/messages", h.GetRoomMessages)
-		g.POST("/:id/messages", h.SendMessage)
-		g.POST("/:id/read", h.MarkAsRead)
+		chatGroup.GET("/ws-token", h.GetWebSocketToken)
+		chatGroup.GET("/rooms", h.ListRooms)
+		chatGroup.POST("/rooms", h.GetOrCreateRoom)
+		chatGroup.GET("/rooms/:id/messages", h.GetRoomMessages)
+		chatGroup.POST("/rooms/:id/messages", h.SendMessage)
+		chatGroup.POST("/rooms/:id/read", h.MarkAsRead)
 	}
 
 	// WebSocket Route (WebSocket manual auth check inside handler)

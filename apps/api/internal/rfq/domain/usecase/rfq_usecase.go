@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -20,6 +21,7 @@ import (
 	"github.com/gilabs/indosupplier/api/internal/rfq/domain/mapper"
 	supplierModels "github.com/gilabs/indosupplier/api/internal/supplier/data/models"
 	trustModels "github.com/gilabs/indosupplier/api/internal/trust/data/models"
+	userModels "github.com/gilabs/indosupplier/api/internal/user/data/models"
 )
 
 var (
@@ -40,6 +42,12 @@ type RFQUsecase interface {
 	ListForSupplier(ctx context.Context, userID string, page, perPage int) ([]dto.SupplierRFQResponse, int64, error)
 	GetSupplierRFQByID(ctx context.Context, userID string, id string) (dto.SupplierRFQResponse, error)
 	SubmitProposal(ctx context.Context, userID string, rfqID string, req *dto.SubmitRFQProposalRequest) error
+	GetBuyerRFQThreads(ctx context.Context, userID string, rfqID string) ([]dto.RFQThreadSupplierDTO, error)
+	GetRFQThreadMessages(ctx context.Context, userID string, rfqID string, supplierProfileID string) ([]dto.RFQMessageDTO, error)
+	SendBuyerRFQMessage(ctx context.Context, userID string, rfqID string, supplierProfileID string, req *dto.SendRFQMessageRequest) (dto.RFQMessageDTO, error)
+	AcceptRFQBidInThread(ctx context.Context, userID string, rfqID string, supplierProfileID string) error
+	GetSupplierRFQThread(ctx context.Context, userID string, rfqID string) ([]dto.RFQMessageDTO, error)
+	SendSupplierRFQMessage(ctx context.Context, userID string, rfqID string, req *dto.SendRFQMessageRequest) (dto.RFQMessageDTO, error)
 }
 
 type rfqUsecase struct {
@@ -270,7 +278,36 @@ func (u *rfqUsecase) GetByID(ctx context.Context, userID string, id string) (dto
 			Pluck("name", &categoryName)
 	}
 
-	return mapper.ToRFQResponse(rfq, categoryName, replies, attachment), nil
+	res := mapper.ToRFQResponse(rfq, categoryName, replies, attachment)
+	var recipients []models.RFQRecipient
+	if err := u.db.WithContext(ctx).Where("rfq_id = ?", rfq.ID).Order("rank_position ASC, created_at ASC").Find(&recipients).Error; err == nil && len(recipients) > 0 {
+		suppProfileIDs := make([]string, len(recipients))
+		for i, rec := range recipients {
+			suppProfileIDs[i] = rec.SupplierProfileID
+		}
+		var sps []supplierModels.SupplierProfile
+		spMap := make(map[string]string)
+		u.db.WithContext(ctx).Where("id IN ?", suppProfileIDs).Find(&sps)
+		for _, sp := range sps {
+			spMap[sp.ID] = sp.CompanyName
+		}
+
+		for _, rec := range recipients {
+			name := spMap[rec.SupplierProfileID]
+			if name == "" {
+				name = "Supplier"
+			}
+			res.Suppliers = append(res.Suppliers, dto.RFQSupplierSummary{
+				ID:                rec.ID,
+				SupplierProfileID: rec.SupplierProfileID,
+				SupplierName:      name,
+				Status:            rec.Status,
+				IsAccepted:        rec.Status == "accepted",
+			})
+		}
+	}
+
+	return res, nil
 }
 
 func (u *rfqUsecase) List(ctx context.Context, userID string, status string, page, perPage int) ([]dto.RFQResponse, int64, error) {
@@ -316,6 +353,62 @@ func (u *rfqUsecase) List(ctx context.Context, userID string, status string, pag
 		}
 	}
 
+	// Fetch recipients and suppliers in batch for tree view
+	rfqSuppliersMap := make(map[string][]dto.RFQSupplierSummary)
+	if len(rfqIDs) > 0 {
+		var recipients []models.RFQRecipient
+		u.db.WithContext(ctx).
+			Where("rfq_id IN ?", rfqIDs).
+			Order("rank_position ASC, created_at ASC").
+			Find(&recipients)
+
+		if len(recipients) > 0 {
+			suppProfileIDs := make([]string, 0, len(recipients))
+			for _, rec := range recipients {
+				suppProfileIDs = append(suppProfileIDs, rec.SupplierProfileID)
+			}
+
+			var suppProfiles []supplierModels.SupplierProfile
+			suppMap := make(map[string]string)
+			if len(suppProfileIDs) > 0 {
+				u.db.WithContext(ctx).Where("id IN ?", suppProfileIDs).Find(&suppProfiles)
+				for _, sp := range suppProfiles {
+					suppMap[sp.ID] = sp.CompanyName
+				}
+			}
+
+			var offerMsgs []models.RFQMessage
+			u.db.WithContext(ctx).
+				Where("rfq_id IN ? AND message_type = ?", rfqIDs, "offer").
+				Order("created_at DESC").
+				Find(&offerMsgs)
+
+			offerMap := make(map[string]string)
+			for _, m := range offerMsgs {
+				key := m.RFQID + ":" + m.SupplierProfileID
+				if _, exists := offerMap[key]; !exists {
+					offerMap[key] = m.PriceFormatted
+				}
+			}
+
+			for _, rec := range recipients {
+				name := suppMap[rec.SupplierProfileID]
+				if name == "" {
+					name = "Supplier"
+				}
+				price := offerMap[rec.RFQID+":"+rec.SupplierProfileID]
+				rfqSuppliersMap[rec.RFQID] = append(rfqSuppliersMap[rec.RFQID], dto.RFQSupplierSummary{
+					ID:                rec.ID,
+					SupplierProfileID: rec.SupplierProfileID,
+					SupplierName:      name,
+					Status:            rec.Status,
+					Price:             price,
+					IsAccepted:        rec.Status == "accepted",
+				})
+			}
+		}
+	}
+
 	var response []dto.RFQResponse
 	for i, rfq := range rfqs {
 		var catName string
@@ -323,7 +416,9 @@ func (u *rfqUsecase) List(ctx context.Context, userID string, status string, pag
 			catName = catMap[*rfq.CategoryID]
 		}
 		attach := attachMap[rfq.ID]
-		response = append(response, mapper.ToRFQResponse(&rfq, catName, replies[i], attach))
+		item := mapper.ToRFQResponse(&rfq, catName, replies[i], attach)
+		item.Suppliers = rfqSuppliersMap[rfq.ID]
+		response = append(response, item)
 	}
 
 	return response, total, nil
@@ -353,23 +448,49 @@ func (u *rfqUsecase) GetBids(ctx context.Context, userID string, rfqID string) (
 	if err != nil {
 		return nil, err
 	}
+	if len(recipients) == 0 {
+		return []dto.RFQBidResponse{}, nil
+	}
+
+	suppProfileIDs := make([]string, 0, len(recipients))
+	for _, rec := range recipients {
+		suppProfileIDs = append(suppProfileIDs, rec.SupplierProfileID)
+	}
+
+	var suppliers []supplierModels.SupplierProfile
+	suppMap := make(map[string]supplierModels.SupplierProfile)
+	if len(suppProfileIDs) > 0 {
+		u.db.WithContext(ctx).Where("id IN ?", suppProfileIDs).Find(&suppliers)
+		for _, s := range suppliers {
+			suppMap[s.ID] = s
+		}
+	}
+
+	var offerMsgs []models.RFQMessage
+	u.db.WithContext(ctx).
+		Where("rfq_id = ? AND message_type = 'offer'", resolvedRFQID).
+		Order("created_at DESC").
+		Find(&offerMsgs)
+
+	offerMap := make(map[string]models.RFQMessage)
+	for _, m := range offerMsgs {
+		if _, exists := offerMap[m.SenderID]; !exists {
+			offerMap[m.SenderID] = m
+		}
+	}
 
 	var responses []dto.RFQBidResponse
 	for _, rec := range recipients {
-		var supplier supplierModels.SupplierProfile
-		if err := u.db.WithContext(ctx).Where("id = ?", rec.SupplierProfileID).First(&supplier).Error; err != nil {
+		supplier, exists := suppMap[rec.SupplierProfileID]
+		if !exists {
 			continue
 		}
 
-		var msg models.RFQMessage
 		price := ""
 		moq := ""
 		responseTimeStr := ""
 
-		if err := u.db.WithContext(ctx).
-			Where("rfq_id = ? AND sender_id = ? AND message_type = ?", resolvedRFQID, supplier.ID, "offer").
-			Order("created_at DESC").
-			First(&msg).Error; err == nil {
+		if msg, ok := offerMap[supplier.ID]; ok {
 			var metadataMap map[string]interface{}
 			if errJson := json.Unmarshal([]byte(msg.Metadata), &metadataMap); errJson == nil {
 				if p, ok := metadataMap["price"].(string); ok {
@@ -719,15 +840,19 @@ func (u *rfqUsecase) SubmitProposal(ctx context.Context, userID string, rfqID st
 		return err
 	}
 	message := &models.RFQMessage{
-		ID:          uuid.NewString(),
-		RFQID:       resolvedID,
-		SenderType:  "supplier",
-		SenderID:    supplierID,
-		MessageType: "offer",
-		Body:        strings.TrimSpace(req.Notes),
-		Metadata:    string(metadata),
-		CreatedAt:   apptime.Now(),
-		UpdatedAt:   apptime.Now(),
+		ID:                uuid.NewString(),
+		RFQID:             resolvedID,
+		SupplierProfileID: supplierID,
+		SenderType:        "supplier",
+		SenderID:          supplierID,
+		MessageType:       "offer",
+		Body:              strings.TrimSpace(req.Notes),
+		PriceFormatted:    strings.TrimSpace(req.Price),
+		MOQ:               strings.TrimSpace(req.MOQ),
+		DeliveryTime:      strings.TrimSpace(req.DeliveryTime),
+		Metadata:          string(metadata),
+		CreatedAt:         apptime.Now(),
+		UpdatedAt:         apptime.Now(),
 	}
 	if err := u.rfqRepo.SubmitProposal(ctx, recipient, message); err != nil {
 		return err
@@ -758,3 +883,603 @@ func (u *rfqUsecase) SubmitProposal(ctx context.Context, userID string, rfqID st
 
 	return nil
 }
+
+func (u *rfqUsecase) GetBuyerRFQThreads(ctx context.Context, userID string, rfqID string) ([]dto.RFQThreadSupplierDTO, error) {
+	buyerID, err := u.getBuyerProfileID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	resolvedID := mapper.ResolveRFQID(rfqID)
+	// Verify RFQ ownership
+	var rfq models.RFQ
+	if err := u.db.WithContext(ctx).Where("id = ? AND buyer_profile_id = ?", resolvedID, buyerID).First(&rfq).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrRFQNotFound
+		}
+		return nil, err
+	}
+
+	recipients, err := u.rfqRepo.GetBids(ctx, resolvedID)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(recipients) == 0 {
+		return []dto.RFQThreadSupplierDTO{}, nil
+	}
+
+	suppProfileIDs := make([]string, 0, len(recipients))
+	for _, rec := range recipients {
+		suppProfileIDs = append(suppProfileIDs, rec.SupplierProfileID)
+	}
+
+	var suppliers []supplierModels.SupplierProfile
+	suppMap := make(map[string]supplierModels.SupplierProfile)
+	if len(suppProfileIDs) > 0 {
+		u.db.WithContext(ctx).Where("id IN ?", suppProfileIDs).Find(&suppliers)
+		for _, s := range suppliers {
+			suppMap[s.ID] = s
+		}
+	}
+
+	// Batch query latest offer messages
+	var offerMsgs []models.RFQMessage
+	u.db.WithContext(ctx).
+		Where("rfq_id = ? AND message_type = 'offer'", resolvedID).
+		Order("created_at DESC").
+		Find(&offerMsgs)
+	offerMap := make(map[string]models.RFQMessage)
+	for _, m := range offerMsgs {
+		if _, exists := offerMap[m.SupplierProfileID]; !exists {
+			offerMap[m.SupplierProfileID] = m
+		}
+	}
+
+	// Batch query message counts per supplier
+	type MsgCountRow struct {
+		SupplierProfileID string
+		Count             int64
+	}
+	var countRows []MsgCountRow
+	u.db.WithContext(ctx).
+		Model(&models.RFQMessage{}).
+		Select("supplier_profile_id, count(*) as count").
+		Where("rfq_id = ?", resolvedID).
+		Group("supplier_profile_id").
+		Scan(&countRows)
+	countMap := make(map[string]int64)
+	for _, cr := range countRows {
+		countMap[cr.SupplierProfileID] = cr.Count
+	}
+
+	// Batch query supplier photos
+	var photos []supplierModels.SupplierPhoto
+	photoMap := make(map[string]string)
+	if len(suppProfileIDs) > 0 {
+		u.db.WithContext(ctx).
+			Where("supplier_profile_id IN ?", suppProfileIDs).
+			Order("sort_order ASC, created_at ASC").
+			Find(&photos)
+		for _, p := range photos {
+			if _, exists := photoMap[p.SupplierProfileID]; !exists {
+				photoMap[p.SupplierProfileID] = p.FileURL
+			}
+		}
+	}
+
+	var threads []dto.RFQThreadSupplierDTO
+	for _, rec := range recipients {
+		supplier, exists := suppMap[rec.SupplierProfileID]
+		if !exists {
+			continue
+		}
+
+		latestOffer := ""
+		latestOfferAt := ""
+		if msg, ok := offerMap[supplier.ID]; ok {
+			latestOffer = msg.PriceFormatted
+			if latestOffer == "" {
+				var meta map[string]interface{}
+				if json.Unmarshal([]byte(msg.Metadata), &meta) == nil {
+					if p, ok := meta["price"].(string); ok {
+						latestOffer = p
+					}
+				}
+			}
+			latestOfferAt = msg.CreatedAt.Format("02/01/2006 15:04:05 WIB")
+		}
+
+		count := countMap[supplier.ID]
+
+		rating := supplier.StarRating
+		if rating == 0 {
+			rating = 4.8
+		}
+		city := supplier.CityID
+		if city == "" {
+			city = supplier.Address
+		}
+
+		threads = append(threads, dto.RFQThreadSupplierDTO{
+			SupplierProfileID: supplier.ID,
+			SupplierName:      supplier.CompanyName,
+			SupplierLogo:      photoMap[supplier.ID],
+			Verified:          supplier.IsPremiumVerified || supplier.VerificationLevel >= 2,
+			Rating:            rating,
+			City:              city,
+			LatestOffer:       latestOffer,
+			LatestOfferAt:     latestOfferAt,
+			Status:            rec.Status,
+			MessageCount:      int(count),
+		})
+	}
+
+	return threads, nil
+}
+
+func (u *rfqUsecase) getSupplierLogo(ctx context.Context, supplierID string) string {
+	var photo supplierModels.SupplierPhoto
+	if err := u.db.WithContext(ctx).Where("supplier_profile_id = ?", supplierID).Order("sort_order ASC, created_at ASC").First(&photo).Error; err == nil {
+		return photo.FileURL
+	}
+	return ""
+}
+
+func (u *rfqUsecase) GetRFQThreadMessages(ctx context.Context, userID string, rfqID string, supplierProfileID string) ([]dto.RFQMessageDTO, error) {
+	buyerID, err := u.getBuyerProfileID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	resolvedID := mapper.ResolveRFQID(rfqID)
+	// Verify RFQ ownership
+	var rfq models.RFQ
+	if err := u.db.WithContext(ctx).Where("id = ? AND buyer_profile_id = ?", resolvedID, buyerID).First(&rfq).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrRFQNotFound
+		}
+		return nil, err
+	}
+
+	messages, err := u.rfqRepo.ListRFQMessages(ctx, resolvedID, supplierProfileID)
+	if err != nil {
+		return nil, err
+	}
+
+	// Fetch supplier details
+	var supplier supplierModels.SupplierProfile
+	_ = u.db.WithContext(ctx).Where("id = ?", supplierProfileID).First(&supplier).Error
+
+	// Fetch buyer user details
+	var buyerUser userModels.User
+	_ = u.db.WithContext(ctx).Where("id = ?", userID).First(&buyerUser).Error
+
+	supplierRating := supplier.StarRating
+	if supplierRating == 0 {
+		supplierRating = 4.8
+	}
+
+	var result []dto.RFQMessageDTO
+	for _, m := range messages {
+		senderName := ""
+		senderAvatar := ""
+		senderRole := ""
+		var senderRating float64
+		isMine := false
+
+		if m.SenderType == "buyer" {
+			senderName = buyerUser.Name
+			if senderName == "" {
+				senderName = "Pembeli"
+			}
+			senderRole = "Buyer"
+			isMine = true
+		} else if m.SenderType == "supplier" {
+			senderName = supplier.CompanyName
+			if senderName == "" {
+				senderName = "Supplier"
+			}
+			senderAvatar = u.getSupplierLogo(ctx, supplier.ID)
+			senderRole = "Supplier"
+			senderRating = supplierRating
+		} else {
+			senderName = "Sistem"
+			senderRole = "System"
+		}
+
+		priceStr := m.PriceFormatted
+		moqStr := m.MOQ
+		deliveryStr := m.DeliveryTime
+		if priceStr == "" && m.Metadata != "" && m.Metadata != "{}" {
+			var meta map[string]interface{}
+			if json.Unmarshal([]byte(m.Metadata), &meta) == nil {
+				if p, ok := meta["price"].(string); ok {
+					priceStr = p
+				}
+				if moq, ok := meta["moq"].(string); ok {
+					moqStr = moq
+				}
+				if dt, ok := meta["deliveryTime"].(string); ok {
+					deliveryStr = dt
+				}
+			}
+		}
+
+		result = append(result, dto.RFQMessageDTO{
+			ID:                 m.ID,
+			RFQID:              m.RFQID,
+			SupplierProfileID:  m.SupplierProfileID,
+			SenderType:         m.SenderType,
+			SenderID:           m.SenderID,
+			SenderName:         senderName,
+			SenderAvatar:       senderAvatar,
+			SenderRole:         senderRole,
+			SenderRating:       senderRating,
+			MessageType:        m.MessageType,
+			Body:               m.Body,
+			Price:              m.Price,
+			PriceFormatted:     priceStr,
+			MOQ:                moqStr,
+			DeliveryTime:       deliveryStr,
+			CreatedAt:          m.CreatedAt.Format(time.RFC3339),
+			CreatedAtFormatted: m.CreatedAt.Format("02/01/2006 15:04:05 WIB"),
+			IsMine:             isMine,
+		})
+	}
+
+	return result, nil
+}
+
+func (u *rfqUsecase) SendBuyerRFQMessage(ctx context.Context, userID string, rfqID string, supplierProfileID string, req *dto.SendRFQMessageRequest) (dto.RFQMessageDTO, error) {
+	buyerID, err := u.getBuyerProfileID(ctx, userID)
+	if err != nil {
+		return dto.RFQMessageDTO{}, err
+	}
+
+	resolvedID := mapper.ResolveRFQID(rfqID)
+	// Verify RFQ ownership
+	var rfq models.RFQ
+	if err := u.db.WithContext(ctx).Where("id = ? AND buyer_profile_id = ?", resolvedID, buyerID).First(&rfq).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return dto.RFQMessageDTO{}, ErrRFQNotFound
+		}
+		return dto.RFQMessageDTO{}, err
+	}
+
+	now := apptime.Now()
+	msg := models.RFQMessage{
+		ID:                uuid.NewString(),
+		RFQID:             resolvedID,
+		SupplierProfileID: supplierProfileID,
+		SenderType:        "buyer",
+		SenderID:          buyerID,
+		MessageType:       "message",
+		Body:              strings.TrimSpace(req.Body),
+		CreatedAt:         now,
+		UpdatedAt:         now,
+	}
+
+	if err := u.rfqRepo.CreateRFQMessage(ctx, &msg); err != nil {
+		return dto.RFQMessageDTO{}, err
+	}
+
+	// Fetch buyer user details
+	var buyerUser userModels.User
+	_ = u.db.WithContext(ctx).Where("id = ?", userID).First(&buyerUser).Error
+	buyerName := buyerUser.Name
+	if buyerName == "" {
+		buyerName = "Pembeli"
+	}
+
+	// Notify supplier
+	notif := trustModels.Notification{
+		ID:            uuid.NewString(),
+		RecipientType: "supplier",
+		RecipientID:   supplierProfileID,
+		Type:          "rfq_message",
+		Title:         fmt.Sprintf("Pesan Baru RFQ: %s", rfq.Title),
+		Body:          fmt.Sprintf("%s mengirim pesan negosiasi: %s", buyerName, msg.Body),
+		Channel:       "in_app",
+		IsRead:        false,
+		RelatedType:   "rfq",
+		RelatedID:     &rfq.ID,
+		CreatedAt:     now,
+		UpdatedAt:     now,
+	}
+	_ = u.db.WithContext(ctx).Create(&notif).Error
+
+	return dto.RFQMessageDTO{
+		ID:                 msg.ID,
+		RFQID:              msg.RFQID,
+		SupplierProfileID:  msg.SupplierProfileID,
+		SenderType:         msg.SenderType,
+		SenderID:           msg.SenderID,
+		SenderName:         buyerName,
+		SenderRole:         "Buyer",
+		MessageType:        msg.MessageType,
+		Body:               msg.Body,
+		CreatedAt:          msg.CreatedAt.Format(time.RFC3339),
+		CreatedAtFormatted: msg.CreatedAt.Format("02/01/2006 15:04:05 WIB"),
+		IsMine:             true,
+	}, nil
+}
+
+func (u *rfqUsecase) AcceptRFQBidInThread(ctx context.Context, userID string, rfqID string, supplierProfileID string) error {
+	buyerID, err := u.getBuyerProfileID(ctx, userID)
+	if err != nil {
+		return err
+	}
+
+	resolvedID := mapper.ResolveRFQID(rfqID)
+	// Verify RFQ ownership
+	var rfq models.RFQ
+	if err := u.db.WithContext(ctx).Where("id = ? AND buyer_profile_id = ?", resolvedID, buyerID).First(&rfq).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return ErrRFQNotFound
+		}
+		return err
+	}
+
+	recipient, err := u.rfqRepo.AcceptBidBySupplier(ctx, resolvedID, supplierProfileID)
+	if err != nil {
+		return err
+	}
+
+	// Fetch supplier details
+	var supplier supplierModels.SupplierProfile
+	_ = u.db.WithContext(ctx).Where("id = ?", supplierProfileID).First(&supplier).Error
+	supplierName := supplier.CompanyName
+	if supplierName == "" {
+		supplierName = "Supplier"
+	}
+
+	now := apptime.Now()
+	// Insert system message in the thread
+	sysMsg := models.RFQMessage{
+		ID:                uuid.NewString(),
+		RFQID:             resolvedID,
+		SupplierProfileID: supplierProfileID,
+		SenderType:        "system",
+		SenderID:          buyerID,
+		MessageType:       "bid_accepted",
+		Body:              fmt.Sprintf("Pembeli telah menyetujui penawaran dari %s. Permintaan RFQ ini telah selesai.", supplierName),
+		CreatedAt:         now,
+		UpdatedAt:         now,
+	}
+	_ = u.rfqRepo.CreateRFQMessage(ctx, &sysMsg)
+
+	// Send in-app notification to Supplier
+	notif := trustModels.Notification{
+		ID:            uuid.NewString(),
+		RecipientType: "supplier",
+		RecipientID:   recipient.SupplierProfileID,
+		Type:          "rfq_accepted",
+		Title:         fmt.Sprintf("Selamat! Penawaran Diterima: %s", rfq.Title),
+		Body:          fmt.Sprintf("Pembeli telah menyetujui penawaran harga Anda untuk RFQ %s.", rfq.Title),
+		Channel:       "in_app",
+		IsRead:        false,
+		RelatedType:   "rfq",
+		RelatedID:     &rfq.ID,
+		CreatedAt:     now,
+		UpdatedAt:     now,
+	}
+	_ = u.db.WithContext(ctx).Create(&notif).Error
+
+	return nil
+}
+
+func (u *rfqUsecase) GetSupplierRFQThread(ctx context.Context, userID string, rfqID string) ([]dto.RFQMessageDTO, error) {
+	supplierID, err := u.getSupplierProfileID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	resolvedID := mapper.ResolveRFQID(rfqID)
+	// Verify recipient exists
+	if _, err := u.rfqRepo.FindForSupplier(ctx, supplierID, resolvedID); err != nil {
+		return nil, err
+	}
+
+	messages, err := u.rfqRepo.ListRFQMessages(ctx, resolvedID, supplierID)
+	if err != nil {
+		return nil, err
+	}
+
+	// Fetch supplier details
+	var supplier supplierModels.SupplierProfile
+	_ = u.db.WithContext(ctx).Where("id = ?", supplierID).First(&supplier).Error
+
+	supplierRating := supplier.StarRating
+	if supplierRating == 0 {
+		supplierRating = 4.8
+	}
+
+	// Fetch buyer details from RFQ
+	var rfq models.RFQ
+	_ = u.db.WithContext(ctx).Where("id = ?", resolvedID).First(&rfq).Error
+	var buyerProfile buyerModels.BuyerProfile
+	_ = u.db.WithContext(ctx).Where("id = ?", rfq.BuyerProfileID).First(&buyerProfile).Error
+	var buyerUser userModels.User
+	_ = u.db.WithContext(ctx).Where("id = ?", buyerProfile.UserID).First(&buyerUser).Error
+
+	var result []dto.RFQMessageDTO
+	for _, m := range messages {
+		senderName := ""
+		senderAvatar := ""
+		senderRole := ""
+		var senderRating float64
+		isMine := false
+
+		if m.SenderType == "supplier" {
+			senderName = supplier.CompanyName
+			senderAvatar = u.getSupplierLogo(ctx, supplier.ID)
+			senderRole = "Supplier"
+			senderRating = supplierRating
+			isMine = true
+		} else if m.SenderType == "buyer" {
+			senderName = buyerUser.Name
+			if senderName == "" {
+				senderName = "Pembeli"
+			}
+			senderRole = "Buyer"
+		} else {
+			senderName = "Sistem"
+			senderRole = "System"
+		}
+
+		priceStr := m.PriceFormatted
+		moqStr := m.MOQ
+		deliveryStr := m.DeliveryTime
+		if priceStr == "" && m.Metadata != "" && m.Metadata != "{}" {
+			var meta map[string]interface{}
+			if json.Unmarshal([]byte(m.Metadata), &meta) == nil {
+				if p, ok := meta["price"].(string); ok {
+					priceStr = p
+				}
+				if moq, ok := meta["moq"].(string); ok {
+					moqStr = moq
+				}
+				if dt, ok := meta["deliveryTime"].(string); ok {
+					deliveryStr = dt
+				}
+			}
+		}
+
+		result = append(result, dto.RFQMessageDTO{
+			ID:                 m.ID,
+			RFQID:              m.RFQID,
+			SupplierProfileID:  m.SupplierProfileID,
+			SenderType:         m.SenderType,
+			SenderID:           m.SenderID,
+			SenderName:         senderName,
+			SenderAvatar:       senderAvatar,
+			SenderRole:         senderRole,
+			SenderRating:       senderRating,
+			MessageType:        m.MessageType,
+			Body:               m.Body,
+			Price:              m.Price,
+			PriceFormatted:     priceStr,
+			MOQ:                moqStr,
+			DeliveryTime:       deliveryStr,
+			CreatedAt:          m.CreatedAt.Format(time.RFC3339),
+			CreatedAtFormatted: m.CreatedAt.Format("02/01/2006 15:04:05 WIB"),
+			IsMine:             isMine,
+		})
+	}
+
+	return result, nil
+}
+
+func (u *rfqUsecase) SendSupplierRFQMessage(ctx context.Context, userID string, rfqID string, req *dto.SendRFQMessageRequest) (dto.RFQMessageDTO, error) {
+	supplierID, err := u.getSupplierProfileID(ctx, userID)
+	if err != nil {
+		return dto.RFQMessageDTO{}, err
+	}
+
+	resolvedID := mapper.ResolveRFQID(rfqID)
+	recipient, err := u.rfqRepo.FindForSupplier(ctx, supplierID, resolvedID)
+	if err != nil {
+		return dto.RFQMessageDTO{}, err
+	}
+
+	var rfq models.RFQ
+	if err := u.db.WithContext(ctx).Where("id = ?", resolvedID).First(&rfq).Error; err != nil {
+		return dto.RFQMessageDTO{}, ErrRFQNotFound
+	}
+	if rfq.ClosedAt != nil {
+		return dto.RFQMessageDTO{}, ErrRFQAlreadyClosed
+	}
+
+	now := apptime.Now()
+	msgType := "message"
+	if strings.TrimSpace(req.Price) != "" {
+		msgType = "offer"
+	}
+
+	metadata, _ := json.Marshal(map[string]string{
+		"price":        strings.TrimSpace(req.Price),
+		"moq":          strings.TrimSpace(req.MOQ),
+		"deliveryTime": strings.TrimSpace(req.DeliveryTime),
+	})
+
+	msg := models.RFQMessage{
+		ID:                uuid.NewString(),
+		RFQID:             resolvedID,
+		SupplierProfileID: supplierID,
+		SenderType:        "supplier",
+		SenderID:          supplierID,
+		MessageType:       msgType,
+		Body:              strings.TrimSpace(req.Body),
+		PriceFormatted:    strings.TrimSpace(req.Price),
+		MOQ:               strings.TrimSpace(req.MOQ),
+		DeliveryTime:      strings.TrimSpace(req.DeliveryTime),
+		Metadata:          string(metadata),
+		CreatedAt:         now,
+		UpdatedAt:         now,
+	}
+
+	if err := u.rfqRepo.CreateRFQMessage(ctx, &msg); err != nil {
+		return dto.RFQMessageDTO{}, err
+	}
+
+	// If offer, update recipient status
+	if msgType == "offer" {
+		_ = u.db.WithContext(ctx).Model(&models.RFQRecipient{}).
+			Where("id = ?", recipient.ID).
+			Updates(map[string]interface{}{
+				"status":       "responded",
+				"responded_at": &now,
+				"updated_at":   now,
+			}).Error
+	}
+
+	var supplier supplierModels.SupplierProfile
+	_ = u.db.WithContext(ctx).Where("id = ?", supplierID).First(&supplier).Error
+	supplierName := supplier.CompanyName
+	if supplierName == "" {
+		supplierName = "Supplier"
+	}
+	supplierRating := supplier.StarRating
+	if supplierRating == 0 {
+		supplierRating = 4.8
+	}
+
+	// Notify buyer
+	notif := trustModels.Notification{
+		ID:            uuid.NewString(),
+		RecipientType: "buyer",
+		RecipientID:   rfq.BuyerProfileID,
+		Type:          "rfq_proposal",
+		Title:         "Tanggapan Baru untuk RFQ: " + rfq.Title,
+		Body:          supplierName + ": " + req.Body,
+		Channel:       "in_app",
+		IsRead:        false,
+		RelatedType:   "rfq",
+		RelatedID:     &rfq.ID,
+		CreatedAt:     now,
+		UpdatedAt:     now,
+	}
+	_ = u.db.WithContext(ctx).Create(&notif).Error
+
+	return dto.RFQMessageDTO{
+		ID:                 msg.ID,
+		RFQID:              msg.RFQID,
+		SupplierProfileID:  msg.SupplierProfileID,
+		SenderType:         msg.SenderType,
+		SenderID:           msg.SenderID,
+		SenderName:         supplierName,
+		SenderAvatar:       u.getSupplierLogo(ctx, supplier.ID),
+		SenderRole:         "Supplier",
+		SenderRating:       supplierRating,
+		MessageType:        msg.MessageType,
+		Body:               msg.Body,
+		PriceFormatted:     msg.PriceFormatted,
+		MOQ:                msg.MOQ,
+		DeliveryTime:       msg.DeliveryTime,
+		CreatedAt:          msg.CreatedAt.Format(time.RFC3339),
+		CreatedAtFormatted: msg.CreatedAt.Format("02/01/2006 15:04:05 WIB"),
+		IsMine:             true,
+	}, nil
+}
+

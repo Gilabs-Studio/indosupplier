@@ -95,7 +95,7 @@ func (h *RFQHandler) GetByID(c *gin.Context) {
 
 type ListRFQRequest struct {
 	Page    int    `form:"page" binding:"omitempty,min=1"`
-	PerPage int    `form:"per_page" binding:"omitempty,min=1,max=20"`
+	PerPage int    `form:"per_page" binding:"omitempty,min=1,max=100"`
 	Status  string `form:"status"`
 }
 
@@ -193,7 +193,7 @@ func (h *RFQHandler) AcceptBid(c *gin.Context) {
 
 type ListSupplierRFQRequest struct {
 	Page    int `form:"page" binding:"omitempty,min=1"`
-	PerPage int `form:"per_page" binding:"omitempty,min=1,max=20"`
+	PerPage int `form:"per_page" binding:"omitempty,min=1,max=100"`
 }
 
 func (h *RFQHandler) ListForSupplier(c *gin.Context) {
@@ -289,3 +289,178 @@ func (h *RFQHandler) SubmitProposal(c *gin.Context) {
 
 	response.SuccessResponse(c, gin.H{"submitted": true}, &response.Meta{UpdatedBy: userID})
 }
+
+func (h *RFQHandler) GetBuyerThreads(c *gin.Context) {
+	userID, ok := h.getAuthenticatedUserID(c)
+	if !ok {
+		return
+	}
+
+	id := c.Param("id")
+	threads, err := h.usecase.GetBuyerRFQThreads(c.Request.Context(), userID, id)
+	if err != nil {
+		if stderrors.Is(err, usecase.ErrBuyerProfileNotFound) {
+			errors.ErrorResponse(c, "BUYER_PROFILE_NOT_FOUND", nil, nil)
+			return
+		}
+		if stderrors.Is(err, usecase.ErrRFQNotFound) {
+			errors.ErrorResponse(c, "RFQ_NOT_FOUND", map[string]interface{}{"id": id}, nil)
+			return
+		}
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, threads, nil)
+}
+
+func (h *RFQHandler) GetThreadMessages(c *gin.Context) {
+	userID, ok := h.getAuthenticatedUserID(c)
+	if !ok {
+		return
+	}
+
+	id := c.Param("id")
+	supplierID := c.Param("supplierId")
+	messages, err := h.usecase.GetRFQThreadMessages(c.Request.Context(), userID, id, supplierID)
+	if err != nil {
+		if stderrors.Is(err, usecase.ErrBuyerProfileNotFound) {
+			errors.ErrorResponse(c, "BUYER_PROFILE_NOT_FOUND", nil, nil)
+			return
+		}
+		if stderrors.Is(err, usecase.ErrRFQNotFound) {
+			errors.ErrorResponse(c, "RFQ_NOT_FOUND", map[string]interface{}{"id": id}, nil)
+			return
+		}
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, messages, nil)
+}
+
+func (h *RFQHandler) SendBuyerMessage(c *gin.Context) {
+	userID, ok := h.getAuthenticatedUserID(c)
+	if !ok {
+		return
+	}
+
+	var req dto.SendRFQMessageRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		if validationErrors, ok := err.(validator.ValidationErrors); ok {
+			errors.HandleValidationError(c, validationErrors)
+			return
+		}
+		errors.InvalidRequestBodyResponse(c)
+		return
+	}
+
+	id := c.Param("id")
+	supplierID := c.Param("supplierId")
+	msg, err := h.usecase.SendBuyerRFQMessage(c.Request.Context(), userID, id, supplierID, &req)
+	if err != nil {
+		if stderrors.Is(err, usecase.ErrBuyerProfileNotFound) {
+			errors.ErrorResponse(c, "BUYER_PROFILE_NOT_FOUND", nil, nil)
+			return
+		}
+		if stderrors.Is(err, usecase.ErrRFQNotFound) {
+			errors.ErrorResponse(c, "RFQ_NOT_FOUND", map[string]interface{}{"id": id}, nil)
+			return
+		}
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponseCreated(c, msg, &response.Meta{CreatedBy: userID})
+}
+
+func (h *RFQHandler) AcceptBidInThread(c *gin.Context) {
+	userID, ok := h.getAuthenticatedUserID(c)
+	if !ok {
+		return
+	}
+
+	id := c.Param("id")
+	supplierID := c.Param("supplierId")
+	if err := h.usecase.AcceptRFQBidInThread(c.Request.Context(), userID, id, supplierID); err != nil {
+		if stderrors.Is(err, usecase.ErrBuyerProfileNotFound) {
+			errors.ErrorResponse(c, "BUYER_PROFILE_NOT_FOUND", nil, nil)
+			return
+		}
+		if stderrors.Is(err, usecase.ErrRFQNotFound) {
+			errors.ErrorResponse(c, "RFQ_NOT_FOUND", map[string]interface{}{"id": id}, nil)
+			return
+		}
+		if stderrors.Is(err, usecase.ErrRFQAlreadyClosed) {
+			errors.ErrorResponse(c, "RFQ_ALREADY_CLOSED", nil, nil)
+			return
+		}
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, gin.H{"accepted": true}, &response.Meta{UpdatedBy: userID})
+}
+
+func (h *RFQHandler) GetSupplierThread(c *gin.Context) {
+	userID, ok := h.getAuthenticatedUserID(c)
+	if !ok {
+		return
+	}
+
+	id := c.Param("id")
+	messages, err := h.usecase.GetSupplierRFQThread(c.Request.Context(), userID, id)
+	if err != nil {
+		if stderrors.Is(err, usecase.ErrSupplierProfileNotFound) {
+			errors.ErrorResponse(c, "SUPPLIER_PROFILE_NOT_FOUND", nil, nil)
+			return
+		}
+		if stderrors.Is(err, usecase.ErrRFQNotFound) {
+			errors.ErrorResponse(c, "RFQ_NOT_FOUND", map[string]interface{}{"id": id}, nil)
+			return
+		}
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, messages, nil)
+}
+
+func (h *RFQHandler) SendSupplierMessage(c *gin.Context) {
+	userID, ok := h.getAuthenticatedUserID(c)
+	if !ok {
+		return
+	}
+
+	var req dto.SendRFQMessageRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		if validationErrors, ok := err.(validator.ValidationErrors); ok {
+			errors.HandleValidationError(c, validationErrors)
+			return
+		}
+		errors.InvalidRequestBodyResponse(c)
+		return
+	}
+
+	id := c.Param("id")
+	msg, err := h.usecase.SendSupplierRFQMessage(c.Request.Context(), userID, id, &req)
+	if err != nil {
+		if stderrors.Is(err, usecase.ErrSupplierProfileNotFound) {
+			errors.ErrorResponse(c, "SUPPLIER_PROFILE_NOT_FOUND", nil, nil)
+			return
+		}
+		if stderrors.Is(err, usecase.ErrRFQNotFound) {
+			errors.ErrorResponse(c, "RFQ_NOT_FOUND", map[string]interface{}{"id": id}, nil)
+			return
+		}
+		if stderrors.Is(err, usecase.ErrRFQAlreadyClosed) {
+			errors.ErrorResponse(c, "RFQ_ALREADY_CLOSED", nil, nil)
+			return
+		}
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponseCreated(c, msg, &response.Meta{CreatedBy: userID})
+}
+

@@ -1,5 +1,10 @@
 import { apiClient } from "@/lib/api-client";
-import type { SupplierRfqItem, SubmitSupplierRfqProposalPayload } from "../types/rfq.types";
+import type {
+  SupplierRfqItem,
+  SubmitSupplierRfqProposalPayload,
+  RFQMessageItem,
+  SendSupplierRFQMessagePayload,
+} from "../types/rfq.types";
 
 interface ApiResponse<T> {
   success: boolean;
@@ -27,5 +32,15 @@ export const supplierRfqService = {
 
   async submitProposal(id: string, payload: SubmitSupplierRfqProposalPayload): Promise<void> {
     await apiClient.post(`/supplier/rfqs/${id}/proposals`, payload);
+  },
+
+  async getThread(id: string): Promise<RFQMessageItem[]> {
+    const response = await apiClient.get<ApiResponse<RFQMessageItem[]>>(`/supplier/rfqs/${id}/thread`);
+    return response.data.data || [];
+  },
+
+  async sendMessage(id: string, payload: SendSupplierRFQMessagePayload): Promise<RFQMessageItem> {
+    const response = await apiClient.post<ApiResponse<RFQMessageItem>>(`/supplier/rfqs/${id}/thread/messages`, payload);
+    return response.data.data;
   },
 };

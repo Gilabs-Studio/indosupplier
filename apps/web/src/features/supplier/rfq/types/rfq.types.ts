@@ -35,3 +35,31 @@ export interface SubmitSupplierRfqProposalPayload {
   deliveryTime: string;
   notes: string;
 }
+
+export interface RFQMessageItem {
+  id: string;
+  rfqId: string;
+  supplierProfileId: string;
+  senderType: "buyer" | "supplier" | "system";
+  senderId: string;
+  senderName: string;
+  senderAvatar?: string;
+  senderRole?: string;
+  senderRating?: number;
+  messageType: "message" | "offer" | "bid_accepted" | "system";
+  body: string;
+  price?: number;
+  priceFormatted?: string;
+  moq?: string;
+  deliveryTime?: string;
+  createdAt: string;
+  createdAtFormatted: string;
+  isMine: boolean;
+}
+
+export interface SendSupplierRFQMessagePayload {
+  body: string;
+  price?: string;
+  moq?: string;
+  deliveryTime?: string;
+}

@@ -14,6 +14,7 @@ export const buyerRfqId = {
     colProduct: "Produk",
     colQty: "Volume",
     colDestination: "Pelabuhan Tujuan",
+    colSupplier: "Supplier",
     colStatus: "Status",
     colAction: "Aksi",
     viewReplies: "Lihat ({count})",
@@ -72,6 +73,18 @@ export const buyerRfqId = {
     labelAttachment: "Lampiran Dokumen",
     toastAcceptSuccess: "Penawaran berhasil disetujui! Tim sales kami akan menghubungi Anda.",
     toastAcceptError: "Gagal menyetujui penawaran.",
-    toastSpecUploadError: "Gagal mengunggah dokumen spesifikasi."
+    toastSpecUploadError: "Gagal mengunggah dokumen spesifikasi.",
+    threadTitle: "Negosiasi & Penawaran Supplier",
+    selectSupplier: "Pilih Supplier",
+    latestOfferBadge: "Penawaran Terakhir",
+    officialOffer: "Penawaran Resmi",
+    givesOffer: "memberikan penawaran sebesar",
+    acceptOffer: "Terima Penawaran Ini",
+    offerAccepted: "Penawaran Ini Telah Diterima",
+    emptyThreads: "Belum ada supplier yang merespons atau mengirim penawaran untuk RFQ ini.",
+    replyPlaceholder: "Tulis pesan balasan negosiasi harga atau pertanyaan teknis...",
+    btnSendReply: "Kirim Balasan",
+    sendingReply: "Mengirim...",
+    deliveryEst: "Estimasi Pengiriman"
   }
 };

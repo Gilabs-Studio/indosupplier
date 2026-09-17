@@ -16,8 +16,12 @@ import {
   Store,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import { useBuyerBookmarks } from "@/features/buyer/bookmarks/hooks/useBuyerBookmarks";
 import { useBuyerFollowing } from "@/features/buyer/following/hooks/useBuyerFollowing";
+import { chatService } from "@/features/buyer/chat/services/chat.service";
+import { useBuyerRfqs } from "@/features/buyer/rfq/hooks/useBuyerRfqs";
+import { useRfqViewedStore } from "@/features/buyer/rfq/stores/use-rfq-viewed-store";
 
 interface BuyerLayoutProps {
   readonly children: React.ReactNode;
@@ -26,11 +30,32 @@ interface BuyerLayoutProps {
 export function BuyerLayout({ children }: BuyerLayoutProps) {
   const locale = useLocale();
   const pathname = usePathname();
-  const { user } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
   const t = useTranslations("buyer.layout");
   const { bookmarks } = useBuyerBookmarks();
   const { following } = useBuyerFollowing();
+  const { isRfqViewed } = useRfqViewedStore();
   const productBookmarks = bookmarks.filter((item) => item.type === "product");
+
+  // Unread chat messages count
+  const { data: rooms } = useQuery({
+    queryKey: ["chat-rooms"],
+    queryFn: () => chatService.getRooms(),
+    enabled: isAuthenticated,
+    refetchInterval: 15000,
+  });
+  const unreadChatCount = rooms?.reduce((acc, r) => acc + (r.unread_count || 0), 0) || 0;
+
+  // Active RFQ incoming offers count (only unviewed/unread offers)
+  const { data: rfqData } = useBuyerRfqs({ page: 1, per_page: 50 });
+  const activeRfqOffersCount =
+    rfqData?.items?.filter(
+      (r) =>
+        (r.status === "Offers Received" || r.replies > 0) &&
+        r.status !== "Completed" &&
+        r.status !== "Selesai" &&
+        !isRfqViewed(r.id)
+    ).length || 0;
 
   const menuItems = [
     {
@@ -42,6 +67,7 @@ export function BuyerLayout({ children }: BuyerLayoutProps) {
       name: t("chat"),
       href: "/chat",
       icon: MessageSquare,
+      badgeCount: unreadChatCount,
     },
     {
       name: t("reviews"),
@@ -52,6 +78,7 @@ export function BuyerLayout({ children }: BuyerLayoutProps) {
       name: t("rfqList"),
       href: "/rfq",
       icon: RefreshCw,
+      badgeCount: activeRfqOffersCount,
     },
     {
       name: t("following"),
@@ -168,14 +195,28 @@ export function BuyerLayout({ children }: BuyerLayoutProps) {
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 cursor-pointer hover:-translate-y-0.5 active:translate-y-0",
+                      "flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 cursor-pointer hover:-translate-y-0.5 active:translate-y-0",
                       isActive
                         ? "bg-primary text-primary-foreground hover:bg-primary/95 hover:shadow-lg hover:shadow-primary/20"
                         : "text-muted-foreground hover:text-foreground hover:bg-secondary"
                     )}
                   >
-                    <IconComponent className="h-4.5 w-4.5 shrink-0" />
-                    <span>{item.name}</span>
+                    <div className="flex items-center gap-3 min-w-0">
+                      <IconComponent className="h-4.5 w-4.5 shrink-0" />
+                      <span className="truncate">{item.name}</span>
+                    </div>
+                    {item.badgeCount !== undefined && item.badgeCount > 0 && (
+                      <span
+                        className={cn(
+                          "inline-flex items-center justify-center min-w-4.5 h-4.5 px-1.5 text-[10px] font-bold rounded-full",
+                          isActive
+                            ? "bg-primary-foreground text-primary"
+                            : "bg-destructive/15 text-destructive"
+                        )}
+                      >
+                        {item.badgeCount}
+                      </span>
+                    )}
                   </Link>
                 );
               })}

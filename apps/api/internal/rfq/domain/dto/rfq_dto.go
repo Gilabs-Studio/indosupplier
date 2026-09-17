@@ -30,7 +30,17 @@ type RFQResponse struct {
 	Description    string `json:"description,omitempty"`
 	AttachmentURL  string `json:"attachmentUrl,omitempty"`
 	AttachmentName string `json:"attachmentName,omitempty"`
-	AttachmentSize string `json:"attachmentSize,omitempty"`
+	AttachmentSize string               `json:"attachmentSize,omitempty"`
+	Suppliers      []RFQSupplierSummary `json:"suppliers,omitempty"`
+}
+
+type RFQSupplierSummary struct {
+	ID                string `json:"id"`
+	SupplierProfileID string `json:"supplierProfileId"`
+	SupplierName      string `json:"supplierName"`
+	Status            string `json:"status"`
+	Price             string `json:"price,omitempty"`
+	IsAccepted        bool   `json:"isAccepted"`
 }
 
 type RFQBidResponse struct {
@@ -79,3 +89,45 @@ type SubmitRFQProposalRequest struct {
 	DeliveryTime string `json:"deliveryTime" binding:"required,min=1,max=120"`
 	Notes        string `json:"notes" binding:"required,min=3,max=1000"`
 }
+
+type RFQThreadSupplierDTO struct {
+	SupplierProfileID string  `json:"supplierProfileId"`
+	SupplierName      string  `json:"supplierName"`
+	SupplierLogo      string  `json:"supplierLogo,omitempty"`
+	Verified          bool    `json:"verified"`
+	Rating            float64 `json:"rating"`
+	City              string  `json:"city,omitempty"`
+	LatestOffer       string  `json:"latestOffer,omitempty"`
+	LatestOfferAt     string  `json:"latestOfferAt,omitempty"`
+	Status            string  `json:"status"`
+	MessageCount      int     `json:"messageCount"`
+}
+
+type RFQMessageDTO struct {
+	ID                 string   `json:"id"`
+	RFQID              string   `json:"rfqId"`
+	SupplierProfileID  string   `json:"supplierProfileId"`
+	SenderType         string   `json:"senderType"` // "buyer", "supplier", "system"
+	SenderID           string   `json:"senderId"`
+	SenderName         string   `json:"senderName"`
+	SenderAvatar       string   `json:"senderAvatar,omitempty"`
+	SenderRole         string   `json:"senderRole,omitempty"`
+	SenderRating       float64  `json:"senderRating,omitempty"`
+	MessageType        string   `json:"messageType"` // "message", "offer", "bid_accepted", "system"
+	Body               string   `json:"body"`
+	Price              *float64 `json:"price,omitempty"`
+	PriceFormatted     string   `json:"priceFormatted,omitempty"`
+	MOQ                string   `json:"moq,omitempty"`
+	DeliveryTime       string   `json:"deliveryTime,omitempty"`
+	CreatedAt          string   `json:"createdAt"`
+	CreatedAtFormatted string   `json:"createdAtFormatted"` // "07/09/2026 23:08:03 WIB"
+	IsMine             bool     `json:"isMine"`
+}
+
+type SendRFQMessageRequest struct {
+	Body         string `json:"body" binding:"required,min=1,max=2000"`
+	Price        string `json:"price" binding:"omitempty,max=120"`
+	MOQ          string `json:"moq" binding:"omitempty,max=120"`
+	DeliveryTime string `json:"deliveryTime" binding:"omitempty,max=120"`
+}
+

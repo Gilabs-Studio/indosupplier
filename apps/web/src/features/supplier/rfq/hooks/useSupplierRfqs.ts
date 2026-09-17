@@ -40,3 +40,30 @@ export function useSubmitSupplierRfqProposal(id: string) {
     },
   });
 }
+
+export function useSupplierRfqThread(id: string) {
+  return useQuery({
+    queryKey: ["supplier-rfq-thread", id],
+    queryFn: () => supplierRfqService.getThread(id),
+    enabled: !!id,
+    refetchInterval: 4000,
+  });
+}
+
+export function useSendSupplierRfqMessage(id: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: { body: string; price?: string; moq?: string; deliveryTime?: string }) =>
+      supplierRfqService.sendMessage(id, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["supplier-rfq-thread", id] });
+      queryClient.invalidateQueries({ queryKey: ["supplier-rfq-detail", id] });
+      queryClient.invalidateQueries({ queryKey: ["supplier-rfqs"] });
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error("Gagal mengirim tanggapan.");
+    },
+  });
+}

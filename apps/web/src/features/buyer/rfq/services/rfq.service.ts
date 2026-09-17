@@ -1,5 +1,13 @@
 import { apiClient } from "@/lib/api-client";
-import type { RFQItem, RFQBid, RFQDetail, CreateRfqPayload } from "../types/rfq.types";
+import type {
+  RFQItem,
+  RFQBid,
+  RFQDetail,
+  CreateRfqPayload,
+  RFQThreadSupplier,
+  RFQMessageItem,
+  SendRFQMessagePayload,
+} from "../types/rfq.types";
 
 interface ApiResponse<T> {
   success: boolean;
@@ -44,6 +52,34 @@ export const rfqService = {
 
   async acceptBid(rfqId: string, bidId: string): Promise<void> {
     await apiClient.post(`/buyer/rfqs/${rfqId}/bids/${bidId}/accept`);
+  },
+
+  async getThreads(rfqId: string): Promise<RFQThreadSupplier[]> {
+    const response = await apiClient.get<ApiResponse<RFQThreadSupplier[]>>(`/buyer/rfqs/${rfqId}/threads`);
+    return response.data.data || [];
+  },
+
+  async getThreadMessages(rfqId: string, supplierId: string): Promise<RFQMessageItem[]> {
+    const response = await apiClient.get<ApiResponse<RFQMessageItem[]>>(
+      `/buyer/rfqs/${rfqId}/threads/${supplierId}/messages`
+    );
+    return response.data.data || [];
+  },
+
+  async sendMessage(
+    rfqId: string,
+    supplierId: string,
+    payload: SendRFQMessagePayload
+  ): Promise<RFQMessageItem> {
+    const response = await apiClient.post<ApiResponse<RFQMessageItem>>(
+      `/buyer/rfqs/${rfqId}/threads/${supplierId}/messages`,
+      payload
+    );
+    return response.data.data;
+  },
+
+  async acceptBidInThread(rfqId: string, supplierId: string): Promise<void> {
+    await apiClient.post(`/buyer/rfqs/${rfqId}/threads/${supplierId}/accept`);
   },
 
   async uploadSpecFile(file: File): Promise<{ url: string; filename: string }> {

@@ -14,6 +14,7 @@ export const buyerRfqEn = {
     colProduct: "Product",
     colQty: "Volume",
     colDestination: "Destination Port",
+    colSupplier: "Supplier",
     colStatus: "Status",
     colAction: "Action",
     viewReplies: "View ({count})",
@@ -72,6 +73,18 @@ export const buyerRfqEn = {
     labelAttachment: "Attachment Document",
     toastAcceptSuccess: "Bid accepted! Our sales team will contact you shortly.",
     toastAcceptError: "Failed to accept bid.",
-    toastSpecUploadError: "Failed to upload specification document."
+    toastSpecUploadError: "Failed to upload specification document.",
+    threadTitle: "Supplier Bids & Negotiations",
+    selectSupplier: "Select Supplier",
+    latestOfferBadge: "Latest Offer",
+    officialOffer: "Official Offer",
+    givesOffer: "submitted an offer of",
+    acceptOffer: "Accept This Offer",
+    offerAccepted: "This Offer Has Been Accepted",
+    emptyThreads: "No suppliers have responded or placed bids for this RFQ yet.",
+    replyPlaceholder: "Type your reply to negotiate price or ask technical questions...",
+    btnSendReply: "Send Reply",
+    sendingReply: "Sending...",
+    deliveryEst: "Estimated Delivery"
   }
 };

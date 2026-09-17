@@ -83,3 +83,70 @@ export function useBuyerRfqDetail(id: string) {
     isUploading: uploadFileMutation.isPending,
   };
 }
+
+export function useBuyerRfqThreads(rfqId: string) {
+  return useQuery({
+    queryKey: ["buyer-rfq-threads", rfqId],
+    queryFn: () => rfqService.getThreads(rfqId),
+    enabled: !!rfqId,
+    refetchInterval: 8000,
+  });
+}
+
+export function useBuyerRfqThreadMessages(rfqId: string, supplierProfileId?: string) {
+  return useQuery({
+    queryKey: ["buyer-rfq-thread-messages", rfqId, supplierProfileId],
+    queryFn: () => rfqService.getThreadMessages(rfqId, supplierProfileId!),
+    enabled: !!rfqId && !!supplierProfileId,
+    refetchInterval: 4000,
+  });
+}
+
+export function useSendBuyerMessage(rfqId: string, supplierProfileId?: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: { body: string }) =>
+      rfqService.sendMessage(rfqId, supplierProfileId!, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["buyer-rfq-thread-messages", rfqId, supplierProfileId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["buyer-rfq-threads", rfqId],
+      });
+    },
+    onError: (err) => {
+      console.error(err);
+      toast.error("Gagal mengirim pesan balasan");
+    },
+  });
+}
+
+export function useAcceptBidInThread(rfqId: string, supplierProfileId?: string) {
+  const queryClient = useQueryClient();
+  const t = useTranslations("buyerRfq");
+
+  return useMutation({
+    mutationFn: () => rfqService.acceptBidInThread(rfqId, supplierProfileId!),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["buyer-rfq-detail", rfqId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["buyer-rfq-threads", rfqId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["buyer-rfq-thread-messages", rfqId, supplierProfileId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["buyer-rfqs"],
+      });
+      toast.success(t("rfqDetail.toastAcceptSuccess") || "Penawaran berhasil diterima!");
+    },
+    onError: (err) => {
+      console.error(err);
+      toast.error(t("rfqDetail.toastAcceptError") || "Gagal menerima penawaran");
+    },
+  });
+}

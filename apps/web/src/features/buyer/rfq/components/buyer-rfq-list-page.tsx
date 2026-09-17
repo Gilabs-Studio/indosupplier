@@ -19,14 +19,18 @@ import {
   MessageSquare,
   Package,
   MapPin,
+  Check,
+  Store,
 } from "lucide-react";
 import { useBuyerRfqs } from "../hooks/useBuyerRfqs";
+import { useRfqViewedStore } from "../stores/use-rfq-viewed-store";
 
 export function BuyerRfqListPage() {
   const t = useTranslations("buyerRfq.rfqList");
   const [activeTab, setActiveTab] = useState("all");
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const { isRfqViewed, markRfqAsViewed } = useRfqViewedStore();
 
   const { data: rfqData, isLoading } = useBuyerRfqs({
     page,
@@ -34,16 +38,16 @@ export function BuyerRfqListPage() {
     status: activeTab,
   });
 
-  // Dedicated query to keep the received offers count accurate and persistent across all tabs
-  const { data: receivedCountData } = useBuyerRfqs({
-    status: "received",
-    per_page: 1,
-  });
-
   const rfqs = rfqData?.items || [];
 
-  // Count active offers for notification badge from server total, falling back to current list
-  const offersCount = receivedCountData?.total ?? rfqs.filter((r) => r.status === "Offers Received" || r.replies > 0).length;
+  // Count active offers that haven't been viewed yet
+  const offersCount = rfqs.filter(
+    (r) =>
+      (r.status === "Offers Received" || r.replies > 0) &&
+      r.status !== "Completed" &&
+      r.status !== "Selesai" &&
+      !isRfqViewed(r.id)
+  ).length;
 
   const tabs = [
     { id: "all", name: t("tabAll"), count: 0 },
@@ -60,18 +64,30 @@ export function BuyerRfqListPage() {
     );
   }
 
-  const filteredRfqs = rfqs.filter((rfq) =>
-    rfq.product.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    rfq.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    rfq.targetPort.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredRfqs = rfqs.filter(
+    (rfq) =>
+      rfq.product.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      rfq.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      rfq.targetPort?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      rfq.suppliers?.some((s) => s.supplierName.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  // Sort priority: RFQs with offers received come first, then by date
+  // Sort priority: Unviewed offers first, then viewed offers, then waiting for quotes, then completed; secondary sort by date
   const sortedRfqs = [...filteredRfqs].sort((a, b) => {
-    const aHasOffer = a.status === "Offers Received" || a.replies > 0;
-    const bHasOffer = b.status === "Offers Received" || b.replies > 0;
+    const aCompleted = a.status === "Completed" || a.status === "Selesai";
+    const bCompleted = b.status === "Completed" || b.status === "Selesai";
+    const aHasOffer = (a.status === "Offers Received" || a.replies > 0) && !aCompleted;
+    const bHasOffer = (b.status === "Offers Received" || b.replies > 0) && !bCompleted;
+
+    const aUnviewedOffer = aHasOffer && !isRfqViewed(a.id);
+    const bUnviewedOffer = bHasOffer && !isRfqViewed(b.id);
+
+    if (aUnviewedOffer && !bUnviewedOffer) return -1;
+    if (!aUnviewedOffer && bUnviewedOffer) return 1;
     if (aHasOffer && !bHasOffer) return -1;
     if (!aHasOffer && bHasOffer) return 1;
+    if (!aCompleted && bCompleted) return -1;
+    if (aCompleted && !bCompleted) return 1;
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
@@ -149,14 +165,16 @@ export function BuyerRfqListPage() {
                     <tr>
                       <th className="py-3 px-6">{t("colProduct")}</th>
                       <th className="py-3 px-4">{t("colQty")}</th>
-                      <th className="py-3 px-4">{t("colDestination")}</th>
+                      <th className="py-3 px-4">{t("colSupplier")}</th>
                       <th className="py-3 px-4">{t("colStatus")}</th>
                       <th className="py-3 px-6 text-right">{t("colAction")}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border/60">
                     {sortedRfqs.map((rfq) => {
-                      const hasOffer = rfq.status === "Offers Received" || rfq.replies > 0;
+                      const isCompleted = rfq.status === "Completed" || rfq.status === "Selesai";
+                      const hasOffer = (rfq.status === "Offers Received" || rfq.replies > 0) && !isCompleted;
+                      const isViewed = isRfqViewed(rfq.id);
                       const defaultThumbnail = "/images/categories/cat-bahan-baku.webp";
                       const imageSrc = resolveImageUrl(rfq.imageUrl || defaultThumbnail);
 
@@ -180,6 +198,7 @@ export function BuyerRfqListPage() {
                               <div className="min-w-0 max-w-md space-y-0.5">
                                 <Link
                                   href={`/rfq/${rfq.id}`}
+                                  onClick={() => markRfqAsViewed(rfq.id)}
                                   className="font-medium text-sm text-foreground hover:text-primary transition-colors cursor-pointer line-clamp-1"
                                 >
                                   {rfq.product}
@@ -195,24 +214,82 @@ export function BuyerRfqListPage() {
                           <td className="py-3.5 px-4 text-sm text-foreground whitespace-nowrap">
                             {rfq.quantity}
                           </td>
-                          <td className="py-3.5 px-4 text-xs text-muted-foreground max-w-xs truncate">
-                            {rfq.targetPort}
+                          <td className="py-3.5 px-4 text-xs">
+                            {rfq.suppliers && rfq.suppliers.length > 0 ? (
+                              rfq.suppliers.length === 1 ? (
+                                <Link
+                                  href={`/supplier/${rfq.suppliers[0].supplierProfileId}`}
+                                  className={cn(
+                                    "inline-flex items-center gap-1.5 transition-colors hover:text-primary cursor-pointer max-w-[220px] truncate",
+                                    rfq.suppliers[0].isAccepted
+                                      ? "font-semibold text-emerald-600 dark:text-emerald-400"
+                                      : "text-foreground"
+                                  )}
+                                >
+                                  <Store className="h-3.5 w-3.5 text-muted-foreground/70 shrink-0" />
+                                  <span className="truncate">{rfq.suppliers[0].supplierName}</span>
+                                  {rfq.suppliers[0].isAccepted && (
+                                    <span
+                                      className="inline-flex items-center justify-center h-4 w-4 rounded-full bg-emerald-600 text-white shrink-0 shadow-xs"
+                                      title="Penawaran Diterima"
+                                    >
+                                      <Check className="h-2.5 w-2.5 stroke-[3]" />
+                                    </span>
+                                  )}
+                                </Link>
+                              ) : (
+                                <div className="flex flex-col space-y-1 font-mono text-xs">
+                                  {rfq.suppliers.map((supp, idx) => {
+                                    const isLast = idx === rfq.suppliers!.length - 1;
+                                    const branch = isLast ? "└─" : "├─";
+                                    return (
+                                      <div key={supp.id} className="flex items-center gap-1.5">
+                                        <span className="text-muted-foreground/60 select-none text-[11px] shrink-0">
+                                          {branch}
+                                        </span>
+                                        <Link
+                                          href={`/supplier/${supp.supplierProfileId}`}
+                                          className={cn(
+                                            "font-sans transition-colors hover:text-primary cursor-pointer truncate max-w-[170px]",
+                                            supp.isAccepted
+                                              ? "font-semibold text-emerald-600 dark:text-emerald-400"
+                                              : "text-foreground"
+                                          )}
+                                        >
+                                          {supp.supplierName}
+                                        </Link>
+                                        {supp.isAccepted && (
+                                          <span
+                                            className="inline-flex items-center justify-center h-3.5 w-3.5 rounded-full bg-emerald-600 text-white shrink-0 shadow-xs"
+                                            title="Penawaran Diterima"
+                                          >
+                                            <Check className="h-2 w-2 stroke-[3]" />
+                                          </span>
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )
+                            ) : (
+                              <span className="text-muted-foreground/60">-</span>
+                            )}
                           </td>
                           <td className="py-3.5 px-4 whitespace-nowrap">
-                            {hasOffer ? (
-                              <div className="flex items-center gap-1.5 text-xs font-medium text-foreground">
-                                <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
-                                <span>Ada Penawaran</span>
+                            {isCompleted ? (
+                              <div className="flex items-center gap-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
+                                <span>{t("tabCompleted")}</span>
                               </div>
-                            ) : rfq.status === "Waiting for Quotes" ? (
-                              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                                <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30 shrink-0" />
-                                <span>Menunggu</span>
+                            ) : hasOffer ? (
+                              <div className="flex items-center gap-1.5 text-xs font-medium text-foreground">
+                                <span className={cn("h-1.5 w-1.5 rounded-full shrink-0", isViewed ? "bg-muted-foreground/40" : "bg-primary")} />
+                                <span className={isViewed ? "text-muted-foreground" : "text-foreground"}>Ada Penawaran</span>
                               </div>
                             ) : (
                               <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
-                                <span>{rfq.status}</span>
+                                <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30 shrink-0" />
+                                <span>{t("tabWaiting")}</span>
                               </div>
                             )}
                           </td>
@@ -220,16 +297,30 @@ export function BuyerRfqListPage() {
                             {hasOffer ? (
                               <Link
                                 href={`/rfq/${rfq.id}`}
+                                onClick={() => markRfqAsViewed(rfq.id)}
                                 className="inline-flex items-center justify-end gap-1.5 text-foreground hover:text-primary transition-colors cursor-pointer py-1 px-2 rounded-md hover:bg-muted/40 group"
-                                title={`${rfq.replies || 1} Penawaran Masuk`}
+                                title={isViewed ? "Penawaran sudah dilihat (0 belum dibaca)" : `${rfq.replies || 1} Penawaran Masuk`}
                               >
-                                <MessageSquare className="h-4 w-4 text-primary shrink-0 group-hover:scale-110 transition-transform" />
-                                <span className="text-xs font-semibold">{rfq.replies || 1}</span>
+                                <MessageSquare
+                                  className={cn(
+                                    "h-4 w-4 shrink-0 transition-transform group-hover:scale-110",
+                                    isViewed ? "text-muted-foreground/60" : "text-primary"
+                                  )}
+                                />
+                                <span
+                                  className={cn(
+                                    "text-xs font-semibold",
+                                    isViewed ? "text-muted-foreground" : "text-primary"
+                                  )}
+                                >
+                                  {isViewed ? "0" : (rfq.replies || 1)}
+                                </span>
                                 <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/60 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
                               </Link>
                             ) : (
                               <Link
                                 href={`/rfq/${rfq.id}`}
+                                onClick={() => markRfqAsViewed(rfq.id)}
                                 className="inline-flex items-center justify-end gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer py-1 px-2 rounded-md hover:bg-muted/40"
                               >
                                 <span>{t("viewDetail")}</span>

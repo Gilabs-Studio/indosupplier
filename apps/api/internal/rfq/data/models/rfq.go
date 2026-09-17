@@ -77,16 +77,21 @@ func (r *RFQRecipient) BeforeCreate(tx *gorm.DB) error {
 }
 
 type RFQMessage struct {
-	ID          string         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
-	RFQID       string         `gorm:"type:uuid;not null;index" json:"rfq_id"`
-	SenderType  string         `gorm:"type:varchar(40);not null;index" json:"sender_type"`
-	SenderID    string         `gorm:"type:uuid;not null;index" json:"sender_id"`
-	MessageType string         `gorm:"type:varchar(40);not null;default:'message';index" json:"message_type"`
-	Body        string         `gorm:"type:text;not null" json:"body"`
-	Metadata    string         `gorm:"type:jsonb;not null;default:'{}'" json:"metadata"`
-	CreatedAt   time.Time      `gorm:"autoCreateTime" json:"created_at"`
-	UpdatedAt   time.Time      `gorm:"autoUpdateTime;index" json:"updated_at"`
-	DeletedAt   gorm.DeletedAt `gorm:"index" json:"-"`
+	ID                string         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
+	RFQID             string         `gorm:"type:uuid;not null;index" json:"rfq_id"`
+	SupplierProfileID string         `gorm:"type:uuid;not null;index" json:"supplier_profile_id"`
+	SenderType        string         `gorm:"type:varchar(40);not null;index" json:"sender_type"` // "buyer", "supplier", "system"
+	SenderID          string         `gorm:"type:uuid;not null;index" json:"sender_id"`
+	MessageType       string         `gorm:"type:varchar(40);not null;default:'message';index" json:"message_type"` // "message", "offer", "bid_accepted", "system"
+	Body              string         `gorm:"type:text;not null" json:"body"`
+	Price             *float64       `gorm:"type:numeric(15,2)" json:"price,omitempty"`
+	PriceFormatted    string         `gorm:"type:varchar(100)" json:"price_formatted,omitempty"`
+	MOQ               string         `gorm:"type:varchar(100)" json:"moq,omitempty"`
+	DeliveryTime      string         `gorm:"type:varchar(100)" json:"delivery_time,omitempty"`
+	Metadata          string         `gorm:"type:jsonb;not null;default:'{}'" json:"metadata"`
+	CreatedAt         time.Time      `gorm:"autoCreateTime" json:"created_at"`
+	UpdatedAt         time.Time      `gorm:"autoUpdateTime;index" json:"updated_at"`
+	DeletedAt         gorm.DeletedAt `gorm:"index" json:"-"`
 }
 
 func (RFQMessage) TableName() string {

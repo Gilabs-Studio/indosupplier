@@ -3,6 +3,7 @@ package handler
 import (
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -145,6 +146,30 @@ func (h *ChatHandler) MarkAsRead(c *gin.Context) {
 	}
 
 	response.SuccessResponse(c, gin.H{"status": "ok"}, nil)
+}
+
+func (h *ChatHandler) GetWebSocketToken(c *gin.Context) {
+	tokenString := ""
+	authHeader := c.GetHeader("Authorization")
+	if authHeader != "" {
+		parts := strings.Split(authHeader, " ")
+		if len(parts) == 2 && parts[0] == "Bearer" {
+			tokenString = parts[1]
+		}
+	}
+	if tokenString == "" {
+		cookie, err := c.Cookie("indosupplier_access_token")
+		if err == nil && cookie != "" {
+			tokenString = cookie
+		}
+	}
+
+	if tokenString == "" {
+		response.ErrorResponse(c, http.StatusUnauthorized, "UNAUTHORIZED", "Token missing", nil, nil)
+		return
+	}
+
+	response.SuccessResponse(c, gin.H{"token": tokenString}, nil)
 }
 
 func (h *ChatHandler) ConnectWebSocket(c *gin.Context) {

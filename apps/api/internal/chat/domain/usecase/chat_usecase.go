@@ -219,6 +219,12 @@ func (u *chatUsecase) GetRoomMessages(ctx context.Context, userID string, roomID
 		return nil, err
 	}
 
+	// Automatically mark messages from counterparty as read
+	_ = u.db.WithContext(ctx).
+		Model(&chatModels.ChatMessage{}).
+		Where("chat_room_id = ? AND (sender_type <> ? OR sender_id <> ?) AND is_read = ?", roomID, "buyer", buyerID, false).
+		Update("is_read", true).Error
+
 	var responses []dto.MessageResponse
 	for _, m := range messages {
 		responses = append(responses, dto.MessageResponse{
@@ -322,9 +328,9 @@ func (u *chatUsecase) MarkAsRead(ctx context.Context, userID string, roomID stri
 		return ErrRoomAccessDenied
 	}
 
-	// Mark all messages from the supplier as read
+	// Mark all messages from the counterparty as read
 	return u.db.WithContext(ctx).
 		Model(&chatModels.ChatMessage{}).
-		Where("chat_room_id = ? AND sender_type = ? AND is_read = ?", roomID, "supplier", false).
+		Where("chat_room_id = ? AND (sender_type <> ? OR sender_id <> ?) AND is_read = ?", roomID, "buyer", buyerID, false).
 		Update("is_read", true).Error
 }

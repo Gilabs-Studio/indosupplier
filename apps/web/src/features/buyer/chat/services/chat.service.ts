@@ -34,4 +34,9 @@ export const chatService = {
   async markAsRead(roomId: string): Promise<void> {
     await apiClient.post(`/buyer/chat/rooms/${roomId}/read`);
   },
+
+  async getWsToken(): Promise<string> {
+    const response = await apiClient.get<ApiResponse<{ token: string }>>("/buyer/chat/ws-token");
+    return response.data?.data?.token || "";
+  },
 };
