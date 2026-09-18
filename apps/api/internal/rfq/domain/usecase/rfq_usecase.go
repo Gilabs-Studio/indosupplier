@@ -828,7 +828,10 @@ func (u *rfqUsecase) SubmitProposal(ctx context.Context, userID string, rfqID st
 		return err
 	}
 	if rfq.ClosedAt != nil || rfq.VisibilityStatus == "closed" {
-		return errors.New("rfq is closed")
+		return ErrRFQAlreadyClosed
+	}
+	if recipient.Status == "accepted" {
+		return ErrRFQAlreadyClosed
 	}
 
 	metadata, err := json.Marshal(map[string]string{
@@ -1059,6 +1062,7 @@ func (u *rfqUsecase) GetRFQThreadMessages(ctx context.Context, userID string, rf
 	if supplierRating == 0 {
 		supplierRating = 4.8
 	}
+	supplierLogo := u.getSupplierLogo(ctx, supplier.ID)
 
 	var result []dto.RFQMessageDTO
 	for _, m := range messages {
@@ -1080,7 +1084,7 @@ func (u *rfqUsecase) GetRFQThreadMessages(ctx context.Context, userID string, rf
 			if senderName == "" {
 				senderName = "Supplier"
 			}
-			senderAvatar = u.getSupplierLogo(ctx, supplier.ID)
+			senderAvatar = supplierLogo
 			senderRole = "Supplier"
 			senderRating = supplierRating
 		} else {
@@ -1241,7 +1245,7 @@ func (u *rfqUsecase) AcceptRFQBidInThread(ctx context.Context, userID string, rf
 		RFQID:             resolvedID,
 		SupplierProfileID: supplierProfileID,
 		SenderType:        "system",
-		SenderID:          buyerID,
+		SenderID:          uuid.Nil.String(),
 		MessageType:       "bid_accepted",
 		Body:              fmt.Sprintf("Pembeli telah menyetujui penawaran dari %s. Permintaan RFQ ini telah selesai.", supplierName),
 		CreatedAt:         now,
@@ -1294,6 +1298,7 @@ func (u *rfqUsecase) GetSupplierRFQThread(ctx context.Context, userID string, rf
 	if supplierRating == 0 {
 		supplierRating = 4.8
 	}
+	supplierLogo := u.getSupplierLogo(ctx, supplier.ID)
 
 	// Fetch buyer details from RFQ
 	var rfq models.RFQ
@@ -1313,7 +1318,7 @@ func (u *rfqUsecase) GetSupplierRFQThread(ctx context.Context, userID string, rf
 
 		if m.SenderType == "supplier" {
 			senderName = supplier.CompanyName
-			senderAvatar = u.getSupplierLogo(ctx, supplier.ID)
+			senderAvatar = supplierLogo
 			senderRole = "Supplier"
 			senderRating = supplierRating
 			isMine = true

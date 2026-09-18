@@ -1,0 +1,30 @@
+meta {
+  name: 09 Get Supplier RFQ Thread
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{base_url}}/api/v1/supplier/rfqs/{{test_rfq_id}}/thread
+  body: none
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+assert {
+  res.status: eq 200
+  res.body.success: eq true
+  res.body.data: isDefined
+}
+
+docs {
+  Retrieves the full message history and negotiation thread for this RFQ from the supplier perspective.
+}

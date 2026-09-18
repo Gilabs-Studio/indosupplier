@@ -283,6 +283,10 @@ func (h *RFQHandler) SubmitProposal(c *gin.Context) {
 			errors.ErrorResponse(c, "RFQ_NOT_FOUND", map[string]interface{}{"id": id}, nil)
 			return
 		}
+		if stderrors.Is(err, usecase.ErrRFQAlreadyClosed) {
+			errors.ErrorResponse(c, "RFQ_ALREADY_CLOSED", map[string]interface{}{"id": id}, nil)
+			return
+		}
 		errors.InternalServerErrorResponse(c, err.Error())
 		return
 	}

@@ -103,8 +103,8 @@ Keterangan Checklist:
 
 ### Respon RFQ & Penawaran (`/supplier/rfq`)
 - [x] FE: List RFQ Masuk & Submit Penawaran
-- [x] BE: API RFQ Supplier (`GET /api/v1/supplier/rfqs`, `POST /:id/proposals`)
-- [ ] BRU: Supplier RFQ Docs
+- [x] BE: API RFQ Supplier (`GET /api/v1/supplier/rfqs`, `POST /:id/proposals`, `GET/POST /:id/thread*`)
+- [x] BRU: Supplier RFQ Docs (`19-supplier-rfq`)
 
 ### Verifikasi Usaha KYB (`/supplier/verification`)
 - [x] FE: Form Upload Dokumen Legal NIB/SIUP/NPWP
