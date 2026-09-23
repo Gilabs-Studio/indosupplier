@@ -283,6 +283,50 @@ export function useBuyerCompare() {
     },
   });
 
+  const clearProductsMutation = useMutation({
+    mutationFn: async () => {
+      saveGuestProducts([]);
+      if (isAuthenticated) {
+        try {
+          await compareService.clearComparedProducts();
+        } catch (err) {
+          console.warn("Failed to clear compared products on server:", err);
+        }
+      }
+      return [] as ComparedProduct[];
+    },
+    onSuccess: () => {
+      queryClient.setQueryData(queryKeyProducts, []);
+      toast.success("Daftar perbandingan produk berhasil dikosongkan");
+    },
+    onError: (error) => {
+      console.error(error);
+      queryClient.setQueryData(queryKeyProducts, []);
+    },
+  });
+
+  const clearSuppliersMutation = useMutation({
+    mutationFn: async () => {
+      saveGuestSuppliers([]);
+      if (isAuthenticated) {
+        try {
+          await compareService.clearComparedSuppliers();
+        } catch (err) {
+          console.warn("Failed to clear compared suppliers on server:", err);
+        }
+      }
+      return [] as ComparedSupplier[];
+    },
+    onSuccess: () => {
+      queryClient.setQueryData(queryKeySuppliers, []);
+      toast.success("Daftar perbandingan supplier berhasil dikosongkan");
+    },
+    onError: (error) => {
+      console.error(error);
+      queryClient.setQueryData(queryKeySuppliers, []);
+    },
+  });
+
   return {
     // Suppliers
     suppliers: compareQuery.data || [],
@@ -293,6 +337,9 @@ export function useBuyerCompare() {
     isAdding: addMutation.isPending,
     removeSupplier: removeMutation.mutate,
     isRemoving: removeMutation.isPending,
+    clearCompareSuppliers: clearSuppliersMutation.mutate,
+    clearCompareSuppliersAsync: clearSuppliersMutation.mutateAsync,
+    isClearingSuppliers: clearSuppliersMutation.isPending,
 
     // Products
     products: compareProductsQuery.data || [],
@@ -303,5 +350,8 @@ export function useBuyerCompare() {
     isAddingProduct: addProductMutation.isPending,
     removeProduct: removeProductMutation.mutate,
     isRemovingProduct: removeProductMutation.isPending,
+    clearCompareProducts: clearProductsMutation.mutate,
+    clearCompareProductsAsync: clearProductsMutation.mutateAsync,
+    isClearingProducts: clearProductsMutation.isPending,
   };
 }

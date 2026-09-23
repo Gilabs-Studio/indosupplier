@@ -11,8 +11,13 @@
       "furniture": "Furniture & Wood Crafts",
       "construction": "Construction & Real Estate",
       "electronics": "Electronics & Electrical",
-      "automotive": "Automotive & Parts",
-      "countSuffix": "Suppliers"
+      "countSuffix": "Suppliers",
+      "productCountSuffix": "Products",
+      "searchPlaceholder": "Search category or industry...",
+      "allCategoriesCount": "Showing {count} verified B2B industrial categories",
+      "directoryTag": "B2B INDUSTRIAL DIRECTORY",
+      "totalIndexed": "{count} Verified Categories",
+      "empty": "No categories found"
     }
   }
 }

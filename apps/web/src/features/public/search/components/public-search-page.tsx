@@ -17,7 +17,7 @@ import {
   GitCompareArrows,
   MapPin,
   Package,
-  Search,
+  RotateCcw,
   ShieldCheck,
   SlidersHorizontal,
   Store,
@@ -130,8 +130,6 @@ export function PublicSearchPage({ locale, detailBasePath = "" }: PublicSearchPa
     isLoading,
     activeTab,
     setActiveTab,
-    searchInput,
-    setSearchInput,
     showMobileFilters,
     setShowMobileFilters,
     filteredProducts,
@@ -140,11 +138,12 @@ export function PublicSearchPage({ locale, detailBasePath = "" }: PublicSearchPa
     isFollowingSupplier,
     isProductBookmarked,
     resultCount,
-    handleSearchSubmit,
     toggleSupplierFollowing,
     toggleProductBookmark,
     toggleSupplierCompare,
     toggleProductCompare,
+    clearCompareProducts,
+    clearCompareSuppliers,
     setCategory,
     setRegion,
     setVerifiedOnly,
@@ -154,52 +153,50 @@ export function PublicSearchPage({ locale, detailBasePath = "" }: PublicSearchPa
   return (
     <PublicLayout locale={locale}>
       <main className="min-h-screen bg-background">
-        <section className="border-b border-border bg-card">
-          <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-5 sm:px-6 lg:px-8">
-            <form onSubmit={handleSearchSubmit} className="flex flex-col gap-3 md:flex-row md:items-center">
-              <div className="flex h-11 flex-1 items-center rounded-lg border border-input bg-background px-3">
-                <Search className="h-5 w-5 shrink-0 text-muted-foreground" />
-                <input
-                  value={searchInput}
-                  onChange={(event) => setSearchInput(event.target.value)}
-                  placeholder={t("placeholder")}
-                  className="h-full w-full bg-transparent px-3 text-sm outline-none"
-                />
-              </div>
-              <Button type="submit" className="h-11 cursor-pointer px-6 font-semibold">
-                {t("btnSearch")}
-              </Button>
-            </form>
-
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex gap-6">
-                <button
-                  type="button"
-                  onClick={() => setActiveTab("products")}
-                  className={`flex cursor-pointer items-center gap-2 border-b-2 pb-3 text-sm font-extrabold ${
-                    activeTab === "products" ? "border-primary text-primary" : "border-transparent text-muted-foreground"
-                  }`}
-                >
-                  <Package className="h-4 w-4" />
-                  {t("productsTab")}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab("suppliers")}
-                  className={`flex cursor-pointer items-center gap-2 border-b-2 pb-3 text-sm font-extrabold ${
-                    activeTab === "suppliers" ? "border-primary text-primary" : "border-transparent text-muted-foreground"
-                  }`}
-                >
-                  <Store className="h-4 w-4" />
-                  {t("shopsTab")}
-                </button>
-              </div>
-
-              <Button variant="outline" size="sm" onClick={() => setShowMobileFilters(true)} className="cursor-pointer lg:hidden">
-                <SlidersHorizontal className="mr-2 h-4 w-4" />
-                {t("filterTitle")}
-              </Button>
+        <section className="border-b border-border bg-card/50 backdrop-blur-xs">
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-6">
+              <button
+                type="button"
+                onClick={() => setActiveTab("products")}
+                className={`flex cursor-pointer items-center gap-2 border-b-2 py-2 text-sm font-bold transition-colors ${
+                  activeTab === "products"
+                    ? "border-primary text-primary"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Package className="h-4 w-4" />
+                <span>{t("productsTab")}</span>
+                <span className="ml-1 rounded-full bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
+                  {filteredProducts.length}
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("suppliers")}
+                className={`flex cursor-pointer items-center gap-2 border-b-2 py-2 text-sm font-bold transition-colors ${
+                  activeTab === "suppliers"
+                    ? "border-primary text-primary"
+                    : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Store className="h-4 w-4" />
+                <span>{t("shopsTab")}</span>
+                <span className="ml-1 rounded-full bg-muted px-2 py-0.5 text-xs font-semibold text-muted-foreground">
+                  {suppliers.length}
+                </span>
+              </button>
             </div>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowMobileFilters(true)}
+              className="cursor-pointer lg:hidden"
+            >
+              <SlidersHorizontal className="mr-2 h-4 w-4" />
+              {t("filterTitle")}
+            </Button>
           </div>
         </section>
 
@@ -310,6 +307,91 @@ export function PublicSearchPage({ locale, detailBasePath = "" }: PublicSearchPa
             </div>
           </div>
         )}
+
+        {/* Floating Comparison Dock */}
+        {activeTab === "products" && comparedProducts.length > 0 && (
+          <aside aria-label="Comparison dock" className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 w-[94%] max-w-xl bg-card/95 backdrop-blur-md border border-border shadow-2xl rounded-2xl p-3 sm:px-4 sm:py-3 transition-all duration-300 animate-in fade-in-50 slide-in-from-bottom-5 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <GitCompareArrows className="h-5 w-5" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm font-bold text-foreground truncate">
+                  Bandingkan Produk ({comparedProducts.length}/5)
+                </p>
+                <p className="text-[11px] text-muted-foreground truncate hidden sm:block">
+                  {comparedProducts.map((p) => p.name).join(", ")}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => clearCompareProducts()}
+                className="cursor-pointer text-xs font-semibold text-muted-foreground hover:text-destructive hover:bg-destructive/10 px-2 sm:px-3 h-8"
+                title="Reset daftar perbandingan"
+              >
+                <RotateCcw className="h-3.5 w-3.5 mr-1" />
+                <span>Reset</span>
+              </Button>
+
+              <Button
+                asChild
+                size="sm"
+                className="cursor-pointer text-xs font-bold bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs h-8 px-3 sm:px-4"
+              >
+                <Link href={`${detailBasePath}/compare`}>
+                  Bandingkan Sekarang &rarr;
+                </Link>
+              </Button>
+            </div>
+          </aside>
+        )}
+
+        {activeTab === "suppliers" && comparedSuppliers.length > 0 && (
+          <aside aria-label="Comparison dock" className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 w-[94%] max-w-xl bg-card/95 backdrop-blur-md border border-border shadow-2xl rounded-2xl p-3 sm:px-4 sm:py-3 transition-all duration-300 animate-in fade-in-50 slide-in-from-bottom-5 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <GitCompareArrows className="h-5 w-5" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm font-bold text-foreground truncate">
+                  Bandingkan Supplier ({comparedSuppliers.length}/5)
+                </p>
+                <p className="text-[11px] text-muted-foreground truncate hidden sm:block">
+                  {comparedSuppliers.map((s) => s.companyName).join(", ")}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => clearCompareSuppliers()}
+                className="cursor-pointer text-xs font-semibold text-muted-foreground hover:text-destructive hover:bg-destructive/10 px-2 sm:px-3 h-8"
+                title="Reset daftar perbandingan"
+              >
+                <RotateCcw className="h-3.5 w-3.5 mr-1" />
+                <span>Reset</span>
+              </Button>
+
+              <Button
+                asChild
+                size="sm"
+                className="cursor-pointer text-xs font-bold bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs h-8 px-3 sm:px-4"
+              >
+                <Link href={`${detailBasePath}/compare`}>
+                  Bandingkan Sekarang &rarr;
+                </Link>
+              </Button>
+            </div>
+          </aside>
+        )}
       </main>
     </PublicLayout>
   );
@@ -326,7 +408,7 @@ function FilterPanel({
   onReset,
   t,
 }: {
-  categories: Array<{ id: string; name: string }>;
+  categories: Array<{ id: string; name: string; slug?: string }>;
   selectedCategory: string;
   selectedRegion: string;
   verifiedOnly: boolean;
@@ -351,20 +433,24 @@ function FilterPanel({
           <button
             type="button"
             onClick={() => onCategory("")}
-            className={`w-full cursor-pointer rounded border px-3 py-2 text-left text-sm ${selectedCategory === "" ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:bg-muted"}`}
+            className={`w-full cursor-pointer rounded border px-3 py-2 text-left text-sm ${selectedCategory === "" ? "border-primary bg-primary/10 text-primary font-semibold" : "border-border text-muted-foreground hover:bg-muted"}`}
           >
             {t("allCategories")}
           </button>
-          {categories.map((category) => (
-            <button
-              type="button"
-              key={category.id}
-              onClick={() => onCategory(selectedCategory === category.id ? "" : category.id)}
-              className={`w-full cursor-pointer rounded border px-3 py-2 text-left text-sm ${selectedCategory === category.id ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground hover:bg-muted"}`}
-            >
-              {category.name}
-            </button>
-          ))}
+          {categories.map((category) => {
+            const isSelected = selectedCategory === category.id || (Boolean(category.slug) && selectedCategory === category.slug);
+            const targetVal = category.slug || category.id;
+            return (
+              <button
+                type="button"
+                key={category.id}
+                onClick={() => onCategory(isSelected ? "" : targetVal)}
+                className={`w-full cursor-pointer rounded border px-3 py-2 text-left text-sm transition-colors ${isSelected ? "border-primary bg-primary/10 text-primary font-semibold" : "border-border text-muted-foreground hover:bg-muted"}`}
+              >
+                {category.name}
+              </button>
+            );
+          })}
         </div>
       </div>
 

@@ -25,6 +25,10 @@ export const compareService = {
     return response.data.data || [];
   },
 
+  async clearComparedSuppliers(): Promise<void> {
+    await apiClient.delete("/buyer/compare/clear");
+  },
+
   // Product comparison
   async getComparedProducts(): Promise<ComparedProduct[]> {
     const response = await apiClient.get<ApiResponse<ComparedProduct[]>>("/buyer/compare/products");
@@ -41,5 +45,9 @@ export const compareService = {
   async removeComparedProduct(id: string): Promise<ComparedProduct[]> {
     const response = await apiClient.delete<ApiResponse<ComparedProduct[]>>(`/buyer/compare/products/${id}`);
     return response.data.data || [];
+  },
+
+  async clearComparedProducts(): Promise<void> {
+    await apiClient.delete("/buyer/compare/products/clear");
   },
 };

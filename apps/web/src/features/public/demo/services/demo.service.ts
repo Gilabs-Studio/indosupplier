@@ -6,6 +6,7 @@ import type {
   DemoProductItem,
   DemoProductFilterState,
 } from "../types/demo.types";
+import { getCategoryThumbnail } from "../../category/utils/category-image";
 
 export const demoService = {
   // Banner mock data (Sysadmin CMS mock)
@@ -91,7 +92,7 @@ export const demoService = {
   // Popular Categories from live API
   async getPopularCategories(): Promise<DemoCategoryItem[]> {
     try {
-      const response = await apiClient.get<{ data: Array<{ id: string; slug: string; name: string; description?: string }> }>("/categories");
+      const response = await apiClient.get<{ data: Array<{ id: string; slug: string; name: string; description?: string; icon_url?: string }> }>("/categories");
       const cats = response.data?.data || [];
       if (cats.length > 0) {
         return cats.map((cat) => ({
@@ -99,7 +100,7 @@ export const demoService = {
           slug: cat.slug,
           nameId: cat.name,
           nameEn: cat.name,
-          image: `/images/categories/cat-${cat.slug}.webp`,
+          image: getCategoryThumbnail(cat.slug, cat.icon_url, cat.name),
           href: `/demo/search?category=${cat.slug}`,
         }));
       }

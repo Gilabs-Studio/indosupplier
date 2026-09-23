@@ -113,14 +113,20 @@ func (u *discoveryUsecase) ListProducts(ctx context.Context, params dto.ListPubl
 		Joins("JOIN supplier_profiles ON supplier_profiles.id = supplier_products.supplier_profile_id").
 		Where("supplier_profiles.status = ?", "active")
 
-	if params.Query != "" {
-		clauses, args := productSearchClauses(params.Query)
-		db = db.Where(strings.Join(clauses, " OR "), args...)
-	}
-
+	hasJoinedCategories := false
 	if params.Category != "" {
 		db = db.Joins("LEFT JOIN categories ON categories.id = supplier_products.category_id").
 			Where("categories.id = ? OR categories.slug = ? OR categories.name ILIKE ?", params.Category, params.Category, "%"+params.Category+"%")
+		hasJoinedCategories = true
+	}
+
+	if params.Query != "" {
+		if !hasJoinedCategories {
+			db = db.Joins("LEFT JOIN categories ON categories.id = supplier_products.category_id")
+			hasJoinedCategories = true
+		}
+		clauses, args := productSearchClauses(params.Query)
+		db = db.Where(strings.Join(clauses, " OR "), args...)
 	}
 
 	if params.Location != "" && params.Location != "all" && params.Location != "Semua Lokasi" {
@@ -161,10 +167,20 @@ func (u *discoveryUsecase) ListProducts(ctx context.Context, params dto.ListPubl
 		db = db.Order("supplier_profiles.star_rating DESC")
 	case "newest", "terbaru":
 		db = db.Order("supplier_products.created_at DESC")
-	case "terlaris", "popular":
-		fallthrough
 	default:
-		db = db.Order("supplier_products.is_featured DESC, supplier_profiles.star_rating DESC, supplier_products.sort_order ASC")
+		if params.Query != "" {
+			trimmedQ := strings.TrimSpace(params.Query)
+			exactPattern := "%" + trimmedQ + "%"
+			db = db.Order(gorm.Expr(`(
+				(CASE WHEN supplier_products.name ILIKE ? THEN 15.0 ELSE 0.0 END) +
+				(COALESCE(word_similarity(?, supplier_products.name), 0) * 8.0) +
+				(COALESCE(similarity(?, supplier_products.name), 0) * 5.0) +
+				(CASE WHEN supplier_products.is_featured THEN 2.0 ELSE 0.0 END) +
+				(COALESCE(supplier_profiles.star_rating, 0) * 0.4)
+			) DESC, supplier_products.sort_order ASC`, exactPattern, trimmedQ, trimmedQ))
+		} else {
+			db = db.Order("supplier_products.is_featured DESC, supplier_profiles.star_rating DESC, supplier_products.sort_order ASC")
+		}
 	}
 
 	page, limit := utils.NormalizePagination(params.Page, params.Limit, 12)
@@ -418,12 +434,23 @@ func (u *discoveryUsecase) LookupProducts(ctx context.Context, q string, page in
 		Joins("JOIN supplier_profiles ON supplier_profiles.id = supplier_products.supplier_profile_id").
 		Where("supplier_profiles.status = ?", "active")
 	if q != "" {
+		db = db.Joins("LEFT JOIN categories ON categories.id = supplier_products.category_id")
 		clauses, args := productSearchClauses(q)
 		db = db.Where(strings.Join(clauses, " OR "), args...)
+		trimmedQ := strings.TrimSpace(q)
+		exactPattern := "%" + trimmedQ + "%"
+		db = db.Order(gorm.Expr(`(
+			(CASE WHEN supplier_products.name ILIKE ? THEN 15.0 ELSE 0.0 END) +
+			(COALESCE(word_similarity(?, supplier_products.name), 0) * 8.0) +
+			(COALESCE(similarity(?, supplier_products.name), 0) * 5.0) +
+			(CASE WHEN supplier_products.is_featured THEN 2.0 ELSE 0.0 END)
+		) DESC, supplier_products.name ASC`, exactPattern, trimmedQ, trimmedQ))
+	} else {
+		db = db.Order("supplier_products.is_featured DESC, supplier_products.name ASC")
 	}
 
 	var products []models.SupplierProduct
-	if err := db.Order("supplier_products.is_featured DESC, supplier_products.name ASC").Offset(offset).Limit(limit).Find(&products).Error; err != nil {
+	if err := db.Offset(offset).Limit(limit).Find(&products).Error; err != nil {
 		return nil, err
 	}
 
@@ -972,14 +999,77 @@ func responseTimeLabel(minutes int) string {
 	return fmt.Sprintf("%d hari", hours/24)
 }
 
+var catalogVocabulary = []string{
+	"laptop", "notebook", "komputer", "computer", "pc", "monitor", "elektronik", "printer",
+	"kertas", "paper", "hvs", "pulpen", "pen", "binder", "atk", "kantor",
+	"masker", "mask", "helm", "helmet", "safety", "k3", "apd",
+	"pompa", "pump", "mesin", "machine", "motor", "genset", "sentrifugal",
+	"kursi", "chair", "meja", "desk", "lemari", "furniture", "mebel", "ergonomis",
+	"karton", "carton", "kardus", "box", "packaging", "kemasan", "corrugated",
+	"baja", "steel", "rebar", "besi", "iron", "metal", "plate", "coil",
+	"kain", "fabric", "tekstil", "textile", "katun", "cotton", "denim", "fiber", "rayon",
+	"kopi", "coffee", "arabica", "robusta", "gayo", "gula", "sugar", "jahe", "ginger",
+	"bentonite", "clay", "karbon", "carbon", "garnet", "sand", "powder",
+}
+
+func levenshteinDistance(s1, s2 string) int {
+	r1, r2 := []rune(s1), []rune(s2)
+	n, m := len(r1), len(r2)
+	if n == 0 {
+		return m
+	}
+	if m == 0 {
+		return n
+	}
+	dp := make([]int, m+1)
+	for j := 0; j <= m; j++ {
+		dp[j] = j
+	}
+	for i := 1; i <= n; i++ {
+		prev := dp[0]
+		dp[0] = i
+		for j := 1; j <= m; j++ {
+			temp := dp[j]
+			cost := 0
+			if r1[i-1] != r2[j-1] {
+				cost = 1
+			}
+			dp[j] = minInt(dp[j]+1, minInt(dp[j-1]+1, prev+cost))
+			prev = temp
+		}
+	}
+	return dp[m]
+}
+
+func minInt(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
 func productSearchClauses(q string) ([]string, []interface{}) {
 	clauses := make([]string, 0)
 	args := make([]interface{}, 0)
-	for _, term := range expandedSearchTerms(q) {
+	terms := expandedSearchTerms(q)
+
+	for _, term := range terms {
 		like := "%" + term + "%"
-		clauses = append(clauses, "(supplier_products.name ILIKE ? OR supplier_products.description ILIKE ? OR supplier_profiles.company_name ILIKE ?)")
-		args = append(args, like, like, like)
+		clauses = append(clauses, "(supplier_products.name ILIKE ? OR supplier_products.description ILIKE ? OR supplier_profiles.company_name ILIKE ? OR coalesce(categories.name, '') ILIKE ?)")
+		args = append(args, like, like, like, like)
 	}
+
+	cleanedQ := strings.TrimSpace(q)
+	if cleanedQ != "" {
+		// Trigram word similarity matching on product name, description, and category name
+		clauses = append(clauses, "(word_similarity(?, supplier_products.name) >= 0.35 OR word_similarity(?, coalesce(categories.name, '')) >= 0.35 OR word_similarity(?, coalesce(supplier_products.description, '')) >= 0.40)")
+		args = append(args, cleanedQ, cleanedQ, cleanedQ)
+
+		// Full-text search inverted index on combined fields
+		clauses = append(clauses, "to_tsvector('simple', supplier_products.name || ' ' || coalesce(supplier_products.description, '') || ' ' || coalesce(categories.name, '')) @@ plainto_tsquery('simple', ?)")
+		args = append(args, cleanedQ)
+	}
+
 	return clauses, args
 }
 
@@ -990,21 +1080,53 @@ func expandedSearchTerms(q string) []string {
 	}
 
 	terms := []string{base}
+
+	// 1. Synonym dictionary
 	synonyms := map[string][]string{
-		"kopi":     {"coffee", "arabica", "gayo"},
-		"coffee":   {"kopi"},
-		"baja":     {"steel", "metal"},
-		"steel":    {"baja", "logam"},
-		"kain":     {"fabric", "textile", "cotton"},
-		"tekstil":  {"textile", "fabric"},
-		"furnitur": {"furniture", "wood", "teak"},
-		"mebel":    {"furniture", "wood", "teak"},
-		"jahe":     {"ginger"},
-		"ginger":   {"jahe"},
+		"laptop":    {"notebook", "komputer", "pc"},
+		"notebook":  {"laptop"},
+		"komputer":  {"computer", "pc", "laptop"},
+		"kopi":      {"coffee", "arabica", "gayo"},
+		"coffee":    {"kopi"},
+		"baja":      {"steel", "metal", "besi"},
+		"steel":     {"baja", "logam", "besi"},
+		"kain":      {"fabric", "textile", "cotton", "katun"},
+		"tekstil":   {"textile", "fabric"},
+		"furnitur":  {"furniture", "wood", "teak", "kursi", "meja"},
+		"mebel":     {"furniture", "wood", "teak", "kursi"},
+		"jahe":      {"ginger"},
+		"ginger":    {"jahe"},
+		"kardus":    {"karton", "box", "packaging"},
+		"karton":    {"box", "carton", "kardus"},
+		"packaging": {"kemasan", "box", "karton"},
+		"masker":    {"mask", "k3", "apd"},
+		"helm":      {"helmet", "k3", "safety"},
+		"pompa":     {"pump", "mesin"},
+		"bentonit":  {"bentonite", "clay"},
+		"bentonite": {"bentonit"},
 	}
+
 	for key, values := range synonyms {
 		if strings.Contains(base, key) {
 			terms = append(terms, values...)
+		}
+	}
+
+	// 2. Fuzzy Typo Correction via Levenshtein against Catalog Vocabulary
+	tokens := strings.Fields(base)
+	for _, token := range tokens {
+		if len(token) >= 4 {
+			for _, vocab := range catalogVocabulary {
+				dist := levenshteinDistance(token, vocab)
+				// Typo tolerance: distance <= 2 for short words (>=4 chars), distance <= 3 for long words (>=7 chars)
+				if dist <= 2 || (len(vocab) >= 7 && dist <= 3) {
+					terms = append(terms, vocab)
+					// Also add synonyms of the corrected vocab if available
+					if syns, ok := synonyms[vocab]; ok {
+						terms = append(terms, syns...)
+					}
+				}
+			}
 		}
 	}
 

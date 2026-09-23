@@ -13,6 +13,7 @@ import { useBuyerCompare } from "@/features/buyer/compare/hooks/useBuyerCompare"
 import { useBuyerFollowing } from "@/features/buyer/following/hooks/useBuyerFollowing";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
 import { toast } from "sonner";
+import { recordUserSearch } from "../utils/user-preference";
 
 export type SearchTab = "products" | "suppliers";
 
@@ -60,19 +61,27 @@ export function usePublicSearchPage({ detailBasePath }: UsePublicSearchPageProps
     removeSupplier,
     addProduct,
     removeProduct,
+    clearCompareProducts,
+    clearCompareSuppliers,
   } = useBuyerCompare();
 
   const { data: products = [], isLoading: isProductsLoading } = useQuery({
-    queryKey: ["public", "products", params.query],
-    queryFn: () => searchService.searchProducts(params.query || ""),
+    queryKey: ["public", "products", params.query, params.category, params.region, params.verifiedOnly],
+    queryFn: () =>
+      searchService.searchProducts({
+        q: params.query || undefined,
+        category: params.category || undefined,
+        region: params.region || undefined,
+        verifiedOnly: params.verifiedOnly || undefined,
+      }),
     placeholderData: (previousData) => previousData,
   });
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
       if (params.category && product.categoryName) {
-        const selected = categories.find((category) => category.id === params.category);
-        if (selected && selected.name !== product.categoryName) return false;
+        const selected = categories.find((category) => category.id === params.category || category.slug === params.category);
+        if (selected && selected.name !== product.categoryName && selected.slug !== params.category) return false;
       }
       if (params.region && !product.supplierLocation?.toLowerCase().includes(params.region.toLowerCase())) return false;
       if (params.verifiedOnly && !product.supplierVerified) return false;
@@ -129,11 +138,21 @@ export function usePublicSearchPage({ detailBasePath }: UsePublicSearchPageProps
 
   const isProductBookmarked = (productId: string) => bookmarks.some((item) => item.type === "product" && item.supplierProductId === productId);
 
+  React.useEffect(() => {
+    if (initialQuery) {
+      recordUserSearch(initialQuery, initialCategory);
+    }
+  }, [initialQuery, initialCategory]);
+
   const resultCount = activeTab === "products" ? filteredProducts.length : suppliers.length;
 
   const handleSearchSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    setQuery(searchInput.trim());
+    const clean = searchInput.trim();
+    if (clean) {
+      recordUserSearch(clean, params.category);
+    }
+    setQuery(clean);
   };
 
   return {
@@ -158,6 +177,8 @@ export function usePublicSearchPage({ detailBasePath }: UsePublicSearchPageProps
     toggleProductBookmark,
     toggleSupplierCompare,
     toggleProductCompare,
+    clearCompareProducts,
+    clearCompareSuppliers,
     setCategory,
     setRegion,
     setVerifiedOnly,

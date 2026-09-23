@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { searchService } from "../services/search-service";
 import type { SupplierSearchParams } from "../types";
 
@@ -12,6 +12,30 @@ export function useSupplierSearch(initialParams: SupplierSearchParams = {}) {
     region: initialParams.region || "",
     verifiedOnly: initialParams.verifiedOnly || false,
   });
+
+  useEffect(() => {
+    setParams((prev) => {
+      const nextQuery = initialParams.query || "";
+      const nextCategory = initialParams.category || "";
+      const nextRegion = initialParams.region || "";
+      const nextVerified = initialParams.verifiedOnly || false;
+
+      if (
+        prev.query === nextQuery &&
+        prev.category === nextCategory &&
+        prev.region === nextRegion &&
+        prev.verifiedOnly === nextVerified
+      ) {
+        return prev;
+      }
+      return {
+        query: nextQuery,
+        category: nextCategory,
+        region: nextRegion,
+        verifiedOnly: nextVerified,
+      };
+    });
+  }, [initialParams.query, initialParams.category, initialParams.region, initialParams.verifiedOnly]);
 
   const { data: suppliers = [], isLoading, isError, refetch } = useQuery({
     queryKey: ["public", "suppliers", params],

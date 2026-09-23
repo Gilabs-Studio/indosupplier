@@ -26,10 +26,12 @@ type CompareUsecase interface {
 	List(ctx context.Context, userID string) ([]dto.ComparedSupplierResponse, error)
 	Add(ctx context.Context, userID string, supplierProfileID string) ([]dto.ComparedSupplierResponse, error)
 	Delete(ctx context.Context, userID string, supplierProfileID string) ([]dto.ComparedSupplierResponse, error)
+	Clear(ctx context.Context, userID string) error
 
 	ListProducts(ctx context.Context, userID string) ([]dto.ComparedProductResponse, error)
 	AddProduct(ctx context.Context, userID string, supplierProductID string) ([]dto.ComparedProductResponse, error)
 	DeleteProduct(ctx context.Context, userID string, supplierProductID string) ([]dto.ComparedProductResponse, error)
+	ClearProducts(ctx context.Context, userID string) error
 }
 
 type compareUsecase struct {
@@ -510,4 +512,36 @@ func (u *compareUsecase) DeleteProduct(ctx context.Context, userID string, suppl
 	}
 
 	return u.ListProducts(ctx, userID)
+}
+
+func (u *compareUsecase) Clear(ctx context.Context, userID string) error {
+	buyerID, err := u.getBuyerProfileID(ctx, userID)
+	if err != nil {
+		return err
+	}
+
+	session, err := u.getOrCreateSession(ctx, buyerID)
+	if err != nil {
+		return err
+	}
+
+	return u.db.WithContext(ctx).
+		Where("comparison_session_id = ?", session.ID).
+		Delete(&buyerModels.ComparisonSessionItem{}).Error
+}
+
+func (u *compareUsecase) ClearProducts(ctx context.Context, userID string) error {
+	buyerID, err := u.getBuyerProfileID(ctx, userID)
+	if err != nil {
+		return err
+	}
+
+	session, err := u.getOrCreateSession(ctx, buyerID)
+	if err != nil {
+		return err
+	}
+
+	return u.db.WithContext(ctx).
+		Where("comparison_session_id = ?", session.ID).
+		Delete(&buyerModels.ComparisonProductSessionItem{}).Error
 }

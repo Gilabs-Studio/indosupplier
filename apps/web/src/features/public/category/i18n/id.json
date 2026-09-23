@@ -11,8 +11,13 @@
       "furniture": "Mebel & Kerajinan Kayu",
       "construction": "Konstruksi & Properti",
       "electronics": "Elektronik & Kelistrikan",
-      "automotive": "Otomotif & Suku Cadang",
-      "countSuffix": "Supplier"
+      "countSuffix": "Supplier",
+      "productCountSuffix": "Produk",
+      "searchPlaceholder": "Cari kategori atau sektor...",
+      "allCategoriesCount": "Menampilkan {count} kategori industri B2B terverifikasi",
+      "directoryTag": "DIREKTORI SEKTOR INDUSTRI",
+      "totalIndexed": "{count} Kategori Terverifikasi",
+      "empty": "Kategori tidak ditemukan"
     }
   }
 }

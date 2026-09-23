@@ -89,9 +89,23 @@ func AutoMigrate() error {
 	DB.Exec("CREATE EXTENSION IF NOT EXISTS pg_trgm")
 	DB.Exec("CREATE INDEX IF NOT EXISTS idx_supplier_profiles_name_trgm ON supplier_profiles USING gin (company_name gin_trgm_ops)")
 	DB.Exec("CREATE INDEX IF NOT EXISTS idx_supplier_products_name_trgm ON supplier_products USING gin (name gin_trgm_ops)")
+	DB.Exec("CREATE INDEX IF NOT EXISTS idx_supplier_products_desc_trgm ON supplier_products USING gin (description gin_trgm_ops)")
+	DB.Exec("CREATE INDEX IF NOT EXISTS idx_categories_name_trgm ON categories USING gin (name gin_trgm_ops)")
+	DB.Exec("CREATE INDEX IF NOT EXISTS idx_categories_slug_trgm ON categories USING gin (slug gin_trgm_ops)")
+	DB.Exec("CREATE INDEX IF NOT EXISTS idx_supplier_products_tsv ON supplier_products USING gin (to_tsvector('simple', coalesce(name, '') || ' ' || coalesce(description, '')))")
 	DB.Exec("CREATE INDEX IF NOT EXISTS idx_po_buyer_status_created ON purchase_orders (buyer_profile_id, status, created_at DESC)")
 	DB.Exec("CREATE INDEX IF NOT EXISTS idx_notifications_recipient_channel_created ON notifications (recipient_id, channel, created_at DESC)")
 	DB.Exec("UPDATE supplier_profiles SET slug = LOWER(REGEXP_REPLACE(company_name, '[^a-zA-Z0-9]+', '-', 'g')) WHERE slug IS NULL OR slug = ''")
+
+	// Backfill category icon URLs
+	DB.Exec(`UPDATE categories SET icon_url = '/images/categories/cat-bahan-baku.webp' WHERE slug IN ('steel-metal', 'bahan-baku') AND (icon_url IS NULL OR icon_url = '')`)
+	DB.Exec(`UPDATE categories SET icon_url = '/images/categories/cat-elektronik.webp' WHERE slug IN ('electronics-it', 'elektronik') AND (icon_url IS NULL OR icon_url = '')`)
+	DB.Exec(`UPDATE categories SET icon_url = '/images/categories/cat-kebersihan-k3.webp' WHERE slug IN ('safety-k3', 'kebersihan-k3') AND (icon_url IS NULL OR icon_url = '')`)
+	DB.Exec(`UPDATE categories SET icon_url = '/images/categories/cat-mesin-industrial.webp' WHERE slug IN ('machinery-industrial', 'mesin') AND (icon_url IS NULL OR icon_url = '')`)
+	DB.Exec(`UPDATE categories SET icon_url = '/images/categories/cat-kantor-atk.webp' WHERE slug IN ('kantor-atk', 'office-stationery') AND (icon_url IS NULL OR icon_url = '')`)
+	DB.Exec(`UPDATE categories SET icon_url = '/images/categories/cat-furniture.webp' WHERE slug IN ('furniture', 'mebel') AND (icon_url IS NULL OR icon_url = '')`)
+	DB.Exec(`UPDATE categories SET icon_url = '/images/categories/cat-packaging.webp' WHERE slug IN ('packaging', 'kemasan') AND (icon_url IS NULL OR icon_url = '')`)
+	DB.Exec(`UPDATE categories SET icon_url = '/images/categories/cat-makanan-minuman.webp' WHERE slug IN ('agricultural-products', 'textiles-fabrics', 'industrial-minerals', 'pertanian') AND (icon_url IS NULL OR icon_url = '')`)
 
 	return nil
 }

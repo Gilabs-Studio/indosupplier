@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ChevronDown, PackageOpen } from "lucide-react";
+import { ChevronDown, PackageOpen, X, Sparkles } from "lucide-react";
 import { useDemoFeaturedProducts } from "../../hooks/use-demo-home";
 import { MarketplaceProductCard } from "../marketplace-product-card";
 import { PopularProductsSkeleton } from "../skeletons/product-card-skeleton";
@@ -17,6 +17,8 @@ export function PopularProductsSection({ locale }: Readonly<PopularProductsSecti
     products,
     isLoading,
     bookmarkedProductIds,
+    activeInterestQuery,
+    clearInterest,
     setSort,
     toggleBookmark,
   } = useDemoFeaturedProducts(locale);
@@ -25,9 +27,34 @@ export function PopularProductsSection({ locale }: Readonly<PopularProductsSecti
     <section className="w-full space-y-4 pt-2">
       {/* Header: Title + Sort */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
-          {isEn ? "Featured Products" : "Produk Unggulan"}
-        </h2>
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h2 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
+              {activeInterestQuery
+                ? (isEn ? "Recommended for You" : "Rekomendasi untuk Anda")
+                : (isEn ? "Featured Products" : "Produk Unggulan")}
+            </h2>
+
+            {activeInterestQuery && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                <span>{isEn ? "Based on interest:" : "Berdasarkan minat:"} <strong>&ldquo;{activeInterestQuery}&rdquo;</strong></span>
+                <button
+                  type="button"
+                  onClick={clearInterest}
+                  className="hover:bg-primary/20 rounded-full p-0.5 transition-colors cursor-pointer"
+                  title={isEn ? "Reset to all products" : "Reset ke semua produk"}
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </span>
+            )}
+          </div>
+          {activeInterestQuery && (
+            <p className="text-xs text-muted-foreground">
+              {isEn ? "Curated catalog based on your recent searches" : "Katalog pilihan disesuaikan dengan aktivitas pencarian Anda"}
+            </p>
+          )}
+        </div>
 
         {/* Sort selector */}
         <div className="flex items-center gap-2">

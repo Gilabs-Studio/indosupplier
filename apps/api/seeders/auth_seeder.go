@@ -55,6 +55,10 @@ func SeedUsers() error {
 		{Email: "supplier3@indosupplier.local", Name: "Dimas Saputra", CompanyName: "PT Agro Indo Sejahtera", Industry: "Agriculture", IsSupplier: true},
 		{Email: "supplier4@indosupplier.local", Name: "Laras Permata", CompanyName: "PT Kimia Cemerlang", Industry: "Chemical", IsSupplier: true},
 		{Email: "supplier5@indosupplier.local", Name: "Fajar Mahendra", CompanyName: "CV Mesin Karya", Industry: "Machinery", IsSupplier: true},
+		{Email: "supplier6@indosupplier.local", Name: "Andi Wijaya", CompanyName: "PT Sentosa Teknologi Komputindo", Industry: "Electronics", IsSupplier: true},
+		{Email: "supplier7@indosupplier.local", Name: "Hendra Gunawan", CompanyName: "CV Kreasi Mebel Nusantara", Industry: "Furniture", IsSupplier: true},
+		{Email: "supplier8@indosupplier.local", Name: "Ratna Sari", CompanyName: "PT Kemasan Box Lestari", Industry: "Packaging", IsSupplier: true},
+		{Email: "supplier9@indosupplier.local", Name: "Dedi Prasetyo", CompanyName: "CV Sarana ATK Kantor", Industry: "Office", IsSupplier: true},
 	}
 
 	for index, seed := range seeds {
@@ -321,6 +325,36 @@ func getSeedProductsForCategory(categorySlug string) []seedProd {
 					"/images/products/prod-laptop.webp",
 				},
 			},
+			{
+				Name:          "Laptop ASUS ExpertBook B1400 Core i7 16GB",
+				Description:   "Laptop komersial ultra tangguh bersertifikasi militer MIL-STD 810H, Intel Core i7 11th Gen, 16GB DDR4, 512GB SSD, Windows 11 Pro.",
+				MOQ:           "3 Unit",
+				StartingPrice: 13500000,
+				Capacity:      "150 Unit / Bulan",
+				Photos: []string{
+					"/images/products/prod-laptop.webp",
+				},
+			},
+			{
+				Name:          "Laptop Lenovo ThinkPad E14 Gen 4 Ryzen 7",
+				Description:   "Laptop korporat workstation AMD Ryzen 7 5825U, RAM 16GB, SSD 512GB PCIe 4.0, keyboard ergonomis ThinkPad TrackPoint tahan tumpahan cairan.",
+				MOQ:           "2 Unit",
+				StartingPrice: 14200000,
+				Capacity:      "120 Unit / Bulan",
+				Photos: []string{
+					"/images/products/prod-laptop.webp",
+				},
+			},
+			{
+				Name:          "Laptop Dell Latitude 3420 Core i5 Enterprise",
+				Description:   "Laptop armada kantor Dell Latitude 3420 dengan ExpressConnect, Intel Core i5-1135G7, RAM 8GB, SSD 256GB, garansi ProSupport 3 tahun on-site.",
+				MOQ:           "5 Unit",
+				StartingPrice: 10800000,
+				Capacity:      "300 Unit / Bulan",
+				Photos: []string{
+					"/images/products/prod-laptop.webp",
+				},
+			},
 		}
 	} else if categorySlug == "machinery-industrial" || categorySlug == "mesin" {
 		return []seedProd{
@@ -405,17 +439,19 @@ func getSeedProductsForCategory(categorySlug string) []seedProd {
 
 func seedSupplierProducts(db *gorm.DB, supplierProfileID string, industry string) error {
 	categories := []struct {
-		Slug string
-		Name string
+		Slug        string
+		Name        string
+		Description string
+		IconURL     string
 	}{
-		{Slug: "kantor-atk", Name: "Kantor & ATK"},
-		{Slug: "safety-k3", Name: "Kebersihan & K3"},
-		{Slug: "electronics-it", Name: "Elektronik & IT"},
-		{Slug: "machinery-industrial", Name: "Mesin & Industrial"},
-		{Slug: "furniture", Name: "Furniture"},
-		{Slug: "packaging", Name: "Packaging"},
-		{Slug: "steel-metal", Name: "Bahan Baku"},
-		{Slug: "agricultural-products", Name: "Komoditas Tani"},
+		{Slug: "kantor-atk", Name: "Kantor & ATK", Description: "Perlengkapan alat tulis kantor, kertas, binder, dan kebutuhan operasional perusahaan.", IconURL: "/images/categories/cat-kantor-atk.webp"},
+		{Slug: "safety-k3", Name: "Kebersihan & K3", Description: "Alat pelindung diri (APD), helm proyek, masker industri, dan perlengkapan keselamatan kerja.", IconURL: "/images/categories/cat-kebersihan-k3.webp"},
+		{Slug: "electronics-it", Name: "Elektronik & IT", Description: "Perangkat komputer, laptop bisnis, server, dan infrastruktur teknologi kantor.", IconURL: "/images/categories/cat-elektronik.webp"},
+		{Slug: "machinery-industrial", Name: "Mesin & Industrial", Description: "Mesin industri, pompa air pabrik, genset komersial, dan peralatan teknik manufaktur.", IconURL: "/images/categories/cat-mesin-industrial.webp"},
+		{Slug: "furniture", Name: "Furniture", Description: "Meja kerja ergonomis, kursi kantor, lemari arsip, dan perabot komersial.", IconURL: "/images/categories/cat-furniture.webp"},
+		{Slug: "packaging", Name: "Packaging", Description: "Kardus karton box custom, bubble wrap, lakban industri, dan kemasan pengiriman B2B.", IconURL: "/images/categories/cat-packaging.webp"},
+		{Slug: "steel-metal", Name: "Bahan Baku", Description: "Besi beton ulir, plat baja SUS 304, coil galvalum, dan material logam konstruksi.", IconURL: "/images/categories/cat-bahan-baku.webp"},
+		{Slug: "agricultural-products", Name: "Komoditas Tani", Description: "Kopi Arabika Gayo, gula kelapa organik, jahe gajah, dan komoditas perkebunan.", IconURL: "/images/categories/cat-makanan-minuman.webp"},
 	}
 
 	categorySlug := "kantor-atk"
@@ -436,9 +472,21 @@ func seedSupplierProducts(db *gorm.DB, supplierProfileID string, industry string
 	} else if industry == "Textile" {
 		categorySlug = "packaging"
 		categoryName = "Packaging"
+	} else if industry == "Electronics" {
+		categorySlug = "electronics-it"
+		categoryName = "Elektronik & IT"
+	} else if industry == "Furniture" {
+		categorySlug = "furniture"
+		categoryName = "Furniture"
+	} else if industry == "Packaging" {
+		categorySlug = "packaging"
+		categoryName = "Packaging"
+	} else if industry == "Office" {
+		categorySlug = "kantor-atk"
+		categoryName = "Kantor & ATK"
 	}
 
-	// Ensure all standard categories exist
+	// Ensure all standard categories exist and are up to date
 	for _, c := range categories {
 		var existingCat supplierModels.Category
 		if err := db.Where("slug = ?", c.Slug).First(&existingCat).Error; err != nil {
@@ -446,11 +494,18 @@ func seedSupplierProducts(db *gorm.DB, supplierProfileID string, industry string
 				newCat := supplierModels.Category{
 					Slug:        c.Slug,
 					Name:        c.Name,
-					Description: "Kategori produk " + c.Name,
+					Description: c.Description,
+					IconURL:     c.IconURL,
 					IsActive:    true,
 				}
 				_ = db.Create(&newCat)
 			}
+		} else {
+			db.Model(&existingCat).Updates(map[string]interface{}{
+				"name":        c.Name,
+				"description": c.Description,
+				"icon_url":    c.IconURL,
+			})
 		}
 	}
 

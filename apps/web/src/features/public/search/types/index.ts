@@ -53,8 +53,13 @@ export interface PublicCategoryDto {
   slug: string;
   name: string;
   description: string;
-  icon: string;
-  supplierCount: number;
+  icon?: string;
+  iconUrl?: string;
+  icon_url?: string;
+  supplierCount?: number;
+  supplier_count?: number;
+  productCount?: number;
+  product_count?: number;
 }
 
 export interface SupplierSearchParams {

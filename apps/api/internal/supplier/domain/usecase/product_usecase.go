@@ -206,7 +206,12 @@ func (u *productUsecase) ListCategories(ctx context.Context) ([]dto.CategoryResp
 
 	resp := make([]dto.CategoryResponse, len(categories))
 	for i, c := range categories {
-		resp[i] = *mapper.ToCategoryResponse(&c)
+		mapped := mapper.ToCategoryResponse(&c.Category)
+		if mapped != nil {
+			mapped.ProductCount = c.ProductCount
+			mapped.SupplierCount = c.SupplierCount
+			resp[i] = *mapped
+		}
 	}
 
 	return resp, nil

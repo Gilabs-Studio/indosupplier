@@ -18,7 +18,13 @@ type ProductRepository interface {
 	Delete(ctx context.Context, id string) error
 
 	// Categories
-	ListCategories(ctx context.Context) ([]models.Category, error)
+	ListCategories(ctx context.Context) ([]CategoryWithCounts, error)
+}
+
+type CategoryWithCounts struct {
+	models.Category
+	ProductCount  int `gorm:"column:product_count"`
+	SupplierCount int `gorm:"column:supplier_count"`
 }
 
 type productRepository struct {
@@ -117,11 +123,29 @@ func (r *productRepository) Delete(ctx context.Context, id string) error {
 	})
 }
 
-func (r *productRepository) ListCategories(ctx context.Context) ([]models.Category, error) {
-	var categories []models.Category
-	err := r.getDB(ctx).
-		Where("is_active = ?", true).
-		Order("sort_order ASC, name ASC").
-		Find(&categories).Error
+func (r *productRepository) ListCategories(ctx context.Context) ([]CategoryWithCounts, error) {
+	var categories []CategoryWithCounts
+	query := `
+		SELECT 
+			c.id, 
+			c.parent_id, 
+			c.slug, 
+			c.name, 
+			c.description, 
+			c.icon_url,
+			c.sort_order,
+			c.is_active,
+			c.created_at,
+			c.updated_at,
+			COUNT(DISTINCT sp.id) as product_count,
+			COUNT(DISTINCT sc.supplier_profile_id) as supplier_count
+		FROM categories c
+		LEFT JOIN supplier_products sp ON sp.category_id = c.id AND sp.deleted_at IS NULL
+		LEFT JOIN supplier_categories sc ON sc.category_id = c.id
+		WHERE c.is_active = true AND c.deleted_at IS NULL
+		GROUP BY c.id, c.parent_id, c.slug, c.name, c.description, c.icon_url, c.sort_order, c.is_active, c.created_at, c.updated_at
+		ORDER BY c.sort_order ASC, c.name ASC
+	`
+	err := r.getDB(ctx).Raw(query).Scan(&categories).Error
 	return categories, err
 }

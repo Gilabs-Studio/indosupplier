@@ -9,12 +9,12 @@ export function PopularCategoriesSkeleton() {
         <div className="h-3.5 w-16 rounded-xs bg-muted/30 animate-pulse" />
       </div>
 
-      {/* 8 Categories Grid Skeleton */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
+      {/* 1 Row Horizontal Skeleton */}
+      <div className="flex flex-row overflow-hidden gap-3.5 pb-2">
         {Array.from({ length: 8 }).map((_, idx) => (
           <div
             key={idx}
-            className="flex flex-col items-center justify-between rounded-xl border border-border bg-card p-2.5 shadow-2xs animate-pulse text-center"
+            className="w-[125px] sm:w-[145px] shrink-0 flex flex-col items-center justify-between rounded-xl border border-border bg-card p-2.5 shadow-2xs animate-pulse text-center"
           >
             {/* Aspect Square Image Placeholder */}
             <div className="aspect-square w-full rounded-lg bg-muted/20 p-2 flex items-center justify-center">

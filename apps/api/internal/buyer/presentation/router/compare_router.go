@@ -15,9 +15,13 @@ func RegisterCompareRoutes(rg *gin.RouterGroup, h *handler.CompareHandler, jwtMa
 		g.GET("", h.List)
 		g.POST("", h.Add)
 		g.DELETE("/:id", h.Delete)
+		g.DELETE("/clear", h.Clear)
+		g.DELETE("", h.Clear)
 
 		g.GET("/products", h.ListProducts)
 		g.POST("/products", h.AddProduct)
 		g.DELETE("/products/:id", h.DeleteProduct)
+		g.DELETE("/products/clear", h.ClearProducts)
+		g.DELETE("/products", h.ClearProducts)
 	}
 }

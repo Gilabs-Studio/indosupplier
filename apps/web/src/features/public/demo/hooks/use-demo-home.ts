@@ -1,8 +1,13 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { demoService } from "../services/demo.service";
+import {
+  getUserTopInterest,
+  dismissUserInterest,
+  INTEREST_CHANGE_EVENT,
+} from "../../search/utils/user-preference";
 import type {
   DemoHeroBanner,
   DemoQuickAction,
@@ -95,12 +100,34 @@ export function useDemoFeaturedProducts(
     ...initialFilterState,
     ...initialFilters,
   });
+  const [activeInterest, setActiveInterest] = useState<{ query?: string; category?: string } | null>(null);
+
+  useEffect(() => {
+    setActiveInterest(getUserTopInterest());
+    const handleUpdate = () => {
+      setActiveInterest(getUserTopInterest());
+    };
+    window.addEventListener(INTEREST_CHANGE_EVENT, handleUpdate);
+    return () => window.removeEventListener(INTEREST_CHANGE_EVENT, handleUpdate);
+  }, []);
+
+  const effectiveFilters = useMemo<DemoProductFilterState>(() => {
+    if (filters.searchQuery) return filters;
+    if (activeInterest?.query) {
+      return {
+        ...filters,
+        searchQuery: activeInterest.query,
+      };
+    }
+    return filters;
+  }, [filters, activeInterest]);
+
   const { bookmarks, toggleBookmarkOptimistic } = useBuyerBookmarks();
   const [cartFeedback, setCartFeedback] = useState<{ id: string; name: string } | null>(null);
 
   const productsQuery = useQuery<DemoProductItem[]>({
-    queryKey: ["demo-featured-products", filters],
-    queryFn: () => demoService.getProducts(filters),
+    queryKey: ["demo-featured-products", effectiveFilters],
+    queryFn: () => demoService.getProducts(effectiveFilters),
     staleTime: 2 * 60 * 1000,
   });
 
@@ -216,9 +243,17 @@ export function useDemoFeaturedProducts(
     }, 2500);
   }, []);
 
+  const clearInterest = useCallback(() => {
+    dismissUserInterest();
+    setActiveInterest(null);
+  }, []);
+
   return {
     isEn,
     filters,
+    effectiveFilters,
+    activeInterestQuery: activeInterest?.query || null,
+    clearInterest,
     products: displayedProducts,
     isLoading: productsQuery.isLoading,
     bookmarkedProductIds,
@@ -248,6 +283,8 @@ export function useDemoHome(locale: string) {
   return {
     isEn: hero.isEn,
     filters: productsHook.filters,
+    activeInterestQuery: productsHook.activeInterestQuery,
+    clearInterest: productsHook.clearInterest,
     banner: hero.banner,
     isBannerLoading: hero.isLoading,
     quickActions: actions.quickActions,

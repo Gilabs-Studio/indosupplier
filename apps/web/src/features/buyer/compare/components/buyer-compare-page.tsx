@@ -75,6 +75,8 @@ export function BuyerComparePage() {
     products,
     removeProduct,
     addProduct,
+    clearCompareProducts,
+    clearCompareSuppliers,
     isLoading: isSuppliersLoading,
     isProductsLoading,
   } = useBuyerCompare();
@@ -854,6 +856,17 @@ export function BuyerComparePage() {
               </Link>
             </Button>
 
+            {activeTab === "suppliers" && suppliers.length > 0 && (
+              <Button
+                onClick={() => clearCompareSuppliers()}
+                variant="outline"
+                size="sm"
+                className="cursor-pointer border-destructive/30 text-destructive hover:bg-destructive/10 rounded-lg text-xs font-semibold shadow-xs"
+              >
+                <Trash2 className="h-3.5 w-3.5 mr-1" /> Kosongkan
+              </Button>
+            )}
+
             {activeTab === "suppliers" && suppliers.length > 0 && suppliers.length < 5 && (
               <Button
                 onClick={openSupplierSearch}
@@ -861,6 +874,17 @@ export function BuyerComparePage() {
                 className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg text-xs font-semibold shadow-xs transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
               >
                 <Plus className="h-3.5 w-3.5 mr-1" /> {t("btnAddSupplier")}
+              </Button>
+            )}
+
+            {activeTab === "products" && products.length > 0 && (
+              <Button
+                onClick={() => clearCompareProducts()}
+                variant="outline"
+                size="sm"
+                className="cursor-pointer border-destructive/30 text-destructive hover:bg-destructive/10 rounded-lg text-xs font-semibold shadow-xs"
+              >
+                <Trash2 className="h-3.5 w-3.5 mr-1" /> Kosongkan
               </Button>
             )}
 

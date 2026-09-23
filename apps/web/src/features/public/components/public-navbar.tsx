@@ -3,8 +3,9 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Link, useRouter } from "@/i18n/routing";
+import { Link, useRouter, usePathname } from "@/i18n/routing";
 import LanguageSwitcher from "@/components/navigation/language-switcher";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/features/auth/stores/use-auth-store";
@@ -12,6 +13,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -30,10 +32,102 @@ import {
   Settings2,
   Wallet,
   UserPlus,
+  X,
 } from "lucide-react";
 import { useBuyerBookmarks } from "@/features/buyer/bookmarks/hooks/useBuyerBookmarks";
 import { useBuyerFollowing } from "@/features/buyer/following/hooks/useBuyerFollowing";
 import { getDicebearUrl } from "@/lib/utils";
+import { recordUserSearch } from "@/features/public/search/utils/user-preference";
+
+function NavbarSearchBarInner() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const urlQuery = searchParams.get("query") || searchParams.get("q") || "";
+  const [searchQuery, setSearchQuery] = useState(urlQuery);
+
+  React.useEffect(() => {
+    if (pathname.includes("/search")) {
+      setSearchQuery(urlQuery);
+    }
+  }, [urlQuery, pathname]);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const clean = searchQuery.trim();
+    const isDemo = pathname.startsWith("/demo") || pathname.includes("/demo/");
+    const targetPath = isDemo ? "/demo/search" : "/search";
+
+    if (clean) {
+      recordUserSearch(clean);
+      router.push(`${targetPath}?query=${encodeURIComponent(clean)}`);
+    } else {
+      router.push(targetPath);
+    }
+  };
+
+  return (
+    <div className="flex-1 min-w-[200px] max-w-2xl xl:max-w-3xl mx-2 sm:mx-4">
+      <form
+        onSubmit={handleSearchSubmit}
+        className="group relative flex items-center w-full h-10 sm:h-11 rounded-lg border-2 border-border/90 bg-background shadow-xs hover:border-primary/50 focus-within:border-primary focus-within:ring-3 focus-within:ring-primary/15 transition-all overflow-hidden"
+      >
+        <div className="flex items-center justify-center pl-3.5 pr-1 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none">
+          <Search className="h-4.5 w-4.5" />
+        </div>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Cari produk, bahan baku, atau supplier..."
+          className="w-full h-full bg-transparent px-2.5 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 outline-hidden font-normal"
+        />
+        {searchQuery && (
+          <button
+            type="button"
+            onClick={() => setSearchQuery("")}
+            className="p-1 mr-1 text-muted-foreground hover:text-foreground rounded-full hover:bg-muted cursor-pointer transition-colors"
+            title="Hapus"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        )}
+        <button
+          type="submit"
+          className="h-full px-4 sm:px-6 bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 cursor-pointer shrink-0 transition-all active:scale-[0.98] shadow-xs"
+        >
+          <Search className="h-3.5 w-3.5 sm:hidden" />
+          <span className="hidden sm:inline">Cari</span>
+        </button>
+      </form>
+    </div>
+  );
+}
+
+function NavbarSearchBar() {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="flex-1 min-w-[200px] max-w-2xl xl:max-w-3xl mx-2 sm:mx-4">
+          <div className="relative flex items-center w-full h-10 sm:h-11 rounded-lg border-2 border-border/90 bg-background shadow-xs overflow-hidden">
+            <div className="pl-3.5 pr-1 text-muted-foreground">
+              <Search className="h-4.5 w-4.5" />
+            </div>
+            <div className="w-full h-full flex items-center px-2.5 text-xs sm:text-sm text-muted-foreground/60">
+              Cari produk, bahan baku, atau supplier...
+            </div>
+            <div className="h-full px-4 sm:px-6 bg-primary text-primary-foreground font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5">
+              <Search className="h-3.5 w-3.5 sm:hidden" />
+              <span className="hidden sm:inline">Cari</span>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <NavbarSearchBarInner />
+    </React.Suspense>
+  );
+}
 
 interface PublicNavbarProps {
   locale: string;
@@ -48,7 +142,6 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
   const { bookmarks } = useBuyerBookmarks();
   const { following } = useBuyerFollowing();
   const productBookmarks = bookmarks.filter((item) => item.type === "product" || Boolean(item.supplierProductId));
-  const [searchQuery, setSearchQuery] = useState("");
   const [isSavedOpen, setIsSavedOpen] = useState(false);
   const [isHeartHovered, setIsHeartHovered] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -76,13 +169,6 @@ export function PublicNavbar({ locale }: Readonly<PublicNavbarProps>) {
       logout();
     } finally {
       closeAllDropdowns();
-    }
-  };
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 
@@ -293,34 +379,36 @@ function resolveBookmarkThumbnail(item: {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-56 p-2 bg-background border border-border rounded-xl shadow-lg animate-in fade-in-50 slide-in-from-top-1">
               <DropdownMenuItem asChild className="focus:bg-secondary cursor-pointer rounded-lg">
-                <Link href="/search?category=manufacturing" className="w-full px-2 py-1.5 text-sm">Manufaktur</Link>
+                <Link href="/search?category=electronics-it" className="w-full px-2 py-1.5 text-sm">Elektronik & IT</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="focus:bg-secondary cursor-pointer rounded-lg">
-                <Link href="/search?category=agriculture" className="w-full px-2 py-1.5 text-sm">Pertanian</Link>
+                <Link href="/search?category=steel-metal" className="w-full px-2 py-1.5 text-sm">Bahan Baku & Logam</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="focus:bg-secondary cursor-pointer rounded-lg">
-                <Link href="/search?category=textile" className="w-full px-2 py-1.5 text-sm">Tekstil</Link>
+                <Link href="/search?category=safety-k3" className="w-full px-2 py-1.5 text-sm">Kebersihan & K3</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="focus:bg-secondary cursor-pointer rounded-lg">
-                <Link href="/search?category=furniture" className="w-full px-2 py-1.5 text-sm">Furnitur</Link>
+                <Link href="/search?category=kantor-atk" className="w-full px-2 py-1.5 text-sm">Kantor & ATK</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="focus:bg-secondary cursor-pointer rounded-lg">
+                <Link href="/search?category=agricultural-products" className="w-full px-2 py-1.5 text-sm">Komoditas Tani</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="focus:bg-secondary cursor-pointer rounded-lg">
+                <Link href="/search?category=machinery-industrial" className="w-full px-2 py-1.5 text-sm">Mesin & Industrial</Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="my-1.5" />
+              <DropdownMenuItem asChild className="focus:bg-primary/10 text-primary font-bold cursor-pointer rounded-lg">
+                <Link href="/categories" className="w-full px-2 py-1.5 text-sm flex items-center justify-between">
+                  <span>Semua Kategori</span>
+                  <span>&rarr;</span>
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
 
-        {/* Search Bar (Prominent Wide Tokopedia/Shopee Style) */}
-        <div className="flex-1 max-w-3xl mx-2 sm:mx-4">
-          <form onSubmit={handleSearchSubmit} className="relative flex items-center w-full">
-            <Search className="absolute left-3.5 h-4 w-4 text-muted-foreground pointer-events-none" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari di IndoSupplier..."
-              className="w-full h-10 pl-10 pr-4 bg-secondary/80 text-foreground placeholder:text-muted-foreground/70 border border-border/80 rounded-lg text-xs sm:text-sm outline-hidden focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-normal"
-            />
-          </form>
-        </div>
+        {/* Search Bar (Prominent High-Visibility Tokopedia/Shopee Style) */}
+        <NavbarSearchBar />
 
         {/* Right Section: Icons, Divider, Persona Controls */}
         <div className="flex items-center gap-4 shrink-0">

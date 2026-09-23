@@ -35,11 +35,14 @@ type UpdateProductRequest struct {
 }
 
 type CategoryResponse struct {
-	ID          string  `json:"id"`
-	ParentID    *string `json:"parent_id"`
-	Slug        string  `json:"slug"`
-	Name        string  `json:"name"`
-	Description string  `json:"description"`
+	ID            string  `json:"id"`
+	ParentID      *string `json:"parent_id"`
+	Slug          string  `json:"slug"`
+	Name          string  `json:"name"`
+	Description   string  `json:"description"`
+	IconURL       string  `json:"icon_url"`
+	ProductCount  int     `json:"product_count"`
+	SupplierCount int     `json:"supplier_count"`
 }
 
 type PhotoResponse struct {

@@ -47,10 +47,39 @@ export const searchService = {
     }
   },
 
-  async searchProducts(q: string, supplierId?: string, page?: number, limit?: number): Promise<PublicProductDto[]> {
+  async searchProducts(
+    paramsOrQuery?: string | {
+      q?: string;
+      query?: string;
+      category?: string;
+      region?: string;
+      location?: string;
+      verifiedOnly?: boolean;
+      supplierId?: string;
+      page?: number;
+      limit?: number;
+    },
+    supplierId?: string,
+    page?: number,
+    limit?: number
+  ): Promise<PublicProductDto[]> {
     try {
+      let params: Record<string, unknown> = {};
+      if (typeof paramsOrQuery === "string") {
+        params = { q: paramsOrQuery, supplier_id: supplierId, page, limit };
+      } else if (paramsOrQuery) {
+        params = {
+          q: paramsOrQuery.q || paramsOrQuery.query || undefined,
+          category: paramsOrQuery.category || undefined,
+          region: paramsOrQuery.region || paramsOrQuery.location || undefined,
+          verified: paramsOrQuery.verifiedOnly ? "true" : undefined,
+          supplier_id: paramsOrQuery.supplierId || undefined,
+          page: paramsOrQuery.page,
+          limit: paramsOrQuery.limit,
+        };
+      }
       const response = await apiClient.get<{ data: PublicProductDto[] }>("/products", {
-        params: { q, supplier_id: supplierId, page, limit },
+        params,
       });
       return response.data?.data || [];
     } catch (error) {

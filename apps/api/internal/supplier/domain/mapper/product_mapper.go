@@ -15,6 +15,7 @@ func ToCategoryResponse(c *models.Category) *dto.CategoryResponse {
 		Slug:        c.Slug,
 		Name:        c.Name,
 		Description: c.Description,
+		IconURL:     c.IconURL,
 	}
 }
 

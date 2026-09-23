@@ -186,3 +186,39 @@ func (h *CompareHandler) DeleteProduct(c *gin.Context) {
 
 	response.SuccessResponse(c, products, nil)
 }
+
+func (h *CompareHandler) Clear(c *gin.Context) {
+	userID, ok := h.getAuthenticatedUserID(c)
+	if !ok {
+		return
+	}
+
+	if err := h.usecase.Clear(c.Request.Context(), userID); err != nil {
+		if stderrors.Is(err, usecase.ErrBuyerProfileNotFound) {
+			errors.ErrorResponse(c, "BUYER_PROFILE_NOT_FOUND", nil, nil)
+			return
+		}
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, gin.H{"message": "comparison cleared"}, nil)
+}
+
+func (h *CompareHandler) ClearProducts(c *gin.Context) {
+	userID, ok := h.getAuthenticatedUserID(c)
+	if !ok {
+		return
+	}
+
+	if err := h.usecase.ClearProducts(c.Request.Context(), userID); err != nil {
+		if stderrors.Is(err, usecase.ErrBuyerProfileNotFound) {
+			errors.ErrorResponse(c, "BUYER_PROFILE_NOT_FOUND", nil, nil)
+			return
+		}
+		errors.InternalServerErrorResponse(c, err.Error())
+		return
+	}
+
+	response.SuccessResponse(c, gin.H{"message": "product comparison cleared"}, nil)
+}
