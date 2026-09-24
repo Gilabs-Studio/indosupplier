@@ -1,0 +1,30 @@
+meta {
+  name: Filter Supplier Reviews by Status (Unreplied)
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/api/v1/supplier/reviews?page=1&limit=10&status=unreplied
+  body: none
+  auth: none
+}
+
+params:query {
+  page: 1
+  limit: 10
+  status: unreplied
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Filters supplier reviews to show only reviews that are pending a reply from the supplier.
+}

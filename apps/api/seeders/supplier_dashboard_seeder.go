@@ -2,6 +2,7 @@ package seeders
 
 import (
 	"fmt"
+	"math"
 	"time"
 
 	buyerModels "github.com/gilabs/indosupplier/api/internal/buyer/data/models"
@@ -9,6 +10,7 @@ import (
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/database"
 	rfqModels "github.com/gilabs/indosupplier/api/internal/rfq/data/models"
 	supplierModels "github.com/gilabs/indosupplier/api/internal/supplier/data/models"
+	trustModels "github.com/gilabs/indosupplier/api/internal/trust/data/models"
 	userModels "github.com/gilabs/indosupplier/api/internal/user/data/models"
 )
 
@@ -195,6 +197,136 @@ func SeedSupplierDashboard() error {
 				}
 			}
 		}
+	}
+
+	if err := seedSupplierReviewsForDashboard(profile.ID); err != nil {
+		fmt.Printf("warning: failed to seed supplier reviews: %v\n", err)
+	}
+
+	return nil
+}
+
+func seedSupplierReviewsForDashboard(supplierProfileID string) error {
+	if !database.DB.Migrator().HasTable(&trustModels.SupplierReview{}) {
+		return nil
+	}
+
+	// Fetch buyers
+	var buyers []buyerModels.BuyerProfile
+	database.DB.Limit(5).Find(&buyers)
+	if len(buyers) == 0 {
+		return nil
+	}
+
+	// Fetch supplier product
+	var prod supplierModels.SupplierProduct
+	var prodID *string
+	if err := database.DB.Where("supplier_profile_id = ?", supplierProfileID).First(&prod).Error; err == nil {
+		prodID = &prod.ID
+	}
+
+	now := apptime.Now()
+	repliedAt1 := now.AddDate(0, 0, -10)
+	repliedAt2 := now.AddDate(0, 0, -16)
+
+	seeds := []struct {
+		buyerIndex int
+		rating     int
+		reviewText string
+		reply      string
+		repliedAt  *time.Time
+		daysAgo    int
+	}{
+		{
+			buyerIndex: 0,
+			rating:     5,
+			reviewText: "Besi beton ulir D10 presisi, sertifikat SNI valid dan delivery on time untuk proyek jembatan kami. Sangat profesional!",
+			reply:      "Terima kasih atas kepercayaannya. Kami selalu menjaga standar mutu SNI dan kepatuhan jadwal pengiriman untuk mendukung kesuksesan proyek infrastruktur Anda.",
+			repliedAt:  &repliedAt1,
+			daysAgo:    12,
+		},
+		{
+			buyerIndex: 1,
+			rating:     5,
+			reviewText: "Kualitas plat baja sangat memuaskan, toleransi ketebalan sesuai standar ASTM dan potongan rapi tanpa cacat pinggiran.",
+			reply:      "",
+			repliedAt:  nil,
+			daysAgo:    7,
+		},
+		{
+			buyerIndex: 2,
+			rating:     4,
+			reviewText: "Barang sesuai spesifikasi teknis dan packing bundle rapi. Sedikit catatan di proses konfirmasi surat jalan yang butuh 1 hari kerja, selebihnya memuaskan.",
+			reply:      "",
+			repliedAt:  nil,
+			daysAgo:    5,
+		},
+		{
+			buyerIndex: 3,
+			rating:     5,
+			reviewText: "Repeat order ketiga kali, respon marketing cepat tanggap dan penyesuaian termin pembayaran B2B sangat membantu cashflow proyek kami.",
+			reply:      "Terima kasih atas kerja samanya. Kami berkomitmen memberikan fleksibilitas dan solusi rantai pasok terbaik untuk mitra jangka panjang kami.",
+			repliedAt:  &repliedAt2,
+			daysAgo:    18,
+		},
+		{
+			buyerIndex: 4,
+			rating:     3,
+			reviewText: "Kualitas material bagus, namun mohon untuk ketersediaan armada truk trailer diatur lebih awal saat high-demand musim konstruksi agar tidak ada antrean bongkar muat.",
+			reply:      "",
+			repliedAt:  nil,
+			daysAgo:    2,
+		},
+	}
+
+	for _, s := range seeds {
+		bIdx := s.buyerIndex
+		if bIdx >= len(buyers) {
+			bIdx = 0
+		}
+		buyer := buyers[bIdx]
+
+		var count int64
+		database.DB.Model(&trustModels.SupplierReview{}).
+			Where("buyer_profile_id = ? AND supplier_profile_id = ? AND review_text = ?", buyer.ID, supplierProfileID, s.reviewText).
+			Count(&count)
+		if count > 0 {
+			continue
+		}
+
+		rev := trustModels.SupplierReview{
+			BuyerProfileID:    buyer.ID,
+			SupplierProfileID: supplierProfileID,
+			ProductID:         prodID,
+			Rating:            s.rating,
+			ReviewText:        s.reviewText,
+			SupplierReply:     s.reply,
+			SupplierRepliedAt: s.repliedAt,
+			Status:            "approved",
+			CreatedAt:         now.AddDate(0, 0, -s.daysAgo),
+			UpdatedAt:         now.AddDate(0, 0, -s.daysAgo),
+		}
+		_ = database.DB.Create(&rev).Error
+	}
+
+	// Update supplier profile aggregate rating and review count
+	type stat struct {
+		Avg   float64 `gorm:"column:avg"`
+		Count int64   `gorm:"column:count"`
+	}
+	var st stat
+	database.DB.Table("supplier_reviews").
+		Select("COALESCE(AVG(rating), 0) AS avg, COUNT(id) AS count").
+		Where("supplier_profile_id = ? AND status = 'approved' AND deleted_at IS NULL", supplierProfileID).
+		Scan(&st)
+
+	if st.Count > 0 {
+		database.DB.Model(&supplierModels.SupplierProfile{}).
+			Where("id = ?", supplierProfileID).
+			Updates(map[string]interface{}{
+				"star_rating":  math.Round(st.Avg*10) / 10,
+				"review_count": int(st.Count),
+			})
 	}
 
 	return nil

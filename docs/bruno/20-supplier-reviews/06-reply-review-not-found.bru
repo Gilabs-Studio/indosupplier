@@ -1,0 +1,31 @@
+meta {
+  name: Reply to Review (Not Found)
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{base_url}}/api/v1/supplier/reviews/00000000-0000-0000-0000-000000000000/reply
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "reply": "Terima kasih atas tanggapannya."
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+}
+
+docs {
+  Tests replying to a non-existent review ID.
+  Expects a 404 NOT_FOUND error.
+}

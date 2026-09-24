@@ -132,9 +132,9 @@ Keterangan Checklist:
 - [ ] BRU: Supplier Auction Docs
 
 ### Balasan Ulasan (`/supplier/reviews`)
-- [ ] FE: Masih Mock UI
-- [ ] BE: API Reply Review (`POST /api/v1/supplier/reviews/:id/reply`) - *Hanya model database*
-- [ ] BRU: Supplier Reviews Reply Docs
+- [x] FE: List Ulasan & Modal Balas Ulasan Pembeli (`/supplier/reviews`)
+- [x] BE: API List & Reply Review (`GET /api/v1/supplier/reviews`, `POST /:id/reply`)
+- [x] BRU: Supplier Reviews Reply Docs (`20-supplier-reviews`)
 
 ### Notifikasi Supplier (`/supplier/notifications`)
 - [x] FE: Halaman List Notifikasi

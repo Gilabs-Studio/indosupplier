@@ -1,152 +1,179 @@
 "use client";
 
-import React, { useState } from "react";
-import { useTranslations } from "next-intl";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import React from "react";
+import { useTranslations, useLocale } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
-import { Star, MessageCircle } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  RefreshCw,
+  MessageSquareOff,
+  ChevronLeft,
+  ChevronRight,
+  Sparkles,
+} from "lucide-react";
+import { useSupplierReviews } from "../hooks/useSupplierReviews";
+import { ReviewStatsCards } from "./review-stats-cards";
+import { ReviewFilters } from "./review-filters";
+import { ReviewCard } from "./review-card";
+import { ReviewReplyDialog } from "./review-reply-dialog";
+import { ReviewsSkeleton } from "./reviews-skeleton";
 
 export function SupplierReviewsList() {
   const t = useTranslations("supplier.reviews");
+  const locale = useLocale();
 
-  const [reviews, setReviews] = useState([
-    { id: "REV-01", buyer: "PT Metalindo Utama", rating: 5, comment: "Bahan garnet sand berkualitas tinggi, pengiriman cepat, packing rapi menggunakan jumbo bag. Sangat direkomendasikan!", date: "2026-06-02", reply: "Terima kasih atas ulasannya! Kami selalu berupaya menjaga kualitas produk dan layanan logistik terbaik." },
-    { id: "REV-02", buyer: "CV Borneo Abadi", rating: 4, comment: "Kualitas bentonite clay bagus, mengembang sempurna untuk drilling mud. Sayang respons logistik pelabuhan agak lambat sedikit.", date: "2026-05-28", reply: "" },
-    { id: "REV-03", buyer: "PT Jakarta Chemical", rating: 5, comment: "Mineral quartz sangat murni, 325 mesh sesuai spesifikasi. Komunikasi sales sangat responsif.", date: "2026-05-15", reply: "" },
-  ]);
+  const {
+    reviews,
+    stats,
+    pagination,
+    isLoading,
+    isFetching,
+    refetch,
+    filter,
+    setFilter,
+    resetFilter,
+    activeReview,
+    isReplyDialogOpen,
+    openReplyDialog,
+    closeReplyDialog,
+    handleReplySubmit,
+    isReplying,
+  } = useSupplierReviews();
 
-  const [activeReviewId, setActiveReviewId] = useState<string | null>(null);
-  const [replyText, setReplyText] = useState("");
-
-  const handleReplySubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!replyText.trim()) return;
-
-    setReviews(reviews.map(rev => rev.id === activeReviewId ? { ...rev, reply: replyText } : rev));
-    toast.success(t("replySuccess"));
-    setActiveReviewId(null);
-    setReplyText("");
-  };
-
-  const getStars = (count: number) => {
-    return Array.from({ length: 5 }).map((_, idx) => (
-      <Star
-        key={idx}
-        className={`h-4 w-4 ${
-          idx < count ? "fill-amber-400 stroke-amber-400" : "text-muted border-muted"
-        }`}
-      />
-    ));
-  };
+  const currentPage = pagination?.current_page ?? 1;
+  const totalPages = pagination?.total_pages ?? 1;
 
   return (
-    <div className="space-y-6 text-left">
-      {/* Header */}
-      <div className="border-b border-border/80 pb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground font-heading">
-          {t("title")}
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          {t("subtitle")}
-        </p>
+    <div className="space-y-6 text-left pb-10">
+      {/* 1. Header Section */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/80 pb-5">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground font-heading">
+              {t("title")}
+            </h1>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/10 text-primary border border-primary/20">
+              <Sparkles className="h-3 w-3" />
+              Live API
+            </span>
+          </div>
+          <p className="text-xs sm:text-sm text-muted-foreground">
+            {t("subtitle")}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => refetch()}
+            disabled={isFetching}
+            className="text-xs h-9 cursor-pointer border-border hover:bg-muted/50 flex items-center gap-1.5"
+          >
+            <RefreshCw
+              className={`h-3.5 w-3.5 ${isFetching ? "animate-spin text-primary" : ""}`}
+            />
+            <span>Refresh</span>
+          </Button>
+        </div>
       </div>
 
-      {/* Overview Card */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="border border-border shadow-xs rounded-xl bg-card">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs uppercase tracking-wider text-muted-foreground">{t("totalReviews")}</CardTitle>
-          </CardHeader>
-          <CardContent className="flex items-center justify-between">
-            <span className="text-2xl font-extrabold text-foreground">3 Reviews</span>
-            <div className="h-10 w-10 bg-primary/10 text-primary border border-border rounded-lg flex items-center justify-center">
-              <MessageCircle className="h-5 w-5" />
-            </div>
-          </CardContent>
-        </Card>
+      {/* 2. Overview Stats Cards */}
+      <ReviewStatsCards
+        stats={stats}
+        currentFilter={filter}
+        onFilterChange={setFilter}
+      />
 
-        <Card className="border border-border shadow-xs rounded-xl bg-card">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-xs uppercase tracking-wider text-muted-foreground">{t("avgRating")}</CardTitle>
-          </CardHeader>
-          <CardContent className="flex items-center gap-3">
-            <span className="text-2xl font-extrabold text-foreground">4.7</span>
-            <div className="flex gap-0.5">{getStars(5)}</div>
-          </CardContent>
-        </Card>
-      </div>
+      {/* 3. Search & Filter Bar */}
+      <ReviewFilters
+        filter={filter}
+        stats={stats}
+        onFilterChange={setFilter}
+        onReset={resetFilter}
+      />
 
-      {/* Reviews List */}
+      {/* 4. Reviews List */}
       <div className="space-y-4">
-        {reviews.map((rev) => (
-          <Card key={rev.id} className="border border-border shadow-xs rounded-xl overflow-hidden bg-card p-6 space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
-              <div className="space-y-1">
-                <h4 className="text-sm font-bold text-foreground">{rev.buyer}</h4>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <div className="flex gap-0.5">{getStars(rev.rating)}</div>
-                  <span className="text-[10px] text-muted-foreground font-semibold">{rev.date}</span>
-                </div>
+        {isLoading ? (
+          <ReviewsSkeleton />
+        ) : reviews.length === 0 ? (
+          <Card className="border border-dashed border-border bg-card rounded-xl">
+            <CardContent className="py-12 flex flex-col items-center justify-center text-center space-y-3">
+              <div className="h-12 w-12 rounded-xl bg-muted/60 text-muted-foreground flex items-center justify-center border border-border">
+                <MessageSquareOff className="h-6 w-6" />
               </div>
-              <Badge variant="secondary" className="font-bold text-[10px] uppercase max-w-fit">{rev.id}</Badge>
-            </div>
-
-            <p className="text-sm text-foreground leading-relaxed font-semibold bg-muted/10 p-3 rounded-lg border border-border">
-              {rev.comment}
-            </p>
-
-            {/* Replies section */}
-            {rev.reply ? (
-              <div className="bg-primary/5 border border-primary/10 p-4 rounded-xl space-y-1 ml-4">
-                <span className="text-[10px] font-bold text-primary uppercase tracking-wider block">Your Response:</span>
-                <p className="text-xs text-foreground font-semibold leading-relaxed">
-                  {rev.reply}
+              <div className="space-y-1 max-w-sm">
+                <h3 className="text-sm font-bold text-foreground">
+                  {t("noReviewsFound")}
+                </h3>
+                <p className="text-xs text-muted-foreground">
+                  {t("noReviewsFoundDesc")}
                 </p>
               </div>
-            ) : (
-              <div className="flex justify-end">
-                <Button onClick={() => setActiveReviewId(rev.id)} size="sm" className="text-xs font-semibold h-8 cursor-pointer">
-                  {t("btnReply")}
+              {(filter.search || filter.rating !== undefined || filter.status !== "all") && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={resetFilter}
+                  className="text-xs h-8 cursor-pointer mt-2"
+                >
+                  {t("clearFilterBtn")}
                 </Button>
-              </div>
-            )}
+              )}
+            </CardContent>
           </Card>
-        ))}
+        ) : (
+          reviews.map((rev) => (
+            <ReviewCard
+              key={rev.id}
+              review={rev}
+              locale={locale}
+              onOpenReply={openReplyDialog}
+            />
+          ))
+        )}
       </div>
 
-      {/* Reply Modal */}
-      {activeReviewId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <Card className="max-w-md w-full border border-border bg-card shadow-2xl rounded-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
-            <CardHeader className="border-b border-border">
-              <CardTitle className="text-base font-bold font-heading">{t("replyModalTitle")}</CardTitle>
-              <CardDescription className="text-xs">Post a reply to the buyer&apos;s review.</CardDescription>
-            </CardHeader>
-            <form onSubmit={handleReplySubmit}>
-              <CardContent className="p-6">
-                <textarea
-                  required
-                  placeholder={t("replyPlaceholder")}
-                  value={replyText}
-                  onChange={(e) => setReplyText(e.target.value)}
-                  rows={4}
-                  className="w-full px-3 py-2 bg-card border border-border text-sm rounded-lg focus:outline-none focus:border-primary transition-all text-left text-foreground font-semibold resize-none"
-                />
-              </CardContent>
-              <div className="p-4 border-t border-border bg-muted/10 flex justify-end gap-2">
-                <Button variant="outline" onClick={() => setActiveReviewId(null)} className="text-xs h-9 cursor-pointer border-border">
-                  Cancel
-                </Button>
-                <Button type="submit" className="text-xs h-9 bg-primary text-primary-foreground hover:bg-primary/95 cursor-pointer font-semibold">
-                  {t("btnSubmitReply")}
-                </Button>
-              </div>
-            </form>
-          </Card>
+      {/* 5. Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between border-t border-border pt-4">
+          <p className="text-xs text-muted-foreground">
+            {t("pageOf", { current: currentPage, total: totalPages })}
+          </p>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={currentPage <= 1 || isFetching}
+              onClick={() => setFilter({ page: currentPage - 1 })}
+              className="text-xs h-8 cursor-pointer flex items-center gap-1 border-border"
+            >
+              <ChevronLeft className="h-3.5 w-3.5" />
+              <span>{t("previous")}</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={currentPage >= totalPages || isFetching}
+              onClick={() => setFilter({ page: currentPage + 1 })}
+              className="text-xs h-8 cursor-pointer flex items-center gap-1 border-border"
+            >
+              <span>{t("next")}</span>
+              <ChevronRight className="h-3.5 w-3.5" />
+            </Button>
+          </div>
         </div>
       )}
+
+      {/* 6. Reply Modal Dialog */}
+      <ReviewReplyDialog
+        isOpen={isReplyDialogOpen}
+        review={activeReview}
+        onClose={closeReplyDialog}
+        onSubmit={handleReplySubmit}
+        isSubmitting={isReplying}
+      />
     </div>
   );
 }

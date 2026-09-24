@@ -184,6 +184,10 @@ func main() {
 	portalUC := supplierUsecase.NewPortalUsecase(portalRepository)
 	portalH := supplierHandler.NewSupplierPortalHandler(portalUC)
 
+	supplierReviewRepository := supplierRepo.NewSupplierReviewRepository(database.DB)
+	supplierReviewUC := supplierUsecase.NewSupplierReviewUsecase(portalRepository, supplierReviewRepository)
+	supplierReviewH := supplierHandler.NewSupplierReviewHandler(supplierReviewUC)
+
 	verificationRepository := verificationRepo.NewVerificationRepository(database.DB)
 	verificationUC := verificationUsecase.NewVerificationUsecase(verificationRepository)
 	verificationH := verificationHandler.NewVerificationHandler(verificationUC)
@@ -261,6 +265,7 @@ func main() {
 		supplierRouter.RegisterProductRoutes(v1, productH, jwtManager)
 		supplierRouter.RegisterDiscoveryRoutes(v1, discoveryH)
 		supplierRouter.RegisterSupplierPortalRoutes(v1, portalH, jwtManager)
+		supplierRouter.RegisterSupplierReviewRoutes(v1, supplierReviewH, jwtManager)
 		verificationRouter.RegisterVerificationRoutes(v1, verificationH, jwtManager)
 		buyerRouter.RegisterProfileRoutes(v1, profileH, jwtManager)
 		buyerRouter.RegisterTransactionRoutes(v1, txH, jwtManager)

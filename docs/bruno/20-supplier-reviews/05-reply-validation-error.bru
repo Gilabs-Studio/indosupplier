@@ -1,0 +1,32 @@
+meta {
+  name: Reply to Review (Validation Error)
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/api/v1/supplier/reviews/{{review_id}}/reply
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  X-CSRF-Token: {{csrf_token}}
+}
+
+body:json {
+  {
+    "reply": "a"
+  }
+}
+
+vars:pre-request {
+  base_url: http://localhost:8088
+  review_id: c14a112e-ac8f-4400-98e6-e86d580e65a8
+}
+
+docs {
+  Tests validation failure when the reply body is less than 3 characters long.
+  Expects a 400 Bad Request error.
+}
