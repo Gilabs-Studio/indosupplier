@@ -12,6 +12,7 @@ type EligibleTransactionResponse struct {
 	SupplierProfileID string  `json:"supplierProfileId"`
 	SupplierName      string  `json:"supplierName"`
 	ProductName       string  `json:"productName"`
+	ProductImage      string  `json:"productImage"`
 	QuantityValue     float64 `json:"quantityValue"`
 	QuantityUnit      string  `json:"quantityUnit"`
 	TotalAmount       float64 `json:"totalAmount"`
@@ -24,6 +25,7 @@ type ReviewHistoryResponse struct {
 	SupplierProfileID string  `json:"supplierProfileId"`
 	SupplierName      string  `json:"supplierName"`
 	ProductName       string  `json:"productName"`
+	ProductImage      string  `json:"productImage"`
 	QuantityValue     float64 `json:"quantityValue"`
 	QuantityUnit      string  `json:"quantityUnit"`
 	TotalAmount       float64 `json:"totalAmount"`

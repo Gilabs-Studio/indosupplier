@@ -88,12 +88,34 @@ func (u *transactionUsecase) Create(ctx context.Context, userID string, req *dto
 
 	totalAmount := req.QuantityValue * req.PricePerUnit
 
+	productImage := req.ProductImage
+	if productImage == "" {
+		var photoURL string
+		q := u.db.WithContext(ctx).Table("supplier_products sp").
+			Select("spp.file_url").
+			Joins("JOIN supplier_product_photos spp ON spp.supplier_product_id = sp.id").
+			Where("sp.supplier_profile_id = ?", req.SupplierProfileID)
+		if req.ProductID != nil && *req.ProductID != "" {
+			q = q.Where("sp.id = ?", *req.ProductID)
+		} else {
+			q = q.Where("LOWER(sp.name) = LOWER(?)", req.ProductName)
+		}
+		if err := q.Order("spp.sort_order ASC").Limit(1).Scan(&photoURL).Error; err == nil && photoURL != "" {
+			productImage = photoURL
+		}
+	}
+	if productImage == "" {
+		productImage = "/images/categories/cat-bahan-baku.webp"
+	}
+
 	po := &buyerModels.PurchaseOrder{
 		PONumber:          poNumber,
 		BuyerProfileID:    buyerID,
 		SupplierProfileID: req.SupplierProfileID,
 		RFQID:             req.RFQID,
+		ProductID:         req.ProductID,
 		ProductName:       req.ProductName,
+		ProductImage:      productImage,
 		QuantityValue:     req.QuantityValue,
 		QuantityUnit:      req.QuantityUnit,
 		PricePerUnit:      req.PricePerUnit,
@@ -115,7 +137,9 @@ func (u *transactionUsecase) Create(ctx context.Context, userID string, req *dto
 		SupplierProfileID: po.SupplierProfileID,
 		SupplierName:      supplierName,
 		RFQID:             po.RFQID,
+		ProductID:         po.ProductID,
 		ProductName:       po.ProductName,
+		ProductImage:      po.ProductImage,
 		QuantityValue:     po.QuantityValue,
 		QuantityUnit:      po.QuantityUnit,
 		PricePerUnit:      po.PricePerUnit,
@@ -148,6 +172,14 @@ func (u *transactionUsecase) GetByID(ctx context.Context, userID string, id stri
 		supplierName = utils.DefaultSupplierName
 	}
 
+	productImage := po.ProductImage
+	if productImage == "" {
+		productImage = "/images/categories/cat-bahan-baku.webp"
+	}
+
+	var reviewCount int64
+	u.db.WithContext(ctx).Table("supplier_reviews").Where("purchase_order_id = ?", po.ID).Count(&reviewCount)
+
 	return &dto.TransactionResponse{
 		ID:                po.ID,
 		PONumber:          po.PONumber,
@@ -155,13 +187,16 @@ func (u *transactionUsecase) GetByID(ctx context.Context, userID string, id stri
 		SupplierProfileID: po.SupplierProfileID,
 		SupplierName:      supplierName,
 		RFQID:             po.RFQID,
+		ProductID:         po.ProductID,
 		ProductName:       po.ProductName,
+		ProductImage:      productImage,
 		QuantityValue:     po.QuantityValue,
 		QuantityUnit:      po.QuantityUnit,
 		PricePerUnit:      po.PricePerUnit,
 		TotalAmount:       po.TotalAmount,
 		Status:            po.Status,
 		PaymentStatus:     po.PaymentStatus,
+		HasReviewed:       reviewCount > 0,
 		DeliveryAddress:   po.DeliveryAddress,
 		Notes:             po.Notes,
 		CreatedAt:         po.CreatedAt,
@@ -203,12 +238,38 @@ func (u *transactionUsecase) List(ctx context.Context, userID string, req *dto.L
 		}
 	}
 
+	// Batch check which completed POs have already been reviewed to eliminate N+1 queries
+	reviewedPOMap := make(map[string]bool)
+	if len(poList) > 0 {
+		completedPOIDs := make([]string, 0, len(poList))
+		for _, po := range poList {
+			if po.Status == "completed" {
+				completedPOIDs = append(completedPOIDs, po.ID)
+			}
+		}
+		if len(completedPOIDs) > 0 {
+			var reviewedIDs []string
+			if err := u.db.WithContext(ctx).Table("supplier_reviews").
+				Where("purchase_order_id IN ?", completedPOIDs).
+				Pluck("purchase_order_id", &reviewedIDs).Error; err == nil {
+				for _, id := range reviewedIDs {
+					reviewedPOMap[id] = true
+				}
+			}
+		}
+	}
+
 	var responseList []dto.TransactionResponse
 	for i := range poList {
 		po := &poList[i]
 		supplierName := supplierMap[po.SupplierProfileID]
 		if supplierName == "" {
 			supplierName = utils.DefaultSupplierName
+		}
+
+		productImage := po.ProductImage
+		if productImage == "" {
+			productImage = "/images/categories/cat-bahan-baku.webp"
 		}
 
 		responseList = append(responseList, dto.TransactionResponse{
@@ -218,13 +279,16 @@ func (u *transactionUsecase) List(ctx context.Context, userID string, req *dto.L
 			SupplierProfileID: po.SupplierProfileID,
 			SupplierName:      supplierName,
 			RFQID:             po.RFQID,
+			ProductID:         po.ProductID,
 			ProductName:       po.ProductName,
+			ProductImage:      productImage,
 			QuantityValue:     po.QuantityValue,
 			QuantityUnit:      po.QuantityUnit,
 			PricePerUnit:      po.PricePerUnit,
 			TotalAmount:       po.TotalAmount,
 			Status:            po.Status,
 			PaymentStatus:     po.PaymentStatus,
+			HasReviewed:       reviewedPOMap[po.ID],
 			DeliveryAddress:   po.DeliveryAddress,
 			Notes:             po.Notes,
 			CreatedAt:         po.CreatedAt,

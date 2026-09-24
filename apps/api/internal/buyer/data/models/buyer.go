@@ -173,7 +173,9 @@ type PurchaseOrder struct {
 	BuyerProfileID    string         `gorm:"type:uuid;not null;index" json:"buyer_profile_id"`
 	SupplierProfileID string         `gorm:"type:uuid;not null;index" json:"supplier_profile_id"`
 	RFQID             *string        `gorm:"type:uuid;index" json:"rfq_id"`
+	ProductID         *string        `gorm:"type:uuid;index" json:"product_id"`
 	ProductName       string         `gorm:"type:varchar(255);not null" json:"product_name"`
+	ProductImage      string         `gorm:"type:text" json:"product_image"`
 	QuantityValue     float64        `gorm:"not null;default:0" json:"quantity_value"`
 	QuantityUnit      string         `gorm:"type:varchar(60)" json:"quantity_unit"`
 	PricePerUnit      float64        `gorm:"not null;default:0" json:"price_per_unit"`

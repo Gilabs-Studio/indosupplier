@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/gilabs/indosupplier/api/internal/buyer/data/models"
+	"github.com/gilabs/indosupplier/api/internal/core/apptime"
 	"github.com/gilabs/indosupplier/api/internal/core/infrastructure/database"
 	"github.com/gilabs/indosupplier/api/internal/core/utils"
 )
@@ -68,7 +69,7 @@ func (r *transactionRepository) List(ctx context.Context, buyerProfileID string,
 	offset := utils.PaginationOffset(page, perPage)
 
 	err := query.
-		Order("created_at DESC").
+		Order("updated_at DESC, created_at DESC").
 		Offset(offset).
 		Limit(perPage).
 		Find(&txs).Error
@@ -91,5 +92,6 @@ func (r *transactionRepository) UpdateStatus(ctx context.Context, id string, sta
 	if len(updates) == 0 {
 		return nil
 	}
+	updates["updated_at"] = apptime.Now()
 	return r.getDB(ctx).Model(&models.PurchaseOrder{}).Where("id = ?", id).Updates(updates).Error
 }

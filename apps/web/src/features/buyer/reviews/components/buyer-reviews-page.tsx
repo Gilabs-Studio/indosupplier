@@ -1,6 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +14,8 @@ import { useBuyerReviewsStore } from "../stores/useBuyerReviewsStore";
 
 export function BuyerReviewsPage() {
   const t = useTranslations("buyerReviews");
+  const searchParams = useSearchParams();
+  const poIdParam = searchParams.get("poId");
   const { selectedItemId, setSelectedItemId } = useBuyerReviewsStore();
   const [rating, setRating] = useState<number>(5);
   const [reviewText, setReviewText] = useState<string>("");
@@ -24,6 +28,15 @@ export function BuyerReviewsPage() {
     submitReview,
     isSubmitting,
   } = useBuyerReviews();
+
+  useEffect(() => {
+    if (poIdParam && eligibleTransactions.length > 0) {
+      const match = eligibleTransactions.find((item) => item.id === poIdParam);
+      if (match) {
+        setSelectedItemId(match.id);
+      }
+    }
+  }, [poIdParam, eligibleTransactions, setSelectedItemId]);
 
   const selectedItem = eligibleTransactions.find((item) => item.id === selectedItemId);
 
@@ -121,11 +134,23 @@ export function BuyerReviewsPage() {
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                       {/* Product details */}
                       <div className="flex items-start gap-4">
-                        <div className="bg-primary/10 h-14 w-14 rounded-lg flex items-center justify-center shrink-0">
-                          <ShoppingBag className="h-6 w-6 text-primary" />
+                        <div className="relative h-14 w-14 rounded-lg border border-border bg-muted/30 overflow-hidden shrink-0">
+                          {item.productImage ? (
+                            <Image
+                              src={item.productImage}
+                              alt={item.productName}
+                              fill
+                              sizes="56px"
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div className="h-full w-full flex items-center justify-center bg-primary/10 text-primary">
+                              <ShoppingBag className="h-6 w-6" />
+                            </div>
+                          )}
                         </div>
                         <div className="space-y-0.5 min-w-0">
-                          <h4 className="font-extrabold text-sm text-foreground hover:text-primary transition-colors cursor-pointer truncate">
+                          <h4 className="font-extrabold text-sm text-foreground truncate">
                             {item.productName}
                           </h4>
                           <p className="text-xs text-muted-foreground font-medium">
@@ -170,7 +195,7 @@ export function BuyerReviewsPage() {
           {/* History reviews */}
           <div className="space-y-4">
             <h3 className="text-sm font-extrabold text-foreground tracking-tight flex items-center gap-2">
-              <Star className="h-4.5 w-4.5 text-warning fill-warning" />
+              <Star className="h-4.5 w-4.5 text-amber-400 fill-amber-400" />
               {t("historyTitle")}
             </h3>
 
@@ -210,8 +235,20 @@ export function BuyerReviewsPage() {
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                       {/* Product details */}
                       <div className="flex items-start gap-4">
-                        <div className="bg-primary/10 h-14 w-14 rounded-lg flex items-center justify-center shrink-0">
-                          <ShoppingBag className="h-6 w-6 text-primary" />
+                        <div className="relative h-14 w-14 rounded-lg border border-border bg-muted/30 overflow-hidden shrink-0">
+                          {item.productImage ? (
+                            <Image
+                              src={item.productImage}
+                              alt={item.productName}
+                              fill
+                              sizes="56px"
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div className="h-full w-full flex items-center justify-center bg-primary/10 text-primary">
+                              <ShoppingBag className="h-6 w-6" />
+                            </div>
+                          )}
                         </div>
                         <div className="space-y-0.5 min-w-0">
                           <h4 className="font-extrabold text-sm text-foreground truncate">
@@ -244,8 +281,8 @@ export function BuyerReviewsPage() {
                             className={cn(
                               "h-3.5 w-3.5",
                               s <= item.rating
-                                ? "fill-warning text-warning"
-                                : "text-muted-foreground/30"
+                                ? "fill-amber-400 text-amber-400"
+                                : "text-muted-foreground/25 fill-transparent"
                             )}
                           />
                         ))}
@@ -275,6 +312,30 @@ export function BuyerReviewsPage() {
                 </p>
               </div>
 
+              {/* Product preview */}
+              <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg border border-border">
+                <div className="relative h-12 w-12 rounded-md border border-border bg-card overflow-hidden shrink-0">
+                  {selectedItem.productImage ? (
+                    <Image
+                      src={selectedItem.productImage}
+                      alt={selectedItem.productName}
+                      fill
+                      sizes="48px"
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="h-full w-full flex items-center justify-center bg-primary/10 text-primary">
+                      <ShoppingBag className="h-5 w-5" />
+                    </div>
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h4 className="font-extrabold text-xs text-foreground truncate">{selectedItem.productName}</h4>
+                  <p className="text-[11px] text-muted-foreground font-semibold">{selectedItem.supplierName}</p>
+                  <p className="text-[10px] text-muted-foreground font-medium">{selectedItem.quantityValue} {selectedItem.quantityUnit}</p>
+                </div>
+              </div>
+
               <form onSubmit={handleSubmit} className="space-y-4 font-medium text-sm">
                 {/* Rating Pick */}
                 <div className="space-y-1.5">
@@ -285,14 +346,14 @@ export function BuyerReviewsPage() {
                         key={star}
                         type="button"
                         onClick={() => setRating(star)}
-                        className="cursor-pointer transition-transform duration-200 hover:scale-110"
+                        className="cursor-pointer transition-transform active:scale-95 focus:outline-hidden p-0.5"
                       >
                         <Star
                           className={cn(
-                            "h-7 w-7",
+                            "h-7 w-7 transition-colors duration-150",
                             star <= rating
-                              ? "text-warning fill-warning"
-                              : "text-muted-foreground/40"
+                              ? "text-amber-400 fill-amber-400 drop-shadow-xs"
+                              : "text-muted-foreground/25 fill-transparent hover:text-amber-300"
                           )}
                         />
                       </button>
@@ -317,7 +378,7 @@ export function BuyerReviewsPage() {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full h-10 text-xs font-bold cursor-pointer bg-primary text-primary-foreground hover:-translate-y-0.5 active:translate-y-0 hover:shadow-lg hover:shadow-primary/30 transition-all duration-300"
+                  className="w-full h-10 text-xs font-semibold cursor-pointer bg-primary text-primary-foreground hover:-translate-y-0.5 active:translate-y-0 hover:shadow-lg hover:shadow-primary/30 transition-all duration-300 disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-50 disabled:transform-none"
                 >
                   {isSubmitting ? (
                     <>

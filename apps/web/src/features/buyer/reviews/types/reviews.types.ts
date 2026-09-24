@@ -4,6 +4,7 @@ export interface EligibleTransaction {
   supplierProfileId: string;
   supplierName: string;
   productName: string;
+  productImage?: string;
   quantityValue: number;
   quantityUnit: string;
   totalAmount: number;
@@ -16,6 +17,7 @@ export interface ReviewHistory {
   supplierProfileId: string;
   supplierName: string;
   productName: string;
+  productImage?: string;
   quantityValue: number;
   quantityUnit: string;
   totalAmount: number;

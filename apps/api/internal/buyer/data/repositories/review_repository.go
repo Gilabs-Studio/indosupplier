@@ -34,7 +34,7 @@ func (r *reviewRepository) GetEligibleTransactions(ctx context.Context, buyerID 
 	var results []dto.EligibleTransactionResponse
 	err := r.getDB(ctx).
 		Table("purchase_orders").
-		Select("purchase_orders.id, purchase_orders.po_number, purchase_orders.supplier_profile_id, supplier_profiles.company_name as supplier_name, purchase_orders.product_name, purchase_orders.quantity_value, purchase_orders.quantity_unit, purchase_orders.total_amount, purchase_orders.updated_at as date").
+		Select("purchase_orders.id, purchase_orders.po_number, purchase_orders.supplier_profile_id, supplier_profiles.company_name as supplier_name, purchase_orders.product_name, COALESCE(purchase_orders.product_image, '') as product_image, purchase_orders.quantity_value, purchase_orders.quantity_unit, purchase_orders.total_amount, purchase_orders.updated_at as date").
 		Joins("JOIN supplier_profiles ON supplier_profiles.id = purchase_orders.supplier_profile_id").
 		Joins("LEFT JOIN supplier_reviews ON supplier_reviews.purchase_order_id = purchase_orders.id").
 		Where("purchase_orders.buyer_profile_id = ? AND purchase_orders.status = ? AND supplier_reviews.id IS NULL", buyerID, "completed").
@@ -45,10 +45,13 @@ func (r *reviewRepository) GetEligibleTransactions(ctx context.Context, buyerID 
 		return nil, err
 	}
 	
-	// Format dates to YYYY-MM-DD
+	// Format dates to YYYY-MM-DD and ensure product image fallback
 	for i := range results {
 		if len(results[i].Date) > 10 {
 			results[i].Date = results[i].Date[:10]
+		}
+		if results[i].ProductImage == "" {
+			results[i].ProductImage = "/images/categories/cat-bahan-baku.webp"
 		}
 	}
 	
@@ -65,6 +68,7 @@ func (r *reviewRepository) GetReviewHistory(ctx context.Context, buyerID string)
 		SupplierProfileID string
 		SupplierName      string
 		ProductName       string
+		ProductImage      string
 		QuantityValue     float64
 		QuantityUnit      string
 		TotalAmount       float64
@@ -77,7 +81,7 @@ func (r *reviewRepository) GetReviewHistory(ctx context.Context, buyerID string)
 	var raws []rawHistory
 	err := r.getDB(ctx).
 		Table("supplier_reviews").
-		Select("supplier_reviews.id, COALESCE(purchase_orders.po_number, 'N/A') as po_number, supplier_reviews.supplier_profile_id, supplier_profiles.company_name as supplier_name, COALESCE(purchase_orders.product_name, 'Sourcing Review') as product_name, COALESCE(purchase_orders.quantity_value, 0) as quantity_value, COALESCE(purchase_orders.quantity_unit, '') as quantity_unit, COALESCE(purchase_orders.total_amount, 0) as total_amount, supplier_reviews.rating, supplier_reviews.review_text, supplier_reviews.status, supplier_reviews.created_at").
+		Select("supplier_reviews.id, COALESCE(purchase_orders.po_number, 'N/A') as po_number, supplier_reviews.supplier_profile_id, supplier_profiles.company_name as supplier_name, COALESCE(purchase_orders.product_name, 'Sourcing Review') as product_name, COALESCE(purchase_orders.product_image, '') as product_image, COALESCE(purchase_orders.quantity_value, 0) as quantity_value, COALESCE(purchase_orders.quantity_unit, '') as quantity_unit, COALESCE(purchase_orders.total_amount, 0) as total_amount, supplier_reviews.rating, supplier_reviews.review_text, supplier_reviews.status, supplier_reviews.created_at").
 		Joins("LEFT JOIN purchase_orders ON purchase_orders.id = supplier_reviews.purchase_order_id").
 		Joins("JOIN supplier_profiles ON supplier_profiles.id = supplier_reviews.supplier_profile_id").
 		Where("supplier_reviews.buyer_profile_id = ?", buyerID).
@@ -90,12 +94,17 @@ func (r *reviewRepository) GetReviewHistory(ctx context.Context, buyerID string)
 
 	results := make([]dto.ReviewHistoryResponse, len(raws))
 	for i, raw := range raws {
+		productImage := raw.ProductImage
+		if productImage == "" {
+			productImage = "/images/categories/cat-bahan-baku.webp"
+		}
 		results[i] = dto.ReviewHistoryResponse{
 			ID:                raw.ID,
 			PONumber:          raw.PONumber,
 			SupplierProfileID: raw.SupplierProfileID,
 			SupplierName:      raw.SupplierName,
 			ProductName:       raw.ProductName,
+			ProductImage:      productImage,
 			QuantityValue:     raw.QuantityValue,
 			QuantityUnit:      raw.QuantityUnit,
 			TotalAmount:       raw.TotalAmount,

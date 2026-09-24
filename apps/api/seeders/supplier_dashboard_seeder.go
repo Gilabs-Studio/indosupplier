@@ -90,13 +90,22 @@ func SeedSupplierDashboard() error {
 			{12, 15, "Baja Profil I-Beam & H-Beam Structural", 9, "Ton", 15555555, 140000000},
 		}
 
+		now := apptime.Now()
+		currentMonth := int(now.Month())
+		currentYear := now.Year()
+
 		for _, mt := range monthlyTargets {
-			poDate := time.Date(2026, time.Month(mt.month), mt.day, 10, 30, 0, 0, time.UTC)
+			year := currentYear
+			if mt.month > currentMonth {
+				year = currentYear - 1
+			}
+			poDate := time.Date(year, time.Month(mt.month), mt.day, 10, 30, 0, 0, time.UTC)
 			po := buyerModels.PurchaseOrder{
-				PONumber:          fmt.Sprintf("PO-2026%02d-%s", mt.month, profile.ID[:6]),
+				PONumber:          fmt.Sprintf("PO-%04d%02d-%s", year, mt.month, profile.ID[:6]),
 				BuyerProfileID:    buyer.ID,
 				SupplierProfileID: profile.ID,
 				ProductName:       mt.product,
+				ProductImage:      "/images/categories/cat-bahan-baku.webp",
 				QuantityValue:     mt.qty,
 				QuantityUnit:      mt.unit,
 				PricePerUnit:      mt.price,

@@ -5,7 +5,9 @@ import "time"
 type CreateTransactionRequest struct {
 	SupplierProfileID string  `json:"supplier_profile_id" binding:"required,uuid"`
 	RFQID             *string `json:"rfq_id" binding:"omitempty,uuid"`
+	ProductID         *string `json:"product_id" binding:"omitempty,uuid"`
 	ProductName       string  `json:"product_name" binding:"required"`
+	ProductImage      string  `json:"product_image"`
 	QuantityValue     float64 `json:"quantity_value" binding:"required,gt=0"`
 	QuantityUnit      string  `json:"quantity_unit" binding:"required"`
 	PricePerUnit      float64 `json:"price_per_unit" binding:"required,gt=0"`
@@ -26,13 +28,16 @@ type TransactionResponse struct {
 	SupplierProfileID string    `json:"supplier_profile_id"`
 	SupplierName      string    `json:"supplier_name"`
 	RFQID             *string   `json:"rfq_id,omitempty"`
+	ProductID         *string   `json:"product_id,omitempty"`
 	ProductName       string    `json:"product_name"`
+	ProductImage      string    `json:"product_image,omitempty"`
 	QuantityValue     float64   `json:"quantity_value"`
 	QuantityUnit      string    `json:"quantity_unit"`
 	PricePerUnit      float64   `json:"price_per_unit"`
 	TotalAmount       float64   `json:"total_amount"`
 	Status            string    `json:"status"`
 	PaymentStatus     string    `json:"payment_status"`
+	HasReviewed       bool      `json:"has_reviewed"`
 	DeliveryAddress   string    `json:"delivery_address"`
 	Notes             string    `json:"notes"`
 	CreatedAt         time.Time `json:"created_at"`

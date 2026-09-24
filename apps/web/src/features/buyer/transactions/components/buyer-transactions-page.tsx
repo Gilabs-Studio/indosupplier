@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { useBuyerTransactions } from "@/features/buyer/transactions/hooks/useBuyerTransactions";
@@ -9,14 +10,19 @@ import { TransactionItem } from "@/features/buyer/transactions/types/transaction
 import { formatCurrency } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Loader2, Calendar, FileText, ShoppingBag, Eye, MessageSquare } from "lucide-react";
+import { Search, Loader2, Calendar, FileText, ShoppingBag, Eye, MessageSquare, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { TransactionStatusBadge } from "./transaction-status-badge";
+import { BuyerReviewDialog } from "./buyer-review-dialog";
 
 export function BuyerTransactionsPage() {
   const t = useTranslations("buyer.transactions");
   const [activeTab, setActiveTab] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [reviewTarget, setReviewTarget] = useState<TransactionItem | null>(null);
+  const [isReviewOpen, setIsReviewOpen] = useState<boolean>(false);
   const itemsPerPage = 5;
 
   const { data, isLoading } = useBuyerTransactions({
@@ -46,27 +52,12 @@ export function BuyerTransactionsPage() {
     setCurrentPage(1);
   };
 
-  const getStatusColorClass = (status: string) => {
-    switch (status) {
-      case "completed":
-        return "bg-success/10 text-success border-success/20";
-      case "processing":
-        return "bg-warning/10 text-warning border-warning/20";
-      case "shipped":
-        return "bg-cyan/10 text-cyan border-cyan/20";
-      case "cancelled":
-        return "bg-destructive/10 text-destructive border-destructive/20";
-      default:
-        return "bg-primary/10 text-primary border-primary/20";
-    }
-  };
-
   const renderContent = () => {
     if (isLoading) {
       return (
         <div className="flex flex-col items-center justify-center py-20 gap-3">
           <Loader2 className="h-8 w-8 text-primary animate-spin" />
-          <p className="text-sm text-muted-foreground">Memuat daftar transaksi...</p>
+          <p className="text-sm text-muted-foreground">{t("loading")}</p>
         </div>
       );
     }
@@ -79,7 +70,7 @@ export function BuyerTransactionsPage() {
           </div>
           <div className="space-y-1">
             <h3 className="font-bold text-base text-foreground">{t("empty")}</h3>
-            <p className="text-xs text-muted-foreground">Coba cari produk atau supplier lain.</p>
+            <p className="text-xs text-muted-foreground">{t("emptyDesc")}</p>
           </div>
         </div>
       );
@@ -92,7 +83,7 @@ export function BuyerTransactionsPage() {
             key={tx.id}
             className="bg-card rounded-xl border border-border p-5 shadow-xs space-y-4 hover:shadow-md transition-all duration-300"
           >
-            {/* Card Header (Date, PO number, Status Badge) */}
+            {/* Card Header (Date, PO number, Unified Status Badge) */}
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-3">
               <div className="flex items-center gap-3 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
@@ -110,35 +101,31 @@ export function BuyerTransactionsPage() {
                 </span>
               </div>
 
+              {/* 1 Unified Status Badge */}
               <div className="flex items-center gap-2">
-                <span
-                  className={cn(
-                    "px-2.5 py-0.5 rounded-md text-[11px] font-semibold uppercase tracking-wider border",
-                    getStatusColorClass(tx.status)
-                  )}
-                >
-                  {tx.status}
-                </span>
-                <span
-                  className={cn(
-                    "px-2.5 py-0.5 rounded-md text-[11px] font-semibold uppercase tracking-wider border",
-                    tx.payment_status === "paid"
-                      ? "bg-success/10 text-success border-success/20"
-                      : "bg-warning/10 text-warning border-warning/20"
-                  )}
-                >
-                  {tx.payment_status}
-                </span>
+                <TransactionStatusBadge status={tx.status} paymentStatus={tx.payment_status} />
               </div>
             </div>
 
-            {/* Card Body (Supplier info, Product detail) */}
+            {/* Card Body (Real Product Image, Supplier info, Product detail) */}
             <div className="flex items-start gap-4">
-              <div className="bg-primary/10 h-10 w-10 rounded-lg flex items-center justify-center shrink-0">
-                <ShoppingBag className="h-5 w-5 text-primary" />
+              <div className="relative h-14 w-14 sm:h-16 sm:w-16 rounded-lg border border-border bg-muted/30 overflow-hidden shrink-0">
+                {tx.product_image ? (
+                  <Image
+                    src={tx.product_image}
+                    alt={tx.product_name}
+                    fill
+                    sizes="64px"
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="h-full w-full flex items-center justify-center bg-primary/10 text-primary">
+                    <ShoppingBag className="h-6 w-6" />
+                  </div>
+                )}
               </div>
               <div className="min-w-0 flex-1 space-y-1">
-                <h4 className="font-extrabold text-sm text-foreground hover:text-primary transition-colors cursor-pointer">
+                <h4 className="font-extrabold text-sm text-foreground truncate">
                   {tx.product_name}
                 </h4>
                 <p className="text-xs text-muted-foreground font-semibold">
@@ -176,11 +163,26 @@ export function BuyerTransactionsPage() {
                 </Link>
 
                 {tx.status === "completed" && (
-                  <Link href={`/reviews`}>
-                    <Button size="sm" className="h-8.5 text-xs font-semibold cursor-pointer bg-primary text-primary-foreground hover:-translate-y-0.5 active:translate-y-0">
+                  tx.has_reviewed ? (
+                    <Badge
+                      variant="outline"
+                      className="h-8.5 px-3 text-xs font-semibold border-success/30 bg-success/10 text-success gap-1.5"
+                    >
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                      {t("alreadyReviewed")}
+                    </Badge>
+                  ) : (
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        setReviewTarget(tx);
+                        setIsReviewOpen(true);
+                      }}
+                      className="h-8.5 text-xs font-semibold cursor-pointer bg-primary text-primary-foreground hover:-translate-y-0.5 active:translate-y-0"
+                    >
                       {t("reviewBtn")}
                     </Button>
-                  </Link>
+                  )
                 )}
               </div>
             </div>
@@ -239,11 +241,11 @@ export function BuyerTransactionsPage() {
         {data && data.total > itemsPerPage && (
           <div className="flex items-center justify-between border-t border-border pt-4">
             <p className="text-xs text-muted-foreground font-semibold">
-              Showing <span className="font-bold">{(currentPage - 1) * itemsPerPage + 1}</span> to{" "}
+              {t("showing")} <span className="font-bold">{(currentPage - 1) * itemsPerPage + 1}</span> {t("to")}{" "}
               <span className="font-bold">
                 {Math.min(currentPage * itemsPerPage, data.total)}
               </span>{" "}
-              of <span className="font-bold">{data.total}</span> entries
+              {t("of")} <span className="font-bold">{data.total}</span> {t("entries")}
             </p>
             <div className="flex items-center gap-2">
               <Button
@@ -253,7 +255,7 @@ export function BuyerTransactionsPage() {
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 className="h-8 text-xs font-semibold cursor-pointer"
               >
-                Previous
+                {t("previous")}
               </Button>
               <Button
                 variant="outline"
@@ -262,13 +264,18 @@ export function BuyerTransactionsPage() {
                 onClick={() => setCurrentPage((p) => p + 1)}
                 className="h-8 text-xs font-semibold cursor-pointer"
               >
-                Next
+                {t("next")}
               </Button>
             </div>
           </div>
         )}
       </div>
+
+      <BuyerReviewDialog
+        open={isReviewOpen}
+        onOpenChange={setIsReviewOpen}
+        transaction={reviewTarget}
+      />
     </BuyerLayout>
   );
 }
-

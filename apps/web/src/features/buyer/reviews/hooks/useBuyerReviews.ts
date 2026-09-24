@@ -27,6 +27,9 @@ export function useBuyerReviews() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["buyer-reviews-eligible"] });
       queryClient.invalidateQueries({ queryKey: ["buyer-reviews-history"] });
+      queryClient.invalidateQueries({ queryKey: ["buyer", "transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["buyer-transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["buyer-transaction"] });
       toast.success(t("success"));
     },
     onError: (error: unknown) => {
