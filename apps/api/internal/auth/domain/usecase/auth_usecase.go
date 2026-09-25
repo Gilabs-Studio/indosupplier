@@ -334,7 +334,6 @@ func (u *authUsecase) BecomeSupplier(ctx context.Context, userID string, req *dt
 			BusinessHours:          strings.TrimSpace(req.BusinessHours),
 			Timezone:               strings.TrimSpace(req.Timezone),
 			Description:            strings.TrimSpace(req.Description),
-			Phone:                  strings.TrimSpace(req.Phone),
 			WhatsApp:               strings.TrimSpace(req.WhatsApp),
 			Email:                  strings.TrimSpace(req.Email),
 			Website:                strings.TrimSpace(req.Website),

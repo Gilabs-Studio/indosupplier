@@ -4,10 +4,8 @@ import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { FileText, Search, ArrowUpRight, Calendar, MapPin, Package } from "lucide-react";
+import { Search, ArrowUpRight } from "lucide-react";
 import { CenteredLoading } from "@/components/loading";
 import { resolveImageUrl } from "@/lib/utils";
 import { useSupplierRfqs } from "../hooks/useSupplierRfqs";
@@ -20,8 +18,7 @@ export function SupplierRfqList() {
 
   const filtered = rfqs.filter(r =>
     r.product.toLowerCase().includes(search.toLowerCase()) ||
-    r.category.toLowerCase().includes(search.toLowerCase()) ||
-    r.port.toLowerCase().includes(search.toLowerCase())
+    r.category.toLowerCase().includes(search.toLowerCase())
   );
 
   if (isLoading) {
@@ -65,7 +62,6 @@ export function SupplierRfqList() {
                 <TableRow className="border-b border-border text-muted-foreground text-[11px] font-medium uppercase tracking-wider">
                   <TableHead className="py-3 px-6">{t("tableProduct")}</TableHead>
                   <TableHead className="py-3 px-4">{t("tableQty")}</TableHead>
-                  <TableHead className="py-3 px-4">{t("tablePort")}</TableHead>
                   <TableHead className="py-3 px-4">Status</TableHead>
                   <TableHead className="py-3 px-6 text-right">Actions</TableHead>
                 </TableRow>
@@ -106,9 +102,6 @@ export function SupplierRfqList() {
                       </TableCell>
                       <TableCell className="py-3.5 px-4 text-sm text-foreground whitespace-nowrap">
                         {r.quantity}
-                      </TableCell>
-                      <TableCell className="py-3.5 px-4 text-xs text-muted-foreground max-w-xs truncate">
-                        {r.port}
                       </TableCell>
                       <TableCell className="py-3.5 px-4 whitespace-nowrap">
                         {r.status === "open" || r.status === "new" ? (

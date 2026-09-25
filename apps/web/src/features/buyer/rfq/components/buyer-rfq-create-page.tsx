@@ -36,7 +36,6 @@ export function BuyerRfqCreatePage() {
       category: "manufacturing",
       quantity: "",
       unit: "Ton",
-      target_port: "",
       description: "",
       attachment_url: "",
     },
@@ -76,7 +75,6 @@ export function BuyerRfqCreatePage() {
       category: data.category,
       quantity: data.quantity,
       unit: data.unit,
-      target_port: data.target_port,
       description: data.description,
       attachment_url: data.attachment_url,
       attachment_name: uploadedFileName || undefined,
@@ -177,22 +175,6 @@ export function BuyerRfqCreatePage() {
                     </Field>
                   </div>
                 </div>
-
-                {/* Shipping Destination */}
-                <Field className="space-y-2">
-                  <FieldLabel htmlFor="target_port">
-                    {t("labelDestination")} <span className="text-destructive">*</span>
-                  </FieldLabel>
-                  <Input
-                    id="target_port"
-                    placeholder={t("placeholderDestination")}
-                    {...register("target_port")}
-                    className="cursor-pointer"
-                  />
-                  {errors.target_port && (
-                    <FieldError>{errors.target_port.message}</FieldError>
-                  )}
-                </Field>
 
                 {/* Description Requirements */}
                 <Field className="space-y-2">

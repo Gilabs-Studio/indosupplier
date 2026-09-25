@@ -223,7 +223,6 @@ func ensureSupplierProfile(userID string, seed marketplaceUserSeed, sequence int
 				BusinessHours:          "Monday-Friday 08:00-17:00",
 				Timezone:               "Asia/Jakarta",
 				Description:            fmt.Sprintf("%s adalah supplier terverifikasi untuk industri %s.", seed.CompanyName, seed.Industry),
-				Phone:                  fmt.Sprintf("+62812%08d", 34000000+sequence),
 				WhatsApp:               fmt.Sprintf("+62812%08d", 34000000+sequence),
 				Email:                  seed.Email,
 				Website:                fmt.Sprintf("https://supplier%d.indosupplier.local", sequence),

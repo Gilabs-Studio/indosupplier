@@ -5,7 +5,7 @@ type CreateRFQRequest struct {
 	Category         string   `json:"category" binding:"required"`
 	Quantity         string   `json:"quantity" binding:"required"`
 	Unit             string   `json:"unit" binding:"required"`
-	TargetPort       string   `json:"target_port" binding:"required,min=3,max=100"`
+	TargetPort       string   `json:"target_port,omitempty" binding:"omitempty,max=100"`
 	Description      string   `json:"description"`
 	AttachmentURL    string   `json:"attachment_url"`
 	AttachmentName   string   `json:"attachment_name"`
@@ -22,7 +22,7 @@ type RFQResponse struct {
 	Product        string `json:"product"`
 	Category       string `json:"category"`
 	Quantity       string `json:"quantity"`
-	TargetPort     string `json:"targetPort"`
+	TargetPort     string `json:"targetPort,omitempty"`
 	Date           string `json:"date"`
 	Status         string `json:"status"`
 	Replies        int    `json:"replies"`
@@ -66,7 +66,7 @@ type SupplierRFQResponse struct {
 	Product        string                     `json:"product"`
 	Category       string                     `json:"category"`
 	Quantity       string                     `json:"quantity"`
-	Port           string                     `json:"port"`
+	Port           string                     `json:"port,omitempty"`
 	Date           string                     `json:"date"`
 	Budget         string                     `json:"budget"`
 	Status         string                     `json:"status"`

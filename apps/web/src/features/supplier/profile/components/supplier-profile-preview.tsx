@@ -136,7 +136,7 @@ export function SupplierProfilePreview() {
       },
     ],
     products: actualProducts,
-    phone: profile?.phone || "+6281234567890",
+    whatsApp: profile?.whatsapp || profile?.whatsApp || "+6281234567890",
     email: profile?.email || "contact@bajasentosa.co.id",
     website: profile?.website || "https://bajasentosa.co.id",
     logo: profile?.logo || "",

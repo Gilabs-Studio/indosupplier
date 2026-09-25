@@ -74,7 +74,7 @@ func toVerificationResponse(profile *models.SupplierProfile, request *verificati
 		BusinessInfo: dto.VerificationBusinessInfo{
 			LegalName:   profile.CompanyName,
 			NIBNumber:   profile.NIB,
-			Phone:       profile.Phone,
+			Phone:       profile.WhatsApp,
 			Description: profile.Description,
 			Address:     profile.Address,
 			NPWPNumber:  profile.NPWP,
@@ -91,7 +91,7 @@ func toVerificationResponse(profile *models.SupplierProfile, request *verificati
 		NIBNumber:       firstNonEmpty(request.NIBNumber, profile.NIB),
 		EstablishedDate: strings.TrimSpace(request.EstablishedDate),
 		Industry:        strings.TrimSpace(request.Industry),
-		Phone:           firstNonEmpty(request.BusinessPhone, profile.Phone),
+		Phone:           firstNonEmpty(request.BusinessPhone, profile.WhatsApp),
 		Description:     firstNonEmpty(request.BusinessDesc, profile.Description),
 		Address:         firstNonEmpty(request.BusinessAddress, profile.Address),
 		NIBFileURL:      strings.TrimSpace(request.NIBFileURL),
@@ -128,9 +128,6 @@ func syncProfileFromVerification(profile *models.SupplierProfile, business *dto.
 	}
 	if value := strings.TrimSpace(business.NIBNumber); value != "" {
 		profile.NIB = value
-	}
-	if value := strings.TrimSpace(business.Phone); value != "" {
-		profile.Phone = value
 	}
 	if value := strings.TrimSpace(business.Description); value != "" {
 		profile.Description = value

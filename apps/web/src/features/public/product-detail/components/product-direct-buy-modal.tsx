@@ -14,10 +14,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Field, FieldLabel, FieldGroup } from "@/components/ui/field";
+import { Field, FieldLabel } from "@/components/ui/field";
 import { transactionService } from "@/features/buyer/transactions/services/transaction.service";
 import { resolveImageUrl, formatPrice } from "@/lib/utils";
-import { Loader2, ShoppingBag, Package, Truck } from "lucide-react";
+import { Loader2, ShoppingBag, Package } from "lucide-react";
 import { toast } from "sonner";
 import type { PublicProductDto, PublicSupplierDto } from "@/features/public/search/types";
 
@@ -50,7 +50,7 @@ export function ProductDirectBuyModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!address.trim()) {
-      toast.error(t("directBuyAddressRequired") || "Alamat pengiriman lengkap wajib diisi.");
+      toast.error(t("directBuyAddressRequired"));
       return;
     }
 
@@ -63,14 +63,14 @@ export function ProductDirectBuyModal({
         quantity_unit: "Unit",
         price_per_unit: product.price,
         delivery_address: address.trim(),
-        notes: `[Varian: ${selectedVariantText}] ${notes.trim()}`.trim(),
+        notes: `[${t("rfqVariantPrefix")}: ${selectedVariantText}] ${notes.trim()}`.trim(),
       });
 
-      toast.success(t("directBuySuccess") || "Pesanan berhasil dibuat! Anda dialihkan ke detail transaksi.");
+      toast.success(t("directBuySuccess"));
       onClose();
       router.push(`/transactions/${res.id}`);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Gagal membuat pesanan transaksi";
+      const msg = err instanceof Error ? err.message : t("directBuyError");
       toast.error(msg);
     } finally {
       setIsSubmitting(false);
@@ -79,13 +79,13 @@ export function ProductDirectBuyModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent size="md" className="rounded-xl border-border bg-card p-6 shadow-xl max-h-[90vh] overflow-y-auto">
+      <DialogContent size="md" className="rounded-lg border border-border bg-card p-6 shadow-xl max-h-[90vh] overflow-y-auto">
         <DialogHeader className="space-y-1 text-left">
-          <DialogTitle className="text-base font-bold font-heading text-foreground">
-            {t("directBuyTitle") || "Beli Langsung / Buat Pesanan"}
+          <DialogTitle className="text-base font-extrabold font-heading text-foreground">
+            {t("directBuyTitle")}
           </DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground">
-            {t("directBuySubtitle") || "Pesan langsung produk ini dari supplier dengan konfirmasi instan."}
+            {t("directBuySubtitle")}
           </DialogDescription>
         </DialogHeader>
 
@@ -105,24 +105,28 @@ export function ProductDirectBuyModal({
               )}
             </div>
             <div className="min-w-0 flex-1">
-              <h4 className="truncate text-xs font-bold text-foreground">{product.name}</h4>
+              <h4 className="truncate text-xs font-bold text-foreground font-heading">{product.name}</h4>
               <p className="truncate text-[11px] text-muted-foreground mt-0.5">
-                Supplier: <span className="font-semibold text-foreground">{supplier.companyName}</span> • Varian: <span className="text-primary font-semibold">{selectedVariantText}</span>
+                {t("rfqSummarySupplier")}{" "}
+                <span className="font-semibold text-foreground">{supplier.companyName}</span>
+                {" • "}
+                {t("rfqSummaryVariant")}{" "}
+                <span className="text-primary font-semibold">{selectedVariantText}</span>
               </p>
             </div>
           </div>
 
           <div className="border-t border-border/80 pt-2.5 space-y-1 text-xs">
             <div className="flex justify-between text-muted-foreground">
-              <span>Harga Satuan</span>
+              <span>{t("unitPrice")}</span>
               <span className="font-semibold text-foreground">{formatPrice(product.price, product.currency)}</span>
             </div>
             <div className="flex justify-between text-muted-foreground">
-              <span>Jumlah Pesanan</span>
+              <span>{t("orderQuantity")}</span>
               <span className="font-semibold text-foreground">{quantity} Unit</span>
             </div>
             <div className="flex justify-between text-foreground font-bold border-t border-border/80 pt-1.5 text-sm">
-              <span>Total Estimasi</span>
+              <span>{t("estimatedTotal")}</span>
               <span className="text-primary font-extrabold">{formatPrice(subtotal, product.currency)}</span>
             </div>
           </div>
@@ -130,11 +134,11 @@ export function ProductDirectBuyModal({
 
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           <Field>
-            <FieldLabel className="text-xs font-bold">{t("directBuyAddressLabel") || "Alamat Lengkap Pengiriman"}</FieldLabel>
+            <FieldLabel className="text-xs font-bold text-foreground">{t("directBuyAddressLabel")}</FieldLabel>
             <Textarea
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              placeholder={t("directBuyAddressPlaceholder") || "Tuliskan alamat lengkap pengiriman, PIC penerima, nomor telepon, dan patokan gudang..."}
+              placeholder={t("directBuyAddressPlaceholder")}
               rows={3}
               required
               className="resize-none text-xs"
@@ -142,40 +146,40 @@ export function ProductDirectBuyModal({
           </Field>
 
           <Field>
-            <FieldLabel className="text-xs font-bold">{t("directBuyNotesLabel") || "Catatan Pesanan (Opsional)"}</FieldLabel>
+            <FieldLabel className="text-xs font-bold text-foreground">{t("directBuyNotesLabel")}</FieldLabel>
             <Input
               type="text"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder={t("directBuyNotesPlaceholder") || "Catatan khusus untuk supplier atau logistik..."}
+              placeholder={t("directBuyNotesPlaceholder")}
               className="h-9 text-xs"
             />
           </Field>
 
-          <div className="flex items-center justify-end gap-2 pt-2">
+          <div className="flex items-center justify-end gap-2 pt-2 border-t border-border">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
               disabled={isSubmitting}
-              className="cursor-pointer text-xs font-semibold border-border rounded-lg h-9 px-4"
+              className="cursor-pointer text-xs font-semibold border-border rounded-lg h-9 px-4 hover:bg-muted"
             >
-              Batal
+              {t("btnCancel")}
             </Button>
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="cursor-pointer text-xs font-bold bg-primary text-primary-foreground hover:bg-primary/95 rounded-lg h-9 px-5 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0"
+              className="cursor-pointer text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg h-9 px-5 transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 shadow-xs hover:shadow-primary/30"
             >
               {isSubmitting ? (
                 <div className="flex items-center gap-1.5">
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                  <span>{t("directBuySubmitting") || "Membuat Pesanan..."}</span>
+                  <span>{t("directBuySubmitting")}</span>
                 </div>
               ) : (
                 <div className="flex items-center gap-1.5">
                   <ShoppingBag className="h-3.5 w-3.5" />
-                  <span>{t("directBuySubmitBtn") || "Konfirmasi & Buat Pesanan"}</span>
+                  <span>{t("directBuySubmitBtn")}</span>
                 </div>
               )}
             </Button>

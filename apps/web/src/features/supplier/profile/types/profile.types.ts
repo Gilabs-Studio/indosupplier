@@ -5,7 +5,8 @@ export interface SupplierProfileData {
   established: string;
   employees: string;
   email: string;
-  phone: string;
+  whatsapp?: string;
+  whatsApp?: string;
   website: string;
   taxId: string;
   nib: string;

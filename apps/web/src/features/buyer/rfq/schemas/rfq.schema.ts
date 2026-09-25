@@ -11,10 +11,7 @@ export const rfqSchema = z.object({
     .min(1, "Harap tentukan volume kebutuhan")
     .regex(/^\d+(\.\d+)?$/, "Volume kebutuhan harus berupa angka"),
   unit: z.string().min(1, "Harap pilih satuan"),
-  target_port: z
-    .string()
-    .min(3, "Pelabuhan tujuan minimal 3 karakter")
-    .max(100, "Pelabuhan tujuan maksimal 100 karakter"),
+  target_port: z.string().optional().or(z.literal("")),
   description: z
     .string()
     .max(1000, "Deskripsi maksimal 1000 karakter")

@@ -25,6 +25,9 @@ func AutoMigrate() error {
 	// Drop legacy unique index if exists to allow bookmarking both supplier and products under idx_bookmark_buyer_item
 	DB.Exec("DROP INDEX IF EXISTS idx_bookmark_buyer_supplier")
 
+	// Drop phone column from supplier_profiles as supplier office phone is removed
+	DB.Exec("ALTER TABLE supplier_profiles DROP COLUMN IF EXISTS phone")
+
 	if err := DB.AutoMigrate(
 		&user.User{},
 		&refreshToken.RefreshToken{},

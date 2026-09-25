@@ -19,7 +19,6 @@ export interface SupplierOnboardingRequest {
   subcategory: string;
   province_id: string;
   city_id: string;
-  phone: string;
   whatsapp: string;
   email: string;
   website?: string;

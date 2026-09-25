@@ -41,7 +41,6 @@ export interface PublicSupplierDto {
   products?: SupplierProductDto[];
   certificationList?: SupplierCertificationDto[];
   reviews?: PublicReviewDto[];
-  phone?: string;
   whatsApp?: string;
   email?: string;
   website?: string;
@@ -88,6 +87,8 @@ export interface PublicProductDto {
   supplierReviewCount: number;
   rating?: number;
   reviewCount?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface PublicReviewDto {

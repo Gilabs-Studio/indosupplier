@@ -51,7 +51,6 @@ type SupplierProfile struct {
 	BusinessHours          string         `gorm:"type:text" json:"business_hours"`
 	Timezone               string         `gorm:"type:varchar(80);not null;default:'Asia/Jakarta'" json:"timezone"`
 	Description            string         `gorm:"type:text" json:"description"`
-	Phone                  string         `gorm:"type:varchar(50)" json:"phone"`
 	WhatsApp               string         `gorm:"type:varchar(50)" json:"whatsapp"`
 	Email                  string         `gorm:"type:varchar(255)" json:"email"`
 	Website                string         `gorm:"type:text" json:"website"`

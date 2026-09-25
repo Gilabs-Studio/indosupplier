@@ -12,7 +12,7 @@ export interface RFQItem {
   product: string;
   category: string;
   quantity: string;
-  targetPort: string;
+  targetPort?: string;
   date: string;
   status: string;
   replies: number;
@@ -42,7 +42,7 @@ export interface CreateRfqPayload {
   category: string;
   quantity: string;
   unit: string;
-  target_port: string;
+  target_port?: string;
   description?: string;
   attachment_url?: string;
   attachment_name?: string;

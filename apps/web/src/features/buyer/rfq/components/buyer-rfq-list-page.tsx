@@ -68,7 +68,6 @@ export function BuyerRfqListPage() {
     (rfq) =>
       rfq.product.toLowerCase().includes(searchQuery.toLowerCase()) ||
       rfq.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      rfq.targetPort?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       rfq.suppliers?.some((s) => s.supplierName.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 

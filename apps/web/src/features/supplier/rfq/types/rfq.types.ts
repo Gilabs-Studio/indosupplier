@@ -10,7 +10,7 @@ export interface SupplierRfqItem {
   product: string;
   category: string;
   quantity: string;
-  port: string;
+  port?: string;
   date: string;
   budget: string;
   status: "open" | "new" | "responded" | "processing" | "accepted" | "closed";

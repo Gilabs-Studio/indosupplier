@@ -692,9 +692,15 @@ func (u *discoveryUsecase) buildSupplierResponse(ctx context.Context, p models.S
 		}
 		response.Products = products
 		response.Reviews = reviews
-		response.Phone = p.Phone
 		response.WhatsApp = p.WhatsApp
 		response.Email = p.Email
+		if response.Email == "" {
+			var userEmail string
+			_ = u.db.WithContext(ctx).Table("users").Select("email").Where("id = ?", p.UserID).Limit(1).Scan(&userEmail)
+			if userEmail != "" {
+				response.Email = userEmail
+			}
+		}
 		response.Website = p.Website
 	}
 

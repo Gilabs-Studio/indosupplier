@@ -22,7 +22,7 @@ body:json {
     "established": "2020",
     "employees": "10",
     "email": "valid@email.com",
-    "phone": "123456789012345678901234567890123456789012345678901234567890",
+    "whatsapp": "123456789012345678901234567890123456789012345678901234567890",
     "location": "Jakarta"
   }
 }
@@ -33,6 +33,6 @@ vars:pre-request {
 
 docs {
   Edge case testing: Buffer overflow / max length violation.
-  Phone length is 60 characters (exceeds max=50), CompanyName exceeds 255.
+  WhatsApp length is 60 characters (exceeds max=50), CompanyName exceeds 255.
   Expected: 400 Bad Request with VALIDATION_ERROR.
 }

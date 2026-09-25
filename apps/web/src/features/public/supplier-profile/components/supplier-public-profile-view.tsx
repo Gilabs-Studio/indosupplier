@@ -22,7 +22,7 @@ import {
   Users,
   MapPin,
   Mail,
-  Phone,
+  MessageCircle,
   Globe,
   Award,
   Package,
@@ -553,10 +553,19 @@ export function SupplierPublicProfileView({
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Phone className="h-3.5 w-3.5 text-primary/70 shrink-0" />
-                    <span className="font-medium text-foreground">
-                      {supplier.phone || tSup("na")}
-                    </span>
+                    <MessageCircle className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    {supplier.whatsApp ? (
+                      <a
+                        href={`https://wa.me/${supplier.whatsApp.replace(/\D/g, "").replace(/^0/, "62")}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-medium text-foreground hover:text-primary transition-colors"
+                      >
+                        {supplier.whatsApp}
+                      </a>
+                    ) : (
+                      <span className="font-medium text-foreground">{tSup("na")}</span>
+                    )}
                   </div>
                   <div className="flex items-center gap-3">
                     <Globe className="h-3.5 w-3.5 text-primary/70 shrink-0" />

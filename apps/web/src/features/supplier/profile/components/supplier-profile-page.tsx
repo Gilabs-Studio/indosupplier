@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Field, FieldLabel, FieldError, FieldGroup } from "@/components/ui/field";
+import { Field, FieldLabel, FieldError, FieldGroup, FieldDescription } from "@/components/ui/field";
 import { Save, Loader2, Eye } from "lucide-react";
 import { useSupplierProfileForm } from "../hooks/useProfile";
 import { SupplierProfilePreview } from "./supplier-profile-preview";
@@ -214,16 +214,19 @@ export function SupplierProfilePage() {
                     />
                     {errors.email && <FieldError>{errors.email.message}</FieldError>}
                   </Field>
-                  <Field invalid={!!errors.phone}>
-                    <FieldLabel htmlFor="phone">{t("fieldPhone")}</FieldLabel>
+                  <Field invalid={!!errors.whatsapp}>
+                    <FieldLabel htmlFor="whatsapp">{t("fieldWhatsApp") || "Nomor WhatsApp"}</FieldLabel>
                     <Input
-                      id="phone"
+                      id="whatsapp"
                       type="tel"
                       inputMode="tel"
-                      {...register("phone")}
+                      {...register("whatsapp")}
                       placeholder="+6281234567890"
                     />
-                    {errors.phone && <FieldError>{errors.phone.message}</FieldError>}
+                    <FieldDescription className="text-[11px] text-muted-foreground">
+                      {t("fieldWhatsAppDesc") || "Digunakan pembeli untuk mengirim pesan tawaran via WhatsApp. Pastikan nomor aktif."}
+                    </FieldDescription>
+                    {errors.whatsapp && <FieldError>{errors.whatsapp.message}</FieldError>}
                   </Field>
                   <Field invalid={!!errors.website}>
                     <FieldLabel htmlFor="website">{t("fieldWebsite")}</FieldLabel>

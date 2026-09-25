@@ -7,7 +7,7 @@ type SupplierProfileDTO struct {
 	Established  string `json:"established"`
 	Employees    string `json:"employees"`
 	Email        string `json:"email"`
-	Phone        string `json:"phone"`
+	WhatsApp     string `json:"whatsapp,omitempty"`
 	Website      string `json:"website"`
 	TaxID        string `json:"taxId"`
 	NIB          string `json:"nib"`
@@ -23,7 +23,7 @@ type UpdateProfileRequest struct {
 	Established  string `json:"established" binding:"omitempty,numeric,len=4"`
 	Employees    string `json:"employees" binding:"omitempty,max=80"`
 	Email        string `json:"email" binding:"required,email,max=255"`
-	Phone        string `json:"phone" binding:"required,min=6,max=50"`
+	WhatsApp     string `json:"whatsapp" binding:"omitempty,max=50"`
 	Website      string `json:"website" binding:"omitempty,max=255"`
 	TaxID        string `json:"taxId" binding:"omitempty,max=80"`
 	NIB          string `json:"nib" binding:"omitempty,numeric,min=9,max=16"`

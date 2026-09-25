@@ -43,7 +43,6 @@ type PublicSupplierDto struct {
 	Products          []SupplierProductDto       `json:"products"`
 	CertificationList []SupplierCertificationDto `json:"certificationList"`
 	Reviews           []PublicReviewDto          `json:"reviews"`
-	Phone             string                     `json:"phone,omitempty"`
 	WhatsApp          string                     `json:"whatsApp,omitempty"`
 	Email             string                     `json:"email,omitempty"`
 	Website           string                     `json:"website,omitempty"`

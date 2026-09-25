@@ -18,7 +18,7 @@ const stepKeys = ["step1", "step2", "step3", "step4", "step5"] as const;
 const getStepForField = (field: string): number => {
   if (["companyName", "primaryCategory", "subcategory"].includes(field)) return 1;
   if (["provinceId", "cityId", "address"].includes(field)) return 2;
-  if (["phone", "whatsapp", "email", "website"].includes(field)) return 3;
+  if (["whatsapp", "email", "website"].includes(field)) return 3;
   if (["companyType", "taxStatus", "npwp", "nib", "businessHours", "timezone"].includes(field)) return 4;
   if (["description", "firstProductName", "firstProductPrice"].includes(field)) return 5;
   return 1;
@@ -41,7 +41,6 @@ export function SupplierOnboardingPage() {
     provinceId: "",
     cityId: "",
     address: "",
-    phone: "",
     whatsapp: "",
     email: user?.email ?? "",
     website: "",
@@ -94,9 +93,6 @@ export function SupplierOnboardingPage() {
     }
 
     if (targetStep === 3) {
-      if (!form.phone.trim()) {
-        newErrors.phone = "Nomor telepon wajib diisi";
-      }
       if (!form.whatsapp.trim()) {
         newErrors.whatsapp = "Nomor WhatsApp wajib diisi";
       }
@@ -165,7 +161,6 @@ export function SupplierOnboardingPage() {
         province_id: form.provinceId.trim(),
         city_id: form.cityId.trim(),
         address: form.address.trim() || undefined,
-        phone: form.phone.trim(),
         whatsapp: form.whatsapp.trim(),
         email: form.email.trim(),
         website: form.website.trim() || undefined,
@@ -326,25 +321,20 @@ export function SupplierOnboardingPage() {
             <div className="space-y-4">
               <h3 className="text-base font-bold text-foreground">{t("step3")}</h3>
               <FieldGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <Field invalid={!!errors.phone}>
-                  <FieldLabel>Telepon</FieldLabel>
-                  <Input value={form.phone} onChange={(e) => updateForm("phone", e.target.value)} placeholder="Contoh: 031-1234567" />
-                  {errors.phone && <FieldError>{errors.phone}</FieldError>}
-                </Field>
                 <Field invalid={!!errors.whatsapp}>
                   <FieldLabel>WhatsApp aktif</FieldLabel>
                   <Input value={form.whatsapp} onChange={(e) => updateForm("whatsapp", e.target.value)} placeholder="Contoh: 6281234567890" />
                   {errors.whatsapp && <FieldError>{errors.whatsapp}</FieldError>}
                 </Field>
-              </FieldGroup>
-              <FieldGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field invalid={!!errors.email}>
                   <FieldLabel>Email bisnis</FieldLabel>
                   <Input type="email" value={form.email} onChange={(e) => updateForm("email", e.target.value)} placeholder="sales@company.com" />
                   {errors.email && <FieldError>{errors.email}</FieldError>}
                 </Field>
+              </FieldGroup>
+              <FieldGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field invalid={!!errors.website}>
-                  <FieldLabel>Website</FieldLabel>
+                  <FieldLabel>Website (Opsional)</FieldLabel>
                   <Input value={form.website} onChange={(e) => updateForm("website", e.target.value)} placeholder="https://company.com" />
                   {errors.website && <FieldError>{errors.website}</FieldError>}
                 </Field>

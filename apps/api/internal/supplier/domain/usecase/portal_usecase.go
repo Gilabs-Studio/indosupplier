@@ -58,7 +58,7 @@ func (u *portalUsecase) GetProfile(ctx context.Context, userID string) (*dto.Sup
 		Established:  profile.EstablishedYear,
 		Employees:    profile.EmployeesCount,
 		Email:        profile.Email,
-		Phone:        profile.Phone,
+		WhatsApp:     profile.WhatsApp,
 		Website:      profile.Website,
 		TaxID:        profile.NPWP,
 		NIB:          profile.NIB,
@@ -86,7 +86,7 @@ func (u *portalUsecase) UpdateProfile(ctx context.Context, userID string, req *d
 	profile.EstablishedYear = req.Established
 	profile.EmployeesCount = req.Employees
 	profile.Email = req.Email
-	profile.Phone = req.Phone
+	profile.WhatsApp = req.WhatsApp
 	profile.Website = req.Website
 	profile.NPWP = req.TaxID
 	profile.NIB = req.NIB
@@ -117,7 +117,7 @@ func (u *portalUsecase) UpdateProfile(ctx context.Context, userID string, req *d
 		Established:  profile.EstablishedYear,
 		Employees:    profile.EmployeesCount,
 		Email:        profile.Email,
-		Phone:        profile.Phone,
+		WhatsApp:     profile.WhatsApp,
 		Website:      profile.Website,
 		TaxID:        profile.NPWP,
 		NIB:          profile.NIB,

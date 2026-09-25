@@ -9,20 +9,19 @@ import { PublicLayout } from "@/features/public/components/public-layout";
 import { ProductCard } from "@/components/ui/product-card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 import { usePublicProductDetail } from "../hooks/use-public-product-detail";
 import {
   Check,
   ChevronDown,
+  FileText,
   GitCompareArrows,
   Heart,
+  Info,
   Loader2,
+  Mail,
   MapPin,
-  MessageSquare,
-  Minus,
+  MessageCircle,
   Package,
-  Plus,
-  Send,
   Share2,
   ShieldCheck,
   Star,
@@ -38,39 +37,9 @@ interface PublicProductDetailPageProps {
   detailBasePath?: "" | "/demo";
 }
 
-function RatingStars({ rating, size = "md" }: { rating: number; size?: "sm" | "md" | "lg" }) {
-  const sizeClasses = {
-    sm: "h-3.5 w-3.5",
-    md: "h-4 w-4",
-    lg: "h-5 w-5",
-  };
-  const iconSize = sizeClasses[size];
-
-  return (
-    <div className="flex items-center gap-0.5">
-      {[1, 2, 3, 4, 5].map((starIndex) => {
-        const isFilled = rating >= starIndex;
-        const isHalf = !isFilled && rating >= starIndex - 0.5;
-        return (
-          <Star
-            key={starIndex}
-            className={`${iconSize} transition-colors ${
-              isFilled
-                ? "fill-warning text-warning"
-                : isHalf
-                ? "fill-warning/50 text-warning"
-                : "text-muted-foreground/30"
-            }`}
-          />
-        );
-      })}
-    </div>
-  );
-}
-
-function formatDate(value: string) {
+function formatDate(value: string, locale: string = "id") {
   if (!value) return "";
-  return new Intl.DateTimeFormat("id-ID", {
+  return new Intl.DateTimeFormat(locale === "en" ? "en-US" : "id-ID", {
     day: "numeric",
     month: "short",
     year: "numeric",
@@ -79,6 +48,7 @@ function formatDate(value: string) {
 
 export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: PublicProductDetailPageProps) {
   const [logoError, setLogoError] = React.useState(false);
+  const [rfqInitialNotes, setRfqInitialNotes] = React.useState("");
   const t = useTranslations("public.productDetail");
 
   const {
@@ -91,14 +61,6 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
     activePhoto,
     setActivePhoto,
     quantity,
-    setQuantity,
-    reviewFilter,
-    setReviewFilter,
-    visibleReviews,
-    reviews,
-    averageRating,
-    distribution,
-    subtotal,
     isBookmarked,
     isCompared,
     isProductBookmarked,
@@ -113,16 +75,18 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
     setIsRfqModalOpen,
     isDirectBuyModalOpen,
     setIsDirectBuyModalOpen,
-    isStartingChat,
     isCopied,
     openRfqModal,
-    openDirectBuyModal,
-    handleStartChat,
     handleShare,
     reviewState,
     productRating,
     productReviewCount,
   } = usePublicProductDetail({ id, detailBasePath: detailBasePath as "" | "/demo" });
+
+  const handleOpenRfqModal = () => {
+    setRfqInitialNotes("");
+    openRfqModal();
+  };
 
   const homeHref = detailBasePath || "/";
 
@@ -162,7 +126,7 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
 
   return (
     <PublicLayout locale={locale}>
-      <main className="min-h-screen bg-background pb-16">
+      <main className="min-h-screen bg-background pb-28">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           {/* Breadcrumbs */}
           <nav className="mb-6 flex flex-wrap items-center gap-2 text-xs font-medium text-muted-foreground">
@@ -174,7 +138,7 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
               href={`${detailBasePath}/search?query=${encodeURIComponent(product.categoryName || product.name)}`}
               className="cursor-pointer text-muted-foreground transition-colors hover:text-primary"
             >
-              {product.categoryName || "Katalog"}
+              {product.categoryName || t("catalogDefault")}
             </Link>
             <span className="text-border">/</span>
             <span className="line-clamp-1 max-w-[300px] text-foreground font-semibold">{product.name}</span>
@@ -204,7 +168,7 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
                         ? "border-primary ring-1 ring-primary shadow-xs"
                         : "border-border hover:border-primary/50 hover:shadow-xs"
                     }`}
-                    aria-label={`Foto product ${index + 1}`}
+                    aria-label={t("photoAriaLabel", { index: index + 1 })}
                   >
                     {photo ? (
                       <img src={photo} alt={`${product.name} ${index + 1}`} className="h-full w-full object-cover transition-transform duration-300 hover:scale-105" />
@@ -219,7 +183,7 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
             {/* Core Info Column */}
             <section className="min-w-0 space-y-6">
               <div className="space-y-3 border-b border-border pb-5">
-                <h1 className="text-xl font-bold tracking-tight text-foreground md:text-2xl lg:text-3xl leading-snug">
+                <h1 className="text-xl font-extrabold tracking-tight text-foreground md:text-2xl lg:text-3xl leading-snug font-heading">
                   {product.name}
                 </h1>
                 <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
@@ -246,8 +210,47 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
                     </>
                   )}
                 </div>
-                <div className="mt-4 inline-block rounded-lg bg-primary/[0.03] px-4 py-2 border border-primary/10">
-                  <p className="text-2xl font-black text-primary">{formatPrice(product.price, product.currency) || t("negotiable")}</p>
+                <div className="mt-4 flex flex-col gap-3">
+                  <div className="inline-block rounded-lg bg-primary/[0.03] px-4 py-2 border border-primary/10 self-start">
+                    <p className="text-3xl font-extrabold text-foreground">{formatPrice(product.price, product.currency) || t("negotiable")}</p>
+                  </div>
+
+                  {/* Informational Warning Note */}
+                  <div className="flex items-start gap-2.5 rounded-lg border border-border bg-muted/40 p-3 text-xs text-foreground">
+                    <Info className="h-4 w-4 shrink-0 text-primary mt-0.5" />
+                    <p className="leading-relaxed font-medium text-muted-foreground">
+                      {t("priceDisclaimer")}
+                    </p>
+                  </div>
+
+                  {/* Key Specifications Card */}
+                  <div className="rounded-lg border border-border bg-card p-4">
+                    <div className="grid grid-cols-2 gap-y-2.5 text-xs">
+                      <span className="text-muted-foreground">{t("stock")}</span>
+                      <span className="font-semibold text-foreground">{product.capacityText || t("stockAvailable")}</span>
+
+                      <span className="text-muted-foreground">{t("specOriginCountry")}</span>
+                      <span className="font-semibold text-foreground">{t("specOriginCountryValue")}</span>
+
+                      <span className="text-muted-foreground">{t("specShippedFrom")}</span>
+                      <span className="font-semibold text-foreground">{supplier.location || product.supplierLocation || t("specOriginCountryValue")}</span>
+
+                      <span className="text-muted-foreground">{t("categoryLabel")}</span>
+                      <span className="font-semibold text-primary">{product.categoryName || "-"}</span>
+
+                      <span className="text-muted-foreground">{t("specLastUpdate")}</span>
+                      <span className="font-semibold text-foreground">{formatDate(product.updatedAt || new Date().toISOString(), locale)}</span>
+                    </div>
+                  </div>
+
+                  {/* Primary CTA: Request Quotation Button */}
+                  <Button
+                    onClick={handleOpenRfqModal}
+                    className="w-full cursor-pointer font-semibold text-sm h-11 bg-primary text-primary-foreground hover:bg-primary/90 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 shadow-xs hover:shadow-primary/30 rounded-lg flex items-center justify-center gap-2"
+                  >
+                    <FileText className="h-4 w-4" />
+                    <span>{t("btnRequestQuote")}</span>
+                  </Button>
                 </div>
               </div>
 
@@ -332,156 +335,200 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
               </Tabs>
             </section>
 
-            {/* Sticky Actions & Supplier Card Column */}
+            {/* Right Sidebar: Supplier Profile, Direct Channels & RFQ Action */}
             <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
-              {/* RFQ / Order Card */}
-              <div className="rounded-lg border border-border bg-card p-4 shadow-xs">
-                <h2 className="text-sm font-bold text-foreground">{t("arrangeQty")}</h2>
-                <p className="mt-2 text-xs font-semibold text-muted-foreground">{variants[selectedVariant]}</p>
-                <div className="my-3.5 border-t border-border" />
-                
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex h-8 items-center rounded-lg border border-border bg-muted/10">
-                    <button
-                      type="button"
-                      onClick={() => setQuantity((value) => Math.max(1, value - 1))}
-                      className="px-2.5 text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
-                      aria-label="Kurangi jumlah"
-                    >
-                      <Minus className="h-3.5 w-3.5" />
-                    </button>
-                    <span className="w-8 text-center text-xs font-bold">{quantity}</span>
-                    <button
-                      type="button"
-                      onClick={() => setQuantity((value) => value + 1)}
-                      className="px-2.5 text-primary hover:text-primary/80 cursor-pointer transition-colors"
-                      aria-label="Tambah jumlah"
-                    >
-                      <Plus className="h-3.5 w-3.5" />
-                    </button>
+              <div className="rounded-lg border border-border bg-card p-5 shadow-xs space-y-4">
+                {/* Supplier Header */}
+                <div className="flex items-center justify-between border-b border-border pb-3">
+                  <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground font-heading">
+                    {t("supplierCardTitle")}
+                  </h2>
+                  <div className="flex items-center gap-1.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>{t("onlineStatus")}</span>
                   </div>
-                  <p className="text-xs text-muted-foreground">{t("stock")} <span className="font-bold text-foreground">248</span></p>
                 </div>
 
-                <div className="mt-4 flex items-end justify-between gap-3">
-                  <span className="text-xs text-muted-foreground">{t("subtotal")}</span>
-                  <span className="text-lg font-black text-foreground">{formatPrice(subtotal, product.currency) || t("negotiable")}</span>
-                </div>
-
-                <div className="mt-4 space-y-2">
-                  <Button
-                    onClick={openRfqModal}
-                    className="w-full cursor-pointer font-bold text-xs py-2 bg-primary text-primary-foreground hover:bg-primary/95 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 hover:shadow-md hover:shadow-primary/20 rounded-lg"
-                  >
-                    <Send className="mr-1.5 h-3.5 w-3.5" />
-                    {t("btnRfq")}
-                  </Button>
-                  <Button
-                    onClick={openDirectBuyModal}
-                    variant="outline"
-                    className="w-full cursor-pointer font-bold text-xs py-2 border-border text-foreground hover:bg-muted hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 hover:shadow-xs rounded-lg"
-                  >
-                    {t("btnBuy")}
-                  </Button>
-                </div>
-
-                <div className="mt-3.5 grid grid-cols-3 gap-1 border-t border-border pt-3 text-[10px] font-bold text-muted-foreground">
-                  <button
-                    type="button"
-                    onClick={handleStartChat}
-                    disabled={isStartingChat}
-                    className="flex flex-col items-center justify-center gap-1 rounded-md py-1.5 hover:bg-muted hover:text-foreground cursor-pointer transition-colors disabled:opacity-60"
-                  >
-                    {isStartingChat ? (
-                      <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
-                    ) : (
-                      <MessageSquare className="h-3.5 w-3.5" />
-                    )}
-                    <span>{isStartingChat ? t("startingChat") : t("btnChat")}</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={toggleBookmark}
-                    disabled={isAdding}
-                    className="flex flex-col items-center justify-center gap-1 rounded-md py-1.5 hover:bg-muted hover:text-foreground cursor-pointer transition-colors"
-                  >
-                    <Heart className={`h-3.5 w-3.5 ${isBookmarked ? "fill-destructive text-destructive" : ""}`} />
-                    <span>{t("btnWishlist")}</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleShare}
-                    className="flex flex-col items-center justify-center gap-1 rounded-md py-1.5 hover:bg-muted hover:text-foreground cursor-pointer transition-colors"
-                  >
-                    {isCopied ? (
-                      <Check className="h-3.5 w-3.5 text-success" />
-                    ) : (
-                      <Share2 className="h-3.5 w-3.5" />
-                    )}
-                    <span>{isCopied ? "Tersalin" : t("btnShare")}</span>
-                  </button>
-                </div>
-                
-                <Button
-                  onClick={toggleCompare}
-                  disabled={isComparing}
-                  variant="ghost"
-                  className="mt-2.5 w-full cursor-pointer text-[10px] font-bold text-muted-foreground hover:bg-muted/50 hover:text-foreground rounded-lg h-7"
+                {/* Supplier Identity */}
+                <Link
+                  href={`${detailBasePath}/suppliers/${supplier.slug}`}
+                  className="flex cursor-pointer items-center gap-3 group"
                 >
-                  <GitCompareArrows className="mr-1.5 h-3.5 w-3.5" />
-                  {isCompared ? t("removeCompare") : t("addCompare")}
-                </Button>
-              </div>
-
-              {/* Supplier Detail Sidebar Card */}
-              <div className="rounded-lg border border-border bg-card p-4 transition-all duration-300 hover:shadow-md">
-                <Link href={`${detailBasePath}/suppliers/${supplier.slug}`} className="flex cursor-pointer items-center gap-3 group">
-                  <div 
-                    className="flex h-10 w-10 shrink-0 items-center justify-center border border-border bg-muted transition-colors group-hover:bg-muted/90 overflow-hidden relative"
-                    style={{ borderRadius: "9999px" }}
+                  <div
+                    className="flex h-11 w-11 shrink-0 items-center justify-center border border-border bg-muted transition-colors group-hover:bg-muted/80 overflow-hidden relative rounded-lg"
                   >
                     {supplier.logo && !logoError ? (
                       <img
                         src={resolveImageUrl(supplier.logo)}
                         alt={supplier.companyName}
-                        className="h-full w-full object-cover"
-                        style={{ borderRadius: "9999px" }}
+                        className="h-full w-full object-cover rounded-lg"
                         onLoad={() => setLogoError(false)}
                         onError={() => setLogoError(true)}
                       />
                     ) : (
-                      <div 
-                        className="flex h-full w-full items-center justify-center bg-primary text-primary-foreground font-heading font-bold text-xs"
-                        style={{ borderRadius: "9999px" }}
+                      <div
+                        className="flex h-full w-full items-center justify-center bg-primary/10 text-primary font-heading font-bold text-xs rounded-lg"
                       >
                         {supplier.companyName.slice(0, 2).toUpperCase()}
                       </div>
                     )}
                   </div>
-                  <div className="min-w-0">
-                    <p className="truncate text-xs font-bold text-foreground transition-colors group-hover:text-primary">
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-xs font-bold text-foreground transition-colors group-hover:text-primary font-heading">
                       {supplier.companyName}
                     </p>
-                    <div className="flex items-center gap-1 text-[10px] text-muted-foreground mt-0.5">
-                      <MapPin className="h-3 w-3" />
-                      <span className="truncate">{supplier.location || "Indonesia"}</span>
-                    </div>
+                    <p className="text-[11px] text-muted-foreground mt-0.5">
+                      {supplier.businessType || t("businessEntity")}
+                    </p>
                   </div>
                 </Link>
-                
-                <div className="mt-4 grid grid-cols-2 gap-2 text-center">
-                  <InfoMetric label={t("rating")} value={supplier.rating?.toFixed(1) || "0.0"} />
-                  <InfoMetric label={t("reviews")} value={`${supplier.reviewCount || reviews.length}`} />
-                  <InfoMetric label={t("response")} value={`${Math.round(supplier.responseRate || 0)}%`} />
-                  <InfoMetric label={t("time")} value={supplier.responseTime || "-"} />
+
+                {/* Badges */}
+                <div className="flex flex-wrap gap-1.5">
+                  {supplier.isVerified && (
+                    <span className="inline-flex items-center gap-1 rounded bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary border border-primary/20">
+                      <ShieldCheck className="h-3 w-3" />
+                      {t("badgeVerified")}
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1 rounded bg-muted/60 px-2 py-0.5 text-[10px] font-semibold text-muted-foreground border border-border">
+                    {t("badgeEstablished", { year: supplier.establishedYear || 2021 })}
+                  </span>
                 </div>
-                
-                <Button asChild variant="outline" className="mt-4 w-full cursor-pointer text-xs font-bold border-border hover:bg-muted hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 rounded-lg">
-                  <Link href={`${detailBasePath}/suppliers/${supplier.slug}`}>
-                    <Store className="mr-1.5 h-3.5 w-3.5" />
-                    {t("detailSupplier")}
-                  </Link>
-                </Button>
+
+                {/* Tax Status & Location */}
+                <div className="space-y-1.5 text-xs border-t border-border pt-3">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-muted-foreground">{t("taxStatusLabel")}</span>
+                    <span className="font-semibold text-foreground">
+                      {supplier.taxStatus === "non_pkp" ? t("taxStatusNonPKP") : t("taxStatusPKP")}
+                    </span>
+                  </div>
+                  <div className="flex items-start gap-1.5 text-[11px] text-muted-foreground pt-0.5">
+                    <MapPin className="h-3.5 w-3.5 shrink-0 text-primary mt-0.5" />
+                    <span className="leading-snug">{supplier.address || supplier.location || t("specOriginCountryValue")}</span>
+                  </div>
+                </div>
+
+                {/* Direct Channels (WhatsApp & Email only - Minimalist & Balanced) */}
+                <div className="grid grid-cols-2 gap-2.5 pt-3 border-t border-border">
+                  {/* WhatsApp */}
+                  {(() => {
+                    const hasWhatsApp = Boolean(supplier.whatsApp);
+                    const raw = supplier.whatsApp || "";
+                    const digits = raw.replace(/\D/g, "");
+                    const waNum = digits.startsWith("0") ? "62" + digits.slice(1) : digits;
+                    const waText = encodeURIComponent(
+                      t("waChatTemplate", { supplier: supplier.companyName, product: product.name })
+                    );
+                    const waLink = `https://wa.me/${waNum}?text=${waText}`;
+
+                    return (
+                      <Button
+                        asChild={hasWhatsApp}
+                        disabled={!hasWhatsApp}
+                        variant="outline"
+                        className={`w-full text-xs font-semibold border-border rounded-lg h-10 px-3 flex items-center justify-center gap-2 transition-all duration-300 ${
+                          hasWhatsApp
+                            ? "cursor-pointer hover:bg-muted text-foreground hover:-translate-y-0.5 active:translate-y-0"
+                            : "opacity-50 cursor-not-allowed text-muted-foreground"
+                        }`}
+                        title={!hasWhatsApp ? t("whatsappNotSet") : undefined}
+                      >
+                        {hasWhatsApp ? (
+                          <a href={waLink} target="_blank" rel="noopener noreferrer">
+                            <MessageCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                            <span className="whitespace-nowrap">{t("btnWhatsapp")}</span>
+                          </a>
+                        ) : (
+                          <span>
+                            <MessageCircle className="h-4 w-4 shrink-0" />
+                            <span className="whitespace-nowrap">{t("btnWhatsapp")}</span>
+                          </span>
+                        )}
+                      </Button>
+                    );
+                  })()}
+
+                  {/* Email */}
+                  <Button
+                    asChild={Boolean(supplier.email)}
+                    disabled={!supplier.email}
+                    variant="outline"
+                    className={`w-full text-xs font-semibold border-border rounded-lg h-10 px-3 flex items-center justify-center gap-2 transition-all duration-300 ${
+                      supplier.email
+                        ? "cursor-pointer hover:bg-muted text-foreground hover:-translate-y-0.5 active:translate-y-0"
+                        : "opacity-50 cursor-not-allowed text-muted-foreground"
+                    }`}
+                    title={!supplier.email ? t("emailNotSet") : undefined}
+                  >
+                    {supplier.email ? (
+                      <a
+                        href={`mailto:${supplier.email}?subject=${encodeURIComponent(
+                          t("emailSubjectTemplate", { product: product.name })
+                        )}&body=${encodeURIComponent(
+                          t("emailBodyTemplate", { supplier: supplier.companyName, product: product.name })
+                        )}`}
+                      >
+                        <Mail className="h-4 w-4 text-primary shrink-0" />
+                        <span className="whitespace-nowrap">{t("btnMessage")}</span>
+                      </a>
+                    ) : (
+                      <span>
+                        <Mail className="h-4 w-4 shrink-0" />
+                        <span className="whitespace-nowrap">{t("btnMessage")}</span>
+                      </span>
+                    )}
+                  </Button>
+                </div>
+
+                {/* Toolbar: Wishlist, Compare, Share, Store Detail */}
+                <div className="border-t border-border pt-3">
+                  <div className="flex items-center justify-around py-1 text-xs text-muted-foreground">
+                    <button
+                      type="button"
+                      onClick={toggleBookmark}
+                      disabled={isAdding}
+                      className="flex items-center gap-1.5 hover:text-foreground cursor-pointer transition-colors px-2 py-1 rounded"
+                    >
+                      <Heart className={`h-3.5 w-3.5 ${isBookmarked ? "fill-destructive text-destructive" : ""}`} />
+                      <span className="text-[11px] font-medium whitespace-nowrap">{t("btnWishlist")}</span>
+                    </button>
+                    <span className="h-3 w-px bg-border" />
+                    <button
+                      type="button"
+                      onClick={toggleCompare}
+                      disabled={isComparing}
+                      className="flex items-center gap-1.5 hover:text-foreground cursor-pointer transition-colors px-2 py-1 rounded"
+                    >
+                      <GitCompareArrows className="h-3.5 w-3.5" />
+                      <span className="text-[11px] font-medium whitespace-nowrap">
+                        {isCompared ? t("removeCompare") : t("addCompare")}
+                      </span>
+                    </button>
+                    <span className="h-3 w-px bg-border" />
+                    <button
+                      type="button"
+                      onClick={handleShare}
+                      className="flex items-center gap-1.5 hover:text-foreground cursor-pointer transition-colors px-2 py-1 rounded"
+                    >
+                      {isCopied ? <Check className="h-3.5 w-3.5 text-success" /> : <Share2 className="h-3.5 w-3.5" />}
+                      <span className="text-[11px] font-medium whitespace-nowrap">{isCopied ? t("copied") : t("btnShare")}</span>
+                    </button>
+                  </div>
+                  <div className="border-t border-border mt-3 pt-3">
+                    <Button
+                      asChild
+                      variant="ghost"
+                      className="w-full cursor-pointer text-xs font-semibold hover:bg-muted rounded-lg h-9 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
+                    >
+                      <Link href={`${detailBasePath}/suppliers/${supplier.slug}`}>
+                        <Store className="mr-1.5 h-3.5 w-3.5" />
+                        {t("detailSupplier")}
+                      </Link>
+                    </Button>
+                  </div>
+                </div>
               </div>
             </aside>
           </section>
@@ -891,7 +938,8 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
             product={product}
             supplier={supplier}
             initialQuantity={quantity}
-            selectedVariantText={variants[selectedVariant] || "Standar"}
+            selectedVariantText={variants[selectedVariant] || t("rfqDefaultVariant")}
+            initialNotes={rfqInitialNotes}
           />
           <ProductDirectBuyModal
             isOpen={isDirectBuyModalOpen}
@@ -899,8 +947,41 @@ export function PublicProductDetailPage({ locale, id, detailBasePath = "" }: Pub
             product={product}
             supplier={supplier}
             quantity={quantity}
-            selectedVariantText={variants[selectedVariant] || "Standar"}
+            selectedVariantText={variants[selectedVariant] || t("rfqDefaultVariant")}
           />
+        </div>
+
+        {/* Bottom Sticky Bar */}
+        <div className="fixed bottom-0 inset-x-0 z-30 border-t border-border bg-card/95 backdrop-blur-md px-4 py-2.5 shadow-lg sm:px-6 lg:px-8">
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="h-10 w-10 shrink-0 overflow-hidden rounded-md border border-border bg-muted flex items-center justify-center">
+                {photos[0] ? (
+                  <img src={photos[0]} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <Package className="h-5 w-5 text-muted-foreground" />
+                )}
+              </div>
+              <div className="min-w-0">
+                <p className="truncate text-xs font-bold text-foreground max-w-[200px] sm:max-w-md">
+                  {product.name}
+                </p>
+                <p className="text-[11px] text-muted-foreground">
+                  {t("stickyTotalPrice")}{" "}
+                  <span className="font-extrabold text-primary">
+                    {formatPrice(product.price, product.currency) || t("stickyRequestQuote")}
+                  </span>
+                </p>
+              </div>
+            </div>
+            <Button
+              onClick={handleOpenRfqModal}
+              className="cursor-pointer font-semibold text-xs h-9 px-5 bg-primary text-primary-foreground hover:bg-primary/90 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 rounded-lg shrink-0 flex items-center gap-1.5 shadow-xs hover:shadow-primary/30"
+            >
+              <FileText className="h-3.5 w-3.5" />
+              <span>{t("btnRequestQuote")}</span>
+            </Button>
+          </div>
         </div>
       </main>
     </PublicLayout>
@@ -912,15 +993,6 @@ function InfoRow({ label, value }: { label: string; value: string }) {
     <div className="rounded-lg border border-border bg-muted/5 p-3 transition-colors hover:border-primary/25">
       <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">{label}</p>
       <p className="mt-1 text-xs font-bold text-foreground">{value}</p>
-    </div>
-  );
-}
-
-function InfoMetric({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-lg border border-border bg-muted/10 p-2.5 transition-all duration-300 hover:border-primary/20 hover:bg-primary/[0.01]">
-      <p className="text-sm font-black text-primary">{value}</p>
-      <p className="text-[10px] font-medium text-muted-foreground mt-0.5">{label}</p>
     </div>
   );
 }

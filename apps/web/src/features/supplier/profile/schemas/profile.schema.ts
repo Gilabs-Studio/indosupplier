@@ -32,13 +32,14 @@ export const supplierProfileSchema = z.object({
     .min(1, "Email wajib diisi")
     .email("Format email tidak valid")
     .max(255, "Email maksimal 255 karakter"),
-  phone: z
+  whatsapp: z
     .string()
-    .min(6, "Nomor telepon minimal 6 digit")
-    .max(30, "Nomor telepon maksimal 30 karakter")
-    .regex(
-      /^(\+?[0-9\s\-()]+)$/,
-      "Format nomor telepon harus berupa angka yang valid (contoh: +6281234567890)"
+    .max(30, "Nomor WhatsApp maksimal 30 karakter")
+    .optional()
+    .or(z.literal(""))
+    .refine(
+      (val) => !val || /^(\+?[0-9\s\-()]+)$/.test(val),
+      { message: "Format nomor WhatsApp harus berupa angka yang valid (contoh: +6281234567890)" }
     ),
   website: z
     .string()
